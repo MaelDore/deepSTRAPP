@@ -1,3 +1,8 @@
+^renv$
+^renv\.lock$
 ^deepSTRAPP\.Rproj$
 ^\.Rproj\.user$
 ^_dev_history\.R$
+^LICENSE\.md$
+^README\.Rmd$
+^README\.html$
