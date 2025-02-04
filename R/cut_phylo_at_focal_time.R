@@ -1,4 +1,4 @@
-#' @title Cut the phylogeny at a given time in the past
+#' @title Cuts the phylogeny at a given time in the past
 #'
 #' @description Cuts off all the branches of the phylogeny which are
 #'   younger than a specific time in the past (i.e. the `focal_time`).
@@ -15,10 +15,16 @@
 #' @importFrom ape nodelabels
 #' @importFrom ape edgelabels
 #'
-#' @details When an entire lineage is cut (i.e. one or more nodes along a path) and \code{keep.lineages = TRUE},
-#'   the leaves left are labeled as "l" followed by a number.
+#' @details When a branch with a single descendant tip is cut and `keep_tip_labels = TRUE`,
+#'   the leaf left is labeled with the tip.label of the unique descendant tip.
 #'
-#' @return The function returns the cut phylogeny as an object of class `"phylo"`. It adds multiple useful items to the object.
+#'   When a branch with a single descendant tip is cut and `keep_tip_labels = FALSE`,
+#'   the leaf left is labeled with the node ID of the unique descendant tip.
+#'
+#'   In all cases, when a branch with multiple descendant tips (i.e., a clade) is cut,
+#'   the leaf left is labeled with the node ID of the MRCA of the cut-off clade.
+#'
+#' @return The function returns the cut phylogeny as an object of class `"phylo"`. It adds multiple useful elements to the object.
 #'   * `$root_age` Integer. Stores the age of the root of the tree.
 #'   * `$nodes_ID_df` Data.frame with two columns. Provides the conversion from the `new_node_ID` to the `initial_node_ID`. Each row is a node.
 #'   * `$initial_nodes_ID` Vector of character strings. Provides the initial ID of internal nodes. Used to plot internal node IDs as labels with [ape::nodelabels()].
@@ -32,7 +38,7 @@
 #' library(phytools)
 #' data(eel.tree)
 #'
-#' # ----- Example 1: keep_tip_labels = T ----- #
+#' # ----- Example 1: keep_tip_labels = TRUE ----- #
 #'
 #' # Cut tree to 30 Mya while keeping tip.label on terminal branches with a unique descending tip.
 #' cut_eel.tree <- cut_phylo_at_focal_time(tree = eel.tree, focal_time = 30, keep_tip_labels = TRUE)
@@ -60,7 +66,7 @@
 #' plot(cut_eel.tree)
 #' ape::edgelabels(text = cut_eel.tree$initial_edges_ID)
 #'
-#' # ----- Example 2: keep_tip_labels = F ----- #
+#' # ----- Example 2: keep_tip_labels = FALSE ----- #
 #'
 #' # Cut tree to 30 Mya without keeping tip.label on terminal branches with a unique descending tip.
 #' # All tip.labels are converted to their descending/tipward node ID
@@ -69,7 +75,7 @@
 #'
 
 
-### Try with non-dichotomous trees!!!
+### Possible update: Make it work with non-dichotomous trees!!!
 
 
 cut_phylo_at_focal_time <- function(tree, focal_time, keep_tip_labels = TRUE)
@@ -97,7 +103,7 @@ cut_phylo_at_focal_time <- function(tree, focal_time, keep_tip_labels = TRUE)
   # Get node ages per edge (no root edge)
   all_edges_df <- phytools::nodeHeights(tree)
   root_age <- max(phytools::nodeHeights(tree)[,2])
-  all_edges_df <- as.data.frame(round(root_age - all_edges_df, 2))
+  all_edges_df <- as.data.frame(round(root_age - all_edges_df, 5)) # May be an issue for trees with very short time span
   names(all_edges_df) <- c("rootward_node_age", "tipward_node_age")
   all_edges_df$edge_ID <- row.names(all_edges_df)
 
@@ -210,4 +216,8 @@ cut_phylo_at_focal_time <- function(tree, focal_time, keep_tip_labels = TRUE)
 }
 
 
+## Make unit tests for ultrametric (eel.tree) and non-ultrametric trees (tortoise.tree)
+
+
+## Make unit tests for edge cases: focal_time > root_age; focal_time = root_age; focal_time = 0
 

@@ -2,7 +2,7 @@
 % Please edit documentation in R/cut_phylo_at_focal_time.R
 \name{cut_phylo_at_focal_time}
 \alias{cut_phylo_at_focal_time}
-\title{Cut the phylogeny at a given time in the past}
+\title{Cuts the phylogeny at a given time in the past}
 \usage{
 cut_phylo_at_focal_time(tree, focal_time, keep_tip_labels = TRUE)
 }
@@ -16,7 +16,7 @@ at which the tree must be cut.}
 \item{keep_tip_labels}{Logical. Specify whether terminal branches with a single descendant tip must retained their initial \code{tip.label}. Default is \code{TRUE}.}
 }
 \value{
-The function returns the cut phylogeny as an object of class \code{"phylo"}. It adds multiple useful items to the object.
+The function returns the cut phylogeny as an object of class \code{"phylo"}. It adds multiple useful elements to the object.
 \itemize{
 \item \verb{$root_age} Integer. Stores the age of the root of the tree.
 \item \verb{$nodes_ID_df} Data.frame with two columns. Provides the conversion from the \code{new_node_ID} to the \code{initial_node_ID}. Each row is a node.
@@ -31,15 +31,21 @@ younger than a specific time in the past (i.e. the \code{focal_time}).
 Branches overlapping the \code{focal_time} are shorten to the \code{focal_time}.
 }
 \details{
-When an entire lineage is cut (i.e. one or more nodes along a path) and \code{keep.lineages = TRUE},
-the leaves left are labeled as "l" followed by a number.
+When a branch with a single descendant tip is cut and \code{keep_tip_labels = TRUE},
+the leaf left is labeled with the tip.label of the unique descendant tip.
+
+When a branch with a single descendant tip is cut and \code{keep_tip_labels = FALSE},
+the leaf left is labeled with the node ID of the unique descendant tip.
+
+In all cases, when a branch with multiple descendant tips (i.e., a clade) is cut,
+the leaf left is labeled with the node ID of the MRCA of the cut-off clade.
 }
 \examples{
 # Load eel phylogeny from the R package phytools
 library(phytools)
 data(eel.tree)
 
-# ----- Example 1: keep_tip_labels = T ----- #
+# ----- Example 1: keep_tip_labels = TRUE ----- #
 
 # Cut tree to 30 Mya while keeping tip.label on terminal branches with a unique descending tip.
 cut_eel.tree <- cut_phylo_at_focal_time(tree = eel.tree, focal_time = 30, keep_tip_labels = TRUE)
@@ -67,7 +73,7 @@ ape::edgelabels(text = edgelabels_in_cut_tree)
 plot(cut_eel.tree)
 ape::edgelabels(text = cut_eel.tree$initial_edges_ID)
 
-# ----- Example 2: keep_tip_labels = F ----- #
+# ----- Example 2: keep_tip_labels = FALSE ----- #
 
 # Cut tree to 30 Mya without keeping tip.label on terminal branches with a unique descending tip.
 # All tip.labels are converted to their descending/tipward node ID

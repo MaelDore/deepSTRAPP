@@ -2,6 +2,14 @@
 
 ## Dependencies: phytools, dplyr
 
+## Does it make sense to ask only for the ancestral state values and the tree in the workflow? (Technically, no need for the contMap, but needed for plotting)
+# Could use the output of	prepare_trait_data() when not asking for stochastic mapping
+# Output = df of trait value x nodes including internal nodes and tips
+# But the rationale of the workflow is to have a contMap for visualization, paralleling the need for stochastic mapping for categorical/biogeographic traits
+
+## Add the option to update the ContMap (not needed for STRAPP test. Useful only for visualization)
+# Provide a cut contMap as output, aside the trait_data vector, with updated maps and tree
+
 ## For continuous traits
 
 # Input = contMap
@@ -12,7 +20,28 @@
 # focal_time <- 50
 
 
-extract_most_likely_trait_values_for_focal_time <- function (contMap, ace = NULL, tip_data = NULL, focal_time, update_contMap = F)
+tree_with_maps <- contMap$tree
+focal_time <- 50
+focal_time <- 99
+
+
+## Test with non-ultrametric trees like tortoise.tree in phytools
+
+tortoise_contMap
+max(phytools::nodeHeights(tortoise_contMap$tree)[,2])
+
+plot(tortoise_contMap)
+root_age <- max(phytools::nodeHeights(tortoise_contMap$tree)[,2])
+abline(v = root_age - 0.001)
+
+test <- update_maps_at_focal_time(tree_with_maps = tortoise_contMap$tree, focal_time = 0.001)
+
+test$maps
+
+
+
+
+extract_most_likely_trait_values_for_focal_time <- function (contMap, ace = NULL, tip_data = NULL, focal_time, update_contMap = F, keep_tip_labels = TRUE)
 {
 
   ### Check input validity
@@ -66,7 +95,7 @@ extract_most_likely_trait_values_for_focal_time <- function (contMap, ace = NULL
   # Get node ages per edge (no root edge)
   all_edges_df <- phytools::nodeHeights(contMap$tree)
   root_age <- max(phytools::nodeHeights(contMap$tree)[,2])
-  all_edges_df <- as.data.frame(round(root_age - all_edges_df, 2))
+  all_edges_df <- as.data.frame(round(root_age - all_edges_df, 5)) # # May be an issue for trees with very short time span
   names(all_edges_df) <- c("rootward_node_age", "tipward_node_age")
   all_edges_df$edge_ID <- row.names(all_edges_df)
 
@@ -196,22 +225,24 @@ extract_most_likely_trait_values_for_focal_time <- function (contMap, ace = NULL
     # Not needed for STRAPP test. Useful only for visualization.
     if (update_contMap)
     {
-      ## Cut tree
+      ## Cut contMap$tree at focal time
 
-      # Use public function cut_phylo_at_focal_time()
-      # Need to include validity checks
-      # Make it such as it will keep other items in the list, not just create a phylo object with the mandatory items
-      # Make it such as it keeps all classes (and add "phylo" if needed)
+      updated_contMap_tree <- contMap
+      updated_contMap_tree$tree <- cut_phylo_at_focal_time(tree = updated_contMap_tree$tree, focal_time = focal_time, keep_tip_labels = keep_tip_labels)
 
-      ## Update maps
+      ## Update contMap$tree$maps for focal time
 
-      # Use public function update_maps_at_focal_time()
+      updated_contMap_maps <- contMap
+      updated_contMap_maps$tree <- update_maps_at_focal_time(tree_with_maps = updated_contMap_maps$tree, focal_time = focal_time)
+
+
+      # Use private function update_maps_at_focal_time()
       # Need to include validity checks
 
       ## Make all of this another public function: cut_contMap_at_focal_time()
       # Need to include validity checks
       # Make it such as it will keep other items in the list, not just create a contMap object with the mandatory items
-      # Make it such as it keeps all classes (and add "contMap" if needed)
+      # Make it such as it keeps all classes
 
     }
 
@@ -231,11 +262,8 @@ extract_most_likely_trait_values_for_focal_time <- function (contMap, ace = NULL
 }
 
 
-## Does it make sense to ask only for the ancestral state values and the tree in the workflow? (Technically, no need for the contMap, but needed for plotting)
-# Could use the output of	prepare_trait_data() when not asking for stochastic mapping
-  # Output = df of trait value x nodes including internal nodes and tips
-  # But the rationale of the workflow is to have a contMap for visualization, paralleling the need for stochastic mapping for categorical/biogeographic traits
+## Make unit tests for ultrametric (eel.tree / eel_contMap) and non-ultrametric trees (tortoise.tree / tortoise_contMap)
 
-## Add the option to update the ContMap (not needed for STRAPP test. Useful only for visualization)
-  # Provide a cut contMap as output, aside the trait_data vector, with updated maps and tree
+## Make unit tests for edge cases: focal_time > root_age; focal_time = root_age; focal_time = 0
+
 

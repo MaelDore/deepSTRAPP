@@ -36,7 +36,7 @@ update_rates_and_regimes_for_focal_time <- function (BAMM_object, focal_time, up
   # Get node ages per branch (no root edge)
   all_edges_df <- phytools::nodeHeights(BAMM_object)
   root_age <- max(phytools::nodeHeights(BAMM_object)[,2])
-  all_edges_df <- as.data.frame(round(root_age - all_edges_df, 2))
+  all_edges_df <- as.data.frame(round(root_age - all_edges_df, 5)) # May be an issue for trees with very short time span
   names(all_edges_df) <- c("rootward_node_age", "tipward_node_age")
   all_edges_df$edge_ID <- row.names(all_edges_df)
 
