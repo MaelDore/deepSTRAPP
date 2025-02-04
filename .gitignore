@@ -6,3 +6,4 @@ _dev_history.R
 .DS_Store
 .quarto
 README.html
+R/_contMap_commented.R

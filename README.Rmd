@@ -15,23 +15,40 @@ knitr::opts_chunk$set(
 
 # deepSTRAPP
 
+Add the Hex logo
+
 <!-- badges: start -->
 
-
+# usethis::use_cran_badge() reports the current version of your package on CRAN.
+# usethis::use_coverage() reports test coverage.
+# use_github_actions()  reports the R CMD check status of your development package.
 
 <!-- badges: end -->
 
 The R package deepSTRAPP employs time-calibrated phylogenies and trait data to test for differences in diversification rates over evolutionary time. It extends the STRAPP test from [BAMMtools::traitDependentBAMM] to any time step along phylogenies.
 
+Explain the context of the Rate Diversification Hypothesis and how this method improve testing ability to disentangle from effects of past and current dynamics in explaining current patterns of biodiversity.
+
+Display a workflow diagram that shows how functions interact with each other in a workflow to achieve a typical goal.
+
+Refer to the Research paper here already (provivde DOI link)
+
 ## Installation
+
+From CRAN for the latest release
+
+From GitHub for the current development version
 
 You can install the development version of deepSTRAPP like so:
 
 ``` r
 # FILL THIS IN! HOW CAN PEOPLE INSTALL YOUR DEV PACKAGE?
+# Provide scripts that can be copy-pasted to install your package easily
 ```
 
 ## Example
+
+A quick-to-run example that shows how you package can be used to solve a rather simple problem (keep it short)
 
 This is a basic example which shows you how to solve a common problem:
 
@@ -55,3 +72,15 @@ plot(pressure)
 ```
 
 In that case, don't forget to commit and push the resulting figure files, so they display on GitHub and CRAN.
+
+
+## Advanced uses / tutorials
+
+Points to vignettes for tutorials on how to use the package in more complex situations
+
+## How to Cite
+
+(provide DOI link)
+
+# May include a chunk of R script with a bibtex citation
+
