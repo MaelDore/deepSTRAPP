@@ -4,11 +4,11 @@
 \alias{cut_phylo_at_focal_time}
 \title{Cut the phylogeny at a given time in the past}
 \usage{
-cut_phylo_at_focal_time(tree, focal_time, keep_tip_labels = T)
+cut_phylo_at_focal_time(tree, focal_time, keep_tip_labels = TRUE)
 }
 \arguments{
-\item{tree}{Object of class \code{"phylo"}. The phylogenetic tree does not need
-to be ultrametric and fully dichotomous.}
+\item{tree}{Object of class \code{"phylo"}. The phylogenetic tree must be rooted and fully resolved/dichotomous,
+but it does not need to be ultrametric (it can includes fossils).}
 
 \item{focal_time}{Integer. The time, in terms of time distance from the present,
 at which the tree must be cut.}
@@ -20,9 +20,9 @@ The function returns the cut phylogeny as an object of class \code{"phylo"}. It 
 \itemize{
 \item \verb{$root_age} Integer. Stores the age of the root of the tree.
 \item \verb{$nodes_ID_df} Data.frame with two columns. Provides the conversion from the \code{new_node_ID} to the \code{initial_node_ID}. Each row is a node.
-\item \verb{$initial.node.labels} Vector of character strings. Provides the initial ID of internal nodes. Used to plot internal node labels with \code{\link[ape:nodelabels]{ape::nodelabels()}}.
+\item \verb{$initial_nodes_ID} Vector of character strings. Provides the initial ID of internal nodes. Used to plot internal node IDs as labels with \code{\link[ape:nodelabels]{ape::nodelabels()}}.
 \item \verb{$edges_ID_df} Data.frame with two columns. Provides the conversion from the \code{new_edge_ID} to the \code{initial_edge_ID}. Each row is an edge/branch.
-\item \verb{$initial.edge.labels} Vector of character strings. Provides the initial ID of edges/branches. Used to plot edge/branch labels with \code{\link[ape:nodelabels]{ape::edgelabels()}}.
+\item \verb{$initial_edges_ID} Vector of character strings. Provides the initial ID of edges/branches. Used to plot edge/branch IDs as labels with \code{\link[ape:nodelabels]{ape::edgelabels()}}.
 }
 }
 \description{
@@ -42,35 +42,36 @@ data(eel.tree)
 # ----- Example 1: keep_tip_labels = T ----- #
 
 # Cut tree to 30 Mya while keeping tip.label on terminal branches with a unique descending tip.
-cut_eel.tree <- cut_phylo_at_focal_time(tree = eel.tree, focal_time = 30, keep_tip_labels = T)
+cut_eel.tree <- cut_phylo_at_focal_time(tree = eel.tree, focal_time = 30, keep_tip_labels = TRUE)
 
 # Plot internal node labels on initial tree with cut-off
 plot(eel.tree)
 abline(v = max(phytools::nodeHeights(eel.tree)[,2]) - 30, col = "red", lty = 2, lwd = 2)
-nodelabels_in_cut_tree <- (length(eel.tree$tip.label)+1):(length(eel.tree$tip.label) + eel.tree$Nnode)
-nodelabels_in_cut_tree[!(nodelabels_in_cut_tree \%in\% cut_eel.tree$initial.node.labels)] <- NA
+nb_tips <- length(eel.tree$tip.label)
+nodelabels_in_cut_tree <- (nb_tips + 1):(nb_tips + eel.tree$Nnode)
+nodelabels_in_cut_tree[!(nodelabels_in_cut_tree \%in\% cut_eel.tree$initial_nodes_ID)] <- NA
 ape::nodelabels(text = nodelabels_in_cut_tree)
 
 # Plot initial internal node labels on cut tree
-plot(cut_tree)
-ape::nodelabels(text = cut_tree$initial.node.labels)
+plot(cut_eel.tree)
+ape::nodelabels(text = cut_eel.tree$initial_nodes_ID)
 
 # Plot edge labels on initial tree with cut-off
 plot(eel.tree)
 abline(v = max(phytools::nodeHeights(eel.tree)[,2]) - 30, col = "red", lty = 2, lwd = 2)
 edgelabels_in_cut_tree <- 1:nrow(eel.tree$edge)
-edgelabels_in_cut_tree[!(1:nrow(eel.tree$edge) \%in\% cut_eel.tree$initial.edge.labels)] <- NA
+edgelabels_in_cut_tree[!(1:nrow(eel.tree$edge) \%in\% cut_eel.tree$initial_edges_ID)] <- NA
 ape::edgelabels(text = edgelabels_in_cut_tree)
 
 # Plot initial edge labels on cut tree
 plot(cut_eel.tree)
-ape::edgelabels(text = cut_tree$initial.edge.labels)
+ape::edgelabels(text = cut_eel.tree$initial_edges_ID)
 
 # ----- Example 2: keep_tip_labels = F ----- #
 
 # Cut tree to 30 Mya without keeping tip.label on terminal branches with a unique descending tip.
 # All tip.labels are converted to their descending/tipward node ID
-cut_eel.tree <- cut_phylo_at_focal_time(tree = eel.tree, focal_time = 30, keep_tip_labels = F)
+cut_eel.tree <- cut_phylo_at_focal_time(tree = eel.tree, focal_time = 30, keep_tip_labels = FALSE)
 plot(cut_eel.tree)
 
 }

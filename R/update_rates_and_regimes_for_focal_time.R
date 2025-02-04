@@ -163,7 +163,7 @@ update_rates_and_regimes_for_focal_time <- function (BAMM_object, focal_time, up
     ## Print progress
     if (verbose & (i %% 100 == 0))
     {
-      cat(paste0(Sys.time(), " - Tip states/rates updated for BAMM posterior sample n°", i, "/", length(BAMM_object$eventData),"\n"))
+      cat(paste0(Sys.time(), " - Tip states/rates updated for BAMM posterior sample n\u00B0", i, "/", length(BAMM_object$eventData),"\n"))
     }
   }
 

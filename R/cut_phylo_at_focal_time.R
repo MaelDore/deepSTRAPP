@@ -4,8 +4,8 @@
 #'   younger than a specific time in the past (i.e. the `focal_time`).
 #'   Branches overlapping the `focal_time` are shorten to the `focal_time`.
 #'
-#' @param tree Object of class `"phylo"`. The phylogenetic tree does not need
-#'   to be ultrametric and fully dichotomous.
+#' @param tree Object of class `"phylo"`. The phylogenetic tree must be rooted and fully resolved/dichotomous,
+#'   but it does not need to be ultrametric (it can includes fossils).
 #' @param focal_time Integer. The time, in terms of time distance from the present,
 #'   at which the tree must be cut.
 #' @param keep_tip_labels Logical. Specify whether terminal branches with a single descendant tip must retained their initial `tip.label`. Default is `TRUE`.
@@ -35,18 +35,19 @@
 #' # ----- Example 1: keep_tip_labels = T ----- #
 #'
 #' # Cut tree to 30 Mya while keeping tip.label on terminal branches with a unique descending tip.
-#' cut_eel.tree <- cut_phylo_at_focal_time(tree = eel.tree, focal_time = 30, keep_tip_labels = T)
+#' cut_eel.tree <- cut_phylo_at_focal_time(tree = eel.tree, focal_time = 30, keep_tip_labels = TRUE)
 #'
 #' # Plot internal node labels on initial tree with cut-off
 #' plot(eel.tree)
 #' abline(v = max(phytools::nodeHeights(eel.tree)[,2]) - 30, col = "red", lty = 2, lwd = 2)
-#' nodelabels_in_cut_tree <- (length(eel.tree$tip.label)+1):(length(eel.tree$tip.label) + eel.tree$Nnode)
+#' nb_tips <- length(eel.tree$tip.label)
+#' nodelabels_in_cut_tree <- (nb_tips + 1):(nb_tips + eel.tree$Nnode)
 #' nodelabels_in_cut_tree[!(nodelabels_in_cut_tree %in% cut_eel.tree$initial_nodes_ID)] <- NA
 #' ape::nodelabels(text = nodelabels_in_cut_tree)
 #'
 #' # Plot initial internal node labels on cut tree
-#' plot(cut_tree)
-#' ape::nodelabels(text = cut_tree$initial_nodes_ID)
+#' plot(cut_eel.tree)
+#' ape::nodelabels(text = cut_eel.tree$initial_nodes_ID)
 #'
 #' # Plot edge labels on initial tree with cut-off
 #' plot(eel.tree)
@@ -57,13 +58,13 @@
 #'
 #' # Plot initial edge labels on cut tree
 #' plot(cut_eel.tree)
-#' ape::edgelabels(text = cut_tree$initial_edges_ID)
+#' ape::edgelabels(text = cut_eel.tree$initial_edges_ID)
 #'
 #' # ----- Example 2: keep_tip_labels = F ----- #
 #'
 #' # Cut tree to 30 Mya without keeping tip.label on terminal branches with a unique descending tip.
 #' # All tip.labels are converted to their descending/tipward node ID
-#' cut_eel.tree <- cut_phylo_at_focal_time(tree = eel.tree, focal_time = 30, keep_tip_labels = F)
+#' cut_eel.tree <- cut_phylo_at_focal_time(tree = eel.tree, focal_time = 30, keep_tip_labels = FALSE)
 #' plot(cut_eel.tree)
 #'
 
@@ -71,50 +72,14 @@
 ### Try with non-dichotomous trees!!!
 
 
-library(phytools)
-library(ape)
-data(package = "phytools")
-data(bat.tree)
-plot(bat.tree)
-
-is.binary(bat.tree)
-
-cut_bat.tree <- cut_phylo_at_focal_time(tree = bat.tree, focal_time = 0.3)
-
-cut_bat.tree$edge
-cut_bat.tree$tip.label
-
-# Plot initial internal node labels on cut treeplot(cut_bat.tree)
-plot(cut_bat.tree)
-ape::nodelabels(text = cut_bat.tree$initial_nodes_ID)
-
-# Plot edge labels on initial tree with cut-off
-plot(bat.tree)
-abline(v = max(phytools::nodeHeights(bat.tree)[,2]) - 0.05, col = "red", lty = 2, lwd = 2)
-edgelabels_in_cut_bat.tree <- 1:nrow(bat.tree$edge)
-edgelabels_in_cut_bat.tree[!(1:nrow(bat.tree$edge) %in% cut_bat.tree$initial_edges_ID)] <- NA
-ape::edgelabels(text = edgelabels_in_cut_bat.tree)
-
-# Plot initial edge labels on cut tree
-plot(cut_bat.tree)
-ape::edgelabels(text = cut_bat.tree$initial_edges_ID)
-
-# ----- Example 2: keep_tip_labels = F ----- #
-
-# Cut tree to 30 Mya without keeping tip.label on terminal branches with a unique descending tip.
-# All tip.labels are converted to their descending/tipward node ID
-cut_bat.tree <- cut_phylo_at_focal_time(tree = bat.tree, focal_time = 0.05, keep_tip_labels = F)
-plot(cut_bat.tree)
-
-
-
-cut_phylo_at_focal_time <- function(tree, focal_time, keep_tip_labels = T)
+cut_phylo_at_focal_time <- function(tree, focal_time, keep_tip_labels = TRUE)
 {
   ### Check input validity
 
   # tree must be a "phylo" class object
   # tree must be rooted
-  # tree must be fully resolved/dichotomic
+    # ape::is.rooted
+  # tree must be fully resolved/dichotomous
     # ape::is.binary
 
   # focal_time must be positive and smaller to root age
@@ -244,6 +209,5 @@ cut_phylo_at_focal_time <- function(tree, focal_time, keep_tip_labels = T)
 
 }
 
-cut_tree <- cut_phylo_at_focal_time(tree = tree, focal_time = 0, keep_tip_labels = F)
 
 
