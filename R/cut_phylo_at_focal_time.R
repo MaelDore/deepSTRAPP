@@ -79,7 +79,7 @@ plot(bat.tree)
 
 is.ultrametric(bat.tree)
 
-cut_bat.tree <- cut_phylo_at_focal_time(tree = bat.tree, focal_time = 0.2)
+cut_bat.tree <- cut_phylo_at_focal_time(tree = bat.tree, focal_time = 0.1)
 
 cut_bat.tree$edge
 cut_bat.tree$tip.label
@@ -90,7 +90,7 @@ ape::nodelabels(text = cut_bat.tree$initial_nodes_ID)
 
 # Plot edge labels on initial tree with cut-off
 plot(bat.tree)
-abline(v = max(phytools::nodeHeights(bat.tree)[,2]) - 30, col = "red", lty = 2, lwd = 2)
+abline(v = max(phytools::nodeHeights(bat.tree)[,2]) - 0.1, col = "red", lty = 2, lwd = 2)
 edgelabels_in_cut_bat.tree <- 1:nrow(bat.tree$edge)
 edgelabels_in_cut_bat.tree[!(1:nrow(bat.tree$edge) %in% cut_bat.tree$initial_edges_ID)] <- NA
 ape::edgelabels(text = edgelabels_in_cut_bat.tree)
