@@ -2,6 +2,7 @@
 
 export(cut_contMap_at_focal_time)
 export(cut_phylo_at_focal_time)
+export(extract_most_likely_trait_values_for_focal_time)
 importFrom(ape,edgelabels)
 importFrom(ape,nodelabels)
 importFrom(phytools,nodeHeights)

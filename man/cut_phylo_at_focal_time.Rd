@@ -42,6 +42,7 @@ the leaf left is labeled with the node ID of the MRCA of the cut-off clade.
 }
 \examples{
 # Load eel phylogeny from the R package phytools
+# Source: Collar et al., 2014; DOI: 10.1038/ncomms6505
 library(phytools)
 data(eel.tree)
 

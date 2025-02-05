@@ -1,47 +1,209 @@
+#' @title Extracts the continuous trait data mapped on a phylogeny at a given time in the past
+#'
+#' @description Extracts the most likely trait values found along branches
+#'   at a specific time in the past (i.e. the `focal_time`).
+#'   Optionally, the function can update the mapped phylogeny (`contMap`) such as
+#'   branches overlapping the `focal_time` are shorten to the `focal_time`, and
+#'   the continuous trait mapping for the cut off branches are removed
+#'   by updating the `$tree$maps` and `$tree$mapped.edge` elements.
+#'
+#' @param contMap Object of class `"contMap"`, typically generated with [phytools::contMap()],
+#'   that contains a phylogenetic tree and associated continuous trait mapping.
+#'   The phylogenetic tree must be rooted and fully resolved/dichotomous,
+#'   but it does not need to be ultrametric (it can includes fossils).
+#' @param ace Named numeric vector (Optional). Ancestral Character Estimates (ACE) of the internal nodes,
+#'   typically generated with [phytools::fastAnc()], [phytools::anc.ML()], or [ape::ace()].
+#'   Names are nodes_ID of the internal nodes. Values are ACE of the trait.
+#'   Needed to provide accurate estimates of trait values.
+#' @param tip_data Named numeric vector (Optional). Tip values of the trait.
+#'   Names are nodes_ID of the internal nodes.
+#'   Needed to provide accurate tip values.
+#' @param focal_time Integer. The time, in terms of time distance from the present,
+#'   at which the tree and mapping must be cut.
+#' @param update_contMap Logical. Specify whether the mapped phylogeny (`contMap`)
+#'   provided as input should be updated for visualization and returned among the outputs. Default is `FALSE`.
+#'   The update consists in cutting off branches and mapping that are younger than the `focal_time`.
+#' @param keep_tip_labels Logical. Specify whether terminal branches with a single descendant tip
+#'   must retained their initial `tip.label` on the updated contMap. Default is `TRUE`.
+#'   Used only if `update_contMap = TRUE`.
+#'
+#' @export
+#' @importFrom phytools nodeHeights
+#'
+#' @details The mapped phylogeny (`contMap`) is cut at a specific time in the past
+#'   (i.e. the `focal_time`) and the current trait values of the overlapping edges/branches are extracted.
+#'
+#'   If providing only the `contMap` trait values at tips and internal nodes will be extracted from
+#'   the mapping of the `contMap` leading to a slight dependency with the actual tip data
+#'   and estimated ancestral character values.
+#'
+#'   True ML estimates will be used if `tip_data` and/or `ace` are provided as optional inputs.
+#'
+#'   # ----- Visualize updated contMap -----#
+#'
+#'   To obtain an updated `contMap` alongside the trait data, set `update_contMap = TRUE`.
+#'   The update consists in cutting off branches and mapping that are younger than the `focal_time`.
+#'
+#'   When a branch with a single descendant tip is cut and `keep_tip_labels = TRUE`,
+#'   the leaf left is labeled with the tip.label of the unique descendant tip.
+#'
+#'   When a branch with a single descendant tip is cut and `keep_tip_labels = FALSE`,
+#'   the leaf left is labeled with the node ID of the unique descendant tip.
+#'
+#'   In all cases, when a branch with multiple descendant tips (i.e., a clade) is cut,
+#'   the leaf left is labeled with the node ID of the MRCA of the cut-off clade.
+#'
+#'   The continuous trait mapping is updated accordingly by removing mapping associated with the cut off branches.
+#'
+#' @return By default, the function returns a named numerical vector with ML trait values found along branches overlapping the `focal_time`.
+#'
+#'   If `update_contMap = TRUE`, the output is a list with two elements: `$trait_data` and `$contMap`.
+#'   * `$trait_data` A named numerical vector with ML trait values found along branches overlapping the `focal_time`. Names are the tip.label/node ID.
+#'   * `$contMap` An object of class that contains the updated `contMap` with  branches and mapping that are younger than the `focal_time` cut off.
+#'      The function also adds multiple useful sub-elements to the `$contMap$tree` element.
+#'   ** `$root_age` Integer. Stores the age of the root of the tree.
+#'   ** `$nodes_ID_df` Data.frame with two columns. Provides the conversion from the `new_node_ID` to the `initial_node_ID`. Each row is a node.
+#'   ** `$initial_nodes_ID` Vector of character strings. Provides the initial ID of internal nodes. Used to plot internal node IDs as labels with [ape::nodelabels()].
+#'   ** `$edges_ID_df` Data.frame with two columns. Provides the conversion from the `new_edge_ID` to the `initial_edge_ID`. Each row is an edge/branch.
+#'   ** `$initial_edges_ID` Vector of character strings. Provides the initial ID of edges/branches. Used to plot edge/branch IDs as labels with [ape::edgelabels()].
+#'
+#'
+#' @author Maël Doré
+#'
+#' @examples
+#' # ----- Example 1: Only extent taxa (Ultrametric tree) ----- #
+#'
+#' ## Prepare data
+#'
+#' # Load eel data from the R package phytools
+#' # Source: Collar et al., 2014; DOI: 10.1038/ncomms6505
+#'
+#' library(phytools)
+#' data(eel.tree)
+#' data(eel.data)
+#'
+#' # Extract body size
+#' eel_data <- setNames(eel.data$Max_TL_cm,
+#'                      rownames(eel.data))
+#'
+#' # Get Ancestral Character Estimates based on a Brownian Motion model
+#' # To obtain values at internal nodes
+#' eel_ACE <- phytools::fastAnc(tree = eel.tree, x = eel_data)
+#'
+#' # Run a Stochastic Mapping based on a Brownian Motion model
+#' # to interpolate values along branches and obtain a "contMap" object
+#' eel_contMap <- phytools::contMap(eel.tree, x = eel_data,
+#'                                  res = 100, # Number of time steps
+#'                                  plot = FALSE)
+#'
+#' # Set focal time to 50 Mya
+#' focal_time <- 50
+#'
+#' ## Extract trait data and update contMap for the given focal_time
+#'
+#' # Extract from the contMap (values are not exact ML estimates)
+#' eel_test <- extract_most_likely_trait_values_for_focal_time(
+#'    contMap = eel_contMap,
+#'    focal_time = focal_time,
+#'    update_contMap = TRUE)
+#' # Extract from tip data and ML estimates of ancestral characters (values are true ML estimates)
+#' eel_test <- extract_most_likely_trait_values_for_focal_time(
+#'    contMap = eel_contMap,
+#'    ace = eel_ACE, tip_data = eel_data,
+#'    focal_time = focal_time,
+#'    update_contMap = TRUE)
+#'
+#' ## Visualize outputs
+#'
+#' # Print trait data
+#' eel_test$trait_data
+#'
+#' # Plot node labels on initial stochastic map with cut-off
+#' plot(eel_contMap)
+#' nodelabels()
+#' abline(v = max(phytools::nodeHeights(eel_contMap$tree)[,2]) - focal_time,
+#'        col = "red", lty = 2, lwd = 2)
+#'
+#' # Plot updated contMap with initial node labels
+#' plot(eel_test$contMap)
+#' nodelabels(text = eel_test$contMap$tree$initial_nodes_ID)
+#'
+#' # ----- Example 2: Include fossils (Non-ultrametric tree) ----- #
+#'
+#' ## Test with non-ultrametric trees like mammals in motmot
+#'
+#' ## Prepare data
+#'
+#' # Load mammals phylogeny and data from the R package motmot
+#' # Data source: Slater, 2013; DOI: 10.1111/2041-210X.12084
+#'
+#' library(motmot)
+#' data("mammals")
+#' force(mammals)
+#'
+#' mammals_tree <- mammals$mammal.phy
+#' mammals_data <- setNames(object = mammals$mammal.mass$mean,
+#'                          nm = row.names(mammals$mammal.mass))[mammals_tree$tip.label]
+#'
+#' # Get Ancestral Character Estimates based on a Brownian Motion model
+#' # To obtain values at internal nodes
+#' mammals_ACE <- phytools::fastAnc(tree = mammals_tree, x = mammals_data)
+#'
+#' # Run a Stochastic Mapping based on a Brownian Motion model
+#' # to interpolate values along branches and obtain a "contMap" object
+#' mammals_contMap <- phytools::contMap(mammals_tree, x = mammals_data,
+#'                                      res = 100, # Number of time steps
+#'                                      plot = FALSE)
+#'
+#' # Set focal time to 80 Mya
+#' focal_time <- 80
+#'
+#' ## Extract trait data and update contMap for the given focal_time
+#'
+#' # Extract from the contMap (values are not exact ML estimates)
+#' mammals_test <- extract_most_likely_trait_values_for_focal_time(
+#'    contMap = mammals_contMap,
+#'    focal_time = focal_time,
+#'    update_contMap = TRUE)
+#' # Extract from tip data and ML estimates of ancestral characters (values are true ML)
+#' mammals_test <- extract_most_likely_trait_values_for_focal_time(
+#'    contMap = mammals_contMap,
+#'    ace = mammals_ACE, tip_data = mammals_data,
+#'    focal_time = focal_time,
+#'    update_contMap = TRUE)
+#'
+#' ## Visualize outputs
+#'
+#' # Print trait data
+#' mammals_test$trait_data
+#'
+#' # Plot node labels on initial stochastic map with cut-off
+#' plot(mammals_contMap)
+#' nodelabels()
+#' abline(v = max(phytools::nodeHeights(mammals_contMap$tree)[,2]) - focal_time,
+#'        col = "red", lty = 2, lwd = 2)
+#'
+#' # Plot updated contMap with initial node labels
+#' plot(mammals_test$contMap)
+#' nodelabels(text = mammals_test$contMap$tree$initial_nodes_ID)
+#'
 
+## Once datasets are included in my package, remove motmot from dependencies
 
-## Dependencies: phytools, dplyr
-
-## Does it make sense to ask only for the ancestral state values and the tree in the workflow? (Technically, no need for the contMap, but needed for plotting)
-# Could use the output of	prepare_trait_data() when not asking for stochastic mapping
-# Output = df of trait value x nodes including internal nodes and tips
-# But the rationale of the workflow is to have a contMap for visualization, paralleling the need for stochastic mapping for categorical/biogeographic traits
-
-## Add the option to update the ContMap (not needed for STRAPP test. Useful only for visualization)
-# Provide a cut contMap as output, aside the trait_data vector, with updated maps and tree
-
-## For continuous traits
-
+## Currently, For continuous traits
 # Input = contMap
 
-# contMap <- eel_contMap
-# ace = ACE_ln_TL$ace
-# tip_data = ln_TL
-# focal_time <- 50
+## Make a different function for each type of data, then make a wrapper function for all types
+# extract_most_likely_trait_values_for_focal_time() = wrapper
+# extract_most_likely_trait_values_from_contMap_for_focal_time() = For continuous traits
+# extract_most_likely_trait_values_from_simmaps_for_focal_time() = For categorical traits
+# extract_most_likely_range_values_from_simmaps_for_focal_time() = For biogeographic traits
 
 
-tree_with_maps <- contMap$tree
-focal_time <- 50
-focal_time <- 99
+### Possible update: Make it work with non-dichotomous trees!!!
 
 
-## Test with non-ultrametric trees like tortoise.tree in phytools
-
-tortoise_contMap
-max(phytools::nodeHeights(tortoise_contMap$tree)[,2])
-
-plot(tortoise_contMap)
-root_age <- max(phytools::nodeHeights(tortoise_contMap$tree)[,2])
-abline(v = root_age - 0.001)
-
-test <- update_maps_at_focal_time(tree_with_maps = tortoise_contMap$tree, focal_time = 0.001)
-
-test$maps
-
-
-
-
-extract_most_likely_trait_values_for_focal_time <- function (contMap, ace = NULL, tip_data = NULL, focal_time, update_contMap = F, keep_tip_labels = TRUE)
+extract_most_likely_trait_values_for_focal_time <- function (contMap, ace = NULL, tip_data = NULL, focal_time, update_contMap = FALSE, keep_tip_labels = TRUE)
 {
 
   ### Check input validity
@@ -105,6 +267,10 @@ extract_most_likely_trait_values_for_focal_time <- function (contMap, ace = NULL
   all_edges_df <- cbind(all_edges_df, all_edges_ID_df)
   all_edges_df <- all_edges_df[, c("edge_ID", "rootward_node_ID", "tipward_node_ID", "rootward_node_age", "tipward_node_age")]
 
+  # Assign tip.labels. Use tipward_node_ID for internal edges
+  all_edges_df$tip.label <- contMap$tree$tip.label[match(x = all_edges_df$tipward_node_ID, 1:length(contMap$tree$tip.label))]
+  all_edges_df$tip.label[is.na(all_edges_df$tip.label)] <- all_edges_df$tipward_node_ID[is.na(all_edges_df$tip.label)]
+
   # # Detect root node ID as the only rootward node that is not also the tipward node of any edge
   # root_node_ID <- contMap$tree$edge[which.min(contMap$tree$edge[, 1] %in% contMap$tree$edge[, 2]), 1]
 
@@ -131,7 +297,7 @@ extract_most_likely_trait_values_for_focal_time <- function (contMap, ace = NULL
   } else {
 
     # Extract only edges that are present at the focal time
-    present_edges_df <- all_edges_df[all_edges_df$time_test, c("edge_ID", "rootward_node_ID", "tipward_node_ID", "rootward_node_age", "tipward_node_age")]
+    present_edges_df <- all_edges_df[all_edges_df$time_test, c("edge_ID", "rootward_node_ID", "tipward_node_ID", "rootward_node_age", "tipward_node_age", "tip.label")]
 
     # Compute node distances to focal time
     present_edges_df$rootward_node_dist <- abs(present_edges_df$rootward_node_age - focal_time)
@@ -221,34 +387,24 @@ extract_most_likely_trait_values_for_focal_time <- function (contMap, ace = NULL
       }
     }
 
+    ## Format "trait_data" output = named vector of most likely values at focal time
+    trait_data <- present_edges_df$ACE_at_focal_time
+    # names(trait_data) <- present_edges_df$edge_ID
+    if (keep_tip_labels) # Names = tip.labels of tipward nodes
+    {
+      names(trait_data) <- present_edges_df$tip.label
+    } else { # Names = tipward nodes ID
+      names(trait_data) <- present_edges_df$tipward_node_ID
+    }
+
+
     ## Update contMap if needed
     # Not needed for STRAPP test. Useful only for visualization.
     if (update_contMap)
     {
-      ## Cut contMap$tree at focal time
-
-      updated_contMap_tree <- contMap
-      updated_contMap_tree$tree <- cut_phylo_at_focal_time(tree = updated_contMap_tree$tree, focal_time = focal_time, keep_tip_labels = keep_tip_labels)
-
-      ## Update contMap$tree$maps for focal time
-
-      updated_contMap_maps <- contMap
-      updated_contMap_maps$tree <- update_maps_at_focal_time(tree_with_maps = updated_contMap_maps$tree, focal_time = focal_time)
-
-
-      # Use private function update_maps_at_focal_time()
-      # Need to include validity checks
-
-      ## Make all of this another public function: cut_contMap_at_focal_time()
-      # Need to include validity checks
-      # Make it such as it will keep other items in the list, not just create a contMap object with the mandatory items
-      # Make it such as it keeps all classes
-
+      ## Cut contMap$tree at focal time and update trait mapping in contMap$tree$maps and contMap$tree$mapped.edge
+      updated_contMap <- cut_contMap_at_focal_time(contMap = contMap, focal_time = focal_time, keep_tip_labels = keep_tip_labels)
     }
-
-    ## Format "trait_data" output = named vector of most likely values at focal time
-    trait_data <- present_edges_df$ACE_at_focal_time
-    names(trait_data) <- present_edges_df$edge_ID
 
     ## Export outputs
     if (!update_contMap)
@@ -262,7 +418,7 @@ extract_most_likely_trait_values_for_focal_time <- function (contMap, ace = NULL
 }
 
 
-## Make unit tests for ultrametric (eel.tree / eel_contMap) and non-ultrametric trees (tortoise.tree / tortoise_contMap)
+## Make unit tests for ultrametric (eel.tree / eel_contMap) and non-ultrametric trees (mammals$mammals.phy / mammals_contMap)
 
 ## Make unit tests for edge cases: focal_time > root_age; focal_time = root_age; focal_time = 0
 

@@ -29,7 +29,7 @@ update_maps_at_focal_time <- function(tree_with_maps, focal_time)
 {
   ### Check input validity
 
-  # tree_with_maps must be a "phylo" class object
+  # tree_with_maps must be an object with the two classes: "simmap" and "phylo".
   # tree_with_maps must be rooted
     # ape::is.rooted
   # tree_with_maps must be fully resolved/dichotomous (??)

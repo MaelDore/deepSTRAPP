@@ -35,6 +35,7 @@
 #'
 #' @examples
 #' # Load eel phylogeny from the R package phytools
+#' # Source: Collar et al., 2014; DOI: 10.1038/ncomms6505
 #' library(phytools)
 #' data(eel.tree)
 #'
@@ -216,7 +217,7 @@ cut_phylo_at_focal_time <- function(tree, focal_time, keep_tip_labels = TRUE)
 }
 
 
-## Make unit tests for ultrametric (eel.tree) and non-ultrametric trees (tortoise.tree)
+## Make unit tests for ultrametric (eel.tree / eel_contMap) and non-ultrametric trees (mammals$mammals.phy / mammals_contMap)
 
 
 ## Make unit tests for edge cases: focal_time > root_age; focal_time = root_age; focal_time = 0

@@ -45,46 +45,56 @@
 #' @examples
 #' # ----- Prepare data ----- #
 #'
-#' # Load turtoise phylogeny and data from the R package phytools
-#' library(phytools)
-#' data(tortoise.tree)
-#' data(tortoise.geog)
+#' # Load mammals phylogeny and data from the R package motmot
+#' # Data source: Slater, 2013; DOI: 10.1111/2041-210X.12084
+#' library(motmot)
 #'
-#' # Extract mean latitudinal niche data
-#' tortoise_lat_data <- setNames(object = tortoise.geog$lat, nm = row.names(tortoise.geog))
+#' data("mammals")
+#' force(mammals)
+#'
+#' mammals_tree <- mammals$mammal.phy
+#' mammals_data <- setNames(object = mammals$mammal.mass$mean,
+#'                          nm = row.names(mammals$mammal.mass))[mammals_tree$tip.label]
 #'
 #' # Run a stochastic mapping based on a Brownian Motion model
 #' # for Ancestral Trait Estimates to obtain a "contMap" object
-#' tortoise_contMap <- phytools::contMap(tortoise.tree, x = tortoise_lat_data,
-#'                                       res = 100, # Number of time steps
-#'                                       plot = FALSE)
+#' mammals_contMap <- phytools::contMap(mammals_tree, x = mammals_data,
+#'                                      res = 100, # Number of time steps
+#'                                      plot = FALSE)
 #'
 #' # Set focal time
-#' focal_time <- 0.001
+#' focal_time <- 80
 #'
 #' # ----- Example 1: keep_tip_labels = TRUE ----- #
 #'
-#' # Cut contMap to 0.001 evolutionary units while keeping tip.label on terminal branches with a unique descending tip.
-#' updated_contMap <- cut_contMap_at_focal_time(contMap = tortoise_contMap, focal_time = focal_time, keep_tip_labels = TRUE)
+#' # Cut contMap to 80 Mya while keeping tip.label
+#' # on terminal branches with a unique descending tip.
+#' updated_contMap <- cut_contMap_at_focal_time(contMap = mammals_contMap,
+#'                                              focal_time = focal_time,
+#'                                              keep_tip_labels = TRUE)
 #'
 #' # Plot node labels on initial stochastic map with cut-off
-#' plot(tortoise_contMap)
+#' plot(mammals_contMap, lwd = 2)
 #' nodelabels()
-#' abline(v = max(phytools::nodeHeights(tortoise_contMap$tree)[,2]) - focal_time, col = "red", lty = 2, lwd = 2)
-#'
+#' abline(v = max(phytools::nodeHeights(mammals_contMap$tree)[,2]) - focal_time,
+#'        col = "red", lty = 2, lwd = 2)
+
 #' # Plot initial node labels on cut stochastic map
 #' plot(updated_contMap)
 #' nodelabels(text = updated_contMap$tree$initial_nodes_ID)
 #'
 #' # ----- Example 2: keep_tip_labels = FALSE ----- #
 #'
-#' # Cut contMap to 0.001 evolutionary units while keeping tip.label on terminal branches with a unique descending tip.
-#' updated_contMap <- cut_contMap_at_focal_time(contMap = tortoise_contMap, focal_time = focal_time, keep_tip_labels = FALSE)
+#' # Cut contMap to 80 Mya while NOT keeping tip.label.
+#' updated_contMap <- cut_contMap_at_focal_time(contMap = mammals_contMap,
+#'                                              focal_time = focal_time,
+#'                                             keep_tip_labels = FALSE)
 #'
 #' # Plot node labels on initial stochastic map with cut-off
-#' plot(tortoise_contMap)
+#' plot(mammals_contMap)
 #' nodelabels()
-#' abline(v = max(phytools::nodeHeights(tortoise_contMap$tree)[,2]) - focal_time, col = "red", lty = 2, lwd = 2)
+#' abline(v = max(phytools::nodeHeights(mammals_contMap$tree)[,2]) - focal_time,
+#'        col = "red", lty = 2, lwd = 2)
 #'
 #' # Plot initial node labels on cut stochastic map
 #' plot(updated_contMap)
@@ -129,23 +139,20 @@ cut_contMap_at_focal_time <- function(contMap, focal_time, keep_tip_labels = TRU
     ## Cut contMap$tree at focal time
 
     updated_contMap_tree <- contMap
-    updated_contMap_tree$tree <- deepSTRAPP::cut_phylo_at_focal_time(tree = updated_contMap_tree$tree, focal_time = focal_time, keep_tip_labels = keep_tip_labels)
+    updated_contMap_tree$tree <- cut_phylo_at_focal_time(tree = updated_contMap_tree$tree, focal_time = focal_time, keep_tip_labels = keep_tip_labels)
 
     ## Update contMap$tree$maps for focal time
 
     updated_contMap_maps <- contMap
-    updated_contMap_maps$tree <- deepSTRAPP::update_maps_at_focal_time(tree_with_maps = updated_contMap_maps$tree, focal_time = focal_time)
+    updated_contMap_maps$tree <- update_maps_at_focal_time(tree_with_maps = updated_contMap_maps$tree, focal_time = focal_time)
 
     ## Merge outputs
     updated_contMap <- updated_contMap_tree
     updated_contMap$tree$maps <- updated_contMap_maps$tree$maps
 
     ## Update $mapped.edge
-    updated_contMap$tree$mapped.edge <- deepSTRAPP::makeMappedEdge(edge = updated_contMap$tree$edge, maps = updated_contMap$tree$maps)
+    updated_contMap$tree$mapped.edge <- makeMappedEdge(edge = updated_contMap$tree$edge, maps = updated_contMap$tree$maps)
     updated_contMap$tree$mapped.edge <- updated_contMap$tree$mapped.edge[, order(as.numeric(colnames(updated_contMap$tree$mapped.edge)))]
-
-    # Store updated maps
-    tree_with_updated_maps$maps <- updated_maps
 
     # Export contMap with updated tree and character mapping ($tree$maps and $tree$mapped.edge)
     return(updated_contMap)

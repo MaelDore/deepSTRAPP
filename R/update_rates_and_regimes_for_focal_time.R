@@ -5,6 +5,11 @@
 # focal_time = 30
 
 
+## Change output of trait data such as the tipward node ID is used as label instead of the edge ID
+# Make more sense to have values attributed to tips than to edges
+# Be sure to have the same when extracting BAMM rates and regimes
+
+
 update_rates_and_regimes_for_focal_time <- function (BAMM_object, focal_time, update_rates = T, update_regimes = T, verbose = T)
 {
 
