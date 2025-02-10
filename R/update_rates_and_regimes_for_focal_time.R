@@ -53,6 +53,51 @@
 
 
 
+##### Handle non-ultrametric tree
+
+BAMM_object_with_fossils <- BAMM_object
+
+# Cut Feroponera_ferox to 12 My: Tip 719; Edge 1443
+# Cut Neoponera_bucki to 55 My: Tip 1; Edge 4
+
+# Adjust $edge.length
+BAMM_object_with_fossils$edge.length[1443] <- BAMM_object_with_fossils$edge.length[1443] - 12
+BAMM_object_with_fossils$edge.length[4] <- BAMM_object_with_fossils$edge.length[4] - 55
+
+# Adjust $end
+BAMM_object_with_fossils$end[1443] <- BAMM_object_with_fossils$end[1443] - 12
+BAMM_object_with_fossils$end[4] <- BAMM_object_with_fossils$end[4] - 55
+
+# Adjust $eventBranchSegs
+for (i in seq_along(BAMM_object_with_fossils$eventBranchSegs))
+{
+  # Adjust $eventBranchSegs for Feroponera_ferox
+  eventBranchSegs_i <- BAMM_object_with_fossils$eventBranchSegs[[i]]
+  eventBranchSegs_i[eventBranchSegs_i[,1] == 719, 3] <- eventBranchSegs_i[eventBranchSegs_i[,1] == 719, 3] - 12
+
+  # Adjust $eventBranchSegs for Neoponera_bucki
+  eventBranchSegs_i <- BAMM_object_with_fossils$eventBranchSegs[[i]]
+  eventBranchSegs_i[eventBranchSegs_i[,1] == 1, 3] <- eventBranchSegs_i[eventBranchSegs_i[,1] == 1, 3] - 55
+
+  # Store updated $eventBranchSegs
+  BAMM_object_with_fossils$eventBranchSegs[[i]] <- eventBranchSegs_i
+}
+BAMM_object_with_fossils$eventBranchSegs[[1]]
+
+BAMM_object <- BAMM_object_with_fossils
+
+## Correct the use of $time_test as in cut_phylo
+
+
+### Ideally, run BAMM on motmot::mammals dataset so I have a real dataset with fossils (does BAMM works with fossils???)
+
+str(BAMM_object, max.level = 1)
+
+pdf(file = "./test_BAMMplot_t0.pdf", width = 20, height = 150)
+plot.bammdata(BAMM_object, labels = TRUE)
+dev.off()
+
+BAMMtools::getEventData
 
 update_rates_and_regimes_for_focal_time <- function (BAMM_object, focal_time,
                                                      update_rates = TRUE, update_regimes = TRUE,
@@ -402,9 +447,6 @@ update_rates_and_regimes_for_focal_time <- function (BAMM_object, focal_time,
   return(updated_BAMM_object)
 }
 
-
-##### Handle non-ultrametric tree
-  # Correct the use of $time_test as in cut_phylo
 
 
 ## Helper function used to generate $mapped.edge from $edge and $maps
