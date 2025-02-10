@@ -1,4 +1,4 @@
-#' @title Extracts the continuous trait data mapped on a phylogeny at a given time in the past
+#' @title Extracts continuous trait data mapped on a phylogeny at a given time in the past
 #'
 #' @description Extracts the most likely trait values found along branches
 #'   at a specific time in the past (i.e. the `focal_time`).
@@ -33,39 +33,38 @@
 #' @details The mapped phylogeny (`contMap`) is cut at a specific time in the past
 #'   (i.e. the `focal_time`) and the current trait values of the overlapping edges/branches are extracted.
 #'
+#'   ----- Extract `trait_data` -----
+#'
 #'   If providing only the `contMap` trait values at tips and internal nodes will be extracted from
 #'   the mapping of the `contMap` leading to a slight dependency with the actual tip data
 #'   and estimated ancestral character values.
 #'
 #'   True ML estimates will be used if `tip_data` and/or `ace` are provided as optional inputs.
 #'
-#'   # ----- Visualize updated contMap -----#
+#'   ----- Update the `contMap` -----
 #'
 #'   To obtain an updated `contMap` alongside the trait data, set `update_contMap = TRUE`.
 #'   The update consists in cutting off branches and mapping that are younger than the `focal_time`.
-#'
-#'   When a branch with a single descendant tip is cut and `keep_tip_labels = TRUE`,
-#'   the leaf left is labeled with the tip.label of the unique descendant tip.
-#'
-#'   When a branch with a single descendant tip is cut and `keep_tip_labels = FALSE`,
-#'   the leaf left is labeled with the node ID of the unique descendant tip.
-#'
-#'   In all cases, when a branch with multiple descendant tips (i.e., a clade) is cut,
-#'   the leaf left is labeled with the node ID of the MRCA of the cut-off clade.
+#'   * When a branch with a single descendant tip is cut and `keep_tip_labels = TRUE`,
+#'       the leaf left is labeled with the tip.label of the unique descendant tip.
+#'   * When a branch with a single descendant tip is cut and `keep_tip_labels = FALSE`,
+#'     the leaf left is labeled with the node ID of the unique descendant tip.
+#'   * In all cases, when a branch with multiple descendant tips (i.e., a clade) is cut,
+#'     the leaf left is labeled with the node ID of the MRCA of the cut-off clade.
 #'
 #'   The continuous trait mapping is updated accordingly by removing mapping associated with the cut off branches.
 #'
-#' @return By default, the function returns a named numerical vector with ML trait values found along branches overlapping the `focal_time`.
+#' @return By default, the function returns `trait_data` as a named numerical vector with ML trait values found along branches overlapping the `focal_time`.
 #'
 #'   If `update_contMap = TRUE`, the output is a list with two elements: `$trait_data` and `$contMap`.
 #'   * `$trait_data` A named numerical vector with ML trait values found along branches overlapping the `focal_time`. Names are the tip.label/node ID.
 #'   * `$contMap` An object of class that contains the updated `contMap` with  branches and mapping that are younger than the `focal_time` cut off.
 #'      The function also adds multiple useful sub-elements to the `$contMap$tree` element.
-#'   ** `$root_age` Integer. Stores the age of the root of the tree.
-#'   ** `$nodes_ID_df` Data.frame with two columns. Provides the conversion from the `new_node_ID` to the `initial_node_ID`. Each row is a node.
-#'   ** `$initial_nodes_ID` Vector of character strings. Provides the initial ID of internal nodes. Used to plot internal node IDs as labels with [ape::nodelabels()].
-#'   ** `$edges_ID_df` Data.frame with two columns. Provides the conversion from the `new_edge_ID` to the `initial_edge_ID`. Each row is an edge/branch.
-#'   ** `$initial_edges_ID` Vector of character strings. Provides the initial ID of edges/branches. Used to plot edge/branch IDs as labels with [ape::edgelabels()].
+#'     + `$root_age` Integer. Stores the age of the root of the tree.
+#'     + `$nodes_ID_df` Data.frame with two columns. Provides the conversion from the `new_node_ID` to the `initial_node_ID`. Each row is a node.
+#'     + `$initial_nodes_ID` Vector of character strings. Provides the initial ID of internal nodes. Used to plot internal node IDs as labels with [ape::nodelabels()].
+#'     + `$edges_ID_df` Data.frame with two columns. Provides the conversion from the `new_edge_ID` to the `initial_edge_ID`. Each row is an edge/branch.
+#'     + `$initial_edges_ID` Vector of character strings. Provides the initial ID of edges/branches. Used to plot edge/branch IDs as labels with [ape::edgelabels()].
 #'
 #'
 #' @author Maël Doré

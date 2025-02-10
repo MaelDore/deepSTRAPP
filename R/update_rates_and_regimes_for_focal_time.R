@@ -1,16 +1,65 @@
 
 
-# BAMM_posterior_samples_data <- readRDS(file = "../Ponerinae_Historical_Biogeography/outputs/BAMM/Ponerinae_MCC_phylogeny_1534t/BAMM_posterior_samples_data.rds")
-# BAMM_object <- BAMM_posterior_samples_data
-# focal_time = 30
+# Dependency: BAMMtools::plot.bammdata, BAMMtools::dtRates, phytools::nodeHeights, phytools::getDescendants
+
+## To updates for rates and regimes
+# $tipStates => update_regimes = TRUE
+# $tipLambda => update_rates = TRUE
+# $tipMu => update_rates = TRUE
+
+## To update for cut phylo => update_tree = TRUE
+# $edge
+# $Nnode
+# $tip.label
+# $edge.length
+
+## To update so plot.bammdata and dtRates works => update_plot = TRUE
+# $begin # Absolute time since root of edge/branch start
+# $end # Absolute time since root of edge/branch end
+# $eventVectors # List of integer vectors of regime membership per branches in each posterior configuration
+# $eventBranchSegs # Same as $eventVectors but with matrix including tipward node ID (NOT the edge ID) and begin/end ages of the branches
+# $dtRates # Provides speciation and extinction rates along segments used by [BAMMtools::plot.bammdata()], and resolution faction (tau) description the fraction of each segment length compared to the full depth of the initial tree (i.e., the root_age)
+
+## Other stuff to update to make the object clean => update_all_elements = TRUE
+# $downseq # Order of node visits when using a pre-order tree traversal
+# $lastvisit # ID of the last node visited when starting from the node in the corresponding position in downseq.
+# $numberEvents # Number of events/macroevolutionary regimes (k+1) recorded in each posterior configuration. k = number of shifts
+# $eventData # Dataframe recording shift events and macroevolutionary regimes in the focal posterior configuration. 1st line = Background root regime
+  # Need to update the ID of the nodes/edges
+# $meanTipLambda # Mean current tip speciation rates across all posterior configurations
+# $meanTipMu # Mean current tip extinction rates across all posterior configurations
+# $type # "diversification"
 
 
-## Change output of trait data such as the tipward node ID is used as label instead of the edge ID
-# Make more sense to have values attributed to tips than to edges
-# Be sure to have the same when extracting BAMM rates and regimes
+# BAMM_object <- readRDS(file = "../Ponerinae_Historical_Biogeography/outputs/BAMM/Ponerinae_MCC_phylogeny_1534t/BAMM_posterior_samples_data.rds")
+#
+# focal_time = 10
+#
+# updated_BAMM_object <- update_rates_and_regimes_for_focal_time(BAMM_object = BAMM_object, focal_time,
+#                                         update_rates = TRUE, update_regimes = TRUE,
+#                                         update_tree = FALSE, update_plot = FALSE,
+#                                         update_all_elements = TRUE,
+#                                         keep_tip_labels = TRUE,
+#                                         verbose = TRUE)
+#
+# plot(BAMM_object, legend = TRUE, labels = FALSE)
+# abline(v = 123.55 - focal_time,
+#        col = "red", lty = 2, lwd = 2)
+#
+# BAMMtools::plot.bammdata(updated_BAMM_object, legend = TRUE,
+#                          colorbreaks = updated_BAMM_object$initial_colorbreaks)
+#
+# BAMMtools::plot.bammdata(updated_BAMM_object, legend = TRUE)
 
 
-update_rates_and_regimes_for_focal_time <- function (BAMM_object, focal_time, update_rates = T, update_regimes = T, verbose = T)
+
+
+update_rates_and_regimes_for_focal_time <- function (BAMM_object, focal_time,
+                                                     update_rates = TRUE, update_regimes = TRUE,
+                                                     update_tree = FALSE, update_plot = FALSE,
+                                                     update_all_elements = FALSE,
+                                                     keep_tip_labels = TRUE,
+                                                     verbose = TRUE)
 {
 
   ### Check input validity
@@ -29,30 +78,43 @@ update_rates_and_regimes_for_focal_time <- function (BAMM_object, focal_time, up
 
   # At least one of "update_rates" and "update_regimes" must be T
 
+  # If update_plot = TRUE & update_tree = FALSE; show a warning claiming that update_tree = FALSE will be ignore and tree and plotting elements will both be updated
+
+  # If update_all_elements = TRUE & any other update_* = FALSE; show a warning claiming that update_* = FALSE will be ignore and all elements including rates/regimes/tree/plotting elements/BAMM elements will all be updated
 
 
-  # Add "phylo" class to the BAMM_object
-  class(BAMM_object) <- c("bammdata", "phylo")
+  ## Initiate new BAMM_object to update
+  updated_BAMM_object <- BAMM_object
+
+  # Add "phylo" class temporarily
+  class(updated_BAMM_object) <- unique(c(class(updated_BAMM_object), "phylo"))
 
   ## Identify edges present at focal time
 
   # Edge, rootward_node, tipward_node, length (once cut)
 
   # Get node ages per branch (no root edge)
-  all_edges_df <- phytools::nodeHeights(BAMM_object)
-  root_age <- max(phytools::nodeHeights(BAMM_object)[,2])
+  all_edges_df <- phytools::nodeHeights(updated_BAMM_object)
+  root_age <- max(phytools::nodeHeights(updated_BAMM_object)[,2])
   all_edges_df <- as.data.frame(round(root_age - all_edges_df, 5)) # May be an issue for trees with very short time span
   names(all_edges_df) <- c("rootward_node_age", "tipward_node_age")
   all_edges_df$edge_ID <- row.names(all_edges_df)
 
   # Get nodes ID per edge
-  all_edges_ID_df <- BAMM_object$edge
+  all_edges_ID_df <- updated_BAMM_object$edge
   colnames(all_edges_ID_df) <- c("rootward_node_ID", "tipward_node_ID")
   all_edges_df <- cbind(all_edges_df, all_edges_ID_df)
   all_edges_df <- all_edges_df[, c("edge_ID", "rootward_node_ID", "tipward_node_ID", "rootward_node_age", "tipward_node_age")]
 
   # # Detect root node ID as the only rootward node that is not also the tipward node of any edge
-  # root_node_ID <- BAMM_object$edge[which.min(BAMM_object$edge[, 1] %in% BAMM_object$edge[, 2]), 1]
+  # root_node_ID <- updated_BAMM_object$edge[which.min(updated_BAMM_object$edge[, 1] %in% updated_BAMM_object$edge[, 2]), 1]
+
+  # Merge tip.label to the edge df
+
+  # If tipward node is a tip, use tip.label
+  all_edges_df$tip.label <- updated_BAMM_object$tip.label[all_edges_df$tipward_node_ID]
+  # If tipward node is an internal node, use node ID
+  all_edges_df$tip.label[is.na(all_edges_df$tip.label)] <- all_edges_df$tipward_node_ID[is.na(all_edges_df$tip.label)]
 
   # Identify edges present at focal time
   all_edges_df$rootward_test <- all_edges_df$rootward_node_age > focal_time
@@ -67,18 +129,18 @@ update_rates_and_regimes_for_focal_time <- function (BAMM_object, focal_time, up
   # present_edges_df <- all_edges_df[all_edges_df$time_test, ]
 
   ## Loop per Posterior sample
-  for (i in seq_along(BAMM_object$eventData))
+  for (i in seq_along(updated_BAMM_object$eventData))
   {
     # i <- 1
 
     # Extract eventData records = Macroevolutionary regime parameters
-    eventData_i <- BAMM_object$eventData[[i]]
+    eventData_i <- updated_BAMM_object$eventData[[i]]
 
     # Compute updated regime age and length
     eventData_i$age <- root_age - eventData_i$time
     eventData_i$updated_length <- eventData_i$age - focal_time
 
-    if (update_regimes)
+    if (update_regimes || update_all_elements)
     {
       ## Identify edge ID per regimes
       ## Loop per regime
@@ -89,7 +151,7 @@ update_rates_and_regimes_for_focal_time <- function (BAMM_object, focal_time, up
         tipward_node_ID_j <- eventData_i$node[j] # Nodes are tipward nodes ID of the branch where the regime starts
 
         # Get descendant tipward nodes of regime j
-        regime_nodes_j <- phytools::getDescendants(tree = BAMM_object, node = tipward_node_ID_j)
+        regime_nodes_j <- phytools::getDescendants(tree = updated_BAMM_object, node = tipward_node_ID_j)
 
         # Assign regime ID
         all_edges_df$regime_ID[all_edges_df$tipward_node_ID %in% regime_nodes_j] <- j
@@ -111,14 +173,23 @@ update_rates_and_regimes_for_focal_time <- function (BAMM_object, focal_time, up
         }
       }
 
-      # Update tipStates by providing only regimes for tips that are present at the focal time
+      # Filter regimes for tips that are present at the focal time
       tipStates_i <- all_edges_df$regime_ID[all_edges_df$time_test]
-      names(tipStates_i) <- all_edges_df$edge_ID[all_edges_df$time_test]
-      BAMM_object$tipStates[[i]] <- tipStates_i
+
+      # Name tip regimes with tip.labels/tipward_edge_ID
+      if (keep_tip_labels)
+      {
+        names(tipStates_i) <- all_edges_df$tip.label[all_edges_df$time_test]
+      } else {
+        names(tipStates_i) <- all_edges_df$tipward_node_ID[all_edges_df$time_test]
+      }
+
+      # Store updated tipStates
+      updated_BAMM_object$tipStates[[i]] <- tipStates_i
     }
 
     ## If needed, also update tipRates
-    if (update_rates)
+    if (update_rates || update_all_elements)
     {
       eventData_i$tip_speciation_rates <- NA
       eventData_i$tip_extinction_rates <- NA
@@ -155,35 +226,202 @@ update_rates_and_regimes_for_focal_time <- function (BAMM_object, focal_time, up
       all_edges_df$tipMu <- NA
       all_edges_df$tipMu <- eventData_i$tip_extinction_rates[match(x = all_edges_df$regime_ID, table = eventData_i$index)]
 
-      # Update tipLambda and tipMu by providing only regimes for tips that are present at the focal time
+      # Filter regimes for tips that are present at the focal time
       tipLambda_i <- all_edges_df$tipLambda[all_edges_df$time_test]
-      names(tipLambda_i) <- all_edges_df$edge_ID[all_edges_df$time_test]
-      BAMM_object$tipLambda[[i]] <- tipLambda_i
-
       tipMu_i <- all_edges_df$tipMu[all_edges_df$time_test]
-      names(tipMu_i) <- all_edges_df$edge_ID[all_edges_df$time_test]
-      BAMM_object$tipMu[[i]] <- tipMu_i
+
+      # Name tip regimes with tip.labels/tipward_edge_ID
+      if (keep_tip_labels)
+      {
+        names(tipLambda_i) <- all_edges_df$tip.label[all_edges_df$time_test]
+        names(tipMu_i) <- all_edges_df$tip.label[all_edges_df$time_test]
+      } else {
+        names(tipLambda_i) <- all_edges_df$tipward_node_ID[all_edges_df$time_test]
+        names(tipMu_i) <- all_edges_df$tipward_node_ID[all_edges_df$time_test]
+      }
+
+      # Store updated tipStates
+      updated_BAMM_object$tipLambda[[i]] <- tipLambda_i
+      updated_BAMM_object$tipMu[[i]] <- tipMu_i
     }
 
     ## Print progress
     if (verbose & (i %% 100 == 0))
     {
-      cat(paste0(Sys.time(), " - Tip states/rates updated for BAMM posterior sample n\u00B0", i, "/", length(BAMM_object$eventData),"\n"))
+      cat(paste0(Sys.time(), " - Tip states/rates updated for BAMM posterior sample n\u00B0", i, "/", length(updated_BAMM_object$eventData),"\n"))
     }
   }
 
-  # Update tip labels
-  BAMM_object$tip.label <- all_edges_df$edge_ID[all_edges_df$time_test]
+  ## Updates elements of the phylo objects if needed
+  if (update_tree || update_plot || update_all_elements)
+  {
+    # Update phylo elements
+    updated_BAMM_object <- cut_phylo_at_focal_time(tree = updated_BAMM_object, focal_time = focal_time, keep_tip_labels = keep_tip_labels)
+
+    ## Extract and plot updated "phylo" object
+    # updated_tree <- list(edge = updated_BAMM_object$edge, Nnode = updated_BAMM_object$Nnode, tip.label = updated_BAMM_object$tip.label, edge.length = updated_BAMM_object$edge.length)
+    # class(updated_tree) <- "phylo"
+    # plot(updated_tree)
+    # nodelabels()
+  }
+
+  ## Updates elements needed to plot a "bammdata" object with plot.bammdata()
+  if (update_plot || update_all_elements)
+  {
+    ## $begin = Absolute time since root of edge/branch start
+    updated_BAMM_object$begin <- BAMM_object$begin[updated_BAMM_object$edges_ID_df$initial_edge_ID] # Extract values only for remaining edges
+    ## $end = Absolute time since root of edge/branch end
+    updated_BAMM_object$end <- BAMM_object$end[updated_BAMM_object$edges_ID_df$initial_edge_ID] # Extract values only for remaining edges
+    updated_BAMM_object$end <- sapply(X = updated_BAMM_object$end, FUN = function (x) { min(x, root_age - focal_time) }) # Adjust end distance to cut-off at focal_time
+
+    ## $eventVectors = List of integer vectors of regime membership per branches in each posterior configuration
+    updated_BAMM_object$eventVectors <- lapply(X = BAMM_object$eventVectors, FUN = function (x) { x[updated_BAMM_object$edges_ID_df$initial_edge_ID] } )
+
+    ## $eventBranchSegs = Same but for segments with matrix including tipward node ID (NOT the edge ID) and begin/end ages of the segments
+    # An edge with a shift is split in multiple segments.
+    # Number of rows = number of segments = nb of edges + nb of shifts (each shift adds a segment to an edge)
+    # Filtered using focal_time to keep only segments that are not younger than the focal_time
+
+    # Loop per BAMM posterior samples
+    for (i in seq_along(updated_BAMM_object$eventData))
+    {
+      # i <- 1
+
+      # Extract matrix of branch segments
+      eventBranchSegs_i <- updated_BAMM_object$eventBranchSegs[[i]]
+      # Remove segments that are younger than focal_time
+      updated_eventBranchSegs_i <- eventBranchSegs_i[(root_age - eventBranchSegs_i[,2] > focal_time), ]
+
+      # Update tipward nodes ID
+      updated_eventBranchSegs_i[ ,1] <- updated_BAMM_object$nodes_ID_df$new_node_ID[match(updated_eventBranchSegs_i[ ,1], updated_BAMM_object$nodes_ID_df$initial_node_ID)]
+      # Reorder following tipward nodes ID, then older segments > younger segments
+      updated_eventBranchSegs_i <- updated_eventBranchSegs_i[order(updated_eventBranchSegs_i[ ,1], updated_eventBranchSegs_i[ ,2]), ]
+
+      # Store updated matrix of branch segments
+      updated_BAMM_object$eventBranchSegs[[i]] <- updated_eventBranchSegs_i
+    }
+
+    # # Updated eventBranchSegs matrix should have a number of rows/segments = number of edges + number of shifts
+    # updated_nb_regimes <- unlist(lapply(X = updated_BAMM_object$eventBranchSegs, FUN = function (x) { length(unique(x[, 4])) }))
+    # updated_nb_segments <- unlist(lapply(X = updated_BAMM_object$eventBranchSegs, FUN = nrow))
+    # all(updated_nb_segments == (nrow(updated_BAMM_object$edge) + (updated_nb_regimes - 1)))
+
+    ## Create $dtRates and update it such as it contains only rates for segments older than the focal_time
+    # Needed to keep consistency with estimated rates and color scheme used in BAMMtools::plot.bammdata
+
+    # Get initial dtrates
+    dtrates_t0 <- BAMMtools::dtRates(BAMM_object, tau = 0.01, tmat = TRUE)$dtrates
+
+    # Find segments to remove segments that are younger than the focal_time
+    dtrates_segments_to_remove <- dtrates_t0$tmat[ , 2] >= (root_age - focal_time)
+
+    # Update dtrates to remove segments that are older than the focal_time
+    updated_dtrates <- dtrates_t0
+    updated_dtrates$rates <- lapply(X = updated_dtrates$rates, FUN = function (x) { y <-  x[!dtrates_segments_to_remove]} )
+    updated_dtrates$tmat <- updated_dtrates$tmat[!dtrates_segments_to_remove,]
+
+    # Update tipward nodes ID in dtrates
+    updated_dtrates$tmat[ ,1] <- updated_BAMM_object$nodes_ID_df$new_node_ID[match(updated_dtrates$tmat[ ,1], updated_BAMM_object$nodes_ID_df$initial_node_ID)]
+    # Update dimnames
+    attr(updated_dtrates$tmat, which = "dimnames")[[1]] <- as.character(1:nrow(updated_dtrates$tmat))
+    # Update tau as the fraction of the total tree length represented by each segment
+    new_depth <- (root_age - focal_time)
+    depth_ratio <- new_depth/root_age
+    updated_dtrates$tau <- updated_dtrates$tau/depth_ratio
+
+    # Store updated $dtrates
+    updated_BAMM_object$dtrates <- updated_dtrates
+
+    ## Save initial_colorbreaks to use as colorbreaks in order to match color gradients from the initial full phylogeny
+    initial_plot <- BAMMtools::plot.bammdata(BAMM_object, legend = TRUE, show = FALSE)
+    # updated_BAMM_object$initial_colorbreaks_range <- range(initial_plot$colorbreaks)
+    updated_BAMM_object$initial_colorbreaks <- initial_plot$colorbreaks
+
+    # ## Updated BAMM_object can be plotted with plot.bammdata
+    # plot.bammdata(BAMM_object, legend = TRUE)
+    # plot.bammdata(updated_BAMM_object, legend = TRUE)
+    # plot.bammdata(updated_BAMM_object, legend = TRUE, colorbreaks = updated_BAMM_object$initial_colorbreaks)
+  }
+
+  if (update_all_elements)
+  {
+    ## Info for tree exploration
+    # $downseq # Order of node visits when using a pre-order tree traversal
+    # $lastvisit # ID of the last node visited when starting from the node in the corresponding position in downseq.
+    updated_BAMM_object <- getRecursiveSequence(updated_BAMM_object)
+
+    ## $numberEvents # Number of events/macroevolutionary regimes (k+1) recorded in each posterior configuration. k = number of shifts
+    # Extract number of regimes detected across the updated segments
+    updated_BAMM_object$numberEvents <- unlist(lapply(X = updated_BAMM_object$eventBranchSegs, FUN = function (x) { length(unique(x[, 4])) }))
+
+    ## $eventData # Dataframe recording shift events and macroevolutionary regimes in the focal posterior configuration. 1st line = Background root regime
+    # Loop per BAMM posterior samples
+    for (i in seq_along(updated_BAMM_object$eventData))
+    {
+      # i <- 1
+
+      # Extract df of macroevolutionary regimes
+      eventData_i <- updated_BAMM_object$eventData[[i]]
+      # Filter to keep only events that happened before focal_time
+      updated_eventData_i <- eventData_i[((root_age - eventData_i$time) > focal_time), ]
+      # Update tipward nodes ID
+      updated_eventData_i$node <- updated_BAMM_object$nodes_ID_df$new_node_ID[match(updated_eventData_i$node, updated_BAMM_object$nodes_ID_df$initial_node_ID)]
+
+      # Store updated df of macroevolutionary regimes
+      updated_BAMM_object$eventData[[i]] <- updated_eventData_i
+    }
+
+    ## Mean tip rates across all posterior configurations
+
+    # Bind all tipLambda in a df
+    tipLambda_df <- data.frame(do.call(what = rbind, args = updated_BAMM_object$tipLambda))
+    # Compute mean
+    updated_meanTipLambda <- apply(X = tipLambda_df, MARGIN = 2, FUN = mean)
+    # Provides tip.labels/tipward_node_ID as names
+    names(updated_meanTipLambda) <- updated_BAMM_object$tip.label
+    # Store updated tipLambda
+    updated_BAMM_object$meanTipLambda <- updated_meanTipLambda
+
+    # Bind all tipMu in a df
+    tipMu_df <- data.frame(do.call(what = rbind, args = updated_BAMM_object$tipMu))
+    # Compute mean
+    updated_meanTipMu <- apply(X = tipMu_df, MARGIN = 2, FUN = mean)
+    # Provides tip.labels/tipward_node_ID as names
+    names(updated_meanTipMu) <- updated_BAMM_object$tip.label
+    # Store updated tipMu
+    updated_BAMM_object$meanTipMu <- updated_meanTipMu
+  }
+
   # Inform focal time
-  BAMM_object$focal_time <- focal_time
+  updated_BAMM_object$focal_time <- focal_time
+
+  # Remove temporary "phylo" class
+  class(updated_BAMM_object) <- setdiff(class(updated_BAMM_object), "phylo")
 
   # Export updated BAMM_object
-  return(BAMM_object)
+  return(updated_BAMM_object)
 }
 
 
-## Add the option to update the tree in the BAMM_object (not needed for STRAPP test. Useful only for visualization)
-# Update elements of a phylogeny: edge, Nnode, tip.label, edge.length
-  # + BAMM stuff (Probably not needed???): begin (Absolute time since root of edge/branch start), end (Absolute time since root of edge/branch end), downseq (?), lastvisit (?), numberEvents (Number of events/macroevolutionary regimes (k+1) recorded in each posterior configuration. k = number of shifts)
-  # Update only what is needed to be able to use BAMM plotting function so it become possible to vizualize rates on the cut tree!
-  # Use cut_phylo_at_focal_time() to update the phylogeny elements
+##### Handle non-ultrametric tree
+  # Correct the use of $time_test as in cut_phylo
+
+
+## Helper function used to generate $mapped.edge from $edge and $maps
+
+# Internal function copied from the R package BAMMtools
+# Associated C scripts in /src/treetraverse.c
+# Source: BAMMtools:::getRecursiveSequence()
+# Authors: Dan Rabosky, Mike Grundler
+
+getRecursiveSequence <- function (phy)
+{
+  rootnd = as.integer(phy$Nnode + 2)
+  anc = as.integer(phy$edge[, 1])
+  desc = as.integer(phy$edge[, 2])
+  ne = as.integer(dim(phy$edge)[1])
+  L = .C("setrecursivesequence", anc, desc, rootnd, ne, integer(ne + 1), integer(ne + 1), PACKAGE = "deepSTRAPP")
+  phy$downseq = as.integer(L[[5]])
+  phy$lastvisit = as.integer(L[[6]])
+  return(phy)
+}

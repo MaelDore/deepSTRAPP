@@ -83,7 +83,7 @@ cut_phylo_at_focal_time <- function(tree, focal_time, keep_tip_labels = TRUE)
 {
   ### Check input validity
 
-  # tree must be a "phylo" class object
+  # tree must have the class "phylo" (can have other classes too)
   # tree must be rooted
     # ape::is.rooted
   # tree must be fully resolved/dichotomous
@@ -143,7 +143,7 @@ cut_phylo_at_focal_time <- function(tree, focal_time, keep_tip_labels = TRUE)
   cut_tree$edge.length <- new_edges_df$updated_length
 
   ## Update Nnode
-  cut_tree$Nnode <- nrow(new_edges_df)/2 # Works only for dichotomic tree
+  cut_tree$Nnode <- as.integer(nrow(new_edges_df)/2) # Works only for dichotomic tree
 
   ## Update node ID to form a valid phylo object
 
@@ -166,6 +166,9 @@ cut_phylo_at_focal_time <- function(tree, focal_time, keep_tip_labels = TRUE)
     internal_nodes_ID_df <- data.frame(new_node_ID = (nrow(nodes_ID_df)+1):(nrow(new_edges_df)+1), initial_node_ID = new_edges_df$tipward_node_ID[new_edges_df$tipward_node_ID %in% internal_nodes_ID])
     nodes_ID_df <- rbind(nodes_ID_df, internal_nodes_ID_df)
   }
+  # Convert to numeric
+  nodes_ID_df$new_node_ID <- as.numeric(nodes_ID_df$new_node_ID)
+  nodes_ID_df$initial_node_ID <- as.numeric(nodes_ID_df$initial_node_ID)
 
   # Store conversion table for nodes ID
   cut_tree$nodes_ID_df <- nodes_ID_df
@@ -184,6 +187,9 @@ cut_phylo_at_focal_time <- function(tree, focal_time, keep_tip_labels = TRUE)
 
   ## Update edge ID to form a valid phylo object
   edges_ID_df <- data.frame(new_edge_ID = 1:nrow(new_edges_df), initial_edge_ID = new_edges_df$edge_ID)
+  # Convert to numeric
+  edges_ID_df$new_edge_ID <- as.numeric(edges_ID_df$new_edge_ID)
+  edges_ID_df$initial_edge_ID <- as.numeric(edges_ID_df$initial_edge_ID)
 
   # Store conversion table for edges ID
   cut_tree$edges_ID_df <- edges_ID_df
@@ -208,8 +214,8 @@ cut_phylo_at_focal_time <- function(tree, focal_time, keep_tip_labels = TRUE)
   cut_tree$edge <- as.matrix(new_edges_df[, c("rootward_node_ID", "tipward_node_ID")])
   dimnames(cut_tree$edge) <- NULL
   # Update nodes ID with the matching table
-  cut_tree$edge[ , 1] <- nodes_ID_df$new_node_ID[match(x = new_edges_df$rootward_node_ID, table = nodes_ID_df$initial_node_ID)]
-  cut_tree$edge[ , 2] <- nodes_ID_df$new_node_ID[match(x = new_edges_df$tipward_node_ID, table = nodes_ID_df$initial_node_ID)]
+  cut_tree$edge[ , 1] <- as.integer(nodes_ID_df$new_node_ID[match(x = new_edges_df$rootward_node_ID, table = nodes_ID_df$initial_node_ID)])
+  cut_tree$edge[ , 2] <- as.integer(nodes_ID_df$new_node_ID[match(x = new_edges_df$tipward_node_ID, table = nodes_ID_df$initial_node_ID)])
 
   # Export output
   return(cut_tree)

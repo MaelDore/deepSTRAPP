@@ -3,7 +3,7 @@
 %   R/extract_most_likely_trait_values_for_focal_time.R
 \name{extract_most_likely_trait_values_for_focal_time}
 \alias{extract_most_likely_trait_values_for_focal_time}
-\title{Extracts the continuous trait data mapped on a phylogeny at a given time in the past}
+\title{Extracts continuous trait data mapped on a phylogeny at a given time in the past}
 \usage{
 extract_most_likely_trait_values_for_focal_time(
   contMap,
@@ -41,18 +41,20 @@ must retained their initial \code{tip.label} on the updated contMap. Default is 
 Used only if \code{update_contMap = TRUE}.}
 }
 \value{
-By default, the function returns a named numerical vector with ML trait values found along branches overlapping the \code{focal_time}.
+By default, the function returns \code{trait_data} as a named numerical vector with ML trait values found along branches overlapping the \code{focal_time}.
 
 If \code{update_contMap = TRUE}, the output is a list with two elements: \verb{$trait_data} and \verb{$contMap}.
 \itemize{
 \item \verb{$trait_data} A named numerical vector with ML trait values found along branches overlapping the \code{focal_time}. Names are the tip.label/node ID.
 \item \verb{$contMap} An object of class that contains the updated \code{contMap} with  branches and mapping that are younger than the \code{focal_time} cut off.
 The function also adds multiple useful sub-elements to the \verb{$contMap$tree} element.
-** \verb{$root_age} Integer. Stores the age of the root of the tree.
-** \verb{$nodes_ID_df} Data.frame with two columns. Provides the conversion from the \code{new_node_ID} to the \code{initial_node_ID}. Each row is a node.
-** \verb{$initial_nodes_ID} Vector of character strings. Provides the initial ID of internal nodes. Used to plot internal node IDs as labels with \code{\link[ape:nodelabels]{ape::nodelabels()}}.
-** \verb{$edges_ID_df} Data.frame with two columns. Provides the conversion from the \code{new_edge_ID} to the \code{initial_edge_ID}. Each row is an edge/branch.
-** \verb{$initial_edges_ID} Vector of character strings. Provides the initial ID of edges/branches. Used to plot edge/branch IDs as labels with \code{\link[ape:nodelabels]{ape::edgelabels()}}.
+\itemize{
+\item \verb{$root_age} Integer. Stores the age of the root of the tree.
+\item \verb{$nodes_ID_df} Data.frame with two columns. Provides the conversion from the \code{new_node_ID} to the \code{initial_node_ID}. Each row is a node.
+\item \verb{$initial_nodes_ID} Vector of character strings. Provides the initial ID of internal nodes. Used to plot internal node IDs as labels with \code{\link[ape:nodelabels]{ape::nodelabels()}}.
+\item \verb{$edges_ID_df} Data.frame with two columns. Provides the conversion from the \code{new_edge_ID} to the \code{initial_edge_ID}. Each row is an edge/branch.
+\item \verb{$initial_edges_ID} Vector of character strings. Provides the initial ID of edges/branches. Used to plot edge/branch IDs as labels with \code{\link[ape:nodelabels]{ape::edgelabels()}}.
+}
 }
 }
 \description{
@@ -67,28 +69,29 @@ by updating the \verb{$tree$maps} and \verb{$tree$mapped.edge} elements.
 The mapped phylogeny (\code{contMap}) is cut at a specific time in the past
 (i.e. the \code{focal_time}) and the current trait values of the overlapping edges/branches are extracted.
 
+----- Extract \code{trait_data} -----
+
 If providing only the \code{contMap} trait values at tips and internal nodes will be extracted from
 the mapping of the \code{contMap} leading to a slight dependency with the actual tip data
 and estimated ancestral character values.
 
 True ML estimates will be used if \code{tip_data} and/or \code{ace} are provided as optional inputs.
-}
-\section{----- Visualize updated contMap -----#}{
+
+----- Update the \code{contMap} -----
+
 To obtain an updated \code{contMap} alongside the trait data, set \code{update_contMap = TRUE}.
 The update consists in cutting off branches and mapping that are younger than the \code{focal_time}.
-
-When a branch with a single descendant tip is cut and \code{keep_tip_labels = TRUE},
+\itemize{
+\item When a branch with a single descendant tip is cut and \code{keep_tip_labels = TRUE},
 the leaf left is labeled with the tip.label of the unique descendant tip.
-
-When a branch with a single descendant tip is cut and \code{keep_tip_labels = FALSE},
+\item When a branch with a single descendant tip is cut and \code{keep_tip_labels = FALSE},
 the leaf left is labeled with the node ID of the unique descendant tip.
-
-In all cases, when a branch with multiple descendant tips (i.e., a clade) is cut,
+\item In all cases, when a branch with multiple descendant tips (i.e., a clade) is cut,
 the leaf left is labeled with the node ID of the MRCA of the cut-off clade.
+}
 
 The continuous trait mapping is updated accordingly by removing mapping associated with the cut off branches.
 }
-
 \examples{
 # ----- Example 1: Only extent taxa (Ultrametric tree) ----- #
 
