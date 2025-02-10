@@ -2,7 +2,7 @@
 
 # Dependency: BAMMtools::plot.bammdata, BAMMtools::dtRates, phytools::nodeHeights, phytools::getDescendants
 
-## To updates for rates and regimes
+## To updates for rates and regimes, only for current tips (not older fossils !)
 # $tipStates => update_regimes = TRUE
 # $tipLambda => update_rates = TRUE
 # $tipMu => update_rates = TRUE
@@ -18,7 +18,7 @@
 # $end # Absolute time since root of edge/branch end
 # $eventVectors # List of integer vectors of regime membership per branches in each posterior configuration
 # $eventBranchSegs # Same as $eventVectors but with matrix including tipward node ID (NOT the edge ID) and begin/end ages of the branches
-# $dtRates # Provides speciation and extinction rates along segments used by [BAMMtools::plot.bammdata()], and resolution faction (tau) description the fraction of each segment length compared to the full depth of the initial tree (i.e., the root_age)
+# $dtrates # Provides speciation and extinction rates along segments used by [BAMMtools::plot.bammdata()], and resolution fraction (tau) description the fraction of each segment length compared to the full depth of the initial tree (i.e., the root_age)
 
 ## Other stuff to update to make the object clean => update_all_elements = TRUE
 # $downseq # Order of node visits when using a pre-order tree traversal
@@ -26,8 +26,8 @@
 # $numberEvents # Number of events/macroevolutionary regimes (k+1) recorded in each posterior configuration. k = number of shifts
 # $eventData # Dataframe recording shift events and macroevolutionary regimes in the focal posterior configuration. 1st line = Background root regime
   # Need to update the ID of the nodes/edges
-# $meanTipLambda # Mean current tip speciation rates across all posterior configurations
-# $meanTipMu # Mean current tip extinction rates across all posterior configurations
+# $meanTipLambda # Mean current tip speciation rates across all posterior configurations (does not includes older fossils !)
+# $meanTipMu # Mean current tip extinction rates across all posterior configurations (does not includes older fossils !)
 # $type # "diversification"
 
 
@@ -82,22 +82,47 @@ for (i in seq_along(BAMM_object_with_fossils$eventBranchSegs))
   # Store updated $eventBranchSegs
   BAMM_object_with_fossils$eventBranchSegs[[i]] <- eventBranchSegs_i
 }
-BAMM_object_with_fossils$eventBranchSegs[[1]]
+head(BAMM_object_with_fossils$eventBranchSegs[[1]])
 
-BAMM_object <- BAMM_object_with_fossils
+# Set param for tests
+focal_time = 0
+focal_time = 10
+focal_time = 50
 
 ## Correct the use of $time_test as in cut_phylo
 
+updated_BAMM_object_t10 <- update_rates_and_regimes_for_focal_time(BAMM_object = BAMM_object_with_fossils, focal_time,
+                                        update_rates = TRUE, update_regimes = TRUE,
+                                        update_tree = FALSE, update_plot = FALSE,
+                                        update_all_elements = TRUE,
+                                        keep_tip_labels = TRUE,
+                                        verbose = TRUE)
+
+updated_BAMM_object <- updated_BAMM_object_t0
+updated_BAMM_object <- updated_BAMM_object_t10
+updated_BAMM_object <- updated_BAMM_object_t10_no_labels
+updated_BAMM_object <- updated_BAMM_object_t50
+
+plot(BAMM_object_with_fossils, legend = TRUE, labels = FALSE)
+abline(v = 123.55 - focal_time,
+       col = "red", lty = 2, lwd = 2)
+
+BAMMtools::plot.bammdata(updated_BAMM_object, legend = TRUE,
+                         colorbreaks = updated_BAMM_object$initial_colorbreaks)
+
+BAMMtools::plot.bammdata(updated_BAMM_object, legend = TRUE)
+
 
 ### Ideally, run BAMM on motmot::mammals dataset so I have a real dataset with fossils (does BAMM works with fossils???)
+# Need to check if the BAMM_output object generated deal with fossils in a specific way...
 
-str(BAMM_object, max.level = 1)
+str(updated_BAMM_object$tipStates, max.level = 1)
+str(updated_BAMM_object$tip.label, max.level = 1)
 
 pdf(file = "./test_BAMMplot_t0.pdf", width = 20, height = 150)
 plot.bammdata(BAMM_object, labels = TRUE)
 dev.off()
 
-BAMMtools::getEventData
 
 update_rates_and_regimes_for_focal_time <- function (BAMM_object, focal_time,
                                                      update_rates = TRUE, update_regimes = TRUE,
@@ -141,7 +166,7 @@ update_rates_and_regimes_for_focal_time <- function (BAMM_object, focal_time,
   # Get node ages per branch (no root edge)
   all_edges_df <- phytools::nodeHeights(updated_BAMM_object)
   root_age <- max(phytools::nodeHeights(updated_BAMM_object)[,2])
-  all_edges_df <- as.data.frame(round(root_age - all_edges_df, 5)) # May be an issue for trees with very short time span
+  all_edges_df <- as.data.frame(round(root_age - all_edges_df, 5)) # Used to ensure ultrametricity of extant tips, but may be an issue for trees with very short time span
   names(all_edges_df) <- c("rootward_node_age", "tipward_node_age")
   all_edges_df$edge_ID <- row.names(all_edges_df)
 
@@ -422,8 +447,13 @@ update_rates_and_regimes_for_focal_time <- function (BAMM_object, focal_time,
     tipLambda_df <- data.frame(do.call(what = rbind, args = updated_BAMM_object$tipLambda))
     # Compute mean
     updated_meanTipLambda <- apply(X = tipLambda_df, MARGIN = 2, FUN = mean)
-    # Provides tip.labels/tipward_node_ID as names
-    names(updated_meanTipLambda) <- updated_BAMM_object$tip.label
+    # Provides tip.labels/tipward_node_ID as names. Extract only current tip names (not older fossils !)
+    if (keep_tip_labels)
+    {
+      names(updated_meanTipLambda) <- updated_BAMM_object$tip.label[all_edges_df$time_test[all_edges_df$tip.label %in% updated_BAMM_object$tip.label]]
+    } else {
+      names(updated_meanTipLambda) <- updated_BAMM_object$tip.label[all_edges_df$time_test[all_edges_df$tipward_node_ID %in% updated_BAMM_object$tip.label]]
+    }
     # Store updated tipLambda
     updated_BAMM_object$meanTipLambda <- updated_meanTipLambda
 
@@ -432,7 +462,12 @@ update_rates_and_regimes_for_focal_time <- function (BAMM_object, focal_time,
     # Compute mean
     updated_meanTipMu <- apply(X = tipMu_df, MARGIN = 2, FUN = mean)
     # Provides tip.labels/tipward_node_ID as names
-    names(updated_meanTipMu) <- updated_BAMM_object$tip.label
+    if (keep_tip_labels)
+    {
+      names(updated_meanTipMu) <- updated_BAMM_object$tip.label[all_edges_df$time_test[all_edges_df$tip.label %in% updated_BAMM_object$tip.label]]
+    } else {
+      names(updated_meanTipMu) <- updated_BAMM_object$tip.label[all_edges_df$time_test[all_edges_df$tipward_node_ID %in% updated_BAMM_object$tip.label]]
+    }
     # Store updated tipMu
     updated_BAMM_object$meanTipMu <- updated_meanTipMu
   }
@@ -462,7 +497,7 @@ getRecursiveSequence <- function (phy)
   anc = as.integer(phy$edge[, 1])
   desc = as.integer(phy$edge[, 2])
   ne = as.integer(dim(phy$edge)[1])
-  L = .C("setrecursivesequence", anc, desc, rootnd, ne, integer(ne + 1), integer(ne + 1), PACKAGE = "deepSTRAPP")
+  L = .C("setrecursivesequence", anc, desc, rootnd, ne, integer(ne + 1), integer(ne + 1), PACKAGE = "BAMMtools")
   phy$downseq = as.integer(L[[5]])
   phy$lastvisit = as.integer(L[[6]])
   return(phy)
