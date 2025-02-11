@@ -539,6 +539,7 @@ update_rates_and_regimes_for_focal_time <- function (BAMM_object, focal_time,
 # Source: BAMMtools:::getRecursiveSequence()
 # Authors: Dan Rabosky, Mike Grundler
 
+# Declare the use of compiled C code in the package
 #' @useDynLib deepSTRAPP
 
 getRecursiveSequence <- function (phy)
