@@ -19,3 +19,7 @@ Imports:
     BAMMtools (>= 2.1.12),
     motmot (>= 2.1.3),
     phytools (>= 2.0.0)
+Depends: 
+    R (>= 3.5)
+LazyData: true
+LazyDataCompression: xz

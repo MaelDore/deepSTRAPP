@@ -42,6 +42,8 @@
 #'
 #' @author Maël Doré
 #'
+#' @seealso [deepSTRAPP::cut_phylo_at_focal_time()] [deepSTRAPP::extract_most_likely_trait_values_for_focal_time()]
+#'
 #' @examples
 #' # ----- Prepare data ----- #
 #'

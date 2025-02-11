@@ -1,128 +1,176 @@
+#' @title Updates diversification rates/regimes mapped on a phylogeny up to a given time in the past
+#'
+#' @description Updates an object of class `"bammdata"` to obtain the diversification rates/regimes
+#'   found along branches at a specific time in the past (i.e. the `focal_time`).
+#'   Optionally, the function can update the object to display a mapped phylogeny such as
+#'   branches overlapping the `focal_time` are shorten to the `focal_time`.
+#'
+#' @param BAMM_object Object of class `"bammdata"`, typically generated with [BAMMtools::getEventData()],
+#'   that contains a phylogenetic tree and associated diversification rate mapping
+#'   across selected posterior samples.
+#'   The phylogenetic tree must be rooted and fully resolved/dichotomous,
+#'   but it does not need to be ultrametric (it can includes fossils).
+#' @param focal_time Integer. The time, in terms of time distance from the present,
+#'   at which the tree and rate mapping must be cut.
+#' @param update_rates Logical. Specify whether diversification rates stored in
+#'   `$tipLambda` (speciation) and `$tipMu` (extinction) must be updated to summarize
+#'   rates found along branches at `focal_time`. Default is `TRUE`.
+#' @param update_regimes Logical. Specify whether diversification regimes stored in
+#'   `$tipStates` must be updated to summarize regimes found along branches at `focal_time`.
+#'   Default is `TRUE`.
+#' @param update_tree Logical. Specify whether to update the phylogeny such as
+#'   all branches that are younger than the `focal_time` are cut-off. Default is `FALSE`.
+#' @param update_plot Logical. Specify whether to update the phylogeny AND the elements
+#'   used by [BAMMtools::plot.bammdata()] to plot diversification rates on the phylogeny
+#'   such as all branches that are younger than the `focal_time` are cut-off. Default is `FALSE`.
+#'   If set to `TRUE`, it will override the `update_tree` parameter and update the phylogeny.
+#' @param update_all_elements Logical. Specify whether to update all the elements in the object, including
+#'   rates/regimes/phylogeny/elements for [BAMMtools::plot.bammdata()]/all other elements. Default is `FALSE`.
+#'   If set to `TRUE`, it will override other `update_*` parameters and update all elements.
+#' @param keep_tip_labels Logical. Should terminal branches with a single descendant tip
+#'   retain their initial `tip.label` on the updated phylogeny and diversification rate mapping?
+#'   Default is `TRUE`. If set to `FALSE`, the tipward node ID will be used as label for all tips.
+#' @param verbose Logical. Should progression be displayed? A message will be printed for every batch of
+#'   100 BAMM posterior samples updated. Default is `TRUE`.
+#'
+#' @export
+#' @importFrom phytools nodeHeights
+#' @importFrom phytools getDescendants
+#' @importFrom BAMMtools plot.bammdata
+#' @importFrom BAMMtools dtRates
+#'
+#' @details The object of class `"bammdata"` (`BAMM_object`) is cut-off at a specific time in the past
+#'   (i.e. the `focal_time`) and the current diversification rate values of the overlapping edges/branches are extracted.
+#'
+#'   ----- Update diversification rate data -----
+#'
+#'   If `update_rates = TRUE`, diversification rates of branches overlapping with `focal_time`
+#'   will be updated. Each cut-off branches form a new tip present at `focal_time` with updated associated
+#'   diversification rate data. Fossils older than `focal_time` do not yield any data.
+#'   * `$tipLambda` contains speciation rates.
+#'   * `$tipMu` contains extinction rates.
+#'
+#'   If `update_regimes = TRUE`, diversification regimes of branches overlapping with `focal_time`
+#'   will be updated. Each cut-off branches form a new tip present at `focal_time` with updated associated
+#'   diversification regime ID found in `$tipStates`. Fossils older than `focal_time` do not yield any data.
+#'
+#'   ----- Update the phylogeny -----
+#'
+#'   If `update_tree = TRUE`, elements defining the phylogeny, as in an `"phylo"` object
+#'   will be updated such as all branches that are younger than the `focal_time` are cut-off:
+#'   * `$edge` defines the tree topology.
+#'   * `$Nnode` defines the number of internal nodes.
+#'   * `$tip.label` provides the labels of all tips, including fossils older than `focal_time` if present.
+#'   * `$edge.length` provides length of all branches.
+#'   * `$node.label` provides the labels of all internal nodes. (Optional)
+#'
+#'   ----- Update the plot from [BAMMtools::plot.bammdata()] -----
+#'
+#'   If `update_plot = TRUE`, elements used to plot diversification rates on the phylogeny
+#'   using [BAMMtools::plot.bammdata()] will be updated such as all branches that are younger
+#'   than the `focal_time` are cut-off:
+#'   * `$begin` provides absolute time since root of edge/branch start (rootward).
+#'   * `$end` provides absolute time since root of edge/branch end (tipward).
+#'   * `$eventVectors` provides regime membership per branches in each posterior sample configuration.
+#'   * `$eventBranchSegs` provides regime membership per segments of branches in each posterior sample configuration.
+#'   * `$dtrates` provides mean speciation and extinction rates along segments of branches, and resolution fraction (tau) describing
+#'   the fraction of each segment length compared to the full depth of the initial tree (i.e., the root_age).
+#'
+#' @return The function returns a list as an updated `BAMM_object` of class `"bammdata"`.
+#'
+#'   Phylogeny-related elements used to plot a phylogeny with [ape::plot.phylo()]:
+#'   * `$edge` Matrix of integers. Defines the tree topology by providing rootward and tipward node ID of each edge.
+#'   * `$Nnode` Integer. Number of internal nodes.
+#'   * `$tip.label` Vector of character strings. Labels of all tips, including fossils older than `focal_time` if present.
+#'     + If `keep_tip_labels = TRUE`, cut-off branches with a single descendant tip retain their initial `tip.label`.
+#'     + If `keep_tip_labels = FALSE`, all cut-off branches are labeled using their tipward node ID.
+#'   * `$edge.length` Vector of numerical. Length of edges/branches.
+#'   * `$node.label` Vector of character strings. Labels of all internal nodes. (Present only if present in the initial `BAMM_object`)
+#'
+#'   BAMM internal elements used for tree exploration:
+#'   * `$begin` Vector of numerical. Absolute time since root of edge/branch start (rootward).
+#'   * `$end` Vector of numerical.  Absolute time since root of edge/branch end (tipward).
+#'   * `$downseq` Vector of integers. Order of node visits when using a pre-order tree traversal.
+#'   * `$lastvisit` ID of the last node visited when starting from the node in the corresponding position in `$downseq`.
+#'
+#'   BAMM elements summarizing diversification data:
+#'   * `$numberEvents` Vector of integer. Number of events/macroevolutionary regimes (k+1) recorded in each posterior configuration. k = number of shifts.
+#'   * `$eventData` List of data.frames. One per posterior sample. Records shift events and macroevolutionary regimes parameters. 1st line = Background root regime.
+#'   * `$eventVectors` List of integer vectors. One per posterior sample. Record regime ID per branches.
+#'   * `$tipStates` List of named integer vectors. One per posterior sample. Record regime ID per tips present at `focal_time`. Updated if `update_regimes = TRUE`.
+#'   * `$tipLambda` List of named numerical vectors. One per posterior sample. Record speciation rates per tips present at `focal_time`. Updated if `update_rates = TRUE`.
+#'   * `$tipMu` List of named numerical vectors. One per posterior sample. Record extinction rates per tips present at `focal_time`. Updated if `update_rates = TRUE`.
+#'   * `$eventBranchSegs` List of matrix of numerical. One per posterior sample. Record regime ID per segments of branches.
+#'   * `$meanTipLambda` Vector of named numerical. Mean tip speciation rates across all posterior configurations of tips present at `focal_time` (does not includes older fossils).
+#'   * `$meanTipMu` Vector of named numerical. Mean tip extinction rates across all posterior configurations of tips present at `focal_time` (does not includes older fossils).
+#'   * `$type` Character string. Set the type of data modeled with BAMM. Should be "diversification".
+#'
+#'   New elements added to provide update information:
+#'   * `$root_age` Integer. Stores the age of the root of the tree.
+#'   * `$nodes_ID_df` Data.frame with two columns. Provides the conversion from the `new_node_ID` to the `initial_node_ID`. Each row is a node.
+#'   * `$initial_nodes_ID` Vector of character strings. Provides the initial ID of internal nodes. Used to plot internal node IDs as labels with [ape::nodelabels()].
+#'   * `$edges_ID_df` Data.frame with two columns. Provides the conversion from the `new_edge_ID` to the `initial_edge_ID`. Each row is an edge/branch.
+#'   * `$initial_edges_ID` Vector of character strings. Provides the initial ID of edges/branches. Used to plot edge/branch IDs as labels with [ape::edgelabels()].
+#'   * `$dtrates` List of three elements.
+#'     + 1/ `$dtrates$tau` Numerical. Resolution factor describing the fraction of each segment length used in [BAMMtools::plot.bammdata()]
+#'       compared to the full depth of the initial tree (i.e., the root_age)
+#'     + 2/ `$dtrates$rates` List of two numerical vectors. Speciation and extinction rates along segments used by [BAMMtools::plot.bammdata()].
+#'     + 3/ `$dtrates$tmat` Matrix of numerical. Start and end times of segments in term of distance to the root.
+#'   * `$initial_colorbreaks` Vector of numerical. Diversification rate values of the percentiles delimiting the bins for mapping rates to colors with [BAMMtools::plot.bammdata()].
+#'   * `$focal_time` Integer. The time, in terms of time distance from the present, at which the rates/regimes were extracted and the tree was eventually cut.
+#'
+#' @author Maël Doré
+#'
+#' @seealso [deepSTRAPP::cut_phylo_at_focal_time()]
+#'
+#' @examples
+#' # ----- Example 1: Ultrametric tree of extant Ponerinae ----- #
+#'
+#' ## Load the BAMM_object summarizing 1000 posterior samples of BAMM
+#' data(Ponerinae_BAMM_object, package = "deepSTRAPP")
+#'
+#' ## Set focal-time to 10 My
+#' focal_time = 10
+#'
+#' ## Update the BAMM object
+#' Ponerinae_BAMM_object_updated <- update_rates_and_regimes_for_focal_time(
+#'   BAMM_object = Ponerinae_BAMM_object,
+#'   focal_time = focal_time,
+#'   update_rates = TRUE, update_regimes = TRUE,
+#'   update_tree = TRUE, update_plot = TRUE,
+#'   update_all_elements = TRUE,
+#'   keep_tip_labels = TRUE,
+#'   verbose = TRUE)
+#'
+#' ## Plot diversification rates on the initial tree
+#' plot(Ponerinae_BAMM_object, legend = TRUE, labels = FALSE)
+#' abline(v = 123.55 - focal_time,
+#'        col = "red", lty = 2, lwd = 2)
+#'
+#' ## Plot diversification rates on the updated tree (cut-off for 10 My)
+#' # Keep the initial color scheme
+#' BAMMtools::plot.bammdata(Ponerinae_BAMM_object_updated, legend = TRUE,
+#'                          colorbreaks = Ponerinae_BAMM_object_updated$initial_colorbreaks)
+#'
+#' # Use a new color scheme mapped on the new distribution of rates
+#' BAMMtools::plot.bammdata(Ponerinae_BAMM_object_updated, legend = TRUE)
+#'
 
 
-# Dependency: BAMMtools::plot.bammdata, BAMMtools::dtRates, phytools::nodeHeights, phytools::getDescendants
-
-## To updates for rates and regimes, only for current tips (not older fossils !)
-# $tipStates => update_regimes = TRUE
-# $tipLambda => update_rates = TRUE
-# $tipMu => update_rates = TRUE
-
-## To update for cut phylo => update_tree = TRUE
-# $edge
-# $Nnode
-# $tip.label
-# $edge.length
-
-## To update so plot.bammdata and dtRates works => update_plot = TRUE
-# $begin # Absolute time since root of edge/branch start
-# $end # Absolute time since root of edge/branch end
-# $eventVectors # List of integer vectors of regime membership per branches in each posterior configuration
-# $eventBranchSegs # Same as $eventVectors but with matrix including tipward node ID (NOT the edge ID) and begin/end ages of the branches
-# $dtrates # Provides speciation and extinction rates along segments used by [BAMMtools::plot.bammdata()], and resolution fraction (tau) description the fraction of each segment length compared to the full depth of the initial tree (i.e., the root_age)
-
-## Other stuff to update to make the object clean => update_all_elements = TRUE
-# $downseq # Order of node visits when using a pre-order tree traversal
-# $lastvisit # ID of the last node visited when starting from the node in the corresponding position in downseq.
-# $numberEvents # Number of events/macroevolutionary regimes (k+1) recorded in each posterior configuration. k = number of shifts
-# $eventData # Dataframe recording shift events and macroevolutionary regimes in the focal posterior configuration. 1st line = Background root regime
-  # Need to update the ID of the nodes/edges
-# $meanTipLambda # Mean current tip speciation rates across all posterior configurations (does not includes older fossils !)
-# $meanTipMu # Mean current tip extinction rates across all posterior configurations (does not includes older fossils !)
-# $type # "diversification"
-
-
-# BAMM_object <- readRDS(file = "../Ponerinae_Historical_Biogeography/outputs/BAMM/Ponerinae_MCC_phylogeny_1534t/BAMM_posterior_samples_data.rds")
+# # ----- Example 2: Non-ultrametric tree including extinct mammal groups ----- #
 #
-# focal_time = 10
+# ### Ideally, run BAMM on motmot::mammals dataset so I have a real dataset with fossils (does BAMM works with fossils???)
+# # Need to check if the BAMM_output object generated deal with fossils in a specific way...
 #
-# updated_BAMM_object <- update_rates_and_regimes_for_focal_time(BAMM_object = BAMM_object, focal_time,
-#                                         update_rates = TRUE, update_regimes = TRUE,
-#                                         update_tree = FALSE, update_plot = FALSE,
-#                                         update_all_elements = TRUE,
-#                                         keep_tip_labels = TRUE,
-#                                         verbose = TRUE)
+# str(updated_BAMM_object$tipStates, max.level = 1)
+# str(updated_BAMM_object, max.level = 1)
 #
-# plot(BAMM_object, legend = TRUE, labels = FALSE)
-# abline(v = 123.55 - focal_time,
-#        col = "red", lty = 2, lwd = 2)
-#
-# BAMMtools::plot.bammdata(updated_BAMM_object, legend = TRUE,
-#                          colorbreaks = updated_BAMM_object$initial_colorbreaks)
-#
-# BAMMtools::plot.bammdata(updated_BAMM_object, legend = TRUE)
+# pdf(file = "./test_BAMMplot_t0.pdf", width = 20, height = 150)
+# plot.bammdata(BAMM_object, labels = TRUE)
+# dev.off()
 
 
-
-##### Handle non-ultrametric tree
-
-BAMM_object_with_fossils <- BAMM_object
-
-# Cut Feroponera_ferox to 12 My: Tip 719; Edge 1443
-# Cut Neoponera_bucki to 55 My: Tip 1; Edge 4
-
-# Adjust $edge.length
-BAMM_object_with_fossils$edge.length[1443] <- BAMM_object_with_fossils$edge.length[1443] - 12
-BAMM_object_with_fossils$edge.length[4] <- BAMM_object_with_fossils$edge.length[4] - 55
-
-# Adjust $end
-BAMM_object_with_fossils$end[1443] <- BAMM_object_with_fossils$end[1443] - 12
-BAMM_object_with_fossils$end[4] <- BAMM_object_with_fossils$end[4] - 55
-
-# Adjust $eventBranchSegs
-for (i in seq_along(BAMM_object_with_fossils$eventBranchSegs))
-{
-  # Adjust $eventBranchSegs for Feroponera_ferox
-  eventBranchSegs_i <- BAMM_object_with_fossils$eventBranchSegs[[i]]
-  eventBranchSegs_i[eventBranchSegs_i[,1] == 719, 3] <- eventBranchSegs_i[eventBranchSegs_i[,1] == 719, 3] - 12
-
-  # Adjust $eventBranchSegs for Neoponera_bucki
-  eventBranchSegs_i <- BAMM_object_with_fossils$eventBranchSegs[[i]]
-  eventBranchSegs_i[eventBranchSegs_i[,1] == 1, 3] <- eventBranchSegs_i[eventBranchSegs_i[,1] == 1, 3] - 55
-
-  # Store updated $eventBranchSegs
-  BAMM_object_with_fossils$eventBranchSegs[[i]] <- eventBranchSegs_i
-}
-head(BAMM_object_with_fossils$eventBranchSegs[[1]])
-
-# Set param for tests
-focal_time = 0
-focal_time = 10
-focal_time = 50
-
-## Correct the use of $time_test as in cut_phylo
-
-updated_BAMM_object_t10 <- update_rates_and_regimes_for_focal_time(BAMM_object = BAMM_object_with_fossils, focal_time,
-                                        update_rates = TRUE, update_regimes = TRUE,
-                                        update_tree = FALSE, update_plot = FALSE,
-                                        update_all_elements = TRUE,
-                                        keep_tip_labels = TRUE,
-                                        verbose = TRUE)
-
-updated_BAMM_object <- updated_BAMM_object_t0
-updated_BAMM_object <- updated_BAMM_object_t10
-updated_BAMM_object <- updated_BAMM_object_t10_no_labels
-updated_BAMM_object <- updated_BAMM_object_t50
-
-plot(BAMM_object_with_fossils, legend = TRUE, labels = FALSE)
-abline(v = 123.55 - focal_time,
-       col = "red", lty = 2, lwd = 2)
-
-BAMMtools::plot.bammdata(updated_BAMM_object, legend = TRUE,
-                         colorbreaks = updated_BAMM_object$initial_colorbreaks)
-
-BAMMtools::plot.bammdata(updated_BAMM_object, legend = TRUE)
-
-
-### Ideally, run BAMM on motmot::mammals dataset so I have a real dataset with fossils (does BAMM works with fossils???)
-# Need to check if the BAMM_output object generated deal with fossils in a specific way...
-
-str(updated_BAMM_object$tipStates, max.level = 1)
-str(updated_BAMM_object$tip.label, max.level = 1)
-
-pdf(file = "./test_BAMMplot_t0.pdf", width = 20, height = 150)
-plot.bammdata(BAMM_object, labels = TRUE)
-dev.off()
-
+# Ponerinae_BAMM_object <- readRDS(file = "../Ponerinae_Historical_Biogeography/outputs/BAMM/Ponerinae_MCC_phylogeny_1534t/BAMM_posterior_samples_data.rds")
 
 update_rates_and_regimes_for_focal_time <- function (BAMM_object, focal_time,
                                                      update_rates = TRUE, update_regimes = TRUE,

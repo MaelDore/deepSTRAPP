@@ -82,6 +82,9 @@ cut_eel.tree <- cut_phylo_at_focal_time(tree = eel.tree, focal_time = 30, keep_t
 plot(cut_eel.tree)
 
 }
+\seealso{
+\code{\link[=cut_contMap_at_focal_time]{cut_contMap_at_focal_time()}}
+}
 \author{
 Maël Doré
 }

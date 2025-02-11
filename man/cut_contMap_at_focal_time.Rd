@@ -109,6 +109,9 @@ plot(updated_contMap)
 nodelabels(text = updated_contMap$tree$initial_nodes_ID)
 
 }
+\seealso{
+\code{\link[=cut_phylo_at_focal_time]{cut_phylo_at_focal_time()}} \code{\link[=update_maps_at_focal_time]{update_maps_at_focal_time()}} \code{\link[=extract_most_likely_trait_values_for_focal_time]{extract_most_likely_trait_values_for_focal_time()}}
+}
 \author{
 Maël Doré
 }

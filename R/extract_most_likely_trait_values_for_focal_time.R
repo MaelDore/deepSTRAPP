@@ -69,6 +69,8 @@
 #'
 #' @author Maël Doré
 #'
+#' @seealso [deepSTRAPP::cut_phylo_at_focal_time()] [deepSTRAPP::cut_contMap_at_focal_time()]
+#'
 #' @examples
 #' # ----- Example 1: Only extent taxa (Ultrametric tree) ----- #
 #'

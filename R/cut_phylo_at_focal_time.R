@@ -33,6 +33,8 @@
 #'
 #' @author Maël Doré
 #'
+#' @seealso [deepSTRAPP::cut_contMap_at_focal_time()]
+#'
 #' @examples
 #' # Load eel phylogeny from the R package phytools
 #' # Source: Collar et al., 2014; DOI: 10.1038/ncomms6505
