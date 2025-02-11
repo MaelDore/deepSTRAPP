@@ -163,7 +163,7 @@ the fraction of each segment length compared to the full depth of the initial tr
 # ----- Example 1: Ultrametric tree of extant Ponerinae ----- #
 
 ## Load the BAMM_object summarizing 1000 posterior samples of BAMM
-data(Ponerinae_BAMM_object)
+data(Ponerinae_BAMM_object, package = "deepSTRAPP")
 
 ## Set focal-time to 10 My
 focal_time = 10
