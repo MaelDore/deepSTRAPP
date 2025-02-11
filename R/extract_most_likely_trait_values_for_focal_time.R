@@ -54,10 +54,13 @@
 #'
 #'   The continuous trait mapping is updated accordingly by removing mapping associated with the cut off branches.
 #'
-#' @return By default, the function returns `trait_data` as a named numerical vector with ML trait values found along branches overlapping the `focal_time`.
+#' @return By default, the function returns a list with three elements.
 #'
-#'   If `update_contMap = TRUE`, the output is a list with two elements: `$trait_data` and `$contMap`.
-#'   * `$trait_data` A named numerical vector with ML trait values found along branches overlapping the `focal_time`. Names are the tip.label/node ID.
+#'   * `$trait_data` A named numerical vector with ML trait values found along branches overlapping the `focal_time`. Names are the tip.label/tipward node ID.
+#'   * `$focal_time` Integer. The time, in terms of time distance from the present, at which the trait data were extracted.
+#'   * `$data_type` Character string. Define the type of data as "continuous". Used in downstream analyses to select appropriate statistical processing.
+#'
+#'   If `update_contMap = TRUE`, the output is a list with four elements: `$trait_data`, `$focal_time`, `$data_type`, and `$contMap`.
 #'   * `$contMap` An object of class that contains the updated `contMap` with  branches and mapping that are younger than the `focal_time` cut off.
 #'      The function also adds multiple useful sub-elements to the `$contMap$tree` element.
 #'     + `$root_age` Integer. Stores the age of the root of the tree.
@@ -285,14 +288,16 @@ extract_most_likely_trait_values_for_focal_time <- function (contMap, ace = NULL
   {
     warning(paste0("No branch is present at focal time = ", focal_time, ". Return a NULL object.\n"))
 
-    # Return a NULL object
+    # Return a NULL object for trait_data
     trait_data <- NULL
-    return(trait_data)
 
-    if (update_contMap)
+    if (!update_contMap)
     {
+      return(list(trait_data = trait_data, focal_time = focal_time, data_type = "continuous"))
+    } else {
+      # Return a NULL object for contMap
       updated_contMap <- NULL
-      return(list(trait_data = trait_data, contMap = updated_contMap))
+      return(list(trait_data = trait_data, focal_time = focal_time, data_type = "continuous", contMap = updated_contMap))
     }
 
   } else {
@@ -410,10 +415,10 @@ extract_most_likely_trait_values_for_focal_time <- function (contMap, ace = NULL
     ## Export outputs
     if (!update_contMap)
     {
-      return(trait_data)
+      return(list(trait_data = trait_data, focal_time = focal_time, data_type = "continuous"))
 
     } else {
-      return(list(trait_data = trait_data, contMap = updated_contMap))
+      return(list(trait_data = trait_data, focal_time = focal_time, data_type = "continuous", contMap = updated_contMap))
     }
   }
 }

@@ -2,6 +2,7 @@
 
 export(cut_contMap_at_focal_time)
 export(cut_phylo_at_focal_time)
+export(extract_diversification_data_melted_df_for_focal_time)
 export(extract_most_likely_trait_values_for_focal_time)
 export(update_rates_and_regimes_for_focal_time)
 importFrom(BAMMtools,dtRates)
@@ -10,4 +11,5 @@ importFrom(ape,edgelabels)
 importFrom(ape,nodelabels)
 importFrom(phytools,getDescendants)
 importFrom(phytools,nodeHeights)
+importFrom(tidyr,pivot_longer)
 useDynLib(deepSTRAPP)

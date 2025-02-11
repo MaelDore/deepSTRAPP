@@ -132,7 +132,8 @@
 #' ## Set focal-time to 10 My
 #' focal_time = 10
 #'
-#' ## Update the BAMM object
+#' \dontrun{
+#' ## Update the BAMM object (May take several minutes to run)
 #' Ponerinae_BAMM_object_updated <- update_rates_and_regimes_for_focal_time(
 #'   BAMM_object = Ponerinae_BAMM_object,
 #'   focal_time = focal_time,
@@ -140,20 +141,21 @@
 #'   update_tree = TRUE, update_plot = TRUE,
 #'   update_all_elements = TRUE,
 #'   keep_tip_labels = TRUE,
-#'   verbose = TRUE)
+#'   verbose = TRUE) }
 #'
 #' ## Plot diversification rates on the initial tree
 #' plot(Ponerinae_BAMM_object, legend = TRUE, labels = FALSE)
 #' abline(v = 123.55 - focal_time,
 #'        col = "red", lty = 2, lwd = 2)
 #'
+#' \dontrun{
 #' ## Plot diversification rates on the updated tree (cut-off for 10 My)
 #' # Keep the initial color scheme
 #' BAMMtools::plot.bammdata(Ponerinae_BAMM_object_updated, legend = TRUE,
 #'                          colorbreaks = Ponerinae_BAMM_object_updated$initial_colorbreaks)
 #'
 #' # Use a new color scheme mapped on the new distribution of rates
-#' BAMMtools::plot.bammdata(Ponerinae_BAMM_object_updated, legend = TRUE)
+#' BAMMtools::plot.bammdata(Ponerinae_BAMM_object_updated, legend = TRUE) }
 #'
 
 
@@ -540,6 +542,7 @@ update_rates_and_regimes_for_focal_time <- function (BAMM_object, focal_time,
 # Authors: Dan Rabosky, Mike Grundler
 
 # Declare the use of compiled C code in the package
+# Add an import in NAMESPACE
 #' @useDynLib deepSTRAPP
 
 getRecursiveSequence <- function (phy)

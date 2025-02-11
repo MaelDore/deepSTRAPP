@@ -41,11 +41,15 @@ must retained their initial \code{tip.label} on the updated contMap. Default is 
 Used only if \code{update_contMap = TRUE}.}
 }
 \value{
-By default, the function returns \code{trait_data} as a named numerical vector with ML trait values found along branches overlapping the \code{focal_time}.
-
-If \code{update_contMap = TRUE}, the output is a list with two elements: \verb{$trait_data} and \verb{$contMap}.
+By default, the function returns a list with three elements.
 \itemize{
-\item \verb{$trait_data} A named numerical vector with ML trait values found along branches overlapping the \code{focal_time}. Names are the tip.label/node ID.
+\item \verb{$trait_data} A named numerical vector with ML trait values found along branches overlapping the \code{focal_time}. Names are the tip.label/tipward node ID.
+\item \verb{$focal_time} Integer. The time, in terms of time distance from the present, at which the trait data were extracted.
+\item \verb{$data_type} Character string. Define the type of data as "continuous". Used in downstream analyses to select appropriate statistical processing.
+}
+
+If \code{update_contMap = TRUE}, the output is a list with four elements: \verb{$trait_data}, \verb{$focal_time}, \verb{$data_type}, and \verb{$contMap}.
+\itemize{
 \item \verb{$contMap} An object of class that contains the updated \code{contMap} with  branches and mapping that are younger than the \code{focal_time} cut off.
 The function also adds multiple useful sub-elements to the \verb{$contMap$tree} element.
 \itemize{
