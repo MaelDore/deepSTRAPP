@@ -1,3 +1,7 @@
+// Source: R package BAMMtools
+// Authors: Dan Rabosky, Mike Grundler
+// References: http://bamm-project.org/
+
 #include <R.h>
 #include <Rinternals.h>
 
