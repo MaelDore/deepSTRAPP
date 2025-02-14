@@ -203,6 +203,8 @@
 # extract_most_likely_trait_values_from_simmaps_for_focal_time() = For categorical traits
 # extract_most_likely_range_values_from_simmaps_for_focal_time() = For biogeographic traits
 
+## Update the reference to extract_most_likely_trait_values_for_focal_time() to link to the wrapper function!
+# Ex: in the doc of run_STRAPP_test.R
 
 ### Possible update: Make it work with non-dichotomous trees!!!
 

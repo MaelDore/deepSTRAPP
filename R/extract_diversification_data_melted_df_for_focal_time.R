@@ -34,11 +34,12 @@
 #'
 #' @examples
 #' # Load the BAMM_object summarizing 1000 posterior samples of BAMM updated for a focal_time of 10 My
-#' Ponerinae_BAMM_object_10My <- readRDS(file = "./src/Ponerinae_BAMM_object_10My.rds")
+#' data(Ponerinae_BAMM_object_10My)
 #'
 #' # Extract diversification data
-#' diversification_data_df <- extract_diversification_data_melted_df_for_focal_time(BAMM_object = Ponerinae_BAMM_object_10My,
-#'                               verbose = TRUE)
+#' diversification_data_df <- extract_diversification_data_melted_df_for_focal_time(
+#'    BAMM_object = Ponerinae_BAMM_object_10My,
+#'    verbose = TRUE)
 #' # Print output
 #' head(diversification_data_df)
 #'

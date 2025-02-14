@@ -34,10 +34,8 @@
 #'   100 BAMM posterior samples updated. Default is `TRUE`.
 #'
 #' @export
-#' @importFrom phytools nodeHeights
-#' @importFrom phytools getDescendants
-#' @importFrom BAMMtools plot.bammdata
-#' @importFrom BAMMtools dtRates
+#' @importFrom phytools nodeHeights getDescendants
+#' @importFrom BAMMtools plot.bammdata dtRates
 #'
 #' @details The object of class `"bammdata"` (`BAMM_object`) is cut-off at a specific time in the past
 #'   (i.e. the `focal_time`) and the current diversification rate values of the overlapping edges/branches are extracted.

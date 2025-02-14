@@ -12,8 +12,7 @@
 #'
 #' @export
 #' @importFrom phytools nodeHeights
-#' @importFrom ape nodelabels
-#' @importFrom ape edgelabels
+#' @importFrom ape nodelabels edgelabels
 #'
 #' @details When a branch with a single descendant tip is cut and `keep_tip_labels = TRUE`,
 #'   the leaf left is labeled with the tip.label of the unique descendant tip.
