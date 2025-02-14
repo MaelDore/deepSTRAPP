@@ -96,7 +96,6 @@ update_maps_at_focal_time <- function(tree_with_maps, focal_time)
     for (i in 1:nrow(focal_edges_df))
     {
       # i <- 1
-      # i <- 6
 
       # Extract edge ID
       edge_ID_i <- as.numeric(focal_edges_df$edge_ID[i])
@@ -120,7 +119,12 @@ update_maps_at_focal_time <- function(tree_with_maps, focal_time)
         # Remove younger segments
         updated_edge_map_i <- updated_edge_map_i[1:cut_position_i]
         # Compute new length of the last segment
-        last_segment_updated_length <- edge_length_i - cumsum(updated_edge_map_i)[cut_position_i - 1]
+        if (cut_position_i > 1)
+        { # Case when time cut does not happen in first segment, need to remove the previous segment length
+          last_segment_updated_length <- edge_length_i - cumsum(updated_edge_map_i)[cut_position_i - 1]
+        } else { # Case when time cut happens in first segment, new edge length = new segment length
+          last_segment_updated_length <- edge_length_i
+        }
         names(last_segment_updated_length) <- names(updated_edge_map_i[cut_position_i])
         updated_edge_map_i[cut_position_i] <- last_segment_updated_length
 
