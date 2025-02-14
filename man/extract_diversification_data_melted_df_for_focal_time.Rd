@@ -40,17 +40,18 @@ and "net_diversification" for net diversification rates (lambda - mu).
 }
 \description{
 Extracts regimes ID and tip rates from a \code{BAMM_object} that have been
-updated to provide diversification date for a specific time in the past (i.e. the \code{focal_time}).
+updated to provide diversification data for a specific time in the past (i.e. the \code{focal_time}).
 Use \code{\link[=update_rates_and_regimes_for_focal_time]{update_rates_and_regimes_for_focal_time()}} to obtain
 a \code{BAMM_object} updated for a given \code{focal_time}.
 }
 \examples{
 # Load the BAMM_object summarizing 1000 posterior samples of BAMM updated for a focal_time of 10 My
-Ponerinae_BAMM_object_10My <- readRDS(file = "./src/Ponerinae_BAMM_object_10My.rds")
+data(Ponerinae_BAMM_object_10My)
 
 # Extract diversification data
-diversification_data_df <- extract_diversification_data_melted_df_for_focal_time(BAMM_object = Ponerinae_BAMM_object_10My,
-                              verbose = TRUE)
+diversification_data_df <- extract_diversification_data_melted_df_for_focal_time(
+   BAMM_object = Ponerinae_BAMM_object_10My,
+   verbose = TRUE)
 # Print output
 head(diversification_data_df)
 
