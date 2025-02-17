@@ -1,4 +1,4 @@
-#' @title Cuts the phylogeny and continuous trait mapping at a given time in the past
+#' @title Cuts the phylogeny and continuous trait mapping for a given focal time in the past
 #'
 #' @description Cuts off all the branches of the phylogeny which are
 #'   younger than a specific time in the past (i.e. the `focal_time`).
@@ -11,13 +11,13 @@
 #'   The phylogenetic tree must be rooted and fully resolved/dichotomous,
 #'   but it does not need to be ultrametric (it can includes fossils).
 #' @param focal_time Integer. The time, in terms of time distance from the present,
-#'   at which the tree and mapping must be cut.
+#'   for which the tree and mapping must be cut.
 #' @param keep_tip_labels Logical. Specify whether terminal branches with a single descendant tip must retained their initial `tip.label`. Default is `TRUE`.
 #'
 #' @export
 #' @importFrom phytools nodeHeights
 #'
-#' @details The phylogenetic tree is cut at a specific time in the past (i.e. the `focal_time`).
+#' @details The phylogenetic tree is cut for a specific time in the past (i.e. the `focal_time`).
 #'
 #'   When a branch with a single descendant tip is cut and `keep_tip_labels = TRUE`,
 #'   the leaf left is labeled with the tip.label of the unique descendant tip.
@@ -42,7 +42,7 @@
 #'
 #' @author Maël Doré
 #'
-#' @seealso [deepSTRAPP::cut_phylo_at_focal_time()] [deepSTRAPP::extract_most_likely_trait_values_for_focal_time()]
+#' @seealso [deepSTRAPP::cut_phylo_for_focal_time()] [deepSTRAPP::extract_most_likely_trait_values_for_focal_time()]
 #'
 #' @examples
 #' # ----- Prepare data ----- #
@@ -71,9 +71,9 @@
 #'
 #' # Cut contMap to 80 Mya while keeping tip.label
 #' # on terminal branches with a unique descending tip.
-#' updated_contMap <- cut_contMap_at_focal_time(contMap = mammals_contMap,
-#'                                              focal_time = focal_time,
-#'                                              keep_tip_labels = TRUE)
+#' updated_contMap <- cut_contMap_for_focal_time(contMap = mammals_contMap,
+#'                                               focal_time = focal_time,
+#'                                               keep_tip_labels = TRUE)
 #'
 #' # Plot node labels on initial stochastic map with cut-off
 #' plot(mammals_contMap, lwd = 2)
@@ -88,9 +88,9 @@
 #' # ----- Example 2: keep_tip_labels = FALSE ----- #
 #'
 #' # Cut contMap to 80 Mya while NOT keeping tip.label.
-#' updated_contMap <- cut_contMap_at_focal_time(contMap = mammals_contMap,
-#'                                              focal_time = focal_time,
-#'                                             keep_tip_labels = FALSE)
+#' updated_contMap <- cut_contMap_for_focal_time(contMap = mammals_contMap,
+#'                                               focal_time = focal_time,
+#'                                               keep_tip_labels = FALSE)
 #'
 #' # Plot node labels on initial stochastic map with cut-off
 #' plot(mammals_contMap)
@@ -106,7 +106,7 @@
 ### Possible update: Make it work with non-dichotomous trees!!!
 
 
-cut_contMap_at_focal_time <- function(contMap, focal_time, keep_tip_labels = TRUE)
+cut_contMap_for_focal_time <- function(contMap, focal_time, keep_tip_labels = TRUE)
 {
   ### Check input validity
 
@@ -114,12 +114,12 @@ cut_contMap_at_focal_time <- function(contMap, focal_time, keep_tip_labels = TRU
 
   # contMap$tree must be an object with the two classes: "simmap" and "phylo"
   # contMap$tree must be rooted
-    # ape::is.rooted
+  # ape::is.rooted
   # contMap$tree must be fully resolved/dichotomous
-    # ape::is.binary
+  # ape::is.binary
 
   # focal_time must be positive and smaller to root age
-    # If focal_time = root_age, throw a specific error
+  # If focal_time = root_age, throw a specific error
   # focal_time must be numerical
 
   # keep_tip_labels must be TRUE or FALSE
@@ -141,12 +141,12 @@ cut_contMap_at_focal_time <- function(contMap, focal_time, keep_tip_labels = TRU
     ## Cut contMap$tree at focal time
 
     updated_contMap_tree <- contMap
-    updated_contMap_tree$tree <- cut_phylo_at_focal_time(tree = updated_contMap_tree$tree, focal_time = focal_time, keep_tip_labels = keep_tip_labels)
+    updated_contMap_tree$tree <- cut_phylo_for_focal_time(tree = updated_contMap_tree$tree, focal_time = focal_time, keep_tip_labels = keep_tip_labels)
 
     ## Update contMap$tree$maps for focal time
 
     updated_contMap_maps <- contMap
-    updated_contMap_maps$tree <- update_maps_at_focal_time(tree_with_maps = updated_contMap_maps$tree, focal_time = focal_time)
+    updated_contMap_maps$tree <- update_maps_for_focal_time(tree_with_maps = updated_contMap_maps$tree, focal_time = focal_time)
 
     ## Merge outputs
     updated_contMap <- updated_contMap_tree

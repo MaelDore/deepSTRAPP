@@ -1,4 +1,4 @@
-#' @title Cuts off the character mapping on a phylogeny at a given time in the past
+#' @title Cuts off the character mapping on a phylogeny for a given focal time in the past
 #'
 #' @description Cuts off the mapping of a trait on a phylogeny over all branches
 #'   younger than a specific time in the past (i.e. the `focal_time`).
@@ -9,7 +9,7 @@
 #'   The phylogenetic tree must be rooted and fully resolved/dichotomous,
 #'   but it does not need to be ultrametric (it can includes fossils).
 #' @param focal_time Integer. The time, in terms of time distance from the present,
-#'   at which the character mapping must be cut.
+#'   for which the character mapping must be cut.
 #'
 #' @importFrom phytools nodeHeights
 #'
@@ -25,19 +25,19 @@
 ### Possible update: Make it work with non-dichotomous trees!!!
 
 
-update_maps_at_focal_time <- function(tree_with_maps, focal_time)
+update_maps_for_focal_time <- function(tree_with_maps, focal_time)
 {
   ### Check input validity
 
   # tree_with_maps must be an object with the two classes: "simmap" and "phylo".
   # tree_with_maps must be rooted
-    # ape::is.rooted
+  # ape::is.rooted
   # tree_with_maps must be fully resolved/dichotomous (??)
-    # ape::is.binary
+  # ape::is.binary
   # tree must have a $maps slot that is a list of N items. N = number of edges
 
   # focal_time must be positive and smaller to root age
-    # If focal_time = root_age, throw a specific error
+  # If focal_time = root_age, throw a specific error
   # focal_time must be numerical
 
   ## Initiate new tree_with_maps

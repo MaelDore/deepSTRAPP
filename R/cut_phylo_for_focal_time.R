@@ -1,4 +1,4 @@
-#' @title Cuts the phylogeny at a given time in the past
+#' @title Cuts the phylogeny for a given time in the past
 #'
 #' @description Cuts off all the branches of the phylogeny which are
 #'   younger than a specific time in the past (i.e. the `focal_time`).
@@ -7,7 +7,7 @@
 #' @param tree Object of class `"phylo"`. The phylogenetic tree must be rooted and fully resolved/dichotomous,
 #'   but it does not need to be ultrametric (it can includes fossils).
 #' @param focal_time Integer. The time, in terms of time distance from the present,
-#'   at which the tree must be cut.
+#'   for which the tree must be cut.
 #' @param keep_tip_labels Logical. Specify whether terminal branches with a single descendant tip must retained their initial `tip.label`. Default is `TRUE`.
 #'
 #' @export
@@ -32,7 +32,7 @@
 #'
 #' @author Maël Doré
 #'
-#' @seealso [deepSTRAPP::cut_contMap_at_focal_time()]
+#' @seealso [deepSTRAPP::cut_contMap_for_focal_time()]
 #'
 #' @examples
 #' # Load eel phylogeny from the R package phytools
@@ -43,7 +43,7 @@
 #' # ----- Example 1: keep_tip_labels = TRUE ----- #
 #'
 #' # Cut tree to 30 Mya while keeping tip.label on terminal branches with a unique descending tip.
-#' cut_eel.tree <- cut_phylo_at_focal_time(tree = eel.tree, focal_time = 30, keep_tip_labels = TRUE)
+#' cut_eel.tree <- cut_phylo_for_focal_time(tree = eel.tree, focal_time = 30, keep_tip_labels = TRUE)
 #'
 #' # Plot internal node labels on initial tree with cut-off
 #' plot(eel.tree)
@@ -72,7 +72,7 @@
 #'
 #' # Cut tree to 30 Mya without keeping tip.label on terminal branches with a unique descending tip.
 #' # All tip.labels are converted to their descending/tipward node ID
-#' cut_eel.tree <- cut_phylo_at_focal_time(tree = eel.tree, focal_time = 30, keep_tip_labels = FALSE)
+#' cut_eel.tree <- cut_phylo_for_focal_time(tree = eel.tree, focal_time = 30, keep_tip_labels = FALSE)
 #' plot(cut_eel.tree)
 #'
 
@@ -80,15 +80,15 @@
 ### Possible update: Make it work with non-dichotomous trees!!!
 
 
-cut_phylo_at_focal_time <- function(tree, focal_time, keep_tip_labels = TRUE)
+cut_phylo_for_focal_time <- function(tree, focal_time, keep_tip_labels = TRUE)
 {
   ### Check input validity
 
   # tree must have the class "phylo" (can have other classes too)
   # tree must be rooted
-    # ape::is.rooted
+  # ape::is.rooted
   # tree must be fully resolved/dichotomous
-    # ape::is.binary
+  # ape::is.binary
 
   # focal_time must be positive and smaller to root age
   # If focal_time = root_age, throw a specific error
