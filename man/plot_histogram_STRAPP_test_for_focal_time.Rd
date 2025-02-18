@@ -72,6 +72,7 @@ data(Ponerinae_trait_data_10My, package = "deepSTRAPP")
 
 # Categorize continuous trait data into three states to create multinomial data
 trait_data_continuous <- Ponerinae_trait_data_10My
+trait_data_multinominal <- trait_data_continuous
 trait_data_multinominal$trait_data[trait_data_continuous$trait_data < 0] <- "state_B"
 trait_data_multinominal$trait_data[trait_data_continuous$trait_data < -1] <- "state_A"
 trait_data_multinominal$trait_data[trait_data_continuous$trait_data >= 0] <- "state_C"
@@ -79,7 +80,7 @@ trait_data_multinominal$data_type <- "categorical"
 
 table(trait_data_multinominal$trait_data)
 
-
+\dontrun{  (May take several minutes to run)
 # ------ Compute STRAPP test ------ #
 
 # Compute STRAPP test under the alternative hypothesis of a "negative" correlation
@@ -112,14 +113,15 @@ print(histogram_ggplot_adj)
 
 # ------ Plot histograms of STRAPP post hoc test results ------ #
 
-histograms_ggplot_list <- plot_histogram_STRAPP_test_for_focal_time(STRAPP_test_output = STRAPP_test_output,
+histograms_ggplot_list <- plot_histogram_STRAPP_test_for_focal_time(
+                              STRAPP_test_output = STRAPP_test_output,
                               display_plot = TRUE,
                               # PDF_file_path = "./plot_STRAPP_histograms_posthoc_tests.pdf",
                               plot_posthoc_tests = TRUE)
 # Plot all histograms one by one
 print(histograms_ggplot_list)
 # Plot all histograms on one plot
-cowplot::plot_grid(plotlist = histograms_ggplot_list)
+cowplot::plot_grid(plotlist = histograms_ggplot_list)}
 
 }
 \seealso{

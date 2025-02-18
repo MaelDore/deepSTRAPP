@@ -201,6 +201,7 @@
 #'
 #' table(trait_data_multinominal$trait_data)
 #'
+#' \dontrun{  (May take a minute to run)
 #' # ------ Compute STRAPP test for continuous data ------ #
 #'
 #' plot(x = trait_data_continuous$trait_data, y = Ponerinae_BAMM_object_10My$tipLambda[[1]])
@@ -249,7 +250,7 @@
 #'    p.adjust_method = "bonferroni")
 #' str(STRAPP_results, max.level = 3)
 #' # All post hoc pairwise test summaries are available in $summary_df
-#' STRAPP_results$posthoc_pairwise_tests$summary_df
+#' STRAPP_results$posthoc_pairwise_tests$summary_df }
 #'
 
 

@@ -65,6 +65,7 @@
 #'
 #' # Categorize continuous trait data into three states to create multinomial data
 #' trait_data_continuous <- Ponerinae_trait_data_10My
+#' trait_data_multinominal <- trait_data_continuous
 #' trait_data_multinominal$trait_data[trait_data_continuous$trait_data < 0] <- "state_B"
 #' trait_data_multinominal$trait_data[trait_data_continuous$trait_data < -1] <- "state_A"
 #' trait_data_multinominal$trait_data[trait_data_continuous$trait_data >= 0] <- "state_C"
@@ -72,7 +73,7 @@
 #'
 #' table(trait_data_multinominal$trait_data)
 #'
-#'
+#' \dontrun{  (May take several minutes to run)
 #' # ------ Compute STRAPP test ------ #
 #'
 #' # Compute STRAPP test under the alternative hypothesis of a "negative" correlation
@@ -113,7 +114,7 @@
 #' # Plot all histograms one by one
 #' print(histograms_ggplot_list)
 #' # Plot all histograms on one plot
-#' cowplot::plot_grid(plotlist = histograms_ggplot_list)
+#' cowplot::plot_grid(plotlist = histograms_ggplot_list)}
 #'
 
 
