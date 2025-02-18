@@ -195,7 +195,7 @@ BAMMtools::plot.bammdata(Ponerinae_BAMM_object_updated, legend = TRUE) }
 
 }
 \seealso{
-\code{\link[=cut_phylo_at_focal_time]{cut_phylo_at_focal_time()}}
+\code{\link[=cut_phylo_for_focal_time]{cut_phylo_for_focal_time()}}
 }
 \author{
 Maël Doré

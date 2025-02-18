@@ -119,7 +119,7 @@
 #'
 #' @author Maël Doré
 #'
-#' @seealso [deepSTRAPP::cut_phylo_at_focal_time()]
+#' @seealso [deepSTRAPP::cut_phylo_for_focal_time()]
 #'
 #' @examples
 #' # ----- Example 1: Ultrametric tree of extant Ponerinae ----- #
@@ -374,7 +374,7 @@ update_rates_and_regimes_for_focal_time <- function (BAMM_object, focal_time,
   if (update_tree || update_plot || update_all_elements)
   {
     # Update phylo elements
-    updated_BAMM_object <- cut_phylo_at_focal_time(tree = updated_BAMM_object, focal_time = focal_time, keep_tip_labels = keep_tip_labels)
+    updated_BAMM_object <- cut_phylo_for_focal_time(tree = updated_BAMM_object, focal_time = focal_time, keep_tip_labels = keep_tip_labels)
 
     ## Extract and plot updated "phylo" object
     # updated_tree <- list(edge = updated_BAMM_object$edge, Nnode = updated_BAMM_object$Nnode, tip.label = updated_BAMM_object$tip.label, edge.length = updated_BAMM_object$edge.length)

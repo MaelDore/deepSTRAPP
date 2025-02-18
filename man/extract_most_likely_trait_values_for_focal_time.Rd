@@ -215,7 +215,7 @@ nodelabels(text = mammals_test$contMap$tree$initial_nodes_ID)
 
 }
 \seealso{
-\code{\link[=cut_phylo_at_focal_time]{cut_phylo_at_focal_time()}} \code{\link[=cut_contMap_at_focal_time]{cut_contMap_at_focal_time()}}
+\code{\link[=cut_phylo_for_focal_time]{cut_phylo_for_focal_time()}} \code{\link[=cut_contMap_for_focal_time]{cut_contMap_for_focal_time()}}
 }
 \author{
 Maël Doré

@@ -72,7 +72,7 @@
 #'
 #' @author Maël Doré
 #'
-#' @seealso [deepSTRAPP::cut_phylo_at_focal_time()] [deepSTRAPP::cut_contMap_at_focal_time()]
+#' @seealso [deepSTRAPP::cut_phylo_for_focal_time()] [deepSTRAPP::cut_contMap_for_focal_time()]
 #'
 #' @examples
 #' # ----- Example 1: Only extent taxa (Ultrametric tree) ----- #
@@ -411,7 +411,7 @@ extract_most_likely_trait_values_for_focal_time <- function (contMap, ace = NULL
     if (update_contMap)
     {
       ## Cut contMap$tree at focal time and update trait mapping in contMap$tree$maps and contMap$tree$mapped.edge
-      updated_contMap <- cut_contMap_at_focal_time(contMap = contMap, focal_time = focal_time, keep_tip_labels = keep_tip_labels)
+      updated_contMap <- cut_contMap_for_focal_time(contMap = contMap, focal_time = focal_time, keep_tip_labels = keep_tip_labels)
     }
 
     ## Export outputs
