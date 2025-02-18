@@ -15,10 +15,11 @@
 #' @export
 #' @importFrom tidyr pivot_longer
 #'
-#' @return Returns a data.frame with five columns.
+#' @return Returns a data.frame with six columns.
 #'
 #'   * `$focal_time` Integer. The time, in terms of time distance from the present, at which the trait data were extracted. Should be equal for all rows
 #'   as a unique BAMM_object updated for a unique `focal_time` is being extracted.
+#'   * `$BAMM_sample_ID` Integer. ID of the posterior samples from which the diversification data are extracted.
 #'   * `$tip_ID` Character string. Tip labels of the branches cut-off at `focal_time`.
 #'     + If `keep_tip_labels = TRUE` was used in [deepSTRAPP::update_rates_and_regimes_for_focal_time()],
 #'     cut-off branches with a single descendant tip retain their initial `tip.label`.
@@ -36,12 +37,13 @@
 #' # Load the BAMM_object summarizing 1000 posterior samples of BAMM updated for a focal_time of 10 My
 #' data(Ponerinae_BAMM_object_10My)
 #'
+#' \dontrun{  (May take several minutes to run)
 #' # Extract diversification data
 #' diversification_data_df <- extract_diversification_data_melted_df_for_focal_time(
 #'    BAMM_object = Ponerinae_BAMM_object_10My,
 #'    verbose = TRUE)
 #' # Print output
-#' head(diversification_data_df)
+#' head(diversification_data_df)}
 #'
 
 extract_diversification_data_melted_df_for_focal_time <- function (BAMM_object, verbose = TRUE)
@@ -65,9 +67,12 @@ extract_diversification_data_melted_df_for_focal_time <- function (BAMM_object, 
     # i <- 1
 
     # Extract diversification data for posterior sample i
-    unmelted_df_i <- data.frame(focal_time = focal_time, tip_ID = tip_labels,
+    unmelted_df_i <- data.frame(focal_time = focal_time,
+                                BAMM_sample_ID = i,
+                                tip_ID = tip_labels,
                                 regime_ID = BAMM_object$tipStates[[i]],
-                                lambda = BAMM_object$tipLambda[[i]], mu = BAMM_object$tipMu[[i]])
+                                lambda = BAMM_object$tipLambda[[i]],
+                                mu = BAMM_object$tipMu[[i]])
 
     # Merge data
     unmelted_df <- rbind(unmelted_df, unmelted_df_i)
