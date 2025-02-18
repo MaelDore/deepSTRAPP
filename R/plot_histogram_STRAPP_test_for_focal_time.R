@@ -10,7 +10,7 @@
 #'
 #'   If a PDF file path is provided in `PDF_file_path`, the plot will be saved directly in a PDF file.
 #'
-#' @param STRAPP_test_output List of elements generated with [deepSTRAPP::compute_STRAPP_test_for_focal_time()],
+#' @param STRAPP_results List of elements generated with [deepSTRAPP::compute_STRAPP_test_for_focal_time()],
 #'   that summarize the results of a STRAPP test for a specific time in the past (i.e. the `focal_time`).
 #' @param display_plot Logical. Whether to display the histogram(s) generated in the R console. Default is `TRUE`.
 #' @param plot_posthoc_tests Logical. For multinominal data only. Whether to plot the histogram for the overall Kruskal-Wallis test across all states (`plot_posthoc_tests = FALSE`),
@@ -25,12 +25,12 @@
 #'
 #' @details Histograms are build based on the distribution of the test statistics.
 #'   Such distributions are recorded in the outputs of STRAPP tests carried out with [deepSTRAPP::compute_STRAPP_test_for_focal_time()]
-#'   when `return_perm_data = TRUE`. The `STRAPP_test_output` object provided as input is a list that must contain
+#'   when `return_perm_data = TRUE`. The `STRAPP_results` object provided as input is a list that must contain
 #'   a `$perm_data_df` element that summarizes test statistics computed across posterior samples.
 #'
 #'   For multinominal data (categorical or biogeographic data with more than 2 states), it is possible to plot the histograms of post hoc pairwise tests.
 #'   Set `plot_posthoc_tests = TRUE` to generate histograms for all the pairwise post hoc Dunn's test across pairs of states.
-#'   To achieve this, the `STRAPP_test_output` input object must contain a `$posthoc_pairwise_tests$perm_data_array` element that summarizes test statistics
+#'   To achieve this, the `STRAPP_results` input object must contain a `$posthoc_pairwise_tests$perm_data_array` element that summarizes test statistics
 #'   computed across posterior samples for all pairwise post hoc tests. This is obtained from [deepSTRAPP::compute_STRAPP_test_for_focal_time()] when setting both
 #'   `posthoc_pairwise_tests = TRUE` to carry out post hoc tests, and `return_perm_data = TRUE` to record distributions of test statistics.
 #'
@@ -78,24 +78,24 @@
 #'
 #' # Compute STRAPP test under the alternative hypothesis of a "negative" correlation
 #' # between "net_diversification" rates and trait data
-#' STRAPP_test_output <- compute_STRAPP_test_for_focal_time(
+#' STRAPP_results <- compute_STRAPP_test_for_focal_time(
 #'    BAMM_object = Ponerinae_BAMM_object_10My,
 #'    trait_data_list = trait_data_multinominal,
 #'    posthoc_pairwise_tests = TRUE,
 #'    two_tailed = TRUE,
 #'    return_perm_data = TRUE)
-#' str(STRAPP_test_output, max.level = 2)
+#' str(STRAPP_results, max.level = 2)
 #' # Data from the posterior samples for the overall Kruskal-Wallis test is available
 #' # in STRAPP_results$perm_data_df
-#' head(STRAPP_test_output$perm_data_df)
+#' head(STRAPP_results$perm_data_df)
 #' # Data from the posterior samples for the post hoc Dunn's tests is available
 #' # in STRAPP_results$posthoc_pairwise_tests$perm_data_array
-#' head(STRAPP_test_output$posthoc_pairwise_tests$perm_data_array[1,,])
+#' head(STRAPP_results$posthoc_pairwise_tests$perm_data_array[1,,])
 #'
 #' # ------ Plot histogram of STRAPP overall test results ------ #
 #'
 #' histogram_ggplot <- plot_histogram_STRAPP_test_for_focal_time(
-#'                         STRAPP_test_output = STRAPP_test_output,
+#'                         STRAPP_results = STRAPP_results,
 #'                         display_plot = TRUE,
 #'                         # PDF_file_path = "./plot_STRAPP_histogram_overall_test.pdf",
 #'                         plot_posthoc_tests = FALSE)
@@ -107,7 +107,7 @@
 #' # ------ Plot histograms of STRAPP post hoc test results ------ #
 #'
 #' histograms_ggplot_list <- plot_histogram_STRAPP_test_for_focal_time(
-#'                               STRAPP_test_output = STRAPP_test_output,
+#'                               STRAPP_results = STRAPP_results,
 #'                               display_plot = TRUE,
 #'                               # PDF_file_path = "./plot_STRAPP_histograms_posthoc_tests.pdf",
 #'                               plot_posthoc_tests = TRUE)
@@ -118,7 +118,7 @@
 #'
 
 
-plot_histogram_STRAPP_test_for_focal_time <- function (STRAPP_test_output,
+plot_histogram_STRAPP_test_for_focal_time <- function (STRAPP_results,
                                                        display_plot = TRUE,
                                                        plot_posthoc_tests = FALSE,
                                                        PDF_file_path = NULL)
@@ -126,7 +126,7 @@ plot_histogram_STRAPP_test_for_focal_time <- function (STRAPP_test_output,
 {
   ### Check input validity
 
-  # STRAPP_test_output must have all the needed elements: $focal_time, $trait_type, $estimate, $stats_median, $p_value, $method, $perm_data_df
+  # STRAPP_results must have all the needed elements: $focal_time, $trait_type, $estimate, $stats_median, $p_value, $method, $perm_data_df
     # Make a special warning if $perm_data_df is missing to ask to select return_perm_data = TRUE in compute_STRAPP_test_for_focal_time() to save the raw data needed for the histogram plot
 
   # PDF_file_path must end with ".pdf"
@@ -140,11 +140,11 @@ plot_histogram_STRAPP_test_for_focal_time <- function (STRAPP_test_output,
     ## Case for overall test plot
 
     # Extract name of the statistic
-    stat_name <- names(STRAPP_test_output$perm_data_df)[4]
+    stat_name <- names(STRAPP_results$perm_data_df)[4]
     # Extract null distribution of the statistic
-    stat_null_distri <- STRAPP_test_output$perm_data_df[,stat_name]
+    stat_null_distri <- STRAPP_results$perm_data_df[,stat_name]
     # Extract quantile of the critical threshold
-    estimate_quantile <- names(STRAPP_test_output$estimate)
+    estimate_quantile <- names(STRAPP_results$estimate)
 
     # Build ggplot object
     ggplot_histo <- ggplot2::ggplot(data = as.data.frame(stat_null_distri)) +
@@ -159,22 +159,22 @@ plot_histogram_STRAPP_test_for_focal_time <- function (STRAPP_test_output,
                           linetype = "dashed", linewidth = 1.0) +
 
       # Add vline for x = estimate (significance threshold)
-      ggplot2::geom_vline(xintercept = STRAPP_test_output$estimate, color = "red",
+      ggplot2::geom_vline(xintercept = STRAPP_results$estimate, color = "red",
                           linetype = "dashed", linewidth = 1.0) +
 
       # Add test summary
       # alpha value : Estimate,  p-value
       annotate_npc(x = 0.05, y = 0.95, hjust = 0, vjust = 1, gp = grid::gpar(fontsize = 18),
-                   label = paste0("Q", estimate_quantile, " = ", round(STRAPP_test_output$estimate, digits = 3), "\n",
-                                  "P-value = ", round(STRAPP_test_output$p_value, digits = 3))) +
+                   label = paste0("Q", estimate_quantile, " = ", round(STRAPP_results$estimate, digits = 3), "\n",
+                                  "P-value = ", round(STRAPP_results$p_value, digits = 3))) +
 
       # Adjust axis labels
       ggplot2::labs(x = paste0("Distribution of the test statistics"),
                     y = "Counts across posterior samples") +
 
       # Add title
-      ggplot2::ggtitle(paste0("STRAPP based on ",STRAPP_test_output$method," test\n",
-                              "Focal-time = ", STRAPP_test_output$focal_time)) +
+      ggplot2::ggtitle(paste0("STRAPP based on ",STRAPP_results$method," test\n",
+                              "Focal-time = ", STRAPP_results$focal_time)) +
 
       # Adjust aesthetics
       ggplot2::theme(panel.grid.major = ggplot2::element_line(color = "grey70", linetype = "dashed", linewidth = 0.3),
@@ -207,7 +207,7 @@ plot_histogram_STRAPP_test_for_focal_time <- function (STRAPP_test_output,
     ggplots_histo_list <- list()
 
     # Extract pairs
-    all_pairs <- dimnames(STRAPP_test_output$posthoc_pairwise_tests$perm_data_array)$pairs
+    all_pairs <- dimnames(STRAPP_results$posthoc_pairwise_tests$perm_data_array)$pairs
     # Compute size factor to adjust size of everything
     size_factor <- sqrt(length(all_pairs))
 
@@ -216,7 +216,7 @@ plot_histogram_STRAPP_test_for_focal_time <- function (STRAPP_test_output,
       # i <- 1
 
       # Extract perm data for pair i
-      perm_data_df_i <- as.data.frame(STRAPP_test_output$posthoc_pairwise_tests$perm_data_array[i, , ])
+      perm_data_df_i <- as.data.frame(STRAPP_results$posthoc_pairwise_tests$perm_data_array[i, , ])
 
       # Extract pair names
       pair_i <- all_pairs[i]
@@ -228,18 +228,18 @@ plot_histogram_STRAPP_test_for_focal_time <- function (STRAPP_test_output,
       # Extract null distribution of the statistic
       stat_null_distri <- perm_data_df_i[,stat_name]
       # Extract quantile of the critical threshold (same the one used for the main test)
-      estimate_quantile <- names(STRAPP_test_output$estimate)
+      estimate_quantile <- names(STRAPP_results$estimate)
       # Extract estimate of the critical threshold
-      estimate_value <- STRAPP_test_output$posthoc_pairwise_tests$summary_df$estimates[i]
+      estimate_value <- STRAPP_results$posthoc_pairwise_tests$summary_df$estimates[i]
       # Extract p-value
-      p_value <- STRAPP_test_output$posthoc_pairwise_tests$summary_df$p_values[i]
+      p_value <- STRAPP_results$posthoc_pairwise_tests$summary_df$p_values[i]
 
       # Detect if adjusted p-values differ from p-value
-      p_value_adj_to_plot <- any(STRAPP_test_output$posthoc_pairwise_tests$summary_df$p_values != STRAPP_test_output$posthoc_pairwise_tests$summary_df$p_values_adjusted)
+      p_value_adj_to_plot <- any(STRAPP_results$posthoc_pairwise_tests$summary_df$p_values != STRAPP_results$posthoc_pairwise_tests$summary_df$p_values_adjusted)
       # Extract p-value adjusted if different
       if (p_value_adj_to_plot)
       {
-        p_value_adj <- STRAPP_test_output$posthoc_pairwise_tests$summary_df$p_values_adjusted[i]
+        p_value_adj <- STRAPP_results$posthoc_pairwise_tests$summary_df$p_values_adjusted[i]
       }
 
       # Build ggplot object
@@ -269,8 +269,8 @@ plot_histogram_STRAPP_test_for_focal_time <- function (STRAPP_test_output,
                       y = "Counts across posterior samples") +
 
         # Add title
-        ggplot2::ggtitle(paste0("STRAPP based on ",STRAPP_test_output$posthoc_pairwise_tests$method," test\n",
-                                "Focal-time = ", STRAPP_test_output$focal_time, "\n",
+        ggplot2::ggtitle(paste0("STRAPP based on ",STRAPP_results$posthoc_pairwise_tests$method," test\n",
+                                "Focal-time = ", STRAPP_results$focal_time, "\n",
                                 "Hypothesis = ",pair_i, "\n")) +
 
         # Adjust aesthetics

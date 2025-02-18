@@ -28,7 +28,8 @@
 #'   Used only if `update_contMap = TRUE`.
 #'
 #' @export
-#' @importFrom phytools nodeHeights
+#' @importFrom phytools nodeHeights plot.contMap
+#' @importFrom ape nodelabels
 #'
 #' @details The mapped phylogeny (`contMap`) is cut at a specific time in the past
 #'   (i.e. the `focal_time`) and the current trait values of the overlapping edges/branches are extracted.
@@ -68,7 +69,6 @@
 #'     + `$initial_nodes_ID` Vector of character strings. Provides the initial ID of internal nodes. Used to plot internal node IDs as labels with [ape::nodelabels()].
 #'     + `$edges_ID_df` Data.frame with two columns. Provides the conversion from the `new_edge_ID` to the `initial_edge_ID`. Each row is an edge/branch.
 #'     + `$initial_edges_ID` Vector of character strings. Provides the initial ID of edges/branches. Used to plot edge/branch IDs as labels with [ape::edgelabels()].
-#'
 #'
 #' @author Maël Doré
 #'
@@ -124,13 +124,13 @@
 #'
 #' # Plot node labels on initial stochastic map with cut-off
 #' plot(eel_contMap)
-#' nodelabels()
+#' ape::nodelabels()
 #' abline(v = max(phytools::nodeHeights(eel_contMap$tree)[,2]) - focal_time,
 #'        col = "red", lty = 2, lwd = 2)
 #'
 #' # Plot updated contMap with initial node labels
 #' plot(eel_test$contMap)
-#' nodelabels(text = eel_test$contMap$tree$initial_nodes_ID)
+#' ape::nodelabels(text = eel_test$contMap$tree$initial_nodes_ID)
 #'
 #' # ----- Example 2: Include fossils (Non-ultrametric tree) ----- #
 #'
@@ -182,14 +182,14 @@
 #' mammals_test$trait_data
 #'
 #' # Plot node labels on initial stochastic map with cut-off
-#' plot(mammals_contMap)
-#' nodelabels()
+#' phytools::plot.contMap(mammals_contMap)
+#' ape::nodelabels()
 #' abline(v = max(phytools::nodeHeights(mammals_contMap$tree)[,2]) - focal_time,
 #'        col = "red", lty = 2, lwd = 2)
 #'
 #' # Plot updated contMap with initial node labels
-#' plot(mammals_test$contMap)
-#' nodelabels(text = mammals_test$contMap$tree$initial_nodes_ID)
+#' phytools::plot.contMap(mammals_test$contMap)
+#' ape::nodelabels(text = mammals_test$contMap$tree$initial_nodes_ID)
 #'
 
 ## Once datasets are included in my package, remove motmot from dependencies
@@ -209,7 +209,12 @@
 ### Possible update: Make it work with non-dichotomous trees!!!
 
 
-extract_most_likely_trait_values_for_focal_time <- function (contMap, ace = NULL, tip_data = NULL, focal_time, update_contMap = FALSE, keep_tip_labels = TRUE)
+extract_most_likely_trait_values_for_focal_time <- function (contMap,
+                                                             ace = NULL,
+                                                             tip_data = NULL,
+                                                             focal_time,
+                                                             update_contMap = FALSE,
+                                                             keep_tip_labels = TRUE)
 {
 
   ### Check input validity

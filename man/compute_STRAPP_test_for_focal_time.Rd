@@ -115,11 +115,11 @@ Combined with \code{posthoc_pairwise_tests = TRUE}, the stats data are also prov
 }
 \description{
 Carries out the appropriate statistical method to test for a relationship between
-diversification rates and trait data. Tests are based on block-permutations: rates data
-are randomized across tips following blocks defined by the diversification regimes identified
-on each tip (typically from a BAMM).
+diversification rates and trait data for a given point in the past (i.e. the \code{focal_time}).
+Tests are based on block-permutations: rates data are randomized across tips following blocks
+defined by the diversification regimes identified on each tip (typically from a BAMM).
 
-Such tests are called STructured RAte Permutations on Phylogenies (STRAPP) as defined in
+Such tests are called STructured RAte Permutations on Phylogenies (STRAPP) as described in
 Rabosky, D. L., & Huang, H. (2016). A robust semi-parametric test for detecting trait-dependent diversification.
 Systematic biology, 65(2), 181-193. \url{https://doi.org/10.1093/sysbio/syv066}.
 
@@ -128,33 +128,33 @@ carry out STRAPP test on extant time-calibrated phylogenies.
 
 Tests can be carried out on speciation, extinction and net diversification rates.
 
-\code{\link[=compute_STRAPP_test_for_focal_time]{compute_STRAPP_test_for_focal_time()}} can handle three types of statistical tests depending on the type of trait data provided:
+\code{deepSTRAPP::compute_STRAPP_test_for_focal_time()} can handle three types of statistical tests depending on the type of trait data provided:
 \subsection{Continuous trait data}{
 
-Tests for correlations between trait and rates carried out with \code{\link[=deepSTRAPP::compute_STRAPP_test_for_focal_time]{compute_STRAPP_test_for_continuous_data()}}.
+Tests for correlations between trait and rates carried out with \code{deepSTRAPP::compute_STRAPP_test_for_continuous_data()}.
 The associated test is the Spearman's rank correlation test (See \link[stats:cor.test]{stats::cor.test}).
 }
 
 \subsection{Binary trait data}{
 
 For categorical and biogeographic trait data that have only two states (ex: 'Nearctic' vs. 'Neotropics').
-Tests for differences in rates between states are carried out with \code{\link[=deepSTRAPP::compute_STRAPP_test_for_focal_time]{compute_STRAPP_test_for_binary_data()}}.
+Tests for differences in rates between states are carried out with \code{deepSTRAPP::compute_STRAPP_test_for_binary_data()}.
 The associated test is the Mann-Whitney-Wilcoxon rank-sum test (See \link[stats:wilcox.test]{stats::wilcox.test}).
 }
 
 \subsection{Multinominal trait data}{
 
 For categorical and biogeographic trait data with more than two states (ex: 'No leg' vs. 'Two legs' vs. 'Four legs').
-Tests for differences in rates between states are carried out with \code{\link[=deepSTRAPP::compute_STRAPP_test_for_focal_time]{compute_STRAPP_test_for_multinominal_data()}}.
+Tests for differences in rates between states are carried out with \code{deepSTRAPP::compute_STRAPP_test_for_multinominal_data()}.
 The associated test for all states is the Kruskal-Wallis H test (See \link[stats:kruskal.test]{stats::kruskal.test}).
-If \code{posthoc_pairwise_tests = TRUE}, post hoc pairwise tests between pairs of states will be carried out.
+If \code{posthoc_pairwise_tests = TRUE}, post hoc pairwise tests between pairs of states will be carried out too.
 The associated test for post hoc pairwise tests is the Dunn's post hoc pairwise rank-sum test (See \link[dunn.test:dunn.test]{dunn.test::dunn.test}).
 }
 }
 \details{
-These set of functions carries out the STructured RAte Permutations on Phylogenies (STRAPP) test
-as defined in Rabosky, D. L., & Huang, H. (2016). A robust semi-parametric test for detecting trait-dependent diversification.
-Systematic biology, 65(2), 181-193. \link{https://doi.org/10.1093/sysbio/syv066}.
+These set of functions carries out the STructured RAte Permutations on Phylogenies (STRAPP) test as defined in
+Rabosky, D. L., & Huang, H. (2016). A robust semi-parametric test for detecting trait-dependent diversification.
+Systematic biology, 65(2), 181-193.
 
 It is an extension of the original \code{\link[BAMMtools:traitDependentBAMM]{BAMMtools::traitDependentBAMM()}} function used to
 carry out STRAPP test on extant time-calibrated phylogenies, but allowing here to test for
@@ -177,7 +177,7 @@ In a one-tailed test, the p-value is the proportion of posterior samples in whic
 \item Allow to choose if random sampling of posterior configurations must be done with replacement or not with \code{replace}.
 \item Add post hoc pairwise tests (Dunn test) for multinominal data. Use \code{posthoc_pairwise_tests = TRUE}.
 \item Provide outputs tailored for histogram plots \code{\link[=plot_histogram_STRAPP_test_for_focal_time]{plot_histogram_STRAPP_test_for_focal_time()}}
-and p-value time-series plots \link{ref_fun}.
+and p-value time-series plots \code{\link[=plot_STRAPP_pvalues_over_time]{plot_STRAPP_pvalues_over_time()}}.
 \item Add prints detailing what test is carried out, what are the null and alternative hypotheses,
 and what significant level is used to rejected or not the null hypothesis. (Enabled with \code{print_hypothesis = TRUE}).
 \item Split the function in multiple sub-functions according to the type of data (\verb{$data_type}).

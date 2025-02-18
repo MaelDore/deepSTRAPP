@@ -8,8 +8,8 @@ data(Ponerinae_trait_data, package = "deepSTRAPP")
 data(Ponerinae_tree, package = "deepSTRAPP")
 
 # Extract log(head with) data
-Ponerinae_data_ln_HW <- setNames(object = Ponerinae_data$sim_ln_HW,
-                                 nm = Ponerinae_data$Taxa)
+Ponerinae_data_ln_HW <- setNames(object = Ponerinae_trait_data$sim_ln_HW,
+                                 nm = Ponerinae_trait_data$Taxa)
 
 # Get Ancestral Character Estimates based on a Brownian Motion model
 # To obtain values at internal nodes

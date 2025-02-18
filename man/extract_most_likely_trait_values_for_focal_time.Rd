@@ -146,13 +146,13 @@ eel_test$trait_data
 
 # Plot node labels on initial stochastic map with cut-off
 plot(eel_contMap)
-nodelabels()
+ape::nodelabels()
 abline(v = max(phytools::nodeHeights(eel_contMap$tree)[,2]) - focal_time,
        col = "red", lty = 2, lwd = 2)
 
 # Plot updated contMap with initial node labels
 plot(eel_test$contMap)
-nodelabels(text = eel_test$contMap$tree$initial_nodes_ID)
+ape::nodelabels(text = eel_test$contMap$tree$initial_nodes_ID)
 
 # ----- Example 2: Include fossils (Non-ultrametric tree) ----- #
 
@@ -204,14 +204,14 @@ mammals_test <- extract_most_likely_trait_values_for_focal_time(
 mammals_test$trait_data
 
 # Plot node labels on initial stochastic map with cut-off
-plot(mammals_contMap)
-nodelabels()
+phytools::plot.contMap(mammals_contMap)
+ape::nodelabels()
 abline(v = max(phytools::nodeHeights(mammals_contMap$tree)[,2]) - focal_time,
        col = "red", lty = 2, lwd = 2)
 
 # Plot updated contMap with initial node labels
-plot(mammals_test$contMap)
-nodelabels(text = mammals_test$contMap$tree$initial_nodes_ID)
+phytools::plot.contMap(mammals_test$contMap)
+ape::nodelabels(text = mammals_test$contMap$tree$initial_nodes_ID)
 
 }
 \seealso{

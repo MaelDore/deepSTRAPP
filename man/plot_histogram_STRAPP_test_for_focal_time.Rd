@@ -5,14 +5,14 @@
 \title{Plot histogram of STRAPP test statistics to assess results}
 \usage{
 plot_histogram_STRAPP_test_for_focal_time(
-  STRAPP_test_output,
+  STRAPP_results,
   display_plot = TRUE,
   plot_posthoc_tests = FALSE,
   PDF_file_path = NULL
 )
 }
 \arguments{
-\item{STRAPP_test_output}{List of elements generated with \code{\link[=compute_STRAPP_test_for_focal_time]{compute_STRAPP_test_for_focal_time()}},
+\item{STRAPP_results}{List of elements generated with \code{\link[=compute_STRAPP_test_for_focal_time]{compute_STRAPP_test_for_focal_time()}},
 that summarize the results of a STRAPP test for a specific time in the past (i.e. the \code{focal_time}).}
 
 \item{display_plot}{Logical. Whether to display the histogram(s) generated in the R console. Default is \code{TRUE}.}
@@ -48,12 +48,12 @@ If a PDF file path is provided in \code{PDF_file_path}, the plot will be saved d
 \details{
 Histograms are build based on the distribution of the test statistics.
 Such distributions are recorded in the outputs of STRAPP tests carried out with \code{\link[=compute_STRAPP_test_for_focal_time]{compute_STRAPP_test_for_focal_time()}}
-when \code{return_perm_data = TRUE}. The \code{STRAPP_test_output} object provided as input is a list that must contain
+when \code{return_perm_data = TRUE}. The \code{STRAPP_results} object provided as input is a list that must contain
 a \verb{$perm_data_df} element that summarizes test statistics computed across posterior samples.
 
 For multinominal data (categorical or biogeographic data with more than 2 states), it is possible to plot the histograms of post hoc pairwise tests.
 Set \code{plot_posthoc_tests = TRUE} to generate histograms for all the pairwise post hoc Dunn's test across pairs of states.
-To achieve this, the \code{STRAPP_test_output} input object must contain a \verb{$posthoc_pairwise_tests$perm_data_array} element that summarizes test statistics
+To achieve this, the \code{STRAPP_results} input object must contain a \verb{$posthoc_pairwise_tests$perm_data_array} element that summarizes test statistics
 computed across posterior samples for all pairwise post hoc tests. This is obtained from \code{\link[=compute_STRAPP_test_for_focal_time]{compute_STRAPP_test_for_focal_time()}} when setting both
 \code{posthoc_pairwise_tests = TRUE} to carry out post hoc tests, and \code{return_perm_data = TRUE} to record distributions of test statistics.
 }
@@ -85,24 +85,24 @@ table(trait_data_multinominal$trait_data)
 
 # Compute STRAPP test under the alternative hypothesis of a "negative" correlation
 # between "net_diversification" rates and trait data
-STRAPP_test_output <- compute_STRAPP_test_for_focal_time(
+STRAPP_results <- compute_STRAPP_test_for_focal_time(
    BAMM_object = Ponerinae_BAMM_object_10My,
    trait_data_list = trait_data_multinominal,
    posthoc_pairwise_tests = TRUE,
    two_tailed = TRUE,
    return_perm_data = TRUE)
-str(STRAPP_test_output, max.level = 2)
+str(STRAPP_results, max.level = 2)
 # Data from the posterior samples for the overall Kruskal-Wallis test is available
 # in STRAPP_results$perm_data_df
-head(STRAPP_test_output$perm_data_df)
+head(STRAPP_results$perm_data_df)
 # Data from the posterior samples for the post hoc Dunn's tests is available
 # in STRAPP_results$posthoc_pairwise_tests$perm_data_array
-head(STRAPP_test_output$posthoc_pairwise_tests$perm_data_array[1,,])
+head(STRAPP_results$posthoc_pairwise_tests$perm_data_array[1,,])
 
 # ------ Plot histogram of STRAPP overall test results ------ #
 
 histogram_ggplot <- plot_histogram_STRAPP_test_for_focal_time(
-                        STRAPP_test_output = STRAPP_test_output,
+                        STRAPP_results = STRAPP_results,
                         display_plot = TRUE,
                         # PDF_file_path = "./plot_STRAPP_histogram_overall_test.pdf",
                         plot_posthoc_tests = FALSE)
@@ -114,7 +114,7 @@ print(histogram_ggplot_adj)
 # ------ Plot histograms of STRAPP post hoc test results ------ #
 
 histograms_ggplot_list <- plot_histogram_STRAPP_test_for_focal_time(
-                              STRAPP_test_output = STRAPP_test_output,
+                              STRAPP_results = STRAPP_results,
                               display_plot = TRUE,
                               # PDF_file_path = "./plot_STRAPP_histograms_posthoc_tests.pdf",
                               plot_posthoc_tests = TRUE)

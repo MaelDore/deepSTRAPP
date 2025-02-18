@@ -15,7 +15,7 @@
 #' @param keep_tip_labels Logical. Specify whether terminal branches with a single descendant tip must retained their initial `tip.label`. Default is `TRUE`.
 #'
 #' @export
-#' @importFrom phytools nodeHeights
+#' @importFrom phytools nodeHeights plot.contMap
 #'
 #' @details The phylogenetic tree is cut for a specific time in the past (i.e. the `focal_time`).
 #'
@@ -76,14 +76,14 @@
 #'                                               keep_tip_labels = TRUE)
 #'
 #' # Plot node labels on initial stochastic map with cut-off
-#' plot(mammals_contMap, lwd = 2)
-#' nodelabels()
+#' phytools::plot.contMap(mammals_contMap, lwd = 2)
+#' ape::nodelabels()
 #' abline(v = max(phytools::nodeHeights(mammals_contMap$tree)[,2]) - focal_time,
 #'        col = "red", lty = 2, lwd = 2)
 
 #' # Plot initial node labels on cut stochastic map
-#' plot(updated_contMap)
-#' nodelabels(text = updated_contMap$tree$initial_nodes_ID)
+#' phytools::plot.contMap(updated_contMap)
+#' ape::nodelabels(text = updated_contMap$tree$initial_nodes_ID)
 #'
 #' # ----- Example 2: keep_tip_labels = FALSE ----- #
 #'
@@ -93,14 +93,14 @@
 #'                                               keep_tip_labels = FALSE)
 #'
 #' # Plot node labels on initial stochastic map with cut-off
-#' plot(mammals_contMap)
-#' nodelabels()
+#' phytools::plot.contMap(mammals_contMap)
+#' ape::nodelabels()
 #' abline(v = max(phytools::nodeHeights(mammals_contMap$tree)[,2]) - focal_time,
 #'        col = "red", lty = 2, lwd = 2)
 #'
 #' # Plot initial node labels on cut stochastic map
-#' plot(updated_contMap)
-#' nodelabels(text = updated_contMap$tree$initial_nodes_ID)
+#' phytools::plot.contMap(updated_contMap)
+#' ape::nodelabels(text = updated_contMap$tree$initial_nodes_ID)
 #'
 
 ### Possible update: Make it work with non-dichotomous trees!!!

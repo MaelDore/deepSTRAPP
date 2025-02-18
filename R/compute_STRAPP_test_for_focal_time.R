@@ -5,11 +5,11 @@
 #' @title Computes STRAPP to test for a relationship between diversification rates and trait data
 #'
 #' @description Carries out the appropriate statistical method to test for a relationship between
-#'   diversification rates and trait data. Tests are based on block-permutations: rates data
-#'   are randomized across tips following blocks defined by the diversification regimes identified
-#'   on each tip (typically from a BAMM).
+#'   diversification rates and trait data for a given point in the past (i.e. the `focal_time`).
+#'   Tests are based on block-permutations: rates data are randomized across tips following blocks
+#'   defined by the diversification regimes identified on each tip (typically from a BAMM).
 #'
-#'   Such tests are called STructured RAte Permutations on Phylogenies (STRAPP) as defined in
+#'   Such tests are called STructured RAte Permutations on Phylogenies (STRAPP) as described in
 #'   Rabosky, D. L., & Huang, H. (2016). A robust semi-parametric test for detecting trait-dependent diversification.
 #'   Systematic biology, 65(2), 181-193. \url{https://doi.org/10.1093/sysbio/syv066}.
 #'
@@ -18,25 +18,25 @@
 #'
 #'   Tests can be carried out on speciation, extinction and net diversification rates.
 #'
-#'   [deepSTRAPP::compute_STRAPP_test_for_focal_time()] can handle three types of statistical tests depending on the type of trait data provided:
+#'   `deepSTRAPP::compute_STRAPP_test_for_focal_time()` can handle three types of statistical tests depending on the type of trait data provided:
 #'
 #'   ## Continuous trait data
 #'
-#'   Tests for correlations between trait and rates carried out with \code{\link[=deepSTRAPP::compute_STRAPP_test_for_focal_time]{compute_STRAPP_test_for_continuous_data()}}.
+#'   Tests for correlations between trait and rates carried out with `deepSTRAPP::compute_STRAPP_test_for_continuous_data()`.
 #'   The associated test is the Spearman's rank correlation test (See [stats::cor.test]).
 #'
 #'   ## Binary trait data
 #'
 #'   For categorical and biogeographic trait data that have only two states (ex: 'Nearctic' vs. 'Neotropics').
-#'   Tests for differences in rates between states are carried out with \code{\link[=deepSTRAPP::compute_STRAPP_test_for_focal_time]{compute_STRAPP_test_for_binary_data()}}.
+#'   Tests for differences in rates between states are carried out with `deepSTRAPP::compute_STRAPP_test_for_binary_data()`.
 #'   The associated test is the Mann-Whitney-Wilcoxon rank-sum test (See [stats::wilcox.test]).
 #'
 #'   ## Multinominal trait data
 #'
 #'   For categorical and biogeographic trait data with more than two states (ex: 'No leg' vs. 'Two legs' vs. 'Four legs').
-#'   Tests for differences in rates between states are carried out with \code{\link[=deepSTRAPP::compute_STRAPP_test_for_focal_time]{compute_STRAPP_test_for_multinominal_data()}}.
+#'   Tests for differences in rates between states are carried out with `deepSTRAPP::compute_STRAPP_test_for_multinominal_data()`.
 #'   The associated test for all states is the Kruskal-Wallis H test (See [stats::kruskal.test]).
-#'   If `posthoc_pairwise_tests = TRUE`, post hoc pairwise tests between pairs of states will be carried out.
+#'   If `posthoc_pairwise_tests = TRUE`, post hoc pairwise tests between pairs of states will be carried out too.
 #'   The associated test for post hoc pairwise tests is the Dunn's post hoc pairwise rank-sum test (See [dunn.test::dunn.test]).
 #'
 #' @param BAMM_object Object of class `"bammdata"`, typically generated with [deepSTRAPP::update_rates_and_regimes_for_focal_time()],
@@ -78,9 +78,9 @@
 #' @importFrom dunn.test dunn.test
 #' @importFrom utils capture.output
 #'
-#' @details These set of functions carries out the STructured RAte Permutations on Phylogenies (STRAPP) test
-#'   as defined in Rabosky, D. L., & Huang, H. (2016). A robust semi-parametric test for detecting trait-dependent diversification.
-#'   Systematic biology, 65(2), 181-193. [https://doi.org/10.1093/sysbio/syv066].
+#' @details These set of functions carries out the STructured RAte Permutations on Phylogenies (STRAPP) test as defined in
+#'   Rabosky, D. L., & Huang, H. (2016). A robust semi-parametric test for detecting trait-dependent diversification.
+#'   Systematic biology, 65(2), 181-193.
 #'
 #'   It is an extension of the original [BAMMtools::traitDependentBAMM()] function used to
 #'   carry out STRAPP test on extant time-calibrated phylogenies, but allowing here to test for
@@ -103,7 +103,7 @@
 #'   * Allow to choose if random sampling of posterior configurations must be done with replacement or not with `replace`.
 #'   * Add post hoc pairwise tests (Dunn test) for multinominal data. Use `posthoc_pairwise_tests = TRUE`.
 #'   * Provide outputs tailored for histogram plots [deepSTRAPP::plot_histogram_STRAPP_test_for_focal_time()]
-#'     and p-value time-series plots [deepSTRAPP::ref_fun].
+#'     and p-value time-series plots [deepSTRAPP::plot_STRAPP_pvalues_over_time()].
 #'   * Add prints detailing what test is carried out, what are the null and alternative hypotheses,
 #'     and what significant level is used to rejected or not the null hypothesis. (Enabled with `print_hypothesis = TRUE`).
 #'   * Split the function in multiple sub-functions according to the type of data (`$data_type`).
@@ -330,7 +330,7 @@ compute_STRAPP_test_for_focal_time <- function (BAMM_object, trait_data_list,
   switch(EXPR = data_type,
          continuous =   { # Case for continuous data
            # Stat test = Spearman's rank Rho test
-           STRAPP_test_output <- compute_STRAPP_test_for_continuous_data(
+           STRAPP_results <- compute_STRAPP_test_for_continuous_data(
              BAMM_data = BAMM_data,
              trait_data = trait_data,
              rate_type = rate_type,
@@ -345,7 +345,7 @@ compute_STRAPP_test_for_focal_time <- function (BAMM_object, trait_data_list,
          },
          binary =       { # Case for binary data (Special case of categorical/biogeographic data with only two states)
            # Stat test = Mann-Whitney U test
-           STRAPP_test_output <- compute_STRAPP_test_for_binary_data(
+           STRAPP_results <- compute_STRAPP_test_for_binary_data(
              BAMM_data = BAMM_data,
              trait_data = trait_data,
              rate_type = rate_type,
@@ -361,7 +361,7 @@ compute_STRAPP_test_for_focal_time <- function (BAMM_object, trait_data_list,
          multinominal = { # Case for multinominal data (Case of categorical/biogeographic data with more than two states)
            # Stat test = Kruskal-Wallis H test
            # Can define the post-hoc pairwise tests to compute
-           STRAPP_test_output <- compute_STRAPP_test_for_multinominal_data(
+           STRAPP_results <- compute_STRAPP_test_for_multinominal_data(
              BAMM_data = BAMM_data,
              trait_data = trait_data,
              rate_type = rate_type,
@@ -378,10 +378,10 @@ compute_STRAPP_test_for_focal_time <- function (BAMM_object, trait_data_list,
   )
 
   ## Include focal_time in the output
-  STRAPP_test_output$focal_time <- BAMM_object$focal_time
+  STRAPP_results$focal_time <- BAMM_object$focal_time
 
   ## Export the STRAPP test output
-  return(STRAPP_test_output)
+  return(STRAPP_results)
 }
 
 
@@ -570,18 +570,18 @@ compute_STRAPP_test_for_continuous_data <- function (
   if (two_tailed)
   {
     # If two-tailed test, need to compare the abs_delta_rho with alpha % quantile to see if higher than zero.
-    STRAPP_test_output <- list(
+    STRAPP_results <- list(
       estimate = stats::quantile(abs(rho_obs) - abs(rho_perm), p = alpha))
   } else {
 
     if (one_tailed_hypothesis == "positive")
     {
       # If one-tailed test for positive correlation, need to compare the delta_rho with alpha % quantile to see if higher than zero.
-      STRAPP_test_output <- list(
+      STRAPP_results <- list(
         estimate = stats::quantile(as.numeric(rho_obs) - as.numeric(rho_perm), p = alpha))
     } else {
       # If one-tailed test for negative correlation, need to compare the delta_rho with (1-alpha) % quantile to see if lower than zero.
-      STRAPP_test_output <- list(
+      STRAPP_results <- list(
         estimate = stats::quantile(as.numeric(rho_obs) - as.numeric(rho_perm), p = 1 - alpha))
     }
   }
@@ -590,16 +590,16 @@ compute_STRAPP_test_for_continuous_data <- function (
   if (two_tailed)
   {
     # For two-tailed test, distribution based on difference in absolute correlations
-    STRAPP_test_output$stats_median <- stats::median(abs(rho_obs) - abs(rho_perm))
+    STRAPP_results$stats_median <- stats::median(abs(rho_obs) - abs(rho_perm))
   } else {
     # For one-tailed test, distribution based on difference in correlations
-    STRAPP_test_output$stats_median <- stats::median(as.numeric(rho_obs) - as.numeric(rho_perm))
+    STRAPP_results$stats_median <- stats::median(as.numeric(rho_obs) - as.numeric(rho_perm))
   }
-  STRAPP_test_output$p_value <- p_value # P-value of the test
-  STRAPP_test_output$method <- "Spearman" # Stats method
-  STRAPP_test_output$two_tailed <- two_tailed # Type of test: two-tailed or not
-  STRAPP_test_output$one_tailed_hypothesis <- one_tailed_hypothesis # Type of hypothesis if one-tailed test
-  STRAPP_test_output$rate_type <- rate_type # Type of rates: speciation, extinction, or net diversification
+  STRAPP_results$p_value <- p_value # P-value of the test
+  STRAPP_results$method <- "Spearman" # Stats method
+  STRAPP_results$two_tailed <- two_tailed # Type of test: two-tailed or not
+  STRAPP_results$one_tailed_hypothesis <- one_tailed_hypothesis # Type of hypothesis if one-tailed test
+  STRAPP_results$rate_type <- rate_type # Type of rates: speciation, extinction, or net diversification
 
   ## Save permutation results in a data.frame
   if (return_perm_data)
@@ -613,11 +613,11 @@ compute_STRAPP_test_for_continuous_data <- function (
     } else { # For one-tailed test, distribution based on difference in correlations
       perm_data_df$delta_rho <- as.numeric(rho_obs) - as.numeric(rho_perm)
     }
-    STRAPP_test_output$perm_data_df <- perm_data_df
+    STRAPP_results$perm_data_df <- perm_data_df
   }
 
   ## Export output
-  return(STRAPP_test_output)
+  return(STRAPP_results)
 }
 
 
@@ -852,12 +852,12 @@ compute_STRAPP_test_for_binary_data <- function (
   if (two_tailed)
   {
     # If two-tailed test, need to compare the abs_delta_U with alpha % quantile to see if higher than zero.
-    STRAPP_test_output <- list(
+    STRAPP_results <- list(
       estimate = stats::quantile(abs(U_obs) - abs(U_perm), p = alpha))
   } else {
 
     # If one-tailed test, need to compare the delta_U with alpha % quantile to see if higher than zero.
-    STRAPP_test_output <- list(
+    STRAPP_results <- list(
       estimate = stats::quantile(as.numeric(U_obs) - as.numeric(U_perm), p = alpha))
   }
 
@@ -865,16 +865,16 @@ compute_STRAPP_test_for_binary_data <- function (
   if (two_tailed)
   {
     # For two-tailed test, distribution based on difference in absolute U-stats
-    STRAPP_test_output$stats_median <- stats::median(abs(U_obs) - abs(U_perm))
+    STRAPP_results$stats_median <- stats::median(abs(U_obs) - abs(U_perm))
   } else {
     # For one-tailed test, distribution based on difference in U-stats
-    STRAPP_test_output$stats_median <- stats::median(as.numeric(U_obs) - as.numeric(U_perm))
+    STRAPP_results$stats_median <- stats::median(as.numeric(U_obs) - as.numeric(U_perm))
   }
-  STRAPP_test_output$p_value <- p_value # P-value of the test
-  STRAPP_test_output$method <- "Mann-Whitney-Wilcoxon" # Stats method
-  STRAPP_test_output$two_tailed <- two_tailed # Type of test: two-tailed or not
-  STRAPP_test_output$one_tailed_hypothesis <- one_tailed_hypothesis # Type of hypothesis if one-tailed test
-  STRAPP_test_output$rate_type <- rate_type # Type of rates: speciation, extinction, or net diversification
+  STRAPP_results$p_value <- p_value # P-value of the test
+  STRAPP_results$method <- "Mann-Whitney-Wilcoxon" # Stats method
+  STRAPP_results$two_tailed <- two_tailed # Type of test: two-tailed or not
+  STRAPP_results$one_tailed_hypothesis <- one_tailed_hypothesis # Type of hypothesis if one-tailed test
+  STRAPP_results$rate_type <- rate_type # Type of rates: speciation, extinction, or net diversification
 
   ## Save permutation results in a data.frame
   if (return_perm_data)
@@ -888,11 +888,11 @@ compute_STRAPP_test_for_binary_data <- function (
     } else { # For one-tailed test, distribution based on difference in U-stats
       perm_data_df$delta_U <- as.numeric(U_obs) - as.numeric(U_perm)
     }
-    STRAPP_test_output$perm_data_df <- perm_data_df
+    STRAPP_results$perm_data_df <- perm_data_df
   }
 
   ## Export output
-  return(STRAPP_test_output)
+  return(STRAPP_results)
 }
 
 
@@ -1047,14 +1047,14 @@ compute_STRAPP_test_for_multinominal_data <- function (
   ## Save test stats
 
   # Need to compare the delta_H with alpha % quantile to see if higher than zero.
-  STRAPP_test_output <- list(
+  STRAPP_results <- list(
     estimate = stats::quantile(as.numeric(H_obs) - as.numeric(H_perm), p = alpha))
 
   ## Save test summary results
-  STRAPP_test_output$stats_median <- stats::median(as.numeric(H_obs) - as.numeric(H_perm))
-  STRAPP_test_output$p_value <- p_value # P-value of the test
-  STRAPP_test_output$method <- "Kruskal-Wallis" # Stats method
-  STRAPP_test_output$rate_type <- rate_type # Type of rates: speciation, extinction, or net diversification
+  STRAPP_results$stats_median <- stats::median(as.numeric(H_obs) - as.numeric(H_perm))
+  STRAPP_results$p_value <- p_value # P-value of the test
+  STRAPP_results$method <- "Kruskal-Wallis" # Stats method
+  STRAPP_results$rate_type <- rate_type # Type of rates: speciation, extinction, or net diversification
 
   ## Save permutation results
   if (return_perm_data)
@@ -1063,14 +1063,14 @@ compute_STRAPP_test_for_multinominal_data <- function (
                                H_obs = as.numeric(H_obs),
                                H_perm = as.numeric(H_perm),
                                delta_U = as.numeric(H_obs) - as.numeric(H_perm))
-    STRAPP_test_output$perm_data_df <- perm_data_df
+    STRAPP_results$perm_data_df <- perm_data_df
   }
 
   ## Deal with post hoc pairwise tests
   if (posthoc_pairwise_tests)
   {
     ## Initiate output elements for post hoc pairwise tests
-    STRAPP_test_output$posthoc_pairwise_tests <- list()
+    STRAPP_results$posthoc_pairwise_tests <- list()
 
     ## Print hypothesis if requested
     if (print_hypothesis)
@@ -1243,9 +1243,9 @@ compute_STRAPP_test_for_multinominal_data <- function (
                              p_values_adjusted = p_values_adjusted)
 
     ## Save test summary results
-    STRAPP_test_output$posthoc_pairwise_tests$summary_df <- summary_df # Tests per pairs: estimates and p-values
-    STRAPP_test_output$posthoc_pairwise_tests$method <- "Dunn" # Stats method
-    STRAPP_test_output$posthoc_pairwise_tests$two_tailed <- two_tailed # Type of test: two-tailed or not
+    STRAPP_results$posthoc_pairwise_tests$summary_df <- summary_df # Tests per pairs: estimates and p-values
+    STRAPP_results$posthoc_pairwise_tests$method <- "Dunn" # Stats method
+    STRAPP_results$posthoc_pairwise_tests$two_tailed <- two_tailed # Type of test: two-tailed or not
 
     ## Save permutation results in an array
     if (return_perm_data)
@@ -1283,12 +1283,12 @@ compute_STRAPP_test_for_multinominal_data <- function (
       }
 
       # Store array
-      STRAPP_test_output$posthoc_pairwise_tests$perm_data_array <- perm_data_array
+      STRAPP_results$posthoc_pairwise_tests$perm_data_array <- perm_data_array
     }
   }
 
   ## Export output
-  return(STRAPP_test_output)
+  return(STRAPP_results)
 }
 
 
