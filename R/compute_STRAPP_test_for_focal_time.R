@@ -1062,7 +1062,7 @@ compute_STRAPP_test_for_multinominal_data <- function (
     perm_data_df <- data.frame(posterior_samples_random_ID = posterior_samples_random_ID,
                                H_obs = as.numeric(H_obs),
                                H_perm = as.numeric(H_perm),
-                               delta_U = as.numeric(H_obs) - as.numeric(H_perm))
+                               delta_H = as.numeric(H_obs) - as.numeric(H_perm))
     STRAPP_results$perm_data_df <- perm_data_df
   }
 
@@ -1229,7 +1229,7 @@ compute_STRAPP_test_for_multinominal_data <- function (
         estimates[[i]] <- stats::quantile(abs(Z_obs[[i]]) - abs(Z_perm[[i]]), p = alpha)
         stats_median[[i]] <- stats::median(abs(Z_obs[[i]]) - abs(Z_perm[[i]]))
       } else {
-        # If one-tailed test, need to compare the delta_U with alpha % quantile to see if higher than zero.
+        # If one-tailed test, need to compare the delta_Z with alpha % quantile to see if higher than zero.
         estimates[[i]] <- stats::quantile(as.numeric(Z_obs[[i]]) - as.numeric(Z_perm[[i]]), p = alpha)
         stats_median[[i]] <- stats::median(as.numeric(Z_obs[[i]]) - as.numeric(Z_perm[[i]]))
       }

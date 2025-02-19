@@ -30,7 +30,7 @@ modify for aesthetics using the ggplot2 grammar.
 
 If using multinominal data and set \code{plot_posthoc_tests = TRUE}, the function will return a list of objects.
 Each object is the ggplot associated with a pairwise post hoc test.
-To plot each histogram individually, use \code{print(output_list[[i]])}.
+To plot each histogram i individually, use \code{print(output_list[[i]])}.
 To plot all histograms at once in a multifaceted plot, as displayed on the console if \code{display_plot = TRUE}, use \code{cowplot::plot_grid(plotlist = output_list)}.
 
 If a \code{PDF_file_path} is provided, the function will also generate a PDF file of the plot. For post hoc tests, this will save the multifaceted plot.
@@ -120,12 +120,12 @@ histograms_ggplot_list <- plot_histogram_STRAPP_test_for_focal_time(
                               plot_posthoc_tests = TRUE)
 # Plot all histograms one by one
 print(histograms_ggplot_list)
-# Plot all histograms on one plot
+# Plot all histograms on one faceted plot
 cowplot::plot_grid(plotlist = histograms_ggplot_list)}
 
 }
 \seealso{
-Associated functions in deepSTRAPP: \code{\link[=compute_STRAPP_test_for_focal_time]{compute_STRAPP_test_for_focal_time()}}
+Associated functions in deepSTRAPP: \code{\link[=compute_STRAPP_test_for_focal_time]{compute_STRAPP_test_for_focal_time()}} \code{\link[=run_STRAPP_test_for_focal_time]{run_STRAPP_test_for_focal_time()}}
 }
 \author{
 Maël Doré

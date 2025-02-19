@@ -65,7 +65,7 @@
 #'  in the post hoc pairwise tests to account for multiple comparisons. See [stats::p.adjust()] for the available methods. Default is `none`.
 #' @param return_perm_data Logical. Whether to return the stats data computed from the posterior samples for observed and permuted data in the output.
 #'  This is needed to plot the histograms of the null distribution used to assess significance of the tests with [deepSTRAPP::plot_histogram_STRAPP_test_for_focal_time()].
-#'  (for a single `focal_time`) and [deepSTRAPP::plot_histogram_STRAPP_test_over_time()] (for multiple `time_steps`). Default is `FALSE`.
+#'  (for a single `focal_time`) and [deepSTRAPP::plot_histograms_STRAPP_tests_over_time()] (for multiple `time_steps`). Default is `FALSE`.
 #' @param nthreads Integer. Number of threads to use for paralleled computing of the STRAPP tests across the permutations.
 #'  The R package `parallel` must be loaded for `nthreads > 1`. Default is `1`.
 #' @param print_hypothesis Logical. Whether to print information on what test is carried out, detailing the null and alternative hypotheses,
@@ -97,7 +97,7 @@
 #'   The STRAPP workflow is described step by step in the [deepSTRAPP::run_STRAPP_test_for_focal_time()] documentation.
 #'
 #'   Its main output is the `$pvalues_summary_df`: a data.frame providing test stat estimates and p-values obtained across all `time_steps`,
-#'   that can be passed down to [deepSTRAPP::plot_pvalues_over_time()] to generate a plot showing the evolution of the test results across time.
+#'   that can be passed down to [deepSTRAPP::plot_STRAPP_pvalues_over_time()] to generate a plot showing the evolution of the test results across time.
 #'   If using multinominal data (with more than two states) and `posthoc_pairwise_tests = TRUE`, the output will also contain
 #'   a data.frame providing test stat estimates and p-values for post hoc pairwise tests in `$pvalues_summary_df_for_posthoc_pairwise_tests`.
 #'
@@ -113,7 +113,7 @@
 #'   * If `return_STRAPP_results = TRUE`, a list of STRAPP test outputs is provided in `$STRAPP_results_over_time`.
 #'     Combined with `return_perm_data = TRUE`, it allows to plot the histograms of the null distributions
 #'     used to assess significance of the tests with [deepSTRAPP::plot_histogram_STRAPP_test_for_focal_time()].
-#'     (for a single `focal_time`) and [deepSTRAPP::plot_histogram_STRAPP_test_over_time()] (for multiple `time_steps`).
+#'     (for a single `focal_time`) and [deepSTRAPP::plot_histograms_STRAPP_tests_over_time()] (for multiple `time_steps`).
 #'   * If `return_updated_trait_data_with_contMap = TRUE`, a list of objects containing trait data and updated `contMap`
 #'     is provided in `$updated_trait_data_with_contMap_over_time`. Updated `contMap` can be plotted with [phytools::plot.contMap()]
 #'     to display a phylogeny mapped with trait values with branches cut at each `focal_time`.
@@ -124,14 +124,14 @@
 #' @return The function returns a list with at least three elements.
 #'
 #'   * `$pvalues_summary_df` Data.frame with three columns providing test stat `$estimate` and `$p_value` obtained for each time-step (i.e., `$focal_time`),
-#'     that can be passed down to [deepSTRAPP::plot_pvalues_over_time()] to generate a plot showing the evolution of the test results across time.
+#'     that can be passed down to [deepSTRAPP::plot_STRAPP_pvalues_over_time()] to generate a plot showing the evolution of the test results across time.
 #'   * `$time_steps` Numerical vector. Time steps at which the STRAPP tests were carried out in the same order as the objects returned in the output lists.
 #'   * `$rate_type` Character string. The type of diversification rates used in the tests: 'speciation', 'extinction' or 'net_diversification'.
 #'
 #'   Optional summary df for multinominal data, if `posthoc_pairwise_tests = TRUE`:
 #'   * `$pvalues_summary_df_for_posthoc_pairwise_tests` Data.frame with four or five columns providing test stat `$estimate`, `$p_value`, and `$p_value_adjusted`
 #'     (if `p.adjust_method` used is not "none") for each `$pair` of states involved in post hoc Dunn's tests obtained for each time-step (i.e., `$focal_time`).
-#'      This data.frame can be passed down to [deepSTRAPP::plot_pvalues_over_time()] to generate a plot showing the evolution of the post hoc test results across time.
+#'      This data.frame can be passed down to [deepSTRAPP::plot_STRAPP_pvalues_over_time()] to generate a plot showing the evolution of the post hoc test results across time.
 #'
 #'   Optional melted data.frames:
 #'   * `$trait_data_df_over_time` Data.frame with three columns providing `$trait_value` associated with each `$tip_ID` found along each time-step (i.e., `$focal_time`).
@@ -148,7 +148,7 @@
 #'     Set `return_STRAPP_results = TRUE` to include it in the output.
 #'     Combined with `return_perm_data = TRUE`, it allows to plot the histograms of the null distributions
 #'     used to assess significance of the tests with [deepSTRAPP::plot_histogram_STRAPP_test_for_focal_time()].
-#'     (for a single `focal_time`) and [deepSTRAPP::plot_histogram_STRAPP_test_over_time()] (for multiple `time_steps`).
+#'     (for a single `focal_time`) and [deepSTRAPP::plot_histograms_STRAPP_tests_over_time()] (for multiple `time_steps`).
 #'   * `$updated_trait_data_with_contMap_over_time` List of objects containing trait data and updated `contMap`.
 #'     Updated `contMap` can be plotted with [phytools::plot.contMap()] to display a phylogeny mapped with trait values
 #'     with branches cut at each `focal_time`.
@@ -216,7 +216,7 @@
 #' str(STRAPP_tests_over_time, max.level = 1)
 #'
 #' # Display test summary
-#' # Can be passed down to [deepSTRAPP::plot_pvalues_over_time()] to generate a plot
+#' # Can be passed down to [deepSTRAPP::plot_STRAPP_pvalues_over_time()] to generate a plot
 #' # showing the evolution of the test results across time.
 #' STRAPP_tests_over_time$pvalues_summary_df
 #'

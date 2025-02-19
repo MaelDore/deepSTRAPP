@@ -165,7 +165,7 @@ See \code{\link[=compute_STRAPP_test_for_focal_time]{compute_STRAPP_test_for_foc
 Set \code{return_STRAPP_results = TRUE} to include it in the output.
 Combined with \code{return_perm_data = TRUE}, it allows to plot the histograms of the null distributions
 used to assess significance of the tests with \code{\link[=plot_histogram_STRAPP_test_for_focal_time]{plot_histogram_STRAPP_test_for_focal_time()}}.
-(for a single \code{focal_time}) and \code{\link[=plot_histogram_STRAPP_test_over_time]{plot_histogram_STRAPP_test_over_time()}} (for multiple \code{time_steps}).
+(for a single \code{focal_time}) and \code{\link[=plot_histograms_STRAPP_tests_over_time]{plot_histograms_STRAPP_tests_over_time()}} (for multiple \code{time_steps}).
 \item \verb{$updated_trait_data_with_contMap_over_time} List of objects containing trait data and updated \code{contMap}.
 Updated \code{contMap} can be plotted with \code{\link[phytools:contMap]{phytools::plot.contMap()}} to display a phylogeny mapped with trait values
 with branches cut at each \code{focal_time}.
@@ -219,7 +219,7 @@ The function also allows to keep records of the intermediate objects generated d
 \item If \code{return_STRAPP_results = TRUE}, a list of STRAPP test outputs is provided in \verb{$STRAPP_results_over_time}.
 Combined with \code{return_perm_data = TRUE}, it allows to plot the histograms of the null distributions
 used to assess significance of the tests with \code{\link[=plot_histogram_STRAPP_test_for_focal_time]{plot_histogram_STRAPP_test_for_focal_time()}}.
-(for a single \code{focal_time}) and \code{\link[=plot_histogram_STRAPP_test_over_time]{plot_histogram_STRAPP_test_over_time()}} (for multiple \code{time_steps}).
+(for a single \code{focal_time}) and \code{\link[=plot_histograms_STRAPP_tests_over_time]{plot_histograms_STRAPP_tests_over_time()}} (for multiple \code{time_steps}).
 \item If \code{return_updated_trait_data_with_contMap = TRUE}, a list of objects containing trait data and updated \code{contMap}
 is provided in \verb{$updated_trait_data_with_contMap_over_time}. Updated \code{contMap} can be plotted with \code{\link[phytools:contMap]{phytools::plot.contMap()}}
 to display a phylogeny mapped with trait values with branches cut at each \code{focal_time}.

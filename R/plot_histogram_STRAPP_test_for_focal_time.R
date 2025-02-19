@@ -41,14 +41,14 @@
 #'
 #'   If using multinominal data and set `plot_posthoc_tests = TRUE`, the function will return a list of objects.
 #'   Each object is the ggplot associated with a pairwise post hoc test.
-#'   To plot each histogram individually, use `print(output_list[[i]])`.
+#'   To plot each histogram i individually, use `print(output_list[[i]])`.
 #'   To plot all histograms at once in a multifaceted plot, as displayed on the console if `display_plot = TRUE`, use `cowplot::plot_grid(plotlist = output_list)`.
 #'
 #'   If a `PDF_file_path` is provided, the function will also generate a PDF file of the plot. For post hoc tests, this will save the multifaceted plot.
 #'
 #' @author Maël Doré
 #'
-#' @seealso Associated functions in deepSTRAPP: [deepSTRAPP::compute_STRAPP_test_for_focal_time()]
+#' @seealso Associated functions in deepSTRAPP: [deepSTRAPP::compute_STRAPP_test_for_focal_time()] [deepSTRAPP::run_STRAPP_test_for_focal_time()]
 #'
 #' @examples
 #' # ------ Prepare data ------ #
@@ -113,7 +113,7 @@
 #'                               plot_posthoc_tests = TRUE)
 #' # Plot all histograms one by one
 #' print(histograms_ggplot_list)
-#' # Plot all histograms on one plot
+#' # Plot all histograms on one faceted plot
 #' cowplot::plot_grid(plotlist = histograms_ggplot_list)}
 #'
 
@@ -300,7 +300,7 @@ plot_histogram_STRAPP_test_for_focal_time <- function (STRAPP_results,
       {
         ggplot_histo_i <- ggplot_histo_i +
           # Add test summary including adjusted p-value
-          annotate_npc(x = 0.05, y = 0.95, hjust = 0, vjust = 1, gp = grid::gpar(fontsize = 18),
+          annotate_npc(x = 0.05, y = 0.95, hjust = 0, vjust = 1, gp = grid::gpar(fontsize = 18/size_factor),
                        label = paste0("Q", estimate_quantile, " = ", round(estimate_value, digits = 3), "\n",
                                       "P-value = ", round(p_value, digits = 3), "\n",
                                       "P-value adj = ", round(p_value_adj, digits = 3)))
