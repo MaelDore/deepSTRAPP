@@ -10,7 +10,7 @@
 #'   that contains a phylogenetic tree and associated continuous trait mapping.
 #'   The phylogenetic tree must be rooted and fully resolved/dichotomous,
 #'   but it does not need to be ultrametric (it can includes fossils).
-#' @param focal_time Integer. The time, in terms of time distance from the present,
+#' @param focal_time Numerical. The time, in terms of time distance from the present,
 #'   for which the tree and mapping must be cut.
 #' @param keep_tip_labels Logical. Specify whether terminal branches with a single descendant tip must retained their initial `tip.label`. Default is `TRUE`.
 #'

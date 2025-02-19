@@ -8,7 +8,7 @@
 #' @param tree_with_maps Object of class `"phylo"` with a character mapping stored in the `$maps` element.
 #'   The phylogenetic tree must be rooted and fully resolved/dichotomous,
 #'   but it does not need to be ultrametric (it can includes fossils).
-#' @param focal_time Integer. The time, in terms of time distance from the present,
+#' @param focal_time Numerical. The time, in terms of time distance from the present,
 #'   for which the character mapping must be cut.
 #'
 #' @importFrom phytools nodeHeights

@@ -10,7 +10,7 @@
 #'   across selected posterior samples.
 #'   The phylogenetic tree must be rooted and fully resolved/dichotomous,
 #'   but it does not need to be ultrametric (it can includes fossils).
-#' @param focal_time Integer. The time, in terms of time distance from the present,
+#' @param focal_time Numerical. The time, in terms of time distance from the present,
 #'   at which the tree and rate mapping must be cut.
 #' @param update_rates Logical. Specify whether diversification rates stored in
 #'   `$tipLambda` (speciation) and `$tipMu` (extinction) must be updated to summarize

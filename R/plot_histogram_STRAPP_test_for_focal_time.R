@@ -129,7 +129,7 @@ plot_histogram_STRAPP_test_for_focal_time <- function (STRAPP_results,
   # STRAPP_results must have all the needed elements: $focal_time, $trait_type, $estimate, $stats_median, $p_value, $method, $perm_data_df
     # Make a special warning if $perm_data_df is missing to ask to select return_perm_data = TRUE in compute_STRAPP_test_for_focal_time() to save the raw data needed for the histogram plot
 
-  # PDF_file_path must end with ".pdf"
+  # If provided, PDF_file_path must end with ".pdf"
 
   # plot_posthoc_tests = TRUE only for "multinominal" data
     # Check if $posthoc_pairwise_tests$perm_data_array is present.
@@ -194,6 +194,14 @@ plot_histogram_STRAPP_test_for_focal_time <- function (STRAPP_results,
     if (display_plot)
     {
       print(ggplot_histo)
+    }
+
+    ## Export plot if requested
+    if (!is.null(PDF_file_path))
+    {
+      cowplot::save_plot(plot = ggplot_histo,
+                         filename = PDF_file_path,
+                         base_height = 8, base_width = 10)
     }
 
     ## Return ggplot

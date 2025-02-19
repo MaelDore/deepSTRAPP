@@ -10,7 +10,7 @@ cut_phylo_for_focal_time(tree, focal_time, keep_tip_labels = TRUE)
 \item{tree}{Object of class \code{"phylo"}. The phylogenetic tree must be rooted and fully resolved/dichotomous,
 but it does not need to be ultrametric (it can includes fossils).}
 
-\item{focal_time}{Integer. The time, in terms of time distance from the present,
+\item{focal_time}{Numerical. The time, in terms of time distance from the present,
 for which the tree must be cut.}
 
 \item{keep_tip_labels}{Logical. Specify whether terminal branches with a single descendant tip must retained their initial \code{tip.label}. Default is \code{TRUE}.}

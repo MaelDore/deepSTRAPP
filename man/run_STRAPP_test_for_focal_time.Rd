@@ -2,7 +2,7 @@
 % Please edit documentation in R/run_STRAPP_test_for_focal_time.R
 \name{run_STRAPP_test_for_focal_time}
 \alias{run_STRAPP_test_for_focal_time}
-\title{Runs a STRAPP to test for a relationship between diversification rates and trait data}
+\title{Runs a STRAPP to test for a relationship between diversification rates and trait data at a focal time}
 \usage{
 run_STRAPP_test_for_focal_time(
   contMap,
@@ -13,7 +13,7 @@ run_STRAPP_test_for_focal_time(
   keep_tip_labels = TRUE,
   rate_type = "net_diversification",
   nb_permutations = NULL,
-  replace = FALSE,
+  replace_samples = FALSE,
   alpha = 0.05,
   two_tailed = TRUE,
   one_tailed_hypothesis = NULL,
@@ -47,7 +47,7 @@ Needed to provide accurate tip values.}
 that contains a phylogenetic tree and associated diversification rate mapping across selected posterior samples.
 The phylogenetic tree must the same as the one associated with the \code{contMap}, \code{ace} and \code{tip_data}.}
 
-\item{focal_time}{Integer. The time, in terms of time distance from the present,
+\item{focal_time}{Numerical. The time, in terms of time distance from the present,
 at which data must be extracted and the phylogeny and mappings must be cut.}
 
 \item{keep_tip_labels}{Logical. Specify whether terminal branches with a single descendant tip
@@ -58,7 +58,7 @@ must retained their initial \code{tip.label} on the updated phylogeny. Default i
 \item{nb_permutations}{Integer. To select the number of random permutations to perform during the tests.
 If NULL (default), all posterior samples will be used once.}
 
-\item{replace}{Logical. To specify whether to allow 'replacement' (i.e., multiple use) of a posterior sample
+\item{replace_samples}{Logical. To specify whether to allow 'replacement' (i.e., multiple use) of a posterior sample
 when drawing samples used to carry out the STRAPP test. Default is \code{FALSE}.}
 
 \item{alpha}{Numerical. Significance level to use to compute the \code{estimate} corresponding to the values of the test statistic used to assess significance of the test.
@@ -66,11 +66,14 @@ This does NOT affect p-values. Default is \code{0.05}.}
 
 \item{two_tailed}{Logical. To define the type of tests. If \code{TRUE} (default), tests for correlations/differences in rates will be carried out with a null hypothesis
 that rates are not correlated with trait values (continuous data) or equals between trait states (categorical and biogeographic data).
-If \code{FALSE}, one-tailed tests are carried out. For continuous data, it involves defining a \code{one_tailed_hypothesis} testing for
+If \code{FALSE}, one-tailed tests are carried out.
+\itemize{
+\item For continuous data, it involves defining a \code{one_tailed_hypothesis} testing for
 either a "positive" or "negative" correlation under the alternative hypothesis.
-For binary data (two states), it involves defining a \code{one_tailed_hypothesis} indicating which states have higher rates under the alternative hypothesis.
-For multinominal data (more than two states), it defines the type of post hoc pairwise tests to carry out between pairs of states.
-If \code{posthoc_pairwise_tests = TRUE}, all two-tailed (if \code{two_tailed = TRUE}) or one-tailed (if \code{two_tailed = FALSE}) tests are automatically carried out.}
+\item For binary data (two states), it involves defining a \code{one_tailed_hypothesis} indicating which states have higher rates under the alternative hypothesis.
+\item For multinominal data (more than two states), it defines the type of post hoc pairwise tests to carry out between pairs of states.
+If \code{posthoc_pairwise_tests = TRUE}, all two-tailed (if \code{two_tailed = TRUE}) or one-tailed (if \code{two_tailed = FALSE}) tests are automatically carried out.
+}}
 
 \item{one_tailed_hypothesis}{A character string specifying the alternative hypothesis in the one-tailed test.
 For continuous data, it is either "negative" or "positive" correlation.

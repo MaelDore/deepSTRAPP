@@ -9,7 +9,7 @@ compute_STRAPP_test_for_focal_time(
   trait_data_list,
   rate_type = "net_diversification",
   nb_permutations = NULL,
-  replace = FALSE,
+  replace_samples = FALSE,
   alpha = 0.05,
   two_tailed = TRUE,
   one_tailed_hypothesis = NULL,
@@ -36,17 +36,19 @@ that contains at least a \verb{$trait_data} element, a \verb{$focal_time} elemen
 \item{nb_permutations}{Integer. To select the number of random permutations to perform during the tests.
 If NULL (default), all posterior samples will be used once.}
 
-\item{replace}{Logical. To specify whether to allow 'replacement' (i.e., multiple use) of a posterior sample when drawing samples used to carry out the test. Default is \code{FALSE}.}
+\item{replace_samples}{Logical. To specify whether to allow 'replacement' (i.e., multiple use) of a posterior sample when drawing samples used to carry out the test. Default is \code{FALSE}.}
 
 \item{alpha}{Numerical. Significance level to use to compute the \code{estimate} corresponding to the values of the test statistic used to assess significance of the test. This does NOT affect p-values. Default is \code{0.05}.}
 
 \item{two_tailed}{Logical. To define the type of tests. If \code{TRUE} (default), tests for correlations/differences in rates will be carried out with a null hypothesis
 that rates are not correlated with trait values (continuous data) or equals between trait states (categorical and biogeographic data).
-If \code{FALSE}, one-tailed tests are carried out. For continuous data, it involves defining a \code{one_tailed_hypothesis} testing for
-either a "positive" or "negative" correlation under the alternative hypothesis.
-For binary data (two states), it involves defining a \code{one_tailed_hypothesis} indicating which states have higher rates under the alternative hypothesis.
-For multinominal data (more than two states), it defines the type of post hoc pairwise tests to carry out between pairs of states.
-If \code{posthoc_pairwise_tests = TRUE}, all two-tailed (if \code{two_tailed = TRUE}) or one-tailed (if \code{two_tailed = FALSE}) tests are automatically carried out.}
+If \code{FALSE}, one-tailed tests are carried out.
+\itemize{
+\item For continuous data, it involves defining a \code{one_tailed_hypothesis} testing for either a "positive" or "negative" correlation under the alternative hypothesis.
+\item For binary data (two states), it involves defining a \code{one_tailed_hypothesis} indicating which states have higher rates under the alternative hypothesis.
+\item For multinominal data (more than two states), it defines the type of post hoc pairwise tests to carry out between pairs of states.
+If \code{posthoc_pairwise_tests = TRUE}, all two-tailed (if \code{two_tailed = TRUE}) or one-tailed (if \code{two_tailed = FALSE}) tests are automatically carried out.
+}}
 
 \item{one_tailed_hypothesis}{A character string specifying the alternative hypothesis in the one-tailed test.
 For continuous data, it is either "negative" or "positive" correlation.
@@ -174,7 +176,7 @@ In a one-tailed test, the p-value is the proportion of posterior samples in whic
 
 ----------  Major changes compared to \code{\link[BAMMtools:traitDependentBAMM]{BAMMtools::traitDependentBAMM()}}  ----------
 \itemize{
-\item Allow to choose if random sampling of posterior configurations must be done with replacement or not with \code{replace}.
+\item Allow to choose if random sampling of posterior configurations must be done with replacement or not with \code{replace_samples}.
 \item Add post hoc pairwise tests (Dunn test) for multinominal data. Use \code{posthoc_pairwise_tests = TRUE}.
 \item Provide outputs tailored for histogram plots \code{\link[=plot_histogram_STRAPP_test_for_focal_time]{plot_histogram_STRAPP_test_for_focal_time()}}
 and p-value time-series plots \code{\link[=plot_STRAPP_pvalues_over_time]{plot_STRAPP_pvalues_over_time()}}.

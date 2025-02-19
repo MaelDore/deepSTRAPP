@@ -12,7 +12,7 @@ that contains a phylogenetic tree and associated continuous trait mapping.
 The phylogenetic tree must be rooted and fully resolved/dichotomous,
 but it does not need to be ultrametric (it can includes fossils).}
 
-\item{focal_time}{Integer. The time, in terms of time distance from the present,
+\item{focal_time}{Numerical. The time, in terms of time distance from the present,
 for which the tree and mapping must be cut.}
 
 \item{keep_tip_labels}{Logical. Specify whether terminal branches with a single descendant tip must retained their initial \code{tip.label}. Default is \code{TRUE}.}

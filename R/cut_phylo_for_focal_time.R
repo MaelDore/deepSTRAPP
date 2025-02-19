@@ -6,7 +6,7 @@
 #'
 #' @param tree Object of class `"phylo"`. The phylogenetic tree must be rooted and fully resolved/dichotomous,
 #'   but it does not need to be ultrametric (it can includes fossils).
-#' @param focal_time Integer. The time, in terms of time distance from the present,
+#' @param focal_time Numerical. The time, in terms of time distance from the present,
 #'   for which the tree must be cut.
 #' @param keep_tip_labels Logical. Specify whether terminal branches with a single descendant tip must retained their initial `tip.label`. Default is `TRUE`.
 #'

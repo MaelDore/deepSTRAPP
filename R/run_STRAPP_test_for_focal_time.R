@@ -1,5 +1,5 @@
 
-#' @title Runs a STRAPP to test for a relationship between diversification rates and trait data
+#' @title Runs a STRAPP to test for a relationship between diversification rates and trait data at a focal time
 #'
 #' @description Wrapper function to run a STRAPP test workflow for a given point in the past (i.e. the `focal_time`).
 #'   It starts from traits mapped on a phylogeny (trait data) and BAMM output (diversification data)
@@ -30,24 +30,25 @@
 #' @param BAMM_object Object of class `"bammdata"`, typically generated with [BAMMtools::getEventData()],
 #'   that contains a phylogenetic tree and associated diversification rate mapping across selected posterior samples.
 #'   The phylogenetic tree must the same as the one associated with the `contMap`, `ace` and `tip_data`.
-#' @param focal_time Integer. The time, in terms of time distance from the present,
+#' @param focal_time Numerical. The time, in terms of time distance from the present,
 #'   at which data must be extracted and the phylogeny and mappings must be cut.
 #' @param keep_tip_labels Logical. Specify whether terminal branches with a single descendant tip
 #'   must retained their initial `tip.label` on the updated phylogeny. Default is `TRUE`.
 #' @param rate_type A character string specifying the type of diversification rates to use. Must be one of 'speciation', 'extinction' or 'net_diversification' (default).
 #' @param nb_permutations Integer. To select the number of random permutations to perform during the tests.
 #'   If NULL (default), all posterior samples will be used once.
-#' @param replace Logical. To specify whether to allow 'replacement' (i.e., multiple use) of a posterior sample
+#' @param replace_samples Logical. To specify whether to allow 'replacement' (i.e., multiple use) of a posterior sample
 #'   when drawing samples used to carry out the STRAPP test. Default is `FALSE`.
 #' @param alpha Numerical. Significance level to use to compute the `estimate` corresponding to the values of the test statistic used to assess significance of the test.
 #'   This does NOT affect p-values. Default is `0.05`.
 #' @param two_tailed Logical. To define the type of tests. If `TRUE` (default), tests for correlations/differences in rates will be carried out with a null hypothesis
 #'   that rates are not correlated with trait values (continuous data) or equals between trait states (categorical and biogeographic data).
-#'   If `FALSE`, one-tailed tests are carried out. For continuous data, it involves defining a `one_tailed_hypothesis` testing for
+#'   If `FALSE`, one-tailed tests are carried out.
+#'   * For continuous data, it involves defining a `one_tailed_hypothesis` testing for
 #'   either a "positive" or "negative" correlation under the alternative hypothesis.
-#'   For binary data (two states), it involves defining a `one_tailed_hypothesis` indicating which states have higher rates under the alternative hypothesis.
-#'   For multinominal data (more than two states), it defines the type of post hoc pairwise tests to carry out between pairs of states.
-#'   If `posthoc_pairwise_tests = TRUE`, all two-tailed (if `two_tailed = TRUE`) or one-tailed (if `two_tailed = FALSE`) tests are automatically carried out.
+#'   * For binary data (two states), it involves defining a `one_tailed_hypothesis` indicating which states have higher rates under the alternative hypothesis.
+#'   * For multinominal data (more than two states), it defines the type of post hoc pairwise tests to carry out between pairs of states.
+#'     If `posthoc_pairwise_tests = TRUE`, all two-tailed (if `two_tailed = TRUE`) or one-tailed (if `two_tailed = FALSE`) tests are automatically carried out.
 #' @param one_tailed_hypothesis A character string specifying the alternative hypothesis in the one-tailed test.
 #'   For continuous data, it is either "negative" or "positive" correlation.
 #'   For binary data, it lists the trait states with states ordered in increasing rates under the alternative hypothesis, separated by a greater-than such as c('A > B').
@@ -212,7 +213,7 @@ run_STRAPP_test_for_focal_time <- function (contMap,
                                             keep_tip_labels = TRUE,
                                             rate_type = "net_diversification",
                                             nb_permutations = NULL,
-                                            replace = FALSE,
+                                            replace_samples = FALSE,
                                             alpha = 0.05,
                                             two_tailed = TRUE,
                                             one_tailed_hypothesis = NULL,
@@ -284,7 +285,7 @@ run_STRAPP_test_for_focal_time <- function (contMap,
     trait_data_list = trait_data_list,
     rate_type = rate_type,
     nb_permutations = nb_permutations,
-    replace = replace,
+    replace_samples = replace_samples,
     alpha = alpha,
     two_tailed = two_tailed,
     one_tailed_hypothesis = one_tailed_hypothesis,

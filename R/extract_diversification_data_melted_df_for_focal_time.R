@@ -90,6 +90,8 @@ extract_diversification_data_melted_df_for_focal_time <- function (BAMM_object, 
   melted_df <- unmelted_df |>
     tidyr::pivot_longer(cols = c("lambda", "mu", "net_diversification"),
                         names_to = "rate_type", values_to = "rates")
+  # Remove tibble class
+  melted_df <- as.data.frame(melted_df)
 
   ## Return melted df
   return(melted_df)

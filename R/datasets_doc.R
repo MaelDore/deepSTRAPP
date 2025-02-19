@@ -219,3 +219,19 @@
 #'
 "Ponerinae_trait_data_10My"
 
+### 6/ Temporary test set as output from run_STRAPP_test_over_time to use for plotting p_values histogram
+
+#' @title Temporary test set as output from run_STRAPP_test_over_time to use for plotting p_values histogram
+#'
+#' @description Temporary test set as output from run_STRAPP_test_over_time to use for plotting p_values histogram.
+#'
+#' @usage data(STRAPP_tests_over_time_temp_example)
+#' @format A list with X elements.
+#'
+#' @docType data
+#' @keywords datasets
+#' @name STRAPP_tests_over_time_temp_example
+#'
+"STRAPP_tests_over_time_temp_example"
+
+

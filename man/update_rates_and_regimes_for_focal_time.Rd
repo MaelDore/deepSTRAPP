@@ -23,7 +23,7 @@ across selected posterior samples.
 The phylogenetic tree must be rooted and fully resolved/dichotomous,
 but it does not need to be ultrametric (it can includes fossils).}
 
-\item{focal_time}{Integer. The time, in terms of time distance from the present,
+\item{focal_time}{Numerical. The time, in terms of time distance from the present,
 at which the tree and rate mapping must be cut.}
 
 \item{update_rates}{Logical. Specify whether diversification rates stored in

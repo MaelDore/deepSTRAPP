@@ -50,15 +50,15 @@
 #' @param rate_type A character string specifying the type of diversification rates to use. Must be one of 'speciation', 'extinction' or 'net_diversification' (default).
 #' @param nb_permutations Integer. To select the number of random permutations to perform during the tests.
 #'   If NULL (default), all posterior samples will be used once.
-#' @param replace Logical. To specify whether to allow 'replacement' (i.e., multiple use) of a posterior sample when drawing samples used to carry out the test. Default is `FALSE`.
+#' @param replace_samples Logical. To specify whether to allow 'replacement' (i.e., multiple use) of a posterior sample when drawing samples used to carry out the test. Default is `FALSE`.
 #' @param alpha Numerical. Significance level to use to compute the `estimate` corresponding to the values of the test statistic used to assess significance of the test. This does NOT affect p-values. Default is `0.05`.
 #' @param two_tailed Logical. To define the type of tests. If `TRUE` (default), tests for correlations/differences in rates will be carried out with a null hypothesis
 #'   that rates are not correlated with trait values (continuous data) or equals between trait states (categorical and biogeographic data).
-#'   If `FALSE`, one-tailed tests are carried out. For continuous data, it involves defining a `one_tailed_hypothesis` testing for
-#'   either a "positive" or "negative" correlation under the alternative hypothesis.
-#'   For binary data (two states), it involves defining a `one_tailed_hypothesis` indicating which states have higher rates under the alternative hypothesis.
-#'   For multinominal data (more than two states), it defines the type of post hoc pairwise tests to carry out between pairs of states.
-#'   If `posthoc_pairwise_tests = TRUE`, all two-tailed (if `two_tailed = TRUE`) or one-tailed (if `two_tailed = FALSE`) tests are automatically carried out.
+#'   If `FALSE`, one-tailed tests are carried out.
+#'   * For continuous data, it involves defining a `one_tailed_hypothesis` testing for either a "positive" or "negative" correlation under the alternative hypothesis.
+#'   * For binary data (two states), it involves defining a `one_tailed_hypothesis` indicating which states have higher rates under the alternative hypothesis.
+#'   * For multinominal data (more than two states), it defines the type of post hoc pairwise tests to carry out between pairs of states.
+#'     If `posthoc_pairwise_tests = TRUE`, all two-tailed (if `two_tailed = TRUE`) or one-tailed (if `two_tailed = FALSE`) tests are automatically carried out.
 #' @param one_tailed_hypothesis A character string specifying the alternative hypothesis in the one-tailed test.
 #'   For continuous data, it is either "negative" or "positive" correlation.
 #'   For binary data, it lists the trait states with states ordered in increasing rates under the alternative hypothesis, separated by a greater-than such as c('A > B').
@@ -100,7 +100,7 @@
 #'
 #'   ----------  Major changes compared to [BAMMtools::traitDependentBAMM()]  ----------
 #'
-#'   * Allow to choose if random sampling of posterior configurations must be done with replacement or not with `replace`.
+#'   * Allow to choose if random sampling of posterior configurations must be done with replacement or not with `replace_samples`.
 #'   * Add post hoc pairwise tests (Dunn test) for multinominal data. Use `posthoc_pairwise_tests = TRUE`.
 #'   * Provide outputs tailored for histogram plots [deepSTRAPP::plot_histogram_STRAPP_test_for_focal_time()]
 #'     and p-value time-series plots [deepSTRAPP::plot_STRAPP_pvalues_over_time()].
@@ -257,7 +257,7 @@
 compute_STRAPP_test_for_focal_time <- function (BAMM_object, trait_data_list,
                                                 rate_type = "net_diversification",
                                                 nb_permutations = NULL,
-                                                replace = FALSE,
+                                                replace_samples = FALSE,
                                                 alpha = 0.05,
                                                 two_tailed = TRUE,
                                                 one_tailed_hypothesis = NULL,
@@ -288,8 +288,8 @@ compute_STRAPP_test_for_focal_time <- function (BAMM_object, trait_data_list,
 
   # $focal_time in $trait_data_list and in BAMM_object must be equal.
 
-  # If nb_permutations is higher than number of posterior samples (length of $tipStates, $tipLambda and $tipMu) AND replace = FALSE,
-  # Send an error to say that replace should be set to TRUE to allow multiple samplings of posterior in order to reach the requested number of permutations
+  # If nb_permutations is higher than number of posterior samples (length of $tipStates, $tipLambda and $tipMu) AND replace_samples = FALSE,
+  # Send an error to say that replace_samples should be set to TRUE to allow multiple samplings of posterior in order to reach the requested number of permutations
 
   # rate_type must be either "speciation", "extinction" or "net diversification"
 
@@ -335,7 +335,7 @@ compute_STRAPP_test_for_focal_time <- function (BAMM_object, trait_data_list,
              trait_data = trait_data,
              rate_type = rate_type,
              nb_permutations = nb_permutations,
-             replace = replace,
+             replace_samples = replace_samples,
              alpha = alpha,
              two_tailed = two_tailed,
              one_tailed_hypothesis = one_tailed_hypothesis,
@@ -350,7 +350,7 @@ compute_STRAPP_test_for_focal_time <- function (BAMM_object, trait_data_list,
              trait_data = trait_data,
              rate_type = rate_type,
              nb_permutations = nb_permutations,
-             replace = replace,
+             replace_samples = replace_samples,
              alpha = alpha,
              two_tailed = two_tailed,
              one_tailed_hypothesis = one_tailed_hypothesis,
@@ -366,7 +366,7 @@ compute_STRAPP_test_for_focal_time <- function (BAMM_object, trait_data_list,
              trait_data = trait_data,
              rate_type = rate_type,
              nb_permutations = nb_permutations,
-             replace = replace,
+             replace_samples = replace_samples,
              alpha = alpha,
              posthoc_pairwise_tests = posthoc_pairwise_tests, # See if I implement that for pairwise posthoc tests. Need to provide list of pairs with hypotheses
              two_tailed = two_tailed,
@@ -392,7 +392,7 @@ compute_STRAPP_test_for_continuous_data <- function (
     BAMM_data, trait_data,
     rate_type = "net_diversification",
     nb_permutations = NULL,
-    replace = FALSE,
+    replace_samples = FALSE,
     alpha = 0.05,
     two_tailed = TRUE,
     one_tailed_hypothesis = NULL,
@@ -439,7 +439,7 @@ compute_STRAPP_test_for_continuous_data <- function (
   }
 
   # Randomly sample posteriors to use for each permutation
-  posterior_samples_random_ID <- sample(x = 1:length(rates_data), size = nb_permutations, replace = replace)
+  posterior_samples_random_ID <- sample(x = 1:length(rates_data), size = nb_permutations, replace = replace_samples)
 
   # Build list of data.frame with rates and regimes ID data for each permutation
   posterior_samples_random_rates_data <- list()
@@ -629,7 +629,7 @@ compute_STRAPP_test_for_binary_data <- function (
     BAMM_data, trait_data,
     rate_type = "net_diversification",
     nb_permutations = NULL,
-    replace = FALSE,
+    replace_samples = FALSE,
     alpha = 0.05,
     two_tailed = TRUE,
     one_tailed_hypothesis = NULL,
@@ -690,7 +690,7 @@ compute_STRAPP_test_for_binary_data <- function (
   }
 
   # Randomly sample posteriors to use for each permutation
-  posterior_samples_random_ID <- sample(x = 1:length(rates_data), size = nb_permutations, replace = replace)
+  posterior_samples_random_ID <- sample(x = 1:length(rates_data), size = nb_permutations, replace = replace_samples)
 
   # Build list of data.frame with rates and regimes ID data for each permutation
   posterior_samples_random_rates_data <- list()
@@ -902,7 +902,7 @@ compute_STRAPP_test_for_multinominal_data <- function (
     BAMM_data, trait_data,
     rate_type = "net_diversification",
     nb_permutations = NULL,
-    replace = FALSE,
+    replace_samples = FALSE,
     alpha = 0.05,
     posthoc_pairwise_tests = FALSE,
     two_tailed = TRUE,
@@ -951,7 +951,7 @@ compute_STRAPP_test_for_multinominal_data <- function (
   }
 
   # Randomly sample posteriors to use for each permutation
-  posterior_samples_random_ID <- sample(x = 1:length(rates_data), size = nb_permutations, replace = replace)
+  posterior_samples_random_ID <- sample(x = 1:length(rates_data), size = nb_permutations, replace = replace_samples)
 
   # Build list of data.frame with rates and regimes ID data for each permutation
   posterior_samples_random_rates_data <- list()
