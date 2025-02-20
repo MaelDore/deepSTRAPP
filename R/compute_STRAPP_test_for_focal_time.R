@@ -43,10 +43,10 @@
 #'   that contains a phylogenetic tree and associated diversification rates
 #'   across selected posterior samples updated to a specific time in the past (i.e. the `focal_time`).
 #' @param trait_data_list List obtained from [deepSTRAPP::extract_most_likely_trait_values_for_focal_time()]
-#'   that contains at least a `$trait_data` element, a `$focal_time` element, and a `$data_type`.
+#'   that contains at least a `$trait_data` element, a `$focal_time` element, and a `$trait_data_type`.
 #'   `$trait_data` is a named vector with the trait data found on the phylogeny at `focal_time`.
 #'   `$focal_time` informs on the time in the past at which the trait and rates data will be tested.
-#'   `$data_type` informs on the type of trait data: continuous, categorical, or biogeographic.
+#'   `$trait_data_type` informs on the type of trait data: continuous, categorical, or biogeographic.
 #' @param rate_type A character string specifying the type of diversification rates to use. Must be one of 'speciation', 'extinction' or 'net_diversification' (default).
 #' @param nb_permutations Integer. To select the number of random permutations to perform during the tests.
 #'   If NULL (default), all posterior samples will be used once.
@@ -106,7 +106,7 @@
 #'     and p-value time-series plots [deepSTRAPP::plot_STRAPP_pvalues_over_time()].
 #'   * Add prints detailing what test is carried out, what are the null and alternative hypotheses,
 #'     and what significant level is used to rejected or not the null hypothesis. (Enabled with `print_hypothesis = TRUE`).
-#'   * Split the function in multiple sub-functions according to the type of data (`$data_type`).
+#'   * Split the function in multiple sub-functions according to the type of data (`$trait_data_type`).
 #'   * Prevent using Pearson's correlation tests and applying log-transformation for continuous data.
 #'     The rationale is that there is no reason to assume that tip rates are distributed normally or log-normally.
 #'     Thus, a Spearman's rank correlation test is favored.
@@ -188,7 +188,7 @@
 #' trait_data_binary <- trait_data_continuous
 #' trait_data_binary$trait_data[trait_data_continuous$trait_data < 0] <- "state_A"
 #' trait_data_binary$trait_data[trait_data_continuous$trait_data >= 0] <- "state_B"
-#' trait_data_binary$data_type <- "categorical"
+#' trait_data_binary$trait_data_type <- "categorical"
 #'
 #' table(trait_data_binary$trait_data)
 #'
@@ -197,7 +197,7 @@
 #' trait_data_multinominal$trait_data[trait_data_continuous$trait_data < 0] <- "state_B"
 #' trait_data_multinominal$trait_data[trait_data_continuous$trait_data < -1] <- "state_A"
 #' trait_data_multinominal$trait_data[trait_data_continuous$trait_data >= 0] <- "state_C"
-#' trait_data_multinominal$data_type <- "categorical"
+#' trait_data_multinominal$trait_data_type <- "categorical"
 #'
 #' table(trait_data_multinominal$trait_data)
 #'
@@ -254,6 +254,8 @@
 #'
 
 
+### Master function to prepare data and select the proper test function according to data type ####
+
 compute_STRAPP_test_for_focal_time <- function (BAMM_object, trait_data_list,
                                                 rate_type = "net_diversification",
                                                 nb_permutations = NULL,
@@ -273,12 +275,12 @@ compute_STRAPP_test_for_focal_time <- function (BAMM_object, trait_data_list,
   # BAMM_object must be a 'bammdata' object
   # Number of posterior sample data must be equal between $tipStates, $tipLambda and $tipMu
 
-  # trait_data_list must be a list with $trait_data and $data_type
+  # trait_data_list must be a list with $trait_data and $trait_data_type
   # $trait_data must be a named vector (can be numerical or character string)
-  # $data_type can only be "continuous", categorical" or "biogeographic"
-  # $trait_data type must match with $data_type
-  # Numerical if $data_type = "continuous"
-  # Character string if $data_type = "categorical" or "biogeographic"
+  # $trait_data_type can only be "continuous", categorical" or "biogeographic"
+  # $trait_data type must match with the type of data detected in $trait_data
+  # Numerical if $trait_data_type = "continuous"
+  # Character string if $trait_data_type = "categorical" or "biogeographic"
 
   # Length of $trait_data should match length of $tipStates, $tipLambda and $tipMu (for each posterior sample)
 
@@ -310,24 +312,24 @@ compute_STRAPP_test_for_focal_time <- function (BAMM_object, trait_data_list,
   ## Extract trait data
   trait_data <- trait_data_list$trait_data
 
-  ## Extract type of data
-  data_type <- trait_data_list$data_type
+  ## Extract type of trait data
+  trait_data_type <- trait_data_list$trait_data_type
 
-  # If data_type is "categorical" or "biogeographic", reclassify according to the number of states
-  if (data_type %in% c("categorical", "biogeographic"))
+  # If trait_data_type is "categorical" or "biogeographic", reclassify according to the number of states
+  if (trait_data_type %in% c("categorical", "biogeographic"))
   {
     nb_levels <- nlevels(as.factor(trait_data))
     if (nb_levels == 2) # Case with two states
     {
-      data_type <- "binary"
+      trait_data_type <- "binary"
     } else { # Case with more than two states
-      data_type <- "multinominal"
+      trait_data_type <- "multinominal"
     }
   }
 
   ## Compute the appropriate internal function depending on the type of data
 
-  switch(EXPR = data_type,
+  switch(EXPR = trait_data_type,
          continuous =   { # Case for continuous data
            # Stat test = Spearman's rank Rho test
            STRAPP_results <- compute_STRAPP_test_for_continuous_data(
@@ -385,8 +387,7 @@ compute_STRAPP_test_for_focal_time <- function (BAMM_object, trait_data_list,
 }
 
 
-
-### Needs doc. See if making a unique doc for the whole family of functions
+### Sub-function to handle continuous data ####
 
 compute_STRAPP_test_for_continuous_data <- function (
     BAMM_data, trait_data,
@@ -403,7 +404,7 @@ compute_STRAPP_test_for_continuous_data <- function (
   ### Check input validity
 
   # Apply the same as in the master function in case this function is used independently
-  # Also check that the data_type is the good one
+  # Also check that the trait_data_type is the good one
 
   ## See other validation checks from BAMMtools::traitDependentBAMM
   if (nthreads > 1)
@@ -621,9 +622,7 @@ compute_STRAPP_test_for_continuous_data <- function (
 }
 
 
-
-### Needs doc. See if making a unique doc for the whole family of functions
-
+### Sub-function to handle binary data ####
 
 compute_STRAPP_test_for_binary_data <- function (
     BAMM_data, trait_data,
@@ -641,7 +640,7 @@ compute_STRAPP_test_for_binary_data <- function (
   ### Check input validity
 
   # Apply the same as in the master function in case this function is used independently
-  # Also check that the data_type is the good one
+  # Also check that the trait_data_type is the good one
 
   if (!two_tailed & is.null(one_tailed_hypothesis))
   {
@@ -896,7 +895,7 @@ compute_STRAPP_test_for_binary_data <- function (
 }
 
 
-### Needs doc. See if making a unique doc for the whole family of functions
+### Sub-function to handle multinominal data ####
 
 compute_STRAPP_test_for_multinominal_data <- function (
     BAMM_data, trait_data,
@@ -915,7 +914,7 @@ compute_STRAPP_test_for_multinominal_data <- function (
   ### Check input validity
 
   # Apply the same as in the master function in case this function is used independently
-  # Also check that the data_type is the good one
+  # Also check that the trait_data_type is the good one
 
   ## See other validation checks from BAMMtools::traitDependentBAMM
   if (nthreads > 1)

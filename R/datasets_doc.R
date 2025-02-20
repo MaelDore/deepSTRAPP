@@ -234,4 +234,16 @@
 #'
 "STRAPP_tests_over_time_temp_example"
 
+#' @title Temporary test set as output from run_STRAPP_test_over_time to use for plotting rates_through_time
+#'
+#' @description Temporary test set as output from run_STRAPP_test_over_time to use for plotting rates_through_time.
+#'
+#' @usage data(STRAPP_tests_over_time_temp_example_2)
+#' @format A list with X elements.
+#'
+#' @docType data
+#' @keywords datasets
+#' @name STRAPP_tests_over_time_temp_example_2
+#'
+"STRAPP_tests_over_time_temp_example_2"
 

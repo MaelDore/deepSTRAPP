@@ -27,6 +27,7 @@
 #' @param tip_data Named numeric vector (Optional). Tip values of the trait.
 #'   Names are nodes_ID of the internal nodes.
 #'   Needed to provide accurate tip values.
+#' @param trait_data_type Character string. Specify the type of trait data. Must be one of "continuous", "categorical", "biogeographic".
 #' @param BAMM_object Object of class `"bammdata"`, typically generated with [BAMMtools::getEventData()],
 #'   that contains a phylogenetic tree and associated diversification rate mapping across selected posterior samples.
 #'   The phylogenetic tree must the same as the one associated with the `contMap`, `ace` and `tip_data`.
@@ -171,6 +172,7 @@
 #'
 #' STRAPP_test_output <- run_STRAPP_test_for_focal_time(
 #'   contMap = Ponerinae_contMap, ace = Ponerinae_ACE, tip_data = Ponerinae_data_ln_HW,
+#'   trait_data_type = "continuous",
 #'   BAMM_object = Ponerinae_BAMM_object,
 #'   focal_time = focal_time,
 #'   rate_type = "net_diversification",
@@ -208,6 +210,7 @@
 run_STRAPP_test_for_focal_time <- function (contMap,
                                             ace = NULL,
                                             tip_data = NULL,
+                                            trait_data_type,
                                             BAMM_object,
                                             focal_time,
                                             keep_tip_labels = TRUE,
@@ -238,10 +241,14 @@ run_STRAPP_test_for_focal_time <- function (contMap,
     cat(paste0(Sys.time(), " - Extract trait data for focal-time = ", focal_time, "\n\n"))
   }
 
+  ## Take $trait_data_type as input to select the proper sub-function
+  # Will also accept simmaps instead of a contMap
+
   trait_data_list <- extract_most_likely_trait_values_for_focal_time(
     contMap = contMap,
     ace = ace,
     tip_data = tip_data,
+    trait_data_type = trait_data_type,
     focal_time = focal_time,
     update_contMap = return_updated_trait_data_with_contMap,
     keep_tip_labels = keep_tip_labels)

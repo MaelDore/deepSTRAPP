@@ -12,7 +12,7 @@
 #'   If a PDF file path is provided in `PDF_file_path`, the plots will be saved directly in a PDF file,
 #'   with one page per focal time in `$time_steps`.
 #'
-#' @param STRAPP_tests_over_time List of elements generated with [deepSTRAPP::run_STRAPP_test_over_time()],
+#' @param STRAPP_tests_over_time List of elements generated with [deepSTRAPP::run_STRAPP_tests_over_time()],
 #'   that summarize the results of multiple STRAPP tests across `$time_steps`. It needs to include the `$STRAPP_results_over_time`
 #'   element with `$perm_data_df` obtained when setting both `return_STRAPP_results = TRUE` and `return_perm_data = TRUE`.
 #' @param display_plots Logical. Whether to display the histograms generated in the R console. Default is `TRUE`.
@@ -28,14 +28,14 @@
 #' @importFrom grDevices pdf dev.off
 #'
 #' @details Histograms are build based on the distribution of the test statistics.
-#'   Such distributions are recorded in the outputs of STRAPP tests carried out with [deepSTRAPP::run_STRAPP_test_over_time()]
+#'   Such distributions are recorded in the outputs of STRAPP tests carried out with [deepSTRAPP::run_STRAPP_tests_over_time()]
 #'   when `return_STRAPP_results = TRUE` AND `return_perm_data = TRUE`. The `$STRAPP_results_over_time` objects provided within the input are lists that must contain
 #'   a `$perm_data_df` element that summarizes test statistics computed across posterior samples.
 #'
 #'   For multinominal data (categorical or biogeographic data with more than 2 states), it is possible to plot the histograms of post hoc pairwise tests.
 #'   Set `plot_posthoc_tests = TRUE` to generate histograms for all the pairwise post hoc Dunn's test across pairs of states.
 #'   To achieve this, the `$STRAPP_results_over_time` objects must contain a `$posthoc_pairwise_tests$perm_data_array` element that summarizes test statistics
-#'   computed across posterior samples for all pairwise post hoc tests. This is obtained from [deepSTRAPP::run_STRAPP_test_over_time()] when setting
+#'   computed across posterior samples for all pairwise post hoc tests. This is obtained from [deepSTRAPP::run_STRAPP_tests_over_time()] when setting
 #'   `return_STRAPP_results = TRUE` to return the STRAPP results, `posthoc_pairwise_tests = TRUE` to carry out post hoc tests,
 #'   and `return_perm_data = TRUE` to record distributions of test statistics.
 #'
@@ -57,7 +57,7 @@
 #' @seealso Associated functions in deepSTRAPP: [deepSTRAPP::run_STRAPP_test_for_focal_time()] [deepSTRAPP::plot_histogram_STRAPP_test_for_focal_time()]
 #'
 #' @examples
-#' ## Load results of run_STRAPP_test_over_time()
+#' ## Load results of run_STRAPP_tests_over_time()
 #' data(STRAPP_tests_over_time_temp_example, package = "deepSTRAPP")
 #'
 #' ## Plot histograms of STRAPP overall test results

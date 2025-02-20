@@ -8,6 +8,7 @@ run_STRAPP_test_over_time(
   contMap,
   ace = NULL,
   tip_data = NULL,
+  trait_data_type,
   BAMM_object,
   time_steps = NULL,
   time_range = NULL,
@@ -48,6 +49,8 @@ Needed to provide accurate estimates of trait values.}
 \item{tip_data}{Named numeric vector (Optional). Tip values of the trait.
 Names are nodes_ID of the internal nodes.
 Needed to provide accurate tip values.}
+
+\item{trait_data_type}{Character string. Specify the type of trait data. Must be one of "continuous", "categorical", "biogeographic".}
 
 \item{BAMM_object}{Object of class \code{"bammdata"}, typically generated with \code{\link[BAMMtools:getEventData]{BAMMtools::getEventData()}},
 that contains a phylogenetic tree and associated diversification rate mapping across selected posterior samples.
@@ -99,7 +102,7 @@ in the post hoc pairwise tests to account for multiple comparisons. See \code{\l
 
 \item{return_perm_data}{Logical. Whether to return the stats data computed from the posterior samples for observed and permuted data in the output.
 This is needed to plot the histograms of the null distribution used to assess significance of the tests with \code{\link[=plot_histogram_STRAPP_test_for_focal_time]{plot_histogram_STRAPP_test_for_focal_time()}}.
-(for a single \code{focal_time}) and \code{\link[=plot_histogram_STRAPP_test_over_time]{plot_histogram_STRAPP_test_over_time()}} (for multiple \code{time_steps}). Default is \code{FALSE}.}
+(for a single \code{focal_time}) and \code{\link[=plot_histograms_STRAPP_tests_over_time]{plot_histograms_STRAPP_tests_over_time()}} (for multiple \code{time_steps}). Default is \code{FALSE}.}
 
 \item{nthreads}{Integer. Number of threads to use for paralleled computing of the STRAPP tests across the permutations.
 The R package \code{parallel} must be loaded for \code{nthreads > 1}. Default is \code{1}.}
@@ -132,11 +135,12 @@ and for every batch of 100 BAMM posterior samples whose rates are regimes are up
 a message for will also be printed when rates are extracted. Default is \code{FALSE}.}
 }
 \value{
-The function returns a list with at least three elements.
+The function returns a list with at least four elements.
 \itemize{
 \item \verb{$pvalues_summary_df} Data.frame with three columns providing test stat \verb{$estimate} and \verb{$p_value} obtained for each time-step (i.e., \verb{$focal_time}),
-that can be passed down to \code{\link[=plot_pvalues_over_time]{plot_pvalues_over_time()}} to generate a plot showing the evolution of the test results across time.
+that can be passed down to \code{\link[=plot_STRAPP_pvalues_over_time]{plot_STRAPP_pvalues_over_time()}} to generate a plot showing the evolution of the test results across time.
 \item \verb{$time_steps} Numerical vector. Time steps at which the STRAPP tests were carried out in the same order as the objects returned in the output lists.
+\item \verb{$trait_data_type} Character string. Specify the type of trait data. Possible values are: "continuous", "categorical", "biogeographic".
 \item \verb{$rate_type} Character string. The type of diversification rates used in the tests: 'speciation', 'extinction' or 'net_diversification'.
 }
 
@@ -144,7 +148,7 @@ Optional summary df for multinominal data, if \code{posthoc_pairwise_tests = TRU
 \itemize{
 \item \verb{$pvalues_summary_df_for_posthoc_pairwise_tests} Data.frame with four or five columns providing test stat \verb{$estimate}, \verb{$p_value}, and \verb{$p_value_adjusted}
 (if \code{p.adjust_method} used is not "none") for each \verb{$pair} of states involved in post hoc Dunn's tests obtained for each time-step (i.e., \verb{$focal_time}).
-This data.frame can be passed down to \code{\link[=plot_pvalues_over_time]{plot_pvalues_over_time()}} to generate a plot showing the evolution of the post hoc test results across time.
+This data.frame can be passed down to \code{\link[=plot_STRAPP_pvalues_over_time]{plot_STRAPP_pvalues_over_time()}} to generate a plot showing the evolution of the post hoc test results across time.
 }
 
 Optional melted data.frames:
@@ -200,7 +204,7 @@ STRAPP test workflow over multiple \code{time_steps}.
 The STRAPP workflow is described step by step in the \code{\link[=run_STRAPP_test_for_focal_time]{run_STRAPP_test_for_focal_time()}} documentation.
 
 Its main output is the \verb{$pvalues_summary_df}: a data.frame providing test stat estimates and p-values obtained across all \code{time_steps},
-that can be passed down to \code{\link[=plot_pvalues_over_time]{plot_pvalues_over_time()}} to generate a plot showing the evolution of the test results across time.
+that can be passed down to \code{\link[=plot_STRAPP_pvalues_over_time]{plot_STRAPP_pvalues_over_time()}} to generate a plot showing the evolution of the test results across time.
 If using multinominal data (with more than two states) and \code{posthoc_pairwise_tests = TRUE}, the output will also contain
 a data.frame providing test stat estimates and p-values for post hoc pairwise tests in \verb{$pvalues_summary_df_for_posthoc_pairwise_tests}.
 
@@ -266,6 +270,7 @@ time_step_duration <- 5
 STRAPP_tests_over_time <- run_STRAPP_test_over_time(
    contMap = Ponerinae_contMap,
    ace = Ponerinae_ACE, tip_data = Ponerinae_data_ln_HW,
+   trait_data_type = "continuous",
    BAMM_object = Ponerinae_BAMM_object,
    nb_time_steps = nb_time_steps,
    time_step_duration = time_step_duration,
@@ -282,7 +287,7 @@ STRAPP_tests_over_time <- run_STRAPP_test_over_time(
 str(STRAPP_tests_over_time, max.level = 1)
 
 # Display test summary
-# Can be passed down to [deepSTRAPP::plot_pvalues_over_time()] to generate a plot
+# Can be passed down to [deepSTRAPP::plot_STRAPP_pvalues_over_time()] to generate a plot
 # showing the evolution of the test results across time.
 STRAPP_tests_over_time$pvalues_summary_df
 

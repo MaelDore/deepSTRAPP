@@ -18,6 +18,7 @@
 #' @param tip_data Named numeric vector (Optional). Tip values of the trait.
 #'   Names are nodes_ID of the internal nodes.
 #'   Needed to provide accurate tip values.
+#' @param trait_data_type Character string. Specify the type of trait data. Must be one of "continuous", "categorical", "biogeographic".
 #' @param focal_time Integer. The time, in terms of time distance from the present,
 #'   at which the tree and mapping must be cut.
 #' @param update_contMap Logical. Specify whether the mapped phylogeny (`contMap`)
@@ -59,9 +60,9 @@
 #'
 #'   * `$trait_data` A named numerical vector with ML trait values found along branches overlapping the `focal_time`. Names are the tip.label/tipward node ID.
 #'   * `$focal_time` Integer. The time, in terms of time distance from the present, at which the trait data were extracted.
-#'   * `$data_type` Character string. Define the type of data as "continuous". Used in downstream analyses to select appropriate statistical processing.
+#'   * `$trait_data_type` Character string. Define the type of trait data as "continuous". Used in downstream analyses to select appropriate statistical processing.
 #'
-#'   If `update_contMap = TRUE`, the output is a list with four elements: `$trait_data`, `$focal_time`, `$data_type`, and `$contMap`.
+#'   If `update_contMap = TRUE`, the output is a list with four elements: `$trait_data`, `$focal_time`, `$trait_data_type`, and `$contMap`.
 #'   * `$contMap` An object of class that contains the updated `contMap` with  branches and mapping that are younger than the `focal_time` cut off.
 #'      The function also adds multiple useful sub-elements to the `$contMap$tree` element.
 #'     + `$root_age` Integer. Stores the age of the root of the tree.
@@ -199,6 +200,7 @@
 
 ## Make a different function for each type of data, then make a wrapper function for all types
 # extract_most_likely_trait_values_for_focal_time() = wrapper
+   # Detect type of data based on $trait_data_type, but check it match the input (contMap or simmaps) and the type of data in ace and tip_data
 # extract_most_likely_trait_values_from_contMap_for_focal_time() = For continuous traits
 # extract_most_likely_trait_values_from_simmaps_for_focal_time() = For categorical traits
 # extract_most_likely_range_values_from_simmaps_for_focal_time() = For biogeographic traits
@@ -212,6 +214,7 @@
 extract_most_likely_trait_values_for_focal_time <- function (contMap,
                                                              ace = NULL,
                                                              tip_data = NULL,
+                                                             trait_data_type = "continuous",
                                                              focal_time,
                                                              update_contMap = FALSE,
                                                              keep_tip_labels = TRUE)
@@ -422,10 +425,10 @@ extract_most_likely_trait_values_for_focal_time <- function (contMap,
     ## Export outputs
     if (!update_contMap)
     {
-      return(list(trait_data = trait_data, focal_time = focal_time, data_type = "continuous"))
+      return(list(trait_data = trait_data, focal_time = focal_time, trait_data_type = "continuous"))
 
     } else {
-      return(list(trait_data = trait_data, focal_time = focal_time, data_type = "continuous", contMap = updated_contMap))
+      return(list(trait_data = trait_data, focal_time = focal_time, trait_data_type = "continuous", contMap = updated_contMap))
     }
   }
 }

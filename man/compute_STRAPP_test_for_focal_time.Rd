@@ -26,10 +26,10 @@ that contains a phylogenetic tree and associated diversification rates
 across selected posterior samples updated to a specific time in the past (i.e. the \code{focal_time}).}
 
 \item{trait_data_list}{List obtained from \code{\link[=extract_most_likely_trait_values_for_focal_time]{extract_most_likely_trait_values_for_focal_time()}}
-that contains at least a \verb{$trait_data} element, a \verb{$focal_time} element, and a \verb{$data_type}.
+that contains at least a \verb{$trait_data} element, a \verb{$focal_time} element, and a \verb{$trait_data_type}.
 \verb{$trait_data} is a named vector with the trait data found on the phylogeny at \code{focal_time}.
 \verb{$focal_time} informs on the time in the past at which the trait and rates data will be tested.
-\verb{$data_type} informs on the type of trait data: continuous, categorical, or biogeographic.}
+\verb{$trait_data_type} informs on the type of trait data: continuous, categorical, or biogeographic.}
 
 \item{rate_type}{A character string specifying the type of diversification rates to use. Must be one of 'speciation', 'extinction' or 'net_diversification' (default).}
 
@@ -182,7 +182,7 @@ In a one-tailed test, the p-value is the proportion of posterior samples in whic
 and p-value time-series plots \code{\link[=plot_STRAPP_pvalues_over_time]{plot_STRAPP_pvalues_over_time()}}.
 \item Add prints detailing what test is carried out, what are the null and alternative hypotheses,
 and what significant level is used to rejected or not the null hypothesis. (Enabled with \code{print_hypothesis = TRUE}).
-\item Split the function in multiple sub-functions according to the type of data (\verb{$data_type}).
+\item Split the function in multiple sub-functions according to the type of data (\verb{$trait_data_type}).
 \item Prevent using Pearson's correlation tests and applying log-transformation for continuous data.
 The rationale is that there is no reason to assume that tip rates are distributed normally or log-normally.
 Thus, a Spearman's rank correlation test is favored.
@@ -217,7 +217,7 @@ trait_data_continuous <- Ponerinae_trait_data_10My
 trait_data_binary <- trait_data_continuous
 trait_data_binary$trait_data[trait_data_continuous$trait_data < 0] <- "state_A"
 trait_data_binary$trait_data[trait_data_continuous$trait_data >= 0] <- "state_B"
-trait_data_binary$data_type <- "categorical"
+trait_data_binary$trait_data_type <- "categorical"
 
 table(trait_data_binary$trait_data)
 
@@ -226,7 +226,7 @@ trait_data_multinominal <- trait_data_continuous
 trait_data_multinominal$trait_data[trait_data_continuous$trait_data < 0] <- "state_B"
 trait_data_multinominal$trait_data[trait_data_continuous$trait_data < -1] <- "state_A"
 trait_data_multinominal$trait_data[trait_data_continuous$trait_data >= 0] <- "state_C"
-trait_data_multinominal$data_type <- "categorical"
+trait_data_multinominal$trait_data_type <- "categorical"
 
 table(trait_data_multinominal$trait_data)
 

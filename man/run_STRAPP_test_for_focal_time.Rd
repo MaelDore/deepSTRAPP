@@ -8,6 +8,7 @@ run_STRAPP_test_for_focal_time(
   contMap,
   ace = NULL,
   tip_data = NULL,
+  trait_data_type,
   BAMM_object,
   focal_time,
   keep_tip_labels = TRUE,
@@ -42,6 +43,8 @@ Needed to provide accurate estimates of trait values.}
 \item{tip_data}{Named numeric vector (Optional). Tip values of the trait.
 Names are nodes_ID of the internal nodes.
 Needed to provide accurate tip values.}
+
+\item{trait_data_type}{Character string. Specify the type of trait data. Must be one of "continuous", "categorical", "biogeographic".}
 
 \item{BAMM_object}{Object of class \code{"bammdata"}, typically generated with \code{\link[BAMMtools:getEventData]{BAMMtools::getEventData()}},
 that contains a phylogenetic tree and associated diversification rate mapping across selected posterior samples.
@@ -227,6 +230,7 @@ focal_time <- 10
 
 STRAPP_test_output <- run_STRAPP_test_for_focal_time(
   contMap = Ponerinae_contMap, ace = Ponerinae_ACE, tip_data = Ponerinae_data_ln_HW,
+  trait_data_type = "continuous",
   BAMM_object = Ponerinae_BAMM_object,
   focal_time = focal_time,
   rate_type = "net_diversification",
