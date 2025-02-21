@@ -173,7 +173,9 @@ trait_data_biogeographic[trait_data_multinominal == "state_C"] <- "range_C"
 table(trait_data_biogeographic)
 
 # Change trait data for biogeographic
-STRAPP_tests_over_time_temp_example_2$trait_data_df_over_time$trait_value <- trait_data_biogeographic
+trait_data_df_over_time <- STRAPP_tests_over_time_temp_example_2$trait_data_df_over_time
+trait_data_df_over_time$trait_value <- trait_data_biogeographic
+STRAPP_tests_over_time_temp_example_2$trait_data_df_over_time <- trait_data_df_over_time
 STRAPP_tests_over_time_temp_example_2$trait_data_type <- "biogeographic"
 
 plotTT_biogeographic <- plot_rates_through_time(

@@ -298,6 +298,11 @@ plot_rates_through_time_for_continuous_data <- function (
   rate_type_label <- stringr::str_to_title(rate_type)
   rate_type_label <- gsub(pattern = "_", replacement = " ", x = rate_type_label)
 
+  ## Create binding of new variables to avoid Notes
+  tip_ID <- BAMM_sample_ID <- focal_time <- quant_traits <- NULL
+  trait_value <- rates <- median_rates <- mean_rates <- NULL
+  n_points <- points_ID <- quant_rates <- NULL
+
   ## Merge diversification and trait data
   # Trait data are copied across BAMM samples
   data_per_samples_df <- dplyr::left_join(
@@ -661,6 +666,11 @@ plot_rates_through_time_for_categorical_data <- function (
 
   # If provided, PDF_file_path must end with ".pdf"
 
+  ## Create binding of new variables to avoid Notes
+  tip_ID <- BAMM_sample_ID <- focal_time <- quant_traits <- NULL
+  trait_value <- rates <- median_rates <- mean_rates <- NULL
+  n_points <- points_ID <- quant_rates <- NULL
+
   ## Adjust rate_type for labels
   rate_type_label <- stringr::str_to_title(rate_type)
   rate_type_label <- gsub(pattern = "_", replacement = " ", x = rate_type_label)
@@ -993,6 +1003,11 @@ plot_rates_through_time_for_biogeographic_data <- function (
   # CI_quantiles is a numerical between 0 and 1.0
 
   # If provided, PDF_file_path must end with ".pdf"
+
+  ## Create binding of new variables to avoid Notes
+  tip_ID <- BAMM_sample_ID <- focal_time <- quant_traits <- NULL
+  trait_value <- rates <-  median_rates <- mean_rates <- NULL
+  n_points <- points_ID <- quant_rates <- NULL
 
   ## Adjust rate_type for labels
   rate_type_label <- stringr::str_to_title(rate_type)

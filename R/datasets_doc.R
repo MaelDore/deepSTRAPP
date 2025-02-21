@@ -247,3 +247,52 @@
 #'
 "STRAPP_tests_over_time_temp_example_2"
 
+### 7/ Temporary BAMM output for whale phylogeny
+
+#' @title Dataset summarizing 1000 posterior samples of BAMM for extant whales
+#'
+#' @description An object of class `"bammdata"` containing information of diversification dynamics
+#'  of extant whales (Cetacea order) modeled with BAMM.
+#'
+#'  Source: Steeman, M. E., M. B. Hebsgaard, R. E. Fordyce, S. Y. W. Ho, D. L. Rabosky, R. Nielsen, C. Rahbek, H. Glenner, M. V. Sorensen, and E. Willerslev (2009)
+#'  Radiation of extant cetaceans driven by restructuring of the oceans. Systematic Biology, 58, 573-585.
+#'
+#' @usage data(whale_BAMM_object)
+#' @format A list with 18 elements.
+#'
+#' @details An object of class `"bammdata"` containing information of diversification dynamics
+#'   of extant ponerine ants (Ponerinae subfamily) modeled with BAMM.
+#'
+#'   Phylogeny-related elements used to plot a phylogeny with [ape::plot.phylo()]:
+#'   * `$edge` Matrix of integers. Defines the tree topology by providing rootward and tipward node ID of each edge.
+#'   * `$Nnode` Integer. Number of internal nodes.
+#'   * `$tip.label` Vector of character strings. Labels of all tips.
+#'   * `$edge.length` Vector of numerical. Length of edges/branches.
+#'
+#'   BAMM internal elements used for tree exploration:
+#'   * `$begin` Vector of numerical. Absolute time since root of edge/branch start (rootward).
+#'   * `$end` Vector of numerical.  Absolute time since root of edge/branch end (tipward).
+#'   * `$downseq` Vector of integers. Order of node visits when using a pre-order tree traversal.
+#'   * `$lastvisit` ID of the last node visited when starting from the node in the corresponding position in `$downseq`.
+#'
+#'   BAMM elements summarizing diversification data:
+#'   * `$numberEvents` Vector of integer. Number of events/macroevolutionary regimes (k+1) recorded in each posterior configuration. k = number of shifts.
+#'   * `$eventData` List of data.frames. One per posterior sample. Records shift events and macroevolutionary regimes parameters. 1st line = Background root regime.
+#'   * `$eventVectors` List of integer vectors. One per posterior sample. Record regime ID per branches.
+#'   * `$tipStates` List of integer vectors. One per posterior sample. Record regime ID per tips.
+#'   * `$tipLambda` List of numerical vectors. One per posterior sample. Record speciation rates per tips.
+#'   * `$tipMu` List of numerical vectors. One per posterior sample. Record extinction rates per tips.
+#'   * `$eventBranchSegs` List of matrix of numerical. One per posterior sample. Record regime ID per segments of branches.
+#'   * `$meanTipLambda` Vector of numerical. Mean tip speciation rates across all posterior configurations of tips.
+#'   * `$meanTipMu` Vector of numerical. Mean tip extinction rates across all posterior configurations of tips.
+#'   * `$type` Character string. Set the type of data modeled with BAMM. Here, type = "diversification".
+#'
+#' @docType data
+#' @keywords datasets
+#' @name whale_BAMM_object
+#'
+#' @references Steeman, M. E., M. B. Hebsgaard, R. E. Fordyce, S. Y. W. Ho, D. L. Rabosky, R. Nielsen, C. Rahbek, H. Glenner, M. V. Sorensen, and E. Willerslev (2009)
+#'  Radiation of extant cetaceans driven by restructuring of the oceans. Systematic Biology, 58, 573-585.
+#' @seealso BAMM software website: \url{http://bamm-project.org/}
+#'
+"whale_BAMM_object"

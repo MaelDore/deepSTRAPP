@@ -54,7 +54,7 @@
 #'
 #' @author Maël Doré
 #'
-#' @seealso Associated functions in deepSTRAPP: [deepSTRAPP::run_STRAPP_test_for_focal_time()] [deepSTRAPP::plot_histogram_STRAPP_test_for_focal_time()]
+#' @seealso Associated functions in deepSTRAPP: [deepSTRAPP::run_STRAPP_tests_over_time()] [deepSTRAPP::plot_histogram_STRAPP_test_for_focal_time()]
 #'
 #' @examples
 #' ## Load results of run_STRAPP_tests_over_time()
