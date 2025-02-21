@@ -52,9 +52,12 @@ library(deepSTRAPP)
 # Ah ah, jokes on you, nothing is basic here!
 ```
 
-STRAPP workflow in a nutshell: - Step 1: Prepare trait data - Step 2:
-Prepare diversification rates data - Step 3: Run a STRAPP workflow -
-Step 4: Plot results
+STRAPP workflow in a nutshell:
+
+- Step 1: Prepare trait data
+- Step 2: Prepare diversification rates data
+- Step 3: Run a STRAPP workflow
+- Step 4: Plot results
 
 ``` r
 
@@ -543,4 +546,4 @@ complex situations
 
 (provide DOI link)
 
-# May include a chunk of R script with a bibtex citation
+### May include a chunk of R script with a bibtex citation

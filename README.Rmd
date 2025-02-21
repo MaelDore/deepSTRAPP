@@ -62,10 +62,11 @@ library(deepSTRAPP)
 ```
 
 STRAPP workflow in a nutshell:
- - Step 1: Prepare trait data
- - Step 2: Prepare diversification rates data
- - Step 3: Run a STRAPP workflow
- - Step 4: Plot results
+
+* Step 1: Prepare trait data
+* Step 2: Prepare diversification rates data
+* Step 3: Run a STRAPP workflow
+* Step 4: Plot results
 
 
 ```{r prepare_trait_data}
@@ -101,6 +102,7 @@ plot(Ponerinae_contMap)
 ## Inputs needed for Step 3 are the contMap, and optionally, the tip_data (Ponerinae_data_ln_HW), and the ACE data (Ponerinae_ACE)
 
 ```
+
 
 ```{r prepare_diversification_data}
 
@@ -413,6 +415,7 @@ plot_histogram_STRAPP_test_for_focal_time(
 
 ```
 
+
 ```{r plot_results}
 
 # ------ Step 4: Plot results ------ #
@@ -570,5 +573,5 @@ Points to vignettes for tutorials on how to use the package in more complex situ
 
 (provide DOI link)
 
-# May include a chunk of R script with a bibtex citation
+### May include a chunk of R script with a bibtex citation
 
