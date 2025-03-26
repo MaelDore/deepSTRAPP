@@ -1,6 +1,6 @@
 ## Functions to plot rates through time in relation with trait values
 # One master function to prepare data and select the proper test function according to data type
-# There sub-functions carrying out tests according to data type
+# Three sub-functions carrying out tests according to data type
 
 #' @title Plot evolution of diversification rates in relation to trait values over time
 #'

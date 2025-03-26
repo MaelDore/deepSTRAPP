@@ -205,6 +205,9 @@
 # extract_most_likely_trait_values_from_simmaps_for_focal_time() = For categorical traits
 # extract_most_likely_range_values_from_simmaps_for_focal_time() = For biogeographic traits
 
+## See if better to extract most likely range/state from densityMaps instead of simmaps
+# Check my scripts in preparing trait data for the Macroevolution Course
+
 ## Update the reference to extract_most_likely_trait_values_for_focal_time() to link to the wrapper function!
 # Ex: in the doc of compute_STRAPP_test_for_focal_time.R
 

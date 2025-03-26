@@ -417,7 +417,7 @@ run_STRAPP_test_over_time <- function (contMap,
   ## Detect if trait_data is needed because requested, or to extract trait data in a melted df
   need_trait_data <- (return_updated_trait_data_with_contMap | extract_trait_data_melted_df)
 
-  ### Run STRAPP test workflow for per time-steps
+  ### Run STRAPP test workflow per time-steps
   STRAPP_test_outputs_over_time <- list()
   for (i in seq_along(time_steps))
   {
