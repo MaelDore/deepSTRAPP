@@ -25,7 +25,7 @@ current dynamics in explaining current patterns of biodiversity.
 Display a workflow diagram that shows how functions interact with each
 other in a workflow to achieve a typical goal.
 
-Refer to the Research paper here already (provivde DOI link)
+Refer to the Research paper here already (provide DOI link)
 
 ## Installation
 
@@ -38,6 +38,11 @@ You can install the development version of deepSTRAPP like so:
 ``` r
 remotes::install_github("MaelDore/deepSTRAPP")
 ```
+
+You may need additional tools for package compilation such as Rtools
+(Windows) and Xcode (Mac OS). See [this
+page](https://support.posit.co/hc/en-us/articles/200486498-Package-Development-Prerequisites)
+for details.
 
 ## Example
 
