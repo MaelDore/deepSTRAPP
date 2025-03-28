@@ -31,36 +31,61 @@ Names should be ordered as the tip labels in the phylogeny foudn in \code{phylo$
 Tip labels (\code{phylo$tip.label}) should match names in \code{tip_data}.}
 
 \item{evolutionary_models}{(Vector of) character string(s). To provide the set of evolutionary models to fit on the data.
-Models available for continuous data are detailed in \code{\link[geiger:fitContinuous]{geiger::fitContinuous()}}.
-Models available for categorical data are detailed in \code{\link[geiger:fitDiscrete]{geiger::fitDiscrete()}}.
-Models for biogeographic data are fit with \code{BioGeoBEARS}.
+\itemize{
+\item Models available for continuous data are detailed in \code{\link[geiger:fitContinuous]{geiger::fitContinuous()}}.
+\item Models available for categorical data are detailed in \code{\link[geiger:fitDiscrete]{geiger::fitDiscrete()}}.
+\item Models for biogeographic data are fit with \code{BioGeoBEARS}.
 The current version of \code{deepSTRAPP} implements BAYAREALIKE, DIVALIKE, DEC models and their +J variation
-(including jump-dispersal events). For details, please refers to the BioGeoBEARS documentation.}
+(including jump-dispersal events). For details, please refers to the BioGeoBEARS documentation.
+}}
 
-\item{res}{Integer. Define the number of time steps used to interpolate/estimate trait value/state/range in contMap/densityMap.}
+\item{res}{Integer. Define the number of time steps used to interpolate/estimate trait value/state/range in \code{contMap}/\code{densityMaps}.}
 
 \item{nb_simulations}{Integer. Define the number of simulations generated for stochastic mapping. Default = 1000. Only for "categorical" and "biogeographic" data.}
 
 \item{plot_map}{Logical. Whether to plot or not the phylogeny with mapped trait evolution.}
 
-\item{plot_overlay}{Logical. If \code{TRUE} (default), plot a unique densityMap with overlapping states/ranges using transparency.
-If \code{FALSE}, plot a densityMap per state/range. Only for "categorical" and "biogeographic" data.}
+\item{plot_overlay}{Logical. If \code{TRUE} (default), plot a unique \code{densityMap} with overlapping states/ranges using transparency.
+If \code{FALSE}, plot a \code{densityMap} per state/range. Only for "categorical" and "biogeographic" data.}
 
 \item{PDF_file_path}{Character string. If provided, the plot will be saved in a PDF file following the path provided here. The path must end with '.pdf'.}
 
-\item{return_ace}{Logical. Whether the names vector of ancestral characters estimates (ACE) at internal nodes should be returned in the output. Default = \code{TRUE}.}
+\item{return_ace}{Logical. Whether the named vector of ancestral characters estimates (ACE) at internal nodes should be returned in the output. Default = \code{TRUE}.}
 
 \item{return_simmaps}{Logical. Whether the evolutionary histories simulated during stochastic mapping (i.e., \code{simmaps}) should be returned in the output.
 Default = \code{TRUE}. Only for "categorical" and "biogeographic" data.}
 
-\item{return_best_model_fit}{Logical. Whether to output of the best fitting model in the function output. Default = \code{FALSE}.}
+\item{return_best_model_fit}{Logical. Whether to include the output of the best fitting model in the function output. Default = \code{FALSE}.}
 
 \item{return_model_selection_df}{Logical. Whether to include the data.frame summarizing model comparisons used to select the best fitting model should be returned in the output. Default = \code{FALSE}.}
 
 \item{verbose}{Logical. Should progression be displayed? A message will be printed for every steps in the process. Default is \code{FALSE}.}
 }
 \value{
-To write
+The function returns a list with at least two elements.
+\itemize{
+\item \verb{$contMap} (For "continuous" data) Object of class \code{"contMap"}, typically generated with \code{\link[phytools:contMap]{phytools::contMap()}},
+that contains a phylogenetic tree and associated continuous trait mapping.
+\item \verb{$densityMaps} (For "categorical" and "biogeographic" data) List of objects of class \verb{"densityMap},
+typically generated with \code{\link[phytools:densityMap]{phytools::densityMap()}}, that contains a phylogenetic tree and associated mapping of probability
+to harbor a given state/range along branches. The list contains one \verb{"densityMap} per state/range found in the \code{tip_data}.
+\item \verb{$trait_data_type} Character string. Record the type of trait data. Either: "continuous", "categorical" or "biogeographic".
+}
+
+If \code{return_ace = TRUE},
+\itemize{
+\item \verb{$ace} Named vector that record the ancestral characters estimates (ACE) at internal nodes.
+}
+
+If \code{return_best_model_fit = TRUE},
+\itemize{
+\item \verb{$best_model_fit} List that provides the output of the best fitting model.
+}
+
+If \code{model_selection_df = TRUE},
+\itemize{
+\item \verb{$model_selection_df} Data.frame that summarizes model comparisons used to select the best fitting model.
+}
 }
 \description{
 Map trait evolution on a time-calibrated phylogeny in several steps:
@@ -70,19 +95,79 @@ Map trait evolution on a time-calibrated phylogeny in several steps:
 \item (3) Infer ancestral characters estimates (ACE) at nodes.
 \item (4) Run stochastic mapping simulations to generate evolutionary histories
 compatible with the best model and infered ACE. (Only for categorical and biogeographic data)
-\item (5) Infer ancestral states along branches
+\item (5) Infer ancestral states along branches.
 \itemize{
-\item For continuous traits = use interpolation to produce a \code{contMap}.
-\item For categorical and biogeographic data = compute posterior frequencies of each state/range
+\item For continuous traits: use interpolation to produce a \code{contMap}.
+\item For categorical and biogeographic data: compute posterior frequencies of each state/range
 to produce a \code{densityMap} for each state/range.
 }
 }
 }
 \details{
-To write
+Map trait evolution on a time-calibrated phylogeny in several steps:
+\itemize{
+\item (1) Models are fit using Maximum Likelihood approach with \code{\link[geiger:fitContinuous]{geiger::fitContinuous()}} for "continuous" data,
+\code{\link[geiger:fitDiscrete]{geiger::fitDiscrete()}} for "categorical" data, and R package \code{BioGeoBEARS} for "biogeographic" data.
+\item (2) Best model is identified among the list of \code{evolutionary_models} by comparing the corrected AIC (AICc)
+and selecting the  model with lowest AICc.
+\item (3) Ancestral characters estimates (ACE) are inferred with \link[phytools:fastAnc]{phytools::fastAnc} on a tree with modified branch lengths
+scaled to reflect the evolutionary rates estimated from the best model using \code{\link[phytools:rescale]{phytools::rescale()}}.
+\item (4) For categorical and biogeographic data, stochastic mapping simulations are performed to generate evolutionary histories
+compatible with the best model and inferred ACE. Node states/ranges are drawn from the scaled marginal likelihoods of ACE,
+and states/ranges shifts along branches are simulated according to the transition matrix Q estimated from the best fitting model.
+\item (5) Infer ancestral states along branches.
+\itemize{
+\item For continuous traits: ancestral trait values along branches are interpolated with \code{\link[phytools:contMap]{phytools::contMap()}}.
+This provides quick estimates of trait value at any point in time, but it does not provide accurate ML estimates in
+case of models that are time or trait-value dependent (such as "EB" or "OU") as the interpolation used to built the contMap is assuming
+a constant rate along each branch. However, ancestral trait values at nodes remain accurate
+\item For categorical and biogeographic data: compute posterior frequencies of each state/range among the simulated evolutionary histories (\code{simmaps})
+to produce a \code{densityMap} for each state/range that reflects the changes along branches in probability of harboring a given state/range.
 }
+}
+}
+\section{Note on macroevolutionary models of trait evolution}{
+This function provides an easy solution to map trait evolution on a time-calibrated phylogeny
+and obtain the \code{contMap}/\code{densityMaps} objects needed to run deepSTRAPP tests (\link{run_STRAPP_test_for_focal_time}, \link{run_STRAPP_tests_over_time}).
+However, it does not explore the most complex options for trait evolution. You may need to explore more complex models to capture the dynamics of trait evolution.
+such as trait-dependent multi-rate models (\code{\link[phytools:brownie.lite]{phytools::brownie.lite()}}, \link[OUwie:OUwie]{OUwie::OUwie}), Bayesian reversible jump MCMC implementations allowing a thorough exploration
+of location and number of regime shifts (Ex: BayesTraits, BAMM), or RRphylo for a penalized phylogenetic ridge regression approach that allows regime shifts across all branches.
+}
+
 \examples{
-# To write
+# ----- Example 1: Continuous data ----- #
+
+# Load phylogeny and tip data
+library(phytools)
+data(eel.tree)
+data(eel.data)
+
+# Extract body size
+eel_data <- setNames(eel.data$Max_TL_cm,
+                     rownames(eel.data))
+
+# Map trait evolution on the phylogeny, selecting among four models ("BM", "OU", "lambda", "kappa")
+mapped_cont_traits <- prepare_trait_data_for_continuous_data(tip_data = eel_data,
+   phylo = eel.tree,
+   evolutionary_models = c("BM", "OU", "lambda", "kappa"),
+   plot_map = FALSE,
+   return_best_model_fit = TRUE,
+   return_model_selection_df = TRUE,
+   verbose = TRUE)
+
+# Explore output
+plot(mapped_cont_traits$contMap) # contMap with interpolated trait values
+mapped_cont_traits$model_selection_df # Summary of model selection
+mapped_cont_traits$best_model_fit$opt # Parameter estimates and optimization summary of the best model (Here, Pagel's lambda)
+mapped_cont_traits$ace # Ancestral character estimates at nodes
+
+# ----- Example 2: Categorical data ----- #
+
+TBA
+
+# ----- Example 3: Biogeographic data ----- #
+
+TBA
 
 }
 \seealso{

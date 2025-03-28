@@ -11,9 +11,9 @@
 #'   * (3) Infer ancestral characters estimates (ACE) at nodes.
 #'   * (4) Run stochastic mapping simulations to generate evolutionary histories
 #'     compatible with the best model and infered ACE. (Only for categorical and biogeographic data)
-#'   * (5) Infer ancestral states along branches
-#'     - For continuous traits = use interpolation to produce a `contMap`.
-#'     - For categorical and biogeographic data = compute posterior frequencies of each state/range
+#'   * (5) Infer ancestral states along branches.
+#'     - For continuous traits: use interpolation to produce a `contMap`.
+#'     - For categorical and biogeographic data: compute posterior frequencies of each state/range
 #'       to produce a `densityMap` for each state/range.
 #'
 #' @param tip_data Named numerical or character string vector of trait values/states/ranges at tips.
@@ -22,21 +22,21 @@
 #' @param phylo Time-calibrated phylogeny. Object of class `"phylo"` as defined in [ape].
 #'   Tip labels (`phylo$tip.label`) should match names in `tip_data`.
 #' @param evolutionary_models (Vector of) character string(s). To provide the set of evolutionary models to fit on the data.
-#'   Models available for continuous data are detailed in [geiger::fitContinuous()].
-#'   Models available for categorical data are detailed in [geiger::fitDiscrete()].
-#'   Models for biogeographic data are fit with `BioGeoBEARS`.
-#'   The current version of `deepSTRAPP` implements BAYAREALIKE, DIVALIKE, DEC models and their +J variation
-#'   (including jump-dispersal events). For details, please refers to the BioGeoBEARS documentation.
-#' @param res Integer. Define the number of time steps used to interpolate/estimate trait value/state/range in contMap/densityMap.
+#'   * Models available for continuous data are detailed in [geiger::fitContinuous()].
+#'   * Models available for categorical data are detailed in [geiger::fitDiscrete()].
+#'   * Models for biogeographic data are fit with `BioGeoBEARS`.
+#'     The current version of `deepSTRAPP` implements BAYAREALIKE, DIVALIKE, DEC models and their +J variation
+#'     (including jump-dispersal events). For details, please refers to the BioGeoBEARS documentation.
+#' @param res Integer. Define the number of time steps used to interpolate/estimate trait value/state/range in `contMap`/`densityMaps`.
 #' @param nb_simulations Integer. Define the number of simulations generated for stochastic mapping. Default = 1000. Only for "categorical" and "biogeographic" data.
 #' @param plot_map Logical. Whether to plot or not the phylogeny with mapped trait evolution.
-#' @param plot_overlay Logical. If `TRUE` (default), plot a unique densityMap with overlapping states/ranges using transparency.
-#'    If `FALSE`, plot a densityMap per state/range. Only for "categorical" and "biogeographic" data.
+#' @param plot_overlay Logical. If `TRUE` (default), plot a unique `densityMap` with overlapping states/ranges using transparency.
+#'    If `FALSE`, plot a `densityMap` per state/range. Only for "categorical" and "biogeographic" data.
 #' @param PDF_file_path Character string. If provided, the plot will be saved in a PDF file following the path provided here. The path must end with '.pdf'.
-#' @param return_ace Logical. Whether the names vector of ancestral characters estimates (ACE) at internal nodes should be returned in the output. Default = `TRUE`.
+#' @param return_ace Logical. Whether the named vector of ancestral characters estimates (ACE) at internal nodes should be returned in the output. Default = `TRUE`.
 #' @param return_simmaps Logical. Whether the evolutionary histories simulated during stochastic mapping (i.e., `simmaps`) should be returned in the output.
 #'  Default = `TRUE`. Only for "categorical" and "biogeographic" data.
-#' @param return_best_model_fit Logical. Whether to output of the best fitting model in the function output. Default = `FALSE`.
+#' @param return_best_model_fit Logical. Whether to include the output of the best fitting model in the function output. Default = `FALSE`.
 #' @param return_model_selection_df Logical. Whether to include the data.frame summarizing model comparisons used to select the best fitting model should be returned in the output. Default = `FALSE`.
 #' @param verbose Logical. Should progression be displayed? A message will be printed for every steps in the process. Default is `FALSE`.
 #'
@@ -46,21 +46,95 @@
 #' @importFrom phytools rescale fastAnc contMap densityMap
 #' @importFrom grDevices pdf dev.off
 #'
-#' @details To write
+#' @details Map trait evolution on a time-calibrated phylogeny in several steps:
 #'
-#' @return To write
+#'   * (1) Models are fit using Maximum Likelihood approach with [geiger::fitContinuous()] for "continuous" data,
+#'   [geiger::fitDiscrete()] for "categorical" data, and R package `BioGeoBEARS` for "biogeographic" data.
+#'
+#'   * (2) Best model is identified among the list of `evolutionary_models` by comparing the corrected AIC (AICc)
+#'   and selecting the  model with lowest AICc.
+#'
+#'   * (3) Ancestral characters estimates (ACE) are inferred with [phytools::fastAnc] on a tree with modified branch lengths
+#'   scaled to reflect the evolutionary rates estimated from the best model using [phytools::rescale()].
+#'
+#'   * (4) For categorical and biogeographic data, stochastic mapping simulations are performed to generate evolutionary histories
+#'     compatible with the best model and inferred ACE. Node states/ranges are drawn from the scaled marginal likelihoods of ACE,
+#'     and states/ranges shifts along branches are simulated according to the transition matrix Q estimated from the best fitting model.
+#'
+#'   * (5) Infer ancestral states along branches.
+#'     - For continuous traits: ancestral trait values along branches are interpolated with [phytools::contMap()].
+#'       This provides quick estimates of trait value at any point in time, but it does not provide accurate ML estimates in
+#'       case of models that are time or trait-value dependent (such as "EB" or "OU") as the interpolation used to built the contMap is assuming
+#'       a constant rate along each branch. However, ancestral trait values at nodes remain accurate
+#'     - For categorical and biogeographic data: compute posterior frequencies of each state/range among the simulated evolutionary histories (`simmaps`)
+#'       to produce a `densityMap` for each state/range that reflects the changes along branches in probability of harboring a given state/range.
+#'
+#'  # Note on macroevolutionary models of trait evolution
+#'
+#'  This function provides an easy solution to map trait evolution on a time-calibrated phylogeny
+#'  and obtain the `contMap`/`densityMaps` objects needed to run deepSTRAPP tests ([run_STRAPP_test_for_focal_time], [run_STRAPP_tests_over_time]).
+#'  However, it does not explore the most complex options for trait evolution. You may need to explore more complex models to capture the dynamics of trait evolution.
+#'  such as trait-dependent multi-rate models ([phytools::brownie.lite()], [OUwie::OUwie]), Bayesian reversible jump MCMC implementations allowing a thorough exploration
+#'  of location and number of regime shifts (Ex: BayesTraits, BAMM), or RRphylo for a penalized phylogenetic ridge regression approach that allows regime shifts across all branches.
+#'
+#' @return The function returns a list with at least two elements.
+#'
+#'   * `$contMap` (For "continuous" data) Object of class `"contMap"`, typically generated with [phytools::contMap()],
+#'     that contains a phylogenetic tree and associated continuous trait mapping.
+#'   * `$densityMaps` (For "categorical" and "biogeographic" data) List of objects of class `"densityMap`,
+#'     typically generated with [phytools::densityMap()], that contains a phylogenetic tree and associated mapping of probability
+#'     to harbor a given state/range along branches. The list contains one `"densityMap` per state/range found in the `tip_data`.
+#'   * `$trait_data_type` Character string. Record the type of trait data. Either: "continuous", "categorical" or "biogeographic".
+#'
+#'   If `return_ace = TRUE`,
+#'   * `$ace` Named vector that record the ancestral characters estimates (ACE) at internal nodes.
+#'
+#'   If `return_best_model_fit = TRUE`,
+#'   * `$best_model_fit` List that provides the output of the best fitting model.
+#'
+#'   If `model_selection_df = TRUE`,
+#'   * `$model_selection_df` Data.frame that summarizes model comparisons used to select the best fitting model.
 #'
 #' @author Maël Doré
 #'
 #' @seealso [geiger::fitContinuous()] [geiger::fitDiscrete()] [phytools::contMap()] [phytools::densityMap()]
 #'
 #' @examples
-#' # To write
+#' # ----- Example 1: Continuous data ----- #
+#'
+#' # Load phylogeny and tip data
+#' library(phytools)
+#' data(eel.tree)
+#' data(eel.data)
+#'
+#' # Extract body size
+#' eel_data <- setNames(eel.data$Max_TL_cm,
+#'                      rownames(eel.data))
+#'
+#' # Map trait evolution on the phylogeny, selecting among four models ("BM", "OU", "lambda", "kappa")
+#' mapped_cont_traits <- prepare_trait_data_for_continuous_data(tip_data = eel_data,
+#'    phylo = eel.tree,
+#'    evolutionary_models = c("BM", "OU", "lambda", "kappa"),
+#'    plot_map = FALSE,
+#'    return_best_model_fit = TRUE,
+#'    return_model_selection_df = TRUE,
+#'    verbose = TRUE)
+#'
+#' # Explore output
+#' plot(mapped_cont_traits$contMap) # contMap with interpolated trait values
+#' mapped_cont_traits$model_selection_df # Summary of model selection
+#' mapped_cont_traits$best_model_fit$opt # Parameter estimates and optimization summary of the best model (Here, Pagel's lambda)
+#' mapped_cont_traits$ace # Ancestral character estimates at nodes
+#'
+#' # ----- Example 2: Categorical data ----- #
+#'
+#' TBA
+#'
+#' # ----- Example 3: Biogeographic data ----- #
+#'
+#' TBA
 #'
 
-## Currently, For continuous traits
-# Input = contMap
-# Output = contMap + plot of contMap + parameters of best model of continuous traits (BM, EB/ACDC, OU1, Pagel's lambda ?)
 
 ## Make a different function for each type of data, then make a wrapper function for all types
 # prepare_trait_data() = wrapper
@@ -69,20 +143,7 @@
 # prepare_trait_data_for_categorical_data() = For categorical traits
 # prepare_trait_data_for_biogeographic_data() = For biogeographic traits
 
-# Add an option to get ACE for categorical and biogeographic traits to (as scaled marginal likelihoods)
-
-## Explain that this only compare and fit 'classic' simple models using geiger::fitContinuous in a ML approach
-# Default for continuous = "BM". "All" = BM, EB/ACDC, OU, Pagel's lambda, kappa, delta, and rate_trend as available in geiger::fitContinuous
-# May need to use more complex models to capture the dynamics of trait evolution. BayesTraits. BAMM. Multi-regimes models (BM and OU)
-# Trait-dependent multi-rate models (use a simmap to assign branches to a specific regime)
-# ?phytools::brownie.lite()
-# ?OUwie::OUwie with model = "BMS" (Multi-BM) and "OUM", "OUMV", "OUA", "OUMVA" (Multi-OU with sigma, theta and alpha varying or not across regimes)
-# BayesTraits and BAMM for a thorough exploration of location and number of regime shifts independent from any other trait/extrinsic variable
-# RRphylo for a penalized phylogenetic ridge regression approach that allows regime shifts across all branches
-
-## Note that interpolation of ancestral trait values along branches is not accurate for time-dependent models,
-# as the interpolation used to built the contMap is assuming a constant rate along each branch.
-# However, ancestral trait values at nodes are accurate.
+# Add an option to get ACE for categorical and biogeographic traits too (as scaled marginal likelihoods)
 
 # Default for categorical = "ARD". "All" = ER, SYM, ARD.
 # May need to use more complex models to capture the dynamics of trait evolution. Custom constrains in the Q matrix, Multi-regimes models, ... (cite packages)
@@ -90,8 +151,6 @@
 # Default for Biogeographic = "DEC+J". "All" = DEC, DEC+J, DIVALIKE, DIVALIKE+J, BAYAREALIKE, BAYAREALIKE+J.
 # May need to use more complex models to capture the dynamics of trait evolution. +W, +X, DECX, ... (cite packages/refs)
 
-## plot_overlay for categorical and biogeographic data
-# Need plot_map = TRUE. If plot_overlay = TRUE: Plot the overlay of Density maps with alpha. If plot_overlay = FALSE, plot one densityMap per state/range
 
 ### Master function to prepare data and select the proper test function according to data type ####
 
@@ -192,70 +251,6 @@ prepare_trait_data <- function (
   ## Export the output
   return(invisible(trait_data_output))
 }
-
-#
-# library(phytools)
-# data(eel.tree)
-# data(eel.data)
-#
-# # Extract body size
-# eel_data <- setNames(eel.data$Max_TL_cm,
-#                      rownames(eel.data))
-#
-# tip_data <- eel_data
-# phylo <- eel.tree
-# evolutionary_models <- c("EB", "OU", "BM", "lambda")
-#
-# test <- prepare_trait_data_for_continuous_data(tip_data = eel_data,
-#                                                phylo = eel.tree,
-#                                                evolutionary_models = evolutionary_models,
-#                                                plot_map = TRUE,
-#                                                return_best_model_fit = TRUE,
-#                                                return_model_selection_df = TRUE,
-#                                                verbose = FALSE)
-# str(test, 2)
-# test$model_selection_df
-# test$best_model_fit$opt
-# test$ace
-#
-# ##### Make a simulation with an extreme model, to check that the contMap actually change depending on the model fitted #####
-#
-# # Rescale tree for extreme trend
-#
-# # Create function to rescale phylo
-# rescaled_phylo_fn <- rescale.phylo(phy = eel.tree, model = "EB")
-# # Rescale phylogeny using the estimated parameters from the best model
-# eel.tree_trend_scaled <- do.call(what = rescaled_phylo_fn, args = list(a = -0.1, sigsq = 1))
-#
-# plot(eel.tree)
-# plot(eel.tree_trend_scaled)
-#
-# # Simulate Brownian evolution on that tree
-# BM_simul <- fastBM(tree = eel.tree_trend_scaled, nsim = 1)
-#
-# test_simul <- prepare_trait_data_for_continuous_data(tip_data = BM_simul,
-#                                                      phylo = eel.tree,
-#                                                      evolutionary_models = c("BM", "EB"),
-#                                                      plot_map = TRUE,
-#                                                      return_best_model_fit = TRUE,
-#                                                      return_model_selection_df = TRUE,
-#                                                      verbose = FALSE)
-# str(test_simul, 2)
-# test_simul$model_selection_df
-# test_simul$best_model_fit$opt
-# test_simul$ace
-#
-# test_simul_2 <- prepare_trait_data_for_continuous_data(tip_data = BM_simul,
-#                                                      phylo = eel.tree,
-#                                                      evolutionary_models = c("BM"),
-#                                                      plot_map = TRUE,
-#                                                      return_best_model_fit = TRUE,
-#                                                      return_model_selection_df = TRUE,
-#                                                      verbose = FALSE)
-# str(test_simul_2, 2)
-# test_simul_2$model_selection_df
-# test_simul_2$best_model_fit$opt
-# test_simul_2$ace
 
 
 ### Sub-function to handle continuous data ####

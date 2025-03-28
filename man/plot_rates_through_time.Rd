@@ -20,14 +20,14 @@ plot_rates_through_time(
 )
 }
 \arguments{
-\item{STRAPP_tests_over_time}{List of elements generated with \code{\link[=run_STRAPP_test_over_time]{run_STRAPP_test_over_time()}},
+\item{STRAPP_tests_over_time}{List of elements generated with \code{\link[=run_STRAPP_tests_over_time]{run_STRAPP_tests_over_time()}},
 that summarize the results of multiple STRAPP tests across \verb{$time_steps}. The list needs to include two data.frame:
 \verb{$trait_data_df_over_time} and \verb{$diversification_data_df_over_time} by setting \code{extract_trait_data_melted_df = TRUE}
 and \code{extract_diversification_data_melted_df = TRUE}.}
 
 \item{rate_type}{A character string specifying the type of diversification rates to use.
 Must be one of 'speciation', 'extinction' or 'net_diversification' (default).
-Even if the \code{STRAPP_tests_over_time} object was generated with \code{\link[=run_STRAPP_test_over_time]{run_STRAPP_test_over_time()}}
+Even if the \code{STRAPP_tests_over_time} object was generated with \code{\link[=run_STRAPP_tests_over_time]{run_STRAPP_tests_over_time()}}
 for testing another type of rates, the \verb{$trait_data_df_over_time} and \verb{$diversification_data_df_over_time} data frames
 will contain data for all types of rates.}
 
@@ -86,7 +86,7 @@ If a \code{PDF_file_path} is provided, the function will also generate a PDF fil
 }
 \description{
 Plot the evolution of diversification rates in relation to trait values
-extracted for multiple \code{time_steps} with \code{\link[=run_STRAPP_test_over_time]{run_STRAPP_test_over_time()}}.
+extracted for multiple \code{time_steps} with \code{\link[=run_STRAPP_tests_over_time]{run_STRAPP_tests_over_time()}}.
 
 Rates are averaged across branches at each time step (i.e., \code{focal_time}).
 \itemize{
@@ -96,7 +96,7 @@ Rates are averaged across branches at each time step (i.e., \code{focal_time}).
 }
 }
 \examples{
-## Load results of run_STRAPP_test_over_time()
+## Load results of run_STRAPP_tests_over_time()
 data(STRAPP_tests_over_time_temp_example_2, package = "deepSTRAPP")
 
 ## Plot rates through time for continuous data
@@ -197,7 +197,7 @@ print(plotTT_biogeographic$rates_TT_ggplot)
 
 }
 \seealso{
-\code{\link[=run_STRAPP_test_over_time]{run_STRAPP_test_over_time()}}
+\code{\link[=run_STRAPP_tests_over_time]{run_STRAPP_tests_over_time()}}
 }
 \author{
 Maël Doré
