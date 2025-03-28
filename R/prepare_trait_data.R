@@ -4,7 +4,59 @@
 
 #' @title Map trait evolution on a time-calibrated phylogeny
 #'
-
+#' @description Map trait evolution on a time-calibrated phylogeny in several steps:
+#'
+#'   * (1) Fit evolutionary models to trait data using Maximum Likelihood.
+#'   * (2) Select the best fitting model comparing AICc.
+#'   * (3) Infer ancestral characters estimates (ACE) at nodes.
+#'   * (4) Run stochastic mapping simulations to generate evolutionary histories
+#'     compatible with the best model and infered ACE. (Only for categorical and biogeographic data)
+#'   * (5) Infer ancestral states along branches
+#'     - For continuous traits = use interpolation to produce a `contMap`.
+#'     - For categorical and biogeographic data = compute posterior frequencies of each state/range
+#'       to produce a `densityMap` for each state/range.
+#'
+#' @param tip_data Named numerical or character string vector of trait values/states/ranges at tips.
+#'   Names should be ordered as the tip labels in the phylogeny foudn in `phylo$tip.label`.
+#' @param trait_data_type Character string. Type of trait data. Either: "continuous", "categorical" or "biogeographic".
+#' @param phylo Time-calibrated phylogeny. Object of class `"phylo"` as defined in [ape].
+#'   Tip labels (`phylo$tip.label`) should match names in `tip_data`.
+#' @param evolutionary_models (Vector of) character string(s). To provide the set of evolutionary models to fit on the data.
+#'   Models available for continuous data are detailed in [geiger::fitContinuous()].
+#'   Models available for categorical data are detailed in [geiger::fitDiscrete()].
+#'   Models for biogeographic data are fit with `BioGeoBEARS`.
+#'   The current version of `deepSTRAPP` implements BAYAREALIKE, DIVALIKE, DEC models and their +J variation
+#'   (including jump-dispersal events). For details, please refers to the BioGeoBEARS documentation.
+#' @param res Integer. Define the number of time steps used to interpolate/estimate trait value/state/range in contMap/densityMap.
+#' @param nb_simulations Integer. Define the number of simulations generated for stochastic mapping. Default = 1000. Only for "categorical" and "biogeographic" data.
+#' @param plot_map Logical. Whether to plot or not the phylogeny with mapped trait evolution.
+#' @param plot_overlay Logical. If `TRUE` (default), plot a unique densityMap with overlapping states/ranges using transparency.
+#'    If `FALSE`, plot a densityMap per state/range. Only for "categorical" and "biogeographic" data.
+#' @param PDF_file_path Character string. If provided, the plot will be saved in a PDF file following the path provided here. The path must end with '.pdf'.
+#' @param return_ace Logical. Whether the names vector of ancestral characters estimates (ACE) at internal nodes should be returned in the output. Default = `TRUE`.
+#' @param return_simmaps Logical. Whether the evolutionary histories simulated during stochastic mapping (i.e., `simmaps`) should be returned in the output.
+#'  Default = `TRUE`. Only for "categorical" and "biogeographic" data.
+#' @param return_best_model_fit Logical. Whether to output of the best fitting model in the function output. Default = `FALSE`.
+#' @param return_model_selection_df Logical. Whether to include the data.frame summarizing model comparisons used to select the best fitting model should be returned in the output. Default = `FALSE`.
+#' @param verbose Logical. Should progression be displayed? A message will be printed for every steps in the process. Default is `FALSE`.
+#'
+#' @export
+#' @importFrom stats logLik
+#' @importFrom geiger fitContinuous
+#' @importFrom phytools rescale fastAnc contMap densityMap
+#' @importFrom grDevices pdf dev.off
+#'
+#' @details To write
+#'
+#' @return To write
+#'
+#' @author Maël Doré
+#'
+#' @seealso [geiger::fitContinuous()] [geiger::fitDiscrete()] [phytools::contMap()] [phytools::densityMap()]
+#'
+#' @examples
+#' # To write
+#'
 
 ## Currently, For continuous traits
 # Input = contMap
@@ -88,7 +140,6 @@ prepare_trait_data <- function (
            # Output = contMap. Trait values are interpolated along branches.
            trait_data_output <- prepare_trait_data_for_continuous_data(
              tip_data = tip_data,
-             trait_data_type = trait_data_type,
              phylo = phylo,
              evolutionary_models = evolutionary_models, # Default = "BM" for continuous data
              res = res,
@@ -104,7 +155,6 @@ prepare_trait_data <- function (
            # Output = densityMap (+ simmaps). Include simulations of trait states.
            trait_data_output <- prepare_trait_data_for_categorical_data(
              tip_data = tip_data,
-             trait_data_type = trait_data_type,
              phylo = phylo,
              evolutionary_models = evolutionary_models, # Default = "ARD" for categorical data
              res = res,
@@ -123,7 +173,6 @@ prepare_trait_data <- function (
            # Output = densityMap (+ simmaps). Include simulations of geographic ranges.
            trait_data_output <- prepare_trait_data_for_biogeographic_data(
              tip_data = tip_data,
-             trait_data_type = trait_data_type,
              phylo = phylo,
              evolutionary_models = evolutionary_models, # Default = "DEC+J" for biogeographic data
              nb_simulations = nb_simulations, # Only for categorical and biogeographic data
@@ -144,34 +193,75 @@ prepare_trait_data <- function (
   return(invisible(trait_data_output))
 }
 
+#
+# library(phytools)
+# data(eel.tree)
+# data(eel.data)
+#
+# # Extract body size
+# eel_data <- setNames(eel.data$Max_TL_cm,
+#                      rownames(eel.data))
+#
+# tip_data <- eel_data
+# phylo <- eel.tree
+# evolutionary_models <- c("EB", "OU", "BM", "lambda")
+#
+# test <- prepare_trait_data_for_continuous_data(tip_data = eel_data,
+#                                                phylo = eel.tree,
+#                                                evolutionary_models = evolutionary_models,
+#                                                plot_map = TRUE,
+#                                                return_best_model_fit = TRUE,
+#                                                return_model_selection_df = TRUE,
+#                                                verbose = FALSE)
+# str(test, 2)
+# test$model_selection_df
+# test$best_model_fit$opt
+# test$ace
+#
+# ##### Make a simulation with an extreme model, to check that the contMap actually change depending on the model fitted #####
+#
+# # Rescale tree for extreme trend
+#
+# # Create function to rescale phylo
+# rescaled_phylo_fn <- rescale.phylo(phy = eel.tree, model = "EB")
+# # Rescale phylogeny using the estimated parameters from the best model
+# eel.tree_trend_scaled <- do.call(what = rescaled_phylo_fn, args = list(a = -0.1, sigsq = 1))
+#
+# plot(eel.tree)
+# plot(eel.tree_trend_scaled)
+#
+# # Simulate Brownian evolution on that tree
+# BM_simul <- fastBM(tree = eel.tree_trend_scaled, nsim = 1)
+#
+# test_simul <- prepare_trait_data_for_continuous_data(tip_data = BM_simul,
+#                                                      phylo = eel.tree,
+#                                                      evolutionary_models = c("BM", "EB"),
+#                                                      plot_map = TRUE,
+#                                                      return_best_model_fit = TRUE,
+#                                                      return_model_selection_df = TRUE,
+#                                                      verbose = FALSE)
+# str(test_simul, 2)
+# test_simul$model_selection_df
+# test_simul$best_model_fit$opt
+# test_simul$ace
+#
+# test_simul_2 <- prepare_trait_data_for_continuous_data(tip_data = BM_simul,
+#                                                      phylo = eel.tree,
+#                                                      evolutionary_models = c("BM"),
+#                                                      plot_map = TRUE,
+#                                                      return_best_model_fit = TRUE,
+#                                                      return_model_selection_df = TRUE,
+#                                                      verbose = FALSE)
+# str(test_simul_2, 2)
+# test_simul_2$model_selection_df
+# test_simul_2$best_model_fit$opt
+# test_simul_2$ace
 
-library(phytools)
-data(eel.tree)
-data(eel.data)
 
-# Extract body size
-eel_data <- setNames(eel.data$Max_TL_cm,
-                     rownames(eel.data))
-
-tip_data <- eel_data
-phylo <- eel.tree
-evolutionary_models <- c("EB", "rate_trend", "BM")
-
-test <- prepare_trait_data_for_continuous_data(tip_data = eel_data,
-                                               phylo = eel.tree,
-                                               evolutionary_models = c("EB", "BM", "lambda"),
-                                               plot_map = TRUE,
-                                               return_best_model_fit = TRUE,
-                                               return_model_selection_df = TRUE,
-                                               verbose = FALSE)
-str(test, 2)
-test$best_model_fit$opt
-test$ace
 ### Sub-function to handle continuous data ####
 
 prepare_trait_data_for_continuous_data <- function (
     tip_data,
-    trait_data_type,
     phylo,
     evolutionary_models = "BM", # Default = "BM" for continuous data
     res = 100,
@@ -339,7 +429,7 @@ prepare_trait_data_for_continuous_data <- function (
   # Adjust model name
   if (best_model_name == "rate_trend") { best_model_name <- "trend" }
   # Create function to rescale phylo
-  rescaled_phylo_fn <- rescale.phylo(phy = phylo, model = best_model_name)
+  rescaled_phylo_fn <- phytools::rescale(x = phylo, model = best_model_name)
   # Extract parameters from best model fit
   fun_args <- formals(fun = rescaled_phylo_fn)
   best_model_args <- best_model_fit$opt[names(fun_args)]
@@ -360,6 +450,7 @@ prepare_trait_data_for_continuous_data <- function (
   if (verbose) { cat(paste0("\n", Sys.time(), " - Create contMap by interpolating values along branches.\n\n")) }
 
   contMap <- phytools::contMap(tree = phylo,
+                               method = "user",
                                x = tip_data,
                                anc.states = ACE_output,
                                res = res, # Number of time steps
@@ -374,7 +465,7 @@ prepare_trait_data_for_continuous_data <- function (
 
     plot(contMap)
 
-    dev.off()
+    grDevices::dev.off()
 
   }
 
@@ -536,7 +627,7 @@ select_best_trait_model_from_geiger <- function (list_model_fits)
 
   # Extract ln-likelihood, number of parameters, and AICc from models' list
   models_comparison_df <- data.frame(model = names(list_model_fits),
-                                     logL = sapply(X = list_model_fits, FUN = logLik),
+                                     logL = sapply(X = list_model_fits, FUN = stats::logLik),
                                      k = sapply(X = list_model_fits, FUN = extract_k),
                                      AICc = sapply(X = list_model_fits, FUN = extract_AICc))
 
@@ -560,459 +651,470 @@ select_best_trait_model_from_geiger <- function (list_model_fits)
 }
 
 
-### Utility functions for tree transformation ####
+# ### Utility functions for tree transformation ####
+#
+# Used to copy the S3 method rescale.phylo() from geiger
+#
+# # Wrapper function for tree transformation from R package geiger
+# # Source: geiger/R/utilities-phylo.R
+# # Authors: LJ Harmon and JM Eastman
+# rescale.phylo <- function(phy,
+#                           model = c("BM", "OU", "EB", "nrate", "lrate", "trend", "lambda", "kappa", "delta", "white", "depth"),
+#                           ...)
+# {
+#
+#   model = match.arg(model, c("BM", "OU", "EB", "nrate", "lrate", "trend", "lambda",
+#                              "kappa", "delta", "white", "depth"))
+#
+#   if (!("phylo" %in% class(phy))) stop("supply 'phy' as a 'phylo' object")
+#
+#   FUN = switch(model,
+#                BM = .bm.phylo(phy),
+#                OU = .ou.phylo(phy),
+#                EB = .eb.phylo(phy),
+#                nrate = .nrate.phylo(phy),
+#                lrate = .lrate.phylo(phy),
+#                trend = .trend.phylo(phy),
+#                lambda = .lambda.phylo(phy),
+#                kappa = .kappa.phylo(phy),
+#                delta = .delta.phylo(phy),
+#                white = .white.phylo(phy),
+#                depth = .depth.phylo(phy)
+#   )
+#   class(FUN) = c("transformer", "function")
+#   dots = list(...)
+#   if(!missing(...))
+#   {
+#     if(!all(names(dots) %in% argn(FUN)))
+#       stop(paste("The following parameters are expected:\n\t", paste(argn(FUN),
+#                                                                      collapse = "\n\t", sep = ""), sep = ""))
+#     return(FUN(...))
+#   } else {
+#     return(FUN)
+#   }
+# }
+#
+# # Tree transformation for BM from R package geiger
+# # Source: geiger/R/utilities-phylo.R
+# # Authors: LJ Harmon and JM Eastman
+# .bm.phylo = function(phy)
+# {
+#   el = phy$edge.length
+#   z = function(sigsq)
+#   {
+#     phy$edge.length = el * sigsq
+#     phy
+#   }
+#   attr(z, "argn") = "sigsq"
+#   return(z)
+# }
+#
+# # Tree transformation for OU from R package geiger
+# # Source: geiger/R/utilities-phylo.R
+# # Authors: LJ Harmon and JM Eastman
+# .ou.phylo = function(phy)
+# {
+#   ht = heights.phylo(phy)
+#   N = Ntip(phy)
+#   Tmax = ht$start[N+1]
+#   mm = match(1:nrow(ht), phy$edge[,2])
+#   ht$t1 = Tmax - ht$end[phy$edge[mm,1]]
+#   ht$t2 = ht$start - ht$end + ht$t1
+#   z = function(alpha, sigsq=1)
+#   {
+#     if(alpha<0) stop("'alpha' must be positive valued")
+#     bl = (1/(2*alpha)) * exp(-2*alpha * (Tmax-ht$t2)) * (1 - exp(-2 * alpha * ht$t2)) - (1/(2*alpha))*exp(-2*alpha * (Tmax-ht$t1)) * (1 - exp(-2 * alpha * ht$t1))
+#     phy$edge.length = bl[phy$edge[,2]]
+#     phy$edge.length = phy$edge.length * sigsq
+#     phy
+#   }
+#   attr(z, "argn") = c("alpha", "sigsq")
+#   return(z)
+# }
+#
+# # Tree transformation for EB from R package geiger
+# # Source: geiger/R/utilities-phylo.R
+# # Authors: LJ Harmon and JM Eastman
+# .eb.phylo = function(phy)
+# {
+#   ht = heights.phylo(phy)
+#   N = Ntip(phy)
+#   Tmax = ht$start[N+1]
+#   mm = match(1:nrow(ht), phy$edge[,2])
+#   ht$t1 = Tmax - ht$end[phy$edge[mm,1]]
+#   ht$t2 = ht$start - ht$end + ht$t1
+#
+#   z = function(a, sigsq = 1)
+#   {
+#     if(a == 0) return(phy)
+#     bl = (exp(a*ht$t2) - exp(a*ht$t1)) / (a)
+#     phy$edge.length = bl[phy$edge[,2]]
+#     phy$edge.length = phy$edge.length * sigsq
+#     phy
+#   }
+#   attr(z, "argn") = c("a", "sigsq")
+#   return(z)
+# }
+#
+# # Tree transformation for multi-regime BM with rates split by time from R package geiger
+# # Source: geiger/R/utilities-phylo.R
+# # Authors: LJ Harmon and JM Eastman
+# .nrate.phylo = function(phy)
+# {
+#   ht = heights.phylo(phy)
+#   N = Ntip(phy)
+#   Tmax = ht$start[N+1]
+#   mm = match(1:nrow(ht), phy$edge[,2])
+#   ht$t = Tmax - ht$end
+#   ht$e = ht$start - ht$end
+#   ht$a = ht$t - ht$e
+#   ht$rS = ht$a/Tmax
+#   ht$rE = ht$t/Tmax
+#
+#   dd = phy$edge[,2]
+#
+#   relscale.brlen = function(start, end, len, dat)
+#   {
+#     ss = start <= dat[,"time"]
+#     strt = min(which(ss))
+#
+#     ee = dat[,"time"] < end
+#     etrt = max(which(ee)) + 1
+#
+#     bl = numeric()
+#     fragment = numeric()
+#     marker = start
+#     for(i in strt:etrt)
+#     {
+#       fragment = c(fragment, (nm <- (min(c(end, dat[i, "time"])))) - marker)
+#       bl = c(bl,dat[i, "rate"])
+#       marker = nm
+#     }
+#     fragment = fragment/(sum(fragment))
+#     sclbrlen = numeric()
+#     for (i in 1:length(bl)) sclbrlen = c(sclbrlen, len * fragment[i] * bl[i])
+#     sc = structure(as.numeric(sclbrlen), names = strt:etrt)
+#     return(sc)
+#   }
+#
+#
+#   z = function(time, rate, sigsq=1)
+#   {
+#     if(any(time > 1) | any(time < 0)) stop("supply 'time' as a vector of relative time:\n\tvalues should be in the range 0 (root) to 1 (present)")
+#     if(any(rate < 0)) stop("'rate' must consist of positive values")
+#     if(length(time) != length(rate)) stop("'time' and 'rate' must be of equal length")
+#     phy$edge.length = phy$edge.length * sigsq
+#     ordx = order(time)
+#     time = time[ordx]
+#     rate = rate[ordx]
+#     dat = cbind(time=c(0,time, 1), rate = (c(1, 1, rate)))
+#     rs = sapply(dd, function(x) as.numeric(sum(relscale.brlen(ht$rS[x], ht$rE[x], ht$e[x], dat))))
+#     phy$edge.length = rs
+#     phy
+#   }
+#   attr(z, "argn") = c("time", "rate", "sigsq")
+#   return(z)
+# }
+#
+# # Tree transformation for multi-regime BM with rates split by clades from R package geiger
+# # Source: geiger/R/utilities-phylo.R
+# # Authors: LJ Harmon and JM Eastman
+# .lrate.phylo = function(phy)
+# {
+#   N = Ntip(phy)
+#   n = Nnode(phy)
+#   cache = .cache.tree(phy)
+#   cache$phy = phy
+#   vv = rep(1, N+n-1)
+#
+#   z = function(node, rate, sigsq = 1)
+#   {
+#     shifts = c(sort(node[node > N]), node[node <= N])
+#     mm = match(shifts, node)
+#     rates = rate[mm]
+#
+#     phy$edge.length = phy$edge.length * sigsq
+#     for(i in 1:length(shifts)) vv = .assigndescendants(vv, shifts[i], rates[i], exclude = shifts, cache = cache)
+#     phy$edge.length = vv * phy$edge.length
+#     phy
+#   }
+#
+#   attr(z, "argn") = c("node", "rate", "sigsq")
+#   return(z)
+# }
+#
+# # Tree transformation for "rate_trend" model from R package geiger
+# # Source: geiger/R/utilities-phylo.R
+# # Authors: LJ Harmon and JM Eastman
+# .trend.phylo = function(phy)
+# {
+#   ht = heights.phylo(phy)
+#   N = Ntip(phy)
+#   Tmax = ht$start[N+1]
+#   mm = match(1:nrow(ht), phy$edge[,2])
+#   ht$head = Tmax - ht$end[phy$edge[mm,1]] # age
+#   ht$tail = ht$head + (ht$start - ht$end)
+#
+#   z = function(slope, sigsq = 1)
+#   {
+#     # begin (age): head
+#     # end: tail
+#     ht$br = 1 + ht$head * slope
+#     ht$er = 1 + ht$tail * slope
+#     scl = sapply(1:nrow(ht),
+#                  function(idx)
+#                  {
+#                    if(idx == N+1) return(NA)
+#                    if(ht$br[idx] > 0 & ht$er[idx] > 0)
+#                    {
+#                      return((ht$br[idx]+ht$er[idx])/2)
+#                    } else if (ht$br[idx] < 0 & ht$er[idx] < 0) {
+#                      return(0)
+#                    } else {
+#                      si = -1/slope
+#                      return(ht$br[idx] * (si-ht$head[idx]) / (2 * (ht$tail[idx] - ht$head[idx])))
+#                    }
+#                  })
+#
+#     phy$edge.length = phy$edge.length * scl[phy$edge[,2]]
+#     phy$edge.length = phy$edge.length * sigsq
+#     phy
+#   }
+#   attr(z, "argn") = c("slope", "sigsq")
+#   return(z)
+# }
+#
+# # Tree transformation for Pagel's lambda model from R package geiger
+# # Source: geiger/R/utilities-phylo.R
+# # Authors: LJ Harmon and JM Eastman
+# .lambda.phylo = function(phy)
+# {
+#   ht = heights.phylo(phy)
+#   N = Ntip(phy)
+#   Tmax = ht$start[N+1]
+#   mm = match(1:N, phy$edge[,2])
+#   ht$e = ht$start - ht$end
+#   paths = .paths.phylo(phy)
+#
+#   z = function(lambda, sigsq = 1)
+#   {
+#     if(lambda < 0) stop("'lambda' must be positive valued")
+#
+#     bl = phy$edge.length * lambda
+#     bl[mm] = bl[mm] + (paths - (paths * lambda))
+#     phy$edge.length = bl
+#     if(any(phy$edge.length < 0))
+#     {
+#       warning("negative branch lengths encountered:\n\tlambda may be too large")
+#     }
+#     phy$edge.length = phy$edge.length * sigsq
+#     phy
+#   }
+#   attr(z, "argn") = c("lambda", "sigsq")
+#   return(z)
+# }
+#
+# # Tree transformation for Pagel's kappa model from R package geiger
+# # Source: geiger/R/utilities-phylo.R
+# # Authors: LJ Harmon and JM Eastman
+# .kappa.phylo = function(phy)
+# {
+#   z = function(kappa, sigsq = 1)
+#   {
+#     if(kappa < 0) stop("'kappa' must be positive valued")
+#
+#     phy$edge.length = phy$edge.length^kappa
+#     phy$edge.length = phy$edge.length * sigsq
+#     phy
+#   }
+#   attr(z, "argn") = c("kappa", "sigsq")
+#   return(z)
+# }
+#
+# # Tree transformation for Pagel's delta model from R package geiger
+# # Source: geiger/R/utilities-phylo.R
+# # Authors: LJ Harmon and JM Eastman
+# .delta.phylo = function(phy)
+# {
+#   ht = heights.phylo(phy)
+#   N = Ntip(phy)
+#   Tmax = ht$start[N+1]
+#   mm = match(1:nrow(ht), phy$edge[,2])
+#   ht$t = Tmax - ht$end
+#   ht$e = ht$start - ht$end
+#   ht$a = ht$t - ht$e
+#   if(sum(ht$a < -0.1) > 0) stop("Calculation error; contact developers (LJ Harmon and JM Eastman).")
+#   ht$a[ht$a < 0] <- 0
+#
+#   z = function(delta, sigsq = 1, rescale=TRUE)
+#   {
+#     if(delta < 0) stop("'delta' must be positive valued")
+#     bl = (ht$a + ht$e)^delta - ht$a^delta
+#     phy$edge.length = bl[phy$edge[,2]]
+#
+#     if(rescale)
+#     {
+#       scl = Tmax^delta
+#       phy$edge.length = (phy$edge.length/scl) * Tmax
+#     }
+#     phy$edge.length = phy$edge.length * sigsq
+#     phy
+#   }
+#   attr(z, "argn") = c("delta", "sigsq")
+#   return(z)
+# }
+#
+# # Tree transformation for a non-phylogenetic "white" model from R package geiger
+# # that assumes there is no covariance structure among species
+# # Internal branches are set to a length of zero
+# # Source: geiger/R/utilities-phylo.R
+# # Authors: LJ Harmon and JM Eastman
+# .white.phylo = function(phy)
+# {
+#   N = Ntip(phy)
+#   phy$edge.length[] = 0
+#   phy$edge.length[phy$edge[,2] <= N] = 1
+#   el = phy$edge.length
+#   z = function(sigsq = 1)
+#   {
+#     phy$edge.length = el * sigsq
+#     phy
+#   }
+#   attr(z, "argn") = "sigsq"
+#   return(z)
+# }
+#
+# # Tree transformation "depth" model from R package geiger
+# # Adjusts the total depth of the tree
+# # which in return increase/decrease rates of evolution
+# # Source: geiger/R/utilities-phylo.R
+# # Authors: LJ Harmon and JM Eastman
+# .depth.phylo = function(phy)
+# {
+#   orig = max(heights.phylo(phy))
+#   z = function(depth)
+#   {
+#     phy$edge.length <- (phy$edge.length/orig) * depth
+#     if(!is.null(phy$root.edge)) phy$root.edge = (phy$root.edge/orig) * depth
+#     phy
+#   }
+#   attr(z, "argn") = "depth"
+#   z
+# }
+#
+# # Internal function from R package geiger
+# # Compute path length from root to tip
+# # Source: geiger/R/utilities-phylo.R
+# # Authors: LJ Harmon and JM Eastman
+# .paths.phylo = function(phy, ...)
+# {
+#
+#   ## much from ape:::vcv.phylo()
+#   phy <- reorder(phy, "postorder")
+#
+#   FUN = function(vcv = FALSE)
+#   {
+#     n <- length(phy$tip.label)
+#     pp <- .cache.descendants(phy)$tips
+#     e1 <- phy$edge[, 1]
+#     e2 <- phy$edge[, 2]
+#     EL <- phy$edge.length
+#     xx <- numeric(n + phy$Nnode)
+#     if(vcv) vmat = matrix(0, n, n)
+#     for (i in length(e1):1)
+#     {
+#       var.cur.node <- xx[e1[i]]
+#       xx[e2[i]] <- var.cur.node + EL[i]
+#       if(vcv)
+#       {
+#         j <- i - 1L
+#         while (e1[j] == e1[i] && j > 0)
+#         {
+#           left = pp[[e2[j]]]
+#           right = pp[[e2[i]]]
+#           vmat[left, right] <- vmat[right, left] <- var.cur.node
+#           j <- j - 1L
+#         }
+#       }
+#     }
+#     if(vcv)
+#     {
+#       diags <- 1 + 0:(n - 1) * (n + 1)
+#       vmat[diags] <- xx[1:n]
+#       colnames(vmat) <- rownames(vmat) <- phy$tip.label
+#       return(vmat)
+#     } else {
+#       return(xx[1:n])
+#     }
+#   }
+#
+#   FUN(...)
+# }
+#
+# ## Internal function from R package geiger
+# # Associated C scripts in /src/utilities.cpp
+# # Source: geiger/R/utilities-phylo.R
+# # Authors: LJ Harmon and JM Eastman
+#
+# # Declare the use of compiled C code in the package
+# # Add an import in NAMESPACE
+# # Need to add things listed in Rcpp::Rcpp.package.skeleton() to get the necessary changes for the package to include Rcpp
+# # Need to add CallEntries in init.c such as R_registerRoutines(dll, CEntries, CallEntries, NULL, NULL);
+# #' @useDynLib deepSTRAPP
+# #' @importFrom Rcpp evalCpp
+#
+# .cache.descendants = function(phy)
+# {
+#   # Fetches all tips subtended by each internal node
+#
+#   N = as.integer(Ntip(phy))
+#   n = as.integer(Nnode(phy))
+#
+#   phy = reorder(phy, "postorder")
+#
+#   zz = list(N=N,
+#             MAXNODE=N+n,
+#             ANC=as.integer(phy$edge[,1]),
+#             DES=as.integer(phy$edge[,2])
+#   )
+#
+#   res = .Call("cache_descendants", phy = zz, PACKAGE = "geiger")
+#   return(res)
+# }
+#
+#
+# # Internal function from R package geiger
+# # Compute heights of nodes in phylo
+# # Source: geiger/R/utilities-phylo.R
+# # Authors: LJ Harmon and JM Eastman
+# heights.phylo = function(x)
+# {
+#   phy = x
+#   phy <- reorder(phy, "postorder")
+#   n <- length(phy$tip.label)
+#   n.node <- phy$Nnode
+#   xx <- numeric(n + n.node) # ending times
+#   for (i in nrow(phy$edge):1) xx[phy$edge[i, 2]] <- xx[phy$edge[i, 1]] + phy$edge.length[i]
+#   root = ifelse(is.null(phy$root.edge), 0, phy$root.edge)
+#   labs = c(phy$tip.label, phy$node.label)
+#   depth = max(xx)
+#   tt = depth - xx # time to 'present day' of branch starts
+#   idx = 1:length(tt)
+#   #dd = phy$edge.length[idx]
+#   mm = match(1:length(tt), c(phy$edge[, 2], Ntip(phy) + 1))
+#   dd = c(phy$edge.length, root)[mm] # reordered bls
+#   ss = tt + dd
+#   res = cbind(ss, tt)
+#   rownames(res) = idx
+#   colnames(res) = c("start", "end")
+#   res = data.frame(res)
+#   res
+# }
 
-# Wrapper function for tree transformation from R package geiger
-# Source: geiger/R/utilities-phylo.R
-# Authors: LJ Harmon and JM Eastman
-rescale.phylo <- function(phy,
-                          model = c("BM", "OU", "EB", "nrate", "lrate", "trend", "lambda", "kappa", "delta", "white", "depth"),
-                          ...)
-{
-
-  model = match.arg(model, c("BM", "OU", "EB", "nrate", "lrate", "trend", "lambda",
-                             "kappa", "delta", "white", "depth"))
-
-  if (!("phylo" %in% class(phy))) stop("supply 'phy' as a 'phylo' object")
-
-  FUN = switch(model,
-               BM = .bm.phylo(phy),
-               OU = .ou.phylo(phy),
-               EB = .eb.phylo(phy),
-               nrate = .nrate.phylo(phy),
-               lrate = .lrate.phylo(phy),
-               trend = .trend.phylo(phy),
-               lambda = .lambda.phylo(phy),
-               kappa = .kappa.phylo(phy),
-               delta = .delta.phylo(phy),
-               white = .white.phylo(phy),
-               depth = .depth.phylo(phy)
-  )
-  class(FUN) = c("transformer", "function")
-  dots = list(...)
-  if(!missing(...))
-  {
-    if(!all(names(dots) %in% argn(FUN)))
-      stop(paste("The following parameters are expected:\n\t", paste(argn(FUN),
-                                                                     collapse = "\n\t", sep = ""), sep = ""))
-    return(FUN(...))
-  } else {
-    return(FUN)
-  }
-}
-
-# Tree transformation for BM from R package geiger
-# Source: geiger/R/utilities-phylo.R
-# Authors: LJ Harmon and JM Eastman
-.bm.phylo = function(phy)
-{
-  el = phy$edge.length
-  z = function(sigsq)
-  {
-    phy$edge.length = el * sigsq
-    phy
-  }
-  attr(z, "argn") = "sigsq"
-  return(z)
-}
-
-# Tree transformation for OU from R package geiger
-# Source: geiger/R/utilities-phylo.R
-# Authors: LJ Harmon and JM Eastman
-.ou.phylo = function(phy)
-{
-  ht = heights.phylo(phy)
-  N = Ntip(phy)
-  Tmax = ht$start[N+1]
-  mm = match(1:nrow(ht), phy$edge[,2])
-  ht$t1 = Tmax - ht$end[phy$edge[mm,1]]
-  ht$t2 = ht$start - ht$end + ht$t1
-  z = function(alpha, sigsq=1)
-  {
-    if(alpha<0) stop("'alpha' must be positive valued")
-    bl = (1/(2*alpha)) * exp(-2*alpha * (Tmax-ht$t2)) * (1 - exp(-2 * alpha * ht$t2)) - (1/(2*alpha))*exp(-2*alpha * (Tmax-ht$t1)) * (1 - exp(-2 * alpha * ht$t1))
-    phy$edge.length = bl[phy$edge[,2]]
-    phy$edge.length = phy$edge.length * sigsq
-    phy
-  }
-  attr(z, "argn") = c("alpha", "sigsq")
-  return(z)
-}
-
-# Tree transformation for EB from R package geiger
-# Source: geiger/R/utilities-phylo.R
-# Authors: LJ Harmon and JM Eastman
-.eb.phylo = function(phy)
-{
-  ht = heights.phylo(phy)
-  N = Ntip(phy)
-  Tmax = ht$start[N+1]
-  mm = match(1:nrow(ht), phy$edge[,2])
-  ht$t1 = Tmax - ht$end[phy$edge[mm,1]]
-  ht$t2 = ht$start - ht$end + ht$t1
-
-  z = function(a, sigsq = 1)
-  {
-    if(a == 0) return(phy)
-    bl = (exp(a*ht$t2) - exp(a*ht$t1)) / (a)
-    phy$edge.length = bl[phy$edge[,2]]
-    phy$edge.length = phy$edge.length * sigsq
-    phy
-  }
-  attr(z, "argn") = c("a", "sigsq")
-  return(z)
-}
-
-# Tree transformation for multi-regime BM with rates split by time from R package geiger
-# Source: geiger/R/utilities-phylo.R
-# Authors: LJ Harmon and JM Eastman
-.nrate.phylo = function(phy)
-{
-  ht = heights.phylo(phy)
-  N = Ntip(phy)
-  Tmax = ht$start[N+1]
-  mm = match(1:nrow(ht), phy$edge[,2])
-  ht$t = Tmax - ht$end
-  ht$e = ht$start - ht$end
-  ht$a = ht$t - ht$e
-  ht$rS = ht$a/Tmax
-  ht$rE = ht$t/Tmax
-
-  dd = phy$edge[,2]
-
-  relscale.brlen = function(start, end, len, dat)
-  {
-    ss = start <= dat[,"time"]
-    strt = min(which(ss))
-
-    ee = dat[,"time"] < end
-    etrt = max(which(ee)) + 1
-
-    bl = numeric()
-    fragment = numeric()
-    marker = start
-    for(i in strt:etrt)
-    {
-      fragment = c(fragment, (nm <- (min(c(end, dat[i, "time"])))) - marker)
-      bl = c(bl,dat[i, "rate"])
-      marker = nm
-    }
-    fragment = fragment/(sum(fragment))
-    sclbrlen = numeric()
-    for (i in 1:length(bl)) sclbrlen = c(sclbrlen, len * fragment[i] * bl[i])
-    sc = structure(as.numeric(sclbrlen), names = strt:etrt)
-    return(sc)
-  }
-
-
-  z = function(time, rate, sigsq=1)
-  {
-    if(any(time > 1) | any(time < 0)) stop("supply 'time' as a vector of relative time:\n\tvalues should be in the range 0 (root) to 1 (present)")
-    if(any(rate < 0)) stop("'rate' must consist of positive values")
-    if(length(time) != length(rate)) stop("'time' and 'rate' must be of equal length")
-    phy$edge.length = phy$edge.length * sigsq
-    ordx = order(time)
-    time = time[ordx]
-    rate = rate[ordx]
-    dat = cbind(time=c(0,time, 1), rate = (c(1, 1, rate)))
-    rs = sapply(dd, function(x) as.numeric(sum(relscale.brlen(ht$rS[x], ht$rE[x], ht$e[x], dat))))
-    phy$edge.length = rs
-    phy
-  }
-  attr(z, "argn") = c("time", "rate", "sigsq")
-  return(z)
-}
-
-# Tree transformation for multi-regime BM with rates split by clades from R package geiger
-# Source: geiger/R/utilities-phylo.R
-# Authors: LJ Harmon and JM Eastman
-.lrate.phylo = function(phy)
-{
-  N = Ntip(phy)
-  n = Nnode(phy)
-  cache = .cache.tree(phy)
-  cache$phy = phy
-  vv = rep(1, N+n-1)
-
-  z = function(node, rate, sigsq = 1)
-  {
-    shifts = c(sort(node[node > N]), node[node <= N])
-    mm = match(shifts, node)
-    rates = rate[mm]
-
-    phy$edge.length = phy$edge.length * sigsq
-    for(i in 1:length(shifts)) vv = .assigndescendants(vv, shifts[i], rates[i], exclude = shifts, cache = cache)
-    phy$edge.length = vv * phy$edge.length
-    phy
-  }
-
-  attr(z, "argn") = c("node", "rate", "sigsq")
-  return(z)
-}
-
-# Tree transformation for "rate_trend" model from R package geiger
-# Source: geiger/R/utilities-phylo.R
-# Authors: LJ Harmon and JM Eastman
-.trend.phylo = function(phy)
-{
-  ht = heights.phylo(phy)
-  N = Ntip(phy)
-  Tmax = ht$start[N+1]
-  mm = match(1:nrow(ht), phy$edge[,2])
-  ht$head = Tmax - ht$end[phy$edge[mm,1]] # age
-  ht$tail = ht$head + (ht$start - ht$end)
-
-  z = function(slope, sigsq = 1)
-  {
-    # begin (age): head
-    # end: tail
-    ht$br = 1 + ht$head * slope
-    ht$er = 1 + ht$tail * slope
-    scl = sapply(1:nrow(ht),
-                 function(idx)
-                 {
-                   if(idx == N+1) return(NA)
-                   if(ht$br[idx] > 0 & ht$er[idx] > 0)
-                   {
-                     return((ht$br[idx]+ht$er[idx])/2)
-                   } else if (ht$br[idx] < 0 & ht$er[idx] < 0) {
-                     return(0)
-                   } else {
-                     si = -1/slope
-                     return(ht$br[idx] * (si-ht$head[idx]) / (2 * (ht$tail[idx] - ht$head[idx])))
-                   }
-                 })
-
-    phy$edge.length = phy$edge.length * scl[phy$edge[,2]]
-    phy$edge.length = phy$edge.length * sigsq
-    phy
-  }
-  attr(z, "argn") = c("slope", "sigsq")
-  return(z)
-}
-
-# Tree transformation for Pagel's lambda model from R package geiger
-# Source: geiger/R/utilities-phylo.R
-# Authors: LJ Harmon and JM Eastman
-.lambda.phylo = function(phy)
-{
-  ht = heights.phylo(phy)
-  N = Ntip(phy)
-  Tmax = ht$start[N+1]
-  mm = match(1:N, phy$edge[,2])
-  ht$e = ht$start - ht$end
-  paths = .paths.phylo(phy)
-
-  z = function(lambda, sigsq = 1)
-  {
-    if(lambda < 0) stop("'lambda' must be positive valued")
-
-    bl = phy$edge.length * lambda
-    bl[mm] = bl[mm] + (paths - (paths * lambda))
-    phy$edge.length = bl
-    if(any(phy$edge.length < 0))
-    {
-      warning("negative branch lengths encountered:\n\tlambda may be too large")
-    }
-    phy$edge.length = phy$edge.length * sigsq
-    phy
-  }
-  attr(z, "argn") = c("lambda", "sigsq")
-  return(z)
-}
-
-# Tree transformation for Pagel's kappa model from R package geiger
-# Source: geiger/R/utilities-phylo.R
-# Authors: LJ Harmon and JM Eastman
-.kappa.phylo = function(phy)
-{
-  z = function(kappa, sigsq = 1)
-  {
-    if(kappa < 0) stop("'kappa' must be positive valued")
-
-    phy$edge.length = phy$edge.length^kappa
-    phy$edge.length = phy$edge.length * sigsq
-    phy
-  }
-  attr(z, "argn") = c("kappa", "sigsq")
-  return(z)
-}
-
-# Tree transformation for Pagel's delta model from R package geiger
-# Source: geiger/R/utilities-phylo.R
-# Authors: LJ Harmon and JM Eastman
-.delta.phylo = function(phy)
-{
-  ht = heights.phylo(phy)
-  N = Ntip(phy)
-  Tmax = ht$start[N+1]
-  mm = match(1:nrow(ht), phy$edge[,2])
-  ht$t = Tmax - ht$end
-  ht$e = ht$start - ht$end
-  ht$a = ht$t - ht$e
-  if(sum(ht$a < -0.1) > 0) stop("Calculation error; contact developers (LJ Harmon and JM Eastman).")
-  ht$a[ht$a < 0] <- 0
-
-  z = function(delta, sigsq = 1, rescale=TRUE)
-  {
-    if(delta < 0) stop("'delta' must be positive valued")
-    bl = (ht$a + ht$e)^delta - ht$a^delta
-    phy$edge.length = bl[phy$edge[,2]]
-
-    if(rescale)
-    {
-      scl = Tmax^delta
-      phy$edge.length = (phy$edge.length/scl) * Tmax
-    }
-    phy$edge.length = phy$edge.length * sigsq
-    phy
-  }
-  attr(z, "argn") = c("delta", "sigsq")
-  return(z)
-}
-
-# Tree transformation for a non-phylogenetic "white" model from R package geiger
-# that assumes there is no covariance structure among species
-# Internal branches are set to a length of zero
-# Source: geiger/R/utilities-phylo.R
-# Authors: LJ Harmon and JM Eastman
-.white.phylo = function(phy)
-{
-  N = Ntip(phy)
-  phy$edge.length[] = 0
-  phy$edge.length[phy$edge[,2] <= N] = 1
-  el = phy$edge.length
-  z = function(sigsq = 1)
-  {
-    phy$edge.length = el * sigsq
-    phy
-  }
-  attr(z, "argn") = "sigsq"
-  return(z)
-}
-
-# Tree transformation "depth" model from R package geiger
-# Adjusts the total depth of the tree
-# which in return increase/decrease rates of evolution
-# Source: geiger/R/utilities-phylo.R
-# Authors: LJ Harmon and JM Eastman
-.depth.phylo = function(phy)
-{
-  orig = max(heights.phylo(phy))
-  z = function(depth)
-  {
-    phy$edge.length <- (phy$edge.length/orig) * depth
-    if(!is.null(phy$root.edge)) phy$root.edge = (phy$root.edge/orig) * depth
-    phy
-  }
-  attr(z, "argn") = "depth"
-  z
-}
-
-# Internal function from R package geiger
-# Compute path length from root to tip
-# Source: geiger/R/utilities-phylo.R
-# Authors: LJ Harmon and JM Eastman
-.paths.phylo = function(phy, ...)
-{
-
-  ## much from ape:::vcv.phylo()
-  phy <- reorder(phy, "postorder")
-
-  FUN = function(vcv = FALSE)
-  {
-    n <- length(phy$tip.label)
-    pp <- .cache.descendants(phy)$tips
-    e1 <- phy$edge[, 1]
-    e2 <- phy$edge[, 2]
-    EL <- phy$edge.length
-    xx <- numeric(n + phy$Nnode)
-    if(vcv) vmat = matrix(0, n, n)
-    for (i in length(e1):1)
-    {
-      var.cur.node <- xx[e1[i]]
-      xx[e2[i]] <- var.cur.node + EL[i]
-      if(vcv)
-      {
-        j <- i - 1L
-        while (e1[j] == e1[i] && j > 0)
-        {
-          left = pp[[e2[j]]]
-          right = pp[[e2[i]]]
-          vmat[left, right] <- vmat[right, left] <- var.cur.node
-          j <- j - 1L
-        }
-      }
-    }
-    if(vcv)
-    {
-      diags <- 1 + 0:(n - 1) * (n + 1)
-      vmat[diags] <- xx[1:n]
-      colnames(vmat) <- rownames(vmat) <- phy$tip.label
-      return(vmat)
-    } else {
-      return(xx[1:n])
-    }
-  }
-
-  FUN(...)
-}
-
-## Internal function from R package geiger
-# Associated C scripts in /src/utilities.cpp
-# Source: geiger/R/utilities-phylo.R
-# Authors: LJ Harmon and JM Eastman
-
-# Declare the use of compiled C code in the package
-# Add an import in NAMESPACE
-# Need to use Rcpp::Rcpp.package.skeleton() to add the necessary changes to the package to include Rcpp
-# Need to add CallEntries in init.c such as R_registerRoutines(dll, CEntries, CallEntries, NULL, NULL);
+### Dummy function to force the use of Rcpp ####
 #' @useDynLib deepSTRAPP
-
-.cache.descendants = function(phy)
+#' @importFrom Rcpp evalCpp
+dummy_Rcpp <- function ()
 {
-  # Fetches all tips subtended by each internal node
-
-  N = as.integer(Ntip(phy))
-  n = as.integer(Nnode(phy))
-
-  phy = reorder(phy, "postorder")
-
-  zz = list(N=N,
-            MAXNODE=N+n,
-            ANC=as.integer(phy$edge[,1]),
-            DES=as.integer(phy$edge[,2])
-  )
-
-  res = .Call("cache_descendants", phy = zz, PACKAGE = "geiger")
-  return(res)
-}
-
-
-# Internal function from R package geiger
-# Compute heights of nodes in phylo
-# Source: geiger/R/utilities-phylo.R
-# Authors: LJ Harmon and JM Eastman
-heights.phylo = function(x)
-{
-  phy = x
-  phy <- reorder(phy, "postorder")
-  n <- length(phy$tip.label)
-  n.node <- phy$Nnode
-  xx <- numeric(n + n.node) # ending times
-  for (i in nrow(phy$edge):1) xx[phy$edge[i, 2]] <- xx[phy$edge[i, 1]] + phy$edge.length[i]
-  root = ifelse(is.null(phy$root.edge), 0, phy$root.edge)
-  labs = c(phy$tip.label, phy$node.label)
-  depth = max(xx)
-  tt = depth - xx # time to 'present day' of branch starts
-  idx = 1:length(tt)
-  #dd = phy$edge.length[idx]
-  mm = match(1:length(tt), c(phy$edge[, 2], Ntip(phy) + 1))
-  dd = c(phy$edge.length, root)[mm] # reordered bls
-  ss = tt + dd
-  res = cbind(ss, tt)
-  rownames(res) = idx
-  colnames(res) = c("start", "end")
-  res = data.frame(res)
-  res
+  Rcpp::evalCpp(code = "__cplusplus" )
 }

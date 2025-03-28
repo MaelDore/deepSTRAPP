@@ -5,20 +5,20 @@
 #' @title Plot evolution of diversification rates in relation to trait values over time
 #'
 #' @description Plot the evolution of diversification rates in relation to trait values
-#'   extracted for multiple `time_steps` with [deepSTRAPP::run_STRAPP_test_over_time()].
+#'   extracted for multiple `time_steps` with [deepSTRAPP::run_STRAPP_tests_over_time()].
 #'
 #'   Rates are averaged across branches at each time step (i.e., `focal_time`).
 #'   * For continuous data, branches are grouped by ranges of trait values defined by `quantile_ranges`.
 #'   * For categorical data, branches are grouped by trait states.
 #'   * For biogeographic data, branches are grouped by ranges.
 #'
-#' @param STRAPP_tests_over_time List of elements generated with [deepSTRAPP::run_STRAPP_test_over_time()],
+#' @param STRAPP_tests_over_time List of elements generated with [deepSTRAPP::run_STRAPP_tests_over_time()],
 #'   that summarize the results of multiple STRAPP tests across `$time_steps`. The list needs to include two data.frame:
 #'   `$trait_data_df_over_time` and `$diversification_data_df_over_time` by setting `extract_trait_data_melted_df = TRUE`
 #'   and `extract_diversification_data_melted_df = TRUE`.
 #' @param rate_type A character string specifying the type of diversification rates to use.
 #'   Must be one of 'speciation', 'extinction' or 'net_diversification' (default).
-#'   Even if the `STRAPP_tests_over_time` object was generated with [deepSTRAPP::run_STRAPP_test_over_time()]
+#'   Even if the `STRAPP_tests_over_time` object was generated with [deepSTRAPP::run_STRAPP_tests_over_time()]
 #'   for testing another type of rates, the `$trait_data_df_over_time` and `$diversification_data_df_over_time` data frames
 #'   will contain data for all types of rates.
 #' @param quantile_ranges Vector of numerical. Only for continuous trait data. Quantiles used as thresholds to group branches
@@ -68,10 +68,10 @@
 #'
 #' @author Maël Doré
 #'
-#' @seealso [deepSTRAPP::run_STRAPP_test_over_time()]
+#' @seealso [deepSTRAPP::run_STRAPP_tests_over_time()]
 #'
 #' @examples
-#' ## Load results of run_STRAPP_test_over_time()
+#' ## Load results of run_STRAPP_tests_over_time()
 #' data(STRAPP_tests_over_time_temp_example_2, package = "deepSTRAPP")
 #'
 #' ## Plot rates through time for continuous data

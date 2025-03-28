@@ -199,7 +199,7 @@
 #' \dontrun{  (May take several minutes to run)
 #' ## Run STRAPP test on net diversification rates
 #'
-#' STRAPP_tests_over_time <- run_STRAPP_test_over_time(
+#' STRAPP_tests_over_time <- run_STRAPP_tests_over_time(
 #'    contMap = Ponerinae_contMap,
 #'    ace = Ponerinae_ACE, tip_data = Ponerinae_data_ln_HW,
 #'    trait_data_type = "continuous",
@@ -245,34 +245,34 @@
 #'    STRAPP_results = STRAPP_tests_over_time$STRAPP_results_over_time[[2]]) }
 #'
 
-run_STRAPP_test_over_time <- function (contMap,
-                                       ace = NULL,
-                                       tip_data = NULL,
-                                       trait_data_type,
-                                       BAMM_object,
-                                       time_steps = NULL,
-                                       time_range = NULL,
-                                       nb_time_steps = NULL,
-                                       time_step_duration = NULL,
-                                       keep_tip_labels = TRUE,
-                                       rate_type = "net_diversification",
-                                       nb_permutations = NULL,
-                                       replace_samples = FALSE,
-                                       alpha = 0.05,
-                                       two_tailed = TRUE,
-                                       one_tailed_hypothesis = NULL,
-                                       posthoc_pairwise_tests = FALSE,
-                                       p.adjust_method = "none",
-                                       return_perm_data = FALSE,
-                                       nthreads = 1,
-                                       print_hypothesis = TRUE,
-                                       extract_trait_data_melted_df = FALSE,
-                                       extract_diversification_data_melted_df = FALSE,
-                                       return_STRAPP_results = FALSE,
-                                       return_updated_trait_data_with_contMap = FALSE,
-                                       return_updated_BAMM_object = FALSE,
-                                       verbose = TRUE,
-                                       verbose_extended = FALSE)
+run_STRAPP_tests_over_time <- function (contMap,
+                                        ace = NULL,
+                                        tip_data = NULL,
+                                        trait_data_type,
+                                        BAMM_object,
+                                        time_steps = NULL,
+                                        time_range = NULL,
+                                        nb_time_steps = NULL,
+                                        time_step_duration = NULL,
+                                        keep_tip_labels = TRUE,
+                                        rate_type = "net_diversification",
+                                        nb_permutations = NULL,
+                                        replace_samples = FALSE,
+                                        alpha = 0.05,
+                                        two_tailed = TRUE,
+                                        one_tailed_hypothesis = NULL,
+                                        posthoc_pairwise_tests = FALSE,
+                                        p.adjust_method = "none",
+                                        return_perm_data = FALSE,
+                                        nthreads = 1,
+                                        print_hypothesis = TRUE,
+                                        extract_trait_data_melted_df = FALSE,
+                                        extract_diversification_data_melted_df = FALSE,
+                                        return_STRAPP_results = FALSE,
+                                        return_updated_trait_data_with_contMap = FALSE,
+                                        return_updated_BAMM_object = FALSE,
+                                        verbose = TRUE,
+                                        verbose_extended = FALSE)
 {
   ### Check input validity
 
