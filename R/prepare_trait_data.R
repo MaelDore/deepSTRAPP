@@ -112,7 +112,8 @@
 #'                      rownames(eel.data))
 #'
 #' # Map trait evolution on the phylogeny, selecting among four models ("BM", "OU", "lambda", "kappa")
-#' mapped_cont_traits <- prepare_trait_data_for_continuous_data(tip_data = eel_data,
+#' mapped_cont_traits <- prepare_trait_data(tip_data = eel_data,
+#'    trait_data_type = "continuous",
 #'    phylo = eel.tree,
 #'    evolutionary_models = c("BM", "OU", "lambda", "kappa"),
 #'    plot_map = FALSE,
@@ -123,16 +124,18 @@
 #' # Explore output
 #' plot(mapped_cont_traits$contMap) # contMap with interpolated trait values
 #' mapped_cont_traits$model_selection_df # Summary of model selection
-#' mapped_cont_traits$best_model_fit$opt # Parameter estimates and optimization summary of the best model (Here, Pagel's lambda)
+#' # Parameter estimates and optimization summary of the best model
+#' # (Here, the best model is Pagel's lambda)
+#' mapped_cont_traits$best_model_fit$opt
 #' mapped_cont_traits$ace # Ancestral character estimates at nodes
 #'
 #' # ----- Example 2: Categorical data ----- #
 #'
-#' TBA
+#' # TBA
 #'
 #' # ----- Example 3: Biogeographic data ----- #
 #'
-#' TBA
+#' # TBA
 #'
 
 
