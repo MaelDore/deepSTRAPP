@@ -87,6 +87,7 @@ phytools::plot.contMap(mammals_contMap, lwd = 2)
 ape::nodelabels()
 abline(v = max(phytools::nodeHeights(mammals_contMap$tree)[,2]) - focal_time,
        col = "red", lty = 2, lwd = 2)
+
 # Plot initial node labels on cut stochastic map
 phytools::plot.contMap(updated_contMap)
 ape::nodelabels(text = updated_contMap$tree$initial_nodes_ID)

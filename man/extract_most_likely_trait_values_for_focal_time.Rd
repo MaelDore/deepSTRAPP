@@ -6,7 +6,8 @@
 \title{Extracts continuous trait data mapped on a phylogeny at a given time in the past}
 \usage{
 extract_most_likely_trait_values_for_focal_time(
-  contMap,
+  contMap = NULL,
+  densityMaps = NULL,
   ace = NULL,
   tip_data = NULL,
   trait_data_type = "continuous",

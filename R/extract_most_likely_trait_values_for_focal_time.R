@@ -211,31 +211,174 @@
 ## Update the reference to extract_most_likely_trait_values_for_focal_time() to link to the wrapper function!
 # Ex: in the doc of compute_STRAPP_test_for_focal_time.R
 
+# Note that the use of ace and tip_data is useful only for contMap! densityMaps should provide accurate ace and tip_data
+# Adjust doc, to explain better what is mandatory (contMap or densityMaps), and what is optional (ace and tip_data, for continuous traits)
+
 ### Possible update: Make it work with non-dichotomous trees!!!
 
 
-extract_most_likely_trait_values_for_focal_time <- function (contMap,
+extract_most_likely_trait_values_for_focal_time <- function (contMap = NULL,
+                                                             densityMaps = NULL,
                                                              ace = NULL,
                                                              tip_data = NULL,
-                                                             trait_data_type = "continuous",
+                                                             trait_data_type = "continuous", # Remove entry from the wrapper. Remove argument from the sub-functions
                                                              focal_time,
-                                                             update_contMap = FALSE,
+                                                             update_contMap = FALSE, # Change for update_map in the wrapper. Adjust to update_contMap / update_densityMaps in the sub-functions
                                                              keep_tip_labels = TRUE)
 {
 
   ### Check input validity
 
-  # focal_time must be positive and smaller or equal to root age
-  # focal_time must be numerical
+  {
+    ## contMap / densityMaps
+    # Must provide either contMap OR densityMaps depending on the type of traits
+    if ((is.null(contMap) & is.null(densityMaps)))
+    {
+      stop(paste0("You must provide a 'contMap' (for continuous traits) OR a 'densityMaps' (for categorical and biogeographic traits).\n",
+                  "See ?BAMMtools::prepare_trait_data(), ?phytools::contMap(), and ?phytools::densityMap() to learn how to generate those objects."))
+    }
+    if ((!is.null(contMap) & !is.null(densityMaps)))
+    {
+      stop(paste0("You must provide a 'contMap' (for continuous traits) OR a 'densityMaps' (for categorical and biogeographic traits) according to the type of trait data.\n",
+                  "For continuous traits, 'ace' and tip_data' can also be provided in complement to use accurate ML estimates of trait values at nodes and tips."))
+    }
 
-  # contMap must be a "contMap" class object and have a $maps slot
+    ## trait_data_type
+    # trait_data_type must be "continuous", categorical" or "biogeographic"
+    if (!(trait_data_type %in% c("continuous", "categorical", "biogeographic")))
+    {
+      stop("'trait_data_type' can only be 'continuous', 'categorical', or 'biogeographic'.")
+    }
 
-  # ace must be a named num vector with as many values as their is internal nodes
-  # names = node ID
-  # names must match node ID and be ordered (add a reordering step and send a warning if not)
+    ## Check that what is provided contMap OR densityMaps match the trait_data_type
+    if ((!is.null(contMap) & trait_data_type != "continuous"))
+    {
+      stop(paste0("You provided a 'contMap' but selected '",trait_data_type,"' as 'trait_data_type'. contMaps are used to map continuous traits.\n",
+                  "If you wish to extract trait values for a continuous trait, provide 'trait_data_type = continuous'.\n",
+                  "If you wish to extract trait states/ranges for ",trait_data_type," data, provide 'densityMaps' as input instead of 'contMap'"))
+    }
+    if ((!is.null(densityMaps) & !(trait_data_type %in% c("categorical", "biogeographic"))))
+    {
+      stop(paste0("You provided 'densityMaps' but selected '",trait_data_type,"' as 'trait_data_type'. densityMaps are used to map categorical or biogeographic data.\n",
+                  "If you wish to extract trait states/ranges for categorical or biogeographic data, provide 'trait_data_type = categorical' or 'trait_data_type = biogeographic' accordingly.\n",
+                  "If you wish to extract trait values for a continuous trait, provide 'contMap' as input instead of 'densityMaps'.\n",
+                  "\tYou can also provide 'ace' and tip_data' in complement to a 'contMap' to use accurate ML estimates of trait values at nodes and tips."))
+    }
 
-  # Same for tip data, but names are tip labels
-  # Ensure that all names match with tip labels (order can differ, but send a warning)
+    # Extract root age
+    if (trait_data_type == "continuous")
+    {
+      root_age <- max(phytools::nodeHeights(contMap$tree)[,2])
+    } else {
+      ### To adjust for densityMaps!!! ########
+    }
+
+    ## focal_time
+    # focal_time must be positive and smaller or equal to root age
+    if (focal_time < 0)
+    {
+      stop(paste0("'focal_time' must be a positive number. It represents the time as a distance from the present."))
+    }
+    if (focal_time > root_age)
+    {
+      stop(paste0("'focal_time' must be smaller or equals to the root age of the phylogeny.\n",
+                  "'focal_time' = ",focal_time,"; root age = ",root_age,"."))
+    }
+    # If focal_time equals root_age, send warning
+    if (focal_time == root_age)
+    {
+      warning(paste0("'focal_time' equals root age = ",root_age,". The function will return an empty list.\n"))
+    }
+
+    ### Only for continuous traits (to move into the sub-function)
+
+    ## contMap
+    # contMap must be a "contMap" class object
+    if (!("contMap" %in% class(contMap)))
+    {
+      stop("'contMap' must have the 'contMap' class. See ?phytools::contMap() and ?deepSTRAPP::prepare_data() to learn how to generate those objects.")
+    }
+    # contMap$tree must have a $maps element
+    if (is.null(contMap$tree$maps))
+    {
+      stop(paste0("'contMap' must have a $tree$maps element that provides the mapping of the evolution of the continuous trait on the phylogeny.\n",
+                  "See ?phytools::contMap() and ?deepSTRAPP::prepare_data() to learn how to generate those objects."))
+    }
+
+    ## ace
+    if (!is.null(ace))
+    {
+      # ace must be a named numerical vector
+      if (!is.numeric(ace))
+      {
+        stop(paste0("'ace' is used only for continuous traits. It must be a named numerical vector that provides trait values for internal nodes.\n",
+                    "The object you provided is not a numerical vector."))
+      }
+      # ace should have many values as there are internal nodes in the contMap$tree
+      if (length(ace) != contMap$tree$Nnode)
+      {
+        stop(paste0("'ace' should have as many values as there are internal nodes in the contMap$tree.\n",
+                    "Number of values in 'ace' = ",length(ace),"; number of internal nodes in the contMap$tree = ",contMap$tree$Nnode,"."))
+      }
+      # names(ace) = internal node IDs
+      if (!all(as.numeric(names(ace)) %in% (length(contMap$tree$tip.label) + 1):(length(contMap$tree$tip.label) + contMap$tree$Nnode)))
+      {
+        stop(paste0("'names(ace)' should match numerical ID of internal nodes in the contMap$tree."))
+      }
+      if (!all(as.numeric(names(ace)) == (length(contMap$tree$tip.label) + 1):(length(contMap$tree$tip.label) + contMap$tree$Nnode)))
+      {
+        warning(paste0("Values in 'ace' are not ordered in increasing numerical ID of internal nodes.\n",
+                       "They have been reordered to follow the numerical ID of internal nodes."))
+      }
+    }
+
+    ## tip_data
+    if (!is.null(tip_data))
+    {
+      # tip_data must be a named numerical vector
+      if (!is.numeric(tip_data))
+      {
+        stop(paste0("'tip_data' is used only for continuous traits. It must be a named numerical vector that provides trait values for tips.\n",
+                    "The object you provided is not a numerical vector."))
+      }
+      # tip_data should have many values as there are tips in the contMap$tree
+      if (length(tip_data) != length(contMap$tree$tip.label))
+      {
+        stop(paste0("'tip_data' should have as many values as there are tips in the contMap$tree.\n",
+                    "Number of values in 'tip_data' = ",length(tip_data),"; number of tips in the contMap$tree = ",length(contMap$tree$tip.label),"."))
+      }
+      # names(tip_data) = contMap$tree$tip.label
+      if (!all(names(tip_data) %in% contMap$tree$tip.label))
+      {
+        stop(paste0("'names(tip_data)' should match tip labels in the contMap$tree$tip.label."))
+      }
+      if (!all(names(tip_data) == contMap$tree$tip.label))
+      {
+        warning(paste0("Values in 'tip_data' are not ordered as tip labels in the contMap$tree.\n",
+                       "They have been reordered to follow tip labels."))
+      }
+    }
+
+
+    ### Only for categorical traits (to move into the sub-function)
+
+    # densityMap must be a list with "densityMap" class objects
+    # names(densityMap) should be the states (just check that they are not NULL and are character strings as is.character())
+
+    # Check that if present, the densityMaps$trait_data_type match the one provided in trait_data_type
+
+    # ace and tip_data must be NULL as they are not used
+
+    ### Only for biogeographic traits (to move into the sub-function)
+
+    # densityMap must be a list with "densityMap" class objects
+    # names(densityMap) should be the ranges (just check that they are not NULL and are character strings as is.character())
+
+    # Check that if present, the densityMaps$trait_data_type match the one provided in trait_data_type
+
+    # ace and tip_data must be NULL as they are not used
+  }
+
 
   if (is.null(ace))
   {

@@ -142,7 +142,7 @@ cut_contMap_for_focal_time <- function(contMap, focal_time, keep_tip_labels = TR
   # focal_time must be positive and smaller to root age
   if (focal_time < 0)
   {
-    stop(paste0("'focal_time' must be positive. It represents the time as a distance from the present."))
+    stop(paste0("'focal_time' must be a positive number. It represents the time as a distance from the present."))
   }
   if (focal_time > root_age)
   {
