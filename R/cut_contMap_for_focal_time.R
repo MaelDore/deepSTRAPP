@@ -80,7 +80,7 @@
 #' ape::nodelabels()
 #' abline(v = max(phytools::nodeHeights(mammals_contMap$tree)[,2]) - focal_time,
 #'        col = "red", lty = 2, lwd = 2)
-
+#'
 #' # Plot initial node labels on cut stochastic map
 #' phytools::plot.contMap(updated_contMap)
 #' ape::nodelabels(text = updated_contMap$tree$initial_nodes_ID)
@@ -110,27 +110,49 @@ cut_contMap_for_focal_time <- function(contMap, focal_time, keep_tip_labels = TR
 {
   ### Check input validity
 
+  ## contMap
   # contMap must be a "contMap" class object
+  if (!("contMap" %in% class(contMap)))
+  {
+    stop("'contMap' must have the 'contMap' class. See ?phytools::contMap() and ?deepSTRAPP::prepare_data() to learn how to generate those objects.")
+  }
 
+  ## contMap$tree
   # contMap$tree must be an object with the two classes: "simmap" and "phylo"
+  if (!(all(c("simmap", "phylo") %in% class(contMap$tree))))
+  {
+    stop(paste0("'contMap$tree' must have the 'simmap' and 'phylo' classes indicating a trait is mapped on the phylogeny.\n",
+                "See ?phytools::contMap() and ?deepSTRAPP::prepare_data() to learn how to generate those objects."))
+  }
   # contMap$tree must be rooted
-  # ape::is.rooted
+  if (!(ape::is.rooted(contMap$tree)))
+  {
+    stop(paste0("'contMap$tree' must be a rooted phylogeny."))
+  }
   # contMap$tree must be fully resolved/dichotomous
-  # ape::is.binary
-
-  # focal_time must be positive and smaller to root age
-  # If focal_time = root_age, throw a specific error
-  # focal_time must be numerical
-
-  # keep_tip_labels must be TRUE or FALSE
+  if (!(ape::is.binary(contMap$tree)))
+  {
+    stop(paste0("'contMap$tree' must be a fully resolved/dichotomous/binary phylogeny."))
+  }
 
   ## Extract root age
   root_age <- max(phytools::nodeHeights(contMap$tree)[,2])
 
+  ## focal_time
+  # focal_time must be positive and smaller to root age
+  if (focal_time < 0)
+  {
+    stop(paste0("'focal_time' must be positive. It represents the time as a distance from the present."))
+  }
+  if (focal_time > root_age)
+  {
+    stop(paste0("'focal_time' must be smaller or equals to the root age of the phylogeny.\n",
+                "'focal_time' = ",focal_time,"; root age = ",root_age,"."))
+  }
   # If focal_time equals root_age, send warning
   if (focal_time == root_age)
   {
-    warning(paste0(focal_time, " equals root age = ",root_age," Mya. Return an empty object.\n"))
+    warning(paste0("'focal_time' equals root age = ",root_age,". Return an empty object.\n"))
 
     # Return a NULL object
     updated_contMap <- NULL
