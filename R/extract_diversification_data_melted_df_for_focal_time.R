@@ -46,11 +46,53 @@
 #' head(diversification_data_df)}
 #'
 
+
 extract_diversification_data_melted_df_for_focal_time <- function (BAMM_object, verbose = TRUE)
 {
-  # BAMM_object must be a 'bammdata' object
-  # Number of posterior sample data must be equal between $tipStates, $tipLambda and $tipMu
-  # Must have a $focal_time element. If not, send a warning message saying it is likely not an output of update_rates_and_regimes_for_focal_time(). Must go through that function, even if local_time is set to 0 My (current time).
+  ### Check input validity
+  {
+    # BAMM_object must be a 'bammdata' object
+    if (!("bammdata" %in% class(BAMM_object)))
+    {
+      stop("'BAMM_object' must have the 'bammdata' class. See ?BAMMtools::getEventData and ?deepSTRAPP::update_rates_and_regimes_for_focal_time() to learn how to generate those objects.")
+    }
+    # Number of posterior sample data must be equal between $tipStates, $tipLambda and $tipMu
+    posterior_samples_length <- c(length(BAMM_object$tipStates), length(BAMM_object$tipLambda), length(BAMM_object$tipMu))
+    if (length(unique(posterior_samples_length)) != 1)
+    {
+      stop("Number of posterior samples in 'BAMM_object' must be equal between $tipStates, $tipLambda and $tipMu.\nPlease check the structure of your 'BAMM_object' with str(BAMM_object, 1)")
+    }
+    # Number of branches in each posterior sample must be equal within $tipStates, $tipLambda and $tipMu
+    tipStates_data_length <- unlist(lapply(X = BAMM_object$tipStates, FUN = length))
+    if (length(unique(tipStates_data_length)) != 1)
+    {
+      stop("Number of branches in each posterior sample of 'BAMM_object$tipStates' must be equal.\nPlease check the structure of your 'BAMM_object' with str(BAMM_object$tipStates, 1)")
+    }
+    tipLambda_data_length <- unlist(lapply(X = BAMM_object$tipLambda, FUN = length))
+    if (length(unique(tipLambda_data_length)) != 1)
+    {
+      stop("Number of branches in each posterior sample of 'BAMM_object$tipLambda' must be equal.\nPlease check the structure of your 'BAMM_object' with str(BAMM_object$tipLambda, 1)")
+    }
+    tipMu_data_length <- unlist(lapply(X = BAMM_object$tipMu, FUN = length))
+    if (length(unique(tipMu_data_length)) != 1)
+    {
+      stop("Number of branches in each posterior sample of 'BAMM_object$tipMu' must be equal.\nPlease check the structure of your 'BAMM_object' with str(BAMM_object$tipMu, 1)")
+    }
+    # Number of branches in each posterior sample must be equal between $tipStates, $tipLambda and $tipMu
+    posterior_samples_data_length <- c(unique(tipStates_data_length), unique(tipLambda_data_length), unique(tipMu_data_length))
+    if (length(unique(posterior_samples_data_length)) != 1)
+    {
+      stop(paste0("Number of branches in posterior samples of 'BAMM_object$tipMu', 'BAMM_object$tipLambda', and 'BAMM_object$tipMu' must be equal.\nThere respective number of branches is: ",paste(posterior_samples_data_length, collapse = ", "),".\nPlease check the structure of your 'BAMM_object' with str(BAMM_object, 2)"))
+    }
+
+    # Must have a $focal_time element. If not, send a warning message saying it is likely not an output of update_rates_and_regimes_for_focal_time(). Must go through that function, even if local_time is set to 0 My (current time).
+    if (is.null(BAMM_object$focal_time))
+    {
+      stop(paste0("'BAMM_object' must have a $focal_time element indicating for which 'focal_time' the rates and regimes have been updated.\n",
+                  "This also applies if investigating the present ('focal_time' = 0).\n",
+                  "See ?deepSTRAPP::update_rates_and_regimes_for_focal_time() to learn how to generate a valid 'BAMM_object' to use as input."))
+    }
+  }
 
   ## Extract focal_time
   focal_time <- BAMM_object$focal_time
