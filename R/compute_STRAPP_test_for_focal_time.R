@@ -271,40 +271,141 @@ compute_STRAPP_test_for_focal_time <- function (BAMM_object, trait_data_list,
 {
 
   ### Check input validity
+  {
+    ## BAMM_object
+    # BAMM_object must be a 'bammdata' object
+    if (!("bammdata" %in% class(BAMM_object)))
+    {
+      stop("'BAMM_object' must have the 'bammdata' class. See ?BAMMtools::getEventData and ?deepSTRAPP::update_rates_and_regimes_for_focal_time() to learn how to generate those objects.")
+    }
+    # Number of posterior sample data must be equal between $tipStates, $tipLambda and $tipMu
+    posterior_samples_length <- c(length(BAMM_object$tipStates), length(BAMM_object$tipLambda), length(BAMM_object$tipMu))
+    if (length(unique(posterior_samples_length)) != 1)
+    {
+      stop("Number of posterior samples in 'BAMM_object' must be equal between $tipStates, $tipLambda and $tipMu.\nPlease check the structure of your 'BAMM_object' with str(BAMM_object, 1)")
+    }
+    # Number of branches in each posterior sample must be equal within $tipStates, $tipLambda and $tipMu
+    tipStates_data_length <- unlist(lapply(X = BAMM_object$tipStates, FUN = length))
+    if (length(unique(tipStates_data_length)) != 1)
+    {
+      stop("Number of branches in each posterior sample of 'BAMM_object$tipStates' must be equal.\nPlease check the structure of your 'BAMM_object' with str(BAMM_object$tipStates, 1)")
+    }
+    tipLambda_data_length <- unlist(lapply(X = BAMM_object$tipLambda, FUN = length))
+    if (length(unique(tipLambda_data_length)) != 1)
+    {
+      stop("Number of branches in each posterior sample of 'BAMM_object$tipLambda' must be equal.\nPlease check the structure of your 'BAMM_object' with str(BAMM_object$tipLambda, 1)")
+    }
+    tipMu_data_length <- unlist(lapply(X = BAMM_object$tipMu, FUN = length))
+    if (length(unique(tipMu_data_length)) != 1)
+    {
+      stop("Number of branches in each posterior sample of 'BAMM_object$tipMu' must be equal.\nPlease check the structure of your 'BAMM_object' with str(BAMM_object$tipMu, 1)")
+    }
+    # Number of branches in each posterior sample must be equal between $tipStates, $tipLambda and $tipMu
+    posterior_samples_data_length <- c(unique(tipStates_data_length), unique(tipLambda_data_length), unique(tipMu_data_length))
+    if (length(unique(posterior_samples_data_length)) != 1)
+    {
+      stop(paste0("Number of branches in posterior samples of 'BAMM_object$tipMu', 'BAMM_object$tipLambda', and 'BAMM_object$tipMu' must be equal.\nThere respective number of branches is: ",paste(posterior_samples_data_length, collapse = ", "),".\nPlease check the structure of your 'BAMM_object' with str(BAMM_object, 2)"))
+    }
 
-  # BAMM_object must be a 'bammdata' object
-  # Number of posterior sample data must be equal between $tipStates, $tipLambda and $tipMu
+    ## trait_data_list
+    # trait_data_list must be a list with $trait_data and $trait_data_type
+    if (is.null(trait_data_list$trait_data) | is.null(trait_data_list$trait_data_type))
+    {
+      stop("'trait_data_list' must be a list with $trait_data and $trait_data_type elements.")
+    }
+    # $trait_data must be a named vector (can be numerical or character string)
+    if (is.null(names(trait_data_list$trait_data)))
+    {
+      stop(paste0("'trait_data_list$trait_data' must be a named vector with names matching those found in BAMM_object$tipStates, BAMM_object$tipLambda, and BAMM_object$tipMu.\n",
+                  "Names are either tip.label or tipward_node_ID of the branches cut at 'trait_data_list$focal_time' with deepSTRAPP::extract_most_likely_trait_values_for_focal_time."))
+    }
+    # $trait_data_type can only be "continuous", categorical" or "biogeographic"
+    if (!(trait_data_list$trait_data_type %in% c("continuous", "categorical", "biogeographic")))
+    {
+      stop("'trait_data_list$trait_data_type' can only be 'continuous', 'categorical', or 'biogeographic'.")
+    }
+    if (trait_data_list$trait_data_type == "continuous" & !is.numeric(trait_data_list$trait_data))
+    {
+      stop("'trait_data_list$trait_data' must be numeric if 'trait_data_list$trait_data_type' is 'continuous'.")
+    }
+    if (trait_data_list$trait_data_type == "categorical" & !is.character(trait_data_list$trait_data))
+    {
+      stop("'trait_data_list$trait_data' must be a vector of character strings if 'trait_data_list$trait_data_type' is 'categorical'.")
+    }
+    if (trait_data_list$trait_data_type == "biogeographic" & !is.character(trait_data_list$trait_data))
+    {
+      stop("'trait_data_list$trait_data' must be a vector of character strings if 'trait_data_list$trait_data_type' is 'biogeographic'.")
+    }
+    # Length of $trait_data should match length of $tipStates, $tipLambda and $tipMu (for each posterior sample)
+    if (length(trait_data_list$trait_data) != unique(posterior_samples_data_length))
+    {
+      stop("Number of branches in 'trait_data_list$trait_data' must be equal to number of branches in posterior samples in 'BAMM_object$tipStates', 'BAMM_object$$tipLambda' and 'BAMM_object$tipMu'.\nPlease check the structure of your 'BAMM_object' with str(BAMM_object, 2)")
+    }
+    # Names of $trait_data should match names in $tipStates, $tipLambda and $tipMu (for each posterior sample)
+    if (!all(names(trait_data_list$trait_data) %in% names(BAMM_object$tipStates[[1]])))
+    {
+      stop("Names of 'trait_data_list$trait_data' should match names in 'BAMM_object$tipStates', 'BAMM_object$tipLambda' and 'BAMM_object$tipMu' (for each posterior sample).")
+    }
+    # Names of $trait_data should be ordered similarly as in in $tipStates, $tipLambda and $tipMu (for each posterior sample)
+    if (!all(names(trait_data_list$trait_data) == names(BAMM_object$tipStates[[1]])))
+    {
+      warning(paste0("Branch data in 'trait_data_list$trait_data' should be ordered similarly as in 'BAMM_object$tipStates', 'BAMM_object$tipLambda' and 'BAMM_object$tipMu' (for each posterior sample).\n",
+                     "This was not the case, likely because the initial phylogenies used to model trait evolution and diversification dynamics were not ordered in the same fashion.\n",
+                     "See attr(x = phylo, which = 'order') to detect the order used in each phylogeny.\n",
+                     "'trait_data_list$trait_data' have been reordered to match data in 'BAMM_object'."))
+      trait_data_list$trait_data <- trait_data_list$trait_data[match(x = names(BAMM_object$tipStates[[1]]), table = names(trait_data_list$trait_data))]
+    }
 
-  # trait_data_list must be a list with $trait_data and $trait_data_type
-  # $trait_data must be a named vector (can be numerical or character string)
-  # $trait_data_type can only be "continuous", categorical" or "biogeographic"
-  # $trait_data type must match with the type of data detected in $trait_data
-  # Numerical if $trait_data_type = "continuous"
-  # Character string if $trait_data_type = "categorical" or "biogeographic"
+    ## focal_time
+    # $focal_time in $trait_data_list and in BAMM_object must be equal.
+    if (BAMM_object$focal_time != trait_data_list$focal_time)
+    {
+      stop(paste0("$focal_time should be the same in 'BAMM_object$focal_time' and 'trait_data_list$focal_time'.\n",
+                  "You provided a 'BAMM_object' with '$focal_time' = ",BAMM_object$focal_time,".\n",
+                  "You provided a 'trait_data_list' with '$focal_time' = ",trait_data_list$focal_time,"."))
+    }
 
-  # Length of $trait_data should match length of $tipStates, $tipLambda and $tipMu (for each posterior sample)
+    ## rate_type must be either "speciation", "extinction" or "net_diversification"
+    if (!(rate_type %in% c("speciation", "extinction", "net_diversification")))
+    {
+      stop("'rate_type' can only be 'speciation', 'extinction', or 'net_diversification'.")
+    }
 
-  # Names of $trait_data should match names in $tipStates, $tipLambda and $tipMu (for each posterior sample)
-  # If need to be reordered, do it, but send a warning explaining differences may be due the fact the initial phylogenies used to model trait evolution and diversification dynamics may have not been ordered in the same fashion
-  # Do NOT use $tip.label to check that as tip.label main contains labels for fossils older than focal_time
+    ## nb_permutations
+    # If nb_permutations is higher than number of posterior samples (length of $tipStates, $tipLambda and $tipMu) AND replace_samples = FALSE,
+    # Send an error to say that replace_samples should be set to TRUE to allow multiple samplings of posterior in order to reach the requested number of permutations
+    if (!is.null(nb_permutations))
+    {
+      if ((nb_permutations > unique(posterior_samples_length)) & !replace_samples)
+      {
+        stop(paste0("Number of permutations ('nb_permutations' = ",nb_permutations,") is higher than number of posterior samples in 'BAMM_object' (",unique(posterior_samples_length),").\n",
+                    "'replace_samples' should be set to 'TRUE' so that multiple replicates of each posterior sample can be used in order to reach the requested number of permutations.\n",
+                    "Alternatively, the 'nb_permutations' can be set to be equal or lower than the number of posterior samples. Default is to use the same number so each posterior is permutated once."))
+      }
+    }
 
-  # $focal_time in $trait_data_list and in BAMM_object must be equal.
+    ## alpha
+    # alpha must be set between 0 and 1.
+    if ((alpha < 0) | (alpha > 1))
+    {
+      stop(paste0("'alpha' reflects the quantile used to extract 'estimate' values and assess significance of the test. It must be between 0 and 1.\n",
+                  "Current value of 'alpha' is ",alpha,"."))
+    }
 
-  # If nb_permutations is higher than number of posterior samples (length of $tipStates, $tipLambda and $tipMu) AND replace_samples = FALSE,
-  # Send an error to say that replace_samples should be set to TRUE to allow multiple samplings of posterior in order to reach the requested number of permutations
+    ## p.adjust_method. Check that it is one of the available option. See [stats::p.adjust()] for the available methods.
+    if (!(p.adjust_method %in% c("none", "holm", "hochberg", "hommel", "bonferroni", "BH", "BY", "fdr")))
+    {
+      stop(paste0("'p.adjust_method' specifies the type of correction to apply to the p-values. See ?stats::p.adjust for the available methods.\n"))
+    }
 
-  # rate_type must be either "speciation", "extinction" or "net diversification"
-
-  # If two_tailed = FALSE, one_tailed_hypothesis must not be FALSE and contain credible hypotheses according to the type of data and state names
-  # Provide error-specific warnings in case of mismatch (see warnings in traitDependentBAMM)
-
-  ## See other validation checks from BAMMtools::traitDependentBAMM
-  if (nthreads > 1) {
-    if (!"package:parallel" %in% search()) {
-      stop("Please load package 'parallel' for using the multi-thread option\n")
+    ## nthreads
+    if (nthreads > 1) {
+      if (!"package:parallel" %in% search())
+      {
+        stop("Please load package 'parallel' for using the multi-thread option\n")
+      }
     }
   }
-
 
   ## Extract BAMM rates and regimes data
   BAMM_data <- list(tipStates = BAMM_object$tipStates, tipLambda = BAMM_object$tipLambda, tipMu = BAMM_object$tipMu)
@@ -325,6 +426,13 @@ compute_STRAPP_test_for_focal_time <- function (BAMM_object, trait_data_list,
     } else { # Case with more than two states
       trait_data_type <- "multinominal"
     }
+  }
+
+  ## posthoc_pairwise_tests = TRUE. Only makes sense if more than 2 states/ranges in categorical/biogeographic data
+  if (trait_data_type != "multinominal" & posthoc_pairwise_tests == TRUE)
+  {
+    stop(paste0("'posthoc_pairwise_tests = TRUE' only makes sense for categorical/biogeographic data with more than two states/ranges.\n",
+                "If you want to test specific hypotheses with continuous or categorical binary data, use 'two_tailed = FALSE' and provide the 'one_tailed_hypothesis'.\n"))
   }
 
   ## Compute the appropriate internal function depending on the type of data
@@ -402,16 +510,30 @@ compute_STRAPP_test_for_continuous_data <- function (
     print_hypothesis = TRUE)
 {
   ### Check input validity
-
-  # Apply the same as in the master function in case this function is used independently
-  # Also check that the trait_data_type is the good one
-
-  ## See other validation checks from BAMMtools::traitDependentBAMM
-  if (nthreads > 1)
   {
-    if (!"package:parallel" %in% search())
+    ## one_tailed_hypothesis
+    # For continuous data, it is either "negative" or "positive" correlation.
+    if (!is.null(one_tailed_hypothesis))
     {
-      stop("Please load package 'parallel' for using the multi-thread option\n")
+      if (!(one_tailed_hypothesis %in% c("negative", "positive")))
+      {
+        stop(paste0("The 'one_tailed_hypothesis' must be either 'negative' or 'positive' for continuous trait data."))
+      }
+    }
+
+    ## two_tailed & one_tailed_hypothesis
+    if (!two_tailed & is.null(one_tailed_hypothesis))
+    {
+      stop(paste0("You selected a one-tailed test ('two_tailed' = FALSE), but 'one_tailed_hypothesis' is not specified.\n",
+                  "You must specify the alternative hypothesis for a 'negative' or 'positive' correlation ",
+                  "between trait values and diversification rates using the 'one_tailed_hypothesis' argument."))
+    }
+
+    if (two_tailed & !is.null(one_tailed_hypothesis))
+    {
+      stop(paste0("You selected a two-tailed test ('two_tailed' = TRUE), but also specified a 'one_tailed_hypothesis': '",one_tailed_hypothesis,"'.\n",
+                  "If you want to test that hypothesis, please select a one-tailed test ('two_tailed' = FALSE).\n",
+                  "If you want to compute a two-tailed test, remove the 'one_tailed_hypothesis' or replace it with 'NULL'."))
     }
   }
 
@@ -638,29 +760,19 @@ compute_STRAPP_test_for_binary_data <- function (
 {
 
   ### Check input validity
-
-  # Apply the same as in the master function in case this function is used independently
-  # Also check that the trait_data_type is the good one
-
-  if (!two_tailed & is.null(one_tailed_hypothesis))
   {
-    stop(paste0("You selected a one-tailed test ('two_tailed' = FALSE), but 'one_tailed_hypothesis' is not specified.\n",
-                "You must specify the hypothesis by providing a character string vector with states ordered in increasing rates under the alternative hypothesis, separated by a greater-than such as c('A > B').\n"))
-  }
-
-  if (two_tailed & !is.null(one_tailed_hypothesis))
-  {
-    stop(paste0("You selected a two-tailed test ('two_tailed' = TRUE), but also specified a 'one_tailed_hypothesis': '",one_tailed_hypothesis,"'.\n",
-                "If you want to test that hypothesis, please select a one-tailed test ('two_tailed' = FALSE).\n",
-                "If you want to compute a two-tailed test, replace the 'one_tailed_hypothesis' with 'NULL'.\n"))
-  }
-
-  ## See other validation checks from BAMMtools::traitDependentBAMM
-  if (nthreads > 1)
-  {
-    if (!"package:parallel" %in% search())
+    ## two_tailed & one_tailed_hypothesis
+    if (!two_tailed & is.null(one_tailed_hypothesis))
     {
-      stop("Please load package 'parallel' for using the multi-thread option\n")
+      stop(paste0("You selected a one-tailed test ('two_tailed' = FALSE), but 'one_tailed_hypothesis' is not specified.\n",
+                  "You must specify the hypothesis by providing a character string vector with states ordered in increasing rates under the alternative hypothesis, separated by a greater-than such as c('A > B').\n"))
+    }
+
+    if (two_tailed & !is.null(one_tailed_hypothesis))
+    {
+      stop(paste0("You selected a two-tailed test ('two_tailed' = TRUE), but also specified a 'one_tailed_hypothesis': '",one_tailed_hypothesis,"'.\n",
+                  "If you want to test that hypothesis, please select a one-tailed test ('two_tailed' = FALSE).\n",
+                  "If you want to compute a two-tailed test, remove the 'one_tailed_hypothesis' or replace it with 'NULL'."))
     }
   }
 
@@ -913,17 +1025,7 @@ compute_STRAPP_test_for_multinominal_data <- function (
 
   ### Check input validity
 
-  # Apply the same as in the master function in case this function is used independently
-  # Also check that the trait_data_type is the good one
-
-  ## See other validation checks from BAMMtools::traitDependentBAMM
-  if (nthreads > 1)
-  {
-    if (!"package:parallel" %in% search())
-    {
-      stop("Please load package 'parallel' for using the multi-thread option\n")
-    }
-  }
+  # Anything regarding posthoc_pairwise_tests, and two_tailed?
 
   ## Extract rates data
   if (rate_type == "speciation")
