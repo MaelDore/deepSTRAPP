@@ -207,7 +207,7 @@
 #'
 
 
-run_STRAPP_test_for_focal_time <- function (contMap,
+run_STRAPP_test_for_focal_time <- function (contMap, # Add densityMaps as alternative input and adjust doc
                                             ace = NULL,
                                             tip_data = NULL,
                                             trait_data_type,
@@ -231,8 +231,9 @@ run_STRAPP_test_for_focal_time <- function (contMap,
                                             verbose = TRUE)
 {
   ### Check input validity
-
-  # Should all already be included in the wrapped functions
+  {
+    # Should all already be included in the wrapped functions
+  }
 
   # ------ Extract trait data ------ #
 
@@ -242,7 +243,7 @@ run_STRAPP_test_for_focal_time <- function (contMap,
   }
 
   ## Take $trait_data_type as input to select the proper sub-function
-  # Will also accept simmaps instead of a contMap
+  # Will also accept densityMaps instead of a contMap
 
   trait_data_list <- extract_most_likely_trait_values_for_focal_time(
     contMap = contMap,

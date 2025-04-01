@@ -247,7 +247,7 @@
 #'
 
 
-run_STRAPP_tests_over_time <- function (contMap,
+run_STRAPP_tests_over_time <- function (contMap, # Add densityMaps as alternative input and adjust doc
                                         ace = NULL,
                                         tip_data = NULL,
                                         trait_data_type,
@@ -277,6 +277,9 @@ run_STRAPP_tests_over_time <- function (contMap,
                                         verbose_extended = FALSE)
 {
   ### Check input validity
+  {
+    # Should all already be included in the wrapped functions
+  }
 
   ## Extract root_age
   root_age <- max(phytools::nodeHeights(contMap$tree)[,2])

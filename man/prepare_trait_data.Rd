@@ -35,8 +35,7 @@ Tip labels (\code{phylo$tip.label}) should match names in \code{tip_data}.}
 \item Models available for continuous data are detailed in \code{\link[geiger:fitContinuous]{geiger::fitContinuous()}}.
 \item Models available for categorical data are detailed in \code{\link[geiger:fitDiscrete]{geiger::fitDiscrete()}}.
 \item Models for biogeographic data are fit with \code{BioGeoBEARS}.
-The current version of \code{deepSTRAPP} implements BAYAREALIKE, DIVALIKE, DEC models and their +J variation
-(including jump-dispersal events). For details, please refers to the BioGeoBEARS documentation.
+\item See list in "Details" section.
 }}
 
 \item{res}{Integer. Define the number of time steps used to interpolate/estimate trait value/state/range in \code{contMap}/\code{densityMaps}.}
@@ -106,8 +105,12 @@ to produce a \code{densityMap} for each state/range.
 \details{
 Map trait evolution on a time-calibrated phylogeny in several steps:
 \itemize{
-\item (1) Models are fit using Maximum Likelihood approach with \code{\link[geiger:fitContinuous]{geiger::fitContinuous()}} for "continuous" data,
-\code{\link[geiger:fitDiscrete]{geiger::fitDiscrete()}} for "categorical" data, and R package \code{BioGeoBEARS} for "biogeographic" data.
+\item (1) Models are fit using Maximum Likelihood approach:
+\itemize{
+\item For "continuous" data models are fit with \code{\link[geiger:fitContinuous]{geiger::fitContinuous()}}: "BM", "OU", "EB", "rate_trend", "lambda", "kappa", "delta".
+\item For "categorical" data models are fit with \code{\link[geiger:fitDiscrete]{geiger::fitDiscrete()}}: "ER", "SYM", "ARD".
+\item For "biogeographic" data models are fit with R package \code{BioGeoBEARS}: "BAYAREALIKE", "DIVALIKE", "DEC", "BAYAREALIKE+J", "DIVALIKE+J", "DEC+J".
+}
 \item (2) Best model is identified among the list of \code{evolutionary_models} by comparing the corrected AIC (AICc)
 and selecting the  model with lowest AICc.
 \item (3) Ancestral characters estimates (ACE) are inferred with \link[phytools:fastAnc]{phytools::fastAnc} on a tree with modified branch lengths
@@ -147,7 +150,8 @@ eel_data <- setNames(eel.data$Max_TL_cm,
                      rownames(eel.data))
 
 # Map trait evolution on the phylogeny, selecting among four models ("BM", "OU", "lambda", "kappa")
-mapped_cont_traits <- prepare_trait_data(tip_data = eel_data,
+mapped_cont_traits <- prepare_trait_data(
+   tip_data = eel_data,
    trait_data_type = "continuous",
    phylo = eel.tree,
    evolutionary_models = c("BM", "OU", "lambda", "kappa"),
