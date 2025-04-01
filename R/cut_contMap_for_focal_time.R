@@ -109,78 +109,78 @@
 cut_contMap_for_focal_time <- function(contMap, focal_time, keep_tip_labels = TRUE)
 {
   ### Check input validity
-
-  ## contMap
-  # contMap must be a "contMap" class object
-  if (!("contMap" %in% class(contMap)))
   {
-    stop("'contMap' must have the 'contMap' class. See ?phytools::contMap() and ?deepSTRAPP::prepare_data() to learn how to generate those objects.")
+    ## contMap
+    # contMap must be a "contMap" class object
+    if (!("contMap" %in% class(contMap)))
+    {
+      stop("'contMap' must have the 'contMap' class. See ?phytools::contMap() and ?deepSTRAPP::prepare_data() to learn how to generate those objects.")
+    }
+
+    ## contMap$tree
+    # contMap$tree must be an object with the two classes: "simmap" and "phylo"
+    if (!(all(c("simmap", "phylo") %in% class(contMap$tree))))
+    {
+      stop(paste0("'contMap$tree' must have the 'simmap' and 'phylo' classes indicating a trait is mapped on the phylogeny.\n",
+                  "See ?phytools::contMap() and ?deepSTRAPP::prepare_data() to learn how to generate those objects."))
+    }
+    # contMap$tree must be rooted
+    if (!(ape::is.rooted(contMap$tree)))
+    {
+      stop(paste0("'contMap$tree' must be a rooted phylogeny."))
+    }
+    # contMap$tree must be fully resolved/dichotomous
+    if (!(ape::is.binary(contMap$tree)))
+    {
+      stop(paste0("'contMap$tree' must be a fully resolved/dichotomous/binary phylogeny."))
+    }
+
+    ## Extract root age
+    root_age <- max(phytools::nodeHeights(contMap$tree)[,2])
+
+    ## focal_time
+    # focal_time must be positive and smaller to root age
+    if (focal_time < 0)
+    {
+      stop(paste0("'focal_time' must be a positive number. It represents the time as a distance from the present."))
+    }
+    if (focal_time > root_age)
+    {
+      stop(paste0("'focal_time' must be smaller or equals to the root age of the phylogeny.\n",
+                  "'focal_time' = ",focal_time,"; root age = ",root_age,"."))
+    }
+    # If focal_time equals root_age, send warning
+    if (focal_time == root_age)
+    {
+      warning(paste0("'focal_time' equals root age = ",root_age,". Return an empty object.\n"))
+
+      # Return a NULL object
+      no_contMap <- NULL
+      return(no_contMap)
+
+    }
   }
 
-  ## contMap$tree
-  # contMap$tree must be an object with the two classes: "simmap" and "phylo"
-  if (!(all(c("simmap", "phylo") %in% class(contMap$tree))))
-  {
-    stop(paste0("'contMap$tree' must have the 'simmap' and 'phylo' classes indicating a trait is mapped on the phylogeny.\n",
-                "See ?phytools::contMap() and ?deepSTRAPP::prepare_data() to learn how to generate those objects."))
-  }
-  # contMap$tree must be rooted
-  if (!(ape::is.rooted(contMap$tree)))
-  {
-    stop(paste0("'contMap$tree' must be a rooted phylogeny."))
-  }
-  # contMap$tree must be fully resolved/dichotomous
-  if (!(ape::is.binary(contMap$tree)))
-  {
-    stop(paste0("'contMap$tree' must be a fully resolved/dichotomous/binary phylogeny."))
-  }
+  ## Cut contMap$tree at focal time
 
-  ## Extract root age
-  root_age <- max(phytools::nodeHeights(contMap$tree)[,2])
+  updated_contMap_tree <- contMap
+  updated_contMap_tree$tree <- cut_phylo_for_focal_time(tree = updated_contMap_tree$tree, focal_time = focal_time, keep_tip_labels = keep_tip_labels)
 
-  ## focal_time
-  # focal_time must be positive and smaller to root age
-  if (focal_time < 0)
-  {
-    stop(paste0("'focal_time' must be a positive number. It represents the time as a distance from the present."))
-  }
-  if (focal_time > root_age)
-  {
-    stop(paste0("'focal_time' must be smaller or equals to the root age of the phylogeny.\n",
-                "'focal_time' = ",focal_time,"; root age = ",root_age,"."))
-  }
-  # If focal_time equals root_age, send warning
-  if (focal_time == root_age)
-  {
-    warning(paste0("'focal_time' equals root age = ",root_age,". Return an empty object.\n"))
+  ## Update contMap$tree$maps for focal time
 
-    # Return a NULL object
-    updated_contMap <- NULL
-    return(updated_contMap)
+  updated_contMap_maps <- contMap
+  updated_contMap_maps$tree <- update_maps_for_focal_time(tree_with_maps = updated_contMap_maps$tree, focal_time = focal_time)
 
-  } else {
+  ## Merge outputs
+  updated_contMap <- updated_contMap_tree
+  updated_contMap$tree$maps <- updated_contMap_maps$tree$maps
 
-    ## Cut contMap$tree at focal time
+  ## Update $mapped.edge
+  updated_contMap$tree$mapped.edge <- makeMappedEdge(edge = updated_contMap$tree$edge, maps = updated_contMap$tree$maps)
+  updated_contMap$tree$mapped.edge <- updated_contMap$tree$mapped.edge[, order(as.numeric(colnames(updated_contMap$tree$mapped.edge)))]
 
-    updated_contMap_tree <- contMap
-    updated_contMap_tree$tree <- cut_phylo_for_focal_time(tree = updated_contMap_tree$tree, focal_time = focal_time, keep_tip_labels = keep_tip_labels)
-
-    ## Update contMap$tree$maps for focal time
-
-    updated_contMap_maps <- contMap
-    updated_contMap_maps$tree <- update_maps_for_focal_time(tree_with_maps = updated_contMap_maps$tree, focal_time = focal_time)
-
-    ## Merge outputs
-    updated_contMap <- updated_contMap_tree
-    updated_contMap$tree$maps <- updated_contMap_maps$tree$maps
-
-    ## Update $mapped.edge
-    updated_contMap$tree$mapped.edge <- makeMappedEdge(edge = updated_contMap$tree$edge, maps = updated_contMap$tree$maps)
-    updated_contMap$tree$mapped.edge <- updated_contMap$tree$mapped.edge[, order(as.numeric(colnames(updated_contMap$tree$mapped.edge)))]
-
-    # Export contMap with updated tree and character mapping ($tree$maps and $tree$mapped.edge)
-    return(updated_contMap)
-  }
+  # Export contMap with updated tree and character mapping ($tree$maps and $tree$mapped.edge)
+  return(updated_contMap)
 }
 
 

@@ -11,7 +11,7 @@
 #'   The phylogenetic tree must be rooted and fully resolved/dichotomous,
 #'   but it does not need to be ultrametric (it can includes fossils).
 #' @param focal_time Numerical. The time, in terms of time distance from the present,
-#'   at which the tree and rate mapping must be cut.
+#'   at which the tree and rate mapping must be cut. It must be smaller than the root age of the phylogeny.
 #' @param update_rates Logical. Specify whether diversification rates stored in
 #'   `$tipLambda` (speciation) and `$tipMu` (extinction) must be updated to summarize
 #'   rates found along branches at `focal_time`. Default is `TRUE`.
@@ -141,9 +141,16 @@
 #'   keep_tip_labels = TRUE,
 #'   verbose = TRUE) }
 #'
+#' ## Extract root age
+#' # Add temporarily the "phylo" class to be compatible with phytools::nodeHeights()
+#' class(Ponerinae_BAMM_object) <- unique(c(class(Ponerinae_BAMM_object), "phylo"))
+#' root_age <- max(phytools::nodeHeights(Ponerinae_BAMM_object)[,2])
+#' # Remove temporary "phylo" class
+#' class(Ponerinae_BAMM_object) <- setdiff(class(Ponerinae_BAMM_object), "phylo")
+#'
 #' ## Plot diversification rates on the initial tree
 #' plot(Ponerinae_BAMM_object, legend = TRUE, labels = FALSE)
-#' abline(v = 123.55 - focal_time,
+#' abline(v = root_age - focal_time,
 #'        col = "red", lty = 2, lwd = 2)
 #'
 #' \dontrun{
@@ -170,8 +177,6 @@
 # dev.off()
 
 
-# Ponerinae_BAMM_object <- readRDS(file = "../Ponerinae_Historical_Biogeography/outputs/BAMM/Ponerinae_MCC_phylogeny_1534t/BAMM_posterior_samples_data.rds")
-
 update_rates_and_regimes_for_focal_time <- function (BAMM_object, focal_time,
                                                      update_rates = TRUE, update_regimes = TRUE,
                                                      update_tree = FALSE, update_plot = FALSE,
@@ -179,27 +184,89 @@ update_rates_and_regimes_for_focal_time <- function (BAMM_object, focal_time,
                                                      keep_tip_labels = TRUE,
                                                      verbose = TRUE)
 {
-
   ### Check input validity
+  {
+    ## Extract root age
+    # Add "phylo" class to be compatible with phytools::nodeHeights()
+    class(BAMM_object) <- unique(c(class(BAMM_object), "phylo"))
+    root_age <- max(phytools::nodeHeights(BAMM_object)[,2])
 
-  # focal_time must be positive and smaller or equal to root age
-  # focal_time must be numerical
-
-  # BAMM_object must be of class "bammdata"
-  # BAMM_object must have an $eventData that is a list of N posterior samples
-  # BAMM_object must have an $eventData that is a list of N posterior samples with df of regimes
-    # Check that all df have 7 columns
-  # BAMM_object must have an $tipStates that is a list of N posterior samples with integer vector of regime membership per tips
+    ## BAMM_object
+    # BAMM_object must be of class "bammdata"
+    if (!("bammdata" %in% class(BAMM_object)))
+    {
+      stop("'BAMM_object' must have the 'bammdata' class. See ?BAMMtools::getEventData() to learn how to generate those objects.")
+    }
+    # BAMM_object must contain at least the elements $eventData, $tipStates, $tipLambda and $tipMu.
+    if (!all(c("eventData", "tipStates", "tipLambda", "tipMu") %in% names(BAMM_object)))
+    {
+      stop(paste0("'BAMM_object' must contain at least the elements $eventData, $tipStates, $tipLambda and $tipMu to extract diversification rates and regimes.\n",
+                  "See ?BAMMtools::getEventData() to learn how to generate those objects."))
+    }
+    # Number of posterior sample data must be equal between $eventData, $tipStates, $tipLambda and $tipMu
+    posterior_samples_length <- c(length(BAMM_object$eventData), length(BAMM_object$tipStates), length(BAMM_object$tipLambda), length(BAMM_object$tipMu))
+    if (length(unique(posterior_samples_length)) != 1)
+    {
+      stop(paste0("Number of posterior samples in 'BAMM_object' must be equal between $eventData, $tipStates, $tipLambda and $tipMu.\n",
+                  "Please check the structure of your 'BAMM_object' with str(BAMM_object, 1).\n",
+                  "See ?BAMMtools::getEventData() to learn how to generate those objects."))
+    }
+    # BAMM_object must have an $tipStates that is a list of N posterior samples with integer vector of regime membership per tips
     # Check that all integer vectors have a length equal to $tip.label
-  # BAMM_object must have an $tipLambda that is a list of N posterior samples with integer vector of final speciation rates at tips = current speciation rates
-  # BAMM_object must have an $tipMu that is a list of N posterior samples with integer vector of final extinction rates at tips = current extinction rates
+    if (!all(unlist(lapply(BAMM_object$tipStates, FUN = length)) == length(BAMM_object$tip.label)))
+    {
+      stop(paste0("Number of values in posterior samples of 'BAMM_object$tipStates' must be equal to the number of tips in the phylogeny.\n",
+                  "Please check the structure of your 'BAMM_object' with str(BAMM_object$tipStates, 1).\n",
+                  "See ?BAMMtools::getEventData() to learn how to generate those objects."))
+    }
+    # BAMM_object must have an $tipLambda that is a list of N posterior samples with integer vector of final speciation rates at tips = current speciation rates
+    if (!all(unlist(lapply(BAMM_object$tipLambda, FUN = length)) == length(BAMM_object$tip.label)))
+    {
+      stop(paste0("Number of values in posterior samples of 'BAMM_object$tipLambda' must be equal to the number of tips in the phylogeny.\n",
+                  "Please check the structure of your 'BAMM_object' with str(BAMM_object$tipLambda, 1).\n",
+                  "See ?BAMMtools::getEventData() to learn how to generate those objects."))
+    }
+    # BAMM_object must have an $tipMu that is a list of N posterior samples with integer vector of final extinction rates at tips = current extinction rates
+    if (!all(unlist(lapply(BAMM_object$tipMu, FUN = length)) == length(BAMM_object$tip.label)))
+    {
+      stop(paste0("Number of values in posterior samples of 'BAMM_object$tipMu' must be equal to the number of tips in the phylogeny.\n",
+                  "Please check the structure of your 'BAMM_object' with str(BAMM_object$tipMu, 1).\n",
+                  "See ?BAMMtools::getEventData() to learn how to generate those objects."))
+    }
 
-  # At least one of "update_rates" and "update_regimes" must be T
+    ## focal_time
+    # focal_time must be positive and smaller than the root age
+    if (focal_time < 0)
+    {
+      stop(paste0("'focal_time' must be a positive number. It represents the time as a distance from the present."))
+    }
+    if (focal_time >= root_age)
+    {
+      stop(paste0("'focal_time' must be smaller than the root age of the phylogeny.\n",
+                  "'focal_time' = ",focal_time,"; root age = ",root_age,"."))
+    }
 
-  # If update_plot = TRUE & update_tree = FALSE; show a warning claiming that update_tree = FALSE will be ignore and tree and plotting elements will both be updated
+    ## update_rates & update_regimes
+    # At least one of "update_rates" and "update_regimes" must be TRUE
+    if (!update_rates & !update_rates)
+    {
+      stop(paste0("At least one of 'update_rates' and 'update_regimes' must be 'TRUE' for the function to update either rates or regimes found at 'focal_time'."))
+    }
 
-  # If update_all_elements = TRUE & any other update_* = FALSE; show a warning claiming that update_* = FALSE will be ignore and all elements including rates/regimes/tree/plotting elements/BAMM elements will all be updated
+    ## update_plot & update_tree
+    # If update_tree = FALSE, but update_plot = TRUE, show a warning claiming that the tree will be updated anyway, alongside plotting elements.
+    if (update_plot & !update_tree)
+    {
+      warning(paste0("'update_tree' is set to 'FALSE', but was ignore as 'update_plot = TRUE' requires the tree to be updated for the plotting elements to be updated too."))
+    }
 
+    ## update_all_elements
+    # If update_all_elements = TRUE & any other update_* = FALSE; show a warning claiming that update_* = FALSE will be ignore and all elements including rates/regimes/tree/plotting elements/BAMM elements will all be updated
+    if (update_all_elements & any(!update_rates, !update_regimes, !update_tree, !update_plot))
+    {
+      warning(paste0("'update_all_elements' is set to 'TRUE'. All components (rates/regimes/tree/plotting elements/BAMM elements) will be updated, even if other 'update_*' arguments are set to 'FALSE'."))
+    }
+  }
 
   ## Initiate new BAMM_object to update
   updated_BAMM_object <- BAMM_object
@@ -213,7 +280,6 @@ update_rates_and_regimes_for_focal_time <- function (BAMM_object, focal_time,
 
   # Get node ages per branch (no root edge)
   all_edges_df <- phytools::nodeHeights(updated_BAMM_object)
-  root_age <- max(phytools::nodeHeights(updated_BAMM_object)[,2])
   all_edges_df <- as.data.frame(round(root_age - all_edges_df, 5)) # Used to ensure ultrametricity of extant tips, but may be an issue for trees with very short time span
   names(all_edges_df) <- c("rootward_node_age", "tipward_node_age")
   all_edges_df$edge_ID <- row.names(all_edges_df)
