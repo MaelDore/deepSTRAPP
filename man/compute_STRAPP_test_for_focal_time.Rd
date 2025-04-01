@@ -70,7 +70,7 @@ Default is \code{FALSE}.}
 and what significant level is used to rejected or not the null hypothesis. Default is \code{TRUE}.}
 }
 \value{
-The function returns a list with at least six elements.
+The function returns a list with at least eight elements.
 
 Summary elements for the main test:
 \itemize{
@@ -80,6 +80,8 @@ according to the significance level provided (\code{alpha}). The test is signifi
 \item \verb{$p-value} Numerical. P-value of the test. The test is considered significant if \verb{$p-value} is lower than \code{alpha}.
 \item \verb{$method} Character string. The statistical method used to carry out the test.
 \item \verb{$rate_type} Character string. The type of diversification rates tested. One of 'speciation', 'extinction' or 'net_diversification'.
+\item \verb{$trait_data_type} Character string. The type of trait data as found in 'trait_data_list$trait_data_type'. One of 'continuous', 'categorical', or 'biogeographic'.
+\item \verb{$trait_data_type_for_stats} Character string. The type of trait data used to select statistical method. One of 'continuous', 'binary', or 'multinominal'.
 \item \verb{$focal_time} The time in the past at which the trait and rates data were tested.
 }
 

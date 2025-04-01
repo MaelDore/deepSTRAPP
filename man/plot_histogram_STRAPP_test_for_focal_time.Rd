@@ -76,7 +76,7 @@ trait_data_multinominal <- trait_data_continuous
 trait_data_multinominal$trait_data[trait_data_continuous$trait_data < 0] <- "state_B"
 trait_data_multinominal$trait_data[trait_data_continuous$trait_data < -1] <- "state_A"
 trait_data_multinominal$trait_data[trait_data_continuous$trait_data >= 0] <- "state_C"
-trait_data_multinominal$data_type <- "categorical"
+trait_data_multinominal$trait_data_type <- "categorical"
 
 table(trait_data_multinominal$trait_data)
 

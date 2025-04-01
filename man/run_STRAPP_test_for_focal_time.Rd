@@ -117,7 +117,7 @@ mapped diversification rates cut-off at the \code{focal_time} should be returned
 \value{
 The function returns a list with at least two elements.
 \itemize{
-\item \verb{$STRAPP_results} List with at least six elements summarizing the results of the STRAPP tests.
+\item \verb{$STRAPP_results} List with at least eight elements summarizing the results of the STRAPP tests.
 See \code{\link[=compute_STRAPP_test_for_focal_time]{compute_STRAPP_test_for_focal_time()}} for a detailed description of the output.
 \item \verb{$focal_time} Integer. The time, in terms of time distance from the present, at which the data were extracted and the STRAPP test carried out.
 }

@@ -54,7 +54,7 @@ extract_diversification_data_melted_df_for_focal_time <- function (BAMM_object, 
     # BAMM_object must be a 'bammdata' object
     if (!("bammdata" %in% class(BAMM_object)))
     {
-      stop("'BAMM_object' must have the 'bammdata' class. See ?BAMMtools::getEventData and ?deepSTRAPP::update_rates_and_regimes_for_focal_time() to learn how to generate those objects.")
+      stop("'BAMM_object' must have the 'bammdata' class. See ?BAMMtools::getEventData() and ?deepSTRAPP::update_rates_and_regimes_for_focal_time() to learn how to generate those objects.")
     }
     # Number of posterior sample data must be equal between $tipStates, $tipLambda and $tipMu
     posterior_samples_length <- c(length(BAMM_object$tipStates), length(BAMM_object$tipLambda), length(BAMM_object$tipMu))

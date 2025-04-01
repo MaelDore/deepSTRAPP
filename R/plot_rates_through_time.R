@@ -34,7 +34,7 @@
 #'  * `fuzzy` (default): to overlay the evolution of rates found in all posterior samples with high transparency levels.
 #'  * `quantiles_rect`: to add a polygon encompassing a proportion of the rate values found in posterior samples.
 #'   This proportion is defined with `CI_quantiles`.
-#' @param CI_quantiles Numerical. Proportion of rate values encompassed by the confidence interval. Default is `0.95`.
+#' @param CI_quantiles Numerical. Proportion of rate values across posterior samples encompassed by the confidence interval. Default is `0.95`.
 #' @param display_plot Logical. Whether to display the plot generated in the R console. Default is `TRUE`.
 #' @param PDF_file_path Character string. If provided, the plot will be saved in a PDF file following the path provided here. The path must end with '.pdf'.
 #' @param return_mean_data_per_samples_df Logical. Whether to include in the output the data.frame of mean rates per trait values computed for
@@ -74,7 +74,7 @@
 #' ## Load results of run_STRAPP_tests_over_time()
 #' data(STRAPP_tests_over_time_temp_example_2, package = "deepSTRAPP")
 #'
-#' ## Plot rates through time for continuous data
+#' # ------ Plot rates through time for continuous data ------ #
 #'
 #' # Visualize trait data
 #' hist(STRAPP_tests_over_time_temp_example_2$trait_data_df_over_time$trait_value)
@@ -102,7 +102,7 @@
 #'     ggplot2::theme(plot.title = ggplot2::element_text(color = "red", size = 15))
 #' print(plotTT_continuous_adj)
 #'
-#' ## Plot rates through time for categorical data
+#' # ------ Plot rates through time for categorical data ------ #
 #'
 #' # Turn trait data into multiple states
 #' trait_data_continuous <- STRAPP_tests_over_time_temp_example_2$trait_data_df_over_time$trait_value
@@ -136,7 +136,7 @@
 #' # Plot again
 #' print(plotTT_categorical$rates_TT_ggplot)
 #'
-#' ## Plot rates through time for biogeographic data
+#' # ------ Plot rates through time for biogeographic data ------ #
 #'
 #' # Turn trait data into multiple ranges
 #' trait_data_biogeographic <- trait_data_multinominal
@@ -190,13 +190,89 @@ plot_rates_through_time <- function (
 )
 {
   ### Check input validity
+  {
+    ## STRAPP_tests_over_time
+    # STRAPP_tests_over_time must have element $trait_data_df_over_time
+    if (is.null(STRAPP_tests_over_time$trait_data_df_over_time))
+    {
+      stop(paste0("'$trait_data_df_over_time' is missing from 'STRAPP_tests_over_time'. You can inspect the structure of the input object with 'str(STRAPP_tests_over_time, 2)'.\n",
+                  "See ?deepSTRAPP::run_STRAPP_tests_over_time() to learn how to generate those objects.\n",
+                  "Especially, check if you used 'extract_trait_data_melted_df = TRUE' to save the summary data.frame of trait values ",
+                  "found along branches at each time-step, needed for the RTT plot."))
+    }
+    # STRAPP_tests_over_time must have element $diversification_data_df_over_time
+    if (is.null(STRAPP_tests_over_time$diversification_data_df_over_time))
+    {
+      stop(paste0("'$diversification_data_df_over_time' is missing from 'STRAPP_tests_over_time'. You can inspect the structure of the input object with 'str(STRAPP_tests_over_time, 2)'.\n",
+                  "See ?deepSTRAPP::run_STRAPP_tests_over_time() to learn how to generate those objects.\n",
+                  "Especially, check if you used 'extract_diversification_data_melted_df = TRUE' to save the summary data.frame of diversification rates ",
+                  "found along branches at each time-step, needed for the RTT plot."))
+    }
 
-  # STRAPP_tests_over_time must contain $trait_data_df_over_time and $diversification_data_df_over_time
-  # Special warning to use extract_trait_data_melted_df = TRUE and extract_diversification_data_melted_df = TRUE to get them
+    ## rate_type must be either "speciation", "extinction" or "net_diversification"
+    if (!(rate_type %in% c("speciation", "extinction", "net_diversification")))
+    {
+      stop("'rate_type' can only be 'speciation', 'extinction', or 'net_diversification'.")
+    }
 
-  # If provided, PDF_file_path must end with ".pdf"
+    ## time_range
+    if (!is.null(time_range))
+    {
+      # Check that two values are provided for time_range
+      if (length(time_range) != 2)
+      {
+        stop(paste0("'time_range' must be a vector of two positive numerical values providing the time boundaries used for the plot."))
+      }
+      # Check that time_range is strictly positive
+      if (!identical(time_range, abs(time_range)))
+      {
+        stop(paste0("'time_range' must be strictly positive numerical values providing the time boundaries used for the plot."))
+      }
+      # Ensure that time_range are properly ordered in increasing values
+      time_range <- range(time_range)
+      # Check that time_range encompass multiple focal-time to be able to draw a line
+      focal_times_in_trait_df <- unique(STRAPP_tests_over_time$trait_data_df_over_time$focal_time)
+      focal_times_in_diversification_df <- unique(STRAPP_tests_over_time$diversification_data_df_over_time$focal_time)
+      shared_focal_times <- intersect(focal_times_in_trait_df, focal_times_in_diversification_df)
+      shared_focal_times_in_range <- (shared_focal_times >= time_range[1]) & (shared_focal_times <= time_range[2])
+      if (sum(shared_focal_times_in_range) < 2)
+      {
+        stop(paste0("'time_range' must encompass at least two focal_time recorded in the summary data.frames ",
+                    "for trait data ('STRAPP_tests_over_time$trait_data_df_over_time') and diversification rates ('STRAPP_tests_over_time$diversification_data_df_over_time').\n",
+                    "Current values of 'time_range' = ", paste(time_range, collapse = ", "), ".\n",
+                    "'focal_time' with data recorded for traits and rates are: ", paste(shared_focal_times, collapse = ", "),"."))
+      }
+    }
 
-  # Other checks are carried in sub-functions
+    ## CI_type
+    # CI_type is either "fuzzy" or "quantiles_rect"
+    if (!(CI_type %in% c("fuzzy", "quantiles_rect")))
+    {
+      stop("'CI_type' can only be 'fuzzy', or 'quantiles_rect'.")
+    }
+
+    ## CI_quantiles
+    # CI_quantiles should be a numerical between 0 and 1
+    if ((CI_quantiles < 0) | (CI_quantiles > 1))
+    {
+      stop(paste0("'CI_quantiles' reflects the proportion of rate values encompass by the confidence interval.\n",
+                  "This is used to display the variance in rates observed across posterior samples. It must be between 0 and 1.\n",
+                  "Current value of 'CI_quantiles' is ",CI_quantiles,"."))
+    }
+
+    ## PDF_file_path
+    # If provided, PDF_file_path must end with ".pdf"
+    if (!is.null(PDF_file_path))
+    {
+      if (length(grep(pattern = "\\.pdf$", x = PDF_file_path)) != 1)
+      {
+        stop("'PDF_file_path' must end with '.pdf'")
+      }
+    }
+
+    ## Other checks are carried in dedicated sub-functions
+  }
+
 
   ## Detect the type of trait data
   trait_data_type <- STRAPP_tests_over_time$trait_data_type
@@ -277,22 +353,38 @@ plot_rates_through_time_for_continuous_data <- function (
 )
 {
   ### Check input validity
-
-  # STRAPP_tests_over_time must contain $trait_data_df_over_time and $diversification_data_df_over_time
-  # Special warning to use extract_trait_data_melted_df = TRUE and extract_diversification_data_melted_df = TRUE to get them
-
-  # quantile_ranges contains numerical between 0 and 1, in increasing order.
-  # Special warning that display the provided argument if error.
-  # If range(quantile_ranges) is not c(0, 1), and the 0, 1 boundaries to the list of quantile_ranges and print a WARNING to say they have been added.
-
-  # Check that time_range is strictly positive, ordered in increasing age, and encompass multiple data points
-  # Can also order by doing time_range <- range(time_range) instead of stopping
-
-  # CI_type is either "fuzzy" or "quantiles_rect"
-
-  # CI_quantiles is a numerical between 0 and 1
-
-  # If provided, PDF_file_path must end with ".pdf"
+  {
+    ## quantile_ranges
+    # Check that quantile_ranges are between 0 and 1
+    if (any(quantile_ranges < 0))
+    {
+      stop(paste0("'quantile_ranges' must be numerical values between [0, 1] providing trait data quantiles to use to aggregate rate values.\n",
+                  "Current values are ", paste(quantile_ranges, collapse = ", ")),".")
+    }
+    if (any(quantile_ranges > 1))
+    {
+      stop(paste0("'quantile_ranges' must be numerical values between [0, 1] providing trait data quantiles to use to aggregate rate values.\n",
+                  "Current values are ", paste(quantile_ranges, collapse = ", ")),".")
+    }
+    # Ensure that quantile_ranges are properly ordered in increasing values
+    quantile_ranges <- quantile_ranges[order(quantile_ranges)]
+    # Ensure that quantile_ranges include the c(0,1) boundaries
+    initial_quantile_ranges <- quantile_ranges
+    if (range(quantile_ranges)[1] != 0)
+    {
+      warning(paste0("'quantile_ranges' does not start with 0. The lower boundary has been added."))
+      quantile_ranges <- c(0, quantile_ranges)
+    }
+    if (range(quantile_ranges)[2] != 1)
+    {
+      warning(paste0("'quantile_ranges' does not end with 1. The upper boundary has been added."))
+      quantile_ranges <- c(quantile_ranges, 1)
+    }
+    if (!(identical(range(initial_quantile_ranges), c(0, 1))))
+    {
+      warning(paste0("New 'quantile_ranges' are ", paste(quantile_ranges, collapse = ", ")),".")
+    }
+  }
 
   ## Adjust rate_type for labels
   rate_type_label <- stringr::str_to_title(rate_type)
@@ -650,21 +742,21 @@ plot_rates_through_time_for_categorical_data <- function (
 )
 {
   ### Check input validity
-
-  # STRAPP_tests_over_time must contain $trait_data_df_over_time and $diversification_data_df_over_time
-  # Special warning to use extract_trait_data_melted_df = TRUE and extract_diversification_data_melted_df = TRUE to get them
-
-  # select_trait_states must be "all" or states that are found in the $trait_data_df_over_time and $diversification_data_df_over_time data.frame
-  # Special warning that display the provided argument and the observed states
-
-  # Check that time_range is strictly positive, ordered in increasing age, and encompass multiple data points
-  # Can also order by doing time_range <- range(time_range) instead of stopping
-
-  # CI_type is either "fuzzy" or "quantiles_rect"
-
-  # CI_quantiles is a numerical between 0 and 1.0
-
-  # If provided, PDF_file_path must end with ".pdf"
+  {
+    ## select_trait_states
+    if (!any(select_trait_states == "all"))
+    {
+      # Check that select_trait_states are all found in the summary data.frame $trait_data_df_over_time
+      states_in_trait_df <- unique(STRAPP_tests_over_time$trait_data_df_over_time$trait_value)
+      states_in_trait_df <- states_in_trait_df[order(states_in_trait_df)]
+      if (!all(select_trait_states %in% states_in_trait_df))
+      {
+        stop(paste0("Some states listed in 'select_trait_states' are not found in the summary data.frame for trait data ('STRAPP_tests_over_time$trait_data_df_over_time').\n",
+                    "'select_trait_states' = ",paste(select_trait_states[order(select_trait_states)], collapse = ", "),".\n",
+                    "Observed states in trait data = ", paste(states_in_trait_df, collapse = ", ")),".")
+      }
+    }
+  }
 
   ## Create binding of new variables to avoid Notes
   tip_ID <- BAMM_sample_ID <- focal_time <- quant_traits <- NULL
@@ -988,21 +1080,22 @@ plot_rates_through_time_for_biogeographic_data <- function (
 )
 {
   ### Check input validity
+  {
+    ## select_trait_states
+    if (!any(select_trait_states == "all"))
+    {
+      # Check that select_trait_states are all found in the summary data.frame $trait_data_df_over_time
+      ranges_in_trait_df <- unique(STRAPP_tests_over_time$trait_data_df_over_time$trait_value)
+      ranges_in_trait_df <- ranges_in_trait_df[order(ranges_in_trait_df)]
+      if (!all(select_trait_states %in% ranges_in_trait_df))
+      {
+        stop(paste0("Some ranges listed in 'select_trait_states' are not found in the summary data.frame for trait data ('STRAPP_tests_over_time$trait_data_df_over_time').\n",
+                    "'select_trait_states' = ",paste(select_trait_states[order(select_trait_states)], collapse = ", "),".\n",
+                    "Observed ranges in trait data = ", paste(ranges_in_trait_df, collapse = ", ")),".")
+      }
+    }
+  }
 
-  # STRAPP_tests_over_time must contain $trait_data_df_over_time and $diversification_data_df_over_time
-  # Special warning to use extract_trait_data_melted_df = TRUE and extract_diversification_data_melted_df = TRUE to get them
-
-  # select_trait_states must be "all" or states that are found in the $trait_data_df_over_time and $diversification_data_df_over_time data.frame
-  # Special warning that display the provided argument and the observed states
-
-  # Check that time_range is strictly positive, ordered in increasing age, and encompass multiple data points
-  # Can also order by doing time_range <- range(time_range) instead of stopping
-
-  # CI_type is either "fuzzy" or "quantiles_rect"
-
-  # CI_quantiles is a numerical between 0 and 1.0
-
-  # If provided, PDF_file_path must end with ".pdf"
 
   ## Create binding of new variables to avoid Notes
   tip_ID <- BAMM_sample_ID <- focal_time <- quant_traits <- NULL

@@ -28,6 +28,7 @@
 #' @export
 #' @importFrom ggplot2 ggplot geom_line aes geom_hline scale_y_continuous scale_x_continuous scale_color_discrete xlab ylab ggtitle theme element_line element_rect element_text unit margin
 #' @importFrom cowplot save_plot
+#' @importFrom stats complete.cases
 #'
 #' @details Plots are build based on the p-values recorded in summary_df provided by [deepSTRAPP::run_STRAPP_tests_over_time()].
 #'
@@ -81,20 +82,123 @@ plot_STRAPP_pvalues_over_time <-  function (
 )
 {
   ### Check input validity
+  {
+    ## STRAPP_tests_over_time
+    # STRAPP_tests_over_time must have element $pvalues_summary_df
+    if (is.null(STRAPP_tests_over_time$pvalues_summary_df))
+    {
+      stop(paste0("'$pvalues_summary_df' is missing from 'STRAPP_tests_over_time'. You can inspect the structure of the input object with 'str(STRAPP_tests_over_time, 2)'.\n",
+                  "See ?deepSTRAPP::run_STRAPP_tests_over_time() to learn how to generate those objects."))
+    }
 
-  # STRAPP_tests_over_time must have $pvalues_summary_df, with $focal_time and $p_value columns
+    ## time_range
+    if (!is.null(time_range))
+    {
+      # Check that two values are provided for time_range
+      if (length(time_range) != 2)
+      {
+        stop(paste0("'time_range' must be a vector of two positive numerical values providing the time boundaries used for the plot."))
+      }
+      # Check that time_range is strictly positive
+      if (!identical(time_range, abs(time_range)))
+      {
+        stop(paste0("'time_range' must be strictly positive numerical values providing the time boundaries used for the plot."))
+      }
+      # Ensure that time_range are properly ordered in increasing values
+      time_range <- range(time_range)
+    } else {
+      # Extract time range from data if not provided
+      time_range <- range(STRAPP_tests_over_time$pvalues_summary_df$focal_time)
+    }
+    # Check that time_range encompass multiple focal-time with recorded p-values to be able to draw a line
+    pvalues_summary_df_no_NA <- STRAPP_tests_over_time$pvalues_summary_df[stats::complete.cases(STRAPP_tests_over_time$pvalues_summary_df), ]
+    focal_times_in_pvalues_df <- unique(pvalues_summary_df_no_NA$focal_time)
+    focal_times_in_range <- (focal_times_in_pvalues_df >= time_range[1]) & (focal_times_in_pvalues_df <= time_range[2])
+    if (sum(focal_times_in_range) < 2)
+    {
+      stop(paste0("'time_range' must encompass at least two focal_time with p-value recorded in 'STRAPP_tests_over_time$pvalues_summary_df'.\n",
+                  "Current values of 'time_range' = ", paste(time_range, collapse = ", "), ".\n",
+                  "'focal_time' with p-values recorded are: ", paste(focal_times_in_pvalues_df, collapse = ", "),"."))
+    }
 
-  # If provided, PDF_file_path must end with ".pdf"
+    ## alpha
+    # alpha must be set between 0 and 1, or NULL.
+    if (!is.null(alpha))
+    {
+      if ((alpha < 0) | (alpha > 1))
+      {
+        stop(paste0("'alpha' is the proportion of type I error tolerated to assess significance of the test. It must be between 0 and 1.\n",
+                    "Current value of 'alpha' is ",alpha,"."))
+      }
+    }
 
-  # plot_posthoc_tests = TRUE only for "multinominal" data
-  # Check if $pvalues_summary_df_for_posthoc_pairwise_tests is present, with $focal_time, $pair, and $p_value columns
-  # Make a special warning to select posthoc_pairwise_tests = TRUE in run_STRAPP_tests_over_time().
+    ## plot_posthoc_tests
+    if (plot_posthoc_tests)
+    {
+      # Extract $trait_data_type_for_stats from STRAPP_tests_over_time$STRAPP_results_over_time
+      trait_data_type_for_stats <- STRAPP_tests_over_time$trait_data_type_for_stats
+      # plot_posthoc_tests = TRUE only for "multinominal" data
+      if (trait_data_type_for_stats != "multinominal")
+      {
+        stop(paste0("'posthoc_pairwise_tests = TRUE' only makes sense for categorical/biogeographic data with more than two states/ranges.\n",
+                    "Set 'posthoc_pairwise_tests = FALSE', or provide 'STRAPP_tests_over_time' for a trait with more than two states/ranges'.\n",
+                    "See ?deepSTRAPP::run_STRAPP_tests_over_time() to learn how to generate those objects."))
+      }
+      # Check if $pvalues_summary_df_for_posthoc_pairwise_tests is present in STRAPP_tests_over_time.
+      if (is.null(STRAPP_tests_over_time$pvalues_summary_df_for_posthoc_pairwise_tests))
+      {
+        stop(paste0("'$pvalues_summary_df_for_posthoc_pairwise_tests' is missing from 'STRAPP_tests_over_time'. You can inspect the structure of the input object with 'str(STRAPP_tests_over_time, 2)'.\n",
+                    "See ?deepSTRAPP::run_STRAPP_tests_over_time() to learn how to generate those objects.\n",
+                    "Especially, check if you used 'posthoc_pairwise_tests = TRUE' to run post hoc tests."))
+      }
 
-  # Check that select_posthoc_pairs is "all" or one of the pair in STRAPP_tests_over_time$pvalues_summary_df_for_posthoc_pairwise_tests$pair
+      # Extract posthoc pairwise tests with recorded p-values
+      pvalues_summary_df_for_posthoc_no_NA <- STRAPP_tests_over_time$pvalues_summary_df_for_posthoc_pairwise_tests[stats::complete.cases(STRAPP_tests_over_time$pvalues_summary_df_for_posthoc_pairwise_tests), ]
 
-  # Check that time_range is strictly positive, ordered in increasing age, and encompass multiple data points (per pair, if post hoc)
+      ## select_posthoc_pairs
+      # Check that select_posthoc_pairs is "all" or match the pairs in STRAPP_tests_over_time$pvalues_summary_df_for_posthoc_pairwise_tests$pair
+      if (!("all" %in% select_posthoc_pairs))
+      {
+        available_pairs <- unique(pvalues_summary_df_for_posthoc_no_NA$pair)
+        available_pairs <- available_pairs[order(available_pairs)]
+        if (!all(select_posthoc_pairs %in% available_pairs))
+        {
+          stop(paste0("Some pairs of states/ranges listed in 'select_posthoc_pairs' are not found in the summary data.frame for posthoc tests ('STRAPP_tests_over_time$pvalues_summary_df_for_posthoc_pairwise_tests').\n",
+                      "'select_posthoc_pairs' = ",paste(select_posthoc_pairs[order(select_posthoc_pairs)], collapse = ", "),".\n",
+                      "Observed pairs of states/ranges with recorded p-values = ", paste(available_pairs, collapse = ", ")),".")
+        }
+      }
 
-  # Check that alpha is NULL or a numerical between 0 and 1.
+      ## time_range
+      # Check that time_range encompass multiple focal-time with recorded p-values per pair (!) to be able to draw a line
+      # Split pvalues_df per pairs
+      pvalues_summary_df_per_pairs <- split(x = pvalues_summary_df_for_posthoc_no_NA, f = pvalues_summary_df_for_posthoc_no_NA$pair)
+      # Extract focal time per pairs
+      focal_times_per_pairs <- lapply(X = pvalues_summary_df_per_pairs, FUN = function (x) { unique(x$focal_time) } )
+      # Detect focal time within range, per pairs
+      focal_times_in_range_per_pairs <- lapply(X = focal_times_per_pairs, FUN = function (x) { (x >= time_range[1]) & (x <= time_range[2]) } )
+      focal_times_in_range_per_pairs_counts <- unlist(lapply(X = focal_times_in_range_per_pairs, FUN = sum))
+      if (any(focal_times_in_range_per_pairs_counts < 2))
+      {
+        pairs_with_issue <- names(focal_times_in_range_per_pairs_counts)[focal_times_in_range_per_pairs_counts < 2]
+        focal_times_for_pair_with_issue <- focal_times_per_pairs[[which.max(focal_times_in_range_per_pairs_counts < 2)]]
+        stop(paste0("'time_range' must encompass at least two focal_time with recorded p-value for each pair in 'STRAPP_tests_over_time$pvalues_summary_df_for_posthoc_pairwise_tests'.\n",
+                    "Current values of 'time_range' = ", paste(time_range, collapse = ", "), ".\n",
+                    "'focal_time' with p-values recorded for pair '",pairs_with_issue[1],"' are: ", paste(focal_times_for_pair_with_issue, collapse = ", "),"."))
+      }
+    }
+
+    ## PDF_file_path
+    # If provided, PDF_file_path must end with ".pdf"
+    if (!is.null(PDF_file_path))
+    {
+      if (length(grep(pattern = "\\.pdf$", x = PDF_file_path)) != 1)
+      {
+        stop("'PDF_file_path' must end with '.pdf'")
+      }
+    }
+  }
+
 
   ## Remove "_" from $rate_type
   rate_type <- gsub(pattern = "_", replacement = " ", x = STRAPP_tests_over_time$rate_type)
@@ -105,14 +209,8 @@ plot_STRAPP_pvalues_over_time <-  function (
     pvalues_summary_df <- STRAPP_tests_over_time$pvalues_summary_df
 
     # Extract data for the selected time range
-    if (!is.null(time_range))
-    {
-      pvalues_summary_df <- pvalues_summary_df[pvalues_summary_df$focal_time <= time_range[2], ]
-      pvalues_summary_df <- pvalues_summary_df[pvalues_summary_df$focal_time >= time_range[1], ]
-    } else {
-      # Extract time range from data
-      time_range <- range(pvalues_summary_df$focal_time)
-    }
+    pvalues_summary_df <- pvalues_summary_df[pvalues_summary_df$focal_time <= time_range[2], ]
+    pvalues_summary_df <- pvalues_summary_df[pvalues_summary_df$focal_time >= time_range[1], ]
 
     # Extract data to avoid 'binding warning'
     p_value <- pvalues_summary_df$p_value

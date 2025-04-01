@@ -115,7 +115,7 @@
 #'
 #' @return The function returns a list with at least two elements.
 #'
-#'   * `$STRAPP_results` List with at least six elements summarizing the results of the STRAPP tests.
+#'   * `$STRAPP_results` List with at least eight elements summarizing the results of the STRAPP tests.
 #'     See [compute_STRAPP_test_for_focal_time()] for a detailed description of the output.
 #'   * `$focal_time` Integer. The time, in terms of time distance from the present, at which the data were extracted and the STRAPP test carried out.
 #'

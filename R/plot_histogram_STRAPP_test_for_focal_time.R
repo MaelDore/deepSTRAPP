@@ -69,7 +69,7 @@
 #' trait_data_multinominal$trait_data[trait_data_continuous$trait_data < 0] <- "state_B"
 #' trait_data_multinominal$trait_data[trait_data_continuous$trait_data < -1] <- "state_A"
 #' trait_data_multinominal$trait_data[trait_data_continuous$trait_data >= 0] <- "state_C"
-#' trait_data_multinominal$data_type <- "categorical"
+#' trait_data_multinominal$trait_data_type <- "categorical"
 #'
 #' table(trait_data_multinominal$trait_data)
 #'
@@ -125,15 +125,79 @@ plot_histogram_STRAPP_test_for_focal_time <- function (STRAPP_results,
 
 {
   ### Check input validity
+  {
+    ## STRAPP_results
+    # STRAPP_results must have all the needed elements: $focal_time, $estimate, $p_value, $method, $trait_data_type_for_stats, $perm_data_df
+    if (is.null(STRAPP_results$focal_time))
+    {
+      stop(paste0("'$focal_time' is missing from 'STRAPP_results'. You can inspect the structure of the input object with 'str(STRAPP_results, 2)'.\n",
+                  "See ?deepSTRAPP::run_STRAPP_test_for_focal_time() to learn how to generate those objects."))
+    }
+    if (is.null(STRAPP_results$estimate))
+    {
+      stop(paste0("'$estimate' is missing from 'STRAPP_results'. You can inspect the structure of the input object with 'str(STRAPP_results, 2)'.\n",
+                  "See ?deepSTRAPP::run_STRAPP_test_for_focal_time() to learn how to generate those objects."))
+    }
+    if (is.null(STRAPP_results$p_value))
+    {
+      stop(paste0("'$p_value' is missing from 'STRAPP_results'. You can inspect the structure of the input object with 'str(STRAPP_results, 2)'.\n",
+                  "See ?deepSTRAPP::run_STRAPP_test_for_focal_time() to learn how to generate those objects."))
+    }
+    if (is.null(STRAPP_results$method))
+    {
+      stop(paste0("'$method' is missing from 'STRAPP_results'. You can inspect the structure of the input object with 'str(STRAPP_results, 2)'.\n",
+                  "See ?deepSTRAPP::run_STRAPP_test_for_focal_time() to learn how to generate those objects."))
+    }
+    if (is.null(STRAPP_results$trait_data_type_for_stats))
+    {
+      stop(paste0("'$trait_data_type_for_stats' is missing from 'STRAPP_results'. You can inspect the structure of the input object with 'str(STRAPP_results, 2)'.\n",
+                  "See ?deepSTRAPP::run_STRAPP_test_for_focal_time() to learn how to generate those objects."))
+    }
+    if (is.null(STRAPP_results$perm_data_df))
+    {
+      stop(paste0("'$perm_data_df' is missing from 'STRAPP_results'. You can inspect the structure of the input object with 'str(STRAPP_results, 2)'.\n",
+                  "See ?deepSTRAPP::run_STRAPP_test_for_focal_time() to learn how to generate those objects.\n",
+                  "Especially, check if you used 'return_perm_data = TRUE' to save the permutated data needed for the histogram plot."))
+    }
 
-  # STRAPP_results must have all the needed elements: $focal_time, $trait_type, $estimate, $stats_median, $p_value, $method, $perm_data_df
-    # Make a special warning if $perm_data_df is missing to ask to select return_perm_data = TRUE in compute_STRAPP_test_for_focal_time() to save the raw data needed for the histogram plot
+    ## plot_posthoc_tests
+    if (plot_posthoc_tests)
+    {
+      # plot_posthoc_tests = TRUE only for "multinominal" data
+      if (STRAPP_results$trait_data_type_for_stats != "multinominal")
+      {
+        stop(paste0("'posthoc_pairwise_tests = TRUE' only makes sense for categorical/biogeographic data with more than two states/ranges.\n",
+                    "Set 'posthoc_pairwise_tests = FALSE', or provide 'STRAPP_results' for a trait with more than two states/ranges'.\n",
+                    "See ?deepSTRAPP::run_STRAPP_test_for_focal_time() to learn how to generate those objects."))
+      }
+      # Check if STRAPP_results$posthoc_pairwise_tests$summary_df is present.
+      if (is.null(STRAPP_results$posthoc_pairwise_tests$summary_df))
+      {
+        stop(paste0("'$posthoc_pairwise_tests$summary_df' is missing from 'STRAPP_results'. You can inspect the structure of the input object with 'str(STRAPP_results, 2)'.\n",
+                    "See ?deepSTRAPP::run_STRAPP_test_for_focal_time() to learn how to generate those objects.\n",
+                    "Especially, check if you used 'posthoc_pairwise_tests = TRUE' to compute pairwise tests.\n",
+                    "In addition, you must also select 'return_perm_data = TRUE' to save the permutated data needed for the histogram plots."))
+      }
+      # Check if $posthoc_pairwise_tests$perm_data_array is present.
+      if (is.null(STRAPP_results$posthoc_pairwise_tests$perm_data_array))
+      {
+        stop(paste0("'$posthoc_pairwise_tests$perm_data_array' is missing from 'STRAPP_results'. You can inspect the structure of the input object with 'str(STRAPP_results, 2)'.\n",
+                    "See ?deepSTRAPP::run_STRAPP_test_for_focal_time() to learn how to generate those objects.\n",
+                    "Especially, check if you used 'posthoc_pairwise_tests = TRUE' AND 'return_perm_data = TRUE' to compute pairwise tests ",
+                    "and save the permutated data needed for the histogram plots."))
+      }
+    }
 
-  # If provided, PDF_file_path must end with ".pdf"
-
-  # plot_posthoc_tests = TRUE only for "multinominal" data
-    # Check if $posthoc_pairwise_tests$perm_data_array is present.
-    # Make a special warning if $posthoc_pairwise_tests$perm_data_array is missing to select posthoc_pairwise_tests = TRUE AND return_perm_data = TRUE in compute_STRAPP_test_for_focal_time() to save the raw data needed for the histogram plot of post hoc tests.
+    ## PDF_file_path
+    # If provided, PDF_file_path must end with ".pdf"
+    if (!is.null(PDF_file_path))
+    {
+      if (length(grep(pattern = "\\.pdf$", x = PDF_file_path)) != 1)
+      {
+        stop("'PDF_file_path' must end with '.pdf'")
+      }
+    }
+  }
 
   if (!plot_posthoc_tests)
   {

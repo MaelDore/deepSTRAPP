@@ -122,12 +122,13 @@
 #'     found at each `focal_time`. Updated `BAMM_object` can be plotted with [BAMMtools::plot.bammdata()] to display
 #'     a phylogeny mapped with diversification rates with branches cut at each `focal_time`.
 #'
-#' @return The function returns a list with at least four elements.
+#' @return The function returns a list with at least five elements.
 #'
 #'   * `$pvalues_summary_df` Data.frame with three columns providing test stat `$estimate` and `$p_value` obtained for each time-step (i.e., `$focal_time`),
 #'     that can be passed down to [deepSTRAPP::plot_STRAPP_pvalues_over_time()] to generate a plot showing the evolution of the test results across time.
 #'   * `$time_steps` Numerical vector. Time steps at which the STRAPP tests were carried out in the same order as the objects returned in the output lists.
 #'   * `$trait_data_type` Character string. Specify the type of trait data. Possible values are: "continuous", "categorical", "biogeographic".
+#'   * `$trait_data_type_for_stats` Character string. The type of trait data used to select statistical method. One of 'continuous', 'binary', or 'multinominal'.
 #'   * `$rate_type` Character string. The type of diversification rates used in the tests: 'speciation', 'extinction' or 'net_diversification'.
 #'
 #'   Optional summary df for multinominal data, if `posthoc_pairwise_tests = TRUE`:
@@ -244,6 +245,7 @@
 #' plot_histogram_STRAPP_test_for_focal_time(
 #'    STRAPP_results = STRAPP_tests_over_time$STRAPP_results_over_time[[2]]) }
 #'
+
 
 run_STRAPP_tests_over_time <- function (contMap,
                                         ace = NULL,
@@ -481,6 +483,10 @@ run_STRAPP_tests_over_time <- function (contMap,
 
   ## Store type of trait data tested
   final_ouput$trait_data_type <- trait_data_type
+
+  ## Store the type of trait data used to select the appropriate statistical method
+  trait_data_type_for_stats_list <- unlist(lapply(X = STRAPP_test_outputs_over_time, FUN = function (x) { x$STRAPP_results$trait_data_type_for_stats } ))
+  final_ouput$trait_data_type_for_stats <- unique(trait_data_type_for_stats_list)
 
   ## Store type of diversification rates tested
   final_ouput$rate_type <- rate_type

@@ -111,7 +111,7 @@
 #'     The rationale is that there is no reason to assume that tip rates are distributed normally or log-normally.
 #'     Thus, a Spearman's rank correlation test is favored.
 #'
-#' @return The function returns a list with at least six elements.
+#' @return The function returns a list with at least eight elements.
 #'
 #'   Summary elements for the main test:
 #'   * `$estimate` Named numerical. Value of the test statistic used to assess significance of the test
@@ -120,6 +120,8 @@
 #'   * `$p-value` Numerical. P-value of the test. The test is considered significant if `$p-value` is lower than `alpha`.
 #'   * `$method` Character string. The statistical method used to carry out the test.
 #'   * `$rate_type` Character string. The type of diversification rates tested. One of 'speciation', 'extinction' or 'net_diversification'.
+#'   * `$trait_data_type` Character string. The type of trait data as found in 'trait_data_list$trait_data_type'. One of 'continuous', 'categorical', or 'biogeographic'.
+#'   * `$trait_data_type_for_stats` Character string. The type of trait data used to select statistical method. One of 'continuous', 'binary', or 'multinominal'.
 #'   * `$focal_time` The time in the past at which the trait and rates data were tested.
 #'
 #'   If using continuous or binary data:
@@ -276,7 +278,7 @@ compute_STRAPP_test_for_focal_time <- function (BAMM_object, trait_data_list,
     # BAMM_object must be a 'bammdata' object
     if (!("bammdata" %in% class(BAMM_object)))
     {
-      stop("'BAMM_object' must have the 'bammdata' class. See ?BAMMtools::getEventData and ?deepSTRAPP::update_rates_and_regimes_for_focal_time() to learn how to generate those objects.")
+      stop("'BAMM_object' must have the 'bammdata' class. See ?BAMMtools::getEventData() and ?deepSTRAPP::update_rates_and_regimes_for_focal_time() to learn how to generate those objects.")
     }
     # Number of posterior sample data must be equal between $tipStates, $tipLambda and $tipMu
     posterior_samples_length <- c(length(BAMM_object$tipStates), length(BAMM_object$tipLambda), length(BAMM_object$tipMu))
@@ -422,14 +424,16 @@ compute_STRAPP_test_for_focal_time <- function (BAMM_object, trait_data_list,
     nb_levels <- nlevels(as.factor(trait_data))
     if (nb_levels == 2) # Case with two states
     {
-      trait_data_type <- "binary"
+      trait_data_type_for_stats <- "binary"
     } else { # Case with more than two states
-      trait_data_type <- "multinominal"
+      trait_data_type_for_stats <- "multinominal"
     }
+  } else {
+    trait_data_type_for_stats <- "continuous"
   }
 
   ## posthoc_pairwise_tests = TRUE. Only makes sense if more than 2 states/ranges in categorical/biogeographic data
-  if (trait_data_type != "multinominal" & posthoc_pairwise_tests == TRUE)
+  if (trait_data_type_for_stats != "multinominal" & posthoc_pairwise_tests == TRUE)
   {
     stop(paste0("'posthoc_pairwise_tests = TRUE' only makes sense for categorical/biogeographic data with more than two states/ranges.\n",
                 "If you want to test specific hypotheses with continuous or categorical binary data, use 'two_tailed = FALSE' and provide the 'one_tailed_hypothesis'.\n"))
@@ -437,12 +441,13 @@ compute_STRAPP_test_for_focal_time <- function (BAMM_object, trait_data_list,
 
   ## Compute the appropriate internal function depending on the type of data
 
-  switch(EXPR = trait_data_type,
+  switch(EXPR = trait_data_type_for_stats,
          continuous =   { # Case for continuous data
            # Stat test = Spearman's rank Rho test
            STRAPP_results <- compute_STRAPP_test_for_continuous_data(
              BAMM_data = BAMM_data,
              trait_data = trait_data,
+             trait_data_type = trait_data_type,
              rate_type = rate_type,
              nb_permutations = nb_permutations,
              replace_samples = replace_samples,
@@ -458,6 +463,7 @@ compute_STRAPP_test_for_focal_time <- function (BAMM_object, trait_data_list,
            STRAPP_results <- compute_STRAPP_test_for_binary_data(
              BAMM_data = BAMM_data,
              trait_data = trait_data,
+             trait_data_type = trait_data_type,
              rate_type = rate_type,
              nb_permutations = nb_permutations,
              replace_samples = replace_samples,
@@ -474,6 +480,7 @@ compute_STRAPP_test_for_focal_time <- function (BAMM_object, trait_data_list,
            STRAPP_results <- compute_STRAPP_test_for_multinominal_data(
              BAMM_data = BAMM_data,
              trait_data = trait_data,
+             trait_data_type = trait_data_type,
              rate_type = rate_type,
              nb_permutations = nb_permutations,
              replace_samples = replace_samples,
@@ -499,6 +506,7 @@ compute_STRAPP_test_for_focal_time <- function (BAMM_object, trait_data_list,
 
 compute_STRAPP_test_for_continuous_data <- function (
     BAMM_data, trait_data,
+    trait_data_type = "continuous",
     rate_type = "net_diversification",
     nb_permutations = NULL,
     replace_samples = FALSE,
@@ -723,6 +731,8 @@ compute_STRAPP_test_for_continuous_data <- function (
   STRAPP_results$two_tailed <- two_tailed # Type of test: two-tailed or not
   STRAPP_results$one_tailed_hypothesis <- one_tailed_hypothesis # Type of hypothesis if one-tailed test
   STRAPP_results$rate_type <- rate_type # Type of rates: speciation, extinction, or net diversification
+  STRAPP_results$trait_data_type <- trait_data_type # Type of trait data: continuous, categorical, or biogeographic
+  STRAPP_results$trait_data_type_for_stats <- "continuous" # Type of trait data used to select statistical method: continuous, binary, or multinominal
 
   ## Save permutation results in a data.frame
   if (return_perm_data)
@@ -748,6 +758,7 @@ compute_STRAPP_test_for_continuous_data <- function (
 
 compute_STRAPP_test_for_binary_data <- function (
     BAMM_data, trait_data,
+    trait_data_type,
     rate_type = "net_diversification",
     nb_permutations = NULL,
     replace_samples = FALSE,
@@ -986,6 +997,8 @@ compute_STRAPP_test_for_binary_data <- function (
   STRAPP_results$two_tailed <- two_tailed # Type of test: two-tailed or not
   STRAPP_results$one_tailed_hypothesis <- one_tailed_hypothesis # Type of hypothesis if one-tailed test
   STRAPP_results$rate_type <- rate_type # Type of rates: speciation, extinction, or net diversification
+  STRAPP_results$trait_data_type <- trait_data_type # Type of trait data: continuous, categorical, or biogeographic
+  STRAPP_results$trait_data_type_for_stats <- "binary" # Type of trait data used to select statistical method: continuous, binary, or multinominal
 
   ## Save permutation results in a data.frame
   if (return_perm_data)
@@ -1011,6 +1024,7 @@ compute_STRAPP_test_for_binary_data <- function (
 
 compute_STRAPP_test_for_multinominal_data <- function (
     BAMM_data, trait_data,
+    trait_data_type,
     rate_type = "net_diversification",
     nb_permutations = NULL,
     replace_samples = FALSE,
@@ -1156,6 +1170,8 @@ compute_STRAPP_test_for_multinominal_data <- function (
   STRAPP_results$p_value <- p_value # P-value of the test
   STRAPP_results$method <- "Kruskal-Wallis" # Stats method
   STRAPP_results$rate_type <- rate_type # Type of rates: speciation, extinction, or net diversification
+  STRAPP_results$trait_data_type <- trait_data_type # Type of trait data: continuous, categorical, or biogeographic
+  STRAPP_results$trait_data_type_for_stats <- "multinominal" # Type of trait data used to select statistical method: continuous, binary, or multinominal
 
   ## Save permutation results
   if (return_perm_data)

@@ -93,18 +93,91 @@ plot_histograms_STRAPP_tests_over_time <- function (STRAPP_tests_over_time,
 
 {
   ### Check input validity
+  {
+    ## STRAPP_tests_over_time$STRAPP_results_over_time
+    # STRAPP_tests_over_time must have element $STRAPP_results_over_time
+    if (is.null(STRAPP_tests_over_time$STRAPP_results_over_time))
+    {
+      stop(paste0("'$STRAPP_results_over_time' is missing from 'STRAPP_tests_over_time'. You can inspect the structure of the input object with 'str(STRAPP_tests_over_time, 2)'.\n",
+                  "See ?deepSTRAPP::run_STRAPP_tests_over_time() to learn how to generate those objects.\n",
+                  "Especially, check if you used 'return_STRAPP_results = TRUE' to save the STRAPP_results for each time-step needed for the histogram plots."))
+    }
+    ## STRAPP_tests_over_time$time_steps
+    # STRAPP_tests_over_time must have element $time_steps
+    if (is.null(STRAPP_tests_over_time$time_steps))
+    {
+      stop(paste0("'$time_steps' is missing from 'STRAPP_tests_over_time'. You can inspect the structure of the input object with 'str(STRAPP_tests_over_time, 2)'.\n",
+                  "See ?deepSTRAPP::run_STRAPP_tests_over_time() to learn how to generate those objects."))
+    }
+    # Extract $focal_time from STRAPP_tests_over_time$STRAPP_results_over_time
+    focal_time_list <- unlist(lapply(X = STRAPP_tests_over_time$STRAPP_results_over_time, FUN = function (x) { x$focal_time } ))
+    # STRAPP_tests_over_time$time_steps must match with focal_time found in STRAPP_tests_over_time$STRAPP_results_over_time
+    if (!all(STRAPP_tests_over_time$time_steps == focal_time_list))
+    {
+      stop(paste0("'STRAPP_tests_over_time$time_steps' does not match with 'focal_time' found in 'STRAPP_tests_over_time$STRAPP_results_over_time'.\n",
+                  "You can inspect the structure of the input object with 'str(STRAPP_tests_over_time, 2)'.\n",
+                  "See ?deepSTRAPP::run_STRAPP_tests_over_time() to learn how to generate those objects."))
+    }
 
-  # STRAPP_tests_over_time must have $STRAPP_results_over_time
-  # Make a special warning if $STRAPP_results_over_time is missing to ask to select return_STRAPP_results = TRUE in compute_STRAPP_test_over_time() to save the STRAPP_results needed for the histogram plot
+    ## STRAPP_tests_over_time$STRAPP_results_over_time is a list.
+    # All elements are STRAPP_results that should have all the needed sub-elements: $focal_time, $estimate, $p_value, $method, $trait_data_type_for_stats, $perm_data_df
+    # Check for presence of $perm_data_df
+    perm_data_df_check_list <- unlist(lapply(X = STRAPP_tests_over_time$STRAPP_results_over_time, FUN = function (x) { "perm_data_df" %in% names(x) } ))
+    if (!all(perm_data_df_check_list))
+    {
+      stop(paste0("Elements in 'STRAPP_tests_over_time$STRAPP_results_over_time' do not have a '$perm_data_df'.\n",
+                  "You can inspect the structure of the input object with 'str(STRAPP_tests_over_time$STRAPP_results_over_time, 2)'.\n",
+                  "See ?deepSTRAPP::run_STRAPP_tests_over_time() to learn how to generate those objects.\n",
+                  "Especially, check if you used 'return_STRAPP_results = TRUE' AND 'return_perm_data = TRUE' to save the permutated data",
+                  "needed for the histogram plot to save the permutated data needed for the histogram plot."))
+    }
 
-  # STRAPP_tests_over_time must have $STRAPP_results_over_time with the $perm_data_df
-  # Make a special warning if $perm_data_df is missing to ask to select return_STRAPP_results = TRUE AND return_perm_data = TRUE in compute_STRAPP_test_over_time() to save the raw data needed for the histogram plot
+    ## plot_posthoc_tests
+    if (plot_posthoc_tests)
+    {
+      # Extract $trait_data_type_for_stats from STRAPP_tests_over_time$STRAPP_results_over_time
+      trait_data_type_for_stats <- STRAPP_tests_over_time$trait_data_type_for_stats
+      # plot_posthoc_tests = TRUE only for "multinominal" data
+      if (trait_data_type_for_stats != "multinominal")
+      {
+        stop(paste0("'posthoc_pairwise_tests = TRUE' only makes sense for categorical/biogeographic data with more than two states/ranges.\n",
+                    "Set 'posthoc_pairwise_tests = FALSE', or provide 'STRAPP_tests_over_time' for a trait with more than two states/ranges'.\n",
+                    "See ?deepSTRAPP::run_STRAPP_tests_over_time() to learn how to generate those objects."))
+      }
+      # Check if $posthoc_pairwise_tests is present in elements of STRAPP_tests_over_time$STRAPP_results_over_time.
+      posthoc_pairwise_tests_check_list <- unlist(lapply(X = STRAPP_tests_over_time$STRAPP_results_over_time, FUN = function (x) { "posthoc_pairwise_tests" %in% names(x) } ))
+      if (!all(posthoc_pairwise_tests_check_list))
+      {
+        stop(paste0("Elements in 'STRAPP_tests_over_time$STRAPP_results_over_time' do not have a '$posthoc_pairwise_tests'.\n",
+                    "You can inspect the structure of the input object with 'str(STRAPP_tests_over_time$STRAPP_results_over_time, 2)'.\n",
+                    "See ?deepSTRAPP::run_STRAPP_tests_over_time() to learn how to generate those objects.\n",
+                    "Especially, check if you used 'return_STRAPP_results = TRUE' AND 'posthoc_pairwise_tests = TRUE' to run post hoc tests ",
+                    "and save the results in 'STRAPP_tests_over_time'."))
+      }
+      # Check if $posthoc_pairwise_tests$perm_data_array is present in elements of STRAPP_tests_over_time$STRAPP_results_over_time.
+      posthoc_pairwise_tests_list <- lapply(X = STRAPP_tests_over_time$STRAPP_results_over_time, FUN = function (x) { x$posthoc_pairwise_tests } )
+      perm_data_array_check_list <- unlist(lapply(X = posthoc_pairwise_tests_list, FUN = function (x) { "perm_data_array" %in% names(x) } ))
+      if (!all(perm_data_array_check_list))
+      {
+        stop(paste0("Elements in 'STRAPP_tests_over_time$STRAPP_results_over_time' do not have a '$posthoc_pairwise_tests$perm_data_array'.\n",
+                    "You can inspect the structure of the input object with 'str(STRAPP_tests_over_time$STRAPP_results_over_time, 3)'.\n",
+                    "See ?deepSTRAPP::run_STRAPP_tests_over_time() to learn how to generate those objects.\n",
+                    "Especially, check if you used 'return_STRAPP_results = TRUE', 'posthoc_pairwise_tests = TRUE' AND return_perm_data = TRUE to run post hoc tests ",
+                    "and save the results and the permutated data needed for the histogram plots in 'STRAPP_tests_over_time'."))
+      }
+    }
 
-  # plot_posthoc_tests = TRUE only for "multinominal" data
-  # Check if $posthoc_pairwise_tests$perm_data_array is present in $STRAPP_results_over_time.
-  # Make a special warning if $posthoc_pairwise_tests$perm_data_array is missing to select return_STRAPP_results = TRUE, posthoc_pairwise_tests = TRUE AND return_perm_data = TRUE in compute_STRAPP_test_over_time() to save the raw data needed for the histogram plot of post hoc tests.
+    ## PDF_file_path
+    # If provided, PDF_file_path must end with ".pdf"
+    if (!is.null(PDF_file_path))
+    {
+      if (length(grep(pattern = "\\.pdf$", x = PDF_file_path)) != 1)
+      {
+        stop("'PDF_file_path' must end with '.pdf'")
+      }
+    }
+  }
 
-  # If provided, PDF_file_path must end with ".pdf"
 
   if (!plot_posthoc_tests)
   {
@@ -185,7 +258,7 @@ plot_histograms_STRAPP_tests_over_time <- function (STRAPP_tests_over_time,
     ## Export all plots in one PDF if requested
     if (!is.null(PDF_file_path))
     {
-      grDevices::pdf(file = PDF_file_path, height = 8, width = 10, onefile = TRUE)
+      grDevices::pdf(file = file.path(PDF_file_path), height = 8, width = 10, onefile = TRUE)
       for (i in seq_along(ggplot_histo_list))
       {
         print(ggplot_histo_list[[i]])
@@ -331,7 +404,7 @@ plot_histograms_STRAPP_tests_over_time <- function (STRAPP_tests_over_time,
       # nb_rows <- ceiling(nb_plots/nb_cols)
 
       # Export PDF witn one page per plot
-      grDevices::pdf(file = PDF_file_path, height = 8, width = 10, onefile = TRUE)
+      grDevices::pdf(file = file.path(PDF_file_path), height = 8, width = 10, onefile = TRUE)
       # pdf(file = PDF_file_path, height = 8*nb_rows, width = 10*nb_cols, onefile = TRUE)
       for (i in seq_along(ggplot_histo_list_of_lists))
       {

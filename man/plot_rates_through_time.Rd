@@ -51,7 +51,7 @@ If \code{NULL} (the default), the range of data provided in \code{STRAPP_tests_o
 This proportion is defined with \code{CI_quantiles}.
 }}
 
-\item{CI_quantiles}{Numerical. Proportion of rate values encompassed by the confidence interval. Default is \code{0.95}.}
+\item{CI_quantiles}{Numerical. Proportion of rate values across posterior samples encompassed by the confidence interval. Default is \code{0.95}.}
 
 \item{display_plot}{Logical. Whether to display the plot generated in the R console. Default is \code{TRUE}.}
 
@@ -99,7 +99,7 @@ Rates are averaged across branches at each time step (i.e., \code{focal_time}).
 ## Load results of run_STRAPP_tests_over_time()
 data(STRAPP_tests_over_time_temp_example_2, package = "deepSTRAPP")
 
-## Plot rates through time for continuous data
+# ------ Plot rates through time for continuous data ------ #
 
 # Visualize trait data
 hist(STRAPP_tests_over_time_temp_example_2$trait_data_df_over_time$trait_value)
@@ -127,7 +127,7 @@ plotTT_continuous_adj <- plotTT_continuous$rates_TT_ggplot +
     ggplot2::theme(plot.title = ggplot2::element_text(color = "red", size = 15))
 print(plotTT_continuous_adj)
 
-## Plot rates through time for categorical data
+# ------ Plot rates through time for categorical data ------ #
 
 # Turn trait data into multiple states
 trait_data_continuous <- STRAPP_tests_over_time_temp_example_2$trait_data_df_over_time$trait_value
@@ -161,7 +161,7 @@ str(plotTT_categorical, max.level = 1)
 # Plot again
 print(plotTT_categorical$rates_TT_ggplot)
 
-## Plot rates through time for biogeographic data
+# ------ Plot rates through time for biogeographic data ------ #
 
 # Turn trait data into multiple ranges
 trait_data_biogeographic <- trait_data_multinominal
