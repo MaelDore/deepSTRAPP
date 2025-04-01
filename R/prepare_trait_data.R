@@ -25,8 +25,7 @@
 #'   * Models available for continuous data are detailed in [geiger::fitContinuous()].
 #'   * Models available for categorical data are detailed in [geiger::fitDiscrete()].
 #'   * Models for biogeographic data are fit with `BioGeoBEARS`.
-#'     The current version of `deepSTRAPP` implements BAYAREALIKE, DIVALIKE, DEC models and their +J variation
-#'     (including jump-dispersal events). For details, please refers to the BioGeoBEARS documentation.
+#'   * See list in "Details" section.
 #' @param res Integer. Define the number of time steps used to interpolate/estimate trait value/state/range in `contMap`/`densityMaps`.
 #' @param nb_simulations Integer. Define the number of simulations generated for stochastic mapping. Default = 1000. Only for "categorical" and "biogeographic" data.
 #' @param plot_map Logical. Whether to plot or not the phylogeny with mapped trait evolution.
@@ -48,8 +47,10 @@
 #'
 #' @details Map trait evolution on a time-calibrated phylogeny in several steps:
 #'
-#'   * (1) Models are fit using Maximum Likelihood approach with [geiger::fitContinuous()] for "continuous" data,
-#'   [geiger::fitDiscrete()] for "categorical" data, and R package `BioGeoBEARS` for "biogeographic" data.
+#'   * (1) Models are fit using Maximum Likelihood approach:
+#'     - For "continuous" data models are fit with [geiger::fitContinuous()]: "BM", "OU", "EB", "rate_trend", "lambda", "kappa", "delta".
+#'     - For "categorical" data models are fit with [geiger::fitDiscrete()]: "ER", "SYM", "ARD".
+#'     - For "biogeographic" data models are fit with R package `BioGeoBEARS`: "BAYAREALIKE", "DIVALIKE", "DEC", "BAYAREALIKE+J", "DIVALIKE+J", "DEC+J".
 #'
 #'   * (2) Best model is identified among the list of `evolutionary_models` by comparing the corrected AIC (AICc)
 #'   and selecting the  model with lowest AICc.
@@ -112,7 +113,8 @@
 #'                      rownames(eel.data))
 #'
 #' # Map trait evolution on the phylogeny, selecting among four models ("BM", "OU", "lambda", "kappa")
-#' mapped_cont_traits <- prepare_trait_data(tip_data = eel_data,
+#' mapped_cont_traits <- prepare_trait_data(
+#'    tip_data = eel_data,
 #'    trait_data_type = "continuous",
 #'    phylo = eel.tree,
 #'    evolutionary_models = c("BM", "OU", "lambda", "kappa"),
@@ -154,6 +156,8 @@
 # Default for Biogeographic = "DEC+J". "All" = DEC, DEC+J, DIVALIKE, DIVALIKE+J, BAYAREALIKE, BAYAREALIKE+J.
 # May need to use more complex models to capture the dynamics of trait evolution. +W, +X, DECX, ... (cite packages/refs)
 
+# Check reference to contMap in the doc => add DensityMaps
+
 
 ### Master function to prepare data and select the proper test function according to data type ####
 
@@ -174,26 +178,69 @@ prepare_trait_data <- function (
     verbose = TRUE)
 {
   ### Check input validity
+  {
+    ## tip_data
+    # tip_data must have the same names as the tip.label in the phylogeny
+    if (!all((names(tip_data) %in% phylo$tip.label)))
+    {
+      stop(paste0("Names in 'tip_data' must match with '$tip.label' in 'phylo'."))
+    }
+    # Check if tip_data need to be reorder to match phylo$tip.label. If so, do it, but send a warning
+    if (!all(names(tip_data) == phylo$tip.label))
+    {
+      tip_data <- tip_data[match(phylo$tip.label, table = names(tip_data))]
+      warning(paste0("Entries in 'tip_data' were reordered to match 'phylo$tip.label."))
+    }
 
-  # tip_data must have names %in% phylo$tip.label
-  # Check if tip_data need to be reorder to match phylo$tip.label. If so, do it, but send a warning
+    ## trait_data_type
+    # trait_data_type must be "continuous", categorical" or "biogeographic"
+    if (!(trait_data_type %in% c("continuous", "categorical", "biogeographic")))
+    {
+      stop("'trait_data_type' can only be 'continuous', 'categorical', or 'biogeographic'.")
+    }
+    # Check that trait_data_type is coherent with what is found in tip_data
+    if ((trait_data_type == "continuous") & !is.numeric(tip_data))
+    {
+      stop("For 'trait_data_type = continuous', 'tip_data' must be a named numeric vector.")
+    }
+    if ((trait_data_type == "categorical") & !is.character(tip_data))
+    {
+      stop("For 'trait_data_type = categorical', 'tip_data' must be a named vector of character strings providing tip states.")
+    }
+    if ((trait_data_type == "biogeographic") & !is.character(tip_data))
+    {
+      stop("For 'trait_data_type = biogeographic', 'tip_data' must be a named vector of character strings providing tip ranges.")
+    }
 
-  # Check that trait_data_type is one of "continuous", "categorical", "biogeographic"
-  # Check that trait_data_type is coherent with what is found in tip_data
+    ## phylo
+    # phylo must be a "phylo" class object
+    if (!("phylo" %in% class(phylo)))
+    {
+      stop("'phylo' must have the 'phylo' class. See ?ape::read.tree() and ?ape::read.nexus() to learn how to import phylogenies in R.")
+    }
+    # phylo must be rooted
+    if (!(ape::is.rooted(phylo)))
+    {
+      stop(paste0("'phylo' must be a rooted phylogeny."))
+    }
+    # phylo must be fully resolved/dichotomous
+    if (!(ape::is.binary(phylo)))
+    {
+      stop(paste0("'phylo' must be a fully resolved/dichotomous/binary phylogeny."))
+    }
 
-  # Check that phylo is of class "phylo"
-  # Check that the phylo is fully resolved (is it needed for those models?)
-  # Check that the phylo is ultrametric (is it needed for those models?)
+    ## PDF_file_path
+    # If provided, PDF_file_path must end with ".pdf"
+    if (!is.null(PDF_file_path))
+    {
+      if (length(grep(pattern = "\\.pdf$", x = PDF_file_path)) != 1)
+      {
+        stop("'PDF_file_path' must end with '.pdf'")
+      }
+    }
 
-  # Check that models are compatible with trait_data_type. If not, send error showing which one is wrong what are the valid options for the given trait_data_type
-  # No error if is.null() as the default will be used
-
-  # Only for categorical and biogeographic data
-  # Check that nb_simulations is a positive integer. Send warnings if higher than 10000 and lower than 100
-    # Higher than 10000 => May be time-consuming
-    # Lower than 100 => May be bias
-
-  # If provided, PDF_file_path must end with ".pdf"
+    ## Other checks are carried in dedicated sub-functions
+  }
 
   ## Compute the appropriate internal function depending on the type of data
 
@@ -271,6 +318,26 @@ prepare_trait_data_for_continuous_data <- function (
     verbose = TRUE,
     ...)
 {
+  ### Check input validity
+  {
+    ## evolutionary_models
+    if (!is.null(evolutionary_models))
+    {
+      if (!all(evolutionary_models %in% c("BM", "OU", "EB", "rate_trend", "lambda", "kappa", "delta")))
+      {
+        stop(paste0("For 'trait_data_type = continuous', 'evolutionary_models' must be selected among: 'BM', 'OU', 'EB', 'rate_trend', 'lambda', 'kappa', 'delta'.\n",
+                    "See details in ?geiger::fitContinuous()."))
+      }
+    }
+
+    ## res
+    # res must be a positive integer.
+    if ((abs(res) != res) | (round(res) != round(res)))
+    {
+      stop(paste0("'res' must be a positive integer defining the number of time steps used to interpolate trait value in the contMap."))
+    }
+
+  }
 
   # Set default model (BM) if absent
   if (is.null(evolutionary_models)) { evolutionary_models <- "BM" }
@@ -500,8 +567,41 @@ prepare_trait_data_for_categorical_data <- function (
     return_model_selection_df = FALSE,
     verbose = TRUE)
 {
-  # If is.null(evolutionary_models), use "ARD" as default
-  # If NULL, send a message to inform of the model used as default
+  ### Check input validity
+  {
+    ## evolutionary_models
+    if (!is.null(evolutionary_models))
+    {
+      if (!all(evolutionary_models %in% c("ER", "SYM", "ARD")))
+      {
+        stop(paste0("For 'trait_data_type = categorical', 'evolutionary_models' must be selected among: 'ER', 'SYM', 'ARD'.\n",
+                    "See details in ?geiger::fitDiscrete()."))
+      }
+    }
+
+    ## res
+    # res must be a positive integer.
+    if ((abs(res) != res) | (round(res) != round(res)))
+    {
+      stop(paste0("'res' must be a positive integer defining the number of time steps used to interpolate trait value in the densityMaps."))
+    }
+
+    ## nb_simulations
+    # Check that nb_simulations is a positive integer.
+    if ((abs(nb_simulations) != nb_simulations) | (round(nb_simulations) != round(nb_simulations)))
+    {
+      stop(paste0("'nb_simulations' must be a positive integer defining the number of simulations generated for stochastic mapping."))
+    }
+    #  Send warnings if higher than 10000 and lower than 100
+    if ((nb_simulations >= 10000))
+    {
+      warning(paste0("'nb_simulations' is set to ",nb_simulations,". High number of simulations may be time-conusming and only improve marginally the robustness of the tests."))
+    }
+    if ((nb_simulations <= 100))
+    {
+      warning(paste0("'nb_simulations' is set to ",nb_simulations,". Low number of simulations may provide bias estimates of states/ranges and affect test outputs."))
+    }
+  }
 
   #	Run all models and store their results in a list
 
@@ -549,6 +649,42 @@ prepare_trait_data_for_biogeographic_data <- function (
     return_model_selection_df = FALSE,
     verbose = TRUE)
 {
+  ### Check input validity
+  {
+    ## evolutionary_models
+    if (!is.null(evolutionary_models))
+    {
+      if (!all(evolutionary_models %in% c("BAYAREALIKE", "DIVALIKE", "DEC", "BAYAREALIKE+J", "DIVALIKE+J", "DEC+J")))
+      {
+        stop(paste0("For 'trait_data_type = biogeographic', 'evolutionary_models' must be selected among: 'BAYAREALIKE', 'DIVALIKE', 'DEC', 'BAYAREALIKE+J', 'DIVALIKE+J', 'DEC+J'.\n",
+                    "See details in documentation from R package `BioGeoBEARS`."))
+      }
+    }
+
+    ## res
+    # res must be a positive integer.
+    if ((abs(res) != res) | (round(res) != round(res)))
+    {
+      stop(paste0("'res' must be a positive integer defining the number of time steps used to interpolate trait value in the densityMaps."))
+    }
+
+    ## nb_simulations
+    # Check that nb_simulations is a positive integer.
+    if ((abs(nb_simulations) != nb_simulations) | (round(nb_simulations) != round(nb_simulations)))
+    {
+      stop(paste0("'nb_simulations' must be a positive integer defining the number of simulations generated for stochastic mapping."))
+    }
+    #  Send warnings if higher than 10000 and lower than 100
+    if ((nb_simulations >= 10000))
+    {
+      warning(paste0("'nb_simulations' is set to ",nb_simulations,". High number of simulations may be time-conusming and only improve marginally the robustness of the tests."))
+    }
+    if ((nb_simulations <= 100))
+    {
+      warning(paste0("'nb_simulations' is set to ",nb_simulations,". Low number of simulations may provide bias estimates of states/ranges and affect test outputs."))
+    }
+  }
+
   # If is.null(evolutionary_models), use "DEC+J" as default
   # If NULL, send a message to inform of the model used as default
 
