@@ -11,7 +11,7 @@
 #'   The phylogenetic tree must be rooted and fully resolved/dichotomous,
 #'   but it does not need to be ultrametric (it can includes fossils).
 #' @param focal_time Numerical. The time, in terms of time distance from the present,
-#'   for which the tree and mapping must be cut.
+#'   for which the tree and mapping must be cut. It must be smaller than the root age of the phylogeny.
 #' @param keep_tip_labels Logical. Specify whether terminal branches with a single descendant tip must retained their initial `tip.label`. Default is `TRUE`.
 #'
 #' @export
@@ -144,20 +144,10 @@ cut_contMap_for_focal_time <- function(contMap, focal_time, keep_tip_labels = TR
     {
       stop(paste0("'focal_time' must be a positive number. It represents the time as a distance from the present."))
     }
-    if (focal_time > root_age)
+    if (focal_time >= root_age)
     {
-      stop(paste0("'focal_time' must be smaller or equals to the root age of the phylogeny.\n",
+      stop(paste0("'focal_time' must be smaller than the root age of the phylogeny.\n",
                   "'focal_time' = ",focal_time,"; root age = ",root_age,"."))
-    }
-    # If focal_time equals root_age, send warning
-    if (focal_time == root_age)
-    {
-      warning(paste0("'focal_time' equals root age = ",root_age,". Return an empty object.\n"))
-
-      # Return a NULL object
-      no_contMap <- NULL
-      return(no_contMap)
-
     }
   }
 

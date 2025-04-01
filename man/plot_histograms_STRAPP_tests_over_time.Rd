@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_histograms_STRAPP_tests_over_time.R
 \name{plot_histograms_STRAPP_tests_over_time}
 \alias{plot_histograms_STRAPP_tests_over_time}
-\title{Wrapper function to plot histogram of STRAPP test statistics over time-steps}
+\title{Wrapper function to plot histogram of STRAPP test statistics over time steps}
 \usage{
 plot_histograms_STRAPP_tests_over_time(
   STRAPP_tests_over_time,
@@ -73,9 +73,9 @@ histogram_ggplots <- plot_histograms_STRAPP_tests_over_time(
   display_plots = TRUE,
   # PDF_file_path = "./plot_STRAPP_histograms_overall_tests_over_time.pdf",
   plot_posthoc_tests = FALSE)
-# Print histogram for time-step 1
+# Print histogram for time step 1
 print(histogram_ggplots[[1]])
-# Adjust aesthetics of plot for time-step 1 a posteriori
+# Adjust aesthetics of plot for time step 1 a posteriori
 histogram_ggplot_adj <- histogram_ggplots[[1]] +
     ggplot2::theme(plot.title = ggplot2::element_text(color = "red", size = 15))
 print(histogram_ggplot_adj)
@@ -86,7 +86,7 @@ histograms_ggplots_list <- plot_histograms_STRAPP_tests_over_time(
   display_plots = TRUE,
   # PDF_file_path = "./test_multi_histo.pdf"
   plot_posthoc_tests = TRUE)
-# Print all histograms for time-step 1 one by one
+# Print all histograms for time step 1 one by one
 print(histograms_ggplots_list[[1]])
 # Plot all histograms on one faceted plot
 cowplot::plot_grid(plotlist = histograms_ggplots_list[[1]])

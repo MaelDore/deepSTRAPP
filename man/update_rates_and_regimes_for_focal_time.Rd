@@ -24,7 +24,7 @@ The phylogenetic tree must be rooted and fully resolved/dichotomous,
 but it does not need to be ultrametric (it can includes fossils).}
 
 \item{focal_time}{Numerical. The time, in terms of time distance from the present,
-at which the tree and rate mapping must be cut.}
+at which the tree and rate mapping must be cut. It must be smaller than the root age of the phylogeny.}
 
 \item{update_rates}{Logical. Specify whether diversification rates stored in
 \verb{$tipLambda} (speciation) and \verb{$tipMu} (extinction) must be updated to summarize
@@ -179,9 +179,16 @@ Ponerinae_BAMM_object_updated <- update_rates_and_regimes_for_focal_time(
   keep_tip_labels = TRUE,
   verbose = TRUE) }
 
+## Extract root age
+# Add temporarily the "phylo" class to be compatible with phytools::nodeHeights()
+class(Ponerinae_BAMM_object) <- unique(c(class(Ponerinae_BAMM_object), "phylo"))
+root_age <- max(phytools::nodeHeights(Ponerinae_BAMM_object)[,2])
+# Remove temporary "phylo" class
+class(Ponerinae_BAMM_object) <- setdiff(class(Ponerinae_BAMM_object), "phylo")
+
 ## Plot diversification rates on the initial tree
 plot(Ponerinae_BAMM_object, legend = TRUE, labels = FALSE)
-abline(v = 123.55 - focal_time,
+abline(v = root_age - focal_time,
        col = "red", lty = 2, lwd = 2)
 
 \dontrun{

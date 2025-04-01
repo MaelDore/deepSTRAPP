@@ -7,7 +7,7 @@
 #' @param tree Object of class `"phylo"`. The phylogenetic tree must be rooted and fully resolved/dichotomous,
 #'   but it does not need to be ultrametric (it can includes fossils).
 #' @param focal_time Numerical. The time, in terms of time distance from the present,
-#'   for which the tree must be cut.
+#'   for which the tree must be cut. It must be smaller than the root age of the phylogeny.
 #' @param keep_tip_labels Logical. Specify whether terminal branches with a single descendant tip must retained their initial `tip.label`. Default is `TRUE`.
 #'
 #' @export
@@ -84,171 +84,162 @@ cut_phylo_for_focal_time <- function(tree, focal_time, keep_tip_labels = TRUE)
 {
 
   ### Check input validity
-
-  ## tree
-  # tree must be a "phylo" class object
-  if (!("phylo" %in% class(tree)))
   {
-    stop("'tree' must have the 'phylo' class. See ?ape::read.tree() and ?ape::read.nexus() to learn how to import phylogenies in R.")
-  }
-  # tree must be rooted
-  if (!(ape::is.rooted(tree)))
-  {
-    stop(paste0("'tree' must be a rooted phylogeny."))
-  }
-  # tree must be fully resolved/dichotomous
-  if (!(ape::is.binary(tree)))
-  {
-    stop(paste0("'tree' must be a fully resolved/dichotomous/binary phylogeny."))
-  }
-
-  ## Extract root age
-  root_age <- max(phytools::nodeHeights(tree)[,2])
-
-  ## focal_time
-  # focal_time must be positive and smaller to root age
-  if (focal_time < 0)
-  {
-    stop(paste0("'focal_time' must be a positive number. It represents the time as a distance from the present."))
-  }
-  if (focal_time > root_age)
-  {
-    stop(paste0("'focal_time' must be smaller or equals to the root age of the phylogeny.\n",
-                "'focal_time' = ",focal_time,"; root age = ",root_age,"."))
-  }
-  # If focal_time equals root_age, send warning
-  if (focal_time == root_age)
-  {
-    warning(paste0("'focal_time' equals root age = ",root_age,". Return an empty object.\n"))
-
-    # Return a NULL object
-    cut_tree <- NULL
-    return(cut_tree)
-
-  } else {
-    ## Initiate new tree
-    cut_tree <- tree
-
-    ## Identify edges present at focal time
-
-    # Get node ages per edge (no root edge)
-    all_edges_df <- phytools::nodeHeights(tree)
-    all_edges_df <- as.data.frame(round(root_age - all_edges_df, 5)) # May be an issue for trees with very short time span
-    names(all_edges_df) <- c("rootward_node_age", "tipward_node_age")
-    all_edges_df$edge_ID <- row.names(all_edges_df)
-
-    # Inform root_age
-    cut_tree$root_age <- root_age
-
-    # Get nodes ID per edge
-    all_edges_ID_df <- tree$edge
-    colnames(all_edges_ID_df) <- c("rootward_node_ID", "tipward_node_ID")
-    all_edges_df <- cbind(all_edges_df, all_edges_ID_df)
-    all_edges_df <- all_edges_df[, c("edge_ID", "rootward_node_ID", "tipward_node_ID", "rootward_node_age", "tipward_node_age")]
-
-    # Detect root node ID as the only rootward node that is not also the tipward node of any edge
-    root_node_ID <- tree$edge[which.min(tree$edge[, 1] %in% tree$edge[, 2]), 1]
-
-    ## Merge tip.label to the edge df
-
-    # If tipward node is a tip, use tip.label
-    all_edges_df$tip.label <- tree$tip.label[all_edges_df$tipward_node_ID]
-    # If tipward node is an internal node, use node ID
-    all_edges_df$tip.label[is.na(all_edges_df$tip.label)] <- all_edges_df$tipward_node_ID[is.na(all_edges_df$tip.label)]
-
-    # Identify edges present at the focal time
-    all_edges_df$rootward_test <- all_edges_df$rootward_node_age > focal_time
-    all_edges_df$tipward_test <- all_edges_df$tipward_node_age <= focal_time
-
-    ## Keep only edges present at focal time and before
-    new_edges_df <- all_edges_df[all_edges_df$rootward_test, ]
-
-    ## Adjust length of edge present at focal time
-    new_edges_df$initial_length <- tree$edge.length[as.numeric(new_edges_df$edge_ID)]
-    new_edges_df$updated_length <- new_edges_df$initial_length
-    new_edges_df$updated_length[new_edges_df$tipward_test] <- new_edges_df$rootward_node_age[new_edges_df$tipward_test] - focal_time
-
-    # Record updated edge length
-    cut_tree$edge.length <- new_edges_df$updated_length
-
-    ## Update Nnode
-    cut_tree$Nnode <- as.integer(nrow(new_edges_df)/2) # Works only for dichotomic tree
-
-    ## Update node ID to form a valid phylo object
-
-    # Nodes = 1:N for tips. N+1 for root. N+2:2N for internal nodes
-
-    # Detect tips node ID as the tipward nodes that are not also the rootward node of any edge
-    tips_node_ID <- new_edges_df$tipward_node_ID[!(new_edges_df$tipward_node_ID %in% new_edges_df$rootward_node_ID)]
-    # Detect internal nodes ID as rootward nodes that are not the root node
-    internal_nodes_ID <- setdiff(new_edges_df$rootward_node_ID, root_node_ID)
-
-    # Get new ID for the tips
-    # nodes_ID_df <- data.frame(new_node_ID = 1:(cut_tree$Nnode+1), initial_node_ID = new_edges_df$tipward_node_ID[new_edges_df$tipward_test]) # Only for ultrametric trees.
-    nodes_ID_df <- data.frame(new_node_ID = 1:(cut_tree$Nnode+1), initial_node_ID = tips_node_ID)
-    # Get new ID for the root
-    nodes_ID_df <- rbind(nodes_ID_df, c(nrow(nodes_ID_df)+1, root_node_ID))
-    # Get new ID for the internal nodes if any
-    if (length(internal_nodes_ID) > 0)
+    ## tree
+    # tree must be a "phylo" class object
+    if (!("phylo" %in% class(tree)))
     {
-      # internal_nodes_ID_df <- data.frame(new_node_ID = (nrow(nodes_ID_df)+1):(nrow(new_edges_df)+1), initial_node_ID = new_edges_df$tipward_node_ID[!new_edges_df$tipward_test]) # Only for ultrametric trees.
-      internal_nodes_ID_df <- data.frame(new_node_ID = (nrow(nodes_ID_df)+1):(nrow(new_edges_df)+1), initial_node_ID = new_edges_df$tipward_node_ID[new_edges_df$tipward_node_ID %in% internal_nodes_ID])
-      nodes_ID_df <- rbind(nodes_ID_df, internal_nodes_ID_df)
+      stop("'tree' must have the 'phylo' class. See ?ape::read.tree() and ?ape::read.nexus() to learn how to import phylogenies in R.")
     }
-    # Convert to numeric
-    nodes_ID_df$new_node_ID <- as.numeric(nodes_ID_df$new_node_ID)
-    nodes_ID_df$initial_node_ID <- as.numeric(nodes_ID_df$initial_node_ID)
-
-    # Store conversion table for nodes ID
-    cut_tree$nodes_ID_df <- nodes_ID_df
-
-    ## Add previous internal node ID as initial_nodes_ID
-    cut_tree$initial_nodes_ID <- as.character(nodes_ID_df$initial_node_ID[nodes_ID_df$new_node_ID > (cut_tree$Nnode+1)])
-
-    ## Update node.label if present
-    if (!is.null(cut_tree$node.label))
+    # tree must be rooted
+    if (!(ape::is.rooted(tree)))
     {
-      initial_node.label <- cut_tree$node.label
-      names(initial_node.label) <- as.character((length(tree$tip.label)+1):(nrow(tree$edge)+1))
-      new_node.label <- initial_node.label[cut_tree$initial_nodes_ID]
-      cut_tree$node.label <- unname(new_node.label)
+      stop(paste0("'tree' must be a rooted phylogeny."))
+    }
+    # tree must be fully resolved/dichotomous
+    if (!(ape::is.binary(tree)))
+    {
+      stop(paste0("'tree' must be a fully resolved/dichotomous/binary phylogeny."))
     }
 
-    ## Update edge ID to form a valid phylo object
-    edges_ID_df <- data.frame(new_edge_ID = 1:nrow(new_edges_df), initial_edge_ID = new_edges_df$edge_ID)
-    # Convert to numeric
-    edges_ID_df$new_edge_ID <- as.numeric(edges_ID_df$new_edge_ID)
-    edges_ID_df$initial_edge_ID <- as.numeric(edges_ID_df$initial_edge_ID)
+    ## Extract root age
+    root_age <- max(phytools::nodeHeights(tree)[,2])
 
-    # Store conversion table for edges ID
-    cut_tree$edges_ID_df <- edges_ID_df
-
-    ## Add previous edge ID as initial_edges_ID
-    cut_tree$initial_edges_ID <- new_edges_df$edge_ID
-
-    ## Update tip.label (use the tipward node ID and/or tip.label depending on "keep_tip_labels")
-
-    if (keep_tip_labels) # If keep_tip_labels == T: Use tip.label for edge leading to a unique leaf/tip, and tipward node ID for terminal edges leading to a clade.
+    ## focal_time
+    # focal_time must be positive and smaller to root age
+    if (focal_time < 0)
     {
-      # cut_tree$tip.label <- new_edges_df$tip.label[new_edges_df$tipward_test] # Only for ultrametric trees.
-      cut_tree$tip.label <- new_edges_df$tip.label[new_edges_df$tipward_node_ID %in% tips_node_ID]
-    } else { # If keep_tip_labels == F: Use tipward node ID for all terminal edges.
-      # cut_tree$tip.label <- new_edges_df$tipward_node_ID[new_edges_df$tipward_test] # Only for ultrametric trees.
-      cut_tree$tip.label <- new_edges_df$tipward_node_ID[new_edges_df$tipward_node_ID %in% tips_node_ID]
+      stop(paste0("'focal_time' must be a positive number. It represents the time as a distance from the present."))
     }
-
-    ## Update $edge
-
-    # Extract edge table using former nodes ID
-    cut_tree$edge <- as.matrix(new_edges_df[, c("rootward_node_ID", "tipward_node_ID")])
-    dimnames(cut_tree$edge) <- NULL
-    # Update nodes ID with the matching table
-    cut_tree$edge[ , 1] <- as.integer(nodes_ID_df$new_node_ID[match(x = new_edges_df$rootward_node_ID, table = nodes_ID_df$initial_node_ID)])
-    cut_tree$edge[ , 2] <- as.integer(nodes_ID_df$new_node_ID[match(x = new_edges_df$tipward_node_ID, table = nodes_ID_df$initial_node_ID)])
-
-    ## Export output
-    return(cut_tree)
+    if (focal_time >= root_age)
+    {
+      stop(paste0("'focal_time' must be smaller than the root age of the phylogeny.\n",
+                  "'focal_time' = ",focal_time,"; root age = ",root_age,"."))
+    }
   }
+
+  ## Initiate new tree
+  cut_tree <- tree
+
+  ## Identify edges present at focal time
+
+  # Get node ages per edge (no root edge)
+  all_edges_df <- phytools::nodeHeights(tree)
+  all_edges_df <- as.data.frame(round(root_age - all_edges_df, 5)) # May be an issue for trees with very short time span
+  names(all_edges_df) <- c("rootward_node_age", "tipward_node_age")
+  all_edges_df$edge_ID <- row.names(all_edges_df)
+
+  # Inform root_age
+  cut_tree$root_age <- root_age
+
+  # Get nodes ID per edge
+  all_edges_ID_df <- tree$edge
+  colnames(all_edges_ID_df) <- c("rootward_node_ID", "tipward_node_ID")
+  all_edges_df <- cbind(all_edges_df, all_edges_ID_df)
+  all_edges_df <- all_edges_df[, c("edge_ID", "rootward_node_ID", "tipward_node_ID", "rootward_node_age", "tipward_node_age")]
+
+  # Detect root node ID as the only rootward node that is not also the tipward node of any edge
+  root_node_ID <- tree$edge[which.min(tree$edge[, 1] %in% tree$edge[, 2]), 1]
+
+  ## Merge tip.label to the edge df
+
+  # If tipward node is a tip, use tip.label
+  all_edges_df$tip.label <- tree$tip.label[all_edges_df$tipward_node_ID]
+  # If tipward node is an internal node, use node ID
+  all_edges_df$tip.label[is.na(all_edges_df$tip.label)] <- all_edges_df$tipward_node_ID[is.na(all_edges_df$tip.label)]
+
+  # Identify edges present at the focal time
+  all_edges_df$rootward_test <- all_edges_df$rootward_node_age > focal_time
+  all_edges_df$tipward_test <- all_edges_df$tipward_node_age <= focal_time
+
+  ## Keep only edges present at focal time and before
+  new_edges_df <- all_edges_df[all_edges_df$rootward_test, ]
+
+  ## Adjust length of edge present at focal time
+  new_edges_df$initial_length <- tree$edge.length[as.numeric(new_edges_df$edge_ID)]
+  new_edges_df$updated_length <- new_edges_df$initial_length
+  new_edges_df$updated_length[new_edges_df$tipward_test] <- new_edges_df$rootward_node_age[new_edges_df$tipward_test] - focal_time
+
+  # Record updated edge length
+  cut_tree$edge.length <- new_edges_df$updated_length
+
+  ## Update Nnode
+  cut_tree$Nnode <- as.integer(nrow(new_edges_df)/2) # Works only for dichotomic tree
+
+  ## Update node ID to form a valid phylo object
+
+  # Nodes = 1:N for tips. N+1 for root. N+2:2N for internal nodes
+
+  # Detect tips node ID as the tipward nodes that are not also the rootward node of any edge
+  tips_node_ID <- new_edges_df$tipward_node_ID[!(new_edges_df$tipward_node_ID %in% new_edges_df$rootward_node_ID)]
+  # Detect internal nodes ID as rootward nodes that are not the root node
+  internal_nodes_ID <- setdiff(new_edges_df$rootward_node_ID, root_node_ID)
+
+  # Get new ID for the tips
+  # nodes_ID_df <- data.frame(new_node_ID = 1:(cut_tree$Nnode+1), initial_node_ID = new_edges_df$tipward_node_ID[new_edges_df$tipward_test]) # Only for ultrametric trees.
+  nodes_ID_df <- data.frame(new_node_ID = 1:(cut_tree$Nnode+1), initial_node_ID = tips_node_ID)
+  # Get new ID for the root
+  nodes_ID_df <- rbind(nodes_ID_df, c(nrow(nodes_ID_df)+1, root_node_ID))
+  # Get new ID for the internal nodes if any
+  if (length(internal_nodes_ID) > 0)
+  {
+    # internal_nodes_ID_df <- data.frame(new_node_ID = (nrow(nodes_ID_df)+1):(nrow(new_edges_df)+1), initial_node_ID = new_edges_df$tipward_node_ID[!new_edges_df$tipward_test]) # Only for ultrametric trees.
+    internal_nodes_ID_df <- data.frame(new_node_ID = (nrow(nodes_ID_df)+1):(nrow(new_edges_df)+1), initial_node_ID = new_edges_df$tipward_node_ID[new_edges_df$tipward_node_ID %in% internal_nodes_ID])
+    nodes_ID_df <- rbind(nodes_ID_df, internal_nodes_ID_df)
+  }
+  # Convert to numeric
+  nodes_ID_df$new_node_ID <- as.numeric(nodes_ID_df$new_node_ID)
+  nodes_ID_df$initial_node_ID <- as.numeric(nodes_ID_df$initial_node_ID)
+
+  # Store conversion table for nodes ID
+  cut_tree$nodes_ID_df <- nodes_ID_df
+
+  ## Add previous internal node ID as initial_nodes_ID
+  cut_tree$initial_nodes_ID <- as.character(nodes_ID_df$initial_node_ID[nodes_ID_df$new_node_ID > (cut_tree$Nnode+1)])
+
+  ## Update node.label if present
+  if (!is.null(cut_tree$node.label))
+  {
+    initial_node.label <- cut_tree$node.label
+    names(initial_node.label) <- as.character((length(tree$tip.label)+1):(nrow(tree$edge)+1))
+    new_node.label <- initial_node.label[cut_tree$initial_nodes_ID]
+    cut_tree$node.label <- unname(new_node.label)
+  }
+
+  ## Update edge ID to form a valid phylo object
+  edges_ID_df <- data.frame(new_edge_ID = 1:nrow(new_edges_df), initial_edge_ID = new_edges_df$edge_ID)
+  # Convert to numeric
+  edges_ID_df$new_edge_ID <- as.numeric(edges_ID_df$new_edge_ID)
+  edges_ID_df$initial_edge_ID <- as.numeric(edges_ID_df$initial_edge_ID)
+
+  # Store conversion table for edges ID
+  cut_tree$edges_ID_df <- edges_ID_df
+
+  ## Add previous edge ID as initial_edges_ID
+  cut_tree$initial_edges_ID <- new_edges_df$edge_ID
+
+  ## Update tip.label (use the tipward node ID and/or tip.label depending on "keep_tip_labels")
+
+  if (keep_tip_labels) # If keep_tip_labels == T: Use tip.label for edge leading to a unique leaf/tip, and tipward node ID for terminal edges leading to a clade.
+  {
+    # cut_tree$tip.label <- new_edges_df$tip.label[new_edges_df$tipward_test] # Only for ultrametric trees.
+    cut_tree$tip.label <- new_edges_df$tip.label[new_edges_df$tipward_node_ID %in% tips_node_ID]
+  } else { # If keep_tip_labels == F: Use tipward node ID for all terminal edges.
+    # cut_tree$tip.label <- new_edges_df$tipward_node_ID[new_edges_df$tipward_test] # Only for ultrametric trees.
+    cut_tree$tip.label <- new_edges_df$tipward_node_ID[new_edges_df$tipward_node_ID %in% tips_node_ID]
+  }
+
+  ## Update $edge
+
+  # Extract edge table using former nodes ID
+  cut_tree$edge <- as.matrix(new_edges_df[, c("rootward_node_ID", "tipward_node_ID")])
+  dimnames(cut_tree$edge) <- NULL
+  # Update nodes ID with the matching table
+  cut_tree$edge[ , 1] <- as.integer(nodes_ID_df$new_node_ID[match(x = new_edges_df$rootward_node_ID, table = nodes_ID_df$initial_node_ID)])
+  cut_tree$edge[ , 2] <- as.integer(nodes_ID_df$new_node_ID[match(x = new_edges_df$tipward_node_ID, table = nodes_ID_df$initial_node_ID)])
+
+  ## Export output
+  return(cut_tree)
 }
 
 

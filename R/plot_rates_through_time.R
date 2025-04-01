@@ -372,17 +372,17 @@ plot_rates_through_time_for_continuous_data <- function (
     initial_quantile_ranges <- quantile_ranges
     if (range(quantile_ranges)[1] != 0)
     {
-      warning(paste0("'quantile_ranges' does not start with 0. The lower boundary has been added."))
+      cat(paste0("WARNING: 'quantile_ranges' does not start with 0. The lower boundary was added.\n"))
       quantile_ranges <- c(0, quantile_ranges)
     }
     if (range(quantile_ranges)[2] != 1)
     {
-      warning(paste0("'quantile_ranges' does not end with 1. The upper boundary has been added."))
+      cat(paste0("WARNING: 'quantile_ranges' does not end with 1. The upper boundary was added.\n"))
       quantile_ranges <- c(quantile_ranges, 1)
     }
     if (!(identical(range(initial_quantile_ranges), c(0, 1))))
     {
-      warning(paste0("New 'quantile_ranges' are ", paste(quantile_ranges, collapse = ", ")),".")
+      cat(paste0("WARNING: New 'quantile_ranges' are ", paste(quantile_ranges, collapse = ", "),".\n"))
     }
   }
 

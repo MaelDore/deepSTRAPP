@@ -20,7 +20,7 @@
 #'   Needed to provide accurate tip values.
 #' @param trait_data_type Character string. Specify the type of trait data. Must be one of "continuous", "categorical", "biogeographic".
 #' @param focal_time Integer. The time, in terms of time distance from the present,
-#'   at which the tree and mapping must be cut.
+#'   at which the tree and mapping must be cut. It must be smaller than the root age of the phylogeny.
 #' @param update_contMap Logical. Specify whether the mapped phylogeny (`contMap`)
 #'   provided as input should be updated for visualization and returned among the outputs. Default is `FALSE`.
 #'   The update consists in cutting off branches and mapping that are younger than the `focal_time`.
@@ -274,20 +274,15 @@ extract_most_likely_trait_values_for_focal_time <- function (contMap = NULL,
     }
 
     ## focal_time
-    # focal_time must be positive and smaller or equal to root age
+    # focal_time must be positive and smaller than the root age
     if (focal_time < 0)
     {
       stop(paste0("'focal_time' must be a positive number. It represents the time as a distance from the present."))
     }
-    if (focal_time > root_age)
+    if (focal_time >= root_age)
     {
-      stop(paste0("'focal_time' must be smaller or equals to the root age of the phylogeny.\n",
+      stop(paste0("'focal_time' must be smaller than the root age of the phylogeny.\n",
                   "'focal_time' = ",focal_time,"; root age = ",root_age,"."))
-    }
-    # If focal_time equals root_age, send warning
-    if (focal_time == root_age)
-    {
-      warning(paste0("'focal_time' equals root age = ",root_age,". The function will return an empty list.\n"))
     }
 
     ### Only for continuous traits (to move into the sub-function)
@@ -328,7 +323,7 @@ extract_most_likely_trait_values_for_focal_time <- function (contMap = NULL,
       if (!all(as.numeric(names(ace)) == (length(contMap$tree$tip.label) + 1):(length(contMap$tree$tip.label) + contMap$tree$Nnode)))
       {
         warning(paste0("Values in 'ace' are not ordered in increasing numerical ID of internal nodes.\n",
-                       "They have been reordered to follow the numerical ID of internal nodes."))
+                       "They were reordered to follow the numerical ID of internal nodes."))
       }
     }
 
@@ -355,7 +350,7 @@ extract_most_likely_trait_values_for_focal_time <- function (contMap = NULL,
       if (!all(names(tip_data) == contMap$tree$tip.label))
       {
         warning(paste0("Values in 'tip_data' are not ordered as tip labels in the contMap$tree.\n",
-                       "They have been reordered to follow tip labels."))
+                       "They were reordered to follow tip labels."))
       }
     }
 
@@ -382,13 +377,11 @@ extract_most_likely_trait_values_for_focal_time <- function (contMap = NULL,
 
   if (is.null(ace))
   {
-    warning("No ancestral character estimates (ace) for internal nodes have been provided. Using values interpolated in the contMap instead.\n")
-    # message?
+    cat(paste0("WARNING: No ancestral character estimates (ace) for internal nodes have been provided. Using values interpolated in the contMap instead.\n"))
   }
   if (is.null(tip_data))
   {
-    warning("No tip data have been provided. Using values interpolated in the contMap instead.\n")
-    # message?
+    cat(paste0("WARNING: No tip data have been provided. Using values interpolated in the contMap instead.\n"))
   }
 
 

@@ -595,11 +595,11 @@ prepare_trait_data_for_categorical_data <- function (
     #  Send warnings if higher than 10000 and lower than 100
     if ((nb_simulations >= 10000))
     {
-      warning(paste0("'nb_simulations' is set to ",nb_simulations,". High number of simulations may be time-conusming and only improve marginally the robustness of the tests."))
+      cat(paste0("WARNING: 'nb_simulations' is set to ",nb_simulations,". High number of simulations may be time-consuming and only improve marginally the robustness of the tests.\n"))
     }
     if ((nb_simulations <= 100))
     {
-      warning(paste0("'nb_simulations' is set to ",nb_simulations,". Low number of simulations may provide bias estimates of states/ranges and affect test outputs."))
+      cat(paste0("WARNING: 'nb_simulations' is set to ",nb_simulations,". Low number of simulations may provide biased estimates of states/ranges and affect test outputs.\n"))
     }
   }
 

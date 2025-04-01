@@ -34,7 +34,7 @@ Needed to provide accurate tip values.}
 \item{trait_data_type}{Character string. Specify the type of trait data. Must be one of "continuous", "categorical", "biogeographic".}
 
 \item{focal_time}{Integer. The time, in terms of time distance from the present,
-at which the tree and mapping must be cut.}
+at which the tree and mapping must be cut. It must be smaller than the root age of the phylogeny.}
 
 \item{update_contMap}{Logical. Specify whether the mapped phylogeny (\code{contMap})
 provided as input should be updated for visualization and returned among the outputs. Default is \code{FALSE}.

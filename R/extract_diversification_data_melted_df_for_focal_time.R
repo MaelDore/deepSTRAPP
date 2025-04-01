@@ -85,7 +85,7 @@ extract_diversification_data_melted_df_for_focal_time <- function (BAMM_object, 
       stop(paste0("Number of branches in posterior samples of 'BAMM_object$tipMu', 'BAMM_object$tipLambda', and 'BAMM_object$tipMu' must be equal.\nThere respective number of branches is: ",paste(posterior_samples_data_length, collapse = ", "),".\nPlease check the structure of your 'BAMM_object' with str(BAMM_object, 2)"))
     }
 
-    # Must have a $focal_time element. If not, send a warning message saying it is likely not an output of update_rates_and_regimes_for_focal_time(). Must go through that function, even if local_time is set to 0 My (current time).
+    # Must have a $focal_time element. If not, send a message saying it is likely not an output of update_rates_and_regimes_for_focal_time(). Must go through that function, even if local_time is set to 0 My (current time).
     if (is.null(BAMM_object$focal_time))
     {
       stop(paste0("'BAMM_object' must have a $focal_time element indicating for which 'focal_time' the rates and regimes have been updated.\n",

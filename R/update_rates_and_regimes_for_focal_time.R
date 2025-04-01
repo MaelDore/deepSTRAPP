@@ -264,7 +264,7 @@ update_rates_and_regimes_for_focal_time <- function (BAMM_object, focal_time,
     # If update_all_elements = TRUE & any other update_* = FALSE; show a warning claiming that update_* = FALSE will be ignore and all elements including rates/regimes/tree/plotting elements/BAMM elements will all be updated
     if (update_all_elements & any(!update_rates, !update_regimes, !update_tree, !update_plot))
     {
-      warning(paste0("'update_all_elements' is set to 'TRUE'. All components (rates/regimes/tree/plotting elements/BAMM elements) will be updated, even if other 'update_*' arguments are set to 'FALSE'."))
+      warning(paste0("'update_all_elements' is set to 'TRUE'. All components (rates/regimes/tree/plotting elements/BAMM elements) were updated, even if other 'update_*' arguments are set to 'FALSE'."))
     }
   }
 

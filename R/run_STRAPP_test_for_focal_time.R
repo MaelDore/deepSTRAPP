@@ -33,6 +33,7 @@
 #'   The phylogenetic tree must the same as the one associated with the `contMap`, `ace` and `tip_data`.
 #' @param focal_time Numerical. The time, in terms of time distance from the present,
 #'   at which data must be extracted and the phylogeny and mappings must be cut.
+#'   It must be smaller than the root age of the phylogeny.
 #' @param keep_tip_labels Logical. Specify whether terminal branches with a single descendant tip
 #'   must retained their initial `tip.label` on the updated phylogeny. Default is `TRUE`.
 #' @param rate_type A character string specifying the type of diversification rates to use. Must be one of 'speciation', 'extinction' or 'net_diversification' (default).

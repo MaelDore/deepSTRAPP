@@ -60,7 +60,8 @@ The phylogenetic tree must the same as the one associated with the \code{contMap
 \code{time_steps} will be generated from a combination of two arguments among \code{time_range}, \code{nb_time_steps}, and/or \code{time_step_duration}.}
 
 \item{time_range}{Vector of two numerical values. Time boundaries within with the \code{time_steps} must be defined if not provided.
-If \code{NULL} (the default), and \code{time_range} is needed to generate the \code{time_steps}, the depth of the tree is used by default: \code{c(0, root_age)}.}
+If \code{NULL} (the default), and \code{time_range} is needed to generate the \code{time_steps}, the depth of the tree is used by default: \code{c(0, root_age)}.
+However, no time step will be generated for the 'root_age'.}
 
 \item{nb_time_steps, time_step_duration}{Numerical. Number of time steps and duration of each time step used to generate \code{time_steps} if not provided.
 You must provide at least one of those two arguments to be able to generate \code{time_steps}.}
@@ -137,7 +138,7 @@ a message for will also be printed when rates are extracted. Default is \code{FA
 \value{
 The function returns a list with at least five elements.
 \itemize{
-\item \verb{$pvalues_summary_df} Data.frame with three columns providing test stat \verb{$estimate} and \verb{$p_value} obtained for each time-step (i.e., \verb{$focal_time}),
+\item \verb{$pvalues_summary_df} Data.frame with three columns providing test stat \verb{$estimate} and \verb{$p_value} obtained for each time step (i.e., \verb{$focal_time}),
 that can be passed down to \code{\link[=plot_STRAPP_pvalues_over_time]{plot_STRAPP_pvalues_over_time()}} to generate a plot showing the evolution of the test results across time.
 \item \verb{$time_steps} Numerical vector. Time steps at which the STRAPP tests were carried out in the same order as the objects returned in the output lists.
 \item \verb{$trait_data_type} Character string. Specify the type of trait data. Possible values are: "continuous", "categorical", "biogeographic".
@@ -148,22 +149,22 @@ that can be passed down to \code{\link[=plot_STRAPP_pvalues_over_time]{plot_STRA
 Optional summary df for multinominal data, if \code{posthoc_pairwise_tests = TRUE}:
 \itemize{
 \item \verb{$pvalues_summary_df_for_posthoc_pairwise_tests} Data.frame with four or five columns providing test stat \verb{$estimate}, \verb{$p_value}, and \verb{$p_value_adjusted}
-(if \code{p.adjust_method} used is not "none") for each \verb{$pair} of states involved in post hoc Dunn's tests obtained for each time-step (i.e., \verb{$focal_time}).
+(if \code{p.adjust_method} used is not "none") for each \verb{$pair} of states involved in post hoc Dunn's tests obtained for each time step (i.e., \verb{$focal_time}).
 This data.frame can be passed down to \code{\link[=plot_STRAPP_pvalues_over_time]{plot_STRAPP_pvalues_over_time()}} to generate a plot showing the evolution of the post hoc test results across time.
 }
 
 Optional melted data.frames:
 \itemize{
-\item \verb{$trait_data_df_over_time} Data.frame with three columns providing \verb{$trait_value} associated with each \verb{$tip_ID} found along each time-step (i.e., \verb{$focal_time}).
+\item \verb{$trait_data_df_over_time} Data.frame with three columns providing \verb{$trait_value} associated with each \verb{$tip_ID} found along each time step (i.e., \verb{$focal_time}).
 Set \code{extract_trait_data_melted_df = TRUE} to include it in the output.
 \item \verb{$diversification_data_df_over_time} Data.frame with six columns providing diversification regimes (\verb{$regime_ID}) and \verb{$rates} sorted by \verb{$rate_type} along tips (\verb{$tip_ID})
-found across all posterior samples (\verb{$BAMM_sample_ID}) over each time-step (i.e., \verb{$focal_time}).
+found across all posterior samples (\verb{$BAMM_sample_ID}) over each time step (i.e., \verb{$focal_time}).
 Set \code{extract_diversification_data_melted_df = TRUE} to include it in the output.
 \item Those data.frames can be passed down to \code{\link[=plot_rates_through_time]{plot_rates_through_time()}} to generate a plot showing
 the evolution diversification rates across trait values over time.
 }
 
-Optional objects generated for each time-step (i.e., \code{focal_time}) and ordered as in \verb{$time_steps}:
+Optional objects generated for each time step (i.e., \code{focal_time}) and ordered as in \verb{$time_steps}:
 \itemize{
 \item \verb{$STRAPP_results_over_time} List of objects summarizing the results of the STRAPP tests
 See \code{\link[=compute_STRAPP_test_for_focal_time]{compute_STRAPP_test_for_focal_time()}} for a detailed description of the elements in each object.
@@ -211,10 +212,10 @@ a data.frame providing test stat estimates and p-values for post hoc pairwise te
 
 The function offers options to generate summary data.frames of the data extracted across \code{time_steps}:
 \itemize{
-\item If \code{extract_trait_data_melted_df = TRUE}, a data.frame of trait values found along branches at each time-step
+\item If \code{extract_trait_data_melted_df = TRUE}, a data.frame of trait values found along branches at each time step
 is provided in \verb{$trait_data_df_over_time}.
 \item If \code{extract_diversification_data_melted_df = TRUE}, a data.frame of diversification data (regimes ID and tip rates)
-found along branches at each time-step is provided in \verb{$diversification_data_df_over_time}.
+found along branches at each time step is provided in \verb{$diversification_data_df_over_time}.
 \item Those data.frames can be passed down to \code{\link[=plot_rates_through_time]{plot_rates_through_time()}} to generate a plot showing
 the evolution diversification rates across trait values over time.
 }
@@ -301,15 +302,15 @@ head(STRAPP_tests_over_time$diversification_data_df_over_time)
 # Access STRAPP test results
 str(STRAPP_tests_over_time$STRAPP_results, max.level = 2)
 
-# Plot updated contMap for time-step n°2
+# Plot updated contMap for time step n°2
 contMap_2 <- STRAPP_tests_over_time$updated_trait_data_with_contMap_over_time[[2]]
 phytools::plot.contMap(contMap_2$contMap)
 ape::nodelabels(text = contMap_2$contMap$tree$initial_nodes_ID)
 
-# Plot diversification rates on updated phylogeny for time-step n°2
+# Plot diversification rates on updated phylogeny for time step n°2
 BAMMtools::plot.bammdata(STRAPP_tests_over_time$updated_BAMM_objects_over_time[[2]], labels = TRUE)
 
-# Plot histogram of test stats for time-step n°2
+# Plot histogram of test stats for time step n°2
 plot_histogram_STRAPP_test_for_focal_time(
    STRAPP_results = STRAPP_tests_over_time$STRAPP_results_over_time[[2]]) }
 

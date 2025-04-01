@@ -38,6 +38,7 @@
 #'  `time_steps` will be generated from a combination of two arguments among `time_range`, `nb_time_steps`, and/or `time_step_duration`.
 #' @param time_range Vector of two numerical values. Time boundaries within with the `time_steps` must be defined if not provided.
 #'   If `NULL` (the default), and `time_range` is needed to generate the `time_steps`, the depth of the tree is used by default: `c(0, root_age)`.
+#'   However, no time step will be generated for the 'root_age'.
 #' @param nb_time_steps,time_step_duration Numerical. Number of time steps and duration of each time step used to generate `time_steps` if not provided.
 #'   You must provide at least one of those two arguments to be able to generate `time_steps`.
 #' @param keep_tip_labels Logical. Specify whether terminal branches with a single descendant tip
@@ -103,10 +104,10 @@
 #'   a data.frame providing test stat estimates and p-values for post hoc pairwise tests in `$pvalues_summary_df_for_posthoc_pairwise_tests`.
 #'
 #'   The function offers options to generate summary data.frames of the data extracted across `time_steps`:
-#'   * If `extract_trait_data_melted_df = TRUE`, a data.frame of trait values found along branches at each time-step
+#'   * If `extract_trait_data_melted_df = TRUE`, a data.frame of trait values found along branches at each time step
 #'     is provided in `$trait_data_df_over_time`.
 #'   * If `extract_diversification_data_melted_df = TRUE`, a data.frame of diversification data (regimes ID and tip rates)
-#'     found along branches at each time-step is provided in `$diversification_data_df_over_time`.
+#'     found along branches at each time step is provided in `$diversification_data_df_over_time`.
 #'   * Those data.frames can be passed down to [deepSTRAPP::plot_rates_through_time()] to generate a plot showing
 #'     the evolution diversification rates across trait values over time.
 #'
@@ -124,7 +125,7 @@
 #'
 #' @return The function returns a list with at least five elements.
 #'
-#'   * `$pvalues_summary_df` Data.frame with three columns providing test stat `$estimate` and `$p_value` obtained for each time-step (i.e., `$focal_time`),
+#'   * `$pvalues_summary_df` Data.frame with three columns providing test stat `$estimate` and `$p_value` obtained for each time step (i.e., `$focal_time`),
 #'     that can be passed down to [deepSTRAPP::plot_STRAPP_pvalues_over_time()] to generate a plot showing the evolution of the test results across time.
 #'   * `$time_steps` Numerical vector. Time steps at which the STRAPP tests were carried out in the same order as the objects returned in the output lists.
 #'   * `$trait_data_type` Character string. Specify the type of trait data. Possible values are: "continuous", "categorical", "biogeographic".
@@ -133,19 +134,19 @@
 #'
 #'   Optional summary df for multinominal data, if `posthoc_pairwise_tests = TRUE`:
 #'   * `$pvalues_summary_df_for_posthoc_pairwise_tests` Data.frame with four or five columns providing test stat `$estimate`, `$p_value`, and `$p_value_adjusted`
-#'     (if `p.adjust_method` used is not "none") for each `$pair` of states involved in post hoc Dunn's tests obtained for each time-step (i.e., `$focal_time`).
+#'     (if `p.adjust_method` used is not "none") for each `$pair` of states involved in post hoc Dunn's tests obtained for each time step (i.e., `$focal_time`).
 #'      This data.frame can be passed down to [deepSTRAPP::plot_STRAPP_pvalues_over_time()] to generate a plot showing the evolution of the post hoc test results across time.
 #'
 #'   Optional melted data.frames:
-#'   * `$trait_data_df_over_time` Data.frame with three columns providing `$trait_value` associated with each `$tip_ID` found along each time-step (i.e., `$focal_time`).
+#'   * `$trait_data_df_over_time` Data.frame with three columns providing `$trait_value` associated with each `$tip_ID` found along each time step (i.e., `$focal_time`).
 #'     Set `extract_trait_data_melted_df = TRUE` to include it in the output.
 #'   * `$diversification_data_df_over_time` Data.frame with six columns providing diversification regimes (`$regime_ID`) and `$rates` sorted by `$rate_type` along tips (`$tip_ID`)
-#'     found across all posterior samples (`$BAMM_sample_ID`) over each time-step (i.e., `$focal_time`).
+#'     found across all posterior samples (`$BAMM_sample_ID`) over each time step (i.e., `$focal_time`).
 #'     Set `extract_diversification_data_melted_df = TRUE` to include it in the output.
 #'   * Those data.frames can be passed down to [deepSTRAPP::plot_rates_through_time()] to generate a plot showing
 #'     the evolution diversification rates across trait values over time.
 #'
-#'   Optional objects generated for each time-step (i.e., `focal_time`) and ordered as in `$time_steps`:
+#'   Optional objects generated for each time step (i.e., `focal_time`) and ordered as in `$time_steps`:
 #'   * `$STRAPP_results_over_time` List of objects summarizing the results of the STRAPP tests
 #'     See [compute_STRAPP_test_for_focal_time()] for a detailed description of the elements in each object.
 #'     Set `return_STRAPP_results = TRUE` to include it in the output.
@@ -233,15 +234,15 @@
 #' # Access STRAPP test results
 #' str(STRAPP_tests_over_time$STRAPP_results, max.level = 2)
 #'
-#' # Plot updated contMap for time-step n°2
+#' # Plot updated contMap for time step n°2
 #' contMap_2 <- STRAPP_tests_over_time$updated_trait_data_with_contMap_over_time[[2]]
 #' phytools::plot.contMap(contMap_2$contMap)
 #' ape::nodelabels(text = contMap_2$contMap$tree$initial_nodes_ID)
 #'
-#' # Plot diversification rates on updated phylogeny for time-step n°2
+#' # Plot diversification rates on updated phylogeny for time step n°2
 #' BAMMtools::plot.bammdata(STRAPP_tests_over_time$updated_BAMM_objects_over_time[[2]], labels = TRUE)
 #'
-#' # Plot histogram of test stats for time-step n°2
+#' # Plot histogram of test stats for time step n°2
 #' plot_histogram_STRAPP_test_for_focal_time(
 #'    STRAPP_results = STRAPP_tests_over_time$STRAPP_results_over_time[[2]]) }
 #'
@@ -278,151 +279,177 @@ run_STRAPP_tests_over_time <- function (contMap, # Add densityMaps as alternativ
 {
   ### Check input validity
   {
-    # Should all already be included in the wrapped functions
-  }
+    ## Extract root_age
+    root_age <- max(phytools::nodeHeights(contMap$tree)[,2])
 
-  ## Extract root_age
-  root_age <- max(phytools::nodeHeights(contMap$tree)[,2])
-
-  ## If provided, check that time_range is two positive numerical values, in increasing order, not above root_age.
-  if (!is.null(time_range))
-  {
-    if (!all(time_range >= 0))
+    ## If provided, check that time_range is two positive numerical values, in increasing order, not above root_age.
+    if (!is.null(time_range))
     {
-      stop("'time_range' must be two positive numerical values.\n")
-    } else {
-      if (time_range[1] > time_range[2])
+      if (!all(time_range >= 0))
       {
-        stop("'time_range' values must be provided in increasing order.\n")
+        stop("'time_range' must be two positive numerical values.")
       } else {
-        if (time_range[2] > root_age)
+        if (time_range[1] > time_range[2])
         {
-          stop("'time_range' older boundary must be equal or lower than the age of the root of the tree.\n",
-               "Max time_range = ",max(time_range),". Root age = ",root_age, ".\n",)
+          stop("'time_range' values must be provided in increasing order.")
+        } else {
+          if (time_range[2] > root_age)
+          {
+            stop("'time_range' older boundary must be equal or lower than the age of the root of the tree.\n",
+                 "Max time_range = ",max(time_range),". Root age = ",root_age, ".")
+          }
+          if (time_range[2] == root_age)
+          {
+            cat(paste0("WARNING: 'time_range' older boundary is equal to the age of the root of the tree.\n",
+                       "\t Although, no time step is generated for the root age.\n"))
+          }
         }
       }
     }
-  }
 
-  ## If provided, check that nb_time_steps is a positive integer (warning over 100 against time consuming option).
-  if (!is.null(nb_time_steps))
-  {
-    if (!(round(nb_time_steps) == nb_time_steps) | !(nb_time_steps > 0))
+    ## If provided, check that nb_time_steps is a positive integer (warning over 100 against time consuming option).
+    if (!is.null(nb_time_steps))
     {
-      stop("'nb_time_steps' must be a positive integer.\n")
-    } else {
-      if (nb_time_steps > 100)
+      if (!(round(nb_time_steps) == nb_time_steps) | !(nb_time_steps > 0))
       {
-        cat("WARNING: Setting 'nb_time_steps' higher than 100 may take a long-time and produce very large outputs.\n")
-      }
-    }
-  }
-
-  ## If provided, check that time_step_duration is a positive numerical, smaller than root_age.
-  if (!is.null(time_step_duration))
-  {
-    if (!(time_step_duration > 0))
-    {
-      stop("'time_step_duration' must be a positive numerical.\n")
-    } else {
-      if (time_step_duration > root_age)
-      {
-        stop("'time_step_duration' must be a smaller than the root of the tree.\n",
-             "'time_step_duration' = ",time_step_duration,". Root age = ",root_age,".\n",)
-      }
-    }
-  }
-
-  ## If time_step_duration AND time_range provided, check that time_step_duration is smaller than the range of time_range.
-  if (!is.null(time_step_duration) && !is.null(time_range))
-  {
-    if (time_step_duration > diff(time_range))
-    {
-      stop("'time_step_duration' must be smaller than the range of 'time_range'.\n",
-           "'time_step_duration' = ",time_step_duration,". 'time_range' = ",time_range,".\n",)
-    }
-  }
-
-  ## If return_perm_data = TRUE, but return_STRAPP_results = FALSE, the distribution of the test statistics will not be returned in the output
-  if (return_perm_data && !return_STRAPP_results)
-  {
-    stop("'return_perm_data' = TRUE but 'return_STRAPP_results' = FALSE.\n",
-         "The distribution of the test statistics will not be returned in the output if 'return_STRAPP_results' = FALSE.\n",
-         "Set 'return_STRAPP_results' = TRUE if you want to retrieve the test statistics in order to plot histograms of the STRAPP test results.\n")
-  }
-  # Only useful if return_STRAPP_results = TRUE
-
-  ### Check validity of time-steps arguments while generating the time-steps vector
-
-  if (is.null(time_steps))
-  {
-    warning("'time_steps' were not provided. Instead, they were tentatively generated from a combination of 'time_range', 'nb_time_steps', and/or 'time_step_duration'.\n")
-
-    if (!is.null(time_range) && !is.null(nb_time_steps) && !is.null(time_step_duration))
-    {
-      stop("In order to generate the 'time_steps', please provide only two of the three arguments: 'time_range', 'nb_time_steps' and/or 'time_step_duration'.\n")
-    }
-
-    if (is.null(nb_time_steps) && is.null(time_step_duration))
-    {
-      stop("In order to generate the 'time_steps', you must provide at least one of those two arguments: 'nb_time_steps' or 'time_step_duration'.\n")
-    }
-
-    # Case with 'nb_time_steps' AND 'time_step_duration'
-    if (!is.null(nb_time_steps) && !is.null(time_step_duration))
-    {
-      # Produce time_steps from nb_time_steps & time_step_duration
-      time_steps <- seq(from = 0, by = time_step_duration, length.out = nb_time_steps)
-
-      # Check that generated time steps are within the range of the tree age.
-      if (max(time_steps) > root_age)
-      {
-        stop(paste0("Some generated 'time_steps' are older than the age of the root of the tree.\n",
-                    "Max time-step = ",max(time_steps),". Root age = ",root_age, ".\n",
-                    "You must provide 'nb_time_steps' and 'time_step_duration' arguments that produce time-steps that are compatible with the root age.\n"))
-      }
-
-    } else {
-      # Cases with 'nb_time_steps' OR 'time_step_duration'
-
-      # Check time_range
-      # If absent, use c(0, root_age) and send warning
-      if (is.null(time_range))
-      {
-        warning("'time_range' was not provided. The depth of the tree was used by default: c(0, root_age).\n")
-        time_range <- c(0, root_age)
-      }
-
-      # Case with 'nb_time_steps' and no 'time_step_duration'
-      if (!is.null(nb_time_steps))
-      {
-        # Produce time_steps from time_range & nb_time_steps
-        time_steps <- seq(from = time_range[1], to = time_range[2], length.out = nb_time_steps)
+        stop("'nb_time_steps' must be a positive integer.")
       } else {
-        # Case with no 'nb_time_steps' and 'time_step_duration'
-        # Produce time_steps from time_range & time_step_duration
-        time_steps <- seq(from = time_range[1], to = time_range[2], by = time_step_duration)
+        if (nb_time_steps > 100)
+        {
+          cat("WARNING: Setting 'nb_time_steps' higher than 100 may take a long-time and produce very large outputs.\n")
+        }
       }
     }
 
-    # Print time steps generated
-    if (verbose | verbose_extended)
+    ## If provided, check that time_step_duration is a positive numerical, smaller than root_age.
+    if (!is.null(time_step_duration))
     {
-      cat(paste0("Time-steps generated from a combination of 'time_range', 'nb_time_steps', and/or 'time_step_duration': ",paste(time_steps, collapse = ", "),".\n\n"))
+      if (!(time_step_duration > 0))
+      {
+        stop("'time_step_duration' must be a positive numerical.\n")
+      } else {
+        if (time_step_duration >= root_age)
+        {
+          stop("'time_step_duration' must be smaller than the root of the tree.\n",
+               "'time_step_duration' = ",time_step_duration,". Root age = ",root_age,".")
+        }
+      }
     }
-  }
 
-  ## Check if there is more than one time-step
-  if (length(time_steps) < 2)
-  {
-    stop(paste0("Only one time-step was provided/generated.\n",
-                "Please use run_STRAPP_test_for_focal_time() to run the STRAPP workflow for a unique time-step/focal time\n\n"))
+    ## If time_step_duration AND time_range provided, check that time_step_duration is smaller or equal to the range of time_range.
+    if (!is.null(time_step_duration) && !is.null(time_range))
+    {
+      if (time_step_duration > diff(time_range))
+      {
+        stop("'time_step_duration' must be smaller or equal to the range of 'time_range'.\n",
+             "'time_step_duration' = ",time_step_duration,". 'time_range' = ",time_range,".")
+      }
+    }
+
+    ## Check validity of time steps arguments while generating the time steps vector
+    if (is.null(time_steps))
+    {
+      cat(paste0("WARNING: 'time_steps' were not provided. Instead, they are tentatively generated from a combination of 'time_range', 'nb_time_steps', and/or 'time_step_duration'.\n"))
+
+      if (!is.null(time_range) && !is.null(nb_time_steps) && !is.null(time_step_duration))
+      {
+        stop("In order to generate the 'time_steps', please provide only two of the three arguments: 'time_range', 'nb_time_steps' and/or 'time_step_duration'.")
+      }
+
+      if (is.null(nb_time_steps) && is.null(time_step_duration))
+      {
+        stop("In order to generate the 'time_steps', you must provide at least one of those two arguments: 'nb_time_steps' or 'time_step_duration'.")
+      }
+
+      # Case with 'nb_time_steps' AND 'time_step_duration'
+      if (!is.null(nb_time_steps) && !is.null(time_step_duration))
+      {
+        # Produce time_steps from nb_time_steps & time_step_duration
+        time_steps <- seq(from = 0, by = time_step_duration, length.out = nb_time_steps)
+
+        # Check that generated time steps are within the range of the tree age.
+        if (max(time_steps) > root_age)
+        {
+          stop(paste0("Some generated 'time_steps' are older than the age of the root of the tree.\n",
+                      "Max time step = ",max(time_steps),". Root age = ",root_age, ".\n",
+                      "You must provide 'nb_time_steps' and 'time_step_duration' arguments that produce time steps that are compatible with the root age."))
+        }
+        # Case if the oldest generated time step equals the root age => ignore it.
+        if (max(time_steps) == root_age)
+        {
+          cat(paste0("WARNING: The oldest time step generated from 'nb_time_steps' and 'time_step_duration' equals the root age.\n",
+                     "\t This time step will be ignored.\n"))
+          time_steps <- time_steps[-length(time_steps)]
+        }
+
+      } else {
+        # Cases with 'nb_time_steps' OR 'time_step_duration'
+
+        # Check time_range
+        # If absent, use c(0, root_age) and send warning
+        if (is.null(time_range))
+        {
+          cat(paste0("WARNING: 'time_range' was not provided. The depth of the tree is used by default: c(0, root_age).\n",
+                     "\t Although, no time step is generated for the root age.\n"))
+          time_range <- c(0, root_age)
+        }
+
+        # Case with 'nb_time_steps' and no 'time_step_duration'
+        if (!is.null(nb_time_steps))
+        {
+          # Produce time_steps from time_range & nb_time_steps
+          time_steps <- seq(from = time_range[1], to = time_range[2], length.out = nb_time_steps)
+          # Case if the oldest generated time step equals the root age => ignore it.
+          if (max(time_steps) == root_age)
+          {
+            cat(paste0("WARNING: The oldest time step generated from 'time_range' and 'nb_time_steps' equals the root age.\n",
+                       "\t This time step will be ignored.\n"))
+            time_steps <- time_steps[-length(time_steps)]
+          }
+        } else {
+          # Case with no 'nb_time_steps' and 'time_step_duration'
+          # Produce time_steps from time_range & time_step_duration
+          time_steps <- seq(from = time_range[1], to = time_range[2], by = time_step_duration)
+          # Case if the oldest generated time step equals the root age => ignore it.
+          if (max(time_steps) == root_age)
+          {
+            cat(paste0("WARNING: The oldest time step generated from 'time_range' and 'time_step_duration' equals the root age.\n",
+                       "\t This time step will be ignored.\n"))
+            time_steps <- time_steps[-length(time_steps)]
+          }
+        }
+      }
+
+      # Print time steps generated
+      if (verbose | verbose_extended)
+      {
+        cat(paste0("Time steps generated from a combination of 'time_range', 'nb_time_steps', and/or 'time_step_duration': ",paste(time_steps, collapse = ", "),".\n\n"))
+      }
+    }
+
+    ## Check if there is more than one time step
+    if (length(time_steps) < 2)
+    {
+      stop(paste0("Only one time step was provided/generated.\n",
+                  "Please use run_STRAPP_test_for_focal_time() to run the STRAPP workflow for a unique time step/focal time."))
+    }
+
+    ## If return_perm_data = TRUE, but return_STRAPP_results = FALSE, the distribution of the test statistics will not be returned in the output
+    if (return_perm_data && !return_STRAPP_results)
+    {
+      stop("'return_perm_data' = TRUE but 'return_STRAPP_results' = FALSE.\n",
+           "The distribution of the test statistics will not be returned in the output if 'return_STRAPP_results' = FALSE.\n",
+           "Set 'return_STRAPP_results' = TRUE if you want to retrieve the test statistics in order to plot histograms of the STRAPP test results.")
+    }
+    # Only useful if return_STRAPP_results = TRUE
+
+    ## Other validity checks should all already be included in the wrapped functions
   }
 
   ## Detect if trait_data is needed because requested, or to extract trait data in a melted df
   need_trait_data <- (return_updated_trait_data_with_contMap | extract_trait_data_melted_df)
 
-  ### Run STRAPP test workflow per time-steps
+  ### Run STRAPP test workflow per time steps
   STRAPP_test_outputs_over_time <- list()
   for (i in seq_along(time_steps))
   {
@@ -431,7 +458,7 @@ run_STRAPP_tests_over_time <- function (contMap, # Add densityMaps as alternativ
     # Extract current focal_time
     focal_time_i <- time_steps[i]
 
-    # Print progress per time-steps
+    # Print progress per time steps
     if (verbose | verbose_extended)
     {
       cat(paste0(Sys.time(), " - STRAPP test running for focal_time = ",focal_time_i," - n\u00B0 ", i, "/", length(time_steps),"\n\n"))
@@ -511,7 +538,7 @@ run_STRAPP_tests_over_time <- function (contMap, # Add densityMaps as alternativ
       names(pvalues_summary_df_i) <- c("focal_time", "pair", "estimate", "p_value", "p_value_adjusted")
       pvalues_summary_df_for_posthoc_pairwise_tests[[i]] <- pvalues_summary_df_i
     }
-    # Bind across all time-steps
+    # Bind across all time steps
     pvalues_summary_df_for_posthoc_pairwise_tests <- do.call(what = rbind, args = pvalues_summary_df_for_posthoc_pairwise_tests)
 
     # Store pvalues_summary_df in final output
@@ -532,7 +559,7 @@ run_STRAPP_tests_over_time <- function (contMap, # Add densityMaps as alternativ
       row.names(trait_data_df_i) <- NULL
       trait_data_over_time[[i]] <- trait_data_df_i
     }
-    # Bind across all time-steps
+    # Bind across all time steps
     trait_data_df_over_time <- do.call(what = rbind, args = trait_data_over_time)
 
     # Store trait_data_df_over_time in final output
@@ -544,7 +571,7 @@ run_STRAPP_tests_over_time <- function (contMap, # Add densityMaps as alternativ
   if (extract_diversification_data_melted_df)
   {
     diversification_data_over_time <- lapply(X = STRAPP_test_outputs_over_time, FUN = function (x) { x$diversification_data_df } )
-    # Bind across all time-steps
+    # Bind across all time steps
     diversification_data_df_over_time <- do.call(what = rbind, args = diversification_data_over_time)
 
     # Store STRAPP_results in final output

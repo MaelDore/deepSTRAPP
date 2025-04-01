@@ -51,7 +51,8 @@ that contains a phylogenetic tree and associated diversification rate mapping ac
 The phylogenetic tree must the same as the one associated with the \code{contMap}, \code{ace} and \code{tip_data}.}
 
 \item{focal_time}{Numerical. The time, in terms of time distance from the present,
-at which data must be extracted and the phylogeny and mappings must be cut.}
+at which data must be extracted and the phylogeny and mappings must be cut.
+It must be smaller than the root age of the phylogeny.}
 
 \item{keep_tip_labels}{Logical. Specify whether terminal branches with a single descendant tip
 must retained their initial \code{tip.label} on the updated phylogeny. Default is \code{TRUE}.}

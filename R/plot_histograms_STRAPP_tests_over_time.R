@@ -1,5 +1,5 @@
 
-#' @title Wrapper function to plot histogram of STRAPP test statistics over time-steps
+#' @title Wrapper function to plot histogram of STRAPP test statistics over time steps
 #'
 #' @description Plot an histogram of the distribution of the test statistics
 #'   obtained from a STRAPP test carried out for each focal time in `$time_steps`.
@@ -66,9 +66,9 @@
 #'   display_plots = TRUE,
 #'   # PDF_file_path = "./plot_STRAPP_histograms_overall_tests_over_time.pdf",
 #'   plot_posthoc_tests = FALSE)
-#' # Print histogram for time-step 1
+#' # Print histogram for time step 1
 #' print(histogram_ggplots[[1]])
-#' # Adjust aesthetics of plot for time-step 1 a posteriori
+#' # Adjust aesthetics of plot for time step 1 a posteriori
 #' histogram_ggplot_adj <- histogram_ggplots[[1]] +
 #'     ggplot2::theme(plot.title = ggplot2::element_text(color = "red", size = 15))
 #' print(histogram_ggplot_adj)
@@ -79,7 +79,7 @@
 #'   display_plots = TRUE,
 #'   # PDF_file_path = "./test_multi_histo.pdf"
 #'   plot_posthoc_tests = TRUE)
-#' # Print all histograms for time-step 1 one by one
+#' # Print all histograms for time step 1 one by one
 #' print(histograms_ggplots_list[[1]])
 #' # Plot all histograms on one faceted plot
 #' cowplot::plot_grid(plotlist = histograms_ggplots_list[[1]])
@@ -100,7 +100,7 @@ plot_histograms_STRAPP_tests_over_time <- function (STRAPP_tests_over_time,
     {
       stop(paste0("'$STRAPP_results_over_time' is missing from 'STRAPP_tests_over_time'. You can inspect the structure of the input object with 'str(STRAPP_tests_over_time, 2)'.\n",
                   "See ?deepSTRAPP::run_STRAPP_tests_over_time() to learn how to generate those objects.\n",
-                  "Especially, check if you used 'return_STRAPP_results = TRUE' to save the STRAPP_results for each time-step needed for the histogram plots."))
+                  "Especially, check if you used 'return_STRAPP_results = TRUE' to save the STRAPP_results for each time step needed for the histogram plots."))
     }
     ## STRAPP_tests_over_time$time_steps
     # STRAPP_tests_over_time must have element $time_steps
@@ -186,7 +186,7 @@ plot_histograms_STRAPP_tests_over_time <- function (STRAPP_tests_over_time,
     # Initiate list of ggplots
     ggplot_histo_list <- list()
 
-    # Loop per time-steps
+    # Loop per time steps
     for (i in seq_along(STRAPP_tests_over_time$time_steps))
     {
       # i <- 1
@@ -245,7 +245,7 @@ plot_histograms_STRAPP_tests_over_time <- function (STRAPP_tests_over_time,
                        axis.text.x = ggplot2::element_text(margin = ggplot2::margin(t = 5)),
                        axis.text.y = ggplot2::element_text(margin = ggplot2::margin(r = 5)))
 
-      ## Display plot at each time-step if requested
+      ## Display plot at each time step if requested
       if (display_plots)
       {
         print(ggplot_histo_i)
@@ -276,7 +276,7 @@ plot_histograms_STRAPP_tests_over_time <- function (STRAPP_tests_over_time,
     # Initiate list of lists of ggplots
     ggplot_histo_list_of_lists <- list()
 
-    # Loop per time-steps
+    # Loop per time steps
     for (i in seq_along(STRAPP_tests_over_time$time_steps))
     {
       # i <- 1
@@ -284,7 +284,7 @@ plot_histograms_STRAPP_tests_over_time <- function (STRAPP_tests_over_time,
       # Extract STRAPP_results
       STRAPP_results_i <- STRAPP_tests_over_time$STRAPP_results_over_time[[i]]
 
-      # Create list of pairwise plots for time-step i
+      # Create list of pairwise plots for time step i
       ggplots_histo_list_i <- list()
 
       # Extract pairs
@@ -384,7 +384,7 @@ plot_histograms_STRAPP_tests_over_time <- function (STRAPP_tests_over_time,
 
       }
 
-      ## Display plot at each time-step if requested
+      ## Display plot at each time step if requested
       if (display_plots)
       {
         cow_plot_to_print_i <- cowplot::plot_grid(plotlist = ggplots_histo_list_i)

@@ -9,7 +9,7 @@
 #'   The phylogenetic tree must be rooted and fully resolved/dichotomous,
 #'   but it does not need to be ultrametric (it can includes fossils).
 #' @param focal_time Numerical. The time, in terms of time distance from the present,
-#'   for which the character mapping must be cut.
+#'   for which the character mapping must be cut. It must be smaller than the root age of the phylogeny.
 #'
 #' @importFrom phytools nodeHeights
 #'
@@ -61,25 +61,15 @@ update_maps_for_focal_time <- function(tree_with_maps, focal_time)
     root_age <- max(phytools::nodeHeights(tree_with_maps)[,2])
 
     ## focal_time
-    # focal_time must be positive and smaller to root age
+    # focal_time must be positive and smaller than root age
     if (focal_time < 0)
     {
       stop(paste0("'focal_time' must be a positive number. It represents the time as a distance from the present."))
     }
-    if (focal_time > root_age)
+    if (focal_time >= root_age)
     {
-      stop(paste0("'focal_time' must be smaller or equals to the root age of the phylogeny.\n",
+      stop(paste0("'focal_time' must be smaller than the root age of the phylogeny.\n",
                   "'focal_time' = ",focal_time,"; root age = ",root_age,"."))
-    }
-    # If focal_time equals root_age, send warning
-    if (focal_time == root_age)
-    {
-      warning(paste0("'focal_time' equals root age = ",root_age,". The function will return an empty object.\n"))
-
-      # Return a NULL object
-      tree_with_no_maps <- tree_with_maps
-      tree_with_no_maps$maps <- NULL
-      return(tree_with_no_maps)
     }
   }
 
