@@ -13,7 +13,9 @@ plot_histogram_STRAPP_test_for_focal_time(
 }
 \arguments{
 \item{STRAPP_results}{List of elements generated with \code{\link[=compute_STRAPP_test_for_focal_time]{compute_STRAPP_test_for_focal_time()}},
-that summarize the results of a STRAPP test for a specific time in the past (i.e. the \code{focal_time}).}
+that summarize the results of a STRAPP test for a specific time in the past (i.e. the \code{focal_time}).
+\code{STRAPP_results} can also be extracted from the output of \code{\link[=run_deepSTRAPP_for_focal_time]{run_deepSTRAPP_for_focal_time()}} that
+run the whole deepSTRAPP workflow and store results inside \verb{$STRAPP_results}.}
 
 \item{display_plot}{Logical. Whether to display the histogram(s) generated in the R console. Default is \code{TRUE}.}
 
@@ -38,7 +40,8 @@ If a \code{PDF_file_path} is provided, the function will also generate a PDF fil
 \description{
 Plot an histogram of the distribution of the test statistics
 obtained from a STRAPP test carried out for a unique \code{focal_time}.
-(See \code{\link[=compute_STRAPP_test_for_focal_time]{compute_STRAPP_test_for_focal_time()}}).
+(See \code{\link[=compute_STRAPP_test_for_focal_time]{compute_STRAPP_test_for_focal_time()}} and
+\code{\link[=run_deepSTRAPP_for_focal_time]{run_deepSTRAPP_for_focal_time()}}).
 
 Returns a single histogram for overall tests.
 If \code{plot_posthoc_tests = TRUE}, it will return a faceted plot with an histogram per post hoc tests.
@@ -50,12 +53,17 @@ Histograms are build based on the distribution of the test statistics.
 Such distributions are recorded in the outputs of STRAPP tests carried out with \code{\link[=compute_STRAPP_test_for_focal_time]{compute_STRAPP_test_for_focal_time()}}
 when \code{return_perm_data = TRUE}. The \code{STRAPP_results} object provided as input is a list that must contain
 a \verb{$perm_data_df} element that summarizes test statistics computed across posterior samples.
+\code{\link[=compute_STRAPP_test_for_focal_time]{compute_STRAPP_test_for_focal_time()}} takes as input a \code{BAMM_object} with diversification rates and regimes updated for the \code{focal_time},
+and a \code{trait_data_list} that contains trait data along branches updated for the \code{focal_time}.
+Meanwhile, \code{\link[=run_deepSTRAPP_for_focal_time]{run_deepSTRAPP_for_focal_time()}} carries the whole deepSTRAPP workflow, starting from an extant \code{BAMM_object} and trait data
+mapped on an extant phylogeny (\code{contMap} or \code{densityMaps}), and produces \code{STRAPP_results} for the given \code{focal_time}.
 
 For multinominal data (categorical or biogeographic data with more than 2 states), it is possible to plot the histograms of post hoc pairwise tests.
 Set \code{plot_posthoc_tests = TRUE} to generate histograms for all the pairwise post hoc Dunn's test across pairs of states.
 To achieve this, the \code{STRAPP_results} input object must contain a \verb{$posthoc_pairwise_tests$perm_data_array} element that summarizes test statistics
-computed across posterior samples for all pairwise post hoc tests. This is obtained from \code{\link[=compute_STRAPP_test_for_focal_time]{compute_STRAPP_test_for_focal_time()}} when setting both
-\code{posthoc_pairwise_tests = TRUE} to carry out post hoc tests, and \code{return_perm_data = TRUE} to record distributions of test statistics.
+computed across posterior samples for all pairwise post hoc tests. This is obtained from \code{\link[=compute_STRAPP_test_for_focal_time]{compute_STRAPP_test_for_focal_time()}}
+or \code{\link[=run_deepSTRAPP_for_focal_time]{run_deepSTRAPP_for_focal_time()}} when setting both \code{posthoc_pairwise_tests = TRUE} to carry out post hoc tests,
+and \code{return_perm_data = TRUE} to record distributions of test statistics.
 }
 \examples{
 # ------ Prepare data ------ #
@@ -125,7 +133,7 @@ cowplot::plot_grid(plotlist = histograms_ggplot_list)}
 
 }
 \seealso{
-Associated functions in deepSTRAPP: \code{\link[=compute_STRAPP_test_for_focal_time]{compute_STRAPP_test_for_focal_time()}} \code{\link[=run_STRAPP_test_for_focal_time]{run_STRAPP_test_for_focal_time()}}
+Associated functions in deepSTRAPP: \code{\link[=compute_STRAPP_test_for_focal_time]{compute_STRAPP_test_for_focal_time()}} \code{\link[=run_deepSTRAPP_for_focal_time]{run_deepSTRAPP_for_focal_time()}}
 }
 \author{
 Maël Doré

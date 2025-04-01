@@ -12,8 +12,8 @@ plot_histograms_STRAPP_tests_over_time(
 )
 }
 \arguments{
-\item{STRAPP_tests_over_time}{List of elements generated with \code{\link[=run_STRAPP_tests_over_time]{run_STRAPP_tests_over_time()}},
-that summarize the results of multiple STRAPP tests across \verb{$time_steps}. It needs to include the \verb{$STRAPP_results_over_time}
+\item{STRAPP_tests_over_time}{List of elements generated with \code{\link[=run_deepSTRAPP_over_time]{run_deepSTRAPP_over_time()}},
+that summarize the results of multiple deepSTRAPP across \verb{$time_steps}. It needs to include the \verb{$STRAPP_results_over_time}
 element with \verb{$perm_data_df} obtained when setting both \code{return_STRAPP_results = TRUE} and \code{return_perm_data = TRUE}.}
 
 \item{display_plots}{Logical. Whether to display the histograms generated in the R console. Default is \code{TRUE}.}
@@ -40,8 +40,8 @@ For post hoc tests, this will save the multifaceted plots.
 }
 \description{
 Plot an histogram of the distribution of the test statistics
-obtained from a STRAPP test carried out for each focal time in \verb{$time_steps}.
-(See \code{\link[=run_STRAPP_tests_over_time]{run_STRAPP_tests_over_time()}}).
+obtained from a deepSTRAPP workflow carried out for each focal time in \verb{$time_steps}.
+(See \code{\link[=run_deepSTRAPP_over_time]{run_deepSTRAPP_over_time()}}).
 
 Returns one histogram for overall tests for each focal time in \verb{$time_steps}.
 If \code{plot_posthoc_tests = TRUE}, it will return one faceted plot with an histogram
@@ -52,19 +52,19 @@ with one page per focal time in \verb{$time_steps}.
 }
 \details{
 Histograms are build based on the distribution of the test statistics.
-Such distributions are recorded in the outputs of STRAPP tests carried out with \code{\link[=run_STRAPP_tests_over_time]{run_STRAPP_tests_over_time()}}
+Such distributions are recorded in the outputs of STRAPP tests carried out with \code{\link[=run_deepSTRAPP_over_time]{run_deepSTRAPP_over_time()}}
 when \code{return_STRAPP_results = TRUE} AND \code{return_perm_data = TRUE}. The \verb{$STRAPP_results_over_time} objects provided within the input are lists that must contain
 a \verb{$perm_data_df} element that summarizes test statistics computed across posterior samples.
 
 For multinominal data (categorical or biogeographic data with more than 2 states), it is possible to plot the histograms of post hoc pairwise tests.
 Set \code{plot_posthoc_tests = TRUE} to generate histograms for all the pairwise post hoc Dunn's test across pairs of states.
 To achieve this, the \verb{$STRAPP_results_over_time} objects must contain a \verb{$posthoc_pairwise_tests$perm_data_array} element that summarizes test statistics
-computed across posterior samples for all pairwise post hoc tests. This is obtained from \code{\link[=run_STRAPP_tests_over_time]{run_STRAPP_tests_over_time()}} when setting
+computed across posterior samples for all pairwise post hoc tests. This is obtained from \code{\link[=run_deepSTRAPP_over_time]{run_deepSTRAPP_over_time()}} when setting
 \code{return_STRAPP_results = TRUE} to return the STRAPP results, \code{posthoc_pairwise_tests = TRUE} to carry out post hoc tests,
 and \code{return_perm_data = TRUE} to record distributions of test statistics.
 }
 \examples{
-## Load results of run_STRAPP_tests_over_time()
+## Load results of run_deepSTRAPP_over_time()
 data(STRAPP_tests_over_time_temp_example, package = "deepSTRAPP")
 
 ## Plot histograms of STRAPP overall test results
@@ -93,7 +93,7 @@ cowplot::plot_grid(plotlist = histograms_ggplots_list[[1]])
 
 }
 \seealso{
-Associated functions in deepSTRAPP: \code{\link[=run_STRAPP_tests_over_time]{run_STRAPP_tests_over_time()}} \code{\link[=plot_histogram_STRAPP_test_for_focal_time]{plot_histogram_STRAPP_test_for_focal_time()}}
+Associated functions in deepSTRAPP: \code{\link[=run_deepSTRAPP_over_time]{run_deepSTRAPP_over_time()}} \code{\link[=plot_histogram_STRAPP_test_for_focal_time]{plot_histogram_STRAPP_test_for_focal_time()}}
 }
 \author{
 Maël Doré

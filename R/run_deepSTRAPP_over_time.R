@@ -1,7 +1,7 @@
 
-#' @title Runs a STRAPP to test for a relationship between diversification rates and trait data over multiple time steps
+#' @title Runs deepSTRAPP to test for a relationship between diversification rates and trait data over multiple time steps
 #'
-#' @description Wrapper function to run STRAPP test workflows over multiple time steps in the past.
+#' @description Wrapper function to run deepSTRAPP workflows over multiple time steps in the past.
 #'   It starts from traits mapped on a phylogeny (trait data) and BAMM output (diversification data)
 #'   and carries out the appropriate statistical method to test for a relationship between diversification rates and trait data.
 #'   The workflow is repeated over multiple points in time (i.e. the `time_steps`) and results are summarized in a data.frame.
@@ -85,18 +85,18 @@
 #' @param return_updated_BAMM_object Logical. Specify whether the `updated_BAMM_object` with phylogeny and
 #'   mapped diversification rates cut-off at the `focal_time` should be returned among the outputs.
 #' @param verbose Logical. Should progression per `time_steps` be displayed? Default is `TRUE`.
-#' @param verbose_extended Should progression per `time_steps` AND within each STRAPP workflow de displayed?
-#'   In addition to printing progress along `time_steps`, a message will be printed at each step of the STRAPP workflow,
+#' @param verbose_extended Should progression per `time_steps` AND within each deepSTRAPP workflow de displayed?
+#'   In addition to printing progress along `time_steps`, a message will be printed at each step of the deepSTRAPP workflow,
 #'   and for every batch of 100 BAMM posterior samples whose rates are regimes are updated. If `extract_diversification_data_melted_df = TRUE`,
 #'   a message for will also be printed when rates are extracted. Default is `FALSE`.
 #'
 #' @export
 #' @importFrom phytools nodeHeights
 #'
-#' @details The function is a wrapper of [deepSTRAPP::run_STRAPP_test_for_focal_time()] that runs the
-#'   STRAPP test workflow over multiple `time_steps`.
+#' @details The function is a wrapper of [deepSTRAPP::run_deepSTRAPP_for_focal_time()] that runs the
+#'   deepSTRAPP workflow over multiple `time_steps`.
 #'
-#'   The STRAPP workflow is described step by step in the [deepSTRAPP::run_STRAPP_test_for_focal_time()] documentation.
+#'   The deepSTRAPP workflow is described step by step in the [deepSTRAPP::run_deepSTRAPP_for_focal_time()] documentation.
 #'
 #'   Its main output is the `$pvalues_summary_df`: a data.frame providing test stat estimates and p-values obtained across all `time_steps`,
 #'   that can be passed down to [deepSTRAPP::plot_STRAPP_pvalues_over_time()] to generate a plot showing the evolution of the test results across time.
@@ -162,7 +162,7 @@
 #'
 #' @author Maël Doré
 #'
-#' @seealso To run STRAPP workflow for a single `focal_time`: [deepSTRAPP::run_STRAPP_test_for_focal_time()]
+#' @seealso To run the deepSTRAPP workflow for a single `focal_time`: [deepSTRAPP::run_deepSTRAPP_for_focal_time()]
 #' [deepSTRAPP::extract_most_likely_trait_values_for_focal_time()] [deepSTRAPP::update_rates_and_regimes_for_focal_time()]
 #' [deepSTRAPP::extract_diversification_data_melted_df_for_focal_time()] [deepSTRAPP::compute_STRAPP_test_for_focal_time()]
 #'
@@ -194,14 +194,14 @@
 #' # Plot contMap = stochastic mapping of continuous trait
 #' plot(Ponerinae_contMap)
 #'
-#' ## Set for three time steps of 5 My. Will generate STRAPP workflows for 0, 5 and 10 Mya.
+#' ## Set for three time steps of 5 My. Will generate deepSTRAPP workflows for 0, 5 and 10 Mya.
 #' nb_time_steps <- 3
 #' time_step_duration <- 5
 #'
 #' \dontrun{  (May take several minutes to run)
-#' ## Run STRAPP test on net diversification rates
+#' ## Run deepSTRAPP on net diversification rates
 #'
-#' STRAPP_tests_over_time <- run_STRAPP_tests_over_time(
+#' deepSTRAPP_over_time <- run_deepSTRAPP_over_time(
 #'    contMap = Ponerinae_contMap,
 #'    ace = Ponerinae_ACE, tip_data = Ponerinae_data_ln_HW,
 #'    trait_data_type = "continuous",
@@ -218,64 +218,64 @@
 #'    verbose_extended = TRUE)
 #'
 #' ## Explore output
-#' str(STRAPP_tests_over_time, max.level = 1)
+#' str(deepSTRAPP_over_time, max.level = 1)
 #'
 #' # Display test summary
 #' # Can be passed down to [deepSTRAPP::plot_STRAPP_pvalues_over_time()] to generate a plot
 #' # showing the evolution of the test results across time.
-#' STRAPP_tests_over_time$pvalues_summary_df
+#' deepSTRAPP_over_time$pvalues_summary_df
 #'
 #' # Access trait data in a melted data.frame
-#' head(STRAPP_tests_over_time$trait_data_df_over_time)
+#' head(deepSTRAPP_over_time$trait_data_df_over_time)
 #'
 #' # Access the diversification data in a melted data.frame
-#' head(STRAPP_tests_over_time$diversification_data_df_over_time)
+#' head(deepSTRAPP_over_time$diversification_data_df_over_time)
 #'
-#' # Access STRAPP test results
-#' str(STRAPP_tests_over_time$STRAPP_results, max.level = 2)
+#' # Access deepSTRAPP results
+#' str(deepSTRAPP_over_time$STRAPP_results, max.level = 2)
 #'
 #' # Plot updated contMap for time step n°2
-#' contMap_2 <- STRAPP_tests_over_time$updated_trait_data_with_contMap_over_time[[2]]
+#' contMap_2 <- deepSTRAPP_over_time$updated_trait_data_with_contMap_over_time[[2]]
 #' phytools::plot.contMap(contMap_2$contMap)
 #' ape::nodelabels(text = contMap_2$contMap$tree$initial_nodes_ID)
 #'
 #' # Plot diversification rates on updated phylogeny for time step n°2
-#' BAMMtools::plot.bammdata(STRAPP_tests_over_time$updated_BAMM_objects_over_time[[2]], labels = TRUE)
+#' BAMMtools::plot.bammdata(deepSTRAPP_over_time$updated_BAMM_objects_over_time[[2]], labels = TRUE)
 #'
 #' # Plot histogram of test stats for time step n°2
 #' plot_histogram_STRAPP_test_for_focal_time(
-#'    STRAPP_results = STRAPP_tests_over_time$STRAPP_results_over_time[[2]]) }
+#'    STRAPP_results = deepSTRAPP_over_time$STRAPP_results_over_time[[2]]) }
 #'
 
 
-run_STRAPP_tests_over_time <- function (contMap, # Add densityMaps as alternative input and adjust doc
-                                        ace = NULL,
-                                        tip_data = NULL,
-                                        trait_data_type,
-                                        BAMM_object,
-                                        time_steps = NULL,
-                                        time_range = NULL,
-                                        nb_time_steps = NULL,
-                                        time_step_duration = NULL,
-                                        keep_tip_labels = TRUE,
-                                        rate_type = "net_diversification",
-                                        nb_permutations = NULL,
-                                        replace_samples = FALSE,
-                                        alpha = 0.05,
-                                        two_tailed = TRUE,
-                                        one_tailed_hypothesis = NULL,
-                                        posthoc_pairwise_tests = FALSE,
-                                        p.adjust_method = "none",
-                                        return_perm_data = FALSE,
-                                        nthreads = 1,
-                                        print_hypothesis = TRUE,
-                                        extract_trait_data_melted_df = FALSE,
-                                        extract_diversification_data_melted_df = FALSE,
-                                        return_STRAPP_results = FALSE,
-                                        return_updated_trait_data_with_contMap = FALSE,
-                                        return_updated_BAMM_object = FALSE,
-                                        verbose = TRUE,
-                                        verbose_extended = FALSE)
+run_deepSTRAPP_over_time <- function (contMap, # Add densityMaps as alternative input and adjust doc
+                                      ace = NULL,
+                                      tip_data = NULL,
+                                      trait_data_type,
+                                      BAMM_object,
+                                      time_steps = NULL,
+                                      time_range = NULL,
+                                      nb_time_steps = NULL,
+                                      time_step_duration = NULL,
+                                      keep_tip_labels = TRUE,
+                                      rate_type = "net_diversification",
+                                      nb_permutations = NULL,
+                                      replace_samples = FALSE,
+                                      alpha = 0.05,
+                                      two_tailed = TRUE,
+                                      one_tailed_hypothesis = NULL,
+                                      posthoc_pairwise_tests = FALSE,
+                                      p.adjust_method = "none",
+                                      return_perm_data = FALSE,
+                                      nthreads = 1,
+                                      print_hypothesis = TRUE,
+                                      extract_trait_data_melted_df = FALSE,
+                                      extract_diversification_data_melted_df = FALSE,
+                                      return_STRAPP_results = FALSE,
+                                      return_updated_trait_data_with_contMap = FALSE,
+                                      return_updated_BAMM_object = FALSE,
+                                      verbose = TRUE,
+                                      verbose_extended = FALSE)
 {
   ### Check input validity
   {
@@ -431,7 +431,7 @@ run_STRAPP_tests_over_time <- function (contMap, # Add densityMaps as alternativ
     if (length(time_steps) < 2)
     {
       stop(paste0("Only one time step was provided/generated.\n",
-                  "Please use run_STRAPP_test_for_focal_time() to run the STRAPP workflow for a unique time step/focal time."))
+                  "Please use run_deepSTRAPP_for_focal_time() to run the deepSTRAPP workflow for a unique time step/focal time."))
     }
 
     ## If return_perm_data = TRUE, but return_STRAPP_results = FALSE, the distribution of the test statistics will not be returned in the output
@@ -449,8 +449,8 @@ run_STRAPP_tests_over_time <- function (contMap, # Add densityMaps as alternativ
   ## Detect if trait_data is needed because requested, or to extract trait data in a melted df
   need_trait_data <- (return_updated_trait_data_with_contMap | extract_trait_data_melted_df)
 
-  ### Run STRAPP test workflow per time steps
-  STRAPP_test_outputs_over_time <- list()
+  ### Run deepSTRAPP workflow per time steps
+  deepSTRAPP_outputs_over_time <- list()
   for (i in seq_along(time_steps))
   {
     # i <- 1
@@ -461,11 +461,11 @@ run_STRAPP_tests_over_time <- function (contMap, # Add densityMaps as alternativ
     # Print progress per time steps
     if (verbose | verbose_extended)
     {
-      cat(paste0(Sys.time(), " - STRAPP test running for focal_time = ",focal_time_i," - n\u00B0 ", i, "/", length(time_steps),"\n\n"))
+      cat(paste0(Sys.time(), " - deepSTRAPP running for focal_time = ",focal_time_i," - n\u00B0 ", i, "/", length(time_steps),"\n\n"))
     }
 
-    ## Run STRAPP test workflow for the current focal_time
-    STRAPP_test_output_i <- run_STRAPP_test_for_focal_time(
+    ## Run deepSTRAPP workflow for the current focal_time
+    deepSTRAPP_output_i <- run_deepSTRAPP_for_focal_time(
       contMap = contMap,
       ace = ace,
       tip_data = tip_data,
@@ -490,7 +490,7 @@ run_STRAPP_tests_over_time <- function (contMap, # Add densityMaps as alternativ
       verbose = verbose_extended)
 
     ## Store output for current focal time
-    STRAPP_test_outputs_over_time[[i]] <- STRAPP_test_output_i
+    deepSTRAPP_outputs_over_time[[i]] <- deepSTRAPP_output_i
   }
 
 
@@ -498,8 +498,8 @@ run_STRAPP_tests_over_time <- function (contMap, # Add densityMaps as alternativ
   final_ouput <- list()
 
   ## Extract p_values and estimates in summary_df
-  p_values <- unlist(lapply(X = STRAPP_test_outputs_over_time, FUN = function (x) { x$STRAPP_results$p_value} ))
-  estimates <- unlist(lapply(X = STRAPP_test_outputs_over_time, FUN = function (x) { x$STRAPP_results$estimate} ))
+  p_values <- unlist(lapply(X = deepSTRAPP_outputs_over_time, FUN = function (x) { x$STRAPP_results$p_value} ))
+  estimates <- unlist(lapply(X = deepSTRAPP_outputs_over_time, FUN = function (x) { x$STRAPP_results$estimate} ))
 
   pvalues_summary_df <- data.frame(focal_time = time_steps,
                                    estimate = estimates,
@@ -515,7 +515,7 @@ run_STRAPP_tests_over_time <- function (contMap, # Add densityMaps as alternativ
   final_ouput$trait_data_type <- trait_data_type
 
   ## Store the type of trait data used to select the appropriate statistical method
-  trait_data_type_for_stats_list <- unlist(lapply(X = STRAPP_test_outputs_over_time, FUN = function (x) { x$STRAPP_results$trait_data_type_for_stats } ))
+  trait_data_type_for_stats_list <- unlist(lapply(X = deepSTRAPP_outputs_over_time, FUN = function (x) { x$STRAPP_results$trait_data_type_for_stats } ))
   final_ouput$trait_data_type_for_stats <- unique(trait_data_type_for_stats_list)
 
   ## Store type of diversification rates tested
@@ -526,14 +526,14 @@ run_STRAPP_tests_over_time <- function (contMap, # Add densityMaps as alternativ
   {
     # Extract summary_df from $STRAPP_results
     pvalues_summary_df_for_posthoc_pairwise_tests <- lapply(
-      X = STRAPP_test_outputs_over_time,
+      X = deepSTRAPP_outputs_over_time,
       FUN = function (x) { x$STRAPP_results$posthoc_pairwise_tests$summary_df } )
 
     # Add focal_time and rename columns to match with $pvalues_summary_df
     for (i in seq_along(pvalues_summary_df_for_posthoc_pairwise_tests))
     {
       pvalues_summary_df_i <- pvalues_summary_df_for_posthoc_pairwise_tests[[i]]
-      pvalues_summary_df_i$focal_time <- STRAPP_test_outputs_over_time[[i]]$STRAPP_results$focal_time
+      pvalues_summary_df_i$focal_time <- deepSTRAPP_outputs_over_time[[i]]$STRAPP_results$focal_time
       pvalues_summary_df_i <- pvalues_summary_df_i[, c("focal_time", "pairs", "estimates", "p_values", "p_values_adjusted")]
       names(pvalues_summary_df_i) <- c("focal_time", "pair", "estimate", "p_value", "p_value_adjusted")
       pvalues_summary_df_for_posthoc_pairwise_tests[[i]] <- pvalues_summary_df_i
@@ -550,7 +550,7 @@ run_STRAPP_tests_over_time <- function (contMap, # Add densityMaps as alternativ
   if (extract_trait_data_melted_df)
   {
     # Extract trait data in a list
-    trait_data_over_time <- lapply(X = STRAPP_test_outputs_over_time, FUN = function (x) { x$updated_trait_data_with_contMap$trait_data } )
+    trait_data_over_time <- lapply(X = deepSTRAPP_outputs_over_time, FUN = function (x) { x$updated_trait_data_with_contMap$trait_data } )
     # Convert to data.frame in each focal_time
     for (i in seq_along(time_steps))
     {
@@ -562,7 +562,7 @@ run_STRAPP_tests_over_time <- function (contMap, # Add densityMaps as alternativ
     # Bind across all time steps
     trait_data_df_over_time <- do.call(what = rbind, args = trait_data_over_time)
 
-    # Store trait_data_df_over_time in final output
+    # Store melted data.frame with trait data in final output
     final_ouput$trait_data_df_over_time <- trait_data_df_over_time
   }
 
@@ -570,11 +570,11 @@ run_STRAPP_tests_over_time <- function (contMap, # Add densityMaps as alternativ
   # Can be used to plot rates through time ~ trait values
   if (extract_diversification_data_melted_df)
   {
-    diversification_data_over_time <- lapply(X = STRAPP_test_outputs_over_time, FUN = function (x) { x$diversification_data_df } )
+    diversification_data_over_time <- lapply(X = deepSTRAPP_outputs_over_time, FUN = function (x) { x$diversification_data_df } )
     # Bind across all time steps
     diversification_data_df_over_time <- do.call(what = rbind, args = diversification_data_over_time)
 
-    # Store STRAPP_results in final output
+    # Store melted data.frame with rates/regimes data in final output
     final_ouput$diversification_data_df_over_time <- diversification_data_df_over_time
   }
 
@@ -582,19 +582,19 @@ run_STRAPP_tests_over_time <- function (contMap, # Add densityMaps as alternativ
   # Can be used to plot histograms of STRAPP test statistics for each focal_time
   if (return_STRAPP_results)
   {
-    STRAPP_results_over_time <- lapply(X = STRAPP_test_outputs_over_time, FUN = function (x) { x$STRAPP_results } )
+    STRAPP_results_over_time <- lapply(X = deepSTRAPP_outputs_over_time, FUN = function (x) { x$STRAPP_results } )
 
     # Store STRAPP_results in final output
     final_ouput$STRAPP_results_over_time <- STRAPP_results_over_time
   }
 
-  ## Extract updated contMap/simmaps with associated trait_data if requested
+  ## Extract updated contMap/densityMaps with associated trait_data if requested
   # Can be used to plot an updated contMap for each focal_time
   if (return_updated_trait_data_with_contMap)
   {
-    updated_trait_data_with_contMap_over_time <- lapply(X = STRAPP_test_outputs_over_time, FUN = function (x) { x$updated_trait_data_with_contMap } )
+    updated_trait_data_with_contMap_over_time <- lapply(X = deepSTRAPP_outputs_over_time, FUN = function (x) { x$updated_trait_data_with_contMap } )
 
-    # Store STRAPP_results in final output
+    # Store updated contMap/densityMaps with associated trait_data in final output
     final_ouput$updated_trait_data_with_contMap_over_time <- updated_trait_data_with_contMap_over_time
   }
 
@@ -602,9 +602,9 @@ run_STRAPP_tests_over_time <- function (contMap, # Add densityMaps as alternativ
   # Can be used to plot diversification rates on updated an phylogeny for each focal_time
   if (return_updated_BAMM_object)
   {
-    updated_BAMM_objects_over_time <- lapply(X = STRAPP_test_outputs_over_time, FUN = function (x) { x$updated_BAMM_object } )
+    updated_BAMM_objects_over_time <- lapply(X = deepSTRAPP_outputs_over_time, FUN = function (x) { x$updated_BAMM_object } )
 
-    # Store STRAPP_results in final output
+    # Store updated BAMM objects in final output
     final_ouput$updated_BAMM_objects_over_time <- updated_BAMM_objects_over_time
   }
 

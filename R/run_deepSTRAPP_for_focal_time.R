@@ -1,7 +1,7 @@
 
-#' @title Runs a STRAPP to test for a relationship between diversification rates and trait data at a focal time
+#' @title Runs deepSTRAPP to test for a relationship between diversification rates and trait data at a given focal time
 #'
-#' @description Wrapper function to run a STRAPP test workflow for a given point in the past (i.e. the `focal_time`).
+#' @description Wrapper function to run deepSTRAPP workflow for a given point in the past (i.e. the `focal_time`).
 #'   It starts from traits mapped on a phylogeny (trait data) and BAMM output (diversification data)
 #'   and carries out the appropriate statistical method to test for a relationship between diversification rates and trait data.
 #'   Tests are based on block-permutations: rates data are randomized across tips following blocks
@@ -74,13 +74,13 @@
 #'   that are younger than the `focal_time`. Default is `FALSE`.
 #' @param return_updated_BAMM_object Logical. Specify whether the `updated_BAMM_object` with phylogeny and
 #'   mapped diversification rates cut-off at the `focal_time` should be returned among the outputs.
-#' @param verbose Logical. Should progression be displayed? A message will be printed at each step, and for every batch of
-#'   100 BAMM posterior samples whose rates are regimes are updated, and optionally extracted in a melted data.frame
+#' @param verbose Logical. Should progression be displayed? A message will be printed at each stepof the deepSTRAPP workflow,
+#'   and for every batch of 100 BAMM posterior samples whose rates are regimes are updated, and optionally extracted in a melted data.frame
 #'   (if `extract_diversification_data_melted_df = TRUE`). Default is `TRUE`.
 #'
 #' @export
 #'
-#' @details The function encapsulates several functions carrying out each step of the workflow:
+#' @details The function encapsulates several functions carrying out each step of the deepSTRAPP workflow:
 #'
 #'   ## Extract trait data
 #'
@@ -169,9 +169,9 @@
 #' focal_time <- 10
 #'
 #' \dontrun{  (May take several minutes to run)
-#' ## Run STRAPP test on net diversification rates for focal time = 10 Mya.
+#' ## Run deepSTRAPP on net diversification rates for focal time = 10 Mya.
 #'
-#' STRAPP_test_output <- run_STRAPP_test_for_focal_time(
+#' deepSTRAPP_output <- run_deepSTRAPP_for_focal_time(
 #'   contMap = Ponerinae_contMap, ace = Ponerinae_ACE, tip_data = Ponerinae_data_ln_HW,
 #'   trait_data_type = "continuous",
 #'   BAMM_object = Ponerinae_BAMM_object,
@@ -183,53 +183,53 @@
 #'   return_updated_BAMM_object = TRUE)
 #'
 #' ## Explore output
-#' str(STRAPP_test_output, max.level = 1)
+#' str(deepSTRAPP_output, max.level = 1)
 #'
-#' # Access STRAPP test results
-#' str(STRAPP_test_output$STRAPP_results)
+#' # Access deepSTRAPP results
+#' str(deepSTRAPP_output$STRAPP_results)
 #'
 #' # Access trait data
-#' head(STRAPP_test_output$updated_trait_data_with_contMap$trait_data)
+#' head(deepSTRAPP_output$updated_trait_data_with_contMap$trait_data)
 #'
 #' # Access the diversification data in a melted data.frame
-#' head(STRAPP_test_output$diversification_data_df)
+#' head(deepSTRAPP_output$diversification_data_df)
 #'
 #' # Plot updated contMap
-#' phytools::plot.contMap(STRAPP_test_output$updated_trait_data_with_contMap$contMap)
+#' phytools::plot.contMap(deepSTRAPP_output$updated_trait_data_with_contMap$contMap)
 #' ape::nodelabels(text =
-#'    STRAPP_test_output$updated_trait_data_with_contMap$contMap$tree$initial_nodes_ID)
+#'    deepSTRAPP_output$updated_trait_data_with_contMap$contMap$tree$initial_nodes_ID)
 #'
 #' # Plot diversification rates on updated phylogeny
-#' BAMMtools::plot.bammdata(STRAPP_test_output$updated_BAMM_object, labels = TRUE)
+#' BAMMtools::plot.bammdata(deepSTRAPP_output$updated_BAMM_object, labels = TRUE)
 #'
 #' # Plot histogram of test stats
 #' plot_histogram_STRAPP_test_for_focal_time(
-#'    STRAPP_results = STRAPP_test_output$STRAPP_results) }
+#'    STRAPP_results = deepSTRAPP_output$STRAPP_results) }
 #'
 
 
-run_STRAPP_test_for_focal_time <- function (contMap, # Add densityMaps as alternative input and adjust doc
-                                            ace = NULL,
-                                            tip_data = NULL,
-                                            trait_data_type,
-                                            BAMM_object,
-                                            focal_time,
-                                            keep_tip_labels = TRUE,
-                                            rate_type = "net_diversification",
-                                            nb_permutations = NULL,
-                                            replace_samples = FALSE,
-                                            alpha = 0.05,
-                                            two_tailed = TRUE,
-                                            one_tailed_hypothesis = NULL,
-                                            posthoc_pairwise_tests = FALSE,
-                                            p.adjust_method = "none",
-                                            return_perm_data = FALSE,
-                                            nthreads = 1,
-                                            print_hypothesis = TRUE,
-                                            extract_diversification_data_melted_df = FALSE,
-                                            return_updated_trait_data_with_contMap = FALSE,
-                                            return_updated_BAMM_object = FALSE,
-                                            verbose = TRUE)
+run_deepSTRAPP_for_focal_time <- function (contMap, # Add densityMaps as alternative input and adjust doc
+                                           ace = NULL,
+                                           tip_data = NULL,
+                                           trait_data_type,
+                                           BAMM_object,
+                                           focal_time,
+                                           keep_tip_labels = TRUE,
+                                           rate_type = "net_diversification",
+                                           nb_permutations = NULL,
+                                           replace_samples = FALSE,
+                                           alpha = 0.05,
+                                           two_tailed = TRUE,
+                                           one_tailed_hypothesis = NULL,
+                                           posthoc_pairwise_tests = FALSE,
+                                           p.adjust_method = "none",
+                                           return_perm_data = FALSE,
+                                           nthreads = 1,
+                                           print_hypothesis = TRUE,
+                                           extract_diversification_data_melted_df = FALSE,
+                                           return_updated_trait_data_with_contMap = FALSE,
+                                           return_updated_BAMM_object = FALSE,
+                                           verbose = TRUE)
 {
   ### Check input validity
   {
@@ -306,30 +306,30 @@ run_STRAPP_test_for_focal_time <- function (contMap, # Add densityMaps as altern
 
   # ------ Export outputs ------ #
 
-  STRAPP_test_output <- list(
+  deepSTRAPP_output <- list(
     STRAPP_results = STRAPP_results,
     focal_time = focal_time)
 
   # Add the melted df of diversification data if requested
   if (extract_diversification_data_melted_df)
   {
-    STRAPP_test_output$diversification_data_df <- diversification_data_df
+    deepSTRAPP_output$diversification_data_df <- diversification_data_df
   }
 
   # Add the updated trait data with updated contMap/simmaps if requested
   if (return_updated_trait_data_with_contMap)
   {
-    STRAPP_test_output$updated_trait_data_with_contMap <- trait_data_list
+    deepSTRAPP_output$updated_trait_data_with_contMap <- trait_data_list
   }
 
   # Add the updated contMap/simmaps if requested
   if (return_updated_BAMM_object)
   {
-    STRAPP_test_output$updated_BAMM_object <- updated_BAMM_object
+    deepSTRAPP_output$updated_BAMM_object <- updated_BAMM_object
   }
 
   ## Return final object
-  return(STRAPP_test_output)
+  return(deepSTRAPP_output)
 
 }
 

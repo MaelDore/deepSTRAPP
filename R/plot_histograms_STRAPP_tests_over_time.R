@@ -2,8 +2,8 @@
 #' @title Wrapper function to plot histogram of STRAPP test statistics over time steps
 #'
 #' @description Plot an histogram of the distribution of the test statistics
-#'   obtained from a STRAPP test carried out for each focal time in `$time_steps`.
-#'   (See [deepSTRAPP::run_STRAPP_tests_over_time()]).
+#'   obtained from a deepSTRAPP workflow carried out for each focal time in `$time_steps`.
+#'   (See [deepSTRAPP::run_deepSTRAPP_over_time()]).
 #'
 #'   Returns one histogram for overall tests for each focal time in `$time_steps`.
 #'   If `plot_posthoc_tests = TRUE`, it will return one faceted plot with an histogram
@@ -12,8 +12,8 @@
 #'   If a PDF file path is provided in `PDF_file_path`, the plots will be saved directly in a PDF file,
 #'   with one page per focal time in `$time_steps`.
 #'
-#' @param STRAPP_tests_over_time List of elements generated with [deepSTRAPP::run_STRAPP_tests_over_time()],
-#'   that summarize the results of multiple STRAPP tests across `$time_steps`. It needs to include the `$STRAPP_results_over_time`
+#' @param STRAPP_tests_over_time List of elements generated with [deepSTRAPP::run_deepSTRAPP_over_time()],
+#'   that summarize the results of multiple deepSTRAPP across `$time_steps`. It needs to include the `$STRAPP_results_over_time`
 #'   element with `$perm_data_df` obtained when setting both `return_STRAPP_results = TRUE` and `return_perm_data = TRUE`.
 #' @param display_plots Logical. Whether to display the histograms generated in the R console. Default is `TRUE`.
 #' @param plot_posthoc_tests Logical. For multinominal data only. Whether to plot the histograms for the overall Kruskal-Wallis test across all states (`plot_posthoc_tests = FALSE`),
@@ -28,14 +28,14 @@
 #' @importFrom grDevices pdf dev.off
 #'
 #' @details Histograms are build based on the distribution of the test statistics.
-#'   Such distributions are recorded in the outputs of STRAPP tests carried out with [deepSTRAPP::run_STRAPP_tests_over_time()]
+#'   Such distributions are recorded in the outputs of STRAPP tests carried out with [deepSTRAPP::run_deepSTRAPP_over_time()]
 #'   when `return_STRAPP_results = TRUE` AND `return_perm_data = TRUE`. The `$STRAPP_results_over_time` objects provided within the input are lists that must contain
 #'   a `$perm_data_df` element that summarizes test statistics computed across posterior samples.
 #'
 #'   For multinominal data (categorical or biogeographic data with more than 2 states), it is possible to plot the histograms of post hoc pairwise tests.
 #'   Set `plot_posthoc_tests = TRUE` to generate histograms for all the pairwise post hoc Dunn's test across pairs of states.
 #'   To achieve this, the `$STRAPP_results_over_time` objects must contain a `$posthoc_pairwise_tests$perm_data_array` element that summarizes test statistics
-#'   computed across posterior samples for all pairwise post hoc tests. This is obtained from [deepSTRAPP::run_STRAPP_tests_over_time()] when setting
+#'   computed across posterior samples for all pairwise post hoc tests. This is obtained from [deepSTRAPP::run_deepSTRAPP_over_time()] when setting
 #'   `return_STRAPP_results = TRUE` to return the STRAPP results, `posthoc_pairwise_tests = TRUE` to carry out post hoc tests,
 #'   and `return_perm_data = TRUE` to record distributions of test statistics.
 #'
@@ -54,10 +54,10 @@
 #'
 #' @author Maël Doré
 #'
-#' @seealso Associated functions in deepSTRAPP: [deepSTRAPP::run_STRAPP_tests_over_time()] [deepSTRAPP::plot_histogram_STRAPP_test_for_focal_time()]
+#' @seealso Associated functions in deepSTRAPP: [deepSTRAPP::run_deepSTRAPP_over_time()] [deepSTRAPP::plot_histogram_STRAPP_test_for_focal_time()]
 #'
 #' @examples
-#' ## Load results of run_STRAPP_tests_over_time()
+#' ## Load results of run_deepSTRAPP_over_time()
 #' data(STRAPP_tests_over_time_temp_example, package = "deepSTRAPP")
 #'
 #' ## Plot histograms of STRAPP overall test results
@@ -99,7 +99,7 @@ plot_histograms_STRAPP_tests_over_time <- function (STRAPP_tests_over_time,
     if (is.null(STRAPP_tests_over_time$STRAPP_results_over_time))
     {
       stop(paste0("'$STRAPP_results_over_time' is missing from 'STRAPP_tests_over_time'. You can inspect the structure of the input object with 'str(STRAPP_tests_over_time, 2)'.\n",
-                  "See ?deepSTRAPP::run_STRAPP_tests_over_time() to learn how to generate those objects.\n",
+                  "See ?deepSTRAPP::run_deepSTRAPP_over_time() to learn how to generate those objects.\n",
                   "Especially, check if you used 'return_STRAPP_results = TRUE' to save the STRAPP_results for each time step needed for the histogram plots."))
     }
     ## STRAPP_tests_over_time$time_steps
@@ -107,7 +107,7 @@ plot_histograms_STRAPP_tests_over_time <- function (STRAPP_tests_over_time,
     if (is.null(STRAPP_tests_over_time$time_steps))
     {
       stop(paste0("'$time_steps' is missing from 'STRAPP_tests_over_time'. You can inspect the structure of the input object with 'str(STRAPP_tests_over_time, 2)'.\n",
-                  "See ?deepSTRAPP::run_STRAPP_tests_over_time() to learn how to generate those objects."))
+                  "See ?deepSTRAPP::run_deepSTRAPP_over_time() to learn how to generate those objects."))
     }
     # Extract $focal_time from STRAPP_tests_over_time$STRAPP_results_over_time
     focal_time_list <- unlist(lapply(X = STRAPP_tests_over_time$STRAPP_results_over_time, FUN = function (x) { x$focal_time } ))
@@ -116,7 +116,7 @@ plot_histograms_STRAPP_tests_over_time <- function (STRAPP_tests_over_time,
     {
       stop(paste0("'STRAPP_tests_over_time$time_steps' does not match with 'focal_time' found in 'STRAPP_tests_over_time$STRAPP_results_over_time'.\n",
                   "You can inspect the structure of the input object with 'str(STRAPP_tests_over_time, 2)'.\n",
-                  "See ?deepSTRAPP::run_STRAPP_tests_over_time() to learn how to generate those objects."))
+                  "See ?deepSTRAPP::run_deepSTRAPP_over_time() to learn how to generate those objects."))
     }
 
     ## STRAPP_tests_over_time$STRAPP_results_over_time is a list.
@@ -127,7 +127,7 @@ plot_histograms_STRAPP_tests_over_time <- function (STRAPP_tests_over_time,
     {
       stop(paste0("Elements in 'STRAPP_tests_over_time$STRAPP_results_over_time' do not have a '$perm_data_df'.\n",
                   "You can inspect the structure of the input object with 'str(STRAPP_tests_over_time$STRAPP_results_over_time, 2)'.\n",
-                  "See ?deepSTRAPP::run_STRAPP_tests_over_time() to learn how to generate those objects.\n",
+                  "See ?deepSTRAPP::run_deepSTRAPP_over_time() to learn how to generate those objects.\n",
                   "Especially, check if you used 'return_STRAPP_results = TRUE' AND 'return_perm_data = TRUE' to save the permutated data",
                   "needed for the histogram plot to save the permutated data needed for the histogram plot."))
     }
@@ -142,7 +142,7 @@ plot_histograms_STRAPP_tests_over_time <- function (STRAPP_tests_over_time,
       {
         stop(paste0("'posthoc_pairwise_tests = TRUE' only makes sense for categorical/biogeographic data with more than two states/ranges.\n",
                     "Set 'posthoc_pairwise_tests = FALSE', or provide 'STRAPP_tests_over_time' for a trait with more than two states/ranges'.\n",
-                    "See ?deepSTRAPP::run_STRAPP_tests_over_time() to learn how to generate those objects."))
+                    "See ?deepSTRAPP::run_deepSTRAPP_over_time() to learn how to generate those objects."))
       }
       # Check if $posthoc_pairwise_tests is present in elements of STRAPP_tests_over_time$STRAPP_results_over_time.
       posthoc_pairwise_tests_check_list <- unlist(lapply(X = STRAPP_tests_over_time$STRAPP_results_over_time, FUN = function (x) { "posthoc_pairwise_tests" %in% names(x) } ))
@@ -150,7 +150,7 @@ plot_histograms_STRAPP_tests_over_time <- function (STRAPP_tests_over_time,
       {
         stop(paste0("Elements in 'STRAPP_tests_over_time$STRAPP_results_over_time' do not have a '$posthoc_pairwise_tests'.\n",
                     "You can inspect the structure of the input object with 'str(STRAPP_tests_over_time$STRAPP_results_over_time, 2)'.\n",
-                    "See ?deepSTRAPP::run_STRAPP_tests_over_time() to learn how to generate those objects.\n",
+                    "See ?deepSTRAPP::run_deepSTRAPP_over_time() to learn how to generate those objects.\n",
                     "Especially, check if you used 'return_STRAPP_results = TRUE' AND 'posthoc_pairwise_tests = TRUE' to run post hoc tests ",
                     "and save the results in 'STRAPP_tests_over_time'."))
       }
@@ -161,7 +161,7 @@ plot_histograms_STRAPP_tests_over_time <- function (STRAPP_tests_over_time,
       {
         stop(paste0("Elements in 'STRAPP_tests_over_time$STRAPP_results_over_time' do not have a '$posthoc_pairwise_tests$perm_data_array'.\n",
                     "You can inspect the structure of the input object with 'str(STRAPP_tests_over_time$STRAPP_results_over_time, 3)'.\n",
-                    "See ?deepSTRAPP::run_STRAPP_tests_over_time() to learn how to generate those objects.\n",
+                    "See ?deepSTRAPP::run_deepSTRAPP_over_time() to learn how to generate those objects.\n",
                     "Especially, check if you used 'return_STRAPP_results = TRUE', 'posthoc_pairwise_tests = TRUE' AND return_perm_data = TRUE to run post hoc tests ",
                     "and save the results and the permutated data needed for the histogram plots in 'STRAPP_tests_over_time'."))
       }

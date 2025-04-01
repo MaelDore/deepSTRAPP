@@ -219,11 +219,11 @@
 #'
 "Ponerinae_trait_data_10My"
 
-### 6/ Temporary test set as output from run_STRAPP_test_over_time to use for plotting p_values histogram
+### 6/ Temporary test set as output from run_deepSTRAPP_over_time to use for plotting p_values histogram
 
-#' @title Temporary test set as output from run_STRAPP_test_over_time to use for plotting p_values histogram
+#' @title Temporary test set as output from run_deepSTRAPP_over_time to use for plotting p_values histogram
 #'
-#' @description Temporary test set as output from run_STRAPP_test_over_time to use for plotting p_values histogram.
+#' @description Temporary test set as output from run_deepSTRAPP_over_time to use for plotting p_values histogram.
 #'
 #' @usage data(STRAPP_tests_over_time_temp_example)
 #' @format A list with X elements.
@@ -234,9 +234,9 @@
 #'
 "STRAPP_tests_over_time_temp_example"
 
-#' @title Temporary test set as output from run_STRAPP_test_over_time to use for plotting rates_through_time
+#' @title Temporary test set as output from run_deepSTRAPP_over_time to use for plotting rates_through_time
 #'
-#' @description Temporary test set as output from run_STRAPP_test_over_time to use for plotting rates_through_time.
+#' @description Temporary test set as output from run_deepSTRAPP_over_time to use for plotting rates_through_time.
 #'
 #' @usage data(STRAPP_tests_over_time_temp_example_2)
 #' @format A list with X elements.

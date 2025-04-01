@@ -3,7 +3,7 @@
 \docType{data}
 \name{STRAPP_tests_over_time_temp_example_2}
 \alias{STRAPP_tests_over_time_temp_example_2}
-\title{Temporary test set as output from run_STRAPP_test_over_time to use for plotting rates_through_time}
+\title{Temporary test set as output from run_deepSTRAPP_over_time to use for plotting rates_through_time}
 \format{
 A list with X elements.
 }
@@ -11,6 +11,6 @@ A list with X elements.
 data(STRAPP_tests_over_time_temp_example_2)
 }
 \description{
-Temporary test set as output from run_STRAPP_test_over_time to use for plotting rates_through_time.
+Temporary test set as output from run_deepSTRAPP_over_time to use for plotting rates_through_time.
 }
 \keyword{datasets}

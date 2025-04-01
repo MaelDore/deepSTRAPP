@@ -5,20 +5,20 @@
 #' @title Plot evolution of diversification rates in relation to trait values over time
 #'
 #' @description Plot the evolution of diversification rates in relation to trait values
-#'   extracted for multiple `time_steps` with [deepSTRAPP::run_STRAPP_tests_over_time()].
+#'   extracted for multiple `time_steps` with [deepSTRAPP::run_deepSTRAPP_over_time()].
 #'
 #'   Rates are averaged across branches at each time step (i.e., `focal_time`).
 #'   * For continuous data, branches are grouped by ranges of trait values defined by `quantile_ranges`.
 #'   * For categorical data, branches are grouped by trait states.
 #'   * For biogeographic data, branches are grouped by ranges.
 #'
-#' @param STRAPP_tests_over_time List of elements generated with [deepSTRAPP::run_STRAPP_tests_over_time()],
+#' @param STRAPP_tests_over_time List of elements generated with [deepSTRAPP::run_deepSTRAPP_over_time()],
 #'   that summarize the results of multiple STRAPP tests across `$time_steps`. The list needs to include two data.frame:
 #'   `$trait_data_df_over_time` and `$diversification_data_df_over_time` by setting `extract_trait_data_melted_df = TRUE`
 #'   and `extract_diversification_data_melted_df = TRUE`.
 #' @param rate_type A character string specifying the type of diversification rates to use.
 #'   Must be one of 'speciation', 'extinction' or 'net_diversification' (default).
-#'   Even if the `STRAPP_tests_over_time` object was generated with [deepSTRAPP::run_STRAPP_tests_over_time()]
+#'   Even if the `STRAPP_tests_over_time` object was generated with [deepSTRAPP::run_deepSTRAPP_over_time()]
 #'   for testing another type of rates, the `$trait_data_df_over_time` and `$diversification_data_df_over_time` data frames
 #'   will contain data for all types of rates.
 #' @param quantile_ranges Vector of numerical. Only for continuous trait data. Quantiles used as thresholds to group branches
@@ -68,10 +68,10 @@
 #'
 #' @author Maël Doré
 #'
-#' @seealso [deepSTRAPP::run_STRAPP_tests_over_time()]
+#' @seealso [deepSTRAPP::run_deepSTRAPP_over_time()]
 #'
 #' @examples
-#' ## Load results of run_STRAPP_tests_over_time()
+#' ## Load results of run_deepSTRAPP_over_time()
 #' data(STRAPP_tests_over_time_temp_example_2, package = "deepSTRAPP")
 #'
 #' # ------ Plot rates through time for continuous data ------ #
@@ -196,7 +196,7 @@ plot_rates_through_time <- function (
     if (is.null(STRAPP_tests_over_time$trait_data_df_over_time))
     {
       stop(paste0("'$trait_data_df_over_time' is missing from 'STRAPP_tests_over_time'. You can inspect the structure of the input object with 'str(STRAPP_tests_over_time, 2)'.\n",
-                  "See ?deepSTRAPP::run_STRAPP_tests_over_time() to learn how to generate those objects.\n",
+                  "See ?deepSTRAPP::run_deepSTRAPP_over_time() to learn how to generate those objects.\n",
                   "Especially, check if you used 'extract_trait_data_melted_df = TRUE' to save the summary data.frame of trait values ",
                   "found along branches at each time-step, needed for the RTT plot."))
     }
@@ -204,7 +204,7 @@ plot_rates_through_time <- function (
     if (is.null(STRAPP_tests_over_time$diversification_data_df_over_time))
     {
       stop(paste0("'$diversification_data_df_over_time' is missing from 'STRAPP_tests_over_time'. You can inspect the structure of the input object with 'str(STRAPP_tests_over_time, 2)'.\n",
-                  "See ?deepSTRAPP::run_STRAPP_tests_over_time() to learn how to generate those objects.\n",
+                  "See ?deepSTRAPP::run_deepSTRAPP_over_time() to learn how to generate those objects.\n",
                   "Especially, check if you used 'extract_diversification_data_melted_df = TRUE' to save the summary data.frame of diversification rates ",
                   "found along branches at each time-step, needed for the RTT plot."))
     }

@@ -3,7 +3,8 @@
 #'
 #' @description Plot an histogram of the distribution of the test statistics
 #'   obtained from a STRAPP test carried out for a unique `focal_time`.
-#'   (See [deepSTRAPP::compute_STRAPP_test_for_focal_time()]).
+#'   (See [deepSTRAPP::compute_STRAPP_test_for_focal_time()] and
+#'   [deepSTRAPP::run_deepSTRAPP_for_focal_time()]).
 #'
 #'   Returns a single histogram for overall tests.
 #'   If `plot_posthoc_tests = TRUE`, it will return a faceted plot with an histogram per post hoc tests.
@@ -12,6 +13,8 @@
 #'
 #' @param STRAPP_results List of elements generated with [deepSTRAPP::compute_STRAPP_test_for_focal_time()],
 #'   that summarize the results of a STRAPP test for a specific time in the past (i.e. the `focal_time`).
+#'   `STRAPP_results` can also be extracted from the output of [deepSTRAPP::run_deepSTRAPP_for_focal_time()] that
+#'   run the whole deepSTRAPP workflow and store results inside `$STRAPP_results`.
 #' @param display_plot Logical. Whether to display the histogram(s) generated in the R console. Default is `TRUE`.
 #' @param plot_posthoc_tests Logical. For multinominal data only. Whether to plot the histogram for the overall Kruskal-Wallis test across all states (`plot_posthoc_tests = FALSE`),
 #'   or plot the histograms for all the pairwise post hoc Dunn's test across pairs of states (`plot_posthoc_tests = TRUE`). Default is `FALSE`.
@@ -27,12 +30,17 @@
 #'   Such distributions are recorded in the outputs of STRAPP tests carried out with [deepSTRAPP::compute_STRAPP_test_for_focal_time()]
 #'   when `return_perm_data = TRUE`. The `STRAPP_results` object provided as input is a list that must contain
 #'   a `$perm_data_df` element that summarizes test statistics computed across posterior samples.
+#'   [deepSTRAPP::compute_STRAPP_test_for_focal_time()] takes as input a `BAMM_object` with diversification rates and regimes updated for the `focal_time`,
+#'   and a `trait_data_list` that contains trait data along branches updated for the `focal_time`.
+#'   Meanwhile, [deepSTRAPP::run_deepSTRAPP_for_focal_time()] carries the whole deepSTRAPP workflow, starting from an extant `BAMM_object` and trait data
+#'   mapped on an extant phylogeny (`contMap` or `densityMaps`), and produces `STRAPP_results` for the given `focal_time`.
 #'
 #'   For multinominal data (categorical or biogeographic data with more than 2 states), it is possible to plot the histograms of post hoc pairwise tests.
 #'   Set `plot_posthoc_tests = TRUE` to generate histograms for all the pairwise post hoc Dunn's test across pairs of states.
 #'   To achieve this, the `STRAPP_results` input object must contain a `$posthoc_pairwise_tests$perm_data_array` element that summarizes test statistics
-#'   computed across posterior samples for all pairwise post hoc tests. This is obtained from [deepSTRAPP::compute_STRAPP_test_for_focal_time()] when setting both
-#'   `posthoc_pairwise_tests = TRUE` to carry out post hoc tests, and `return_perm_data = TRUE` to record distributions of test statistics.
+#'   computed across posterior samples for all pairwise post hoc tests. This is obtained from [deepSTRAPP::compute_STRAPP_test_for_focal_time()]
+#'   or [deepSTRAPP::run_deepSTRAPP_for_focal_time()] when setting both `posthoc_pairwise_tests = TRUE` to carry out post hoc tests,
+#'   and `return_perm_data = TRUE` to record distributions of test statistics.
 #'
 #' @return By default, the function returns a list of classes `gg` and `ggplot`.
 #'   This object is a ggplot that can be displayed on the console with `print(output)`.
@@ -48,7 +56,7 @@
 #'
 #' @author Maël Doré
 #'
-#' @seealso Associated functions in deepSTRAPP: [deepSTRAPP::compute_STRAPP_test_for_focal_time()] [deepSTRAPP::run_STRAPP_test_for_focal_time()]
+#' @seealso Associated functions in deepSTRAPP: [deepSTRAPP::compute_STRAPP_test_for_focal_time()] [deepSTRAPP::run_deepSTRAPP_for_focal_time()]
 #'
 #' @examples
 #' # ------ Prepare data ------ #
@@ -117,6 +125,9 @@
 #' cowplot::plot_grid(plotlist = histograms_ggplot_list)}
 #'
 
+### Include an example using directly run_deepSTRAPP_for_focal_time() with output = deepSTRAPP_output.
+# Then extract deepSTRAPP_output$STRAPP_results to plot the histogram
+
 
 plot_histogram_STRAPP_test_for_focal_time <- function (STRAPP_results,
                                                        display_plot = TRUE,
@@ -131,32 +142,32 @@ plot_histogram_STRAPP_test_for_focal_time <- function (STRAPP_results,
     if (is.null(STRAPP_results$focal_time))
     {
       stop(paste0("'$focal_time' is missing from 'STRAPP_results'. You can inspect the structure of the input object with 'str(STRAPP_results, 2)'.\n",
-                  "See ?deepSTRAPP::run_STRAPP_test_for_focal_time() to learn how to generate those objects."))
+                  "See ?deepSTRAPP::run_deepSTRAPP_for_focal_time() to learn how to generate those objects."))
     }
     if (is.null(STRAPP_results$estimate))
     {
       stop(paste0("'$estimate' is missing from 'STRAPP_results'. You can inspect the structure of the input object with 'str(STRAPP_results, 2)'.\n",
-                  "See ?deepSTRAPP::run_STRAPP_test_for_focal_time() to learn how to generate those objects."))
+                  "See ?deepSTRAPP::run_deepSTRAPP_for_focal_time() to learn how to generate those objects."))
     }
     if (is.null(STRAPP_results$p_value))
     {
       stop(paste0("'$p_value' is missing from 'STRAPP_results'. You can inspect the structure of the input object with 'str(STRAPP_results, 2)'.\n",
-                  "See ?deepSTRAPP::run_STRAPP_test_for_focal_time() to learn how to generate those objects."))
+                  "See ?deepSTRAPP::run_deepSTRAPP_for_focal_time() to learn how to generate those objects."))
     }
     if (is.null(STRAPP_results$method))
     {
       stop(paste0("'$method' is missing from 'STRAPP_results'. You can inspect the structure of the input object with 'str(STRAPP_results, 2)'.\n",
-                  "See ?deepSTRAPP::run_STRAPP_test_for_focal_time() to learn how to generate those objects."))
+                  "See ?deepSTRAPP::run_deepSTRAPP_for_focal_time() to learn how to generate those objects."))
     }
     if (is.null(STRAPP_results$trait_data_type_for_stats))
     {
       stop(paste0("'$trait_data_type_for_stats' is missing from 'STRAPP_results'. You can inspect the structure of the input object with 'str(STRAPP_results, 2)'.\n",
-                  "See ?deepSTRAPP::run_STRAPP_test_for_focal_time() to learn how to generate those objects."))
+                  "See ?deepSTRAPP::run_deepSTRAPP_for_focal_time() to learn how to generate those objects."))
     }
     if (is.null(STRAPP_results$perm_data_df))
     {
       stop(paste0("'$perm_data_df' is missing from 'STRAPP_results'. You can inspect the structure of the input object with 'str(STRAPP_results, 2)'.\n",
-                  "See ?deepSTRAPP::run_STRAPP_test_for_focal_time() to learn how to generate those objects.\n",
+                  "See ?deepSTRAPP::run_deepSTRAPP_for_focal_time() to learn how to generate those objects.\n",
                   "Especially, check if you used 'return_perm_data = TRUE' to save the permutated data needed for the histogram plot."))
     }
 
@@ -168,13 +179,13 @@ plot_histogram_STRAPP_test_for_focal_time <- function (STRAPP_results,
       {
         stop(paste0("'posthoc_pairwise_tests = TRUE' only makes sense for categorical/biogeographic data with more than two states/ranges.\n",
                     "Set 'posthoc_pairwise_tests = FALSE', or provide 'STRAPP_results' for a trait with more than two states/ranges'.\n",
-                    "See ?deepSTRAPP::run_STRAPP_test_for_focal_time() to learn how to generate those objects."))
+                    "See ?deepSTRAPP::run_deepSTRAPP_for_focal_time() to learn how to generate those objects."))
       }
       # Check if STRAPP_results$posthoc_pairwise_tests$summary_df is present.
       if (is.null(STRAPP_results$posthoc_pairwise_tests$summary_df))
       {
         stop(paste0("'$posthoc_pairwise_tests$summary_df' is missing from 'STRAPP_results'. You can inspect the structure of the input object with 'str(STRAPP_results, 2)'.\n",
-                    "See ?deepSTRAPP::run_STRAPP_test_for_focal_time() to learn how to generate those objects.\n",
+                    "See ?deepSTRAPP::run_deepSTRAPP_for_focal_time() to learn how to generate those objects.\n",
                     "Especially, check if you used 'posthoc_pairwise_tests = TRUE' to compute pairwise tests.\n",
                     "In addition, you must also select 'return_perm_data = TRUE' to save the permutated data needed for the histogram plots."))
       }
@@ -182,7 +193,7 @@ plot_histogram_STRAPP_test_for_focal_time <- function (STRAPP_results,
       if (is.null(STRAPP_results$posthoc_pairwise_tests$perm_data_array))
       {
         stop(paste0("'$posthoc_pairwise_tests$perm_data_array' is missing from 'STRAPP_results'. You can inspect the structure of the input object with 'str(STRAPP_results, 2)'.\n",
-                    "See ?deepSTRAPP::run_STRAPP_test_for_focal_time() to learn how to generate those objects.\n",
+                    "See ?deepSTRAPP::run_deepSTRAPP_for_focal_time() to learn how to generate those objects.\n",
                     "Especially, check if you used 'posthoc_pairwise_tests = TRUE' AND 'return_perm_data = TRUE' to compute pairwise tests ",
                     "and save the permutated data needed for the histogram plots."))
       }

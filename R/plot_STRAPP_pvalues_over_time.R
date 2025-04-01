@@ -1,9 +1,9 @@
 
 #' @title Plot evolution of p-values of STRAPP tests over time
 #'
-#' @description Plot the evolution of the p-values yield STRAPP tests
+#' @description Plot the evolution of the p-values of STRAPP tests
 #'   carried out for across multiple `time_steps`, obtained from
-#'   [deepSTRAPP::run_STRAPP_tests_over_time()].
+#'   [deepSTRAPP::run_deepSTRAPP_over_time()].
 #'
 #'   By default, return a plot with a single line for p-values of overall tests.
 #'   If `plot_posthoc_tests = TRUE`, it will return a plot with multiple lines, one per pair in post hoc tests
@@ -11,8 +11,8 @@
 #'
 #'   If a PDF file path is provided in `PDF_file_path`, the plot will be saved directly in a PDF file.
 #'
-#' @param STRAPP_tests_over_time List of elements generated with [deepSTRAPP::run_STRAPP_tests_over_time()],
-#'   that summarize the results of multiple STRAPP tests across `$time_steps`.
+#' @param STRAPP_tests_over_time List of elements generated with [deepSTRAPP::run_deepSTRAPP_over_time()],
+#'   that summarize the results of multiple deepSTRAPP across `$time_steps`.
 #' @param time_range Vector of two numerical values. Time boundaries used for the plot.
 #'   If `NULL` (the default), the range of data provided in `STRAPP_tests_over_time` will be used.
 #' @param alpha Numerical. Significance level to display as a red dashed line on the plot. If set to `NULL`, no line will be added. Default is `0.05`.
@@ -20,7 +20,7 @@
 #' @param plot_posthoc_tests Logical. For multinominal data only. Whether to plot the p-values for the overall Kruskal-Wallis test across all states (`plot_posthoc_tests = FALSE`),
 #'   or plot the p-values for the pairwise post hoc Dunn's test across pairs of states (`plot_posthoc_tests = TRUE`). Default is `FALSE`.
 #'   This is only possible if `STRAPP_tests_over_time` contains the `$pvalues_summary_df_for_posthoc_pairwise_tests` element returned by
-#'   [deepSTRAPP::run_STRAPP_tests_over_time()] when `posthoc_pairwise_tests = TRUE`.
+#'   [deepSTRAPP::run_deepSTRAPP_over_time()] when `posthoc_pairwise_tests = TRUE`.
 #' @param select_posthoc_pairs Vector of character strings used to specify the pairs to include in the plot. Names of pairs must match the pairs found in
 #'   `STRAPP_tests_over_time$pvalues_summary_df_for_posthoc_pairwise_tests$pair`. Default is "all" to include all pairs.
 #' @param PDF_file_path Character string. If provided, the plot will be saved in a PDF file following the path provided here. The path must end with '.pdf'.
@@ -30,14 +30,14 @@
 #' @importFrom cowplot save_plot
 #' @importFrom stats complete.cases
 #'
-#' @details Plots are build based on the p-values recorded in summary_df provided by [deepSTRAPP::run_STRAPP_tests_over_time()].
+#' @details Plots are build based on the p-values recorded in summary_df provided by [deepSTRAPP::run_deepSTRAPP_over_time()].
 #'
 #'   For overall tests, those p-values are found in `$pvalues_summary_df`.
 #'
 #'   For multinominal data (categorical or biogeographic data with more than 2 states), it is possible to plot p-values of post hoc pairwise tests.
 #'   Set `plot_posthoc_tests = TRUE` to generate plots for the pairwise post hoc Dunn's test across pairs of states.
 #'   To achieve this, the `STRAPP_tests_over_time` input object must contain a `$pvalues_summary_df_for_posthoc_pairwise_tests` element that summarizes p-values
-#'   computed across pairs of states for all post hoc tests. This is obtained from [deepSTRAPP::run_STRAPP_tests_over_time()] when setting
+#'   computed across pairs of states for all post hoc tests. This is obtained from [deepSTRAPP::run_deepSTRAPP_over_time()] when setting
 #'   `posthoc_pairwise_tests = TRUE` to carry out post hoc tests.
 #'
 #' @return The function returns a list of classes `gg` and `ggplot`.
@@ -49,10 +49,10 @@
 #'
 #' @author Maël Doré
 #'
-#' @seealso [deepSTRAPP::run_STRAPP_tests_over_time()]
+#' @seealso [deepSTRAPP::run_deepSTRAPP_over_time()]
 #'
 #' @examples
-#' ## Load results of run_STRAPP_tests_over_time()
+#' ## Load results of run_deepSTRAPP_over_time()
 #' data(STRAPP_tests_over_time_temp_example, package = "deepSTRAPP")
 #'
 #' ## Plot results of overall Kruskal-Wallis test across all tests
@@ -88,7 +88,7 @@ plot_STRAPP_pvalues_over_time <-  function (
     if (is.null(STRAPP_tests_over_time$pvalues_summary_df))
     {
       stop(paste0("'$pvalues_summary_df' is missing from 'STRAPP_tests_over_time'. You can inspect the structure of the input object with 'str(STRAPP_tests_over_time, 2)'.\n",
-                  "See ?deepSTRAPP::run_STRAPP_tests_over_time() to learn how to generate those objects."))
+                  "See ?deepSTRAPP::run_deepSTRAPP_over_time() to learn how to generate those objects."))
     }
 
     ## time_range
@@ -142,13 +142,13 @@ plot_STRAPP_pvalues_over_time <-  function (
       {
         stop(paste0("'posthoc_pairwise_tests = TRUE' only makes sense for categorical/biogeographic data with more than two states/ranges.\n",
                     "Set 'posthoc_pairwise_tests = FALSE', or provide 'STRAPP_tests_over_time' for a trait with more than two states/ranges'.\n",
-                    "See ?deepSTRAPP::run_STRAPP_tests_over_time() to learn how to generate those objects."))
+                    "See ?deepSTRAPP::run_deepSTRAPP_over_time() to learn how to generate those objects."))
       }
       # Check if $pvalues_summary_df_for_posthoc_pairwise_tests is present in STRAPP_tests_over_time.
       if (is.null(STRAPP_tests_over_time$pvalues_summary_df_for_posthoc_pairwise_tests))
       {
         stop(paste0("'$pvalues_summary_df_for_posthoc_pairwise_tests' is missing from 'STRAPP_tests_over_time'. You can inspect the structure of the input object with 'str(STRAPP_tests_over_time, 2)'.\n",
-                    "See ?deepSTRAPP::run_STRAPP_tests_over_time() to learn how to generate those objects.\n",
+                    "See ?deepSTRAPP::run_deepSTRAPP_over_time() to learn how to generate those objects.\n",
                     "Especially, check if you used 'posthoc_pairwise_tests = TRUE' to run post hoc tests."))
       }
 

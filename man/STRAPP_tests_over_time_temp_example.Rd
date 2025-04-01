@@ -3,7 +3,7 @@
 \docType{data}
 \name{STRAPP_tests_over_time_temp_example}
 \alias{STRAPP_tests_over_time_temp_example}
-\title{Temporary test set as output from run_STRAPP_test_over_time to use for plotting p_values histogram}
+\title{Temporary test set as output from run_deepSTRAPP_over_time to use for plotting p_values histogram}
 \format{
 A list with X elements.
 }
@@ -11,6 +11,6 @@ A list with X elements.
 data(STRAPP_tests_over_time_temp_example)
 }
 \description{
-Temporary test set as output from run_STRAPP_test_over_time to use for plotting p_values histogram.
+Temporary test set as output from run_deepSTRAPP_over_time to use for plotting p_values histogram.
 }
 \keyword{datasets}

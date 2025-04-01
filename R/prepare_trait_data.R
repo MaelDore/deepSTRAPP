@@ -73,7 +73,7 @@
 #'  # Note on macroevolutionary models of trait evolution
 #'
 #'  This function provides an easy solution to map trait evolution on a time-calibrated phylogeny
-#'  and obtain the `contMap`/`densityMaps` objects needed to run deepSTRAPP tests ([run_STRAPP_test_for_focal_time], [run_STRAPP_tests_over_time]).
+#'  and obtain the `contMap`/`densityMaps` objects needed to run the deepSTRAPP workflow ([run_deepSTRAPP_for_focal_time], [run_deepSTRAPP_over_time]).
 #'  However, it does not explore the most complex options for trait evolution. You may need to explore more complex models to capture the dynamics of trait evolution.
 #'  such as trait-dependent multi-rate models ([phytools::brownie.lite()], [OUwie::OUwie]), Bayesian reversible jump MCMC implementations allowing a thorough exploration
 #'  of location and number of regime shifts (Ex: BayesTraits, BAMM), or RRphylo for a penalized phylogenetic ridge regression approach that allows regime shifts across all branches.
