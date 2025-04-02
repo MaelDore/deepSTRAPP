@@ -26,6 +26,7 @@
 #'   * Models available for categorical data are detailed in [geiger::fitDiscrete()].
 #'   * Models for biogeographic data are fit with `BioGeoBEARS`.
 #'   * See list in "Details" section.
+#' @param ... Additional arguments to be passed down to the functions used to fit models (See `evolutionary_models`).
 #' @param res Integer. Define the number of time steps used to interpolate/estimate trait value/state/range in `contMap`/`densityMaps`.
 #' @param nb_simulations Integer. Define the number of simulations generated for stochastic mapping. Default = 1000. Only for "categorical" and "biogeographic" data.
 #' @param plot_map Logical. Whether to plot or not the phylogeny with mapped trait evolution.
@@ -118,6 +119,8 @@
 #'    trait_data_type = "continuous",
 #'    phylo = eel.tree,
 #'    evolutionary_models = c("BM", "OU", "lambda", "kappa"),
+#'    # Example of an additional argument ('control') that can be provided to geiger::fitContinuous()
+#'    control = list(niter = 200),
 #'    plot_map = FALSE,
 #'    return_best_model_fit = TRUE,
 #'    return_model_selection_df = TRUE,
@@ -166,6 +169,7 @@ prepare_trait_data <- function (
     trait_data_type,
     phylo,
     evolutionary_models = NULL, # Default = "BM" for continuous data; "ARD" for categorical; "DEC+J" for biogeographic
+    ..., # To allow to pass down arguments in the functions used to fit the models
     res = 100, # Number of time steps used to interpolate trait value in the contMap
     nb_simulations = 1000, # Only for categorical and biogeographic data
     plot_map = TRUE,
@@ -242,6 +246,9 @@ prepare_trait_data <- function (
     ## Other checks are carried in dedicated sub-functions
   }
 
+  # ## Catch additional arguments
+  # add_args <- list(...)
+
   ## Compute the appropriate internal function depending on the type of data
 
   switch(EXPR = trait_data_type,
@@ -251,6 +258,7 @@ prepare_trait_data <- function (
              tip_data = tip_data,
              phylo = phylo,
              evolutionary_models = evolutionary_models, # Default = "BM" for continuous data
+             ..., # Additional arguments for geiger::fitContinuous()
              res = res,
              plot_map = plot_map,
              PDF_file_path = PDF_file_path,
@@ -266,6 +274,7 @@ prepare_trait_data <- function (
              tip_data = tip_data,
              phylo = phylo,
              evolutionary_models = evolutionary_models, # Default = "ARD" for categorical data
+             ..., # Additional arguments for geiger::fitDiscrete()
              res = res,
              nb_simulations = nb_simulations, # Only for categorical and biogeographic data
              plot_map = plot_map,
@@ -284,6 +293,7 @@ prepare_trait_data <- function (
              tip_data = tip_data,
              phylo = phylo,
              evolutionary_models = evolutionary_models, # Default = "DEC+J" for biogeographic data
+             ..., # Additional arguments for BioGeoBEARS functions
              nb_simulations = nb_simulations, # Only for categorical and biogeographic data
              res = res,
              plot_map = plot_map,
@@ -309,14 +319,15 @@ prepare_trait_data_for_continuous_data <- function (
     tip_data,
     phylo,
     evolutionary_models = "BM", # Default = "BM" for continuous data
+    ..., # Additional arguments for geiger::fitContinuous()
     res = 100,
     plot_map = TRUE,
     PDF_file_path = NULL,
     return_ace = TRUE,
     return_best_model_fit = FALSE,
     return_model_selection_df = FALSE,
-    verbose = TRUE,
-    ...)
+    verbose = TRUE
+    )
 {
   ### Check input validity
   {
@@ -556,6 +567,7 @@ prepare_trait_data_for_categorical_data <- function (
     tip_data,
     phylo,
     evolutionary_models = "ARD", # Default = "ARD" for categorical
+    ..., # Additional arguments for geiger::fitDiscrete()
     res = 100,
     nb_simulations = 1000, # Only for categorical and biogeographic data
     plot_map = TRUE,
@@ -638,6 +650,7 @@ prepare_trait_data_for_biogeographic_data <- function (
     tip_data,
     phylo,
     evolutionary_models = "DEC+J", # Default = "DEC+J" for biogeographic
+    ..., # Additional arguments for BioGeoBEARS functions
     res = 100,
     nb_simulations = 1000, # Only for categorical and biogeographic data
     plot_map = TRUE,

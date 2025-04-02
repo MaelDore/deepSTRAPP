@@ -9,6 +9,7 @@ prepare_trait_data(
   trait_data_type,
   phylo,
   evolutionary_models = NULL,
+  ...,
   res = 100,
   nb_simulations = 1000,
   plot_map = TRUE,
@@ -37,6 +38,8 @@ Tip labels (\code{phylo$tip.label}) should match names in \code{tip_data}.}
 \item Models for biogeographic data are fit with \code{BioGeoBEARS}.
 \item See list in "Details" section.
 }}
+
+\item{...}{Additional arguments to be passed down to the functions used to fit models (See \code{evolutionary_models}).}
 
 \item{res}{Integer. Define the number of time steps used to interpolate/estimate trait value/state/range in \code{contMap}/\code{densityMaps}.}
 
@@ -155,6 +158,8 @@ mapped_cont_traits <- prepare_trait_data(
    trait_data_type = "continuous",
    phylo = eel.tree,
    evolutionary_models = c("BM", "OU", "lambda", "kappa"),
+   # Example of an additional argument ('control') that can be provided to geiger::fitContinuous()
+   control = list(niter = 200),
    plot_map = FALSE,
    return_best_model_fit = TRUE,
    return_model_selection_df = TRUE,

@@ -8,3 +8,5 @@
 ^README\.html$
 ^R/_contMap_commented\.R$
 ^data-raw$
+^software/*
+^BAMM_outputs/*
