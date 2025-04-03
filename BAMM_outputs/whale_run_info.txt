@@ -1,21 +1,21 @@
-Command line: D:\Mael_D\R_projects\deepSTRAPP\software\bamm-2.5.0\bamm.exe -c ./BAMM_outputs/eel_config_file.txt
+Command line: D:\Mael_D\R_projects\deepSTRAPP\software\bamm-2.5.0\bamm.exe -c ./BAMM_outputs/whale_config_file.txt
 Git commit id: 462bc39af9d4c4b4dd81a481f32c953e93a076e7
-Random seed: 1743689686
-Start time: Thu Apr 03 16:14:46 2025
+Random seed: 1743689736
+Start time: Thu Apr 03 16:15:36 2025
 
 Current parameter settings:
-       acceptanceInfoFileName    eel_acceptance_info.txt
+       acceptanceInfoFileName    whale_acceptance_info.txt
           acceptanceResetFreq    500
             alwaysRecomputeE0    0
                      autotune    0
          branchRatesWriteFreq    0
-            chainSwapFileName    eel_chain_swap_log.txt
+            chainSwapFileName    whale_chain_swap_log.txt
              checkUltrametric    1
      combineExtinctionAtNodes    if_different
           conditionOnSurvival    -1
                        deltaT    0.01
               eventDataInfile    event_data_in.txt
-             eventDataOutfile    eel_event_data.txt
+             eventDataOutfile    whale_event_data.txt
            eventDataWriteFreq    50
        expectedNumberOfShifts    1
             extinctionProbMax    0.9999
@@ -26,25 +26,25 @@ fastSimulatePrior_Generations    5000000
        globalSamplingFraction    1
           initialNumberEvents    0
               initializeModel    1
-                  lambdaInit0    0.0297363841585933
-              lambdaInitPrior    5.79332457827394
+                  lambdaInit0    0.104708635808267
+              lambdaInitPrior    1.87792388968545
           lambdaInitRootPrior    -1.0
     lambdaIsTimeVariablePrior    1
-                lambdaOutfile    eel_lambda_rates.txt
+                lambdaOutfile    whale_lambda_rates.txt
                  lambdaShift0    0
-             lambdaShiftPrior    0.0116292176425587
+             lambdaShiftPrior    0.0324996298762062
          lambdaShiftRootPrior    -1.0
                 loadEventData    0
          localGlobalMoveRatio    10
               maxNumberEvents    5000
-                  mcmcOutfile    eel_mcmc_log.txt
+                  mcmcOutfile    whale_mcmc_log.txt
                 mcmcWriteFreq    50
          minCladeSizeForShift    1
                     modeltype    speciationextinction
                       muInit0    0
-                  muInitPrior    5.79332457827394
+                  muInitPrior    1.87792388968545
               muInitRootPrior    -1.0
-                    muOutfile    eel_mu_rates.txt
+                    muOutfile    whale_mu_rates.txt
                      muShift0    0.0
                  muShiftPrior    1.0
              muShiftRootPrior    -1.0
@@ -52,16 +52,16 @@ fastSimulatePrior_Generations    5000000
                numberOfChains    4
           numberOfGenerations    100000
               observationTime    -1
-                      outName    eel
+                      outName    whale
          outputAcceptanceInfo    0
                     overwrite    1
              poissonRatePrior    1
          preservationRateInit    0
         preservationRatePrior    1.0
                     printFreq    1000
-          priorOutputFileName    eel_prior_probs.txt
+          priorOutputFileName    whale_prior_probs.txt
  priorSim_IntervalGenerations    5000
-              runInfoFilename    eel_run_info.txt
+              runInfoFilename    whale_run_info.txt
                       runMCMC    1
           sampleFromPriorOnly    0
           sampleProbsFilename    taxa_sampling_probs.txt
@@ -69,7 +69,7 @@ fastSimulatePrior_Generations    5000000
                     segLength    0.01
           simulatePriorShifts    0
                    swapPeriod    1000
-                     treefile    ./BAMM_outputs/eel_phylogeny.tree
+                     treefile    ./BAMM_outputs/whale_phylogeny.tree
      updateEventLocationScale    0.05
          updateEventRateScale    4
         updateLambdaInitScale    2
@@ -90,5 +90,5 @@ updateRateEventNumberForBranch    0.0
  useGlobalSamplingProbability    1
    validateEventConfiguration    1
    writeMeanBranchLengthTrees    0
-End time: Thu Apr 03 16:14:51 2025
+End time: Thu Apr 03 16:15:44 2025
 

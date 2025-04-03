@@ -22,7 +22,7 @@
 modeltype = speciationextinction        
 # Specify "speciationextinction" or "trait" analysis
                                   
-treefile = ./BAMM_outputs/eel_phylogeny.tree
+treefile = ./BAMM_outputs/whale_phylogeny.tree
 # File name of the phylogenetic tree to be analyzed
 
 runInfoFilename = run_info.txt
@@ -85,16 +85,16 @@ expectedNumberOfShifts = 1
 #     expectedNumberOfShifts = 1.0 for small trees (< 500 tips)
 #	  expectedNumberOfShifts = 10 or even 50 for large trees (> 5000 tips) 
  
-lambdaInitPrior = 5.79332457827394
+lambdaInitPrior = 1.87792388968545
 # Prior (rate parameter of exponential) on the initial lambda value for rate
 # regimes
 
-lambdaShiftPrior = 0.0116292176425587
+lambdaShiftPrior = 0.0324996298762062
 # Prior (std dev of normal) on lambda shift parameter for rate regimes
 # You cannot adjust the mean of this distribution (fixed at zero, which is
 # equal to a constant rate diversification process)
 
-muInitPrior = 5.79332457827394
+muInitPrior = 1.87792388968545
 # Prior (rate parameter of exponential) on extinction rates  
 
 lambdaIsTimeVariablePrior = 1
@@ -139,7 +139,7 @@ acceptanceResetFreq = 500
 # Frequency in which to reset the acceptance rate calculation
 # The acceptance rate is output to both the MCMC data file and the screen
 
-outName = eel
+outName = whale
 # Optional name that will be prefixed on all output files (separated with "_")
 # If commented out, no prefix will be used
 
@@ -204,7 +204,7 @@ localGlobalMoveRatio = 10
 # INITIAL PARAMETER VALUES
 ################################################################################
 
-lambdaInit0 = 0.0297363841585933
+lambdaInit0 = 0.104708635808267
 # Initial speciation rate (at the root of the tree)
 
 lambdaShift0 = 0

@@ -36,7 +36,7 @@ run_deepSTRAPP_over_time(
 )
 }
 \arguments{
-\item{contMap}{Object of class \code{"contMap"}, typically generated with \code{\link[phytools:contMap]{phytools::contMap()}},
+\item{contMap}{Object of class \code{"contMap"}, typically generated with \code{\link[=prepare_trait_data]{prepare_trait_data()}},
 that contains a phylogenetic tree and associated continuous trait mapping.
 The phylogenetic tree must be rooted and fully resolved/dichotomous,
 but it does not need to be ultrametric (it can includes fossils).}
@@ -52,7 +52,7 @@ Needed to provide accurate tip values.}
 
 \item{trait_data_type}{Character string. Specify the type of trait data. Must be one of "continuous", "categorical", "biogeographic".}
 
-\item{BAMM_object}{Object of class \code{"bammdata"}, typically generated with \code{\link[BAMMtools:getEventData]{BAMMtools::getEventData()}},
+\item{BAMM_object}{Object of class \code{"bammdata"}, typically generated with \code{\link[=prepare_diversification_data]{prepare_diversification_data()}},
 that contains a phylogenetic tree and associated diversification rate mapping across selected posterior samples.
 The phylogenetic tree must the same as the one associated with the \code{contMap}, \code{ace} and \code{tip_data}.}
 

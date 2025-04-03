@@ -296,3 +296,34 @@
 #' @seealso BAMM software website: \url{http://bamm-project.org/}
 #'
 "whale_BAMM_object"
+
+
+### 8/ Template file for BAMM diversification analyses ####
+
+#' @title Template file for BAMM diversification analyses
+#'
+#' @description Template file for BAMM diversification analyses provided as character strings.
+#'
+#'  Source: bamm-2.5.0
+#'  References: http://bamm-project.org/; https://github.com/macroevolution/bamm
+#'
+#' @usage data(BAMM_template_diversification)
+#' @format A vector of 260 character strings.
+#'
+#' @details A vector of 260 character strings that can be displayed with `print(BAMM_template_diversification)`.
+#'   This is the template used to generate the 'config_file.txt' controlling settings used for a BAMM run.
+#'   It provides detailed explanations of the `additional_BAMM_settings` that can be used in [deepSTRAPP::prepare_diversification_data()]
+#'   to customize the BAMM run.
+#'   It is called internally by [deepSTRAPP::prepare_diversification_data()] to produce
+#'   the custom 'config_file' used in the subsequent BAMM run.
+#'
+#' @docType data
+#' @keywords datasets
+#' @name BAMM_template_diversification
+#'
+#' @references Authors: Daniel Rabosky (BAMM) & Pascal Title ([BAMMtools]). Modified by Maël Doré for [deepSTRAPP].
+#' @seealso BAMM software website: \url{http://bamm-project.org/}
+#'
+"BAMM_template_diversification"
+
+

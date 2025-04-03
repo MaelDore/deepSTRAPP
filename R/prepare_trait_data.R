@@ -6,12 +6,12 @@
 #'
 #' @description Map trait evolution on a time-calibrated phylogeny in several steps:
 #'
-#'   * (1) Fit evolutionary models to trait data using Maximum Likelihood.
-#'   * (2) Select the best fitting model comparing AICc.
-#'   * (3) Infer ancestral characters estimates (ACE) at nodes.
-#'   * (4) Run stochastic mapping simulations to generate evolutionary histories
+#'   * Step 1: Fit evolutionary models to trait data using Maximum Likelihood.
+#'   * Step 2: Select the best fitting model comparing AICc.
+#'   * Step 3: Infer ancestral characters estimates (ACE) at nodes.
+#'   * Step 4: Run stochastic mapping simulations to generate evolutionary histories
 #'     compatible with the best model and infered ACE. (Only for categorical and biogeographic data)
-#'   * (5) Infer ancestral states along branches.
+#'   * Step 5: Infer ancestral states along branches.
 #'     - For continuous traits: use interpolation to produce a `contMap`.
 #'     - For categorical and biogeographic data: compute posterior frequencies of each state/range
 #'       to produce a `densityMap` for each state/range.
@@ -48,28 +48,30 @@
 #'
 #' @details Map trait evolution on a time-calibrated phylogeny in several steps:
 #'
-#'   * (1) Models are fit using Maximum Likelihood approach:
-#'     - For "continuous" data models are fit with [geiger::fitContinuous()]: "BM", "OU", "EB", "rate_trend", "lambda", "kappa", "delta".
-#'     - For "categorical" data models are fit with [geiger::fitDiscrete()]: "ER", "SYM", "ARD".
-#'     - For "biogeographic" data models are fit with R package `BioGeoBEARS`: "BAYAREALIKE", "DIVALIKE", "DEC", "BAYAREALIKE+J", "DIVALIKE+J", "DEC+J".
+#'  Step 1: Models are fit using Maximum Likelihood approach:
+#'    * For "continuous" data models are fit with [geiger::fitContinuous()]: "BM", "OU", "EB", "rate_trend", "lambda", "kappa", "delta".
+#'    * For "categorical" data models are fit with [geiger::fitDiscrete()]: "ER", "SYM", "ARD".
+#'    * For "biogeographic" data models are fit with R package `BioGeoBEARS`: "BAYAREALIKE", "DIVALIKE", "DEC", "BAYAREALIKE+J", "DIVALIKE+J", "DEC+J".
 #'
-#'   * (2) Best model is identified among the list of `evolutionary_models` by comparing the corrected AIC (AICc)
-#'   and selecting the  model with lowest AICc.
+#'  Step 2: Best model is identified among the list of `evolutionary_models` by comparing the corrected AIC (AICc)
+#'    and selecting the  model with lowest AICc.
 #'
-#'   * (3) Ancestral characters estimates (ACE) are inferred with [phytools::fastAnc] on a tree with modified branch lengths
-#'   scaled to reflect the evolutionary rates estimated from the best model using [phytools::rescale()].
+#'  Step 3: Ancestral characters estimates (ACE) are inferred with [phytools::fastAnc] on a tree with modified branch lengths
+#'    scaled to reflect the evolutionary rates estimated from the best model using [phytools::rescale()].
 #'
-#'   * (4) For categorical and biogeographic data, stochastic mapping simulations are performed to generate evolutionary histories
-#'     compatible with the best model and inferred ACE. Node states/ranges are drawn from the scaled marginal likelihoods of ACE,
-#'     and states/ranges shifts along branches are simulated according to the transition matrix Q estimated from the best fitting model.
+#'  Step 4: Stochastic Mapping.
 #'
-#'   * (5) Infer ancestral states along branches.
-#'     - For continuous traits: ancestral trait values along branches are interpolated with [phytools::contMap()].
-#'       This provides quick estimates of trait value at any point in time, but it does not provide accurate ML estimates in
-#'       case of models that are time or trait-value dependent (such as "EB" or "OU") as the interpolation used to built the contMap is assuming
-#'       a constant rate along each branch. However, ancestral trait values at nodes remain accurate
-#'     - For categorical and biogeographic data: compute posterior frequencies of each state/range among the simulated evolutionary histories (`simmaps`)
-#'       to produce a `densityMap` for each state/range that reflects the changes along branches in probability of harboring a given state/range.
+#'    For categorical and biogeographic data, stochastic mapping simulations are performed to generate evolutionary histories
+#'    compatible with the best model and inferred ACE. Node states/ranges are drawn from the scaled marginal likelihoods of ACE,
+#'    and states/ranges shifts along branches are simulated according to the transition matrix Q estimated from the best fitting model.
+#'
+#'  Step 5: Infer ancestral states along branches.
+#'    * For continuous traits: ancestral trait values along branches are interpolated with [phytools::contMap()].
+#'      This provides quick estimates of trait value at any point in time, but it does not provide accurate ML estimates in
+#'      case of models that are time or trait-value dependent (such as "EB" or "OU") as the interpolation used to built the contMap is assuming
+#'      a constant rate along each branch. However, ancestral trait values at nodes remain accurate
+#'    * For categorical and biogeographic data: compute posterior frequencies of each state/range among the simulated evolutionary histories (`simmaps`)
+#'      to produce a `densityMap` for each state/range that reflects the changes along branches in probability of harboring a given state/range.
 #'
 #'  # Note on macroevolutionary models of trait evolution
 #'

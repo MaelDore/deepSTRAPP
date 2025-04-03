@@ -16,7 +16,7 @@
 #'
 #'   Tests can be carried out on speciation, extinction and net diversification rates.
 #'
-#' @param contMap Object of class `"contMap"`, typically generated with [phytools::contMap()],
+#' @param contMap Object of class `"contMap"`, typically generated with [deepSTRAPP::prepare_trait_data()],
 #'   that contains a phylogenetic tree and associated continuous trait mapping.
 #'   The phylogenetic tree must be rooted and fully resolved/dichotomous,
 #'   but it does not need to be ultrametric (it can includes fossils).
@@ -28,7 +28,7 @@
 #'   Names are nodes_ID of the internal nodes.
 #'   Needed to provide accurate tip values.
 #' @param trait_data_type Character string. Specify the type of trait data. Must be one of "continuous", "categorical", "biogeographic".
-#' @param BAMM_object Object of class `"bammdata"`, typically generated with [BAMMtools::getEventData()],
+#' @param BAMM_object Object of class `"bammdata"`, typically generated with [deepSTRAPP::prepare_diversification_data()],
 #'   that contains a phylogenetic tree and associated diversification rate mapping across selected posterior samples.
 #'   The phylogenetic tree must the same as the one associated with the `contMap`, `ace` and `tip_data`.
 #' @param focal_time Numerical. The time, in terms of time distance from the present,

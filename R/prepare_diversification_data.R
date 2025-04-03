@@ -1,101 +1,199 @@
 
-
-
-# Run a BAMM (Bayesian Analysis of Macroevolutionary Mixtures)
-# http://bamm-project.org/
-
-## Explain that BAMM need to be installed first
-# Put BAMM in a hidden directory (not included in the package build)
-# BAMM is only available on Windows and OS X
-
-# Explain that other diversification models with different assumptions can be used as long as they model regime shifts. Provide other examples. Explain that their output should then be formatted as in bammdata objects
-# Structure of STRAPP tests relies on posterior samples so need a Bayesian approach to estimate the model parameters
-
-# Use BAMMtools::setBAMMpriors to define priors from the phylogeny
-
-# Ask the path to the BAMM.exe as argument
-# Ask path for directory used to store input/output files generated
-# Ask if the directory should be kept or erased
-
-# See my BAMM script (Script 15)!
-  # See if subsections can/should be split in sub-functions
-
-## Sub-functions:
-  # set_BAMM() => set default config files
-  # run_BAMM() => run rjMCMC and deal with outputs
-  # evaluate_BAMM() => produce traces for convergence checks and ESS; ask if exported in PDF?
-  # import_BAMM() => including burn-in and selection of posterior samples to reach the desire numbers
-  # clean_BAMM_files() => remove all files generated
-  # plot_BAMM_rates() => See if simply using BAMMtools::plot.bammdata()
-
-# Expected number of shifts based on ???
-  # Empirical rule derived from number of tips. Explain the rule and warn that best practice is to try several runs and compare posterior samples to the expected distribution and select the value of expected number of shifts that is the closest match.
-  # See if the BAMM manual provide any sort of empirical rules or if BAMMtools allows a default selection.
-
-## Best practice = run multiple runs and check for convergence of the MCMC traces.
- # Here, a single run. Inspect chain stability beyond the burn-in.
-
-## Find how to handle the call to the consoles from different systems!
-
-## Output = the BAMM object used in run_deepSTRAPP, update_rates_and_regimes_for_focal_time and extract_diversification_data_melted_df_for_focal_time, and that can be plotted with BAMMtools::plot.bammdata()
-
-### Outputs from BAMM (default names)
-# run_info.txt containing a summary of your parameters/settings
-# mcmc_log.txt containing raw MCMC information useful in diagnosing convergence
-# event_data.txt containing all evolutionary rate parameters and their topological mappings
-# chain_swap.txt containing data about each chain swap proposal (when a proposal occurred, which chains might be swapped, and whether the swap was accepted).
-# priors.txt containing default priors used to set up the run, as computed from BAMMtools::setBAMMpriors()
-
-# acceptance_info.txt containing the history of acceptance/proposal of MCMC steps (If additional parameter 'outputAcceptanceInfo' is set to 1)
-
-# Optional outputs
-  # BAMM regime tables = $EventData (already included?)
-
-
-
-# Include [deepSTRAPP::prepare_diversification_data()] in related functions
-# http://bamm-project.org/
-# R package BAMMtools = companion package of BAMM for post-processing of BAMM outputs
-# Ref to the Rabosky paper
-
-# Examples cannot be ran because they involve the BAMM software that is not installed on CRAN machines
-# Still provide examples (but with not run balises) + something to run like plots of the output already loaded
-
-# ape::write.tree
-# stringr::str_detect stringr::str_remove
-# utils::read.csv write.csv
-# @importFrom ggplot2 ggplot geom_line geom_point geom_vline aes labs ggtitle theme element_line element_rect element_text unit margin
-# coda::effectiveSize
-# cowplot::save_plot
-# BAMMtools::plotPrior
-# @importFrom grDevices pdf dev.off
+#' @title Run a full BAMM (Bayesian Analysis of Macroevolutionary Mixtures) workflow
+#'
+#' @description Run a full BAMM (Bayesian Analysis of Macroevolutionary Mixtures) workflow
+#'   to produce a `BAMM_object` that contains a phylogenetic tree and associated diversification rates
+#'   mapped along branches, across selected posterior samples:
+#'
+#'   * Step 1: Set BAMM - Record BAMM settings and generate all input files needed for BAMM.
+#'   * Step 2: Run BAMM - Run BAMM and move output files in dedicated directory.
+#'   * Step 3: Evaluate BAMM - Produce evaluation plots and ESS data.
+#'   * Step 4: Import BAMM outputs - Load `BAMM_object` in R and subset posterior samples.
+#'   * Step 5: Clean BAMM files - Remove files generated during the BAMM run.
+#'
+#'   The `BAMM_object` output is typically used as input to run deepSTRAPP with [deepSTRAPP::run_deepSTRAPP_for_focal_time()]
+#'   or [deepSTRAPP::run_deepSTRAPP_over_time()].
+#'
+#'   BAMM is a model of diversification for time-calibrated phylogenies that explores complex diversification dynamics
+#'   by allowing multiple regime shifts across clades without a priori hypotheses on the location of such shifts.
+#'   It uses reversible jump Markov chain Monte Carlo (rjMCMC) to automatically explore a vast range of models with different
+#'   speciation and extinction rates, and different number and location of regime shits.
+#'
+#'   This function will work only if you have the BAMM C++ program installed in your machine.
+#'   See the BAMM website: \url{http://bamm-project.org/} and the companion R package [BAMMtools].
+#'
+#' @param BAMM_install_directory_path Character string. The path to the directory where BAMM is.
+#'   Use '/' to separate directory and sub-directories. The path must end with '/'.
+#' @param phylo Time-calibrated phylogeny. Object of class `"phylo"` as defined in R package [ape].
+#' @param prefix_for_files Character string. Prefix to add to all BAMM files stored in the `BAMM_output_directory_path` if `keep_BAMM_outputs = TRUE`.
+#'   Files will be exported such as 'prefix_*' with an underscore separating the prefix and the file name. Default is `NULL` (no prefix is added).
+#' @param seed Integer. Set the seed to ensure reproducibility. Default is `NULL` (a random seed is used).
+#' @param numberOfGenerations Integer. Number of steps in the MCMC run. It should be set high enough to reach the equilibrium distribution
+#'  and allows posterior samples to be uncorrelated. Check the Effective Sample Size of parameters with coda::effectiveSize() in the Evaluation step.
+#'  Default value is `10^7`.
+#' @param globalSamplingFraction Numerical. Global sampling fraction representing the overall proportion of terminals in the phylogeny compared to
+#'  the estimated overall richness in the clade. It acts as a multiplier on the rates needed to achieve such extant diversity.
+#'  Default is `1.0` (assuming all taxa are in the phylogeny).
+#' @param sampleProbsFilename Character string. The path to the `.txt` file used to provide clade-specific sampling fractions.
+#'  See [BAMMtools::samplingProbs()] to generate such file. If provided, `globalSamplingFraction` is ignored.
+#' @param expectedNumberOfShifts Integer. Set the expected number of regime shifts. It acts as an hyperparameter controlling the exponential prior distribution
+#'  used to modulate reversible jumps across model configurations in the rjMCMC run.
+#'  If set to `NULL` (default), an empirical rule will be used to define this value: 1 regime shift expected for every 100 tips in the phylogeny, with a minimum of 1.
+#'  The best practice consists in trying several values and inspect the similarity of the prior and posterior distribution of the regime shift parameter.
+#'  See [BAMMtools::plotPrior()] and the Evaluation step to produce such evaluation plot.
+#' @param eventDataWriteFreq Integer. Set the frequency in which to write the event data to the output file = the sampling frequency of posterior samples.
+#'  If set to `NULL` (default), will set frequency such as 2000 posterior samples are recorded such as `eventDataWriteFreq = numberOfGenerations / 2000`.
+#' @param burn_in Numerical. Proportion of posterior samples removed from the BAMM output to ensure that the remaining samples where drawn once the equilibrium distribution was reached.
+#'  This can be evaluated looking at the MCMC trace (see Evaluation step). Default is `0.25`.
+#' @param nb_posterior_samples Numerical. Number of posterior samples to extract, after removing the burn-in, in the final `BAMM_object` to use for downstream analyses.
+#'  Default = 1000.
+#' @param additional_BAMM_settings List of named elements. Additional settings options for BAMM provided as a list of named arguments.
+#'  Ex: `list(lambdaInit0 = 0.5, muInit0 = 0)`. See available settings in the template file provided within the deepSTRAPP package files as 'BAMM_template_diversification.txt'.
+#'  The template can also be loaded directly in R with `utils::data(BAMM_template_diversification)` and displayed with `print(BAMM_template_diversification)`.
+#' @param BAMM_output_directory_path Character string. The path to the directory used to store input/output files generated.
+#' Use '/' to separate directory and subdirectories. It must end with '/'. Default is `./BAMM_outputs/`
+#' @param keep_BAMM_outputs Logical. Whether the `BAMM_output_directory` should be kept after the run. Default = `TRUE`.
+#' @param skip_evaluations Logical. Whether to skip the Evaluation step including MCMC trace, ESS, and prior/posterior comparisons for expected number of shifts. Default = `FALSE`.
+#' @param plot_evaluations Logical. Whether to display the plots generated during the Evaluation step: MCMC trace, and prior/posterior comparisons for expected number of shifts. Default = `TRUE`.
+#' @param save_evaluations Logical. Whether to save the outputs of evaluations in a table (ESS), and PDFs (MCMC trace, and prior/posterior comparisons for expected number of shifts)
+#'  in the `BAMM_output_directory`. Default = `TRUE`.
+#'
+#' @export
+#' @importFrom ape write.tree
+#' @importFrom stringr str_detect str_remove
+#' @importFrom utils read.csv write.csv data
+#' @importFrom ggplot2 ggplot geom_line geom_point geom_vline aes labs ggtitle theme element_line element_rect element_text unit margin
+#' @importFrom grDevices pdf dev.off
+#' @importFrom coda effectiveSize
+#' @importFrom cowplot save_plot
+#' @importFrom BAMMtools setBAMMpriors plotPrior plot.bammdata samplingProbs getEventData subsetEventData
+#'
+#' @details This function runs a full BAMM (Bayesian Analysis of Macroevolutionary Mixtures) workflow
+#'   to produce a `BAMM_object` that contains a phylogenetic tree and associated diversification rates
+#'   mapped along branches, across selected posterior samples.
+#'
+#'  Step 1: Set BAMM
+#'   * Produces a tree file for the phylogeny. Default file: 'phylogeny.tree'.
+#'   * Save configuration settings used for the BAMM run. Default file: 'config_file.txt'.
+#'   * Save default priors generated by [BAMMtools::setBAMMpriors] based on the phylogeny. Default file: 'priors.txt'.
+#'
+#'  Step 2: Run BAMM
+#'   * Run BAMM using the system console
+#'   * Move output files in dedicated `BAMM_output_directory`. Default directory is `./BAMM_outputs/`.
+#'     - 'run_info.txt' containing a summary of your parameters/settings.
+#'     - 'mcmc_log.txt' containing raw MCMC information useful in diagnosing convergence.
+#'     - 'event_data.txt' containing all evolutionary rate parameters and their topological mappings.
+#'     - 'chain_swap.txt' containing data about each chain swap proposal (when a proposal occurred, which chains might be swapped, and whether the swap was accepted).
+#'     - 'acceptance_info.txt' containing the history of acceptance/proposal of MCMC steps (If additional setting `outputAcceptanceInfo` is set to 1).
+#'
+#'  Step 3: Evaluate BAMM
+#'   * Plot the MCMC trace = evolution of logLik across MCMC generations. Output file = 'MCMC_trace_logLik.pdf'.
+#'   * Compute the Effective Sample Size (ESS) across posterior samples (after removing burn-in) using [coda::effectiveSize()].
+#'     This is a way to evaluate if your MCMC runs has enough generations to produce robust estimates. Ideally, ESS should be higher than 200.
+#'     Output file = 'ESS_df.csv'.
+#'   * Plot the comparison of prior and posterior distributions of the number of regime shifts with [BAMMtools::plotPrior].
+#'     Output file = 'PP_nb_shifts_plot.pdf'.
+#'     A good value for `expectedNumberOfShifts` is one with high similarities between the distributions
+#'     hinting that the information in the data coincides with your expectations for the number of regime shifts.
+#'     The best practice consists in trying several values to control if it affects or not the final output.
+#'
+#'  Step 4: Import BAMM outputs
+#'   * Load BAMM outputs with [BAMMtools::getEventData].
+#'   * Subset posterior samples to the requested `nb_posterior_samples` with [BAMMtools::subsetEventData].
+#'
+#'  Step 5: Clean BAMM files
+#'   * Remove files generated in Steps 1 & 2 if `keep_BAMM_outputs = FALSE`.
+#'   * Delete the `BAMM_output_directory` if empty after cleaning files.
+#'
+#'  The `BAMM_object` output:
+#'   * is typically used as input to run deepSTRAPP with [deepSTRAPP::run_deepSTRAPP_for_focal_time()] or [deepSTRAPP::run_deepSTRAPP_over_time()].
+#'   * can be used to extract rates and regimes for any `focal_time` in the past with [deepSTRAPP::update_rates_and_regimes_for_focal_time()].
+#'   * can be used to map diversification rates on the phylogeny with [BAMMtools::plot.bammdata()].
+#'
+#' # Note on diversification models for time-calibrated phylogenies
+#'
+#' This function relies on BAMM to provide a reliable solution to map diversification rates and regime shifts on a time-calibrated phylogeny
+#' and obtain the `BAMM_object` object needed to run the deepSTRAPP workflow ([run_deepSTRAPP_for_focal_time], [run_deepSTRAPP_over_time]).
+#' However, it is one option among others for modeling diversification on phylogenies.
+#' You may wish to explore alternatives models such as LSBDS model in RevBayes (Höhna et al., 2016), the MTBD model (Barido-Sottani et al., 2020),
+#' or the ClaDS2 model (Maliet et al., 2019) for our own data.
+#' However, you will need Bayesian models that infer regime shifts to be able to perform STRAPP tests (Rabosky & Huang, 2016).
+#' Additionally, you need to format the model output such as in `BAMM_object`, so it can be used in a deepSTRAPP workflow.
+#'
+#' This function perform a single BAMM run to infer diversification rates and regime shifts.
+#' Due to the stochastic nature of the exploration of the parameter space with MCMC process,
+#' best practice recommend to ran multiple runs and check for convergence of the MCMC traces,
+#' ensuring that the region of high probability has been reached by your MCMC runs.
+#'
+#' @return The function returns a `BAMM_object` of class `"bammdata"` which is a list with at least 18 elements.
+#'
+#'   Phylogeny-related elements used to plot a phylogeny with [ape::plot.phylo()]:
+#'   * `$edge` Matrix of integers. Defines the tree topology by providing rootward and tipward node ID of each edge.
+#'   * `$Nnode` Integer. Number of internal nodes.
+#'   * `$tip.label` Vector of character strings. Labels of all tips.
+#'   * `$edge.length` Vector of numerical. Length of edges/branches.
+#'   * `$node.label` Vector of character strings. Labels of all internal nodes. (Present only if present in the initial `BAMM_object`)
+#'
+#'   BAMM internal elements used for tree exploration:
+#'   * `$begin` Vector of numerical. Absolute time since root of edge/branch start (rootward).
+#'   * `$end` Vector of numerical.  Absolute time since root of edge/branch end (tipward).
+#'   * `$downseq` Vector of integers. Order of node visits when using a pre-order tree traversal.
+#'   * `$lastvisit` ID of the last node visited when starting from the node in the corresponding position in `$downseq`.
+#'
+#'   BAMM elements summarizing diversification data:
+#'   * `$numberEvents` Vector of integer. Number of events/macroevolutionary regimes (k+1) recorded in each posterior configuration. k = number of shifts.
+#'   * `$eventData` List of data.frames. One per posterior sample. Records shift events and macroevolutionary regimes parameters. 1st line = Background root regime.
+#'   * `$eventVectors` List of integer vectors. One per posterior sample. Record regime ID per branches.
+#'   * `$tipStates` List of named integer vectors. One per posterior sample. Record regime ID per tips.
+#'   * `$tipLambda` List of named numerical vectors. One per posterior sample. Record speciation rates per tips.
+#'   * `$tipMu` List of named numerical vectors. One per posterior sample. Record extinction rates per tips.
+#'   * `$eventBranchSegs` List of matrix of numerical. One per posterior sample. Record regime ID per segments of branches.
+#'   * `$meanTipLambda` Vector of named numerical. Mean tip speciation rates across all posterior configurations of tips.
+#'   * `$meanTipMu` Vector of named numerical. Mean tip extinction rates across all posterior configurations of tips.
+#'   * `$type` Character string. Set the type of data modeled with BAMM. Should be "diversification".
+#'
+#'  The function also produces files listed in the Details section and stored in the the `BAMM_output_directory`.
+#'
+#' @author Maël Doré
+#'
+#' @seealso [deepSTRAPP::run_deepSTRAPP_for_focal_time()] [deepSTRAPP::run_deepSTRAPP_over_time()] [deepSTRAPP::update_rates_and_regimes_for_focal_time()] [deepSTRAPP::prepare_trait_data()]
+#'
+#' @references For BAMM: Rabosky, D. L. (2014). Automatic detection of key innovations, rate shifts, and diversity-dependence on phylogenetic trees.
+#'  PloS one, 9(2), e89543. DOI: \url{https://doi.org/10.1371/journal.pone.0089543}. Website: \url{http://bamm-project.org/}.
+#'
+#'  For BAMMtools: Rabosky, D. L., Grundler, M., Anderson, C., Title, P., Shi, J. J., Brown, J. W., ... & Larson, J. G. (2014).
+#'   BAMM tools: an R package for the analysis of evolutionary dynamics on phylogenetic trees. Methods in Ecology and Evolution, 5(7), 701-707.
+#'   DOI: \url{https://doi.org/10.1111/2041-210X.12199}
+#'
+#' @examples
+#' # ----- Example 1: Whale phylogeny ----- #
+#'
+#' library(phytools)
+#' data(whale.tree)
+#'
+#' \dontrun{
+#' # Run BAMM workflow with deepSTRAPP
+#' whale_BAMM_object <- prepare_diversification_data(
+#'    BAMM_install_directory_path = "./software/bamm-2.5.0/",
+#'    phylo = whale.tree,
+#'    prefix_for_files = "whale",
+#'    numberOfGenerations = 100000 # Set low for the example
+#' )}
+#'
+#' # Load directly the result
+#' data(whale_BAMM_object)
+#'
+#' # Explore output
+#' str(whale_BAMM_object, 1)
+#'
+#' # Plot mean net diversification rates on the phylogeny
+#' BAMMtools::plot.bammdata(whale_BAMM_object, labels = TRUE)
+#'
 
 # Try on a small example.
 
-# BAMM_install_directory_path <- "./software/bamm-2.5.0/"
-
 # Check if BAMM works with non ultrametric trees (fossils). If not working add validity checks and info in doc.
 
-# library(phytools)
-# data(eel.tree)
-#
-# BAMM_object <- prepare_diversification_data(
-#    BAMM_install_directory_path = "./software/bamm-2.5.0/",
-#    phylo = eel.tree,
-#    prefix_for_files = "eel",
-#    numberOfGenerations = 10000,
-#    expectedNumberOfShifts = 1,
-#    burn_in = 0.5,
-#    nb_posterior_samples = 10,
-#    additional_BAMM_settings = list(updateLambdaShiftScale = 0.5),
-#    skip_evaluations = TRUE,
-#    plot_evaluations = TRUE)
-#
-# plot.bammdata(BAMM_object, labels = TRUE)
-
-# Try to run quick example to see if it works once built
- # With and without keeping files
- # Add the option to remove the directory if empty
 
 
 ##### plot_BAMM_rates() #####
@@ -107,11 +205,14 @@
 # Do not include it in prepare_diversification_data !
 # Just make it a function to use after!
 
+# Add in the seeAlso of prepare_diversification_data(), after Step 5 in the details section, and in the examples
 
-prepare_diversification_data <- function (BAMM_install_directory_path, # Ask the path to directory where is the BAMM 'executable'. Use '/' to separate directory and subdirectorys. It must end with '/'.
+
+
+prepare_diversification_data <- function (BAMM_install_directory_path, # Ask the path to directory where is the BAMM 'executable'. Use '/' to separate directory and subdirectories. It must end with '/'.
                                           phylo, # Phylogeny. Object of class phylo. Must be rooted and fully resolved.
-                                          prefix_for_files = NULL, # To provide the prefix to add to all BAMM files stored in the 'BAMM_output_directory_path' and kept if 'keep_BAMM_outputs = TRUE'.
-                                          # Files will exported such as 'prefix_*' with an underscore separating the prefix and the file name.
+                                          prefix_for_files = NULL, # To provide the prefix to add to all BAMM files stored in the 'BAMM_output_directory_path' if 'keep_BAMM_outputs = TRUE'.
+                                          # Files will be exported such as 'prefix_*' with an underscore separating the prefix and the file name.
                                           seed = NULL, # Set for reproducibility
                                           numberOfGenerations = 10^7, # Number of steps in the MCMC run. Should be set high enough to reach the equilibrium distribution, and allows posterior samples to be decorrelated (check the Effective Sample Size of parameters with coda::effectiveSize() in the Evaluation step)
                                           globalSamplingFraction = 1.0, # Global sampling fraction representing the overall proportion of terminals in the phylogeny compared to the estimated overall richness in the clade. It acts as a multipliers on the rates needed to achieve such extant diversity.
@@ -128,8 +229,8 @@ prepare_diversification_data <- function (BAMM_install_directory_path, # Ask the
                                           BAMM_output_directory_path = "./BAMM_outputs/", # Ask path for directory used to store input/output files generated. Use '/' to separate directory and subdirectories. It must end with '/'.
                                           keep_BAMM_outputs = TRUE, # Ask if the directory should be kept or erased. If 'BAMM_output_directory' is empty, it will be removed too.
                                           skip_evaluations = FALSE, # To skip the evaluation step (MCMC trace, ESS, and prior/posterior comparisons for LAMBDA = parameter controlling the expected nb of shifts)
-                                          plot_evaluations = FALSE, # To display evaluation plots (MCMC trace, and prior/posterior comparisons of the expected nb of shifts)
-                                          save_evaluations = TRUE) # To save outputs of evaluations: PDFs and table. 'MCMC_trace_logLik.pdf'. ESS with coda::effectiveSize() => 'ESS_df.csv'. Prior/posterior comparisons of the expected nb of shifts with BAMMtools::plotPrior() => 'PP_lambda_plot.pdf'
+                                          plot_evaluations = TRUE, # To display evaluation plots (MCMC trace, and prior/posterior comparisons of the expected nb of shifts)
+                                          save_evaluations = TRUE) # To save outputs of evaluations: PDFs and table. 'MCMC_trace_logLik.pdf'. ESS with coda::effectiveSize() => 'ESS_df.csv'. Prior/posterior comparisons of the expected nb of shifts with BAMMtools::plotPrior() => 'PP_nb_shifts_plot.pdf'
 
 {
   ### Check input validity
@@ -352,18 +453,23 @@ prepare_diversification_data <- function (BAMM_install_directory_path, # Ask the
 
     ## Load control file template for diversification analyses
 
-    # Load it from the root as in binary/installed version of the package
-    BAMM_config_file <- tryCatch({
-      readLines(con = file.path("./BAMM_template_diversification.txt"))
-    }, warning = function(w) { }, # Do nothing
-    error = function(e) { }, # Do nothing
-    finally = { } # Do nothing
-    )
-    # If failed, load it from the /inst/ directory as in source/bundled version of the package
-    if (is.null(BAMM_config_file))
-    {
-      BAMM_config_file <- readLines(con = file.path("./inst/BAMM_template_diversification.txt"))
-    }
+    # # Load it from the root as in binary/installed version of the package
+    # BAMM_config_file <- tryCatch({
+    #   readLines(con = file.path("./BAMM_template_diversification.txt"))
+    # }, warning = function(w) { }, # Do nothing
+    # error = function(e) { }, # Do nothing
+    # finally = { } # Do nothing
+    # )
+    # # If failed, load it from the /inst/ directory as in source/bundled version of the package
+    # if (is.null(BAMM_config_file))
+    # {
+    #   BAMM_config_file <- readLines(con = file.path("./inst/BAMM_template_diversification.txt"))
+    # }
+
+    # Load control file template from internal deepSTRAPP data
+    BAMM_template_diversification <- NULL
+    utils::data(BAMM_template_diversification)
+    BAMM_config_file <- BAMM_template_diversification
 
     # Initiate new config file for this analysis
     my_config_file <- BAMM_config_file
@@ -1168,18 +1274,18 @@ prepare_diversification_data <- function (BAMM_install_directory_path, # Ask the
       {
         if (is.null(prefix_for_files))
         {
-          PP_lambda_path <- file.path(paste0(BAMM_output_directory_path, "PP_lambda_plot.pdf"))
+          PP_nb_shifts_path <- file.path(paste0(BAMM_output_directory_path, "PP_nb_shifts_plot.pdf"))
         } else {
-          PP_lambda_path <- file.path(paste0(BAMM_output_directory_path, prefix_for_files, "_PP_lambda_plot.pdf"))
+          PP_nb_shifts_path <- file.path(paste0(BAMM_output_directory_path, prefix_for_files, "_PP_nb_shifts_plot.pdf"))
         }
-        grDevices::pdf(file = file.path(PP_lambda_path),
+        grDevices::pdf(file = file.path(PP_nb_shifts_path),
                        width = 10, height = 8)
 
         BAMMtools::plotPrior(mcmc = MCMC_log,
                              expectedNumberOfShifts = expectedNumberOfShifts,
                              burnin = burn_in,
                              main = paste0("Comparison prior/posterior distributions\n",
-                                           "of the number of shifts"))
+                                           "of the number of regime shifts"))
 
         grDevices::dev.off()
       }
