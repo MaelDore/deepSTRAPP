@@ -101,6 +101,13 @@
 #'
 #' @seealso [geiger::fitContinuous()] [geiger::fitDiscrete()] [phytools::contMap()] [phytools::densityMap()]
 #'
+#' @references For macroevolutionary models in geiger: Pennell, M. W., Eastman, J. M., Slater, G. J., Brown, J. W., Uyeda, J. C., FitzJohn, R. G., ... & Harmon, L. J. (2014).
+#'  geiger v2. 0: an expanded suite of methods for fitting macroevolutionary models to phylogenetic trees. Bioinformatics, 30(15), 2216-2218..
+#'  \url{https://doi.org/10.1093/bioinformatics/btu181}.
+#'
+#'  For BioGeoBEARS: Matzke, Nicholas J. (2018). BioGeoBEARS: BioGeography with Bayesian (and likelihood) Evolutionary Analysis with R Scripts.
+#'    version 1.1.1, published on GitHub on November 6, 2018. DOI: \url{http://dx.doi.org/10.5281/zenodo.1478250}. Website: \url{http://phylo.wikidot.com/}.
+#'
 #' @examples
 #' # ----- Example 1: Continuous data ----- #
 #'
@@ -343,7 +350,7 @@ prepare_trait_data_for_continuous_data <- function (
 
     ## res
     # res must be a positive integer.
-    if ((abs(res) != res) | (round(res) != round(res)))
+    if ((res != abs(res)) | (res != round(res)))
     {
       stop(paste0("'res' must be a positive integer defining the number of time steps used to interpolate trait value in the contMap."))
     }
@@ -593,14 +600,14 @@ prepare_trait_data_for_categorical_data <- function (
 
     ## res
     # res must be a positive integer.
-    if ((abs(res) != res) | (round(res) != round(res)))
+    if ((res != abs(res)) | (res != round(res)))
     {
       stop(paste0("'res' must be a positive integer defining the number of time steps used to interpolate trait value in the densityMaps."))
     }
 
     ## nb_simulations
     # Check that nb_simulations is a positive integer.
-    if ((abs(nb_simulations) != nb_simulations) | (round(nb_simulations) != round(nb_simulations)))
+    if ((nb_simulations != abs(nb_simulations)) | (nb_simulations != round(nb_simulations)))
     {
       stop(paste0("'nb_simulations' must be a positive integer defining the number of simulations generated for stochastic mapping."))
     }
@@ -676,14 +683,14 @@ prepare_trait_data_for_biogeographic_data <- function (
 
     ## res
     # res must be a positive integer.
-    if ((abs(res) != res) | (round(res) != round(res)))
+    if ((res != abs(res)) | (res != round(res)))
     {
       stop(paste0("'res' must be a positive integer defining the number of time steps used to interpolate trait value in the densityMaps."))
     }
 
     ## nb_simulations
     # Check that nb_simulations is a positive integer.
-    if ((abs(nb_simulations) != nb_simulations) | (round(nb_simulations) != round(nb_simulations)))
+    if ((nb_simulations != abs(nb_simulations)) | (nb_simulations != round(nb_simulations)))
     {
       stop(paste0("'nb_simulations' must be a positive integer defining the number of simulations generated for stochastic mapping."))
     }

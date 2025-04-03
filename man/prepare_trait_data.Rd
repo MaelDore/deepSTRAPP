@@ -182,6 +182,14 @@ mapped_cont_traits$ace # Ancestral character estimates at nodes
 # TBA
 
 }
+\references{
+For macroevolutionary models in geiger: Pennell, M. W., Eastman, J. M., Slater, G. J., Brown, J. W., Uyeda, J. C., FitzJohn, R. G., ... & Harmon, L. J. (2014).
+geiger v2. 0: an expanded suite of methods for fitting macroevolutionary models to phylogenetic trees. Bioinformatics, 30(15), 2216-2218..
+\url{https://doi.org/10.1093/bioinformatics/btu181}.
+
+For BioGeoBEARS: Matzke, Nicholas J. (2018). BioGeoBEARS: BioGeography with Bayesian (and likelihood) Evolutionary Analysis with R Scripts.
+version 1.1.1, published on GitHub on November 6, 2018. DOI: \url{http://dx.doi.org/10.5281/zenodo.1478250}. Website: \url{http://phylo.wikidot.com/}.
+}
 \seealso{
 \code{\link[geiger:fitContinuous]{geiger::fitContinuous()}} \code{\link[geiger:fitDiscrete]{geiger::fitDiscrete()}} \code{\link[phytools:contMap]{phytools::contMap()}} \code{\link[phytools:densityMap]{phytools::densityMap()}}
 }

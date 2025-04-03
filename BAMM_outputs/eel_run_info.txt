@@ -1,11 +1,11 @@
 Command line: D:\Mael_D\R_projects\deepSTRAPP\software\bamm-2.5.0\bamm.exe -c ./BAMM_outputs/eel_config_file.txt
 Git commit id: 462bc39af9d4c4b4dd81a481f32c953e93a076e7
-Random seed: 1743621540
-Start time: Wed Apr 02 21:19:00 2025
+Random seed: 1743673189
+Start time: Thu Apr 03 11:39:49 2025
 
 Current parameter settings:
        acceptanceInfoFileName    eel_acceptance_info.txt
-          acceptanceResetFreq    5000
+          acceptanceResetFreq    500
             alwaysRecomputeE0    0
                      autotune    0
          branchRatesWriteFreq    0
@@ -16,7 +16,7 @@ Current parameter settings:
                        deltaT    0.01
               eventDataInfile    event_data_in.txt
              eventDataOutfile    eel_event_data.txt
-           eventDataWriteFreq    25
+           eventDataWriteFreq    5
        expectedNumberOfShifts    1
             extinctionProbMax    0.9999
 fastSimulatePriorExperimental    0
@@ -38,7 +38,7 @@ fastSimulatePrior_Generations    5000000
          localGlobalMoveRatio    10
               maxNumberEvents    5000
                   mcmcOutfile    eel_mcmc_log.txt
-                mcmcWriteFreq    25
+                mcmcWriteFreq    5
          minCladeSizeForShift    1
                     modeltype    speciationextinction
                       muInit0    0
@@ -50,7 +50,7 @@ fastSimulatePrior_Generations    5000000
              muShiftRootPrior    -1.0
             numberOccurrences    0
                numberOfChains    4
-          numberOfGenerations    50000
+          numberOfGenerations    10000
               observationTime    -1
                       outName    eel
          outputAcceptanceInfo    0
@@ -58,7 +58,7 @@ fastSimulatePrior_Generations    5000000
              poissonRatePrior    1
          preservationRateInit    0
         preservationRatePrior    1.0
-                    printFreq    10000
+                    printFreq    1000
           priorOutputFileName    eel_prior_probs.txt
  priorSim_IntervalGenerations    5000
               runInfoFilename    eel_run_info.txt
@@ -90,5 +90,5 @@ updateRateEventNumberForBranch    0.0
  useGlobalSamplingProbability    1
    validateEventConfiguration    1
    writeMeanBranchLengthTrees    0
-End time: Wed Apr 02 21:19:03 2025
+End time: Thu Apr 03 11:39:49 2025
 
