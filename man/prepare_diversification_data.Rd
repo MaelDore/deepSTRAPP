@@ -28,7 +28,8 @@ prepare_diversification_data(
 \item{BAMM_install_directory_path}{Character string. The path to the directory where BAMM is.
 Use '/' to separate directory and sub-directories. The path must end with '/'.}
 
-\item{phylo}{Time-calibrated phylogeny. Object of class \code{"phylo"} as defined in R package \link{ape}.}
+\item{phylo}{Time-calibrated phylogeny. Object of class \code{"phylo"} as defined in R package \link{ape}. The phylogeny must be rooted and fully resolved.
+BAMM does not currently work with fossils, so the tree must also be ultrametric.}
 
 \item{prefix_for_files}{Character string. Prefix to add to all BAMM files stored in the \code{BAMM_output_directory_path} if \code{keep_BAMM_outputs = TRUE}.
 Files will be exported such as 'prefix_*' with an underscore separating the prefix and the file name. Default is \code{NULL} (no prefix is added).}
@@ -109,6 +110,7 @@ BAMM elements summarizing diversification data:
 \item \verb{$meanTipLambda} Vector of named numerical. Mean tip speciation rates across all posterior configurations of tips.
 \item \verb{$meanTipMu} Vector of named numerical. Mean tip extinction rates across all posterior configurations of tips.
 \item \verb{$type} Character string. Set the type of data modeled with BAMM. Should be "diversification".
+\item \verb{$expectedNumberOfShifts} Integer. The expected number of regime shifts used to set the prior in BAMM.
 }
 
 The function also produces files listed in the Details section and stored in the the \code{BAMM_output_directory}.
@@ -178,6 +180,8 @@ Step 4: Import BAMM outputs
 \itemize{
 \item Load BAMM outputs with \link[BAMMtools:getEventData]{BAMMtools::getEventData}.
 \item Subset posterior samples to the requested \code{nb_posterior_samples} with \link[BAMMtools:subsetEventData]{BAMMtools::subsetEventData}.
+\item Record the \verb{$expectedNumberOfShifts} used to set the prior. This is useful for downstream analyses involving comparison of prior vs. posterior probabilities
+(See \code{\link[BAMMtools:distinctShiftConfigurations]{BAMMtools::distinctShiftConfigurations()}}).
 }
 
 Step 5: Clean BAMM files
@@ -230,7 +234,34 @@ data(whale_BAMM_object)
 str(whale_BAMM_object, 1)
 
 # Plot mean net diversification rates on the phylogeny
-BAMMtools::plot.bammdata(whale_BAMM_object, labels = TRUE)
+BAMMtools::plot.bammdata(whale_BAMM_object,
+   labels = TRUE, legend = TRUE)
+
+
+# ----- Example 2: Ponerinae phylogeny ----- #
+
+# Load phylogeny
+data("Ponerinae_tree", package = "deepSTRAPP")
+plot(Ponerinae_tree, show.tip.label = FALSE)
+
+\dontrun{
+# Run BAMM workflow with deepSTRAPP
+Ponerinae_BAMM_object <- prepare_diversification_data(
+   BAMM_install_directory_path = "./software/bamm-2.5.0/",
+   phylo = Ponerinae_tree,
+   prefix_for_files = "Ponerinae",
+   numberOfGenerations = 10^7 # Set high for optimal run, but will take ages
+)}
+
+# Load directly the result
+data(Ponerinae_BAMM_object)
+
+# Explore output
+str(Ponerinae_BAMM_object, 1)
+
+# Plot mean net diversification rates on the phylogeny
+BAMMtools::plot.bammdata(Ponerinae_BAMM_object,
+    labels = FALSE, legend = TRUE)
 
 }
 \references{

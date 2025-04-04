@@ -1,67 +1,67 @@
-Command line: D:\Mael_D\R_projects\deepSTRAPP\software\bamm-2.5.0\bamm.exe -c ./BAMM_outputs/whale_config_file.txt
+Command line: D:\Mael_D\R_projects\deepSTRAPP\software\bamm-2.5.0\bamm.exe -c ./BAMM_outputs/Ponerinae_config_file.txt
 Git commit id: 462bc39af9d4c4b4dd81a481f32c953e93a076e7
-Random seed: 1743783175
-Start time: Fri Apr 04 18:12:55 2025
+Random seed: 1743696239
+Start time: Thu Apr 03 18:03:59 2025
 
 Current parameter settings:
-       acceptanceInfoFileName    whale_acceptance_info.txt
+       acceptanceInfoFileName    Ponerinae_acceptance_info.txt
           acceptanceResetFreq    500
             alwaysRecomputeE0    0
                      autotune    0
          branchRatesWriteFreq    0
-            chainSwapFileName    whale_chain_swap_log.txt
+            chainSwapFileName    Ponerinae_chain_swap_log.txt
              checkUltrametric    1
      combineExtinctionAtNodes    if_different
           conditionOnSurvival    -1
                        deltaT    0.01
               eventDataInfile    event_data_in.txt
-             eventDataOutfile    whale_event_data.txt
-           eventDataWriteFreq    50
-       expectedNumberOfShifts    1
+             eventDataOutfile    Ponerinae_event_data.txt
+           eventDataWriteFreq    5
+       expectedNumberOfShifts    15
             extinctionProbMax    0.9999
 fastSimulatePriorExperimental    0
      fastSimulatePrior_BurnIn    0.05
 fastSimulatePrior_Generations    5000000
  fastSimulatePrior_SampleFreq    50
        globalSamplingFraction    1
-          initialNumberEvents    0
+          initialNumberEvents    0.0886505657072102
               initializeModel    1
-                  lambdaInit0    0.104708635808267
-              lambdaInitPrior    1.87792388968545
+                  lambdaInit0    0.156782722146671
+              lambdaInitPrior    3.72001688603489
           lambdaInitRootPrior    -1.0
     lambdaIsTimeVariablePrior    1
-                lambdaOutfile    whale_lambda_rates.txt
+                lambdaOutfile    Ponerinae_lambda_rates.txt
                  lambdaShift0    0
-             lambdaShiftPrior    0.0324996298762062
+             lambdaShiftPrior    0.00931837271494848
          lambdaShiftRootPrior    -1.0
                 loadEventData    0
          localGlobalMoveRatio    10
               maxNumberEvents    5000
-                  mcmcOutfile    whale_mcmc_log.txt
-                mcmcWriteFreq    50
+                  mcmcOutfile    Ponerinae_mcmc_log.txt
+                mcmcWriteFreq    5
          minCladeSizeForShift    1
                     modeltype    speciationextinction
-                      muInit0    0
-                  muInitPrior    1.87792388968545
+                      muInit0    0.0886505657072102
+                  muInitPrior    3.72001688603489
               muInitRootPrior    -1.0
-                    muOutfile    whale_mu_rates.txt
+                    muOutfile    Ponerinae_mu_rates.txt
                      muShift0    0.0
                  muShiftPrior    1.0
              muShiftRootPrior    -1.0
             numberOccurrences    0
                numberOfChains    4
-          numberOfGenerations    100000
+          numberOfGenerations    10000
               observationTime    -1
-                      outName    whale
+                      outName    Ponerinae
          outputAcceptanceInfo    0
                     overwrite    1
-             poissonRatePrior    1
+             poissonRatePrior    0.0666667
          preservationRateInit    0
         preservationRatePrior    1.0
                     printFreq    1000
-          priorOutputFileName    whale_prior_probs.txt
+          priorOutputFileName    Ponerinae_prior_probs.txt
  priorSim_IntervalGenerations    5000
-              runInfoFilename    whale_run_info.txt
+              runInfoFilename    Ponerinae_run_info.txt
                       runMCMC    1
           sampleFromPriorOnly    0
           sampleProbsFilename    taxa_sampling_probs.txt
@@ -69,7 +69,7 @@ fastSimulatePrior_Generations    5000000
                     segLength    0.01
           simulatePriorShifts    0
                    swapPeriod    1000
-                     treefile    ./BAMM_outputs/whale_phylogeny.tree
+                     treefile    ./BAMM_outputs/Ponerinae_phylogeny.tree
      updateEventLocationScale    0.05
          updateEventRateScale    4
         updateLambdaInitScale    2
@@ -90,5 +90,5 @@ updateRateEventNumberForBranch    0.0
  useGlobalSamplingProbability    1
    validateEventConfiguration    1
    writeMeanBranchLengthTrees    0
-End time: Fri Apr 04 18:13:03 2025
+End time: Thu Apr 03 18:04:03 2025
 

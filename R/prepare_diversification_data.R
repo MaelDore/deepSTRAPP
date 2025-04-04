@@ -24,7 +24,8 @@
 #'
 #' @param BAMM_install_directory_path Character string. The path to the directory where BAMM is.
 #'   Use '/' to separate directory and sub-directories. The path must end with '/'.
-#' @param phylo Time-calibrated phylogeny. Object of class `"phylo"` as defined in R package [ape].
+#' @param phylo Time-calibrated phylogeny. Object of class `"phylo"` as defined in R package [ape]. The phylogeny must be rooted and fully resolved.
+#'   BAMM does not currently work with fossils, so the tree must also be ultrametric.
 #' @param prefix_for_files Character string. Prefix to add to all BAMM files stored in the `BAMM_output_directory_path` if `keep_BAMM_outputs = TRUE`.
 #'   Files will be exported such as 'prefix_*' with an underscore separating the prefix and the file name. Default is `NULL` (no prefix is added).
 #' @param seed Integer. Set the seed to ensure reproducibility. Default is `NULL` (a random seed is used).
@@ -100,6 +101,11 @@
 #'  Step 4: Import BAMM outputs
 #'   * Load BAMM outputs with [BAMMtools::getEventData].
 #'   * Subset posterior samples to the requested `nb_posterior_samples` with [BAMMtools::subsetEventData].
+#'   * Record the `$expectedNumberOfShifts` used to set the prior. This is useful for downstream analyses involving comparison of prior vs. posterior probabilities
+#'     (See [BAMMtools::distinctShiftConfigurations()]).
+#'   * Record the index of the posterior sample with the Maximum Shift Credibility configuration (MSC).
+#'     This corresponds to the sample with regime shift events occurring on branches with the highest posterior shift probability.
+#'     (See [BAMMtools::marginalShiftProbsTree()]). This configuration may be used to plot regime shifts on the phylogeny with [deepSTRAPP::plot_BAMM_rates()].
 #'
 #'  Step 5: Clean BAMM files
 #'   * Remove files generated in Steps 1 & 2 if `keep_BAMM_outputs = FALSE`.
@@ -108,7 +114,7 @@
 #'  The `BAMM_object` output:
 #'   * is typically used as input to run deepSTRAPP with [deepSTRAPP::run_deepSTRAPP_for_focal_time()] or [deepSTRAPP::run_deepSTRAPP_over_time()].
 #'   * can be used to extract rates and regimes for any `focal_time` in the past with [deepSTRAPP::update_rates_and_regimes_for_focal_time()].
-#'   * can be used to map diversification rates on the phylogeny with [BAMMtools::plot.bammdata()].
+#'   * can be used to map diversification rates and regime shifts on the phylogeny with [deepSTRAPP::plot_BAMM_rates()].
 #'
 #' # Note on diversification models for time-calibrated phylogenies
 #'
@@ -125,7 +131,7 @@
 #' best practice recommend to ran multiple runs and check for convergence of the MCMC traces,
 #' ensuring that the region of high probability has been reached by your MCMC runs.
 #'
-#' @return The function returns a `BAMM_object` of class `"bammdata"` which is a list with at least 18 elements.
+#' @return The function returns a `BAMM_object` of class `"bammdata"` which is a list with at least 21 elements.
 #'
 #'   Phylogeny-related elements used to plot a phylogeny with [ape::plot.phylo()]:
 #'   * `$edge` Matrix of integers. Defines the tree topology by providing rootward and tipward node ID of each edge.
@@ -151,6 +157,10 @@
 #'   * `$meanTipLambda` Vector of named numerical. Mean tip speciation rates across all posterior configurations of tips.
 #'   * `$meanTipMu` Vector of named numerical. Mean tip extinction rates across all posterior configurations of tips.
 #'   * `$type` Character string. Set the type of data modeled with BAMM. Should be "diversification".
+#'   * `$expectedNumberOfShifts` Integer. The expected number of regime shifts used to set the prior in BAMM.
+#'   * `$MSC_index` Integer. The index of the Maximum Shift Credibility configuration among the posterior samples.
+#'   * `$MSP_tree` Object of class `phylo`. List of 4 elements duplicating information from the Phylogeny-related elements above,
+#'      except `$MSP_tree$edge.length` is recording the Marginal Shift Probability of each branch (i.e., the probability of a regime shift to occur along each branch)
 #'
 #'  The function also produces files listed in the Details section and stored in the the `BAMM_output_directory`.
 #'
@@ -187,50 +197,82 @@
 #' str(whale_BAMM_object, 1)
 #'
 #' # Plot mean net diversification rates on the phylogeny
-#' BAMMtools::plot.bammdata(whale_BAMM_object, labels = TRUE)
+#' BAMMtools::plot.bammdata(whale_BAMM_object,
+#'    labels = TRUE, legend = TRUE)
+#'
+#'
+#' # ----- Example 2: Ponerinae phylogeny ----- #
+#'
+#' # Load phylogeny
+#' data("Ponerinae_tree", package = "deepSTRAPP")
+#' plot(Ponerinae_tree, show.tip.label = FALSE)
+#'
+#' \dontrun{
+#' # Run BAMM workflow with deepSTRAPP
+#' Ponerinae_BAMM_object <- prepare_diversification_data(
+#'    BAMM_install_directory_path = "./software/bamm-2.5.0/",
+#'    phylo = Ponerinae_tree,
+#'    prefix_for_files = "Ponerinae",
+#'    numberOfGenerations = 10^7 # Set high for optimal run, but will take ages
+#' )}
+#'
+#' # Load directly the result
+#' data(Ponerinae_BAMM_object)
+#'
+#' # Explore output
+#' str(Ponerinae_BAMM_object, 1)
+#'
+#' # Plot mean net diversification rates on the phylogeny
+#' BAMMtools::plot.bammdata(Ponerinae_BAMM_object,
+#'     labels = FALSE, legend = TRUE)
 #'
 
-# Try on a small example.
-
-# Check if BAMM works with non ultrametric trees (fossils). If not working add validity checks and info in doc.
-
+library(phytools)
+data(whale.tree)
 
 
-##### plot_BAMM_rates() #####
+# Run BAMM workflow with deepSTRAPP
+whale_BAMM_object <- prepare_diversification_data(
+   BAMM_install_directory_path = "./software/bamm-2.5.0/",
+   phylo = whale.tree,
+   prefix_for_files = "whale",
+   numberOfGenerations = 100000) # Set low for the example
 
-# See if simply using BAMMtools::plot.bammdata() or a custom function to reuse to plot BAMM rates/regimes at every 'focal_time'?
+# Explore output
+str(Ponerinae_trait_data_10My$MSP_tree, 1)
 
-# See if adding regime shifts. From what?
+whale_BAMM_object$MSP_tree
 
-# Do not include it in prepare_diversification_data !
-# Just make it a function to use after!
+# Plot mean net diversification rates on the phylogeny
+BAMMtools::plot.bammdata(whale_BAMM_object,
+   labels = TRUE, legend = TRUE)
+BAMMtools::addBAMMshifts(whale_BAMM_object,
+                         index = whale_BAMM_object$MSC_index,
+                         cex = 2)
+# Replace by plot_BAMM_rates()
 
-# Add in the seeAlso of prepare_diversification_data(), after Step 5 in the details section, and in the examples
+## Try to cut Ponerinae deep enough so some events should disappear
+MSC_detection <- BAMMtools::maximumShiftCredibility(Ponerinae_BAMM_object)
+MSC_detection$sampleindex
 
 
-
-prepare_diversification_data <- function (BAMM_install_directory_path, # Ask the path to directory where is the BAMM 'executable'. Use '/' to separate directory and subdirectories. It must end with '/'.
-                                          phylo, # Phylogeny. Object of class phylo. Must be rooted and fully resolved.
-                                          prefix_for_files = NULL, # To provide the prefix to add to all BAMM files stored in the 'BAMM_output_directory_path' if 'keep_BAMM_outputs = TRUE'.
-                                          # Files will be exported such as 'prefix_*' with an underscore separating the prefix and the file name.
-                                          seed = NULL, # Set for reproducibility
-                                          numberOfGenerations = 10^7, # Number of steps in the MCMC run. Should be set high enough to reach the equilibrium distribution, and allows posterior samples to be decorrelated (check the Effective Sample Size of parameters with coda::effectiveSize() in the Evaluation step)
-                                          globalSamplingFraction = 1.0, # Global sampling fraction representing the overall proportion of terminals in the phylogeny compared to the estimated overall richness in the clade. It acts as a multipliers on the rates needed to achieve such extant diversity.
-                                          sampleProbsFilename = NULL, # Provide path to clade-specific sampling fractions. See ?BAMMtools::samplingProbs() to generate the file. It must be a '.txt' file. If provided, 'globalSamplingFraction' is ignored.
-                                          expectedNumberOfShifts = NULL, # Set the expected number of regime shifts used to set the exponential hyperprior used to modulate reversible jumps across model configuration in the rjMCMC run.
-                                                                         # If set to NULL (default), will use an empirical rule to define this value such as we expected a regime shift for every 100 tips in the phylogeny, with a minimum of 1.
-                                                                         # Best practice is to try runs with several value and inspect the convergence of the posterior distribution of the regime shift parameter with the prior distribution defined by this hyperprior parameter.
-                                          eventDataWriteFreq = NULL, # Set the frequency in which to write the event data to the output file = the sampling frequency of posterior samples.
-                                                                     # Aim for 500-5000 posterior samples ideally as some samples will be removed to account for burn-in.
-                                                                     # If set to NULL (default), will set frequency such as 2000 posterior samples are recorded.
-                                          burn_in = 0.25, # Proportion of posterior samples removed to ensure the remaining samples where drawn once the equilibrium distribution was reached. This can be evaluated looking at the MCMC trace (see Evaluation step). Default is '0.25'.
+prepare_diversification_data <- function (BAMM_install_directory_path,
+                                          phylo,
+                                          prefix_for_files = NULL,
+                                          seed = NULL,
+                                          numberOfGenerations = 10^7,
+                                          globalSamplingFraction = 1.0,
+                                          sampleProbsFilename = NULL,
+                                          expectedNumberOfShifts = NULL,
+                                          eventDataWriteFreq = NULL,
+                                          burn_in = 0.25,
                                           nb_posterior_samples = 1000,
-                                          additional_BAMM_settings = list(), # Additional settings options for BAMM provided as a list of named argument. Ex: list(lambdaInit0 = 0.5, muInit0 = 0). See details in the template file provided with the package files 'BAMM_template_diversification.txt'.
-                                          BAMM_output_directory_path = "./BAMM_outputs/", # Ask path for directory used to store input/output files generated. Use '/' to separate directory and subdirectories. It must end with '/'.
-                                          keep_BAMM_outputs = TRUE, # Ask if the directory should be kept or erased. If 'BAMM_output_directory' is empty, it will be removed too.
-                                          skip_evaluations = FALSE, # To skip the evaluation step (MCMC trace, ESS, and prior/posterior comparisons for LAMBDA = parameter controlling the expected nb of shifts)
-                                          plot_evaluations = TRUE, # To display evaluation plots (MCMC trace, and prior/posterior comparisons of the expected nb of shifts)
-                                          save_evaluations = TRUE) # To save outputs of evaluations: PDFs and table. 'MCMC_trace_logLik.pdf'. ESS with coda::effectiveSize() => 'ESS_df.csv'. Prior/posterior comparisons of the expected nb of shifts with BAMMtools::plotPrior() => 'PP_nb_shifts_plot.pdf'
+                                          additional_BAMM_settings = list(),
+                                          BAMM_output_directory_path = "./BAMM_outputs/",
+                                          keep_BAMM_outputs = TRUE,
+                                          skip_evaluations = FALSE,
+                                          plot_evaluations = TRUE,
+                                          save_evaluations = TRUE)
 
 {
   ### Check input validity
@@ -467,9 +509,8 @@ prepare_diversification_data <- function (BAMM_install_directory_path, # Ask the
     # }
 
     # Load control file template from internal deepSTRAPP data
-    BAMM_template_diversification <- NULL
-    utils::data(BAMM_template_diversification)
-    BAMM_config_file <- BAMM_template_diversification
+    # utils::data("BAMM_template_diversification", package = "deepSTRAPP")
+    BAMM_config_file <- deepSTRAPP::BAMM_template_diversification
 
     # Initiate new config file for this analysis
     my_config_file <- BAMM_config_file
@@ -1320,6 +1361,18 @@ prepare_diversification_data <- function (BAMM_install_directory_path, # Ask the
     }
     sample_indices <- sample(x = 1:length(BAMM_data_output$eventData), size = nb_posterior_samples)
     BAMM_posterior_samples_data <- BAMMtools::subsetEventData(BAMM_data_output, index = sample_indices)
+
+    ## Add the expectedNumberOfShifts as information in the output
+    BAMM_posterior_samples_data$expectedNumberOfShifts <- expectedNumberOfShifts
+
+    ## Identify the maximum shift credibility configuration (MSC) for plotting regime shifts
+    MSC_detection <- BAMMtools::maximumShiftCredibility(BAMM_posterior_samples_data)
+    BAMM_posterior_samples_data$MSC_index <- MSC_detection$sampleindex
+
+    ## Extract Marginal Shift Probability of each branch and scale branch length accordingly
+    MSP_tree <- BAMMtools::marginalShiftProbsTree(BAMM_posterior_samples_data)
+    BAMM_posterior_samples_data$MSP_tree <- MSP_tree
+
   }
 
   #### ----------- Step 5: Clean BAMM files ----------- ####

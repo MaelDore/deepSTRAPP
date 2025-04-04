@@ -89,6 +89,7 @@ BAMM elements summarizing diversification data:
 \item \verb{$meanTipLambda} Vector of named numerical. Mean tip speciation rates across all posterior configurations of tips present at \code{focal_time} (does not includes older fossils).
 \item \verb{$meanTipMu} Vector of named numerical. Mean tip extinction rates across all posterior configurations of tips present at \code{focal_time} (does not includes older fossils).
 \item \verb{$type} Character string. Set the type of data modeled with BAMM. Should be "diversification".
+\item \verb{$expectedNumberOfShifts} Integer. The expected number of regime shifts used to set the prior in BAMM.
 }
 
 New elements added to provide update information:

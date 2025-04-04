@@ -5,7 +5,7 @@
 \alias{Ponerinae_BAMM_object_10My}
 \title{Dataset summarizing 1000 posterior samples of BAMM for extant ponerine ants updated to 10 My}
 \format{
-A list with 26 elements.
+A list with 28 elements.
 }
 \usage{
 data(Ponerinae_BAMM_object_10My)
@@ -51,6 +51,8 @@ BAMM elements summarizing diversification data updated for a \code{focal_time} o
 \item \verb{$meanTipLambda} Vector of numerical. Mean tip speciation rates across all posterior configurations of tips.
 \item \verb{$meanTipMu} Vector of numerical. Mean tip extinction rates across all posterior configurations of tips.
 \item \verb{$type} Character string. Set the type of data modeled with BAMM. Here, type = "diversification".
+\item \verb{$expectedNumberOfShifts} Integer. The expected number of regime shifts used to set the prior in BAMM.
+\item \verb{$MSC_index} Integer. The index of the Maximum Shift Credibility configuration among the posterior samples.
 }
 
 New elements added to provide update information:

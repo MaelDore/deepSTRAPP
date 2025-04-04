@@ -19,19 +19,19 @@
 # GENERAL SETUP AND DATA INPUT
 ################################################################################
 
-modeltype = speciationextinction        
+modeltype = speciationextinction
 # Specify "speciationextinction" or "trait" analysis
-                                  
+
 treefile = %%%%
 # File name of the phylogenetic tree to be analyzed
 
 runInfoFilename = run_info.txt
 # File name to output general information about this run
 
-sampleFromPriorOnly = 0                 
+sampleFromPriorOnly = 0
 # Whether to perform analysis sampling from prior only (no likelihoods computed)
 
-runMCMC = 1                             
+runMCMC = 1
 # Whether to perform the MCMC simulation. If runMCMC = 0, the program will only
 # check whether the data file can be read and the initial likelihood computed
 
@@ -40,21 +40,21 @@ simulatePriorShifts = 1
 # given the hyperprior on the Poisson rate parameter. This is necessary to
 # compute Bayes factors
 
-loadEventData = 0                       
+loadEventData = 0
 # Whether to load a previous event data file
 
 eventDataInfile = event_data_in.txt
 # File name of the event data file to load, used only if loadEventData = 1
 
-initializeModel = 1                     
+initializeModel = 1
 # Whether to initialize (but not run) the MCMC. If initializeModel = 0, the
 # program will only ensure that the data files (e.g., treefile) can be read
 
-useGlobalSamplingProbability = 1        
+useGlobalSamplingProbability = 1
 # Whether to use a "global" sampling probability. If False (0), expects a file
 # name for species-specific sampling probabilities (see sampleProbsFilename)
-                                        
-globalSamplingFraction = 1.0            
+
+globalSamplingFraction = 1.0
 # The sampling probability. If useGlobalSamplingFraction = 0, this is ignored
 # and BAMM looks for a file name with species-specific sampling fractions
 

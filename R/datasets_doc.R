@@ -42,7 +42,7 @@
 #'  [https://doi_of_Paper_to_provide.html]
 #'
 #' @usage data(Ponerinae_BAMM_object)
-#' @format A list with 18 elements.
+#' @format A list with 21 elements.
 #'
 #' @details An object of class `"bammdata"` containing information of diversification dynamics
 #'   of extant ponerine ants (Ponerinae subfamily) modeled with BAMM.
@@ -70,6 +70,10 @@
 #'   * `$meanTipLambda` Vector of numerical. Mean tip speciation rates across all posterior configurations of tips.
 #'   * `$meanTipMu` Vector of numerical. Mean tip extinction rates across all posterior configurations of tips.
 #'   * `$type` Character string. Set the type of data modeled with BAMM. Here, type = "diversification".
+#'   * `$expectedNumberOfShifts` Integer. The expected number of regime shifts used to set the prior in BAMM.
+#'   * `$MSC_index` Integer. The index of the Maximum Shift Credibility configuration among the posterior samples.
+#'   * `$MSP_tree` Object of class `phylo`. List of 4 elements duplicating information from the Phylogeny-related elements above,
+#'      except `$MSP_tree$edge.length` is recording the Marginal Shift Probability of each branch (i.e., the probability of a regime shift to occur along each branch)
 #'
 #' @docType data
 #' @keywords datasets
@@ -96,7 +100,7 @@
 #'  [https://doi_of_Paper_to_provide.html]
 #'
 #' @usage data(Ponerinae_BAMM_object_10My)
-#' @format A list with 26 elements.
+#' @format A list with 29 elements.
 #'
 #' @details An object of class `"bammdata"` containing information of diversification dynamics
 #'   of extant ponerine ants (Ponerinae subfamily) modeled with BAMM.
@@ -124,6 +128,10 @@
 #'   * `$meanTipLambda` Vector of numerical. Mean tip speciation rates across all posterior configurations of tips.
 #'   * `$meanTipMu` Vector of numerical. Mean tip extinction rates across all posterior configurations of tips.
 #'   * `$type` Character string. Set the type of data modeled with BAMM. Here, type = "diversification".
+#'   * `$expectedNumberOfShifts` Integer. The expected number of regime shifts used to set the prior in BAMM.
+#'   * `$MSC_index` Integer. The index of the Maximum Shift Credibility configuration among the posterior samples.
+#'   * `$MSP_tree` Object of class `phylo`. List of 4 elements duplicating information from the Phylogeny-related elements above,
+#'      except `$MSP_tree$edge.length` is recording the Marginal Shift Probability of each branch (i.e., the probability of a regime shift to occur along each branch)
 #'
 #'   New elements added to provide update information:
 #'   * `$root_age` Integer. Stores the age of the root of the tree.
@@ -258,7 +266,7 @@
 #'  Radiation of extant cetaceans driven by restructuring of the oceans. Systematic Biology, 58, 573-585.
 #'
 #' @usage data(whale_BAMM_object)
-#' @format A list with 18 elements.
+#' @format A list with 21 elements.
 #'
 #' @details An object of class `"bammdata"` containing information of diversification dynamics
 #'   of extant ponerine ants (Ponerinae subfamily) modeled with BAMM.
@@ -286,6 +294,10 @@
 #'   * `$meanTipLambda` Vector of numerical. Mean tip speciation rates across all posterior configurations of tips.
 #'   * `$meanTipMu` Vector of numerical. Mean tip extinction rates across all posterior configurations of tips.
 #'   * `$type` Character string. Set the type of data modeled with BAMM. Here, type = "diversification".
+#'   * `$expectedNumberOfShifts` Integer. The expected number of regime shifts used to set the prior in BAMM.
+#'   * `$MSC_index` Integer. The index of the Maximum Shift Credibility configuration among the posterior samples.
+#'   * `$MSP_tree` Object of class `phylo`. List of 4 elements duplicating information from the Phylogeny-related elements above,
+#'      except `$MSP_tree$edge.length` is recording the Marginal Shift Probability of each branch (i.e., the probability of a regime shift to occur along each branch)
 #'
 #' @docType data
 #' @keywords datasets
@@ -321,7 +333,7 @@
 #' @keywords datasets
 #' @name BAMM_template_diversification
 #'
-#' @references Authors: Daniel Rabosky (BAMM) & Pascal Title ([BAMMtools]). Modified by Maël Doré for [deepSTRAPP].
+#' @references Authors: Daniel Rabosky (BAMM) & Pascal Title ([BAMMtools]). Modified by Maël Doré for deepSTRAPP.
 #' @seealso BAMM software website: \url{http://bamm-project.org/}
 #'
 "BAMM_template_diversification"

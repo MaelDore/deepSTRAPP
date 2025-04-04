@@ -102,6 +102,11 @@
 #'   * `$meanTipLambda` Vector of named numerical. Mean tip speciation rates across all posterior configurations of tips present at `focal_time` (does not includes older fossils).
 #'   * `$meanTipMu` Vector of named numerical. Mean tip extinction rates across all posterior configurations of tips present at `focal_time` (does not includes older fossils).
 #'   * `$type` Character string. Set the type of data modeled with BAMM. Should be "diversification".
+#'   * `$expectedNumberOfShifts` Integer. The expected number of regime shifts used to set the prior in BAMM.
+#'   * `$MSC_index` Integer. The index of the Maximum Shift Credibility configuration among the posterior samples.
+#'   * `$MSP_tree` Object of class `phylo`. List of 4 elements duplicating information from the Phylogeny-related elements above,
+#'      except `$MSP_tree$edge.length` is recording the Marginal Shift Probability of each branch (i.e., the probability of a regime shift to occur along each branch)
+#'      whose origin is older that `focal_time`.
 #'
 #'   New elements added to provide update information:
 #'   * `$root_age` Integer. Stores the age of the root of the tree.
@@ -162,6 +167,29 @@
 #' # Use a new color scheme mapped on the new distribution of rates
 #' BAMMtools::plot.bammdata(Ponerinae_BAMM_object_updated, legend = TRUE) }
 #'
+
+
+# ## Replace BAMMtools::plot.bammdata with plot_BAMM_rates
+#
+# str(Ponerinae_BAMM_object_updated,1)
+#
+# Ponerinae_BAMM_object_10My <- Ponerinae_BAMM_object_updated
+#
+# ## Load results to save time
+# data(Ponerinae_BAMM_object_10My, package = "deepSTRAPP")
+#
+# ## Plot diversification rates and regime shifts on the initial tree
+# plot_BAMM_rates(Ponerinae_BAMM_object, legend = TRUE)
+# abline(v = root_age - focal_time,
+#        col = "red", lty = 2, lwd = 2)
+#
+# ## Plot diversification rates on the updated tree (cut-off for 10 My)
+# # Keep the initial color scheme
+# plot_BAMM_rates(Ponerinae_BAMM_object_10My, legend = TRUE,
+#                 colorbreaks = Ponerinae_BAMM_object_10My$initial_colorbreaks)
+#
+# # Use a new color scheme mapped on the new distribution of rates
+# plot_BAMM_rates(Ponerinae_BAMM_object_10My, legend = TRUE)
 
 
 # # ----- Example 2: Non-ultrametric tree including extinct mammal groups ----- #
@@ -447,6 +475,17 @@ update_rates_and_regimes_for_focal_time <- function (BAMM_object, focal_time,
     # class(updated_tree) <- "phylo"
     # plot(updated_tree)
     # nodelabels()
+
+    # Update the Marginal Shift Probability tree if present
+    if ("MSP_tree" %in% names(updated_BAMM_object))
+    {
+      # Use the topology of the new updated tree
+      updated_BAMM_object$MSP_tree$edge <- updated_BAMM_object$edge
+      updated_BAMM_object$MSP_tree$Nnode <- updated_BAMM_object$Nnode
+      updated_BAMM_object$MSP_tree$tip.label <- updated_BAMM_object$tip.label
+      # Extract edge length (Marginal shift posterior probabilities) for the remaining edges
+      updated_BAMM_object$MSP_tree$edge.length <- updated_BAMM_object$MSP_tree$edge.length[updated_BAMM_object$edges_ID_df$initial_edge_ID]
+    }
   }
 
   ## Updates elements needed to plot a "bammdata" object with plot.bammdata()

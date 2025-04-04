@@ -22,7 +22,7 @@
 modeltype = speciationextinction
 # Specify "speciationextinction" or "trait" analysis
 
-treefile = ./BAMM_outputs/whale_phylogeny.tree
+treefile = ./BAMM_outputs/Ponerinae_phylogeny.tree
 # File name of the phylogenetic tree to be analyzed
 
 runInfoFilename = run_info.txt
@@ -79,22 +79,22 @@ validateEventConfiguration = 1
 # PRIORS
 ################################################################################
 
-expectedNumberOfShifts = 1
+expectedNumberOfShifts = 15
 # prior on the number of shifts in diversification
 # Suggested values: 
 #     expectedNumberOfShifts = 1.0 for small trees (< 500 tips)
 #	  expectedNumberOfShifts = 10 or even 50 for large trees (> 5000 tips) 
  
-lambdaInitPrior = 1.87792388968545
+lambdaInitPrior = 3.72001688603489
 # Prior (rate parameter of exponential) on the initial lambda value for rate
 # regimes
 
-lambdaShiftPrior = 0.0324996298762062
+lambdaShiftPrior = 0.00931837271494848
 # Prior (std dev of normal) on lambda shift parameter for rate regimes
 # You cannot adjust the mean of this distribution (fixed at zero, which is
 # equal to a constant rate diversification process)
 
-muInitPrior = 1.87792388968545
+muInitPrior = 3.72001688603489
 # Prior (rate parameter of exponential) on extinction rates  
 
 lambdaIsTimeVariablePrior = 1
@@ -105,14 +105,14 @@ lambdaIsTimeVariablePrior = 1
 # MCMC SIMULATION SETTINGS & OUTPUT OPTIONS
 ################################################################################
 
-numberOfGenerations = 100000
+numberOfGenerations = 10000
 # Number of generations to perform MCMC simulation
 
 mcmcOutfile = mcmc_log.txt
 # File name for the MCMC output, which only includes summary information about
 # MCMC simulation (e.g., log-likelihoods, log-prior, number of processes)
 
-mcmcWriteFreq = 50
+mcmcWriteFreq = 5
 # Frequency in which to write the MCMC output to a file
 
 eventDataOutfile = event_data.txt
@@ -121,7 +121,7 @@ eventDataOutfile = event_data.txt
 # positions, marginal distributions etc can be reconstructed from this output.
 # See R package BAMMtools for working with this output
 
-eventDataWriteFreq = 50
+eventDataWriteFreq = 5
 # Frequency in which to write the event data to a file
 
 printFreq = 1000
@@ -139,7 +139,7 @@ acceptanceResetFreq = 500
 # Frequency in which to reset the acceptance rate calculation
 # The acceptance rate is output to both the MCMC data file and the screen
 
-outName = whale
+outName = Ponerinae
 # Optional name that will be prefixed on all output files (separated with "_")
 # If commented out, no prefix will be used
 
@@ -204,16 +204,16 @@ localGlobalMoveRatio = 10
 # INITIAL PARAMETER VALUES
 ################################################################################
 
-lambdaInit0 = 0.104708635808267
+lambdaInit0 = 0.156782722146671
 # Initial speciation rate (at the root of the tree)
 
 lambdaShift0 = 0
 # Initial shift parameter for the root process
 
-muInit0 = 0
+muInit0 = 0.0886505657072102
 # Initial value of extinction (at the root)
 
-initialNumberEvents = 0
+initialNumberEvents = 0.0886505657072102
 # Initial number of non-root processes
  
 

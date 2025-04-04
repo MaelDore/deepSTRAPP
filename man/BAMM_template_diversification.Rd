@@ -25,7 +25,7 @@ It is called internally by \code{\link[=prepare_diversification_data]{prepare_di
 the custom 'config_file' used in the subsequent BAMM run.
 }
 \references{
-Authors: Daniel Rabosky (BAMM) & Pascal Title (\link{BAMMtools}). Modified by Maël Doré for \link{deepSTRAPP}.
+Authors: Daniel Rabosky (BAMM) & Pascal Title (\link{BAMMtools}). Modified by Maël Doré for deepSTRAPP.
 }
 \seealso{
 BAMM software website: \url{http://bamm-project.org/}
