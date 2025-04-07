@@ -102,11 +102,16 @@
 #'   * `$meanTipLambda` Vector of named numerical. Mean tip speciation rates across all posterior configurations of tips present at `focal_time` (does not includes older fossils).
 #'   * `$meanTipMu` Vector of named numerical. Mean tip extinction rates across all posterior configurations of tips present at `focal_time` (does not includes older fossils).
 #'   * `$type` Character string. Set the type of data modeled with BAMM. Should be "diversification".
+#'
+#'   Additional elements providing key information for downstream analyses:
 #'   * `$expectedNumberOfShifts` Integer. The expected number of regime shifts used to set the prior in BAMM.
 #'   * `$MSC_index` Integer. The index of the Maximum Shift Credibility configuration among the posterior samples.
 #'   * `$MSP_tree` Object of class `phylo`. List of 4 elements duplicating information from the Phylogeny-related elements above,
 #'      except `$MSP_tree$edge.length` is recording the Marginal Shift Probability of each branch (i.e., the probability of a regime shift to occur along each branch)
 #'      whose origin is older that `focal_time`.
+#'   * `$MAP_BAMM_object`. List of 18 elements of class `"bammdata" recording the mean rates and regime shift locations found across
+#'      the Maximum A Posteriori probability (MAP) configuration. All BAMM elements summarizing diversification data holds a single entry describing this
+#'      the mean diversification history, updated for the `focal_time`.
 #'
 #'   New elements added to provide update information:
 #'   * `$root_age` Integer. Stores the age of the root of the tree.
@@ -132,12 +137,12 @@
 #' ## Load the BAMM_object summarizing 1000 posterior samples of BAMM
 #' data(Ponerinae_BAMM_object, package = "deepSTRAPP")
 #'
-#' ## Set focal-time to 10 My
-#' focal_time = 10
+#' ## Set focal-time to 25 My
+#' focal_time = 25
 #'
 #' \dontrun{
 #' ## Update the BAMM object (May take several minutes to run)
-#' Ponerinae_BAMM_object_updated <- update_rates_and_regimes_for_focal_time(
+#' Ponerinae_BAMM_object_25My <- update_rates_and_regimes_for_focal_time(
 #'   BAMM_object = Ponerinae_BAMM_object,
 #'   focal_time = focal_time,
 #'   update_rates = TRUE, update_regimes = TRUE,
@@ -145,6 +150,9 @@
 #'   update_all_elements = TRUE,
 #'   keep_tip_labels = TRUE,
 #'   verbose = TRUE) }
+#'
+#' ## Load results to save time
+#' data(Ponerinae_BAMM_object_25My, package = "deepSTRAPP")
 #'
 #' ## Extract root age
 #' # Add temporarily the "phylo" class to be compatible with phytools::nodeHeights()
@@ -158,38 +166,78 @@
 #' abline(v = root_age - focal_time,
 #'        col = "red", lty = 2, lwd = 2)
 #'
-#' \dontrun{
-#' ## Plot diversification rates on the updated tree (cut-off for 10 My)
+#' ## Plot diversification rates on the updated tree (cut-off for 25 My)
 #' # Keep the initial color scheme
-#' BAMMtools::plot.bammdata(Ponerinae_BAMM_object_updated, legend = TRUE,
-#'                          colorbreaks = Ponerinae_BAMM_object_updated$initial_colorbreaks)
+#' BAMMtools::plot.bammdata(Ponerinae_BAMM_object_25My, legend = TRUE,
+#'                          colorbreaks = Ponerinae_BAMM_object_25My$initial_colorbreaks)
 #'
 #' # Use a new color scheme mapped on the new distribution of rates
-#' BAMMtools::plot.bammdata(Ponerinae_BAMM_object_updated, legend = TRUE) }
+#' BAMMtools::plot.bammdata(Ponerinae_BAMM_object_25My, legend = TRUE)
 #'
 
 
 # ## Replace BAMMtools::plot.bammdata with plot_BAMM_rates
 #
-# str(Ponerinae_BAMM_object_updated,1)
-#
-# Ponerinae_BAMM_object_10My <- Ponerinae_BAMM_object_updated
-#
 # ## Load results to save time
 # data(Ponerinae_BAMM_object_10My, package = "deepSTRAPP")
+# data(Ponerinae_BAMM_object_25My, package = "deepSTRAPP")
 #
 # ## Plot diversification rates and regime shifts on the initial tree
 # plot_BAMM_rates(Ponerinae_BAMM_object, legend = TRUE)
-# abline(v = root_age - focal_time,
+# abline(v = 124 - 25,
 #        col = "red", lty = 2, lwd = 2)
 #
-# ## Plot diversification rates on the updated tree (cut-off for 10 My)
+# ## Plot diversification rates on the updated tree (cut-off for 25 My)
 # # Keep the initial color scheme
-# plot_BAMM_rates(Ponerinae_BAMM_object_10My, legend = TRUE,
+# plot_BAMM_rates(Ponerinae_BAMM_object_25My, legend = TRUE,
 #                 colorbreaks = Ponerinae_BAMM_object_10My$initial_colorbreaks)
 #
 # # Use a new color scheme mapped on the new distribution of rates
-# plot_BAMM_rates(Ponerinae_BAMM_object_10My, legend = TRUE)
+# plot_BAMM_rates(Ponerinae_BAMM_object_25My, legend = TRUE)
+
+
+whale_BAMM_object_25My <- update_rates_and_regimes_for_focal_time(
+  BAMM_object = whale_BAMM_object,
+  focal_time = 5,
+  update_rates = TRUE, update_regimes = TRUE,
+  update_tree = TRUE, update_plot = TRUE,
+  update_all_elements = TRUE,
+  keep_tip_labels = TRUE,
+  verbose = TRUE)
+
+str(whale_BAMM_object, max.level = 1)
+str(whale_BAMM_object$MAP_BAMM_object, max.level = 1)
+str(whale_BAMM_object_25My, max.level = 1)
+str(whale_BAMM_object_25My$MSP_tree, max.level = 1)
+str(whale_BAMM_object_25My$MAP_BAMM_object, max.level = 1)
+
+plot.bammdata(whale_BAMM_object$MAP_BAMM_object)
+BAMMtools::addBAMMshifts(whale_BAMM_object$MAP_BAMM_object,
+                         cex = 2)
+plot.bammdata(whale_BAMM_object_25My$MAP_BAMM_object,
+              colorbreaks = whale_BAMM_object_25My$MAP_BAMM_object$initial_colorbreaks)
+BAMMtools::addBAMMshifts(whale_BAMM_object_25My$MAP_BAMM_object,
+                         cex = 2)
+ape::nodelabels(text = whale_BAMM_object_25My$nodes_ID_df$initial_node_ID[(length(whale_BAMM_object_25My$tip.label)+1):nrow(whale_BAMM_object_25My$nodes_ID_df)])
+
+whale_BAMM_object$MAP_BAMM_object$eventData
+whale_BAMM_object_25My$MAP_BAMM_object$eventData
+
+plot_BAMM_rates(whale_BAMM_object_25My, show_regime_shifts = TRUE,
+                configuration_type = "MAP",
+                regimes_size = 2, bg = "black")
+
+plot_BAMM_rates(whale_BAMM_object_25My$MAP_BAMM_object, show_regime_shifts = TRUE,
+                configuration_type = "MAP",
+                regimes_size = 2, bg = "black")
+
+# Weird color on tips.
+# Issue with dtrates when cut?
+
+str(Ponerinae_BAMM_object$eventBranchSegs[[1]])
+
+### Do the same for MSC after getting the mean values among equal configs, instead of saving the MSC_index
+
 
 
 # # ----- Example 2: Non-ultrametric tree including extinct mammal groups ----- #
@@ -452,7 +500,7 @@ update_rates_and_regimes_for_focal_time <- function (BAMM_object, focal_time,
         names(tipMu_i) <- all_edges_df$tipward_node_ID[all_edges_df$time_test]
       }
 
-      # Store updated tipStates
+      # Store updated tipLambda & tipMu
       updated_BAMM_object$tipLambda[[i]] <- tipLambda_i
       updated_BAMM_object$tipMu[[i]] <- tipMu_i
     }
@@ -475,17 +523,6 @@ update_rates_and_regimes_for_focal_time <- function (BAMM_object, focal_time,
     # class(updated_tree) <- "phylo"
     # plot(updated_tree)
     # nodelabels()
-
-    # Update the Marginal Shift Probability tree if present
-    if ("MSP_tree" %in% names(updated_BAMM_object))
-    {
-      # Use the topology of the new updated tree
-      updated_BAMM_object$MSP_tree$edge <- updated_BAMM_object$edge
-      updated_BAMM_object$MSP_tree$Nnode <- updated_BAMM_object$Nnode
-      updated_BAMM_object$MSP_tree$tip.label <- updated_BAMM_object$tip.label
-      # Extract edge length (Marginal shift posterior probabilities) for the remaining edges
-      updated_BAMM_object$MSP_tree$edge.length <- updated_BAMM_object$MSP_tree$edge.length[updated_BAMM_object$edges_ID_df$initial_edge_ID]
-    }
   }
 
   ## Updates elements needed to plot a "bammdata" object with plot.bammdata()
@@ -564,6 +601,198 @@ update_rates_and_regimes_for_focal_time <- function (BAMM_object, focal_time,
     # plot.bammdata(BAMM_object, legend = TRUE)
     # plot.bammdata(updated_BAMM_object, legend = TRUE)
     # plot.bammdata(updated_BAMM_object, legend = TRUE, colorbreaks = updated_BAMM_object$initial_colorbreaks)
+
+    # Update the Marginal Shift Probability tree if present (used to plot regime shifts)
+    if ("MSP_tree" %in% names(updated_BAMM_object))
+    {
+      # Use the topology of the new updated tree
+      updated_BAMM_object$MSP_tree$edge <- updated_BAMM_object$edge
+      updated_BAMM_object$MSP_tree$Nnode <- updated_BAMM_object$Nnode
+      updated_BAMM_object$MSP_tree$tip.label <- updated_BAMM_object$tip.label
+      # Extract edge length (Marginal shift posterior probabilities) for the remaining edges
+      updated_BAMM_object$MSP_tree$edge.length <- updated_BAMM_object$MSP_tree$edge.length[updated_BAMM_object$edges_ID_df$initial_edge_ID]
+    }
+
+    ## Update the BAMM_object for the Maximum A Posteriori probability (MAP) configuration if present (used to plot regime shifts)
+    if ("MAP_BAMM_object" %in% names(updated_BAMM_object))
+    {
+      ## Add "phylo" class to be compatible with phytools::getDescendants()
+      class(updated_BAMM_object$MAP_BAMM_object) <- unique(c(class(updated_BAMM_object$MAP_BAMM_object), "phylo"))
+
+      ## Use the $MAP_BAMM_object following updates from the main BAMM_object
+      updated_BAMM_object$MAP_BAMM_object$edge <- updated_BAMM_object$edge
+      updated_BAMM_object$MAP_BAMM_object$Nnode <- updated_BAMM_object$Nnode
+      updated_BAMM_object$MAP_BAMM_object$tip.label <- updated_BAMM_object$tip.label
+      updated_BAMM_object$MAP_BAMM_object$edge.length <- updated_BAMM_object$edge.length
+      updated_BAMM_object$MAP_BAMM_object$begin <- updated_BAMM_object$begin
+      updated_BAMM_object$MAP_BAMM_object$end <- updated_BAMM_object$end
+
+      ## Update information according to 'focal_type'
+
+      ## $eventVectors
+      ## $eventVectors = List of integer vectors of regime membership per branches in each posterior configuration
+      updated_BAMM_object$MAP_BAMM_object$eventVectors[[1]] <- updated_BAMM_object$MAP_BAMM_object$eventVectors[[1]][updated_BAMM_object$edges_ID_df$initial_edge_ID]
+
+      ## $tipStates
+      # Extract eventData records = Macroevolutionary regime parameters
+      MAP_eventData <- updated_BAMM_object$MAP_BAMM_object$eventData[[1]]
+      # Compute updated regime age and length
+      MAP_eventData$age <- root_age - MAP_eventData$time
+      MAP_eventData$updated_length <- MAP_eventData$age - focal_time
+      # Identify edge ID per regimes
+      # Loop per regime
+      for (j in 1:nrow(MAP_eventData))
+      {
+        # j <- 2
+
+        tipward_node_ID_j <- MAP_eventData$node[j] # Nodes are tipward nodes ID of the branch where the regime starts
+
+        # Get descendant tipward nodes of regime j
+        regime_nodes_j <- phytools::getDescendants(tree = updated_BAMM_object$MAP_BAMM_object, node = tipward_node_ID_j)
+
+        # Assign regime ID
+        all_edges_df$regime_ID[all_edges_df$tipward_node_ID %in% regime_nodes_j] <- j
+
+        # Deal with special case of the edge where the process starts
+        # Should the edge where the process starts be included in the regime at the focal time?
+        if (j != 1) # No need for the root process
+        {
+          # Identify the starting edge
+          starting_edge_j <- as.numeric(all_edges_df$edge_ID[all_edges_df$tipward_node_ID == tipward_node_ID_j])
+
+          # Get relative position of the regime shift
+          relative_position_shift_j <- all_edges_df$rootward_node_age[starting_edge_j] - MAP_eventData$age[j]
+          # Assign starting edge to process only if the regime shift happen before the time cut
+          if (relative_position_shift_j < all_edges_df$length[starting_edge_j])
+          {
+            all_edges_df$regime_ID[starting_edge_j] <- j
+          }
+        }
+      }
+      # Filter regimes for tips that are present at the focal time
+      MAP_tipStates <- all_edges_df$regime_ID[all_edges_df$time_test]
+      # Name tip regimes with tip.labels/tipward_edge_ID
+      if (keep_tip_labels)
+      {
+        names(MAP_tipStates) <- all_edges_df$tip.label[all_edges_df$time_test]
+      } else {
+        names(MAP_tipStates) <- all_edges_df$tipward_node_ID[all_edges_df$time_test]
+      }
+      # Store updated tipStates
+      updated_BAMM_object$MAP_BAMM_object$tipStates[[1]] <- MAP_tipStates
+
+      ## $tipLambda & $tipMu
+      MAP_eventData$tip_speciation_rates <- NA
+      MAP_eventData$tip_extinction_rates <- NA
+      # Loop per regime
+      for (j in 1:nrow(MAP_eventData))
+      {
+        # Compute new tip speciation rates based on regime parameters
+        lambda_0_j <- MAP_eventData$lam1[j]
+        alpha_j <- MAP_eventData$lam2[j]
+        time_j <- MAP_eventData$updated_length[j]
+
+        if (alpha_j <= 0) # If alpha <= 0 (decrease): lambda_t = lambda_0 * exp(alpha*t)
+        {
+          MAP_eventData$tip_speciation_rates[j] <- lambda_0_j * exp(alpha_j*time_j)
+        } else { # If alpha > 0 (increase): lambda_t = lambda_0 * (2 - exp(-alpha*t))
+          MAP_eventData$tip_speciation_rates[j] <- lambda_0_j * (2 - exp(-alpha_j*time_j))
+        }
+
+        # Compute new tip extinction rates based on regime parameters
+        # All extinction rates are constant within regime in the current BAMM settings
+        MAP_eventData$tip_extinction_rates[j] <- MAP_eventData$mu1[j]
+        if (time_j < 0)
+        {
+          MAP_eventData$tip_speciation_rates[j] <- NA
+          MAP_eventData$tip_extinction_rates[j] <- NA
+        }
+      }
+
+      # Assign rates to edge according to regime ID
+      all_edges_df$tipLambda <- NA
+      all_edges_df$tipLambda <- MAP_eventData$tip_speciation_rates[match(x = all_edges_df$regime_ID, table = MAP_eventData$index)]
+      all_edges_df$tipMu <- NA
+      all_edges_df$tipMu <- MAP_eventData$tip_extinction_rates[match(x = all_edges_df$regime_ID, table = MAP_eventData$index)]
+
+      # Filter regimes for tips that are present at the focal time
+      MAP_tipLambda <- all_edges_df$tipLambda[all_edges_df$time_test]
+      MAP_tipMu <- all_edges_df$tipMu[all_edges_df$time_test]
+
+      # Name tip regimes with tip.labels/tipward_edge_ID
+      if (keep_tip_labels)
+      {
+        names(MAP_tipLambda) <- all_edges_df$tip.label[all_edges_df$time_test]
+        names(MAP_tipMu) <- all_edges_df$tip.label[all_edges_df$time_test]
+      } else {
+        names(MAP_tipLambda) <- all_edges_df$tipward_node_ID[all_edges_df$time_test]
+        names(MAP_tipMu) <- all_edges_df$tipward_node_ID[all_edges_df$time_test]
+      }
+
+      # Store updated tipLambda & tipMu
+      updated_BAMM_object$MAP_BAMM_object$tipLambda[[1]] <- MAP_tipLambda
+      updated_BAMM_object$MAP_BAMM_object$tipMu[[1]] <- MAP_tipMu
+
+      ## $eventData # Dataframe recording shift events and macroevolutionary regimes in the focal posterior configuration. 1st line = Background root regime
+      # Filter to keep only events that happened before focal_time
+      MAP_eventData <- updated_BAMM_object$MAP_BAMM_object$eventData[[1]]
+      MAP_eventData <- MAP_eventData[((root_age - MAP_eventData$time) > focal_time), ]
+      # Update tipward nodes ID
+      MAP_eventData$node <- updated_BAMM_object$nodes_ID_df$new_node_ID[match(MAP_eventData$node, updated_BAMM_object$nodes_ID_df$initial_node_ID)]
+      # Store updated df of macroevolutionary regimes
+      updated_BAMM_object$MAP_BAMM_object$eventData[[1]] <- MAP_eventData
+
+      ## $eventBranchSegs
+      # Extract matrix of branch segments
+      MAP_eventBranchSegs <- updated_BAMM_object$MAP_BAMM_object$eventBranchSegs[[1]]
+      # Remove segments that are younger than focal_time
+      MAP_eventBranchSegs <- MAP_eventBranchSegs[(root_age - MAP_eventBranchSegs[,2] > focal_time), ]
+
+      # Update tipward nodes ID
+      MAP_eventBranchSegs[ ,1] <- updated_BAMM_object$nodes_ID_df$new_node_ID[match(MAP_eventBranchSegs[ ,1], updated_BAMM_object$nodes_ID_df$initial_node_ID)]
+      # Reorder following tipward nodes ID, then older segments > younger segments
+      MAP_eventBranchSegs <- MAP_eventBranchSegs[order(MAP_eventBranchSegs[ ,1], MAP_eventBranchSegs[ ,2]), ]
+
+      # Store updated matrix of branch segments
+      updated_BAMM_object$eventBranchSegs[[1]] <- MAP_eventBranchSegs
+
+      ## Use the $MAP_BAMM_object following updates from the main BAMM_object
+      updated_BAMM_object$MAP_BAMM_object$type <- updated_BAMM_object$type
+
+      ## Create $dtRates and update it such as it contains only rates for segments older than the focal_time
+      # Needed to keep consistency with estimated rates and color scheme used in BAMMtools::plot.bammdata
+
+      # Get initial dtrates
+      dtrates_t0 <- BAMMtools::dtRates(BAMM_object$MAP_BAMM_object, tau = 0.01, tmat = TRUE)$dtrates
+
+      # Find segments to remove segments that are younger than the focal_time
+      dtrates_segments_to_remove <- dtrates_t0$tmat[ , 2] >= (root_age - focal_time)
+
+      # Update dtrates to remove segments that are older than the focal_time
+      MAP_dtrates <- dtrates_t0
+      MAP_dtrates$rates <- lapply(X = MAP_dtrates$rates, FUN = function (x) { y <-  x[!dtrates_segments_to_remove]} )
+      MAP_dtrates$tmat <- MAP_dtrates$tmat[!dtrates_segments_to_remove,]
+
+      # Update tipward nodes ID in dtrates
+      MAP_dtrates$tmat[ ,1] <- updated_BAMM_object$nodes_ID_df$new_node_ID[match(MAP_dtrates$tmat[ ,1], updated_BAMM_object$nodes_ID_df$initial_node_ID)]
+      # Update dimnames
+      attr(MAP_dtrates$tmat, which = "dimnames")[[1]] <- as.character(1:nrow(MAP_dtrates$tmat))
+      # Update tau as the fraction of the total tree length represented by each segment
+      new_depth <- (root_age - focal_time)
+      depth_ratio <- new_depth/root_age
+      MAP_dtrates$tau <- MAP_dtrates$tau/depth_ratio
+
+      # Store updated $dtrates
+      updated_BAMM_object$MAP_BAMM_object$dtrates <- MAP_dtrates
+
+      ## Save initial_colorbreaks to use as colorbreaks in order to match color gradients from the initial full phylogeny
+      initial_plot <- BAMMtools::plot.bammdata(BAMM_object$MAP_BAMM_object, legend = TRUE, show = FALSE)
+      # updated_BAMM_object$initial_colorbreaks_range <- range(initial_plot$colorbreaks)
+      updated_BAMM_object$MAP_BAMM_object$initial_colorbreaks <- initial_plot$colorbreaks
+
+      # Remove temporary "phylo" class
+      class(updated_BAMM_object$MAP_BAMM_object) <- setdiff(class(updated_BAMM_object$MAP_BAMM_object), "phylo")
+    }
   }
 
   if (update_all_elements)
@@ -623,6 +852,40 @@ update_rates_and_regimes_for_focal_time <- function (BAMM_object, focal_time,
     }
     # Store updated tipMu
     updated_BAMM_object$meanTipMu <- updated_meanTipMu
+
+    ## Update the BAMM_object for the Maximum A Posteriori probability (MAP) configuration if present (used to plot regime shifts)
+    if ("MAP_BAMM_object" %in% names(updated_BAMM_object))
+    {
+      # Update $downseq & $lastvisit from the main BAMM_object
+      updated_BAMM_object$MAP_BAMM_object$downseq <- updated_BAMM_object$downseq
+      updated_BAMM_object$MAP_BAMM_object$lastvisit <- updated_BAMM_object$lastvisit
+
+      # Update $eventVectors by extracting information of remaning branches only
+      updated_BAMM_object$MAP_BAMM_object$eventVectors[[1]] <- updated_BAMM_object$MAP_BAMM_object$eventVectors[[1]][updated_BAMM_object$edges_ID_df$initial_edge_ID]
+
+      ## Update $numberEvents from $eventBranchSegs
+      updated_BAMM_object$numberEvents <- length(unique(updated_BAMM_object$MAP_BAMM_object$eventBranchSegs[[1]][, 4]))
+
+      ## Update $meanTipLambda and $meanTipMu as in $TipLambda and $TipMu
+      updated_BAMM_object$MAP_BAMM_object$meanTipLambda <- updated_BAMM_object$MAP_BAMM_object$tipLambda[[1]]
+      updated_BAMM_object$MAP_BAMM_object$meanTipMu <- updated_BAMM_object$MAP_BAMM_object$tipMu[[1]]
+
+      ## Reorder elements to fit order in the main BAMM_object
+      if ("node.label" %in% names(updated_BAMM_object$MAP_BAMM_object))
+      {
+        updated_BAMM_object$MAP_BAMM_object <- updated_BAMM_object$MAP_BAMM_object[c("edge", "Nnode", "tip.label", "edge.length", "node.label",
+            "begin", "end", "downseq", "lastvisit", "numberEvents", "eventData",
+            "eventVectors", "tipStates", "tipLambda", "tipMu", "eventBranchSegs",
+            "meanTipLambda", "meanTipMu", "type", "dtrates", "initial_colorbreaks")]
+      } else {
+        updated_BAMM_object$MAP_BAMM_object <- updated_BAMM_object$MAP_BAMM_object[c("edge", "Nnode", "tip.label", "edge.length",
+            "begin", "end", "downseq", "lastvisit", "numberEvents", "eventData",
+            "eventVectors", "tipStates", "tipLambda", "tipMu", "eventBranchSegs",
+            "meanTipLambda", "meanTipMu", "type", "dtrates", "initial_colorbreaks")]
+      }
+      class(updated_BAMM_object$MAP_BAMM_object) <- "bammdata"
+      attr(x = updated_BAMM_object$MAP_BAMM_object, which = "order") <- "cladewise"
+    }
   }
 
   # Inform focal time

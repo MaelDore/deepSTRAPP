@@ -1,7 +1,7 @@
 Command line: D:\Mael_D\R_projects\deepSTRAPP\software\bamm-2.5.0\bamm.exe -c ./BAMM_outputs/whale_config_file.txt
 Git commit id: 462bc39af9d4c4b4dd81a481f32c953e93a076e7
-Random seed: 1743783175
-Start time: Fri Apr 04 18:12:55 2025
+Random seed: 1743868426
+Start time: Sat Apr 05 17:53:46 2025
 
 Current parameter settings:
        acceptanceInfoFileName    whale_acceptance_info.txt
@@ -90,5 +90,5 @@ updateRateEventNumberForBranch    0.0
  useGlobalSamplingProbability    1
    validateEventConfiguration    1
    writeMeanBranchLengthTrees    0
-End time: Fri Apr 04 18:13:03 2025
+End time: Sat Apr 05 17:53:54 2025
 
