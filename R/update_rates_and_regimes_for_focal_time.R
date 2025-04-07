@@ -175,6 +175,8 @@
 #' BAMMtools::plot.bammdata(Ponerinae_BAMM_object_25My, legend = TRUE)
 #'
 
+## If adding dtrates in the output
+
 
 # ## Replace BAMMtools::plot.bammdata with plot_BAMM_rates
 #
@@ -196,7 +198,7 @@
 # plot_BAMM_rates(Ponerinae_BAMM_object_25My, legend = TRUE)
 
 
-whale_BAMM_object_25My <- update_rates_and_regimes_for_focal_time(
+whale_BAMM_object_5My <- update_rates_and_regimes_for_focal_time(
   BAMM_object = whale_BAMM_object,
   focal_time = 5,
   update_rates = TRUE, update_regimes = TRUE,
@@ -207,37 +209,33 @@ whale_BAMM_object_25My <- update_rates_and_regimes_for_focal_time(
 
 str(whale_BAMM_object, max.level = 1)
 str(whale_BAMM_object$MAP_BAMM_object, max.level = 1)
-str(whale_BAMM_object_25My, max.level = 1)
-str(whale_BAMM_object_25My$MSP_tree, max.level = 1)
-str(whale_BAMM_object_25My$MAP_BAMM_object, max.level = 1)
+str(whale_BAMM_object_5My, max.level = 1)
+str(whale_BAMM_object_5My$MSP_tree, max.level = 1)
+str(whale_BAMM_object_5My$MAP_BAMM_object, max.level = 1)
 
-plot.bammdata(whale_BAMM_object$MAP_BAMM_object)
-BAMMtools::addBAMMshifts(whale_BAMM_object$MAP_BAMM_object,
-                         cex = 2)
-plot.bammdata(whale_BAMM_object_25My$MAP_BAMM_object,
-              colorbreaks = whale_BAMM_object_25My$MAP_BAMM_object$initial_colorbreaks)
-BAMMtools::addBAMMshifts(whale_BAMM_object_25My$MAP_BAMM_object,
-                         cex = 2)
-ape::nodelabels(text = whale_BAMM_object_25My$nodes_ID_df$initial_node_ID[(length(whale_BAMM_object_25My$tip.label)+1):nrow(whale_BAMM_object_25My$nodes_ID_df)])
-
-whale_BAMM_object$MAP_BAMM_object$eventData
-whale_BAMM_object_25My$MAP_BAMM_object$eventData
-
-plot_BAMM_rates(whale_BAMM_object_25My, show_regime_shifts = TRUE,
+plot_BAMM_rates(whale_BAMM_object, show_regime_shifts = TRUE,
                 configuration_type = "MAP",
                 regimes_size = 2, bg = "black")
 
-plot_BAMM_rates(whale_BAMM_object_25My$MAP_BAMM_object, show_regime_shifts = TRUE,
+plot_BAMM_rates(whale_BAMM_object_5My, show_regime_shifts = TRUE,
                 configuration_type = "MAP",
                 regimes_size = 2, bg = "black")
 
-# Weird color on tips.
-# Issue with dtrates when cut?
 
-str(Ponerinae_BAMM_object$eventBranchSegs[[1]])
+plot_BAMM_rates(whale_BAMM_object$MAP_BAMM_object, show_regime_shifts = TRUE,
+                configuration_type = "index",
+                regimes_size = 2, bg = "black")
+
+plot_BAMM_rates(whale_BAMM_object_5My$MAP_BAMM_object, show_regime_shifts = TRUE,
+                configuration_type = "index",
+                regimes_size = 2, bg = "black")
+
 
 ### Do the same for MSC after getting the mean values among equal configs, instead of saving the MSC_index
 
+### Issue with reset of par() ?
+
+MAP_dtrates <- BAMMtools::dtRates(whale_BAMM_object_5My$MAP_BAMM_object, tau = 0.01, tmat = TRUE)$dtrates
 
 
 # # ----- Example 2: Non-ultrametric tree including extinct mammal groups ----- #
@@ -567,30 +565,38 @@ update_rates_and_regimes_for_focal_time <- function (BAMM_object, focal_time,
     # all(updated_nb_segments == (nrow(updated_BAMM_object$edge) + (updated_nb_regimes - 1)))
 
     ## Create $dtRates and update it such as it contains only rates for segments older than the focal_time
-    # Needed to keep consistency with estimated rates and color scheme used in BAMMtools::plot.bammdata
+    # Can be used to keep consistency with estimated rates and color scheme used in BAMMtools::plot.bammdata
 
-    # Get initial dtrates
-    dtrates_t0 <- BAMMtools::dtRates(BAMM_object, tau = 0.01, tmat = TRUE)$dtrates
-
-    # Find segments to remove segments that are younger than the focal_time
-    dtrates_segments_to_remove <- dtrates_t0$tmat[ , 2] >= (root_age - focal_time)
-
-    # Update dtrates to remove segments that are older than the focal_time
-    updated_dtrates <- dtrates_t0
-    updated_dtrates$rates <- lapply(X = updated_dtrates$rates, FUN = function (x) { y <-  x[!dtrates_segments_to_remove]} )
-    updated_dtrates$tmat <- updated_dtrates$tmat[!dtrates_segments_to_remove,]
-
-    # Update tipward nodes ID in dtrates
-    updated_dtrates$tmat[ ,1] <- updated_BAMM_object$nodes_ID_df$new_node_ID[match(updated_dtrates$tmat[ ,1], updated_BAMM_object$nodes_ID_df$initial_node_ID)]
-    # Update dimnames
-    attr(updated_dtrates$tmat, which = "dimnames")[[1]] <- as.character(1:nrow(updated_dtrates$tmat))
-    # Update tau as the fraction of the total tree length represented by each segment
-    new_depth <- (root_age - focal_time)
-    depth_ratio <- new_depth/root_age
-    updated_dtrates$tau <- updated_dtrates$tau/depth_ratio
-
-    # Store updated $dtrates
+    ## New version. Works but not sure why...
+    updated_dtrates <- BAMMtools::dtRates(updated_BAMM_object, tau = 0.01, tmat = TRUE)$dtrates
     updated_BAMM_object$dtrates <- updated_dtrates
+
+    # ## Former 'manual' version that ensure segments to be similar, but creates artifacts on the terminal segments (not sure why...)
+    # # Get initial dtrates
+    # dtrates_t0 <- BAMMtools::dtRates(BAMM_object, tau = 0.01, tmat = TRUE)$dtrates
+    #
+    # # Find segments to remove segments that are younger than the focal_time
+    # dtrates_segments_to_remove <- dtrates_t0$tmat[ , 2] >= (root_age - focal_time)
+    #
+    # # Update dtrates to remove segments that are older than the focal_time
+    # updated_dtrates <- dtrates_t0
+    # updated_dtrates$rates <- lapply(X = updated_dtrates$rates, FUN = function (x) { y <-  x[!dtrates_segments_to_remove]} )
+    # updated_dtrates$tmat <- updated_dtrates$tmat[!dtrates_segments_to_remove,]
+    #
+    # # Update dtrates$tmat to set distance to root of the terminal segments according to the focal_time
+    # updated_dtrates$tmat[(updated_dtrates$tmat[ ,3] > (root_age - focal_time)), 3] <- (root_age - focal_time)
+    #
+    # # Update tipward nodes ID in dtrates
+    # updated_dtrates$tmat[ ,1] <- updated_BAMM_object$nodes_ID_df$new_node_ID[match(updated_dtrates$tmat[ ,1], updated_BAMM_object$nodes_ID_df$initial_node_ID)]
+    # # Update dimnames
+    # attr(updated_dtrates$tmat, which = "dimnames")[[1]] <- as.character(1:nrow(updated_dtrates$tmat))
+    # # Update tau as the fraction of the total tree length represented by each segment
+    # new_depth <- (root_age - focal_time)
+    # depth_ratio <- new_depth/root_age
+    # updated_dtrates$tau <- updated_dtrates$tau/depth_ratio
+    #
+    # # Store updated $dtrates
+    # updated_BAMM_object$dtrates <- updated_dtrates
 
     ## Save initial_colorbreaks to use as colorbreaks in order to match color gradients from the initial full phylogeny
     initial_plot <- BAMMtools::plot.bammdata(BAMM_object, legend = TRUE, show = FALSE)
@@ -754,36 +760,42 @@ update_rates_and_regimes_for_focal_time <- function (BAMM_object, focal_time,
       MAP_eventBranchSegs <- MAP_eventBranchSegs[order(MAP_eventBranchSegs[ ,1], MAP_eventBranchSegs[ ,2]), ]
 
       # Store updated matrix of branch segments
-      updated_BAMM_object$eventBranchSegs[[1]] <- MAP_eventBranchSegs
+      updated_BAMM_object$MAP_BAMM_object$eventBranchSegs[[1]] <- MAP_eventBranchSegs
 
       ## Use the $MAP_BAMM_object following updates from the main BAMM_object
       updated_BAMM_object$MAP_BAMM_object$type <- updated_BAMM_object$type
 
       ## Create $dtRates and update it such as it contains only rates for segments older than the focal_time
-      # Needed to keep consistency with estimated rates and color scheme used in BAMMtools::plot.bammdata
+      # Can be used to keep consistency with estimated rates and color scheme used in BAMMtools::plot.bammdata
 
-      # Get initial dtrates
-      dtrates_t0 <- BAMMtools::dtRates(BAMM_object$MAP_BAMM_object, tau = 0.01, tmat = TRUE)$dtrates
-
-      # Find segments to remove segments that are younger than the focal_time
-      dtrates_segments_to_remove <- dtrates_t0$tmat[ , 2] >= (root_age - focal_time)
-
-      # Update dtrates to remove segments that are older than the focal_time
-      MAP_dtrates <- dtrates_t0
-      MAP_dtrates$rates <- lapply(X = MAP_dtrates$rates, FUN = function (x) { y <-  x[!dtrates_segments_to_remove]} )
-      MAP_dtrates$tmat <- MAP_dtrates$tmat[!dtrates_segments_to_remove,]
-
-      # Update tipward nodes ID in dtrates
-      MAP_dtrates$tmat[ ,1] <- updated_BAMM_object$nodes_ID_df$new_node_ID[match(MAP_dtrates$tmat[ ,1], updated_BAMM_object$nodes_ID_df$initial_node_ID)]
-      # Update dimnames
-      attr(MAP_dtrates$tmat, which = "dimnames")[[1]] <- as.character(1:nrow(MAP_dtrates$tmat))
-      # Update tau as the fraction of the total tree length represented by each segment
-      new_depth <- (root_age - focal_time)
-      depth_ratio <- new_depth/root_age
-      MAP_dtrates$tau <- MAP_dtrates$tau/depth_ratio
-
-      # Store updated $dtrates
+      ## New version. Works but not sure why...
+      ## New version. Does not work on updated tree! Rate estimates are crap. Issue with reordering of egdes?
+      MAP_dtrates <- BAMMtools::dtRates(updated_BAMM_object$MAP_BAMM_object, tau = 0.01, tmat = TRUE)$dtrates
       updated_BAMM_object$MAP_BAMM_object$dtrates <- MAP_dtrates
+
+      # # ## Former 'manual' version that ensure segments to be similar, but creates artifacts on the terminal segments (not sure why...)
+      # # # Get initial dtrates
+      # # dtrates_t0 <- BAMMtools::dtRates(BAMM_object$MAP_BAMM_object, tau = 0.01, tmat = TRUE)$dtrates
+      # #
+      # # # Find segments to remove segments that are younger than the focal_time
+      # # dtrates_segments_to_remove <- dtrates_t0$tmat[ , 2] >= (root_age - focal_time)
+      # #
+      # # # Update dtrates to remove segments that are older than the focal_time
+      # # MAP_dtrates <- dtrates_t0
+      # # MAP_dtrates$rates <- lapply(X = MAP_dtrates$rates, FUN = function (x) { y <-  x[!dtrates_segments_to_remove]} )
+      # # MAP_dtrates$tmat <- MAP_dtrates$tmat[!dtrates_segments_to_remove,]
+      # #
+      # # # Update tipward nodes ID in dtrates
+      # # MAP_dtrates$tmat[ ,1] <- updated_BAMM_object$nodes_ID_df$new_node_ID[match(MAP_dtrates$tmat[ ,1], updated_BAMM_object$nodes_ID_df$initial_node_ID)]
+      # # # Update dimnames
+      # # attr(MAP_dtrates$tmat, which = "dimnames")[[1]] <- as.character(1:nrow(MAP_dtrates$tmat))
+      # # # Update tau as the fraction of the total tree length represented by each segment
+      # # new_depth <- (root_age - focal_time)
+      # # depth_ratio <- new_depth/root_age
+      # # MAP_dtrates$tau <- MAP_dtrates$tau/depth_ratio
+      #
+      # # Store updated $dtrates
+      # updated_BAMM_object$MAP_BAMM_object$dtrates <- MAP_dtrates
 
       ## Save initial_colorbreaks to use as colorbreaks in order to match color gradients from the initial full phylogeny
       initial_plot <- BAMMtools::plot.bammdata(BAMM_object$MAP_BAMM_object, legend = TRUE, show = FALSE)

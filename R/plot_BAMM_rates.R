@@ -63,17 +63,19 @@
 # plot_BAMM_rates(Ponerinae_BAMM_object, show_regime_shifts = TRUE,
 #                 configuration_type = "MAP",
 #                 regimes_size = 2, bg = "black")
-#
-# ### Replace BAMMtools::plot.bammdata() in all docs!
-#
-# ### Currently, the MSC option is selecting the first sample among all MSC configs.
-# # It will be better if I used an average approach just like in MAP
-# # Make my own averaging function based on [BAMMtools::getBestShiftConfiguration()])
-# # that subsampled all the posterior samples detected with BAMMtools::maximumShiftCredibility() => $bestconfigs[[1]] and not just $sampleindex
+
+### Replace BAMMtools::plot.bammdata() in all docs!
+
+### Currently, the MSC option is selecting the first sample among all MSC configs.
+# It will be better if I used an average approach just like in MAP
+# Make my own averaging function based on [BAMMtools::getBestShiftConfiguration()])
+# that subsampled all the posterior samples detected with BAMMtools::maximumShiftCredibility() => $bestconfigs[[1]] and not just $sampleindex
 
 
 plot_BAMM_rates <- function (BAMM_object,
-                             configuration_type = "MSC", # MSC or MAP
+                             rate_type = "net_diversification",
+                             configuration_type = "MSC", # MSC, MAP, or index
+                             sample_index = 1,
                              show_regime_shifts = TRUE,
                              adjust_size_to_prob = TRUE, # To adjust size of points representing regime shifts to their marginal posterior probabilities
                              method = "phylogram",
@@ -88,15 +90,24 @@ plot_BAMM_rates <- function (BAMM_object,
   {
     ## BAMM_object is a bammdata object
 
+    ## rate_type must be either 'net_diversification', 'speciation', 'extinction'
+
     ## Need $MSC_index
     # Ask to run prepare_diversification_data, or get it from BAMMtools::maximumShiftCredibility()
 
     ## Need $MSP_tree if using 'adjust_size_to_prob = TRUE'
 
-    ## configuration_type is either 'MSC' or 'MAP'
+    ## configuration_type is either 'MSC' or 'MAP' or 'index'
+
+    ## sample index must be an integer from 1 to length of EventData
 
     ## method is either 'phylogram' or 'polar'
   }
+
+  ## Convert 'rate_type' into 'spex'
+  if (rate_type == "net_diversification") { spex <- "netdiv" }
+  if (rate_type == "speciation") { spex <- "s" }
+  if (rate_type == "extinction") { spex <- "e" }
 
   ## Filter list of additional arguments to avoid warnings from par()
   add_args <- list(...)
@@ -118,7 +129,7 @@ plot_BAMM_rates <- function (BAMM_object,
   if ("show" %in% names(add_args_for_plot)) { show <- add_args_for_plot$show } else { show <- TRUE }
   if ("labels" %in% names(add_args_for_plot)) { labels <- add_args_for_plot$labels } else { labels <- FALSE }
   if ("legend" %in% names(add_args_for_plot)) { legend <- add_args_for_plot$legend } else { legend <- FALSE }
-  if ("spex" %in% names(add_args_for_plot)) { spex <- add_args_for_plot$spex } else { spex <- "s" }
+  # if ("spex" %in% names(add_args_for_plot)) { spex <- add_args_for_plot$spex } else { spex <- "s" }
   if ("lwd" %in% names(add_args_for_plot)) { lwd <- add_args_for_plot$lwd } else { lwd <- 1 }
   if ("cex" %in% names(add_args_for_plot)) { cex <- add_args_for_plot$cex } else { cex <- 1 }
   if ("pal" %in% names(add_args_for_plot)) { pal <- add_args_for_plot$pal } else { pal <- "RdYlBu" }
@@ -164,6 +175,38 @@ plot_BAMM_rates <- function (BAMM_object,
       msp <- NULL
     }
 
+    # Case for 'index' => Plotting the configuraiton for a given posterior sample
+    if (configuration_type == "index")
+    {
+      # ## Add regime shifts on the plot
+      # BAMMtools::addBAMMshifts(ephy = BAMM_object,
+      #                          index = sample_index,
+      #                          method = method,
+      #                          msp = msp,
+      #                          bg = regimes_fill,
+      #                          cex = regimes_size,
+      #                          pch = regimes_pch,
+      #                          col = regimes_border_col,
+      #                          lwd = regimes_border_width
+      #                          ...)
+
+      ## Add regime shifts on the plot while separating names arguments from additional arguments for points() and par() in the ellipsis (...)
+      do.call(what = addBAMMshifts_custom,
+              args = c(list(ephy = BAMM_object,
+                            index = sample_index,
+                            method = method,
+                            msp = msp,
+                            regimes_fill = regimes_fill,
+                            regimes_size = regimes_size,
+                            regimes_pch = regimes_pch,
+                            regimes_border_col = regimes_border_col,
+                            regimes_border_width = regimes_border_width,
+                            shiftnodes = shiftnodes,
+                            par.reset = par.reset),
+                       add_args_for_par))
+
+    }
+
     # Case for Maximum Shift Credibility (MSC) configuration
     if (configuration_type == "MSC")
     {
@@ -194,12 +237,15 @@ plot_BAMM_rates <- function (BAMM_object,
                             par.reset = par.reset),
                        add_args_for_par))
 
-    } else {
-      # Case for Maximum A Posteriori probability (MAP) configuration
+    }
 
+    # Case for Maximum A Posteriori probability (MAP) configuration
+    if (configuration_type == "MAP")
+    {
       ## Use the BAMM_object$MAP_BAMM_object to get locations of shifts
       do.call(what = addBAMMshifts_custom,
               args = c(list(ephy = BAMM_object$MAP_BAMM_object,
+                            index = 1,
                             method = method,
                             msp = msp,
                             regimes_fill = regimes_fill,
