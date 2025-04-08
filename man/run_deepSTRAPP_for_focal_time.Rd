@@ -135,7 +135,7 @@ Optional data updated for the \code{focal_time}:
 that can be used as input of \code{\link[phytools:contMap]{phytools::plot.contMap()}} to display a phylogeny mapped with trait values with branches cut at the \code{focal_time}.
 See \code{\link[=extract_most_likely_trait_values_for_focal_time]{extract_most_likely_trait_values_for_focal_time()}} for a detailed description of the output.
 \item \verb{$updated_BAMM_object} An updated \code{BAMM_object} of class \code{"bammdata"} that contains rates and regimes ID found at the \code{focal_time}.
-Can be used as input of \code{\link[BAMMtools:plot]{BAMMtools::plot.bammdata()}} to display a phylogeny mapped with diversification rates with branches cut at the \code{focal_time}.
+Can be used as input of \code{\link[=plot_BAMM_rates]{plot_BAMM_rates()}} to display a phylogeny mapped with diversification rates with branches cut at the \code{focal_time}.
 See \code{\link[=update_rates_and_regimes_for_focal_time]{update_rates_and_regimes_for_focal_time()}} for a detailed description of the output.
 }
 }
@@ -258,7 +258,7 @@ ape::nodelabels(text =
    deepSTRAPP_output$updated_trait_data_with_contMap$contMap$tree$initial_nodes_ID)
 
 # Plot diversification rates on updated phylogeny
-BAMMtools::plot.bammdata(deepSTRAPP_output$updated_BAMM_object, labels = TRUE)
+plot_BAMM_rates(deepSTRAPP_output$updated_BAMM_object, labels = TRUE)
 
 # Plot histogram of test stats
 plot_histogram_STRAPP_test_for_focal_time(

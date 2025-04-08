@@ -42,7 +42,7 @@
 #'  [https://doi_of_Paper_to_provide.html]
 #'
 #' @usage data(Ponerinae_BAMM_object)
-#' @format A list with 21 elements.
+#' @format A list with 24 elements.
 #'
 #' @details An object of class `"bammdata"` containing information of diversification dynamics
 #'   of extant ponerine ants (Ponerinae subfamily) modeled with BAMM.
@@ -109,7 +109,7 @@
 #'  [https://doi_of_Paper_to_provide.html]
 #'
 #' @usage data(Ponerinae_BAMM_object_10My)
-#' @format A list with 29 elements.
+#' @format A list with 32 elements.
 #'
 #' @details An object of class `"bammdata"` containing information of diversification dynamics
 #'   of extant ponerine ants (Ponerinae subfamily) modeled with BAMM.
@@ -159,11 +159,12 @@
 #'   * `$edges_ID_df` Data.frame with two columns. Provides the conversion from the `new_edge_ID` in the cut tree to the `initial_edge_ID` in the extant tree. Each row is an edge/branch.
 #'   * `$initial_edges_ID` Vector of character strings. Provides the initial ID of edges/branches. Used to plot edge/branch IDs as labels with [ape::edgelabels()].
 #'   * `$dtrates` List of three elements.
-#'     + 1/ `$dtrates$tau` Numerical. Resolution factor describing the fraction of each segment length used in [BAMMtools::plot.bammdata()]
+#'     + 1/ `$dtrates$tau` Numerical. Resolution factor describing the fraction of each segment length used in [deepSTRAPP::plot_BAMM_rates()]
 #'       compared to the full depth of the initial tree (i.e., the root_age)
-#'     + 2/ `$dtrates$rates` List of two numerical vectors. Speciation and extinction rates along segments used by [BAMMtools::plot.bammdata()].
+#'     + 2/ `$dtrates$rates` List of two numerical vectors. Speciation and extinction rates along segments used by [deepSTRAPP::plot_BAMM_rates()].
 #'     + 3/ `$dtrates$tmat` Matrix of numerical. Start and end times of segments in term of distance to the root.
-#'   * `$initial_colorbreaks` Vector of numerical. Diversification rate values of the percentiles delimiting the bins for mapping rates to colors with [BAMMtools::plot.bammdata()].
+#'   * `$initial_colorbreaks` List of three vectors of numerical. Rate values of the percentiles delimiting the bins for mapping rates to colors with [BAMMtools::plot.bammdata()].
+#'     Each element provides values for different type of rates (`$speciation`, `$extinction`, `$net_diversification`).
 #'   * `$focal_time` Integer. The time, in terms of time distance from the present, at which the rates/regimes were extracted and the tree was eventually cut. Here: 10 My.
 #'
 #' @docType data
@@ -192,7 +193,7 @@
 #'  [https://doi_of_Paper_to_provide.html]
 #'
 #' @usage data(Ponerinae_BAMM_object_25My)
-#' @format A list with 29 elements.
+#' @format A list with 32 elements.
 #'
 #' @details An object of class `"bammdata"` containing information of diversification dynamics
 #'   of extant ponerine ants (Ponerinae subfamily) modeled with BAMM.
@@ -242,11 +243,12 @@
 #'   * `$edges_ID_df` Data.frame with two columns. Provides the conversion from the `new_edge_ID` in the cut tree to the `initial_edge_ID` in the extant tree. Each row is an edge/branch.
 #'   * `$initial_edges_ID` Vector of character strings. Provides the initial ID of edges/branches. Used to plot edge/branch IDs as labels with [ape::edgelabels()].
 #'   * `$dtrates` List of three elements.
-#'     + 1/ `$dtrates$tau` Numerical. Resolution factor describing the fraction of each segment length used in [BAMMtools::plot.bammdata()]
+#'     + 1/ `$dtrates$tau` Numerical. Resolution factor describing the fraction of each segment length used in [deepSTRAPP::plot_BAMM_rates()]
 #'       compared to the full depth of the initial tree (i.e., the root_age)
-#'     + 2/ `$dtrates$rates` List of two numerical vectors. Speciation and extinction rates along segments used by [BAMMtools::plot.bammdata()].
+#'     + 2/ `$dtrates$rates` List of two numerical vectors. Speciation and extinction rates along segments used by [deepSTRAPP::plot_BAMM_rates()].
 #'     + 3/ `$dtrates$tmat` Matrix of numerical. Start and end times of segments in term of distance to the root.
-#'   * `$initial_colorbreaks` Vector of numerical. Diversification rate values of the percentiles delimiting the bins for mapping rates to colors with [BAMMtools::plot.bammdata()].
+#'   * `$initial_colorbreaks` List of three vectors of numerical. Rate values of the percentiles delimiting the bins for mapping rates to colors with [BAMMtools::plot.bammdata()].
+#'     Each element provides values for different type of rates (`$speciation`, `$extinction`, `$net_diversification`).
 #'   * `$focal_time` Integer. The time, in terms of time distance from the present, at which the rates/regimes were extracted and the tree was eventually cut. Here: 25 My.
 #'
 #' @docType data
@@ -356,7 +358,7 @@
 #'
 "STRAPP_tests_over_time_temp_example_2"
 
-### 7/ Temporary BAMM output for whale phylogeny ####
+### 7/ BAMM output for whale phylogeny ####
 
 #' @title Dataset summarizing 1000 posterior samples of BAMM for extant whales
 #'
@@ -367,7 +369,7 @@
 #'  Radiation of extant cetaceans driven by restructuring of the oceans. Systematic Biology, 58, 573-585.
 #'
 #' @usage data(whale_BAMM_object)
-#' @format A list with 21 elements.
+#' @format A list with 24 elements.
 #'
 #' @details An object of class `"bammdata"` containing information of diversification dynamics
 #'   of extant ponerine ants (Ponerinae subfamily) modeled with BAMM.
@@ -398,12 +400,16 @@
 #'
 #'   Additional elements providing key information for downstream analyses:
 #'   * `$expectedNumberOfShifts` Integer. The expected number of regime shifts used to set the prior in BAMM.
-#'   * `$MSC_index` Integer. The index of the Maximum Shift Credibility configuration among the posterior samples.
 #'   * `$MSP_tree` Object of class `phylo`. List of 4 elements duplicating information from the Phylogeny-related elements above,
 #'      except `$MSP_tree$edge.length` is recording the Marginal Shift Probability of each branch (i.e., the probability of a regime shift to occur along each branch)
+#'   * `$MAP_indices` Vector of integers. The indices of the Maximum A Posteriori probability (MAP) configurations among the posterior samples.
 #'   * `$MAP_BAMM_object`. List of 18 elements of class `"bammdata" recording the mean rates and regime shift locations found across
-#'      the Maximum A Posteriori probability (MAP) configuration. All BAMM elements summarizing diversification data holds a single entry describing this
-#'      the mean diversification history.
+#'      the Maximum A Posteriori probability (MAP) configurations. All BAMM elements summarizing diversification data holds a single entry describing
+#'      this mean diversification history.
+#'   * `$MSC_indices` Vector of integers. The indices of the Maximum Shift Credibility (MSC) configurations among the posterior samples.
+#'   * `$MSC_BAMM_object` List of 18 elements of class `"bammdata" recording the mean rates and regime shift locations found across
+#'      the Maximum Shift Credibility (MSC) configurations. All BAMM elements summarizing diversification data holds a single entry describing
+#'      this mean diversification history.
 #'
 #' @docType data
 #' @keywords datasets

@@ -21,7 +21,6 @@
 #' @param PDF_file_path Character string. If provided, the plot will be saved in a PDF file following the path provided here. The path must end with '.pdf'.
 #'
 #' @export
-#' @importFrom BAMMtools plot.bammdata
 #' @importFrom ggplot2 ggplot geom_histogram aes geom_vline labs ggtitle theme element_line element_rect element_text unit margin annotate annotation_custom
 #' @importFrom grid gpar textGrob
 #' @importFrom cowplot plot_grid save_plot
@@ -66,7 +65,7 @@
 #' data(Ponerinae_BAMM_object_10My, package = "deepSTRAPP")
 #'
 #' # Plot the associated phylogeny with mapped rates
-#' BAMMtools::plot.bammdata(Ponerinae_BAMM_object_10My)
+#' plot_BAMM_rates(Ponerinae_BAMM_object_10My)
 #'
 #' ## Load the object containing head width trait data for ponerine ants extracted for 10My ago.
 #' data(Ponerinae_trait_data_10My, package = "deepSTRAPP")

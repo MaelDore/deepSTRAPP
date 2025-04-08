@@ -20,11 +20,11 @@
 #' @param update_tree Logical. Specify whether to update the phylogeny such as
 #'   all branches that are younger than the `focal_time` are cut-off. Default is `FALSE`.
 #' @param update_plot Logical. Specify whether to update the phylogeny AND the elements
-#'   used by [BAMMtools::plot.bammdata()] to plot diversification rates on the phylogeny
+#'   used by [deepSTRAPP::plot_BAMM_rates()] to plot diversification rates on the phylogeny
 #'   such as all branches that are younger than the `focal_time` are cut-off. Default is `FALSE`.
 #'   If set to `TRUE`, it will override the `update_tree` parameter and update the phylogeny.
 #' @param update_all_elements Logical. Specify whether to update all the elements in the object, including
-#'   rates/regimes/phylogeny/elements for [BAMMtools::plot.bammdata()]/all other elements. Default is `FALSE`.
+#'   rates/regimes/phylogeny/elements for [deepSTRAPP::plot_BAMM_rates()]/all other elements. Default is `FALSE`.
 #'   If set to `TRUE`, it will override other `update_*` parameters and update all elements.
 #' @param keep_tip_labels Logical. Should terminal branches with a single descendant tip
 #'   retain their initial `tip.label` on the updated phylogeny and diversification rate mapping?
@@ -61,10 +61,10 @@
 #'   * `$edge.length` provides length of all branches.
 #'   * `$node.label` provides the labels of all internal nodes. (Optional)
 #'
-#'   ----- Update the plot from [BAMMtools::plot.bammdata()] -----
+#'   ----- Update the plot from [deepSTRAPP::plot_BAMM_rates()] -----
 #'
 #'   If `update_plot = TRUE`, elements used to plot diversification rates on the phylogeny
-#'   using [BAMMtools::plot.bammdata()] will be updated such as all branches that are younger
+#'   using [deepSTRAPP::plot_BAMM_rates()] will be updated such as all branches that are younger
 #'   than the `focal_time` are cut-off:
 #'   * `$begin` provides absolute time since root of edge/branch start (rootward).
 #'   * `$end` provides absolute time since root of edge/branch end (tipward).
@@ -123,19 +123,55 @@
 #'   * `$edges_ID_df` Data.frame with two columns. Provides the conversion from the `new_edge_ID` to the `initial_edge_ID`. Each row is an edge/branch.
 #'   * `$initial_edges_ID` Vector of character strings. Provides the initial ID of edges/branches. Used to plot edge/branch IDs as labels with [ape::edgelabels()].
 #'   * `$dtrates` List of three elements.
-#'     + 1/ `$dtrates$tau` Numerical. Resolution factor describing the fraction of each segment length used in [BAMMtools::plot.bammdata()]
+#'     + 1/ `$dtrates$tau` Numerical. Resolution factor describing the fraction of each segment length used in [deepSTRAPP::plot_BAMM_rates()]
 #'       compared to the full depth of the initial tree (i.e., the root_age)
-#'     + 2/ `$dtrates$rates` List of two numerical vectors. Speciation and extinction rates along segments used by [BAMMtools::plot.bammdata()].
+#'     + 2/ `$dtrates$rates` List of two numerical vectors. Speciation and extinction rates along segments used by [deepSTRAPP::plot_BAMM_rates()].
 #'     + 3/ `$dtrates$tmat` Matrix of numerical. Start and end times of segments in term of distance to the root.
-#'   * `$initial_colorbreaks` Vector of numerical. Diversification rate values of the percentiles delimiting the bins for mapping rates to colors with [BAMMtools::plot.bammdata()].
+#'   * `$initial_colorbreaks` List of three vectors of numerical. Rate values of the percentiles delimiting the bins for mapping rates to colors with [BAMMtools::plot.bammdata()].
+#'     Each element provides values for different type of rates (`$speciation`, `$extinction`, `$net_diversification`).
 #'   * `$focal_time` Integer. The time, in terms of time distance from the present, at which the rates/regimes were extracted and the tree was eventually cut.
 #'
 #' @author Maël Doré
 #'
-#' @seealso [deepSTRAPP::cut_phylo_for_focal_time()]
+#' @seealso [deepSTRAPP::cut_phylo_for_focal_time()] [deepSTRAPP::plot_BAMM_rates()]
 #'
 #' @examples
-#' # ----- Example 1: Ultrametric tree of extant Ponerinae ----- #
+#' # ----- Example 1: Extant whales (87 taxa) ----- #
+#'
+#' ## Load the BAMM_object summarizing 1000 posterior samples of BAMM
+#' data(whale_BAMM_object, package = "deepSTRAPP")
+#'
+#' ## Set focal-time to 5 My
+#' focal_time = 5
+#'
+#' ## Update the BAMM object
+#' whale_BAMM_object_5My <- update_rates_and_regimes_for_focal_time(
+#'    BAMM_object = whale_BAMM_object,
+#'    focal_time = 5,
+#'    update_rates = TRUE, update_regimes = TRUE,
+#'    update_tree = TRUE, update_plot = TRUE,
+#'    update_all_elements = TRUE,
+#'    keep_tip_labels = TRUE,
+#'    verbose = TRUE)
+#'
+#' # Add "phylo" class to be compatible with phytools::nodeHeights()
+#' class(whale_BAMM_object) <- unique(c(class(whale_BAMM_object), "phylo"))
+#' root_age <- max(phytools::nodeHeights(whale_BAMM_object)[,2])
+#' # Remove temporary "phylo" class
+#' class(whale_BAMM_object) <- setdiff(class(whale_BAMM_object), "phylo")
+#'
+#' ## Plot initial BAMM_object for t = 0 My
+#' plot_BAMM_rates(whale_BAMM_object, add_regime_shifts = TRUE,
+#'                 labels = TRUE, legend = TRUE,
+#'                 par.reset = FALSE) # Keep plotting parameters in memory to use abline().
+#' abline(v = root_age - focal_time,
+#'       col = "red", lty = 2, lwd = 2)
+#'
+#' ## Plot updated BAMM_object for t = 5 My
+#' plot_BAMM_rates(whale_BAMM_object_5My, add_regime_shifts = TRUE,
+#'                 labels = TRUE, legend = TRUE)
+#'
+#' # ----- Example 2: Extant Ponerinae (1,534 taxa) ----- #
 #'
 #' ## Load the BAMM_object summarizing 1000 posterior samples of BAMM
 #' data(Ponerinae_BAMM_object, package = "deepSTRAPP")
@@ -165,109 +201,32 @@
 #' class(Ponerinae_BAMM_object) <- setdiff(class(Ponerinae_BAMM_object), "phylo")
 #'
 #' ## Plot diversification rates on the initial tree
-#' plot(Ponerinae_BAMM_object, legend = TRUE, labels = FALSE)
+#' plot_BAMM_rates(Ponerinae_BAMM_object,
+#'                 legend = TRUE, labels = FALSE)
 #' abline(v = root_age - focal_time,
 #'        col = "red", lty = 2, lwd = 2)
 #'
-#' ## Plot diversification rates on the updated tree (cut-off for 25 My)
+#' ## Plot diversification rates and regime shifts on the updated tree (cut-off for 25 My)
 #' # Keep the initial color scheme
-#' BAMMtools::plot.bammdata(Ponerinae_BAMM_object_25My, legend = TRUE,
-#'                          colorbreaks = Ponerinae_BAMM_object_25My$initial_colorbreaks)
+#' plot_BAMM_rates(Ponerinae_BAMM_object_25My, legend = TRUE, labels = FALSE,
+#'                 colorbreaks = Ponerinae_BAMM_object_25My$initial_colorbreaks$net_diversification)
 #'
 #' # Use a new color scheme mapped on the new distribution of rates
-#' BAMMtools::plot.bammdata(Ponerinae_BAMM_object_25My, legend = TRUE)
+#' plot_BAMM_rates(Ponerinae_BAMM_object_25My, legend = TRUE, labels = FALSE)
 #'
 
-## If adding dtrates in the output
 
-
-# ## Replace BAMMtools::plot.bammdata with plot_BAMM_rates
+# # ----- Example 3: Non-ultrametric tree including extinct mammal groups ----- #
 #
-# ## Load results to save time
-# data(Ponerinae_BAMM_object_10My, package = "deepSTRAPP")
-# data(Ponerinae_BAMM_object_25My, package = "deepSTRAPP")
-#
-# ## Plot diversification rates and regime shifts on the initial tree
-# plot_BAMM_rates(Ponerinae_BAMM_object, legend = TRUE)
-# abline(v = 124 - 25,
-#        col = "red", lty = 2, lwd = 2)
-#
-# ## Plot diversification rates on the updated tree (cut-off for 25 My)
-# # Keep the initial color scheme
-# plot_BAMM_rates(Ponerinae_BAMM_object_25My, legend = TRUE,
-#                 colorbreaks = Ponerinae_BAMM_object_10My$initial_colorbreaks)
-#
-# # Use a new color scheme mapped on the new distribution of rates
-# plot_BAMM_rates(Ponerinae_BAMM_object_25My, legend = TRUE)
-
-
-# ## Fast enough, no need to \not_run\
-# whale_BAMM_object_5My <- update_rates_and_regimes_for_focal_time(
-#   BAMM_object = whale_BAMM_object,
-#   focal_time = 5,
-#   update_rates = TRUE, update_regimes = TRUE,
-#   update_tree = TRUE, update_plot = TRUE,
-#   update_all_elements = TRUE,
-#   keep_tip_labels = TRUE,
-#   verbose = TRUE)
-#
-# str(whale_BAMM_object, max.level = 1)
-# str(whale_BAMM_object$MAP_BAMM_object, max.level = 1)
-# str(whale_BAMM_object$MSC_BAMM_object, max.level = 1)
-# str(whale_BAMM_object_5My, max.level = 1)
-# str(whale_BAMM_object_5My$MSP_tree, max.level = 1)
-# str(whale_BAMM_object_5My$MAP_BAMM_object, max.level = 1)
-# str(whale_BAMM_object_5My$MSC_BAMM_object, max.level = 1)
-#
-# ## Example for update()
-#
-# # Add "phylo" class to be compatible with phytools::nodeHeights()
-# class(whale_BAMM_object) <- unique(c(class(whale_BAMM_object), "phylo"))
-#
-# ## Plot initial BAMM_object for t = 0 My
-# plot_BAMM_rates(whale_BAMM_object, add_regime_shifts = TRUE,
-#                 labels = TRUE, legend = TRUE,
-#                 par.reset = FALSE) # To keep plotting parameters in memory. Needed to use abline() afterwards.
-# abline(v = max(phytools::nodeHeights(whale_BAMM_object)[,2]) - focal_time,
-#        col = "red", lty = 2, lwd = 2)
-#
-# ## Plot updated BAMM_object for t = 5 My
-# plot_BAMM_rates(whale_BAMM_object_5My, add_regime_shifts = TRUE,
-#                 labels = TRUE, legend = TRUE)
-#
-#
-# ## Example for plot_BAMM_rates()
-#
-# ## Plot overall mean rates with MAP configuration for regime shifts
-# plot_BAMM_rates(whale_BAMM_object, add_regime_shifts = TRUE,
-#                 configuration_type = "MAP", bg = "black",
-#                 regimes_size = 3)
-# ## Plot overall mean rates with MSC configuration for regime shifts
-# plot_BAMM_rates(whale_BAMM_object, add_regime_shifts = TRUE,
-#                 configuration_type = "MSC", bg = "black",
-#                 regimes_size = 3)
-#
-# ## Plot mean MAP rates with regime shifts
-# plot_BAMM_rates(whale_BAMM_object$MAP_BAMM_object, add_regime_shifts = TRUE,
-#                 configuration_type = "index", # Set to index to use the regime shift data from the MAP_BAMM_object
-#                 regimes_size = 3, bg = "black")
-# ## Plot mean MSC rates with regime shifts
-# plot_BAMM_rates(whale_BAMM_object$MSC_BAMM_object, add_regime_shifts = TRUE,
-#                 configuration_type = "index", # Set to index to use the regime shift data from the MSC_BAMM_object
-#                 regimes_size = 3, bg = "black")
-
-
-
-# # ----- Example 2: Non-ultrametric tree including extinct mammal groups ----- #
-#
-# ### Ideally, run BAMM on motmot::mammals dataset so I have a real dataset with fossils (does BAMM works with fossils???)
+# ### Ideally, run BAMM on motmot::mammals dataset so I have a real dataset with fossils
+# # (but BAMM does not work with fossils yet)
 # # Need to check if the BAMM_output object generated deal with fossils in a specific way...
 #
 # str(updated_BAMM_object$tipStates, max.level = 1)
 # str(updated_BAMM_object, max.level = 1)
 #
 # pdf(file = "./test_BAMMplot_t0.pdf", width = 20, height = 150)
-# plot.bammdata(BAMM_object, labels = TRUE)
+# plot_BAMM_rates(BAMM_object, labels = TRUE)
 # dev.off()
 
 
@@ -543,7 +502,7 @@ update_rates_and_regimes_for_focal_time <- function (BAMM_object, focal_time,
     # nodelabels()
   }
 
-  ## Updates elements needed to plot a "bammdata" object with plot.bammdata()
+  ## Updates elements needed to plot a "bammdata" object with plot_BAMM_rates()
   if (update_plot || update_all_elements)
   {
     ## $begin = Absolute time since root of edge/branch start
@@ -585,7 +544,7 @@ update_rates_and_regimes_for_focal_time <- function (BAMM_object, focal_time,
     # all(updated_nb_segments == (nrow(updated_BAMM_object$edge) + (updated_nb_regimes - 1)))
 
     ## Create $dtRates and update it such as it contains only rates for segments older than the focal_time
-    # Can be used to keep consistency with estimated rates and color scheme used in BAMMtools::plot.bammdata
+    # Can be used to keep consistency with estimated rates and color scheme used in deepSTRAPP::plot_BAMM_rates()
 
     ## New version. Works but not sure why...
     updated_dtrates <- BAMMtools::dtRates(updated_BAMM_object, tau = 0.01, tmat = TRUE)$dtrates
@@ -619,14 +578,18 @@ update_rates_and_regimes_for_focal_time <- function (BAMM_object, focal_time,
     # updated_BAMM_object$dtrates <- updated_dtrates
 
     ## Save initial_colorbreaks to use as colorbreaks in order to match color gradients from the initial full phylogeny
-    initial_plot <- BAMMtools::plot.bammdata(BAMM_object, legend = TRUE, show = FALSE)
+    initial_plot_speciation <- BAMMtools::plot.bammdata(BAMM_object, legend = TRUE, show = FALSE, spex = "s")
+    initial_plot_extinction <- BAMMtools::plot.bammdata(BAMM_object, legend = TRUE, show = FALSE, spex = "e")
+    initial_plot_net_div <- BAMMtools::plot.bammdata(BAMM_object, legend = TRUE, show = FALSE, spex = "netdiv")
     # updated_BAMM_object$initial_colorbreaks_range <- range(initial_plot$colorbreaks)
-    updated_BAMM_object$initial_colorbreaks <- initial_plot$colorbreaks
+    updated_BAMM_object$initial_colorbreaks <- list(speciation = initial_plot_speciation$colorbreaks,
+                                                    extinction = initial_plot_extinction$colorbreaks,
+                                                    net_diversification = initial_plot_net_div$colorbreaks)
 
-    # ## Updated BAMM_object can be plotted with plot.bammdata
-    # plot.bammdata(BAMM_object, legend = TRUE)
-    # plot.bammdata(updated_BAMM_object, legend = TRUE)
-    # plot.bammdata(updated_BAMM_object, legend = TRUE, colorbreaks = updated_BAMM_object$initial_colorbreaks)
+    # ## Updated BAMM_object can be plotted with deepSTRAPP::plot_BAMM_rates()
+    # plot_BAMM_rates(BAMM_object, legend = TRUE)
+    # plot_BAMM_rates(updated_BAMM_object, legend = TRUE)
+    # plot_BAMM_rates(updated_BAMM_object, legend = TRUE, colorbreaks = updated_BAMM_object$initial_colorbreaks$net_diversification)
 
     # Update the Marginal Shift Probability tree if present (used to plot regime shifts)
     if ("MSP_tree" %in% names(updated_BAMM_object))
@@ -786,7 +749,7 @@ update_rates_and_regimes_for_focal_time <- function (BAMM_object, focal_time,
       updated_BAMM_object$MAP_BAMM_object$type <- updated_BAMM_object$type
 
       ## Create $dtRates and update it such as it contains only rates for segments older than the focal_time
-      # Can be used to keep consistency with estimated rates and color scheme used in BAMMtools::plot.bammdata
+      # Can be used to keep consistency with estimated rates and color scheme used in deepSTRAPP::plot_BAMM_rates()
 
       ## New version. Works but not sure why...
       ## New version. Does not work on updated tree! Rate estimates are crap. Issue with reordering of egdes?
@@ -818,9 +781,13 @@ update_rates_and_regimes_for_focal_time <- function (BAMM_object, focal_time,
       # updated_BAMM_object$MAP_BAMM_object$dtrates <- MAP_dtrates
 
       ## Save initial_colorbreaks to use as colorbreaks in order to match color gradients from the initial full phylogeny
-      initial_plot <- BAMMtools::plot.bammdata(BAMM_object$MAP_BAMM_object, legend = TRUE, show = FALSE)
-      # updated_BAMM_object$initial_colorbreaks_range <- range(initial_plot$colorbreaks)
-      updated_BAMM_object$MAP_BAMM_object$initial_colorbreaks <- initial_plot$colorbreaks
+      initial_plot_speciation <- BAMMtools::plot.bammdata(BAMM_object$MAP_BAMM_object, legend = TRUE, show = FALSE, spex = "s")
+      initial_plot_extinction <- BAMMtools::plot.bammdata(BAMM_object$MAP_BAMM_object, legend = TRUE, show = FALSE, spex = "e")
+      initial_plot_net_div <- BAMMtools::plot.bammdata(BAMM_object$MAP_BAMM_object, legend = TRUE, show = FALSE, spex = "netdiv")
+      # updated_BAMM_object$MAP_BAMM_object$initial_colorbreaks_range <- range(initial_plot$colorbreaks)
+      updated_BAMM_object$MAP_BAMM_object$initial_colorbreaks <- list(speciation = initial_plot_speciation$colorbreaks,
+                                                                      extinction = initial_plot_extinction$colorbreaks,
+                                                                      net_diversification = initial_plot_net_div$colorbreaks)
 
       # Remove temporary "phylo" class
       class(updated_BAMM_object$MAP_BAMM_object) <- setdiff(class(updated_BAMM_object$MAP_BAMM_object), "phylo")
@@ -973,7 +940,7 @@ update_rates_and_regimes_for_focal_time <- function (BAMM_object, focal_time,
       updated_BAMM_object$MSC_BAMM_object$type <- updated_BAMM_object$type
 
       ## Create $dtRates and update it such as it contains only rates for segments older than the focal_time
-      # Can be used to keep consistency with estimated rates and color scheme used in BAMMtools::plot.bammdata
+      # Can be used to keep consistency with estimated rates and color scheme used in deepSTRAPP::plot_BAMM_rates()
 
       ## New version. Works but not sure why...
       ## New version. Does not work on updated tree! Rate estimates are crap. Issue with reordering of egdes?
@@ -1005,9 +972,14 @@ update_rates_and_regimes_for_focal_time <- function (BAMM_object, focal_time,
       # updated_BAMM_object$MSC_BAMM_object$dtrates <- MSC_dtrates
 
       ## Save initial_colorbreaks to use as colorbreaks in order to match color gradients from the initial full phylogeny
-      initial_plot <- BAMMtools::plot.bammdata(BAMM_object$MSC_BAMM_object, legend = TRUE, show = FALSE)
-      # updated_BAMM_object$initial_colorbreaks_range <- range(initial_plot$colorbreaks)
-      updated_BAMM_object$MSC_BAMM_object$initial_colorbreaks <- initial_plot$colorbreaks
+      initial_plot_speciation <- BAMMtools::plot.bammdata(BAMM_object$MSC_BAMM_object, legend = TRUE, show = FALSE, spex = "s")
+      initial_plot_extinction <- BAMMtools::plot.bammdata(BAMM_object$MSC_BAMM_object, legend = TRUE, show = FALSE, spex = "e")
+      initial_plot_net_div <- BAMMtools::plot.bammdata(BAMM_object$MSC_BAMM_object, legend = TRUE, show = FALSE, spex = "netdiv")
+      # updated_BAMM_object$MSC_BAMM_object$initial_colorbreaks_range <- range(initial_plot$colorbreaks)
+      updated_BAMM_object$MSC_BAMM_object$initial_colorbreaks <- list(speciation = initial_plot_speciation$colorbreaks,
+                                                                      extinction = initial_plot_extinction$colorbreaks,
+                                                                      net_diversification = initial_plot_net_div$colorbreaks)
+
 
       # Remove temporary "phylo" class
       class(updated_BAMM_object$MSC_BAMM_object) <- setdiff(class(updated_BAMM_object$MSC_BAMM_object), "phylo")

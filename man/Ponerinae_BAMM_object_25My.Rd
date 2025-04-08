@@ -5,7 +5,7 @@
 \alias{Ponerinae_BAMM_object_25My}
 \title{Dataset summarizing 1000 posterior samples of BAMM for extant ponerine ants updated to 25 My}
 \format{
-A list with 29 elements.
+A list with 32 elements.
 }
 \usage{
 data(Ponerinae_BAMM_object_25My)
@@ -74,12 +74,13 @@ New elements added to provide updated information:
 \item \verb{$initial_edges_ID} Vector of character strings. Provides the initial ID of edges/branches. Used to plot edge/branch IDs as labels with \code{\link[ape:nodelabels]{ape::edgelabels()}}.
 \item \verb{$dtrates} List of three elements.
 \itemize{
-\item 1/ \verb{$dtrates$tau} Numerical. Resolution factor describing the fraction of each segment length used in \code{\link[BAMMtools:plot]{BAMMtools::plot.bammdata()}}
+\item 1/ \verb{$dtrates$tau} Numerical. Resolution factor describing the fraction of each segment length used in \code{\link[=plot_BAMM_rates]{plot_BAMM_rates()}}
 compared to the full depth of the initial tree (i.e., the root_age)
-\item 2/ \verb{$dtrates$rates} List of two numerical vectors. Speciation and extinction rates along segments used by \code{\link[BAMMtools:plot]{BAMMtools::plot.bammdata()}}.
+\item 2/ \verb{$dtrates$rates} List of two numerical vectors. Speciation and extinction rates along segments used by \code{\link[=plot_BAMM_rates]{plot_BAMM_rates()}}.
 \item 3/ \verb{$dtrates$tmat} Matrix of numerical. Start and end times of segments in term of distance to the root.
 }
-\item \verb{$initial_colorbreaks} Vector of numerical. Diversification rate values of the percentiles delimiting the bins for mapping rates to colors with \code{\link[BAMMtools:plot]{BAMMtools::plot.bammdata()}}.
+\item \verb{$initial_colorbreaks} List of three vectors of numerical. Rate values of the percentiles delimiting the bins for mapping rates to colors with \code{\link[BAMMtools:plot]{BAMMtools::plot.bammdata()}}.
+Each element provides values for different type of rates (\verb{$speciation}, \verb{$extinction}, \verb{$net_diversification}).
 \item \verb{$focal_time} Integer. The time, in terms of time distance from the present, at which the rates/regimes were extracted and the tree was eventually cut. Here: 25 My.
 }
 }

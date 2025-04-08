@@ -120,7 +120,7 @@
 #'     is provided in `$updated_trait_data_with_contMap_over_time`. Updated `contMap` can be plotted with [phytools::plot.contMap()]
 #'     to display a phylogeny mapped with trait values with branches cut at each `focal_time`.
 #'   * If `return_updated_BAMM_object = TRUE`, a list of updated `BAMM_object` of class `"bammdata"` that contains rates and regimes ID
-#'     found at each `focal_time`. Updated `BAMM_object` can be plotted with [BAMMtools::plot.bammdata()] to display
+#'     found at each `focal_time`. Updated `BAMM_object` can be plotted with [deepSTRAPP::plot_BAMM_rates()] to display
 #'     a phylogeny mapped with diversification rates with branches cut at each `focal_time`.
 #'
 #' @return The function returns a list with at least five elements.
@@ -157,7 +157,7 @@
 #'     Updated `contMap` can be plotted with [phytools::plot.contMap()] to display a phylogeny mapped with trait values
 #'     with branches cut at each `focal_time`.
 #'   * `$updated_BAMM_objects_over_time` List of objects containing rates and regimes ID mapped on phylogeny.
-#'     Updated `BAMM_object` can be plotted with [BAMMtools::plot.bammdata()] to display a phylogeny mapped with
+#'     Updated `BAMM_object` can be plotted with [deepSTRAPP::plot_BAMM_rates()] to display a phylogeny mapped with
 #'     diversification rates with branches cut at each `focal_time`.
 #'
 #' @author Maël Doré
@@ -240,7 +240,7 @@
 #' ape::nodelabels(text = contMap_2$contMap$tree$initial_nodes_ID)
 #'
 #' # Plot diversification rates on updated phylogeny for time step n°2
-#' BAMMtools::plot.bammdata(deepSTRAPP_over_time$updated_BAMM_objects_over_time[[2]], labels = TRUE)
+#' plot_BAMM_rates(deepSTRAPP_over_time$updated_BAMM_objects_over_time[[2]], labels = TRUE)
 #'
 #' # Plot histogram of test stats for time step n°2
 #' plot_histogram_STRAPP_test_for_focal_time(

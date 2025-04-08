@@ -96,7 +96,7 @@ Map trait evolution on a time-calibrated phylogeny in several steps:
 \item Step 2: Select the best fitting model comparing AICc.
 \item Step 3: Infer ancestral characters estimates (ACE) at nodes.
 \item Step 4: Run stochastic mapping simulations to generate evolutionary histories
-compatible with the best model and infered ACE. (Only for categorical and biogeographic data)
+compatible with the best model and inferred ACE. (Only for categorical and biogeographic data)
 \item Step 5: Infer ancestral states along branches.
 \itemize{
 \item For continuous traits: use interpolation to produce a \code{contMap}.

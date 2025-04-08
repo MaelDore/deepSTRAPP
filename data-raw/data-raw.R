@@ -129,7 +129,70 @@ usethis::use_data(whale_BAMM_object, overwrite = TRUE)
 # usethis::use_data(whale_BAMM_object_5My, overwrite = TRUE)
 
 
-### 6/ Save diversification template file as .rds #####
+### 6/ Generate Ponerinae_deepSTRAPP_0_40 ####
+
+## deepSTRAPP output for Ponerinae over time from 0 to 40My (steps = 10 My)
+
+## Load trait df
+data(Ponerinae_trait_data, package = "deepSTRAPP")
+
+dim(Ponerinae_trait_data)
+View(Ponerinae_trait_data)
+
+# Extract continuous trait data as a named vector
+Ponerinae_data_ln_HW <- setNames(object = Ponerinae_trait_data$sim_ln_HW,
+                                 nm = Ponerinae_trait_data$Taxa)
+
+## Load phylogeny
+data(Ponerinae_tree, package = "deepSTRAPP")
+
+## Run prepare_trait_data with default options
+# For continuous trait, a BM model is assumed by default.
+Ponerinae_trait_object <- prepare_trait_data(tip_data = Ponerinae_data_ln_HW,
+                                             trait_data_type = "continuous",
+                                             phylo = Ponerinae_tree)
+
+# Explore output
+str(Ponerinae_trait_object, 1)
+
+# Extract the contMap representing continuous trait evolution on the phylogeny
+Ponerinae_contMap <- Ponerinae_trait_object$contMap
+plot(Ponerinae_contMap)
+
+# Extract the Ancestral Character Estimates (ACE) = trait values at nodes
+Ponerinae_ACE <- Ponerinae_trait_object$ace
+head(Ponerinae_ACE)
+
+## Set for five time steps of 10 My. Will generate deepSTRAPP workflows for 0, 10, 20, 30, and 40 Mya.
+nb_time_steps <- 5
+time_step_duration <- 10
+
+# Run deepSTRAPP on net diversification rates
+## This step is time-consuming. You can skip it and load directly the result if needed
+Ponerinae_deepSTRAPP_0_40 <- run_deepSTRAPP_over_time(
+  contMap = Ponerinae_contMap,
+  ace = Ponerinae_ACE,
+  tip_data = Ponerinae_data_ln_HW,
+  trait_data_type = "continuous",
+  BAMM_object = Ponerinae_BAMM_object,
+  nb_time_steps = nb_time_steps,
+  time_step_duration = time_step_duration,
+  return_perm_data = TRUE,
+  extract_trait_data_melted_df = TRUE,
+  extract_diversification_data_melted_df = TRUE,
+  return_STRAPP_results = TRUE,
+  return_updated_trait_data_with_contMap = TRUE,
+  return_updated_BAMM_object = TRUE,
+  verbose = TRUE,
+  verbose_extended = TRUE)
+
+## Explore output
+str(Ponerinae_deepSTRAPP_0_40, max.level = 1)
+
+usethis::use_data(Ponerinae_deepSTRAPP_0_40, overwrite = TRUE)
+
+
+### 7/ Save diversification template file as .rds #####
 
 # Load it from the /inst/ directory (works only in source/bundled version of the package)
 BAMM_template_diversification <- readLines(con = file.path("./inst/BAMM_template_diversification.txt"))

@@ -5,7 +5,7 @@
 \alias{Ponerinae_BAMM_object}
 \title{Dataset summarizing 1000 posterior samples of BAMM for extant ponerine ants}
 \format{
-A list with 21 elements.
+A list with 24 elements.
 }
 \usage{
 data(Ponerinae_BAMM_object)

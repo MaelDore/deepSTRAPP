@@ -198,7 +198,7 @@ Thus, a Spearman's rank correlation test is favored.
 data(Ponerinae_BAMM_object_10My, package = "deepSTRAPP")
 
 # Plot the associated phylogeny with mapped rates
-BAMMtools::plot.bammdata(Ponerinae_BAMM_object_10My)
+plot_BAMM_rates(Ponerinae_BAMM_object_10My)
 
 ## Load the object containing head width trait data for ponerine ants extracted for 10My ago.
 data(Ponerinae_trait_data_10My, package = "deepSTRAPP")

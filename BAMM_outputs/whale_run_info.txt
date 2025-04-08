@@ -1,7 +1,7 @@
 Command line: D:\Mael_D\R_projects\deepSTRAPP\software\bamm-2.5.0\bamm.exe -c ./BAMM_outputs/whale_config_file.txt
 Git commit id: 462bc39af9d4c4b4dd81a481f32c953e93a076e7
-Random seed: 1744051115
-Start time: Mon Apr 07 20:38:35 2025
+Random seed: 1744128073
+Start time: Tue Apr 08 18:01:13 2025
 
 Current parameter settings:
        acceptanceInfoFileName    whale_acceptance_info.txt
@@ -16,7 +16,7 @@ Current parameter settings:
                        deltaT    0.01
               eventDataInfile    event_data_in.txt
              eventDataOutfile    whale_event_data.txt
-           eventDataWriteFreq    5
+           eventDataWriteFreq    50
        expectedNumberOfShifts    1
             extinctionProbMax    0.9999
 fastSimulatePriorExperimental    0
@@ -38,7 +38,7 @@ fastSimulatePrior_Generations    5000000
          localGlobalMoveRatio    10
               maxNumberEvents    5000
                   mcmcOutfile    whale_mcmc_log.txt
-                mcmcWriteFreq    5
+                mcmcWriteFreq    50
          minCladeSizeForShift    1
                     modeltype    speciationextinction
                       muInit0    0
@@ -50,7 +50,7 @@ fastSimulatePrior_Generations    5000000
              muShiftRootPrior    -1.0
             numberOccurrences    0
                numberOfChains    4
-          numberOfGenerations    10000
+          numberOfGenerations    100000
               observationTime    -1
                       outName    whale
          outputAcceptanceInfo    0
@@ -90,5 +90,5 @@ updateRateEventNumberForBranch    0.0
  useGlobalSamplingProbability    1
    validateEventConfiguration    1
    writeMeanBranchLengthTrees    0
-End time: Mon Apr 07 20:38:36 2025
+End time: Tue Apr 08 18:01:21 2025
 

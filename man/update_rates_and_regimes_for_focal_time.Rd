@@ -37,12 +37,12 @@ Default is \code{TRUE}.}
 all branches that are younger than the \code{focal_time} are cut-off. Default is \code{FALSE}.}
 
 \item{update_plot}{Logical. Specify whether to update the phylogeny AND the elements
-used by \code{\link[BAMMtools:plot]{BAMMtools::plot.bammdata()}} to plot diversification rates on the phylogeny
+used by \code{\link[=plot_BAMM_rates]{plot_BAMM_rates()}} to plot diversification rates on the phylogeny
 such as all branches that are younger than the \code{focal_time} are cut-off. Default is \code{FALSE}.
 If set to \code{TRUE}, it will override the \code{update_tree} parameter and update the phylogeny.}
 
 \item{update_all_elements}{Logical. Specify whether to update all the elements in the object, including
-rates/regimes/phylogeny/elements for \code{\link[BAMMtools:plot]{BAMMtools::plot.bammdata()}}/all other elements. Default is \code{FALSE}.
+rates/regimes/phylogeny/elements for \code{\link[=plot_BAMM_rates]{plot_BAMM_rates()}}/all other elements. Default is \code{FALSE}.
 If set to \code{TRUE}, it will override other \verb{update_*} parameters and update all elements.}
 
 \item{keep_tip_labels}{Logical. Should terminal branches with a single descendant tip
@@ -111,12 +111,13 @@ New elements added to provide update information:
 \item \verb{$initial_edges_ID} Vector of character strings. Provides the initial ID of edges/branches. Used to plot edge/branch IDs as labels with \code{\link[ape:nodelabels]{ape::edgelabels()}}.
 \item \verb{$dtrates} List of three elements.
 \itemize{
-\item 1/ \verb{$dtrates$tau} Numerical. Resolution factor describing the fraction of each segment length used in \code{\link[BAMMtools:plot]{BAMMtools::plot.bammdata()}}
+\item 1/ \verb{$dtrates$tau} Numerical. Resolution factor describing the fraction of each segment length used in \code{\link[=plot_BAMM_rates]{plot_BAMM_rates()}}
 compared to the full depth of the initial tree (i.e., the root_age)
-\item 2/ \verb{$dtrates$rates} List of two numerical vectors. Speciation and extinction rates along segments used by \code{\link[BAMMtools:plot]{BAMMtools::plot.bammdata()}}.
+\item 2/ \verb{$dtrates$rates} List of two numerical vectors. Speciation and extinction rates along segments used by \code{\link[=plot_BAMM_rates]{plot_BAMM_rates()}}.
 \item 3/ \verb{$dtrates$tmat} Matrix of numerical. Start and end times of segments in term of distance to the root.
 }
-\item \verb{$initial_colorbreaks} Vector of numerical. Diversification rate values of the percentiles delimiting the bins for mapping rates to colors with \code{\link[BAMMtools:plot]{BAMMtools::plot.bammdata()}}.
+\item \verb{$initial_colorbreaks} List of three vectors of numerical. Rate values of the percentiles delimiting the bins for mapping rates to colors with \code{\link[BAMMtools:plot]{BAMMtools::plot.bammdata()}}.
+Each element provides values for different type of rates (\verb{$speciation}, \verb{$extinction}, \verb{$net_diversification}).
 \item \verb{$focal_time} Integer. The time, in terms of time distance from the present, at which the rates/regimes were extracted and the tree was eventually cut.
 }
 }
@@ -156,10 +157,10 @@ will be updated such as all branches that are younger than the \code{focal_time}
 \item \verb{$node.label} provides the labels of all internal nodes. (Optional)
 }
 
------ Update the plot from \code{\link[BAMMtools:plot]{BAMMtools::plot.bammdata()}} -----
+----- Update the plot from \code{\link[=plot_BAMM_rates]{plot_BAMM_rates()}} -----
 
 If \code{update_plot = TRUE}, elements used to plot diversification rates on the phylogeny
-using \code{\link[BAMMtools:plot]{BAMMtools::plot.bammdata()}} will be updated such as all branches that are younger
+using \code{\link[=plot_BAMM_rates]{plot_BAMM_rates()}} will be updated such as all branches that are younger
 than the \code{focal_time} are cut-off:
 \itemize{
 \item \verb{$begin} provides absolute time since root of edge/branch start (rootward).
@@ -171,7 +172,42 @@ the fraction of each segment length compared to the full depth of the initial tr
 }
 }
 \examples{
-# ----- Example 1: Ultrametric tree of extant Ponerinae ----- #
+# ----- Example 1: Extant whales (87 taxa) ----- #
+
+## Load the BAMM_object summarizing 1000 posterior samples of BAMM
+data(whale_BAMM_object, package = "deepSTRAPP")
+
+## Set focal-time to 5 My
+focal_time = 5
+
+## Update the BAMM object
+whale_BAMM_object_5My <- update_rates_and_regimes_for_focal_time(
+   BAMM_object = whale_BAMM_object,
+   focal_time = 5,
+   update_rates = TRUE, update_regimes = TRUE,
+   update_tree = TRUE, update_plot = TRUE,
+   update_all_elements = TRUE,
+   keep_tip_labels = TRUE,
+   verbose = TRUE)
+
+# Add "phylo" class to be compatible with phytools::nodeHeights()
+class(whale_BAMM_object) <- unique(c(class(whale_BAMM_object), "phylo"))
+root_age <- max(phytools::nodeHeights(whale_BAMM_object)[,2])
+# Remove temporary "phylo" class
+class(whale_BAMM_object) <- setdiff(class(whale_BAMM_object), "phylo")
+
+## Plot initial BAMM_object for t = 0 My
+plot_BAMM_rates(whale_BAMM_object, add_regime_shifts = TRUE,
+                labels = TRUE, legend = TRUE,
+                par.reset = FALSE) # Keep plotting parameters in memory to use abline().
+abline(v = root_age - focal_time,
+      col = "red", lty = 2, lwd = 2)
+
+## Plot updated BAMM_object for t = 5 My
+plot_BAMM_rates(whale_BAMM_object_5My, add_regime_shifts = TRUE,
+                labels = TRUE, legend = TRUE)
+
+# ----- Example 2: Extant Ponerinae (1,534 taxa) ----- #
 
 ## Load the BAMM_object summarizing 1000 posterior samples of BAMM
 data(Ponerinae_BAMM_object, package = "deepSTRAPP")
@@ -201,21 +237,22 @@ root_age <- max(phytools::nodeHeights(Ponerinae_BAMM_object)[,2])
 class(Ponerinae_BAMM_object) <- setdiff(class(Ponerinae_BAMM_object), "phylo")
 
 ## Plot diversification rates on the initial tree
-plot(Ponerinae_BAMM_object, legend = TRUE, labels = FALSE)
+plot_BAMM_rates(Ponerinae_BAMM_object,
+                legend = TRUE, labels = FALSE)
 abline(v = root_age - focal_time,
        col = "red", lty = 2, lwd = 2)
 
-## Plot diversification rates on the updated tree (cut-off for 25 My)
+## Plot diversification rates and regime shifts on the updated tree (cut-off for 25 My)
 # Keep the initial color scheme
-BAMMtools::plot.bammdata(Ponerinae_BAMM_object_25My, legend = TRUE,
-                         colorbreaks = Ponerinae_BAMM_object_25My$initial_colorbreaks)
+plot_BAMM_rates(Ponerinae_BAMM_object_25My, legend = TRUE, labels = FALSE,
+                colorbreaks = Ponerinae_BAMM_object_25My$initial_colorbreaks$net_diversification)
 
 # Use a new color scheme mapped on the new distribution of rates
-BAMMtools::plot.bammdata(Ponerinae_BAMM_object_25My, legend = TRUE)
+plot_BAMM_rates(Ponerinae_BAMM_object_25My, legend = TRUE, labels = FALSE)
 
 }
 \seealso{
-\code{\link[=cut_phylo_for_focal_time]{cut_phylo_for_focal_time()}}
+\code{\link[=cut_phylo_for_focal_time]{cut_phylo_for_focal_time()}} \code{\link[=plot_BAMM_rates]{plot_BAMM_rates()}}
 }
 \author{
 Maël Doré

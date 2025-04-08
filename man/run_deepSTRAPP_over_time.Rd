@@ -176,7 +176,7 @@ used to assess significance of the tests with \code{\link[=plot_histogram_STRAPP
 Updated \code{contMap} can be plotted with \code{\link[phytools:contMap]{phytools::plot.contMap()}} to display a phylogeny mapped with trait values
 with branches cut at each \code{focal_time}.
 \item \verb{$updated_BAMM_objects_over_time} List of objects containing rates and regimes ID mapped on phylogeny.
-Updated \code{BAMM_object} can be plotted with \code{\link[BAMMtools:plot]{BAMMtools::plot.bammdata()}} to display a phylogeny mapped with
+Updated \code{BAMM_object} can be plotted with \code{\link[=plot_BAMM_rates]{plot_BAMM_rates()}} to display a phylogeny mapped with
 diversification rates with branches cut at each \code{focal_time}.
 }
 }
@@ -230,7 +230,7 @@ used to assess significance of the tests with \code{\link[=plot_histogram_STRAPP
 is provided in \verb{$updated_trait_data_with_contMap_over_time}. Updated \code{contMap} can be plotted with \code{\link[phytools:contMap]{phytools::plot.contMap()}}
 to display a phylogeny mapped with trait values with branches cut at each \code{focal_time}.
 \item If \code{return_updated_BAMM_object = TRUE}, a list of updated \code{BAMM_object} of class \code{"bammdata"} that contains rates and regimes ID
-found at each \code{focal_time}. Updated \code{BAMM_object} can be plotted with \code{\link[BAMMtools:plot]{BAMMtools::plot.bammdata()}} to display
+found at each \code{focal_time}. Updated \code{BAMM_object} can be plotted with \code{\link[=plot_BAMM_rates]{plot_BAMM_rates()}} to display
 a phylogeny mapped with diversification rates with branches cut at each \code{focal_time}.
 }
 }
@@ -308,7 +308,7 @@ phytools::plot.contMap(contMap_2$contMap)
 ape::nodelabels(text = contMap_2$contMap$tree$initial_nodes_ID)
 
 # Plot diversification rates on updated phylogeny for time step n°2
-BAMMtools::plot.bammdata(deepSTRAPP_over_time$updated_BAMM_objects_over_time[[2]], labels = TRUE)
+plot_BAMM_rates(deepSTRAPP_over_time$updated_BAMM_objects_over_time[[2]], labels = TRUE)
 
 # Plot histogram of test stats for time step n°2
 plot_histogram_STRAPP_test_for_focal_time(

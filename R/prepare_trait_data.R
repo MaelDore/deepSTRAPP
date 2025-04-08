@@ -10,7 +10,7 @@
 #'   * Step 2: Select the best fitting model comparing AICc.
 #'   * Step 3: Infer ancestral characters estimates (ACE) at nodes.
 #'   * Step 4: Run stochastic mapping simulations to generate evolutionary histories
-#'     compatible with the best model and infered ACE. (Only for categorical and biogeographic data)
+#'     compatible with the best model and inferred ACE. (Only for categorical and biogeographic data)
 #'   * Step 5: Infer ancestral states along branches.
 #'     - For continuous traits: use interpolation to produce a `contMap`.
 #'     - For categorical and biogeographic data: compute posterior frequencies of each state/range

@@ -84,7 +84,7 @@
 #'
 #'   ## Extract trait data
 #'
-#'   [extract_most_likely_trait_values_for_focal_time()] extracts the most likely trait values
+#'   [deepSTRAPP::extract_most_likely_trait_values_for_focal_time()] extracts the most likely trait values
 #'   found along branches at the `focal_time`.
 #'   Optionally, the function can update the mapped phylogeny (`contMap`) such as
 #'   branches overlapping the `focal_time` are shorten to the `focal_time`, and
@@ -93,20 +93,20 @@
 #'
 #'   ## Extract diversification data
 #'
-#'   [update_rates_and_regimes_for_focal_time()] updates the `BAMM_object` to obtain
+#'   [deepSTRAPP::update_rates_and_regimes_for_focal_time()] updates the `BAMM_object` to obtain
 #'   the diversification rates/regimes found along branches the `focal_time`.
 #'   Optionally, the function can update the `BAMM_object` to display a mapped phylogeny
 #'   such as branches overlapping the `focal_time` are shorten to the `focal_time`
 #'
 #'   ## Extract diversification data in a melted df
 #'
-#'   If requested (`extract_diversification_data_melted_df = TRUE`), [extract_diversification_data_melted_df_for_focal_time()]
+#'   If requested (`extract_diversification_data_melted_df = TRUE`), [deepSTRAPP::extract_diversification_data_melted_df_for_focal_time()]
 #'   will be used to extract regimes ID and tip rates from the `updated_BAMM_object` and provide a melted data.frame summarizing the diversification data
 #'   as found on the phylogeny for the `focal_time`.
 #'
 #'   ## Compute STRAPP test
 #'
-#'   [compute_STRAPP_test_for_focal_time()] carries out the appropriate statistical method to test for
+#'   [deepSTRAPP::compute_STRAPP_test_for_focal_time()] carries out the appropriate statistical method to test for
 #'   a relationship between diversification rates and trait data for a given point in the past (i.e. the `focal_time`).
 #'   It can handle three types of statistical tests depending on the type of trait data provided:
 #'   * Continuous trait data: Test for correlations with the Spearman's rank correlation test (See [stats::cor.test]).
@@ -117,7 +117,7 @@
 #' @return The function returns a list with at least two elements.
 #'
 #'   * `$STRAPP_results` List with at least eight elements summarizing the results of the STRAPP tests.
-#'     See [compute_STRAPP_test_for_focal_time()] for a detailed description of the output.
+#'     See [deepSTRAPP::compute_STRAPP_test_for_focal_time()] for a detailed description of the output.
 #'   * `$focal_time` Integer. The time, in terms of time distance from the present, at which the data were extracted and the STRAPP test carried out.
 #'
 #'   Optional formatted output:
@@ -127,10 +127,10 @@
 #'   Optional data updated for the `focal_time`:
 #'   * `$updated_trait_data_with_contMap` A list with four elements that contains trait data found at the `focal_time` and an updated `contMap`
 #'     that can be used as input of [phytools::plot.contMap()] to display a phylogeny mapped with trait values with branches cut at the `focal_time`.
-#'     See [extract_most_likely_trait_values_for_focal_time()] for a detailed description of the output.
+#'     See [deepSTRAPP::extract_most_likely_trait_values_for_focal_time()] for a detailed description of the output.
 #'   * `$updated_BAMM_object` An updated `BAMM_object` of class `"bammdata"` that contains rates and regimes ID found at the `focal_time`.
-#'     Can be used as input of [BAMMtools::plot.bammdata()] to display a phylogeny mapped with diversification rates with branches cut at the `focal_time`.
-#'     See [update_rates_and_regimes_for_focal_time()] for a detailed description of the output.
+#'     Can be used as input of [deepSTRAPP::plot_BAMM_rates()] to display a phylogeny mapped with diversification rates with branches cut at the `focal_time`.
+#'     See [deepSTRAPP::update_rates_and_regimes_for_focal_time()] for a detailed description of the output.
 #'
 #' @author Maël Doré
 #'
@@ -200,7 +200,7 @@
 #'    deepSTRAPP_output$updated_trait_data_with_contMap$contMap$tree$initial_nodes_ID)
 #'
 #' # Plot diversification rates on updated phylogeny
-#' BAMMtools::plot.bammdata(deepSTRAPP_output$updated_BAMM_object, labels = TRUE)
+#' plot_BAMM_rates(deepSTRAPP_output$updated_BAMM_object, labels = TRUE)
 #'
 #' # Plot histogram of test stats
 #' plot_histogram_STRAPP_test_for_focal_time(

@@ -5,7 +5,7 @@
 # References: http://bamm-project.org/; https://github.com/macroevolution/bamm
 #
 # Authors: Daniel Rabosky (BAMM) & Pascal Title (BAMMtools)
-# Modified by Maël Doré for deepSTRAPP
+# Modified by Ma<U+00EB>l Dor<U+00E9> for deepSTRAPP
 #
 # Format
 # ------
@@ -105,14 +105,14 @@ lambdaIsTimeVariablePrior = 1
 # MCMC SIMULATION SETTINGS & OUTPUT OPTIONS
 ################################################################################
 
-numberOfGenerations = 10000
+numberOfGenerations = 100000
 # Number of generations to perform MCMC simulation
 
 mcmcOutfile = mcmc_log.txt
 # File name for the MCMC output, which only includes summary information about
 # MCMC simulation (e.g., log-likelihoods, log-prior, number of processes)
 
-mcmcWriteFreq = 5
+mcmcWriteFreq = 50
 # Frequency in which to write the MCMC output to a file
 
 eventDataOutfile = event_data.txt
@@ -121,7 +121,7 @@ eventDataOutfile = event_data.txt
 # positions, marginal distributions etc can be reconstructed from this output.
 # See R package BAMMtools for working with this output
 
-eventDataWriteFreq = 5
+eventDataWriteFreq = 50
 # Frequency in which to write the event data to a file
 
 printFreq = 1000

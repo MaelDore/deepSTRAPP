@@ -106,16 +106,6 @@
 #'
 
 
-
-### Replace BAMMtools::plot.bammdata() in all docs!
-
-# Add in doc of deepSTRAPP::prepare_diversification_data() and update_rates_and_regimes_for_focal_time()
-
-# Add in the seeAlso of prepare_diversification_data(), after Step 5 in the details section, and in the examples
-# Add in all examples using plot.bammdata() instead
-
-
-
 plot_BAMM_rates <- function (BAMM_object,
                              rate_type = "net_diversification",
                              method = "phylogram",

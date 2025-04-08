@@ -146,7 +146,7 @@ mapped along branches, across selected posterior samples:
 }
 
 The \code{BAMM_object} output is typically used as input to run deepSTRAPP with \code{\link[=run_deepSTRAPP_for_focal_time]{run_deepSTRAPP_for_focal_time()}}
-or \code{\link[=run_deepSTRAPP_over_time]{run_deepSTRAPP_over_time()}}.
+or \code{\link[=run_deepSTRAPP_over_time]{run_deepSTRAPP_over_time()}}. Diversification rates and regimes shift can be visualized with \code{\link[=plot_BAMM_rates]{plot_BAMM_rates()}}.
 
 BAMM is a model of diversification for time-calibrated phylogenies that explores complex diversification dynamics
 by allowing multiple regime shifts across clades without a priori hypotheses on the location of such shifts.
@@ -260,10 +260,9 @@ data(whale_BAMM_object)
 # Explore output
 str(whale_BAMM_object, 1)
 
-# Plot mean net diversification rates on the phylogeny
-BAMMtools::plot.bammdata(whale_BAMM_object,
-   labels = TRUE, legend = TRUE)
-
+# Plot mean net diversification rates and regime shifts on the phylogeny
+plot_BAMM_rates(whale_BAMM_object,
+                labels = TRUE, legend = TRUE)
 
 # ----- Example 2: Ponerinae phylogeny ----- #
 
@@ -286,9 +285,9 @@ data(Ponerinae_BAMM_object)
 # Explore output
 str(Ponerinae_BAMM_object, 1)
 
-# Plot mean net diversification rates on the phylogeny
-BAMMtools::plot.bammdata(Ponerinae_BAMM_object,
-    labels = FALSE, legend = TRUE)
+# Plot mean net diversification rates and regime shifts on the phylogeny
+plot_BAMM_rates(Ponerinae_BAMM_object,
+                labels = FALSE, legend = TRUE)
 
 }
 \references{
@@ -300,7 +299,7 @@ BAMM tools: an R package for the analysis of evolutionary dynamics on phylogenet
 DOI: \url{https://doi.org/10.1111/2041-210X.12199}
 }
 \seealso{
-\code{\link[=run_deepSTRAPP_for_focal_time]{run_deepSTRAPP_for_focal_time()}} \code{\link[=run_deepSTRAPP_over_time]{run_deepSTRAPP_over_time()}} \code{\link[=update_rates_and_regimes_for_focal_time]{update_rates_and_regimes_for_focal_time()}} \code{\link[=prepare_trait_data]{prepare_trait_data()}}
+\code{\link[=run_deepSTRAPP_for_focal_time]{run_deepSTRAPP_for_focal_time()}} \code{\link[=run_deepSTRAPP_over_time]{run_deepSTRAPP_over_time()}} \code{\link[=update_rates_and_regimes_for_focal_time]{update_rates_and_regimes_for_focal_time()}} \code{\link[=prepare_trait_data]{prepare_trait_data()}} \code{\link[=plot_BAMM_rates]{plot_BAMM_rates()}}
 }
 \author{
 Maël Doré

@@ -12,7 +12,7 @@
 #'   * Step 5: Clean BAMM files - Remove files generated during the BAMM run.
 #'
 #'   The `BAMM_object` output is typically used as input to run deepSTRAPP with [deepSTRAPP::run_deepSTRAPP_for_focal_time()]
-#'   or [deepSTRAPP::run_deepSTRAPP_over_time()].
+#'   or [deepSTRAPP::run_deepSTRAPP_over_time()]. Diversification rates and regimes shift can be visualized with [deepSTRAPP::plot_BAMM_rates()].
 #'
 #'   BAMM is a model of diversification for time-calibrated phylogenies that explores complex diversification dynamics
 #'   by allowing multiple regime shifts across clades without a priori hypotheses on the location of such shifts.
@@ -183,7 +183,7 @@
 #'
 #' @author Maël Doré
 #'
-#' @seealso [deepSTRAPP::run_deepSTRAPP_for_focal_time()] [deepSTRAPP::run_deepSTRAPP_over_time()] [deepSTRAPP::update_rates_and_regimes_for_focal_time()] [deepSTRAPP::prepare_trait_data()]
+#' @seealso [deepSTRAPP::run_deepSTRAPP_for_focal_time()] [deepSTRAPP::run_deepSTRAPP_over_time()] [deepSTRAPP::update_rates_and_regimes_for_focal_time()] [deepSTRAPP::prepare_trait_data()] [deepSTRAPP::plot_BAMM_rates()]
 #'
 #' @references For BAMM: Rabosky, D. L. (2014). Automatic detection of key innovations, rate shifts, and diversity-dependence on phylogenetic trees.
 #'  PloS one, 9(2), e89543. DOI: \url{https://doi.org/10.1371/journal.pone.0089543}. Website: \url{http://bamm-project.org/}.
@@ -213,10 +213,9 @@
 #' # Explore output
 #' str(whale_BAMM_object, 1)
 #'
-#' # Plot mean net diversification rates on the phylogeny
-#' BAMMtools::plot.bammdata(whale_BAMM_object,
-#'    labels = TRUE, legend = TRUE)
-#'
+#' # Plot mean net diversification rates and regime shifts on the phylogeny
+#' plot_BAMM_rates(whale_BAMM_object,
+#'                 labels = TRUE, legend = TRUE)
 #'
 #' # ----- Example 2: Ponerinae phylogeny ----- #
 #'
@@ -239,9 +238,9 @@
 #' # Explore output
 #' str(Ponerinae_BAMM_object, 1)
 #'
-#' # Plot mean net diversification rates on the phylogeny
-#' BAMMtools::plot.bammdata(Ponerinae_BAMM_object,
-#'     labels = FALSE, legend = TRUE)
+#' # Plot mean net diversification rates and regime shifts on the phylogeny
+#' plot_BAMM_rates(Ponerinae_BAMM_object,
+#'                 labels = FALSE, legend = TRUE)
 #'
 
 
