@@ -73,12 +73,16 @@
 #'
 #'   Additional elements providing key information for downstream analyses:
 #'   * `$expectedNumberOfShifts` Integer. The expected number of regime shifts used to set the prior in BAMM.
-#'   * `$MSC_index` Integer. The index of the Maximum Shift Credibility configuration among the posterior samples.
 #'   * `$MSP_tree` Object of class `phylo`. List of 4 elements duplicating information from the Phylogeny-related elements above,
 #'      except `$MSP_tree$edge.length` is recording the Marginal Shift Probability of each branch (i.e., the probability of a regime shift to occur along each branch)
+#'   * `$MAP_indices` Vector of integers. The indices of the Maximum A Posteriori probability (MAP) configurations among the posterior samples.
 #'   * `$MAP_BAMM_object`. List of 18 elements of class `"bammdata" recording the mean rates and regime shift locations found across
-#'      the Maximum A Posteriori probability (MAP) configuration. All BAMM elements summarizing diversification data holds a single entry describing this
-#'      the mean diversification history.
+#'      the Maximum A Posteriori probability (MAP) configurations. All BAMM elements summarizing diversification data holds a single entry describing
+#'      this mean diversification history.
+#'   * `$MSC_indices` Vector of integers. The indices of the Maximum Shift Credibility (MSC) configurations among the posterior samples.
+#'   * `$MSC_BAMM_object` List of 18 elements of class `"bammdata" recording the mean rates and regime shift locations found across
+#'      the Maximum Shift Credibility (MSC) configurations. All BAMM elements summarizing diversification data holds a single entry describing
+#'      this mean diversification history.
 #'
 #' @docType data
 #' @keywords datasets
@@ -136,12 +140,17 @@
 #'
 #'   Additional elements providing key information for downstream analyses:
 #'   * `$expectedNumberOfShifts` Integer. The expected number of regime shifts used to set the prior in BAMM.
-#'   * `$MSC_index` Integer. The index of the Maximum Shift Credibility configuration among the posterior samples.
 #'   * `$MSP_tree` Object of class `phylo`. List of 4 elements duplicating information from the Phylogeny-related elements above,
 #'      except `$MSP_tree$edge.length` is recording the Marginal Shift Probability of each branch (i.e., the probability of a regime shift to occur along each branch)
+#'      whose origin is older that `focal_time`.
+#'   * `$MAP_indices` Vector of integers. The indices of the Maximum A Posteriori probability (MAP) configurations among the posterior samples.
 #'   * `$MAP_BAMM_object`. List of 18 elements of class `"bammdata" recording the mean rates and regime shift locations found across
 #'      the Maximum A Posteriori probability (MAP) configuration. All BAMM elements summarizing diversification data holds a single entry describing this
-#'      the mean diversification history.
+#'      the mean diversification history, updated for the `focal_time`.
+#'   * `$MSC_indices` Vector of integers. The indices of the Maximum Shift Credibility (MSC) configurations among the posterior samples.
+#'   * `$MSC_BAMM_object` List of 18 elements of class `"bammdata" recording the mean rates and regime shift locations found across
+#'      the Maximum Shift Credibility (MSC) configurations. All BAMM elements summarizing diversification data holds a single entry describing
+#'      this mean diversification history, updated for the `focal_time`.
 #'
 #'   New elements added to provide updated information:
 #'   * `$root_age` Integer. Stores the age of the root of the tree.
@@ -214,12 +223,17 @@
 #'
 #'   Additional elements providing key information for downstream analyses:
 #'   * `$expectedNumberOfShifts` Integer. The expected number of regime shifts used to set the prior in BAMM.
-#'   * `$MSC_index` Integer. The index of the Maximum Shift Credibility configuration among the posterior samples.
 #'   * `$MSP_tree` Object of class `phylo`. List of 4 elements duplicating information from the Phylogeny-related elements above,
 #'      except `$MSP_tree$edge.length` is recording the Marginal Shift Probability of each branch (i.e., the probability of a regime shift to occur along each branch)
+#'      whose origin is older that `focal_time`.
+#'   * `$MAP_indices` Vector of integers. The indices of the Maximum A Posteriori probability (MAP) configurations among the posterior samples.
 #'   * `$MAP_BAMM_object`. List of 18 elements of class `"bammdata" recording the mean rates and regime shift locations found across
 #'      the Maximum A Posteriori probability (MAP) configuration. All BAMM elements summarizing diversification data holds a single entry describing this
-#'      the mean diversification history.
+#'      the mean diversification history, updated for the `focal_time`.
+#'   * `$MSC_indices` Vector of integers. The indices of the Maximum Shift Credibility (MSC) configurations among the posterior samples.
+#'   * `$MSC_BAMM_object` List of 18 elements of class `"bammdata" recording the mean rates and regime shift locations found across
+#'      the Maximum Shift Credibility (MSC) configurations. All BAMM elements summarizing diversification data holds a single entry describing
+#'      this mean diversification history, updated for the `focal_time`.
 #'
 #'   New elements added to provide updated information:
 #'   * `$root_age` Integer. Stores the age of the root of the tree.

@@ -19,6 +19,7 @@ prepare_diversification_data(
   additional_BAMM_settings = list(),
   BAMM_output_directory_path = "./BAMM_outputs/",
   keep_BAMM_outputs = TRUE,
+  MAP_odd_ratio_threshold = 5,
   skip_evaluations = FALSE,
   plot_evaluations = TRUE,
   save_evaluations = TRUE
@@ -71,6 +72,9 @@ Use '/' to separate directory and subdirectories. It must end with '/'. Default 
 
 \item{keep_BAMM_outputs}{Logical. Whether the \code{BAMM_output_directory} should be kept after the run. Default = \code{TRUE}.}
 
+\item{MAP_odd_ratio_threshold}{Numerical. Controls the definition of 'core-shifts' used to distinguish across configurations when fetching the MAP samples.
+Shifts that have an odd-ratio of marginal posterior probability / prior lower than \code{MAP_odd_ratio_threshold} are ignored. See \code{\link[BAMMtools:getBestShiftConfiguration]{BAMMtools::getBestShiftConfiguration()}}. Default = \code{5}.}
+
 \item{skip_evaluations}{Logical. Whether to skip the Evaluation step including MCMC trace, ESS, and prior/posterior comparisons for expected number of shifts. Default = \code{FALSE}.}
 
 \item{plot_evaluations}{Logical. Whether to display the plots generated during the Evaluation step: MCMC trace, and prior/posterior comparisons for expected number of shifts. Default = \code{TRUE}.}
@@ -79,7 +83,7 @@ Use '/' to separate directory and subdirectories. It must end with '/'. Default 
 in the \code{BAMM_output_directory}. Default = \code{TRUE}.}
 }
 \value{
-The function returns a \code{BAMM_object} of class \code{"bammdata"} which is a list with at least 18 elements.
+The function returns a \code{BAMM_object} of class \code{"bammdata"} which is a list with at least 22 elements.
 
 Phylogeny-related elements used to plot a phylogeny with \code{\link[ape:plot.phylo]{ape::plot.phylo()}}:
 \itemize{
@@ -110,7 +114,21 @@ BAMM elements summarizing diversification data:
 \item \verb{$meanTipLambda} Vector of named numerical. Mean tip speciation rates across all posterior configurations of tips.
 \item \verb{$meanTipMu} Vector of named numerical. Mean tip extinction rates across all posterior configurations of tips.
 \item \verb{$type} Character string. Set the type of data modeled with BAMM. Should be "diversification".
+}
+
+Additional elements providing key information for downstream analyses:
+\itemize{
 \item \verb{$expectedNumberOfShifts} Integer. The expected number of regime shifts used to set the prior in BAMM.
+\item \verb{$MSP_tree} Object of class \code{phylo}. List of 4 elements duplicating information from the Phylogeny-related elements above,
+except \verb{$MSP_tree$edge.length} is recording the Marginal Shift Probability of each branch (i.e., the probability of a regime shift to occur along each branch)
+\item \verb{$MAP_indices} Vector of integers. The indices of the Maximum A Posteriori probability (MAP) configurations among the posterior samples.
+\item \verb{$MAP_BAMM_object}. List of 18 elements of class `"bammdata" recording the mean rates and regime shift locations found across
+the Maximum A Posteriori probability (MAP) configurations. All BAMM elements summarizing diversification data holds a single entry describing
+this mean diversification history.
+\item \verb{$MSC_indices} Vector of integers. The indices of the Maximum Shift Credibility (MSC) configurations among the posterior samples.
+\item \verb{$MSC_BAMM_object} List of 18 elements of class `"bammdata" recording the mean rates and regime shift locations found across
+the Maximum Shift Credibility (MSC) configurations. All BAMM elements summarizing diversification data holds a single entry describing
+this mean diversification history.
 }
 
 The function also produces files listed in the Details section and stored in the the \code{BAMM_output_directory}.
@@ -182,6 +200,15 @@ Step 4: Import BAMM outputs
 \item Subset posterior samples to the requested \code{nb_posterior_samples} with \link[BAMMtools:subsetEventData]{BAMMtools::subsetEventData}.
 \item Record the \verb{$expectedNumberOfShifts} used to set the prior. This is useful for downstream analyses involving comparison of prior vs. posterior probabilities
 (See \code{\link[BAMMtools:distinctShiftConfigurations]{BAMMtools::distinctShiftConfigurations()}}).
+\item Record the marginal posterior probability of regime shift along branches based on the proportion of samples harboring a regime shift along each branch.
+(See \code{\link[BAMMtools:ShiftProbsTree]{BAMMtools::marginalShiftProbsTree()}}). Result is stored in \verb{$MSP_tree} as phylogenetic tree with \verb{$edge.length} scaled to the marginal posterior probability.
+\item Extract the Maximum A Posteriori probability (MAP) configuration = the configuration of regime shift location found the most frequently among the posterior samples.
+(See \code{\link[BAMMtools:getBestShiftConfiguration]{BAMMtools::getBestShiftConfiguration()}}). This ignores shifts that have an odd-ratio of marginal posterior probability / prior lower than \code{MAP_odd_ratio_threshold}
+to avoid noise from non-core shifts. MAP sample indices are stored in \verb{$MAP_indices}. Diversification rates and shift locations on branches are then averaged across all MAP samples and
+recorded as an object of class \code{"bammdata"} in \verb{$MAP_BAMM_object} with a single \verb{$eventData} table used to plot regime shifts on the phylogeny with \code{\link[=plot_BAMM_rates]{plot_BAMM_rates()}}.
+\item Extract the Maximum Shift Credibility (MSC) configuration = the configuration of regime shift location with the highest product of marginal probabilities across branches.
+(See \code{\link[BAMMtools:maximumShiftCredibility]{BAMMtools::maximumShiftCredibility()}}). MSC sample indices are stored in \verb{$MSC_indices}. Diversification rates and shift locations on branches are then averaged across all MSC samples and
+recorded as an object of class \code{"bammdata"} in \verb{$MSC_BAMM_object} with a single \verb{$eventData} table used to plot regime shifts on the phylogeny with \code{\link[=plot_BAMM_rates]{plot_BAMM_rates()}}.
 }
 
 Step 5: Clean BAMM files
@@ -194,7 +221,7 @@ The \code{BAMM_object} output:
 \itemize{
 \item is typically used as input to run deepSTRAPP with \code{\link[=run_deepSTRAPP_for_focal_time]{run_deepSTRAPP_for_focal_time()}} or \code{\link[=run_deepSTRAPP_over_time]{run_deepSTRAPP_over_time()}}.
 \item can be used to extract rates and regimes for any \code{focal_time} in the past with \code{\link[=update_rates_and_regimes_for_focal_time]{update_rates_and_regimes_for_focal_time()}}.
-\item can be used to map diversification rates on the phylogeny with \code{\link[BAMMtools:plot]{BAMMtools::plot.bammdata()}}.
+\item can be used to map diversification rates and regime shifts on the phylogeny with \code{\link[=plot_BAMM_rates]{plot_BAMM_rates()}}.
 }
 }
 \section{Note on diversification models for time-calibrated phylogenies}{

@@ -5,9 +5,8 @@
 #'   Optionally, the function can update the object to display a mapped phylogeny such as
 #'   branches overlapping the `focal_time` are shorten to the `focal_time`.
 #'
-#' @param BAMM_object Object of class `"bammdata"`, typically generated with [BAMMtools::getEventData()],
-#'   that contains a phylogenetic tree and associated diversification rate mapping
-#'   across selected posterior samples.
+#' @param BAMM_object Object of class `"bammdata"`, typically generated with [deepSTRAPP::prepare_diversification_data()],
+#'   that contains a phylogenetic tree and associated diversification rate mapping across selected posterior samples.
 #'   The phylogenetic tree must be rooted and fully resolved/dichotomous,
 #'   but it does not need to be ultrametric (it can includes fossils).
 #' @param focal_time Numerical. The time, in terms of time distance from the present,
@@ -105,13 +104,17 @@
 #'
 #'   Additional elements providing key information for downstream analyses:
 #'   * `$expectedNumberOfShifts` Integer. The expected number of regime shifts used to set the prior in BAMM.
-#'   * `$MSC_index` Integer. The index of the Maximum Shift Credibility configuration among the posterior samples.
 #'   * `$MSP_tree` Object of class `phylo`. List of 4 elements duplicating information from the Phylogeny-related elements above,
 #'      except `$MSP_tree$edge.length` is recording the Marginal Shift Probability of each branch (i.e., the probability of a regime shift to occur along each branch)
 #'      whose origin is older that `focal_time`.
+#'   * `$MAP_indices` Vector of integers. The indices of the Maximum A Posteriori probability (MAP) configurations among the posterior samples.
 #'   * `$MAP_BAMM_object`. List of 18 elements of class `"bammdata" recording the mean rates and regime shift locations found across
 #'      the Maximum A Posteriori probability (MAP) configuration. All BAMM elements summarizing diversification data holds a single entry describing this
 #'      the mean diversification history, updated for the `focal_time`.
+#'   * `$MSC_indices` Vector of integers. The indices of the Maximum Shift Credibility (MSC) configurations among the posterior samples.
+#'   * `$MSC_BAMM_object` List of 18 elements of class `"bammdata" recording the mean rates and regime shift locations found across
+#'      the Maximum Shift Credibility (MSC) configurations. All BAMM elements summarizing diversification data holds a single entry describing
+#'      this mean diversification history, updated for the `focal_time`.
 #'
 #'   New elements added to provide update information:
 #'   * `$root_age` Integer. Stores the age of the root of the tree.
@@ -198,44 +201,61 @@
 # plot_BAMM_rates(Ponerinae_BAMM_object_25My, legend = TRUE)
 
 
-whale_BAMM_object_5My <- update_rates_and_regimes_for_focal_time(
-  BAMM_object = whale_BAMM_object,
-  focal_time = 5,
-  update_rates = TRUE, update_regimes = TRUE,
-  update_tree = TRUE, update_plot = TRUE,
-  update_all_elements = TRUE,
-  keep_tip_labels = TRUE,
-  verbose = TRUE)
+# ## Fast enough, no need to \not_run\
+# whale_BAMM_object_5My <- update_rates_and_regimes_for_focal_time(
+#   BAMM_object = whale_BAMM_object,
+#   focal_time = 5,
+#   update_rates = TRUE, update_regimes = TRUE,
+#   update_tree = TRUE, update_plot = TRUE,
+#   update_all_elements = TRUE,
+#   keep_tip_labels = TRUE,
+#   verbose = TRUE)
+#
+# str(whale_BAMM_object, max.level = 1)
+# str(whale_BAMM_object$MAP_BAMM_object, max.level = 1)
+# str(whale_BAMM_object$MSC_BAMM_object, max.level = 1)
+# str(whale_BAMM_object_5My, max.level = 1)
+# str(whale_BAMM_object_5My$MSP_tree, max.level = 1)
+# str(whale_BAMM_object_5My$MAP_BAMM_object, max.level = 1)
+# str(whale_BAMM_object_5My$MSC_BAMM_object, max.level = 1)
+#
+# ## Example for update()
+#
+# # Add "phylo" class to be compatible with phytools::nodeHeights()
+# class(whale_BAMM_object) <- unique(c(class(whale_BAMM_object), "phylo"))
+#
+# ## Plot initial BAMM_object for t = 0 My
+# plot_BAMM_rates(whale_BAMM_object, add_regime_shifts = TRUE,
+#                 labels = TRUE, legend = TRUE,
+#                 par.reset = FALSE) # To keep plotting parameters in memory. Needed to use abline() afterwards.
+# abline(v = max(phytools::nodeHeights(whale_BAMM_object)[,2]) - focal_time,
+#        col = "red", lty = 2, lwd = 2)
+#
+# ## Plot updated BAMM_object for t = 5 My
+# plot_BAMM_rates(whale_BAMM_object_5My, add_regime_shifts = TRUE,
+#                 labels = TRUE, legend = TRUE)
+#
+#
+# ## Example for plot_BAMM_rates()
+#
+# ## Plot overall mean rates with MAP configuration for regime shifts
+# plot_BAMM_rates(whale_BAMM_object, add_regime_shifts = TRUE,
+#                 configuration_type = "MAP", bg = "black",
+#                 regimes_size = 3)
+# ## Plot overall mean rates with MSC configuration for regime shifts
+# plot_BAMM_rates(whale_BAMM_object, add_regime_shifts = TRUE,
+#                 configuration_type = "MSC", bg = "black",
+#                 regimes_size = 3)
+#
+# ## Plot mean MAP rates with regime shifts
+# plot_BAMM_rates(whale_BAMM_object$MAP_BAMM_object, add_regime_shifts = TRUE,
+#                 configuration_type = "index", # Set to index to use the regime shift data from the MAP_BAMM_object
+#                 regimes_size = 3, bg = "black")
+# ## Plot mean MSC rates with regime shifts
+# plot_BAMM_rates(whale_BAMM_object$MSC_BAMM_object, add_regime_shifts = TRUE,
+#                 configuration_type = "index", # Set to index to use the regime shift data from the MSC_BAMM_object
+#                 regimes_size = 3, bg = "black")
 
-str(whale_BAMM_object, max.level = 1)
-str(whale_BAMM_object$MAP_BAMM_object, max.level = 1)
-str(whale_BAMM_object_5My, max.level = 1)
-str(whale_BAMM_object_5My$MSP_tree, max.level = 1)
-str(whale_BAMM_object_5My$MAP_BAMM_object, max.level = 1)
-
-plot_BAMM_rates(whale_BAMM_object, show_regime_shifts = TRUE,
-                configuration_type = "MAP",
-                regimes_size = 2, bg = "black")
-
-plot_BAMM_rates(whale_BAMM_object_5My, show_regime_shifts = TRUE,
-                configuration_type = "MAP",
-                regimes_size = 2, bg = "black")
-
-
-plot_BAMM_rates(whale_BAMM_object$MAP_BAMM_object, show_regime_shifts = TRUE,
-                configuration_type = "index",
-                regimes_size = 2, bg = "black")
-
-plot_BAMM_rates(whale_BAMM_object_5My$MAP_BAMM_object, show_regime_shifts = TRUE,
-                configuration_type = "index",
-                regimes_size = 2, bg = "black")
-
-
-### Do the same for MSC after getting the mean values among equal configs, instead of saving the MSC_index
-
-### Issue with reset of par() ?
-
-MAP_dtrates <- BAMMtools::dtRates(whale_BAMM_object_5My$MAP_BAMM_object, tau = 0.01, tmat = TRUE)$dtrates
 
 
 # # ----- Example 2: Non-ultrametric tree including extinct mammal groups ----- #
@@ -805,6 +825,194 @@ update_rates_and_regimes_for_focal_time <- function (BAMM_object, focal_time,
       # Remove temporary "phylo" class
       class(updated_BAMM_object$MAP_BAMM_object) <- setdiff(class(updated_BAMM_object$MAP_BAMM_object), "phylo")
     }
+
+    ## Update the BAMM_object for the Maximum Shift Credibility (MSC) configuration if present (used to plot regime shifts)
+    if ("MSC_BAMM_object" %in% names(updated_BAMM_object))
+    {
+      ## Add "phylo" class to be compatible with phytools::getDescendants()
+      class(updated_BAMM_object$MSC_BAMM_object) <- unique(c(class(updated_BAMM_object$MSC_BAMM_object), "phylo"))
+
+      ## Use the $MSC_BAMM_object following updates from the main BAMM_object
+      updated_BAMM_object$MSC_BAMM_object$edge <- updated_BAMM_object$edge
+      updated_BAMM_object$MSC_BAMM_object$Nnode <- updated_BAMM_object$Nnode
+      updated_BAMM_object$MSC_BAMM_object$tip.label <- updated_BAMM_object$tip.label
+      updated_BAMM_object$MSC_BAMM_object$edge.length <- updated_BAMM_object$edge.length
+      updated_BAMM_object$MSC_BAMM_object$begin <- updated_BAMM_object$begin
+      updated_BAMM_object$MSC_BAMM_object$end <- updated_BAMM_object$end
+
+      ## Update information according to 'focal_type'
+
+      ## $eventVectors
+      ## $eventVectors = List of integer vectors of regime membership per branches in each posterior configuration
+      updated_BAMM_object$MSC_BAMM_object$eventVectors[[1]] <- updated_BAMM_object$MSC_BAMM_object$eventVectors[[1]][updated_BAMM_object$edges_ID_df$initial_edge_ID]
+
+      ## $tipStates
+      # Extract eventData records = Macroevolutionary regime parameters
+      MSC_eventData <- updated_BAMM_object$MSC_BAMM_object$eventData[[1]]
+      # Compute updated regime age and length
+      MSC_eventData$age <- root_age - MSC_eventData$time
+      MSC_eventData$updated_length <- MSC_eventData$age - focal_time
+      # Identify edge ID per regimes
+      # Loop per regime
+      for (j in 1:nrow(MSC_eventData))
+      {
+        # j <- 2
+
+        tipward_node_ID_j <- MSC_eventData$node[j] # Nodes are tipward nodes ID of the branch where the regime starts
+
+        # Get descendant tipward nodes of regime j
+        regime_nodes_j <- phytools::getDescendants(tree = updated_BAMM_object$MSC_BAMM_object, node = tipward_node_ID_j)
+
+        # Assign regime ID
+        all_edges_df$regime_ID[all_edges_df$tipward_node_ID %in% regime_nodes_j] <- j
+
+        # Deal with special case of the edge where the process starts
+        # Should the edge where the process starts be included in the regime at the focal time?
+        if (j != 1) # No need for the root process
+        {
+          # Identify the starting edge
+          starting_edge_j <- as.numeric(all_edges_df$edge_ID[all_edges_df$tipward_node_ID == tipward_node_ID_j])
+
+          # Get relative position of the regime shift
+          relative_position_shift_j <- all_edges_df$rootward_node_age[starting_edge_j] - MSC_eventData$age[j]
+          # Assign starting edge to process only if the regime shift happen before the time cut
+          if (relative_position_shift_j < all_edges_df$length[starting_edge_j])
+          {
+            all_edges_df$regime_ID[starting_edge_j] <- j
+          }
+        }
+      }
+      # Filter regimes for tips that are present at the focal time
+      MSC_tipStates <- all_edges_df$regime_ID[all_edges_df$time_test]
+      # Name tip regimes with tip.labels/tipward_edge_ID
+      if (keep_tip_labels)
+      {
+        names(MSC_tipStates) <- all_edges_df$tip.label[all_edges_df$time_test]
+      } else {
+        names(MSC_tipStates) <- all_edges_df$tipward_node_ID[all_edges_df$time_test]
+      }
+      # Store updated tipStates
+      updated_BAMM_object$MSC_BAMM_object$tipStates[[1]] <- MSC_tipStates
+
+      ## $tipLambda & $tipMu
+      MSC_eventData$tip_speciation_rates <- NA
+      MSC_eventData$tip_extinction_rates <- NA
+      # Loop per regime
+      for (j in 1:nrow(MSC_eventData))
+      {
+        # Compute new tip speciation rates based on regime parameters
+        lambda_0_j <- MSC_eventData$lam1[j]
+        alpha_j <- MSC_eventData$lam2[j]
+        time_j <- MSC_eventData$updated_length[j]
+
+        if (alpha_j <= 0) # If alpha <= 0 (decrease): lambda_t = lambda_0 * exp(alpha*t)
+        {
+          MSC_eventData$tip_speciation_rates[j] <- lambda_0_j * exp(alpha_j*time_j)
+        } else { # If alpha > 0 (increase): lambda_t = lambda_0 * (2 - exp(-alpha*t))
+          MSC_eventData$tip_speciation_rates[j] <- lambda_0_j * (2 - exp(-alpha_j*time_j))
+        }
+
+        # Compute new tip extinction rates based on regime parameters
+        # All extinction rates are constant within regime in the current BAMM settings
+        MSC_eventData$tip_extinction_rates[j] <- MSC_eventData$mu1[j]
+        if (time_j < 0)
+        {
+          MSC_eventData$tip_speciation_rates[j] <- NA
+          MSC_eventData$tip_extinction_rates[j] <- NA
+        }
+      }
+
+      # Assign rates to edge according to regime ID
+      all_edges_df$tipLambda <- NA
+      all_edges_df$tipLambda <- MSC_eventData$tip_speciation_rates[match(x = all_edges_df$regime_ID, table = MSC_eventData$index)]
+      all_edges_df$tipMu <- NA
+      all_edges_df$tipMu <- MSC_eventData$tip_extinction_rates[match(x = all_edges_df$regime_ID, table = MSC_eventData$index)]
+
+      # Filter regimes for tips that are present at the focal time
+      MSC_tipLambda <- all_edges_df$tipLambda[all_edges_df$time_test]
+      MSC_tipMu <- all_edges_df$tipMu[all_edges_df$time_test]
+
+      # Name tip regimes with tip.labels/tipward_edge_ID
+      if (keep_tip_labels)
+      {
+        names(MSC_tipLambda) <- all_edges_df$tip.label[all_edges_df$time_test]
+        names(MSC_tipMu) <- all_edges_df$tip.label[all_edges_df$time_test]
+      } else {
+        names(MSC_tipLambda) <- all_edges_df$tipward_node_ID[all_edges_df$time_test]
+        names(MSC_tipMu) <- all_edges_df$tipward_node_ID[all_edges_df$time_test]
+      }
+
+      # Store updated tipLambda & tipMu
+      updated_BAMM_object$MSC_BAMM_object$tipLambda[[1]] <- MSC_tipLambda
+      updated_BAMM_object$MSC_BAMM_object$tipMu[[1]] <- MSC_tipMu
+
+      ## $eventData # Dataframe recording shift events and macroevolutionary regimes in the focal posterior configuration. 1st line = Background root regime
+      # Filter to keep only events that happened before focal_time
+      MSC_eventData <- updated_BAMM_object$MSC_BAMM_object$eventData[[1]]
+      MSC_eventData <- MSC_eventData[((root_age - MSC_eventData$time) > focal_time), ]
+      # Update tipward nodes ID
+      MSC_eventData$node <- updated_BAMM_object$nodes_ID_df$new_node_ID[match(MSC_eventData$node, updated_BAMM_object$nodes_ID_df$initial_node_ID)]
+      # Store updated df of macroevolutionary regimes
+      updated_BAMM_object$MSC_BAMM_object$eventData[[1]] <- MSC_eventData
+
+      ## $eventBranchSegs
+      # Extract matrix of branch segments
+      MSC_eventBranchSegs <- updated_BAMM_object$MSC_BAMM_object$eventBranchSegs[[1]]
+      # Remove segments that are younger than focal_time
+      MSC_eventBranchSegs <- MSC_eventBranchSegs[(root_age - MSC_eventBranchSegs[,2] > focal_time), ]
+
+      # Update tipward nodes ID
+      MSC_eventBranchSegs[ ,1] <- updated_BAMM_object$nodes_ID_df$new_node_ID[match(MSC_eventBranchSegs[ ,1], updated_BAMM_object$nodes_ID_df$initial_node_ID)]
+      # Reorder following tipward nodes ID, then older segments > younger segments
+      MSC_eventBranchSegs <- MSC_eventBranchSegs[order(MSC_eventBranchSegs[ ,1], MSC_eventBranchSegs[ ,2]), ]
+
+      # Store updated matrix of branch segments
+      updated_BAMM_object$MSC_BAMM_object$eventBranchSegs[[1]] <- MSC_eventBranchSegs
+
+      ## Use the $MSC_BAMM_object following updates from the main BAMM_object
+      updated_BAMM_object$MSC_BAMM_object$type <- updated_BAMM_object$type
+
+      ## Create $dtRates and update it such as it contains only rates for segments older than the focal_time
+      # Can be used to keep consistency with estimated rates and color scheme used in BAMMtools::plot.bammdata
+
+      ## New version. Works but not sure why...
+      ## New version. Does not work on updated tree! Rate estimates are crap. Issue with reordering of egdes?
+      MSC_dtrates <- BAMMtools::dtRates(updated_BAMM_object$MSC_BAMM_object, tau = 0.01, tmat = TRUE)$dtrates
+      updated_BAMM_object$MSC_BAMM_object$dtrates <- MSC_dtrates
+
+      # # ## Former 'manual' version that ensure segments to be similar, but creates artifacts on the terminal segments (not sure why...)
+      # # # Get initial dtrates
+      # # dtrates_t0 <- BAMMtools::dtRates(BAMM_object$MSC_BAMM_object, tau = 0.01, tmat = TRUE)$dtrates
+      # #
+      # # # Find segments to remove segments that are younger than the focal_time
+      # # dtrates_segments_to_remove <- dtrates_t0$tmat[ , 2] >= (root_age - focal_time)
+      # #
+      # # # Update dtrates to remove segments that are older than the focal_time
+      # # MSC_dtrates <- dtrates_t0
+      # # MSC_dtrates$rates <- lapply(X = MSC_dtrates$rates, FUN = function (x) { y <-  x[!dtrates_segments_to_remove]} )
+      # # MSC_dtrates$tmat <- MSC_dtrates$tmat[!dtrates_segments_to_remove,]
+      # #
+      # # # Update tipward nodes ID in dtrates
+      # # MSC_dtrates$tmat[ ,1] <- updated_BAMM_object$nodes_ID_df$new_node_ID[match(MSC_dtrates$tmat[ ,1], updated_BAMM_object$nodes_ID_df$initial_node_ID)]
+      # # # Update dimnames
+      # # attr(MSC_dtrates$tmat, which = "dimnames")[[1]] <- as.character(1:nrow(MSC_dtrates$tmat))
+      # # # Update tau as the fraction of the total tree length represented by each segment
+      # # new_depth <- (root_age - focal_time)
+      # # depth_ratio <- new_depth/root_age
+      # # MSC_dtrates$tau <- MSC_dtrates$tau/depth_ratio
+      #
+      # # Store updated $dtrates
+      # updated_BAMM_object$MSC_BAMM_object$dtrates <- MSC_dtrates
+
+      ## Save initial_colorbreaks to use as colorbreaks in order to match color gradients from the initial full phylogeny
+      initial_plot <- BAMMtools::plot.bammdata(BAMM_object$MSC_BAMM_object, legend = TRUE, show = FALSE)
+      # updated_BAMM_object$initial_colorbreaks_range <- range(initial_plot$colorbreaks)
+      updated_BAMM_object$MSC_BAMM_object$initial_colorbreaks <- initial_plot$colorbreaks
+
+      # Remove temporary "phylo" class
+      class(updated_BAMM_object$MSC_BAMM_object) <- setdiff(class(updated_BAMM_object$MSC_BAMM_object), "phylo")
+    }
+
   }
 
   if (update_all_elements)
@@ -897,6 +1105,40 @@ update_rates_and_regimes_for_focal_time <- function (BAMM_object, focal_time,
       }
       class(updated_BAMM_object$MAP_BAMM_object) <- "bammdata"
       attr(x = updated_BAMM_object$MAP_BAMM_object, which = "order") <- "cladewise"
+    }
+
+    ## Update the BAMM_object for the Maximum Shift Credibility (MSC) configuration if present (used to plot regime shifts)
+    if ("MSC_BAMM_object" %in% names(updated_BAMM_object))
+    {
+      # Update $downseq & $lastvisit from the main BAMM_object
+      updated_BAMM_object$MSC_BAMM_object$downseq <- updated_BAMM_object$downseq
+      updated_BAMM_object$MSC_BAMM_object$lastvisit <- updated_BAMM_object$lastvisit
+
+      # Update $eventVectors by extracting information of remaning branches only
+      updated_BAMM_object$MSC_BAMM_object$eventVectors[[1]] <- updated_BAMM_object$MSC_BAMM_object$eventVectors[[1]][updated_BAMM_object$edges_ID_df$initial_edge_ID]
+
+      ## Update $numberEvents from $eventBranchSegs
+      updated_BAMM_object$numberEvents <- length(unique(updated_BAMM_object$MSC_BAMM_object$eventBranchSegs[[1]][, 4]))
+
+      ## Update $meanTipLambda and $meanTipMu as in $TipLambda and $TipMu
+      updated_BAMM_object$MSC_BAMM_object$meanTipLambda <- updated_BAMM_object$MSC_BAMM_object$tipLambda[[1]]
+      updated_BAMM_object$MSC_BAMM_object$meanTipMu <- updated_BAMM_object$MSC_BAMM_object$tipMu[[1]]
+
+      ## Reorder elements to fit order in the main BAMM_object
+      if ("node.label" %in% names(updated_BAMM_object$MSC_BAMM_object))
+      {
+        updated_BAMM_object$MSC_BAMM_object <- updated_BAMM_object$MSC_BAMM_object[c("edge", "Nnode", "tip.label", "edge.length", "node.label",
+                                                                                     "begin", "end", "downseq", "lastvisit", "numberEvents", "eventData",
+                                                                                     "eventVectors", "tipStates", "tipLambda", "tipMu", "eventBranchSegs",
+                                                                                     "meanTipLambda", "meanTipMu", "type", "dtrates", "initial_colorbreaks")]
+      } else {
+        updated_BAMM_object$MSC_BAMM_object <- updated_BAMM_object$MSC_BAMM_object[c("edge", "Nnode", "tip.label", "edge.length",
+                                                                                     "begin", "end", "downseq", "lastvisit", "numberEvents", "eventData",
+                                                                                     "eventVectors", "tipStates", "tipLambda", "tipMu", "eventBranchSegs",
+                                                                                     "meanTipLambda", "meanTipMu", "type", "dtrates", "initial_colorbreaks")]
+      }
+      class(updated_BAMM_object$MSC_BAMM_object) <- "bammdata"
+      attr(x = updated_BAMM_object$MSC_BAMM_object, which = "order") <- "cladewise"
     }
   }
 

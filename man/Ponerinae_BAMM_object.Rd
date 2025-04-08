@@ -5,7 +5,7 @@
 \alias{Ponerinae_BAMM_object}
 \title{Dataset summarizing 1000 posterior samples of BAMM for extant ponerine ants}
 \format{
-A list with 20 elements.
+A list with 21 elements.
 }
 \usage{
 data(Ponerinae_BAMM_object)
@@ -50,8 +50,21 @@ BAMM elements summarizing diversification data:
 \item \verb{$meanTipLambda} Vector of numerical. Mean tip speciation rates across all posterior configurations of tips.
 \item \verb{$meanTipMu} Vector of numerical. Mean tip extinction rates across all posterior configurations of tips.
 \item \verb{$type} Character string. Set the type of data modeled with BAMM. Here, type = "diversification".
+}
+
+Additional elements providing key information for downstream analyses:
+\itemize{
 \item \verb{$expectedNumberOfShifts} Integer. The expected number of regime shifts used to set the prior in BAMM.
-\item \verb{$MSC_index} Integer. The index of the Maximum Shift Credibility configuration among the posterior samples.
+\item \verb{$MSP_tree} Object of class \code{phylo}. List of 4 elements duplicating information from the Phylogeny-related elements above,
+except \verb{$MSP_tree$edge.length} is recording the Marginal Shift Probability of each branch (i.e., the probability of a regime shift to occur along each branch)
+\item \verb{$MAP_indices} Vector of integers. The indices of the Maximum A Posteriori probability (MAP) configurations among the posterior samples.
+\item \verb{$MAP_BAMM_object}. List of 18 elements of class `"bammdata" recording the mean rates and regime shift locations found across
+the Maximum A Posteriori probability (MAP) configurations. All BAMM elements summarizing diversification data holds a single entry describing
+this mean diversification history.
+\item \verb{$MSC_indices} Vector of integers. The indices of the Maximum Shift Credibility (MSC) configurations among the posterior samples.
+\item \verb{$MSC_BAMM_object} List of 18 elements of class `"bammdata" recording the mean rates and regime shift locations found across
+the Maximum Shift Credibility (MSC) configurations. All BAMM elements summarizing diversification data holds a single entry describing
+this mean diversification history.
 }
 }
 \references{

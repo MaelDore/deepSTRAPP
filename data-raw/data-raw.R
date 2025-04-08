@@ -55,6 +55,8 @@ Ponerinae_BAMM_object_10My <- update_rates_and_regimes_for_focal_time(
   keep_tip_labels = TRUE,
   verbose = TRUE)
 
+str(Ponerinae_BAMM_object_10My, 1)
+
 usethis::use_data(Ponerinae_BAMM_object_10My, overwrite = TRUE)
 
 
@@ -67,7 +69,7 @@ data(Ponerinae_BAMM_object, package = "deepSTRAPP")
 focal_time = 25
 
 ## Update the BAMM object (May take several minutes to run)
-Ponerinae_BAMM_object_10My <- update_rates_and_regimes_for_focal_time(
+Ponerinae_BAMM_object_25My <- update_rates_and_regimes_for_focal_time(
   BAMM_object = Ponerinae_BAMM_object,
   focal_time = focal_time,
   update_rates = TRUE, update_regimes = TRUE,
@@ -75,6 +77,8 @@ Ponerinae_BAMM_object_10My <- update_rates_and_regimes_for_focal_time(
   update_all_elements = TRUE,
   keep_tip_labels = TRUE,
   verbose = TRUE)
+
+str(Ponerinae_BAMM_object_25My, 1)
 
 usethis::use_data(Ponerinae_BAMM_object_25My, overwrite = TRUE)
 
@@ -102,8 +106,30 @@ plot.bammdata(whale_BAMM_object, labels = TRUE)
 
 usethis::use_data(whale_BAMM_object, overwrite = TRUE)
 
+# ### 5/ Generate whale_BAMM_object_5My ####
+#
+# ## Load the BAMM_object summarizing 1000 posterior samples of BAMM.
+# data(whale_BAMM_object, package = "deepSTRAPP")
+#
+# ## Set focal-time to 5 My
+# focal_time = 5
+#
+# ## Update the BAMM object (May take several minutes to run)
+# whale_BAMM_object_5My <- update_rates_and_regimes_for_focal_time(
+#   BAMM_object = whale_BAMM_object,
+#   focal_time = focal_time,
+#   update_rates = TRUE, update_regimes = TRUE,
+#   update_tree = TRUE, update_plot = TRUE,
+#   update_all_elements = TRUE,
+#   keep_tip_labels = TRUE,
+#   verbose = TRUE)
+#
+# str(whale_BAMM_object_5My, 1)
+#
+# usethis::use_data(whale_BAMM_object_5My, overwrite = TRUE)
 
-##### 5/ Save diversification template file as .rds #####
+
+### 6/ Save diversification template file as .rds #####
 
 # Load it from the /inst/ directory (works only in source/bundled version of the package)
 BAMM_template_diversification <- readLines(con = file.path("./inst/BAMM_template_diversification.txt"))

@@ -17,9 +17,8 @@ update_rates_and_regimes_for_focal_time(
 )
 }
 \arguments{
-\item{BAMM_object}{Object of class \code{"bammdata"}, typically generated with \code{\link[BAMMtools:getEventData]{BAMMtools::getEventData()}},
-that contains a phylogenetic tree and associated diversification rate mapping
-across selected posterior samples.
+\item{BAMM_object}{Object of class \code{"bammdata"}, typically generated with \code{\link[=prepare_diversification_data]{prepare_diversification_data()}},
+that contains a phylogenetic tree and associated diversification rate mapping across selected posterior samples.
 The phylogenetic tree must be rooted and fully resolved/dichotomous,
 but it does not need to be ultrametric (it can includes fossils).}
 
@@ -89,7 +88,18 @@ BAMM elements summarizing diversification data:
 \item \verb{$meanTipLambda} Vector of named numerical. Mean tip speciation rates across all posterior configurations of tips present at \code{focal_time} (does not includes older fossils).
 \item \verb{$meanTipMu} Vector of named numerical. Mean tip extinction rates across all posterior configurations of tips present at \code{focal_time} (does not includes older fossils).
 \item \verb{$type} Character string. Set the type of data modeled with BAMM. Should be "diversification".
+}
+
+Additional elements providing key information for downstream analyses:
+\itemize{
 \item \verb{$expectedNumberOfShifts} Integer. The expected number of regime shifts used to set the prior in BAMM.
+\item \verb{$MSP_tree} Object of class \code{phylo}. List of 4 elements duplicating information from the Phylogeny-related elements above,
+except \verb{$MSP_tree$edge.length} is recording the Marginal Shift Probability of each branch (i.e., the probability of a regime shift to occur along each branch)
+whose origin is older that \code{focal_time}.
+\item \verb{$MAP_indices} Vector of integers. The indices of the Maximum A Posteriori probability (MAP) configurations among the posterior samples.
+\item \verb{$MAP_BAMM_object}. List of 18 elements of class \verb{"bammdata" recording the mean rates and regime shift locations found across the Maximum A Posteriori probability (MAP) configuration. All BAMM elements summarizing diversification data holds a single entry describing this the mean diversification history, updated for the }focal_time`.
+\item \verb{$MSC_indices} Vector of integers. The indices of the Maximum Shift Credibility (MSC) configurations among the posterior samples.
+\item \verb{$MSC_BAMM_object} List of 18 elements of class \verb{"bammdata" recording the mean rates and regime shift locations found across the Maximum Shift Credibility (MSC) configurations. All BAMM elements summarizing diversification data holds a single entry describing this mean diversification history, updated for the }focal_time`.
 }
 
 New elements added to provide update information:
@@ -166,12 +176,12 @@ the fraction of each segment length compared to the full depth of the initial tr
 ## Load the BAMM_object summarizing 1000 posterior samples of BAMM
 data(Ponerinae_BAMM_object, package = "deepSTRAPP")
 
-## Set focal-time to 10 My
-focal_time = 10
+## Set focal-time to 25 My
+focal_time = 25
 
 \dontrun{
 ## Update the BAMM object (May take several minutes to run)
-Ponerinae_BAMM_object_updated <- update_rates_and_regimes_for_focal_time(
+Ponerinae_BAMM_object_25My <- update_rates_and_regimes_for_focal_time(
   BAMM_object = Ponerinae_BAMM_object,
   focal_time = focal_time,
   update_rates = TRUE, update_regimes = TRUE,
@@ -179,6 +189,9 @@ Ponerinae_BAMM_object_updated <- update_rates_and_regimes_for_focal_time(
   update_all_elements = TRUE,
   keep_tip_labels = TRUE,
   verbose = TRUE) }
+
+## Load results to save time
+data(Ponerinae_BAMM_object_25My, package = "deepSTRAPP")
 
 ## Extract root age
 # Add temporarily the "phylo" class to be compatible with phytools::nodeHeights()
@@ -192,14 +205,13 @@ plot(Ponerinae_BAMM_object, legend = TRUE, labels = FALSE)
 abline(v = root_age - focal_time,
        col = "red", lty = 2, lwd = 2)
 
-\dontrun{
-## Plot diversification rates on the updated tree (cut-off for 10 My)
+## Plot diversification rates on the updated tree (cut-off for 25 My)
 # Keep the initial color scheme
-BAMMtools::plot.bammdata(Ponerinae_BAMM_object_updated, legend = TRUE,
-                         colorbreaks = Ponerinae_BAMM_object_updated$initial_colorbreaks)
+BAMMtools::plot.bammdata(Ponerinae_BAMM_object_25My, legend = TRUE,
+                         colorbreaks = Ponerinae_BAMM_object_25My$initial_colorbreaks)
 
 # Use a new color scheme mapped on the new distribution of rates
-BAMMtools::plot.bammdata(Ponerinae_BAMM_object_updated, legend = TRUE) }
+BAMMtools::plot.bammdata(Ponerinae_BAMM_object_25My, legend = TRUE)
 
 }
 \seealso{
