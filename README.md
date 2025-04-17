@@ -191,7 +191,7 @@ head(Ponerinae_ACE)
 # Run a BAMM (Bayesian Analysis of Macroevolutionary Mixtures)
 
 # You need the BAMM C++ program installed in your machine to run this step.
-# See the BAMM website: \url{http://bamm-project.org/} and the companion R package [BAMMtools].
+# See the BAMM website: http://bamm-project.org/ and the companion R package [BAMMtools].
 
 # 1/ Set BAMM - Record BAMM settings and generate all input files needed for BAMM.
 # 2/ Run BAMM - Run BAMM and move output files in dedicated directory.

@@ -330,7 +330,7 @@
 #'
 "Ponerinae_trait_data_10My"
 
-### 6/ Temporary test set as output from run_deepSTRAPP_over_time to use for plotting p_values histogram
+### 7/ Temporary test sets as output from run_deepSTRAPP_over_time to use for plotting p_values histogram ####
 
 #' @title Temporary test set as output from run_deepSTRAPP_over_time to use for plotting p_values histogram
 #'
@@ -358,7 +358,23 @@
 #'
 "STRAPP_tests_over_time_temp_example_2"
 
-### 7/ BAMM output for whale phylogeny ####
+### 8/ Temporary test sets as output from run_deepSTRAPP_over_time to use for plotting stuff ####
+
+#' @title Temporary test set as output from run_deepSTRAPP_over_time to use for plotting rates_through_time
+#'
+#' @description Temporary test set as output from run_deepSTRAPP_over_time to use for plotting rates_through_time.
+#'
+#' @usage data(Ponerinae_deepSTRAPP_0_40)
+#' @format A list with X elements.
+#'
+#' @docType data
+#' @keywords datasets
+#' @name Ponerinae_deepSTRAPP_0_40
+#'
+"Ponerinae_deepSTRAPP_0_40"
+
+
+### 9/ BAMM output for whale phylogeny ####
 
 #' @title Dataset summarizing 1000 posterior samples of BAMM for extant whales
 #'
@@ -422,7 +438,7 @@
 "whale_BAMM_object"
 
 
-### 8/ Template file for BAMM diversification analyses ####
+### 10/ Template file for BAMM diversification analyses ####
 
 #' @title Template file for BAMM diversification analyses
 #'
