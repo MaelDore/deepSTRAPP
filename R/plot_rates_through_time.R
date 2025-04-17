@@ -511,8 +511,9 @@ plot_rates_through_time_for_continuous_data <- function (
         plot.title = ggplot2::element_text(size = 20, hjust = 0.5, color = "black",
                                            margin = ggplot2::margin(b = 10, t = 5)),
         legend.title = ggplot2::element_text(size  = 16, margin = ggplot2::margin(b = 5)),
-        legend.position = "inside",
-        legend.position.inside = c(0.15, 0.2),
+        legend.position = "right",
+        # legend.position = "inside",
+        # legend.position.inside = c(0.15, 0.2),
         legend.text = ggplot2::element_text(size = 12),
         legend.key = ggplot2::element_rect(colour = NA, fill = NA, linewidth = 5),
         legend.key.size = ggplot2::unit(1.8, "line"),
@@ -577,8 +578,9 @@ plot_rates_through_time_for_continuous_data <- function (
           plot.title = ggplot2::element_text(size = 20, hjust = 0.5, color = "black",
                                              margin = ggplot2::margin(b = 10, t = 5)),
           legend.title = ggplot2::element_text(size  = 16, margin = ggplot2::margin(b = 5)),
-          legend.position = "inside",
-          legend.position.inside = c(0.15, 0.2),
+          legend.position = "right",
+          # legend.position = "inside",
+          # legend.position.inside = c(0.15, 0.2),
           legend.text = ggplot2::element_text(size = 12),
           legend.key = ggplot2::element_rect(colour = NA, fill = NA, linewidth = 5),
           legend.key.size = ggplot2::unit(1.8, "line"),
@@ -672,8 +674,9 @@ plot_rates_through_time_for_continuous_data <- function (
           plot.title = ggplot2::element_text(size = 20, hjust = 0.5, color = "black",
                                              margin = ggplot2::margin(b = 10, t = 5)),
           legend.title = ggplot2::element_text(size  = 16, margin = ggplot2::margin(b = 5)),
-          legend.position = "inside",
-          legend.position.inside = c(0.15, 0.2),
+          legend.position = "right",
+          # legend.position = "inside",
+          # legend.position.inside = c(0.15, 0.2),
           legend.text = ggplot2::element_text(size = 12),
           legend.key = ggplot2::element_rect(colour = NA, fill = NA, linewidth = 5),
           legend.key.size = ggplot2::unit(1.8, "line"),
@@ -701,7 +704,7 @@ plot_rates_through_time_for_continuous_data <- function (
   {
     cowplot::save_plot(plot = rates_TT_ggplot,
                        filename = PDF_file_path,
-                       base_height = 8, base_width = 10)
+                       base_height = 8, base_width = 14)
   }
 
   ## Build output
@@ -849,8 +852,9 @@ plot_rates_through_time_for_categorical_data <- function (
         plot.title = ggplot2::element_text(size = 20, hjust = 0.5, color = "black",
                                            margin = ggplot2::margin(b = 10, t = 5)),
         legend.title = ggplot2::element_text(size  = 16, margin = ggplot2::margin(b = 5)),
-        legend.position = "inside",
-        legend.position.inside = c(0.15, 0.2),
+        legend.position = "right",
+        # legend.position = "inside",
+        # legend.position.inside = c(0.15, 0.2),
         legend.text = ggplot2::element_text(size = 12),
         legend.key = ggplot2::element_rect(colour = NA, fill = NA, linewidth = 5),
         legend.key.size = ggplot2::unit(1.8, "line"),
@@ -915,8 +919,9 @@ plot_rates_through_time_for_categorical_data <- function (
           plot.title = ggplot2::element_text(size = 20, hjust = 0.5, color = "black",
                                              margin = ggplot2::margin(b = 10, t = 5)),
           legend.title = ggplot2::element_text(size  = 16, margin = ggplot2::margin(b = 5)),
-          legend.position = "inside",
-          legend.position.inside = c(0.15, 0.2),
+          legend.position = "right",
+          # legend.position = "inside",
+          # legend.position.inside = c(0.15, 0.2),
           legend.text = ggplot2::element_text(size = 12),
           legend.key = ggplot2::element_rect(colour = NA, fill = NA, linewidth = 5),
           legend.key.size = ggplot2::unit(1.8, "line"),
@@ -1010,8 +1015,9 @@ plot_rates_through_time_for_categorical_data <- function (
           plot.title = ggplot2::element_text(size = 20, hjust = 0.5, color = "black",
                                              margin = ggplot2::margin(b = 10, t = 5)),
           legend.title = ggplot2::element_text(size  = 16, margin = ggplot2::margin(b = 5)),
-          legend.position = "inside",
-          legend.position.inside = c(0.15, 0.2),
+          legend.position = "right",
+          # legend.position = "inside",
+          # legend.position.inside = c(0.15, 0.2),
           legend.text = ggplot2::element_text(size = 12),
           legend.key = ggplot2::element_rect(colour = NA, fill = NA, linewidth = 5),
           legend.key.size = ggplot2::unit(1.8, "line"),
@@ -1039,7 +1045,7 @@ plot_rates_through_time_for_categorical_data <- function (
   {
     cowplot::save_plot(plot = rates_TT_ggplot,
                        filename = PDF_file_path,
-                       base_height = 8, base_width = 10)
+                       base_height = 8, base_width = 14)
   }
 
   ## Build output
@@ -1188,8 +1194,9 @@ plot_rates_through_time_for_biogeographic_data <- function (
         plot.title = ggplot2::element_text(size = 20, hjust = 0.5, color = "black",
                                            margin = ggplot2::margin(b = 10, t = 5)),
         legend.title = ggplot2::element_text(size  = 16, margin = ggplot2::margin(b = 5)),
-        legend.position = "inside",
-        legend.position.inside = c(0.15, 0.2),
+        legend.position = "right",
+        # legend.position = "inside",
+        # legend.position.inside = c(0.15, 0.2),
         legend.text = ggplot2::element_text(size = 12),
         legend.key = ggplot2::element_rect(colour = NA, fill = NA, linewidth = 5),
         legend.key.size = ggplot2::unit(1.8, "line"),
@@ -1254,8 +1261,9 @@ plot_rates_through_time_for_biogeographic_data <- function (
           plot.title = ggplot2::element_text(size = 20, hjust = 0.5, color = "black",
                                              margin = ggplot2::margin(b = 10, t = 5)),
           legend.title = ggplot2::element_text(size  = 16, margin = ggplot2::margin(b = 5)),
-          legend.position = "inside",
-          legend.position.inside = c(0.15, 0.2),
+          legend.position = "right",
+          # legend.position = "inside",
+          # legend.position.inside = c(0.15, 0.2),
           legend.text = ggplot2::element_text(size = 12),
           legend.key = ggplot2::element_rect(colour = NA, fill = NA, linewidth = 5),
           legend.key.size = ggplot2::unit(1.8, "line"),
@@ -1349,8 +1357,9 @@ plot_rates_through_time_for_biogeographic_data <- function (
           plot.title = ggplot2::element_text(size = 20, hjust = 0.5, color = "black",
                                              margin = ggplot2::margin(b = 10, t = 5)),
           legend.title = ggplot2::element_text(size  = 16, margin = ggplot2::margin(b = 5)),
-          legend.position = "inside",
-          legend.position.inside = c(0.15, 0.2),
+          legend.position = "right",
+          # legend.position = "inside",
+          # legend.position.inside = c(0.15, 0.2),
           legend.text = ggplot2::element_text(size = 12),
           legend.key = ggplot2::element_rect(colour = NA, fill = NA, linewidth = 5),
           legend.key.size = ggplot2::unit(1.8, "line"),
@@ -1378,7 +1387,7 @@ plot_rates_through_time_for_biogeographic_data <- function (
   {
     cowplot::save_plot(plot = rates_TT_ggplot,
                        filename = PDF_file_path,
-                       base_height = 8, base_width = 10)
+                       base_height = 8, base_width = 14)
   }
 
   ## Build output

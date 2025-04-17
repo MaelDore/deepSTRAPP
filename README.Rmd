@@ -57,7 +57,7 @@ A deepSTRAPP workflow runs as follows:
 
 **References:**
 
->  STRAPP test: Rabosky, D. L., & Huang, H. (2016). A robust semi-parametric test for detecting trait-dependent diversification. Systematic biology, 65(2), 181-193. https://doi.org/10.1093/sysbio/syv066.
+> STRAPP test: Rabosky, D. L., & Huang, H. (2016). A robust semi-parametric test for detecting trait-dependent diversification. Systematic biology, 65(2), 181-193. https://doi.org/10.1093/sysbio/syv066.
 
 > deepSTRAPP method: Doré, M., & Blaimer, B. deepSTRAPP: Testing for differences in diversification rates over deep evolutionary time. (provide DOI link)
 
@@ -220,7 +220,7 @@ plot_BAMM_rates(Ponerinae_BAMM_object,
 # 1/ Extract trait data at a given time in the past ('focal_time')
 # 2/ Extract diversification rates and regimes at a given time in the past ('focal_time')
 # 3/ Compute STRAPP test
-# 4/ Repeat previous actions for many timesteps along evolution time
+# 4/ Repeat previous actions for many timesteps along evolutionary time
 
 # All these actions are performed by a single function:
 #  For a single 'focal_time': deepSTRAPP::run_deepSTRAPP_for_focal_time()

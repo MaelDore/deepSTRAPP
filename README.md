@@ -235,7 +235,7 @@ plot_BAMM_rates(Ponerinae_BAMM_object,
 # 1/ Extract trait data at a given time in the past ('focal_time')
 # 2/ Extract diversification rates and regimes at a given time in the past ('focal_time')
 # 3/ Compute STRAPP test
-# 4/ Repeat previous actions for many timesteps along evolution time
+# 4/ Repeat previous actions for many timesteps along evolutionary time
 
 # All these actions are performed by a single function:
 #  For a single 'focal_time': deepSTRAPP::run_deepSTRAPP_for_focal_time()
