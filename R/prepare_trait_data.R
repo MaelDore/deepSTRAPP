@@ -26,12 +26,18 @@
 #'   * Models available for categorical data are detailed in [geiger::fitDiscrete()].
 #'   * Models for biogeographic data are fit with `BioGeoBEARS`.
 #'   * See list in "Details" section.
-#' @param ... Additional arguments to be passed down to the functions used to fit models (See `evolutionary_models`).
+#' @param Q_matrix Custom Q-matrix for categorical data representing transition classes between states.
+#'   Elements that are zero signify rates that are fixed to zero (i.e., impossible transition).
+#' @param ... Additional arguments to be passed down to the functions used to fit models (See `evolutionary_models`) and produce simmaps (See [phytools::make.simmap()]).
 #' @param res Integer. Define the number of time steps used to interpolate/estimate trait value/state/range in `contMap`/`densityMaps`.
 #' @param nb_simulations Integer. Define the number of simulations generated for stochastic mapping. Default = 1000. Only for "categorical" and "biogeographic" data.
+#' @param colors_per_states Named character string. To set the colors to use to map each state posterior probabilities. Names = states; values = colors.
+#'  If `NULL` (default), the `rainbow()` color scale will be used. Only for categorical and biogeographic data.
 #' @param plot_map Logical. Whether to plot or not the phylogeny with mapped trait evolution.
 #' @param plot_overlay Logical. If `TRUE` (default), plot a unique `densityMap` with overlapping states/ranges using transparency.
 #'    If `FALSE`, plot a `densityMap` per state/range. Only for "categorical" and "biogeographic" data.
+#' @param add_ACE_pies Logical. Whether to add pies of posterior probabilities of states/ranges at internal nodes on the mapped phylogeny. Default = `TRUE`.
+#'    Only for categorical and biogeographic data.
 #' @param PDF_file_path Character string. If provided, the plot will be saved in a PDF file following the path provided here. The path must end with '.pdf'.
 #' @param return_ace Logical. Whether the named vector of ancestral characters estimates (ACE) at internal nodes should be returned in the output. Default = `TRUE`.
 #' @param return_simmaps Logical. Whether the evolutionary histories simulated during stochastic mapping (i.e., `simmaps`) should be returned in the output.
@@ -43,8 +49,11 @@
 #' @export
 #' @importFrom stats logLik
 #' @importFrom geiger fitContinuous
-#' @importFrom phytools rescale fastAnc contMap densityMap
-#' @importFrom grDevices pdf dev.off
+#' @importFrom ape all.equal.phylo
+#' @importFrom phytools rescale fastAnc contMap densityMap rescaleSimmap as.Qmatrix setMap
+#' @importFrom grDevices pdf dev.off rainbow colorRampPalette col2rgb rgb
+#' @importFrom methods hasArg
+#' @importFrom stats setNames
 #'
 #' @details Map trait evolution on a time-calibrated phylogeny in several steps:
 #'
@@ -56,8 +65,8 @@
 #'  Step 2: Best model is identified among the list of `evolutionary_models` by comparing the corrected AIC (AICc)
 #'    and selecting the  model with lowest AICc.
 #'
-#'  Step 3: Ancestral characters estimates (ACE) are inferred with [phytools::fastAnc] on a tree with modified branch lengths
-#'    scaled to reflect the evolutionary rates estimated from the best model using [phytools::rescale()].
+#'  Step 3: For continuous traits: Ancestral characters estimates (ACE) are inferred with [phytools::fastAnc] on a tree
+#'    with modified branch lengths scaled to reflect the evolutionary rates estimated from the best model using [phytools::rescale()].
 #'
 #'  Step 4: Stochastic Mapping.
 #'
@@ -91,7 +100,9 @@
 #'   * `$trait_data_type` Character string. Record the type of trait data. Either: "continuous", "categorical" or "biogeographic".
 #'
 #'   If `return_ace = TRUE`,
-#'   * `$ace` Named vector that record the ancestral characters estimates (ACE) at internal nodes.
+#'   * `$ace` For continuous traits: Named vector that record the ancestral characters estimates (ACE) at internal nodes.
+#'     For categorical and biogeographic data: Matrix that record the posterior probabilities of ancestral states/ranges (characters) estimates (ACE) at internal nodes.
+#'     Rows are internal nodes. Columns are states/ranges. Values are posterior probabilities of each state per node.
 #'
 #'   If `return_best_model_fit = TRUE`,
 #'   * `$best_model_fit` List that provides the output of the best fitting model.
@@ -119,8 +130,8 @@
 #' data(eel.data)
 #'
 #' # Extract body size
-#' eel_data <- setNames(eel.data$Max_TL_cm,
-#'                      rownames(eel.data))
+#' eel_data <- stats::setNames(eel.data$Max_TL_cm,
+#'                             rownames(eel.data))
 #'
 #' # Map trait evolution on the phylogeny, selecting among four models ("BM", "OU", "lambda", "kappa")
 #' mapped_cont_traits <- prepare_trait_data(
@@ -141,11 +152,52 @@
 #' # Parameter estimates and optimization summary of the best model
 #' # (Here, the best model is Pagel's lambda)
 #' mapped_cont_traits$best_model_fit$opt
-#' mapped_cont_traits$ace # Ancestral character estimates at nodes
+#' mapped_cont_traits$ace # Ancestral character estimates at internal nodes
 #'
 #' # ----- Example 2: Categorical data ----- #
 #'
-#' # TBA
+#' # Load phylogeny and tip data
+#' library(phytools)
+#' data(eel.tree)
+#' data(eel.data)
+#'
+#' # Transform feeding mode data into a 3-level factor
+#' eel_data <- stats::setNames(eel.data$feed_mode, rownames(eel.data))
+#' eel_data <- as.character(eel_data)
+#' eel_data[c(1, 5, 6, 7, 10, 11, 15, 16, 17, 24, 25, 28, 30, 51, 52, 53, 55, 58, 60)] <- "kiss"
+#' eel_data <- stats::setNames(eel_data, rownames(eel.data))
+#' table(eel_data)
+#'
+#' # Manually define a Q_matrix for rate classes of state transition to use in the 'matrix' model
+#' # Does not allow transitions from state 1 ("bite") to state 2 ("kiss") or state 3 ("suction")
+#' # Does not allow transitions from state 3 ("suction") to state 1 ("bite")
+#' # Set symmetrical rates between state 2 ("kiss") and state 3 ("suction")
+#' Q_matrix = rbind(c(NA, 0, 0), c(1, NA, 2), c(0, 2, NA))
+#'
+#' # Set colors per states
+#' colors_per_states <- c("limegreen", "orange", "dodgerblue")
+#' names(colors_per_states) <- c("bite", "kiss", "suction")
+#'
+#' mapped_cat_traits <- prepare_trait_data(tip_data = eel_data, phylo = eel.tree,
+#'                                         trait_data_type = "categorical",
+#'                                         colors_per_states = colors_per_states,
+#'                                         evolutionary_models = c("ER", "ARD", "matrix"),
+#'                                         Q_matrix = Q_matrix,
+#'                                         nb_simulations = 10, # Set to 10 to save time.
+#'                                         # But recommended value = 1000.
+#'                                         plot_map = TRUE,
+#'                                         plot_overlay = TRUE,
+#'                                         return_best_model_fit = TRUE,
+#'                                         return_model_selection_df = TRUE)
+#'
+#' # Explore output
+#' plot(mapped_cat_traits$densityMaps[[1]]) # densityMap for state n°1 ("bite")
+#' mapped_cat_traits$model_selection_df # Summary of model selection
+#' # Parameter estimates and optimization summary of the best model
+#' # (Here, the best model is ER)
+#' print(mapped_cat_traits$best_model_fit)$ # Summary of the best evolutionary model
+#' mapped_cat_traits$ace # Posterior probabilities of each state (= ACE) at internal nodes
+#'
 #'
 #' # ----- Example 3: Biogeographic data ----- #
 #'
@@ -178,11 +230,14 @@ prepare_trait_data <- function (
     trait_data_type,
     phylo,
     evolutionary_models = NULL, # Default = "BM" for continuous data; "ARD" for categorical; "DEC+J" for biogeographic
+    Q_matrix = NULL, # Custom Q-matrix for categorical data
     ..., # To allow to pass down arguments in the functions used to fit the models
     res = 100, # Number of time steps used to interpolate trait value in the contMap
     nb_simulations = 1000, # Only for categorical and biogeographic data
+    colors_per_states = NULL, # Only for categorical and biogeographic data. To set the colors to use to map each state posterior probabilities
     plot_map = TRUE,
     plot_overlay = TRUE, # Only for categorical and biogeographic data
+    add_ACE_pies = TRUE, # Only for categorical and biogeographic data
     PDF_file_path = NULL,
     return_ace = TRUE,
     return_simmaps = TRUE, # Only for categorical and biogeographic data
@@ -283,11 +338,14 @@ prepare_trait_data <- function (
              tip_data = tip_data,
              phylo = phylo,
              evolutionary_models = evolutionary_models, # Default = "ARD" for categorical data
+             Q_matrix = Q_matrix, # Custom Q-matrix for categorical data
              ..., # Additional arguments for geiger::fitDiscrete()
              res = res,
              nb_simulations = nb_simulations, # Only for categorical and biogeographic data
+             colors_per_states = colors_per_states, # Only for categorical and biogeographic data
              plot_map = plot_map,
              plot_overlay = plot_overlay, # Only for categorical and biogeographic data
+             add_ACE_pies = add_ACE_pies, # Only for categorical and biogeographic data
              PDF_file_path = PDF_file_path,
              return_ace = return_ace,
              return_simmaps = return_simmaps, # Only for categorical and biogeographic data
@@ -504,7 +562,7 @@ prepare_trait_data_for_continuous_data <- function (
     print(models_comparison$models_comparison_df)
   }
 
-  ### Get ACE (if return_ace)
+  ### Get ACE (useful in all cases to build the contMap)
 
   if (verbose) { cat(paste0("\n", Sys.time(), " - Infer Ancestral Character Estimates from the best fitting model: ",best_model_name,".\n")) }
 
@@ -576,11 +634,14 @@ prepare_trait_data_for_categorical_data <- function (
     tip_data,
     phylo,
     evolutionary_models = "ARD", # Default = "ARD" for categorical
+    Q_matrix = NULL, # Custom Q-matrix for categorical data
     ..., # Additional arguments for geiger::fitDiscrete()
     res = 100,
     nb_simulations = 1000, # Only for categorical and biogeographic data
+    colors_per_states = NULL,
     plot_map = TRUE,
     plot_overlay = TRUE, # Only for categorical and biogeographic data
+    add_ACE_pies = TRUE, # Only for categorical and biogeographic data
     PDF_file_path = NULL,
     return_ace = TRUE,
     return_simmaps = TRUE, # Only for categorical and biogeographic data
@@ -593,10 +654,19 @@ prepare_trait_data_for_categorical_data <- function (
     ## evolutionary_models
     if (!is.null(evolutionary_models))
     {
-      if (!all(evolutionary_models %in% c("ER", "SYM", "ARD")))
+      if (!all(evolutionary_models %in% c("ER", "SYM", "ARD", "meristic", "matrix")))
       {
-        stop(paste0("For 'trait_data_type = categorical', 'evolutionary_models' must be selected among: 'ER', 'SYM', 'ARD'.\n",
+        stop(paste0("For 'trait_data_type = categorical', 'evolutionary_models' must be selected among: 'ER', 'SYM', 'ARD', 'meristic', 'matrix'.\n",
                     "See details in ?geiger::fitDiscrete()."))
+      }
+      ## Q_matrix
+      if ("matrix" %in% evolutionary_models)
+      {
+        if (is.null(Q_matrix))
+        {
+         stop(paste0("For 'evolutionary_models = matrix', you must provide a 'Q_matrix' defining rate transition classes.\n",
+              "See details in ?geiger::fitDiscrete()."))
+        }
       }
     }
 
@@ -622,34 +692,331 @@ prepare_trait_data_for_categorical_data <- function (
     {
       cat(paste0("WARNING: 'nb_simulations' is set to ",nb_simulations,". Low number of simulations may provide biased estimates of states/ranges and affect test outputs.\n"))
     }
+
+    ## colors_per_states
+    if (!is.null(colors_per_states))
+    {
+      # Check that the color scale match the states
+      states_list <- levels(as.factor(tip_data))
+      if (!all(states_list %in% names(colors_per_states)))
+      {
+        missing_states <- states_list[!(states_list %in% names(colors_per_states))]
+        stop(paste0("Not all states are found in 'colors_per_states'.\n",
+                    "Missing: ", paste(missing_states, collapse = ", "), "."))
+      }
+      # Check whether all colors are valid
+      if (!all(is_color(colors_per_states)))
+      {
+        invalid_colors <- colors_per_states[!is_color(colors_per_states)]
+        stop(paste0("Some color names in 'colors_per_states' are not valid.\n",
+                    "Invalid: ", paste(invalid_colors, collapse = ", "), "."))
+      }
+    }
   }
 
-  #	Run all models and store their results in a list
+  # Set default model (ARD) if absent
+  if (is.null(evolutionary_models)) { evolutionary_models <- "ARD" }
 
-  #	select_best_trait_model() # Use it to compare model fits with AICc applying on the list of model results
-  # Generate a df for model comparison
+  # Get number of tips
+  nb_tips <- length(phylo$tip.label)
+  # Get number of nodes
+  nb_nodes <- nb_tips + phylo$Nnode
 
-  # Get ACE (if return_ace)
+  ##	Run all models and store their results in a list
+  # ?geiger::fitDiscrete
 
-  # Run stochastic mapping = obtain simmaps
+  nb_models <- length(evolutionary_models)
+  if (verbose) { cat(paste0(Sys.time(), " - Fit ",nb_models," evolutionary model(s): ", paste(evolutionary_models, collapse = ", "), ".\n\n")) }
 
-  # Create densityMaps from simmaps
+  # Initiate list to store models outputs
+  models_fits <- list()
 
-  # Plot densityMaps (if plot_map)
-    # If plot_overlay, plot the overlay of densityMaps with alpha
-    # If !plot_overlay,  plot one densityMap per state
+  # Fit ARD model
+  if (any(evolutionary_models == "ARD"))
+  {
+    ARD_ID <- which(evolutionary_models == "ARD")
+    ARD_fit <- geiger::fitDiscrete(phy = phylo, dat = tip_data, model = "ARD", ...)
 
-  # Export densityMaps in PDF (if !is.null(PDF_file_path))
+    if (verbose) { cat("------ ARD model ------ \n\n") ; print(ARD_fit) ; cat("\n") }
+    # fitted Q matrix = transition parameters defining instantaneous rates of transitions between states in nb of events / time
 
-  # Build output
-  # Include contMap by default
-  # Include trait_data_type <- "categorical" by default
-  # Include ACE if return_ace
-  # Include simmaps if return_simmaps
-  # Include output of best model if best_model_fit
-  # Include df for model comparison if return_model_selection_df
+    # print(ARD_fit$opt)
+    # q12 = transition rate from state 1 to state 2
+    # q21 = transition rate from state 2 to state 1
+    # q13 = transition rate from state 1 to state 3
+    # All transition rates can differ
 
-  # Return output
+    # Store output
+    models_fits[[ARD_ID]] <- ARD_fit
+  }
+
+  # Fit ER model
+  if (any(evolutionary_models == "ER"))
+  {
+    ER_ID <- which(evolutionary_models == "ER")
+    ER_fit <- geiger::fitDiscrete(phy = phylo, dat = tip_data, model = "ER", ...)
+
+    if (verbose) { cat("------ ER model ------ \n\n") ; print(ER_fit) ; cat("\n") }
+    # fitted Q matrix = transition parameters defining instantaneous rates of transitions between states in nb of events / time
+
+    # print(ER_fit$opt)
+    # q12 = q21 = q13 = q31 = q23 = q32
+    # Transition rates between states are all equals
+
+    # Store output
+    models_fits[[ER_ID]] <- ER_fit
+  }
+
+  # Fit SYM model
+  if (any(evolutionary_models == "SYM"))
+  {
+    SYM_ID <- which(evolutionary_models == "SYM")
+    SYM_fit <- geiger::fitDiscrete(phy = phylo, dat = tip_data, model = "SYM", ...)
+
+    if (verbose) { cat("------ SYM model ------ \n\n") ; print(SYM_fit) ; cat("\n") }
+    # fitted Q matrix = transition parameters defining instantaneous rates of transitions between states in nb of events / time
+
+    # print(SYM_fit$opt)
+    # q12 = q21
+    # Transition rates from state 1 to state 2 are equal in both direction
+    # But transition between different states can differ: q12 ≠ q13
+
+    # Store output
+    models_fits[[SYM_ID]] <- SYM_fit
+  }
+
+  # Fit 'meristic' model = step-wise transitions => 1 <-> 2 <-> 3
+  if (any(evolutionary_models == "meristic"))
+  {
+    meristic_ID <- which(evolutionary_models == "meristic")
+    meristic_fit <- geiger::fitDiscrete(phy = phylo, dat = tip_data, model = "meristic", ...)
+    # Can define if the Q-matrix is symmetrical or not with symmetric = TRUE/FALSE. Default is TRUE.
+
+    if (verbose) { cat("------ Meristic model ------ \n\n") ; print(meristic_fit) ; cat("\n") }
+    # fitted Q matrix = transition parameters defining instantaneous rates of transitions between states in nb of events / time
+
+    # print(meristic_fit$opt)
+    # q13 = q31 = 0
+    # No transition possible between non-sequential states
+
+    # Store output
+    models_fits[[meristic_ID]] <- meristic_fit
+  }
+
+  # Fit 'matrix' model = User-defined Q-matrix defining state transition classes
+  if (any(evolutionary_models == "matrix"))
+  {
+    matrix_ID <- which(evolutionary_models == "matrix")
+    matrix_fit <- geiger::fitDiscrete(phy = phylo, dat = tip_data, model = Q_matrix, ...)
+    # Can define if the Q-matrix is symmetrical or not with symmetric = TRUE/FALSE. Default is TRUE.
+
+    if (verbose) { cat("------ User-defined matrix model ------ \n\n") ; print(matrix_fit) ; cat("\n") }
+    # fitted Q matrix = transition parameters defining instantaneous rates of transitions between states in nb of events / time
+
+    # print(matrix_fit$opt)
+
+    # Store output
+    models_fits[[matrix_ID]] <- matrix_fit
+  }
+
+  # Name model fits according to the associated models
+  names(models_fits) <- evolutionary_models
+
+  ## Compare model fits and select best model
+
+  # Compare model fits with AICc and Akaike's weights
+  models_comparison <- select_best_trait_model_from_geiger(list_model_fits = models_fits)
+
+  # Extract best model
+  best_model_name <- models_comparison$best_model_name
+  best_model_fit <- models_comparison$best_model_fit
+
+  # Display result of model comparison
+  if (verbose)
+  {
+    cat(paste0(Sys.time(), " - Compare model fits.\n\n"))
+    print(models_comparison$models_comparison_df)
+  }
+
+  ### Run stochastic mapping = obtain simmaps
+
+  # Display steps
+  if (verbose)
+  {
+    cat(paste0("\n", Sys.time(), " - Run simulations for stochastic mapping.\n\n"))
+  }
+
+  # Extract Q-matrix from best model
+  best_Q_matrix <- phytools::as.Qmatrix(best_model_fit)
+
+  simmaps <- phytools::make.simmap(tree = phylo, x = tip_data, model = best_model_name,
+                                   nsim = nb_simulations, # Run at least 100 simulations because you want to observe the mean trend
+                                   Q = best_Q_matrix,
+                                   ...) # Can provide additional arguments for root states
+
+  ### Get ACE at nodes based on posterior sampling of the simmaps (if return_ace)
+
+  # Display steps
+  if (verbose)
+  {
+    cat(paste0("\n", Sys.time(), " - Extract ACE as posterior sampling from stochastic mapping.\n"))
+  }
+
+  # Use phytools summary function
+  simmaps_summary_obj <- phytools::describe.simmap(tree = simmaps, plot = FALSE)
+  ace_matrix <- simmaps_summary_obj$ace
+
+  ### Create densityMaps from simmaps
+
+  if (verbose) { cat(paste0("\n", Sys.time(), " - Create densityMaps by summarizing simulations of evolutionary history (simmaps).\n\n")) }
+
+  # Works only for binary traits.
+  # Need to binarize every state as 0/1 with 0 = Not the focal state; 1 = Focal state.
+
+  ## If not provided, define a color per state
+  if (is.null(colors_per_states))
+  {
+    colors_per_states <- grDevices::rainbow(n = length(states_list))
+    names(colors_per_states) <- states_list
+  } else {
+    # If provided, ensure it is properly ordered
+    colors_per_states <- colors_per_states[match(x = states_list, table = names(colors_per_states))]
+  }
+
+  # Initiate list of densityMaps
+  densityMaps_all_states <- list()
+
+  ## Loop per state
+  for (i in seq_along(states_list))
+  {
+    # i <- 1
+
+    # Extract state
+    state_i <- states_list[i]
+    # Define other states by contrast
+    other_states <- states_list[states_list != state_i]
+
+    ## Binarize states in simmaps
+    simmaps_binary_i <- simmaps
+    simmaps_binary_i <- lapply(X = simmaps_binary_i, FUN = phytools::mergeMappedStates, old.states = other_states, new.state = "0")
+    simmaps_binary_i <- lapply(X = simmaps_binary_i, FUN = phytools::mergeMappedStates, old.states = state_i, new.state = "1")
+
+    class(simmaps_binary_i) <- c("list", "multiSimmap", "multiPhylo")
+
+    # Check that remaining states are all binary
+    # unique(unlist(lapply(X = simmaps_binary_i, FUN = function (x) { lapply(X = x$maps, FUN = names) })))
+    # simmaps_binary_i[[1]]$maps
+
+    ## Estimate the posterior probabilities of states along all branches (from the set of simulated maps)
+
+    densityMap_state_i <- densityMap_custom(trees = simmaps_binary_i,
+                                            tol = 1e-5, verbose = verbose,
+                                            col_scale = NULL,
+                                            plot = FALSE)
+
+    ## Update color gradient
+
+    # Set color gradient from grey to focal color
+    focal_color <- colors_per_states[i]
+    col_fn <- grDevices::colorRampPalette(colors = c("grey90", focal_color))
+    col_scale <- col_fn(n = 1001)
+
+    # Update color gradient
+    densityMap_state_i <- phytools::setMap(densityMap_state_i, c("grey90", focal_color))
+
+    ## Update state names
+    densityMap_state_i$states <- c(paste0("Not ", state_i), state_i)
+
+    # plot(densityMap_state_i)
+
+    ## Store in final object with all density maps
+    densityMaps_all_states[[i]] <- densityMap_state_i
+
+    ## Print progress for each state
+    if (verbose)
+    {
+      cat(paste0(Sys.time(), " - Posterior probabilities computed for State = ",state_i," - n\u00B0", i, "/", length(states_list),"\n"))
+    }
+  }
+  names(densityMaps_all_states) <- paste0("Density_map_", states_list)
+
+  ## Plot densityMaps (if plot_map)
+  if (plot_map)
+  {
+    # Allows plotting outside of figure range
+    xpd_init <- par()$xpd
+    par(xpd = TRUE)
+
+    if (!plot_overlay)
+    {
+      ## Plot one densityMap per state
+      for (i in seq_along(densityMaps_all_states))
+      {
+        plot(densityMaps_all_states[[i]])
+      }
+    } else {
+
+      ## Plot the overlay of densityMaps with alpha
+      plot_densityMaps_overlay(densityMaps = densityMaps_all_states,
+                               add_ACE_pies = TRUE,
+                               ace = ace_matrix[1:(nrow(ace_matrix)-nb_tips), ])
+    }
+
+    # Reset $xpd to initial values
+    par(xpd = xpd_init)
+  }
+
+  ## Export densityMap(s) in PDF if requested
+  if (!is.null(PDF_file_path))
+  {
+    # Allows plotting outside of figure range
+    xpd_init <- par()$xpd
+    par(xpd = TRUE)
+
+    if (!plot_overlay)
+    {
+      ## Plot one densityMap per state
+      grDevices::pdf(file = file.path(PDF_file_path),
+                     width = nb_tips/60*8, height = nb_tips/60*10)
+
+      for (i in seq_along(densityMaps_all_states))
+      {
+        plot(densityMaps_all_states[[i]])
+      }
+
+      grDevices::dev.off()
+
+    } else {
+
+      ## Plot the overlay of densityMaps with alpha
+      grDevices::pdf(file = file.path(PDF_file_path),
+                     width = nb_tips/60*8, height = nb_tips/60*10)
+
+      plot_densityMaps_overlay(densityMaps = densityMaps_all_states,
+                               add_ACE_pies = TRUE,
+                               ace = ace_matrix[1:(nrow(ace_matrix)-nb_tips), ])
+
+      grDevices::dev.off()
+    }
+
+    # Reset $xpd to initial values
+    par(xpd = xpd_init)
+  }
+
+  ## Build output
+  output <- list(densityMaps = densityMaps_all_states,
+                 trait_data_type = "categorical")
+  # Include simmaps if requested
+  if(return_simmaps) { output$simmaps <- simmaps } # Filter to include only internal nodes (to be consistent with continuous trait)
+  # Include ACE if requested
+  if(return_ace) { output$ace <- ace_matrix[1:(nrow(ace_matrix)-nb_tips), ] } # Filter to include only internal nodes (to be consistent with continuous trait)
+  # Include output of best model if requested
+  if(return_best_model_fit) { output$best_model_fit <- best_model_fit }
+  # Include df for model comparison if requested
+  if(return_model_selection_df) { output$model_selection_df <- models_comparison$models_comparison_df }
+
+  ## Return output
+  return(invisible(output))
 }
 
 
@@ -741,26 +1108,26 @@ prepare_trait_data_for_biogeographic_data <- function (
   # Return output
 }
 
-### Helper function to compare model fits from geiger::fitContinuous with AICc and Akaike's weights ####
-# Input = list of models fit with geiger::fitContinuous
+### Helper function to compare model fits from geiger::fitContinuous or geiger::fitDiscrete with AICc and Akaike's weights ####
+# Input = list of models fit with geiger::fitContinuous or geiger::fitDiscrete
 
 #' @title Compare model fits with AICc and Akaike's weights
 #'
-#' @description Compare models fit with [geiger::fitContinuous()] using AICc and Akaike's weights.
+#' @description Compare models fit with [geiger::fitContinuous()] or [geiger::fitDiscrete()] using AICc and Akaike's weights.
 #'   Generate a data.frame summarizing information. Identify the best model and extract its results.
 #'
-#' @param list_model_fits Named list with the results of a model fit with [geiger::fitContinuous()] in each element.
+#' @param list_model_fits Named list with the results of a model fit with [geiger::fitContinuous()] or [geiger::fitDiscrete()] in each element.
 #'
 #' @return The function returns a list with three elements.
 #' * `$model_comparison_df` Data.frame summarizing information to compare model fits. It includes the model name (`$model`),
 #'   the log-likelihood (`$logLik`), the number of free-parameters (`$k`), the corrected AIC (`$AICc`),
 #'   the Akaike weights (`$Akaike_weights`), and their rank based on AICc (`$rank`).
 #' * `$best_model_name` Character string. Name of the best model.
-#' * `$best_model_fit` List containing the output of [geiger::fitContinuous()] for the model with the best fit.
+#' * `$best_model_fit` List containing the output of [geiger::fitContinuous()] or [geiger::fitDiscrete()] for the model with the best fit.
 #'
 #' @author Maël Doré
 #'
-#' @seealso [geiger::fitContinuous()]
+#' @seealso [geiger::fitContinuous()] [geiger::fitDiscrete()]
 #'
 #' @noRd
 #'
@@ -805,6 +1172,289 @@ select_best_trait_model_from_geiger <- function (list_model_fits)
                         best_model_name = best_model_name,
                         best_model_fit = best_model_fit)))
 }
+
+
+### Helper function to produce densityMap from simmaps ####
+# Original function written by Liam Revell, 2012
+# Input = simmaps
+
+#' @title Plot posterior density of stochastic mapping on a tree
+#'
+#' @description Visualize posterior probability density from stochastic mapping using a color gradient on the tree.
+#'   Original function written by Liam Revell, 2012 in the [phytools] package: [phytools::densityMap()].
+#'
+#' @inheritParams phytools::densityMap
+#' @param tol Positive numerical. To set the tolerance used to match node ages and time steps (i.e., onsider them equal). Default = 1e-5.
+#' @param verbose Logical. To display or progress every 100 edges. Default = `TRUE`.
+#' @param col_scale Character string vector. To set the color scale manually. Need to provide 1001 colors for the scale.
+#'   If `NULL` (the default), the `rainbow()` color scale will be used.
+#'
+#' @return The function plots a tree with mapped trait probability densities and returns an object of class `densityMap` invisibly.
+#'   A `densityMap` is a list with three elements.
+#'     * `$tree` List of at least 8 elements. Includes the phylogeny, the trait evolution model data from the simmaps, and the newly mapped trait posterior densities.
+#'       * `$maps` List of N elements, one per edge. Each list comprises a named numerical vector that represent changes in posterior probability density of the focal state along segments of equal time.
+#'         Named are posterior probabilities scaled from 0 to 1000. Values are length of the segments. Segments are ordered from root to tips.
+#'       * `$mapped.edge` Matrix of edge per posterior probability summarizing the overall length of each edge attributed to a specific posterior probabiliy value.
+#'       * `$Q` Numerical square matrix summarizing instantaneous transition rates between states as estimated from the evolutionary model.
+#'       Rows = initial states. Cols = final states.
+#'       * `$logL` Numerical. Log-likelihood of the data as optimized when estimated model parameters.
+#'     * `$col` Named character string vector. Color scale used to map posterior probabilities. Names are the posterior probabilities scaled from 0 to 1000. Values are the colors.
+#'     * `$states` Character string. The name of the states.
+#'
+#' @details Wrapped function of [phytools::densityMap()].
+#'   Additions to the initial function:
+#'   * Can modify manually the tolerance to handle issue with mismatch between node ages and time steps used.
+#'   * Can print progress across egdes
+#'   * Can provide a manual color scale to replace the default rainbow scale. The color scale must have 1001 colors.
+#'
+#' @author Maël Doré. Initial function by Liam Revell, 2012 in the [phytools] package.
+#'
+#' @seealso [phytools::densityMap()]
+#'
+#' @noRd
+#'
+
+densityMap_custom <- function (trees, res = 100, fsize = NULL, ftype = NULL, lwd = 3,
+                               tol = 1e-5, verbose = T, col_scale = NULL,
+                               check = FALSE, legend = NULL, outline = FALSE, type = "phylogram",
+                               direction = "rightwards", plot = TRUE, ...)
+{
+  # Set graphical parameters
+  if (methods::hasArg(mar))
+    mar <- list(...)$mar
+  else mar <- rep(0.3, 4)
+  if (methods::hasArg(offset))
+    offset <- list(...)$offset
+  else offset <- NULL
+  if (methods::hasArg(states))
+    states <- list(...)$states
+  else states <- NULL
+  if (methods::hasArg(hold))
+    hold <- list(...)$hold
+  else hold <- TRUE
+  if (length(lwd) == 1)
+    lwd <- rep(lwd, 2)
+  else if (length(lwd) > 2)
+    lwd <- lwd[1:2]
+
+  # Adjust tolerance
+  tol <- tol
+
+  # Check validity of the class of the input object
+  if (!inherits(trees, "multiPhylo") && inherits(trees, "phylo"))
+  {
+    stop("trees not \"multiPhylo\" object; just use plotSimmap.")
+  }
+  if (!inherits(trees, "multiPhylo"))
+  {
+    stop("trees should be an object of class \"multiPhylo\".")
+  }
+
+  # Extract root age
+  h <- sapply(unclass(trees), function(x) max(phytools::nodeHeights(x)))
+
+  # Define time steps
+  steps <- 0:res/res * max(h)
+
+  # Rescale trees to ensure they all have the same root age
+  trees <- phytools::rescaleSimmap(trees, totalDepth = max(h))
+
+  # Check that phylogeny topology and branch length are equal
+  if (check)
+  {
+    X <- matrix(FALSE, length(trees), length(trees))
+    for (i in 1:length(trees)) X[i, ] <- sapply(trees, ape::all.equal.phylo,
+                                                current = trees[[i]])
+    if (!all(X))
+      stop("some of the trees don't match in topology or relative branch lengths")
+  }
+
+  # Extract first tree as reference
+  tree <- trees[[1]]
+
+  # Remove class
+  trees <- unclass(trees)
+
+  # Extract all states from the first tree (dangerous if some states are not present in this tree but in other!)
+  if (is.null(states))
+  {
+    ss <- sort(unique(c(phytools::getStates(tree, "nodes"), phytools::getStates(tree, "tips"))))
+  }  else {
+    ss <- states
+  }
+
+  # If states are not binary, rename the first two states as "0" and "1" (dangerous as if there are more states, will lead to errors)
+  if (!all(ss == c("0", "1")))
+  {
+    c1 <- paste(sample(c(letters, LETTERS), 6), collapse = "")
+    c2 <- paste(sample(c(letters, LETTERS), 6), collapse = "")
+    trees <- lapply(trees, phytools::mergeMappedStates, ss[1], c1)
+    trees <- lapply(trees, phytools::mergeMappedStates, ss[2], c2)
+    trees <- lapply(trees, phytools::mergeMappedStates, c1, "0")
+    trees <- lapply(trees, phytools::mergeMappedStates, c2, "1")
+  }
+
+  # Extract all node ages per edge
+  H <- phytools::nodeHeights(tree)
+  # message("sorry - this might take a while; please be patient")
+
+  # Reinitiate the map of the reference tree with NULL data
+  tree$maps <- vector(mode = "list", length = nrow(tree$edge))
+
+  # Loop per edge/item in tree$maps
+  for (i in 1:nrow(tree$edge))
+  {
+    # i <- 5
+    # i <- 983
+
+    # YY = Matrix of ages to use as time step along edge i
+    # Include start (0) and end (edge length)
+    # One raw = one interval
+    # Columns = Start and End relative age
+    YY <- cbind(c(H[i, 1], steps[intersect(which(steps > H[i, 1]), which(steps < H[i, 2]))]),
+                c(steps[intersect(which(steps > H[i, 1]), which(steps < H[i, 2]))], H[i, 2])) - H[i, 1]
+
+    # Initiate vector of final time step values for edge i
+    ZZ <- rep(0, nrow(YY))
+
+    # Loop per trees/simmaps
+    for (j in 1:length(trees))
+    {
+      # j <- 1
+
+      # XX = a matrix of the states detected for edge i on simmap j
+      # One row = one state
+      # Colmuns = start and end relative age
+      XX <- matrix(data = 0,
+                   nrow = length(trees[[j]]$maps[[i]]),
+                   ncol = 2,
+                   dimnames = list(names(trees[[j]]$maps[[i]]),
+                                   c("start", "end")))
+      # Fill the first raw with information on start and end relative age of the first state
+      XX[1, 2] <- trees[[j]]$maps[[i]][1]
+
+      # Case with multiple states: fill information for other states
+      if (length(trees[[j]]$maps[[i]]) > 1)
+      {
+        for (k in 2:length(trees[[j]]$maps[[i]]))
+        {
+          XX[k, 1] <- XX[k - 1, 2]
+          XX[k, 2] <- XX[k, 1] + trees[[j]]$maps[[i]][k]
+        }
+      }
+
+      # Loop per time interval wanted for the density mapping
+      for (k in 1:nrow(YY))
+      {
+        # k <- 1
+
+        # Detect which state start before the k time step
+        lower <- which(XX[, 1] <= YY[k, 1])
+        lower <- lower[length(lower)] # Take the last one as the last state recorded before the beginning of the time step
+
+        # Detect which state end after the k time step
+        upper <- which(XX[, 2] >= (YY[k, 2] - tol))[1]
+
+
+        AA <- 0
+        names(lower) <- names(upper) <- NULL
+        if (!all(XX == 0))
+        {
+          # Case for internal edge (end time > 0)
+
+          # Loop per states on the time interval
+          for (l in lower:upper)
+          {
+            # Compute weighted mean of the time interval
+            AA <- AA + (min(XX[l, 2], YY[k, 2]) - max(XX[l, 1], YY[k, 1]))/(YY[k, 2] - YY[k, 1]) * as.numeric(rownames(XX)[l])
+          }
+        } else {
+          # Case for tips (or null branches) (start and end time = 0)
+          AA <- as.numeric(rownames(XX)[1]) # Use the tip state
+        }
+        # Increment the final value of the edge i
+        ZZ[k] <- ZZ[k] + AA/length(trees)
+      }
+    }
+    # Record time steps length
+    tree$maps[[i]] <- YY[, 2] - YY[, 1]
+
+    # Record time steps continuous value as names of the maps of edge i
+    names(tree$maps[[i]]) <- round(ZZ * 1000) # Convert proportion in a scale from 0 to 1000
+
+    # Print progress every 100 edges
+    if ((i %% 100 == 0) & verbose)
+    {
+      cat(paste0(Sys.time(), " - Posterior probability computed for edge n\u00B0", i, "/", nrow(tree$edge),"\n"))
+    }
+  }
+
+  # Create color scale
+  if (is.null(col_scale))
+  {
+    cols <- grDevices::rainbow(1001, start = 0.7, end = 0)
+    names(cols) <- 0:1000
+  } else {
+    cols <- col_scale
+  }
+
+  # Recreate map using continuous values
+  tree$mapped.edge <- makeMappedEdge(tree$edge, tree$maps)
+  tree$mapped.edge <- tree$mapped.edge[, order(as.numeric(colnames(tree$mapped.edge)))]
+
+  class(tree) <- c("simmap", setdiff(class(tree), "simmap"))
+  attr(tree, "map.order") <- "right-to-left"
+  x <- list(tree = tree, cols = cols, states = ss)
+  class(x) <- "densityMap"
+
+  # Plot
+  if (plot)
+    plot(x, fsize = fsize, ftype = ftype, lwd = lwd,
+         legend = legend, outline = outline, type = type,
+         mar = mar, direction = direction, offset = offset,
+         hold = hold)
+
+  # Return final simmap
+  invisible(x)
+}
+
+### Utility function from phytools used to produce $mapped.edge in densityMap ####
+# Original function written by Liam Revell, 2012
+
+makeMappedEdge <- function (edge, maps)
+{
+  st <- sort(unique(unlist(sapply(maps, function(x) names(x)))))
+  mapped.edge <- matrix(0, nrow(edge), length(st))
+  rownames(mapped.edge) <- apply(edge, 1, function(x) paste(x, collapse = ","))
+  colnames(mapped.edge) <- st
+
+  for (i in 1:length(maps))
+  {
+    for (j in 1:length(maps[[i]]))
+    {
+      mapped.edge[i, names(maps[[i]])[j]] <- mapped.edge[i, names(maps[[i]])[j]] + maps[[i]][j]
+    }
+  }
+
+  return(mapped.edge)
+}
+
+### Utility function to check that an object is a valid color according to grDevices ####
+
+is_color <- function(x, null_ok = FALSE)
+{
+  if (is.null(x) && null_ok)
+  {
+    return(TRUE)
+  }
+  vapply(x, function(i)
+  {
+    tryCatch({
+      is.matrix(grDevices::col2rgb(i))
+    }, error = function(e) FALSE)
+  }, TRUE)
+}
+
 
 
 # ### Utility functions for tree transformation ####

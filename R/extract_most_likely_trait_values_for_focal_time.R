@@ -200,10 +200,10 @@
 
 ## Make a different function for each type of data, then make a wrapper function for all types
 # extract_most_likely_trait_values_for_focal_time() = wrapper
-   # Detect type of data based on $trait_data_type, but check it match the input (contMap or simmaps) and the type of data in ace and tip_data
+   # Detect type of data based on $trait_data_type, but check it match the input (contMap or densityMaps) and the type of data in ace and tip_data
 # extract_most_likely_trait_values_from_contMap_for_focal_time() = For continuous traits
-# extract_most_likely_trait_values_from_simmaps_for_focal_time() = For categorical traits
-# extract_most_likely_range_values_from_simmaps_for_focal_time() = For biogeographic traits
+# extract_most_likely_trait_values_from_densityMaps_for_focal_time() = For categorical traits
+# extract_most_likely_range_values_from_densityMaps_for_focal_time() = For biogeographic traits
 
 ## See if better to extract most likely range/state from densityMaps instead of simmaps
 # Check my scripts in preparing trait data for the Macroevolution Course

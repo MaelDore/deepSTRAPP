@@ -9,11 +9,14 @@ prepare_trait_data(
   trait_data_type,
   phylo,
   evolutionary_models = NULL,
+  Q_matrix = NULL,
   ...,
   res = 100,
   nb_simulations = 1000,
+  colors_per_states = NULL,
   plot_map = TRUE,
   plot_overlay = TRUE,
+  add_ACE_pies = TRUE,
   PDF_file_path = NULL,
   return_ace = TRUE,
   return_simmaps = TRUE,
@@ -39,16 +42,25 @@ Tip labels (\code{phylo$tip.label}) should match names in \code{tip_data}.}
 \item See list in "Details" section.
 }}
 
-\item{...}{Additional arguments to be passed down to the functions used to fit models (See \code{evolutionary_models}).}
+\item{Q_matrix}{Custom Q-matrix for categorical data representing transition classes between states.
+Elements that are zero signify rates that are fixed to zero (i.e., impossible transition).}
+
+\item{...}{Additional arguments to be passed down to the functions used to fit models (See \code{evolutionary_models}) and produce simmaps (See \code{\link[phytools:make.simmap]{phytools::make.simmap()}}).}
 
 \item{res}{Integer. Define the number of time steps used to interpolate/estimate trait value/state/range in \code{contMap}/\code{densityMaps}.}
 
 \item{nb_simulations}{Integer. Define the number of simulations generated for stochastic mapping. Default = 1000. Only for "categorical" and "biogeographic" data.}
 
+\item{colors_per_states}{Named character string. To set the colors to use to map each state posterior probabilities. Names = states; values = colors.
+If \code{NULL} (default), the \code{rainbow()} color scale will be used. Only for categorical and biogeographic data.}
+
 \item{plot_map}{Logical. Whether to plot or not the phylogeny with mapped trait evolution.}
 
 \item{plot_overlay}{Logical. If \code{TRUE} (default), plot a unique \code{densityMap} with overlapping states/ranges using transparency.
 If \code{FALSE}, plot a \code{densityMap} per state/range. Only for "categorical" and "biogeographic" data.}
+
+\item{add_ACE_pies}{Logical. Whether to add pies of posterior probabilities of states/ranges at internal nodes on the mapped phylogeny. Default = \code{TRUE}.
+Only for categorical and biogeographic data.}
 
 \item{PDF_file_path}{Character string. If provided, the plot will be saved in a PDF file following the path provided here. The path must end with '.pdf'.}
 
@@ -76,7 +88,9 @@ to harbor a given state/range along branches. The list contains one \verb{"densi
 
 If \code{return_ace = TRUE},
 \itemize{
-\item \verb{$ace} Named vector that record the ancestral characters estimates (ACE) at internal nodes.
+\item \verb{$ace} For continuous traits: Named vector that record the ancestral characters estimates (ACE) at internal nodes.
+For categorical and biogeographic data: Matrix that record the posterior probabilities of ancestral states/ranges (characters) estimates (ACE) at internal nodes.
+Rows are internal nodes. Columns are states/ranges. Values are posterior probabilities of each state per node.
 }
 
 If \code{return_best_model_fit = TRUE},
@@ -118,8 +132,8 @@ Step 1: Models are fit using Maximum Likelihood approach:
 Step 2: Best model is identified among the list of \code{evolutionary_models} by comparing the corrected AIC (AICc)
 and selecting the  model with lowest AICc.
 
-Step 3: Ancestral characters estimates (ACE) are inferred with \link[phytools:fastAnc]{phytools::fastAnc} on a tree with modified branch lengths
-scaled to reflect the evolutionary rates estimated from the best model using \code{\link[phytools:rescale]{phytools::rescale()}}.
+Step 3: For continuous traits: Ancestral characters estimates (ACE) are inferred with \link[phytools:fastAnc]{phytools::fastAnc} on a tree
+with modified branch lengths scaled to reflect the evolutionary rates estimated from the best model using \code{\link[phytools:rescale]{phytools::rescale()}}.
 
 Step 4: Stochastic Mapping.
 
@@ -154,8 +168,8 @@ data(eel.tree)
 data(eel.data)
 
 # Extract body size
-eel_data <- setNames(eel.data$Max_TL_cm,
-                     rownames(eel.data))
+eel_data <- stats::setNames(eel.data$Max_TL_cm,
+                            rownames(eel.data))
 
 # Map trait evolution on the phylogeny, selecting among four models ("BM", "OU", "lambda", "kappa")
 mapped_cont_traits <- prepare_trait_data(
@@ -176,11 +190,52 @@ mapped_cont_traits$model_selection_df # Summary of model selection
 # Parameter estimates and optimization summary of the best model
 # (Here, the best model is Pagel's lambda)
 mapped_cont_traits$best_model_fit$opt
-mapped_cont_traits$ace # Ancestral character estimates at nodes
+mapped_cont_traits$ace # Ancestral character estimates at internal nodes
 
 # ----- Example 2: Categorical data ----- #
 
-# TBA
+# Load phylogeny and tip data
+library(phytools)
+data(eel.tree)
+data(eel.data)
+
+# Transform feeding mode data into a 3-level factor
+eel_data <- stats::setNames(eel.data$feed_mode, rownames(eel.data))
+eel_data <- as.character(eel_data)
+eel_data[c(1, 5, 6, 7, 10, 11, 15, 16, 17, 24, 25, 28, 30, 51, 52, 53, 55, 58, 60)] <- "kiss"
+eel_data <- stats::setNames(eel_data, rownames(eel.data))
+table(eel_data)
+
+# Manually define a Q_matrix for rate classes of state transition to use in the 'matrix' model
+# Does not allow transitions from state 1 ("bite") to state 2 ("kiss") or state 3 ("suction")
+# Does not allow transitions from state 3 ("suction") to state 1 ("bite")
+# Set symmetrical rates between state 2 ("kiss") and state 3 ("suction")
+Q_matrix = rbind(c(NA, 0, 0), c(1, NA, 2), c(0, 2, NA))
+
+# Set colors per states
+colors_per_states <- c("limegreen", "orange", "dodgerblue")
+names(colors_per_states) <- c("bite", "kiss", "suction")
+
+mapped_cat_traits <- prepare_trait_data(tip_data = eel_data, phylo = eel.tree,
+                                        trait_data_type = "categorical",
+                                        colors_per_states = colors_per_states,
+                                        evolutionary_models = c("ER", "ARD", "matrix"),
+                                        Q_matrix = Q_matrix,
+                                        nb_simulations = 10, # Set to 10 to save time.
+                                        # But recommended value = 1000.
+                                        plot_map = TRUE,
+                                        plot_overlay = TRUE,
+                                        return_best_model_fit = TRUE,
+                                        return_model_selection_df = TRUE)
+
+# Explore output
+plot(mapped_cat_traits$densityMaps[[1]]) # densityMap for state n°1 ("bite")
+mapped_cat_traits$model_selection_df # Summary of model selection
+# Parameter estimates and optimization summary of the best model
+# (Here, the best model is ER)
+print(mapped_cat_traits$best_model_fit)$ # Summary of the best evolutionary model
+mapped_cat_traits$ace # Posterior probabilities of each state (= ACE) at internal nodes
+
 
 # ----- Example 3: Biogeographic data ----- #
 

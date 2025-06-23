@@ -88,7 +88,7 @@ It presents the main functions in a typical deepSTRAPP workflow. For more advanc
 
 **Temporary version with continuous trait, but should be replace by categorical trait once prepare_trait_data() is updated**
 
-**Need to find a simple example with enough regime shifts to find significant results, and ideally, non-significicant results in the present, but a significant time-frame in the past**
+**Need to find a simple example with enough regime shifts to find significant results, and ideally, non-significant results in the present, but a significant time-frame in the past**
 
 ```{r load_data}
 # ------ Step 0: Load data ------ #

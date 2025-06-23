@@ -108,7 +108,7 @@ vignettes/tutorials below.
 categorical trait once prepare_trait_data() is updated**
 
 **Need to find a simple example with enough regime shifts to find
-significant results, and ideally, non-significicant results in the
+significant results, and ideally, non-significant results in the
 present, but a significant time-frame in the past**
 
 ``` r
