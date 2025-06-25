@@ -473,29 +473,6 @@ extract_most_likely_trait_values_for_focal_time <- function (contMap = NULL,
 #' ape::nodelabels(text = mammals_test$contMap$tree$initial_nodes_ID)
 #'
 
-## Once datasets are included in my package, remove motmot from dependencies
-
-## Currently, For continuous traits
-# Input = contMap
-
-## Make a different function for each type of data, then make a wrapper function for all types
-# extract_most_likely_trait_values_for_focal_time() = wrapper
-   # Detect type of data based on $trait_data_type, but check it match the input (contMap or densityMaps) and the type of data in ace and tip_data
-# extract_most_likely_trait_values_from_contMap_for_focal_time() = For continuous traits
-# extract_most_likely_state_values_from_densityMaps_for_focal_time() = For categorical traits
-# extract_most_likely_range_values_from_densityMaps_for_focal_time() = For biogeographic traits
-
-## See if better to extract most likely range/state from densityMaps instead of simmaps
-# Check my scripts in preparing trait data for the Macroevolution Course
-
-## Update the reference to extract_most_likely_trait_values_for_focal_time() to link to the wrapper function!
-# Ex: in the doc of compute_STRAPP_test_for_focal_time.R
-
-# Note that the use of ace and tip_data is useful only for contMap! densityMaps should provide accurate ace and tip_data
-# Adjust doc, to explain better what is mandatory (contMap or densityMaps), and what is optional (ace and tip_data, for continuous traits)
-
-### Possible update: Make it work with non-dichotomous trees!!!
-
 
 extract_most_likely_trait_values_from_contMap_for_focal_time <- function (
     contMap,
@@ -1329,6 +1306,10 @@ extract_most_likely_states_from_densityMaps_for_focal_time <- function (
   }
 }
 
+
+## Once datasets are included in my package, remove motmot from dependencies
+
+### Possible update: Make it work with non-dichotomous trees!!!
 
 ## Make unit tests for ultrametric (eel.tree / eel_contMap) and non-ultrametric trees (mammals$mammals.phy / mammals_contMap)
 

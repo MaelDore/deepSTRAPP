@@ -78,7 +78,7 @@
 #'   at each time step and returned in a melted data.frame. Default is `FALSE`.
 #' @param return_STRAPP_results Logical. Specify whether the `STRAPP_results` objects summarizing the results of the STRAPP tests carried out at each time step
 #'   should be returned among the outputs in addition to the `$pvalues_summary_df` already providing test stat estimates and p-values obtained across all `time_steps`.
-#' @param return_updated_trait_data_with_contMap Logical. Specify whether the `trait_data` extracted
+#' @param return_updated_trait_data_with_Map Logical. Specify whether the `trait_data` extracted
 #'   for the given `focal_time` and the updated version of mapped phylogeny (`contMap`) provided as input
 #'   should be returned among the outputs. The updated `contMap` consists in cutting off branches and mapping
 #'   that are younger than the `focal_time`. Default is `FALSE`.
@@ -116,7 +116,7 @@
 #'     Combined with `return_perm_data = TRUE`, it allows to plot the histograms of the null distributions
 #'     used to assess significance of the tests with [deepSTRAPP::plot_histogram_STRAPP_test_for_focal_time()].
 #'     (for a single `focal_time`) and [deepSTRAPP::plot_histograms_STRAPP_tests_over_time()] (for multiple `time_steps`).
-#'   * If `return_updated_trait_data_with_contMap = TRUE`, a list of objects containing trait data and updated `contMap`
+#'   * If `return_updated_trait_data_with_Map = TRUE`, a list of objects containing trait data and updated `contMap`
 #'     is provided in `$updated_trait_data_with_contMap_over_time`. Updated `contMap` can be plotted with [phytools::plot.contMap()]
 #'     to display a phylogeny mapped with trait values with branches cut at each `focal_time`.
 #'   * If `return_updated_BAMM_object = TRUE`, a list of updated `BAMM_object` of class `"bammdata"` that contains rates and regimes ID
@@ -212,7 +212,7 @@
 #'    extract_trait_data_melted_df = TRUE,
 #'    extract_diversification_data_melted_df = TRUE,
 #'    return_STRAPP_results = TRUE,
-#'    return_updated_trait_data_with_contMap = TRUE,
+#'    return_updated_trait_data_with_Map = TRUE,
 #'    return_updated_BAMM_object = TRUE,
 #'    verbose = TRUE,
 #'    verbose_extended = TRUE)
@@ -272,7 +272,7 @@ run_deepSTRAPP_over_time <- function (contMap, # Add densityMaps as alternative 
                                       extract_trait_data_melted_df = FALSE,
                                       extract_diversification_data_melted_df = FALSE,
                                       return_STRAPP_results = FALSE,
-                                      return_updated_trait_data_with_contMap = FALSE,
+                                      return_updated_trait_data_with_Map = FALSE,
                                       return_updated_BAMM_object = FALSE,
                                       verbose = TRUE,
                                       verbose_extended = FALSE)
@@ -447,7 +447,7 @@ run_deepSTRAPP_over_time <- function (contMap, # Add densityMaps as alternative 
   }
 
   ## Detect if trait_data is needed because requested, or to extract trait data in a melted df
-  need_trait_data <- (return_updated_trait_data_with_contMap | extract_trait_data_melted_df)
+  need_trait_data <- (return_updated_trait_data_with_Map | extract_trait_data_melted_df)
 
   ### Run deepSTRAPP workflow per time steps
   deepSTRAPP_outputs_over_time <- list()
@@ -485,7 +485,7 @@ run_deepSTRAPP_over_time <- function (contMap, # Add densityMaps as alternative 
       nthreads = nthreads,
       print_hypothesis = print_hypothesis,
       extract_diversification_data_melted_df = extract_diversification_data_melted_df,
-      return_updated_trait_data_with_contMap = need_trait_data,
+      return_updated_trait_data_with_Map = need_trait_data,
       return_updated_BAMM_object = return_updated_BAMM_object,
       verbose = verbose_extended)
 
@@ -590,7 +590,7 @@ run_deepSTRAPP_over_time <- function (contMap, # Add densityMaps as alternative 
 
   ## Extract updated contMap/densityMaps with associated trait_data if requested
   # Can be used to plot an updated contMap for each focal_time
-  if (return_updated_trait_data_with_contMap)
+  if (return_updated_trait_data_with_Map)
   {
     updated_trait_data_with_contMap_over_time <- lapply(X = deepSTRAPP_outputs_over_time, FUN = function (x) { x$updated_trait_data_with_contMap } )
 

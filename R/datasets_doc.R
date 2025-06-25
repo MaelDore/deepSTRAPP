@@ -477,7 +477,7 @@
 #'  "bite" and "suction" data. This is NOT real biological data. Please refer to the initial article for real data.
 #'
 #'  Original data source: Collar, D. C., P. C. Wainwright, M. E. Alfaro, L. J. Revell, and R. S. Mehta (2014) Biting disrupts integration to spur skull evolution in eels. Nature Communications, 5, 5505.
-#'  [https://doi.org/10.1038/ncomms6505]
+#'  \href{https://doi.org/10.1038/ncomms6505}{https://doi.org/10.1038/ncomms6505}
 #'
 #' @usage data(eel_cat_data)
 #' @format A list with 5 elements.
@@ -503,4 +503,33 @@
 #'
 "eel_cat_data"
 
+### 12/ Categorical trait evolution data for Ponerinae ants using 3-level factor ####
+
+#' @title Data summarizing the evolution of head width in Ponerinae ants using a 3-level factor as categorical trait
+#'
+#' @description A list containing head width data of Ponerinae ants mapped on the phylogeny,
+#'  modeled with [geiger::fitDiscrete]. This object was obtained with [deepSTRAPP::prepare_trait_data()].
+#'  Initial data was altered arbitrarily to create three categories from a continuous trait (head width).
+#'
+#' @usage data(Ponerinae_cat_data)
+#' @format A list with 5 elements.
+#'
+#' @details A list of five objects containing information on the evolution of feeding habits in eels.
+#'  This object was obtained with [deepSTRAPP::prepare_trait_data()].
+#'
+#'   * `$densityMaps` List of objects of class `"densityMap` that contains a phylogenetic tree and associated mapping of probability
+#'     to harbor a given state/range along branches. The list contains one `"densityMap` per state/range found in the `tip_data`.
+#'   * `$trait_data_type` Character string. Record the type of trait data. Here: "categorical".
+#'   * `$ace` Numerical matrix that record the posterior probabilities of ancestral states/ranges (characters) estimates (ACE) at internal nodes.
+#'     Rows are internal nodes. Columns are states/ranges. Values are posterior probabilities of each state per node.
+#'   * `$best_model_fit` List that provides the output of the best fitting model (Here: ER model).
+#'   * `$model_selection_df` Data.frame that summarizes model comparisons used to select the best fitting model.
+#'
+#' @docType data
+#' @keywords datasets
+#' @name Ponerinae_cat_data
+#'
+#' @seealso [deepSTRAPP::prepare_trait_data()]
+#'
+"Ponerinae_cat_data"
 

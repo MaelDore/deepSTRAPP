@@ -245,3 +245,52 @@ print(eel_cat_data$best_model_fit)$ # Summary of the best evolutionary model
 eel_cat_data$ace # Posterior probabilities of each state (= ACE) at internal nodes
 
 usethis::use_data(eel_cat_data, overwrite = TRUE)
+
+
+### 9/ Generate categorical trait evolution data for Ponerinae ants using 3-level factor #####
+
+## Load data
+
+# Load phylogeny
+data(Ponerinae_trait_data, package = "deepSTRAPP")
+# Load trait df
+data(Ponerinae_tree, package = "deepSTRAPP")
+# Load the BAMM_object summarizing 1000 posterior samples of BAMM
+data(Ponerinae_BAMM_object, package = "deepSTRAPP")
+
+## Prepare trait data
+
+# Extract log(head with) data
+Ponerinae_data_ln_HW <- setNames(object = Ponerinae_trait_data$sim_ln_HW,
+                                 nm = Ponerinae_trait_data$Taxa)
+# Convert to three-factor categorical traits
+Ponerinae_data <- Ponerinae_data_ln_HW
+Ponerinae_data[seq_along(Ponerinae_data)] <- "small"
+Ponerinae_data[Ponerinae_data_ln_HW > -1] <- "medium"
+Ponerinae_data[Ponerinae_data_ln_HW > 0] <- "large"
+table(Ponerinae_data)
+
+# Select color scheme for states
+colors_per_states <- c("darkblue", "dodgerblue", "lightblue")
+names(colors_per_states) <- c("large", "medium", "small")
+
+## Produce densityMaps using stochastic character mapping based on an equal-rates (ER) Mk model
+Ponerinae_cat_data <- prepare_trait_data(tip_data = Ponerinae_data, phylo = Ponerinae_tree,
+                                         trait_data_type = "categorical",
+                                         colors_per_states = colors_per_states,
+                                         evolutionary_models = c("ER", "SYM", "ARD", "meristic"),
+                                         nb_simulations = 1000,
+                                         return_best_model_fit = TRUE,
+                                         return_model_selection_df = TRUE,
+                                         plot_map = FALSE)
+
+# Explore output
+plot(Ponerinae_cat_data$densityMaps[[1]]) # densityMap for state n°1 ("large")
+Ponerinae_cat_data$model_selection_df # Summary of model selection
+# Parameter estimates and optimization summary of the best model
+# (Here, the best model is ARD)
+print(Ponerinae_cat_data$best_model_fit) # Summary of the best evolutionary model
+Ponerinae_cat_data$ace # Posterior probabilities of each state (= ACE) at internal nodes
+
+usethis::use_data(Ponerinae_cat_data, overwrite = TRUE)
+

@@ -16,21 +16,31 @@
 #'
 #'   Tests can be carried out on speciation, extinction and net diversification rates.
 #'
-#' @param contMap Object of class `"contMap"`, typically generated with [deepSTRAPP::prepare_trait_data()],
+#' @param contMap For continuous trait data. Object of class `"contMap"`,
+#'   typically generated with [deepSTRAPP::prepare_trait_data()] or [phytools::contMap()],
 #'   that contains a phylogenetic tree and associated continuous trait mapping.
 #'   The phylogenetic tree must be rooted and fully resolved/dichotomous,
 #'   but it does not need to be ultrametric (it can includes fossils).
-#' @param ace Named numeric vector (Optional). Ancestral Character Estimates (ACE) of the internal nodes,
-#'   typically generated with [phytools::fastAnc()], [phytools::anc.ML()], or [ape::ace()].
-#'   Names are nodes_ID of the internal nodes. Values are ACE of the trait.
-#'   Needed to provide accurate estimates of trait values.
-#' @param tip_data Named numeric vector (Optional). Tip values of the trait.
-#'   Names are nodes_ID of the internal nodes.
-#'   Needed to provide accurate tip values.
+#' @param densityMaps For categorical trait or biogeographic data. List of objects of class `"densityMap"`,
+#'   typically generated with [deepSTRAPP::prepare_trait_data()],
+#'   that contains a phylogenetic tree and associated posterior probability of being in a given state/range along branches.
+#'   Each object (i.e., `densityMap`) corresponds to a state/range. The phylogenetic tree must be rooted and fully resolved/dichotomous,
+#'   but it does not need to be ultrametric (it can includes fossils).
+#' @param ace (Optional) Ancestral Character Estimates (ACE) at the internal nodes.
+#'   Obtained with [deepSTRAPP::prepare_trait_data()] as output in the `$ace` slot.
+#'   * For continuous trait data: Named numerical vector typically generated with [phytools::fastAnc()], [phytools::anc.ML()], or [ape::ace()].
+#'     Names are nodes_ID of the internal nodes. Values are ACE of the trait.
+#'   * For categorical trait or biogeographic data: Matrix that record the posterior probabilities of ancestral states/ranges.
+#'     Rows are internal nodes_ID. Columns are states/ranges. Values are posterior probabilities of each state per node.
+#'   Needed in all cases to provide accurate estimates of trait values.
+#' @param tip_data (Optional) Named vector of tip values of the trait.
+#'   * For continuous trait data: Named numerical vector of trait values.
+#'   * For categorical trait or biogeographic data: Character string vector of states/ranges
+#'   Names are nodes_ID of the internal nodes. Needed to provide accurate tip values.
 #' @param trait_data_type Character string. Specify the type of trait data. Must be one of "continuous", "categorical", "biogeographic".
 #' @param BAMM_object Object of class `"bammdata"`, typically generated with [deepSTRAPP::prepare_diversification_data()],
 #'   that contains a phylogenetic tree and associated diversification rate mapping across selected posterior samples.
-#'   The phylogenetic tree must the same as the one associated with the `contMap`, `ace` and `tip_data`.
+#'   The phylogenetic tree must the same as the one associated with the `contMap`/`densityMaps`, `ace` and `tip_data`.
 #' @param focal_time Numerical. The time, in terms of time distance from the present,
 #'   at which data must be extracted and the phylogeny and mappings must be cut.
 #'   It must be smaller than the root age of the phylogeny.
@@ -68,9 +78,9 @@
 #'  and what significant level is used to rejected or not the null hypothesis. Default is `TRUE`.
 #' @param extract_diversification_data_melted_df Logical. Specify whether diversification data (regimes ID and tip rates) must be extracted from the `updated_BAMM_object`
 #'   and returned in a melted data.frame. Default is `FALSE`.
-#' @param return_updated_trait_data_with_contMap Logical. Specify whether the `trait_data` extracted
-#'   for the given `focal_time` and the updated version of mapped phylogeny (`contMap`) provided as input
-#'   should be returned among the outputs. The updated `contMap` consists in cutting off branches and mapping
+#' @param return_updated_trait_data_with_Map Logical. Specify whether the `trait_data` extracted
+#'   for the given `focal_time` and the updated version of mapped phylogeny (`contMap`/`densityMaps`) provided as input
+#'   should be returned among the outputs. The updated `contMap`/`densityMaps` consists in cutting off branches and mapping
 #'   that are younger than the `focal_time`. Default is `FALSE`.
 #' @param return_updated_BAMM_object Logical. Specify whether the `updated_BAMM_object` with phylogeny and
 #'   mapped diversification rates cut-off at the `focal_time` should be returned among the outputs.
@@ -86,9 +96,9 @@
 #'
 #'   [deepSTRAPP::extract_most_likely_trait_values_for_focal_time()] extracts the most likely trait values
 #'   found along branches at the `focal_time`.
-#'   Optionally, the function can update the mapped phylogeny (`contMap`) such as
+#'   Optionally, the function can update the mapped phylogeny (`contMap`/`densityMaps`) such as
 #'   branches overlapping the `focal_time` are shorten to the `focal_time`, and
-#'   the continuous trait mapping for the cut off branches are removed
+#'   the trait mapping for the cut off branches are removed
 #'   by updating the `$tree$maps` and `$tree$mapped.edge` elements.
 #'
 #'   ## Extract diversification data
@@ -125,8 +135,8 @@
 #'     See [extract_diversification_data_melted_df_for_focal_time()] for a detailed description of the output.
 #'
 #'   Optional data updated for the `focal_time`:
-#'   * `$updated_trait_data_with_contMap` A list with four elements that contains trait data found at the `focal_time` and an updated `contMap`
-#'     that can be used as input of [phytools::plot.contMap()] to display a phylogeny mapped with trait values with branches cut at the `focal_time`.
+#'   * `$updated_trait_data_with_Map` A list with four elements that contains trait data found at the `focal_time` and an updated `contMap` or `densityMaps`
+#'     that can be used as input of [phytools::plot.contMap()] or [deepSTRAPP::plot_densityMaps_overlay()] to display a phylogeny mapped with trait values/states/ranges with branches cut at the `focal_time`.
 #'     See [deepSTRAPP::extract_most_likely_trait_values_for_focal_time()] for a detailed description of the output.
 #'   * `$updated_BAMM_object` An updated `BAMM_object` of class `"bammdata"` that contains rates and regimes ID found at the `focal_time`.
 #'     Can be used as input of [deepSTRAPP::plot_BAMM_rates()] to display a phylogeny mapped with diversification rates with branches cut at the `focal_time`.
@@ -138,6 +148,7 @@
 #' [deepSTRAPP::extract_diversification_data_melted_df_for_focal_time()] [deepSTRAPP::compute_STRAPP_test_for_focal_time()]
 #'
 #' @examples
+#' # ----- Example 1: Continuous trait ----- #
 #' ## Load data
 #'
 #' # Load phylogeny
@@ -179,7 +190,7 @@
 #'   rate_type = "net_diversification",
 #'   return_perm_data = TRUE,
 #'   extract_diversification_data_melted_df = TRUE,
-#'   return_updated_trait_data_with_contMap = TRUE,
+#'   return_updated_trait_data_with_Map = TRUE,
 #'   return_updated_BAMM_object = TRUE)
 #'
 #' ## Explore output
@@ -189,15 +200,15 @@
 #' str(deepSTRAPP_output$STRAPP_results)
 #'
 #' # Access trait data
-#' head(deepSTRAPP_output$updated_trait_data_with_contMap$trait_data)
+#' head(deepSTRAPP_output$updated_trait_data_with_Map$trait_data)
 #'
 #' # Access the diversification data in a melted data.frame
 #' head(deepSTRAPP_output$diversification_data_df)
 #'
 #' # Plot updated contMap
-#' phytools::plot.contMap(deepSTRAPP_output$updated_trait_data_with_contMap$contMap)
+#' phytools::plot.contMap(deepSTRAPP_output$updated_trait_data_with_Map$contMap)
 #' ape::nodelabels(text =
-#'    deepSTRAPP_output$updated_trait_data_with_contMap$contMap$tree$initial_nodes_ID)
+#'    deepSTRAPP_output$updated_trait_data_with_Map$contMap$tree$initial_nodes_ID)
 #'
 #' # Plot diversification rates on updated phylogeny
 #' plot_BAMM_rates(deepSTRAPP_output$updated_BAMM_object, labels = TRUE)
@@ -206,9 +217,102 @@
 #' plot_histogram_STRAPP_test_for_focal_time(
 #'    STRAPP_results = deepSTRAPP_output$STRAPP_results) }
 #'
+#' # ----- Example 2: Categorical trait ----- #
+#' ## Load data
+#'
+#' # Load phylogeny
+#' data(Ponerinae_trait_data, package = "deepSTRAPP")
+#' # Load trait df
+#' data(Ponerinae_tree, package = "deepSTRAPP")
+#' # Load the BAMM_object summarizing 1000 posterior samples of BAMM
+#' data(Ponerinae_BAMM_object, package = "deepSTRAPP")
+#'
+#' ## Prepare trait data
+#'
+#' # Extract log(head with) data
+#' Ponerinae_data_ln_HW <- setNames(object = Ponerinae_trait_data$sim_ln_HW,
+#'                                  nm = Ponerinae_trait_data$Taxa)
+#' # Convert to three-factor categorical traits
+#' Ponerinae_data <- Ponerinae_data_ln_HW
+#' Ponerinae_data[seq_along(Ponerinae_data)] <- "small"
+#' Ponerinae_data[Ponerinae_data_ln_HW > -1] <- "medium"
+#' Ponerinae_data[Ponerinae_data_ln_HW > 0] <- "large"
+#' table(Ponerinae_data)
+#'
+#' # Select color scheme for states
+#' colors_per_states <- c("darkblue", "dodgerblue", "lightblue")
+#' names(colors_per_states) <- c("large", "medium", "small")
+#'
+#' \dontrun{  (May take several minutes to run)
+#' ## Produce densityMaps using stochastic character mapping based on an equal-rates (ER) Mk model
+#' Ponerinae_cat_data <- prepare_trait_data(tip_data = Ponerinae_data, phylo = Ponerinae_tree,
+#'                                          trait_data_type = "categorical",
+#'                                          colors_per_states = colors_per_states,
+#'                                          evolutionary_models = c("ER", "SYM", "ARD", "meristic"),
+#'                                          nb_simulations = 1000,
+#'                                          return_best_model_fit = TRUE,
+#'                                          return_model_selection_df = TRUE,
+#'                                          plot_map = FALSE) }
+#'
+#' # Load directly output
+#' data(Ponerinae_cat_data, package = "deepSTRAPP")
+#'
+#' ## Set focal time to 10 Mya
+#' focal_time <- 10
+#'
+#' \dontrun{  (May take several minutes to run)
+#' ## Run deepSTRAPP on net diversification rates for focal time = 10 Mya.
+#'
+#' deepSTRAPP_output <- run_deepSTRAPP_for_focal_time(
+#'     densityMaps = Ponerinae_cat_data$densityMaps,
+#'     ace = Ponerinae_cat_data$ace,
+#'     tip_data = Ponerinae_data,
+#'     trait_data_type = "categorical",
+#'     BAMM_object = Ponerinae_BAMM_object,
+#'     focal_time = focal_time,
+#'     rate_type = "net_diversification",
+#'     posthoc_pairwise_tests = TRUE,
+#'     return_perm_data = TRUE,
+#'     extract_diversification_data_melted_df = TRUE,
+#'     return_updated_trait_data_with_Map = TRUE,
+#'     return_updated_BAMM_object = TRUE)
+#'
+#' ## Explore output
+#' str(deepSTRAPP_output, max.level = 1)
+#'
+#' # Access deepSTRAPP results
+#' str(deepSTRAPP_output$STRAPP_results, max.level = 2)
+#' # Result for overall Kruskal-Wallis test
+#' deepSTRAPP_output$STRAPP_results[1:3]
+#' # Results for posthoc pairwise Dunn's tests
+#' deepSTRAPP_output$STRAPP_results$posthoc_pairwise_tests$summary_df
+#'
+#' # Access trait data
+#' head(deepSTRAPP_output$updated_trait_data_with_Map$trait_data)
+#'
+#' # Access the diversification data in a melted data.frame
+#' head(deepSTRAPP_output$diversification_data_df)
+#'
+#' # Plot updated densityMaps cut at focal time
+#' plot_densityMaps_overlay(deepSTRAPP_output$updated_trait_data_with_Map$densityMaps)
+#'
+#' # Plot diversification rates on updated phylogeny
+#' plot_BAMM_rates(BAMM_object = deepSTRAPP_output$updated_BAMM_object, legend = TRUE, labels = FALSE,
+#'    colorbreaks = deepSTRAPP_output$updated_BAMM_object$initial_colorbreaks$net_diversification)
+#'
+#' # Plot histogram of Kruskal-Wallis overall test stats
+#' plot_histogram_STRAPP_test_for_focal_time(
+#'    STRAPP_results = deepSTRAPP_output$STRAPP_results)
+#'
+#' # Plot histograms of posthoc pairwise Dunn's test stats
+#' plot_histogram_STRAPP_test_for_focal_time(
+#'   STRAPP_results = deepSTRAPP_output$STRAPP_results,
+#'    plot_posthoc_tests = TRUE) }
+#'
 
 
-run_deepSTRAPP_for_focal_time <- function (contMap, # Add densityMaps as alternative input and adjust doc
+run_deepSTRAPP_for_focal_time <- function (contMap = NULL,
+                                           densityMaps = NULL,
                                            ace = NULL,
                                            tip_data = NULL,
                                            trait_data_type,
@@ -227,7 +331,7 @@ run_deepSTRAPP_for_focal_time <- function (contMap, # Add densityMaps as alterna
                                            nthreads = 1,
                                            print_hypothesis = TRUE,
                                            extract_diversification_data_melted_df = FALSE,
-                                           return_updated_trait_data_with_contMap = FALSE,
+                                           return_updated_trait_data_with_Map = FALSE,
                                            return_updated_BAMM_object = FALSE,
                                            verbose = TRUE)
 {
@@ -243,16 +347,14 @@ run_deepSTRAPP_for_focal_time <- function (contMap, # Add densityMaps as alterna
     cat(paste0(Sys.time(), " - Extract trait data for focal-time = ", focal_time, "\n\n"))
   }
 
-  ## Take $trait_data_type as input to select the proper sub-function
-  # Will also accept densityMaps instead of a contMap
-
   trait_data_list <- extract_most_likely_trait_values_for_focal_time(
     contMap = contMap,
+    densityMaps = densityMaps,
     ace = ace,
     tip_data = tip_data,
     trait_data_type = trait_data_type,
     focal_time = focal_time,
-    update_map = return_updated_trait_data_with_contMap, # Adjust contMap / densityMaps
+    update_map = return_updated_trait_data_with_Map,
     keep_tip_labels = keep_tip_labels)
 
   # ------ Extract diversification data ------ #
@@ -265,6 +367,10 @@ run_deepSTRAPP_for_focal_time <- function (contMap, # Add densityMaps as alterna
   updated_BAMM_object <- update_rates_and_regimes_for_focal_time(
     BAMM_object = BAMM_object,
     focal_time = focal_time,
+    update_rates = TRUE,
+    update_regimes = TRUE,
+    update_tree = return_updated_BAMM_object,
+    update_plot = return_updated_BAMM_object,
     update_all_elements = return_updated_BAMM_object,
     keep_tip_labels = keep_tip_labels,
     verbose = verbose)
@@ -282,7 +388,7 @@ run_deepSTRAPP_for_focal_time <- function (contMap, # Add densityMaps as alterna
       verbose = verbose)
   }
 
-  # ------ Compute diversification data ------ #
+  # ------ Compute STRAPP test ------ #
 
   if (verbose)
   {
@@ -316,13 +422,13 @@ run_deepSTRAPP_for_focal_time <- function (contMap, # Add densityMaps as alterna
     deepSTRAPP_output$diversification_data_df <- diversification_data_df
   }
 
-  # Add the updated trait data with updated contMap/simmaps if requested
-  if (return_updated_trait_data_with_contMap)
+  # Add the updated trait data with updated contMap/densityMaps if requested
+  if (return_updated_trait_data_with_Map)
   {
-    deepSTRAPP_output$updated_trait_data_with_contMap <- trait_data_list
+    deepSTRAPP_output$updated_trait_data_with_Map <- trait_data_list
   }
 
-  # Add the updated contMap/simmaps if requested
+  # Add the updated BAMM object if requested
   if (return_updated_BAMM_object)
   {
     deepSTRAPP_output$updated_BAMM_object <- updated_BAMM_object

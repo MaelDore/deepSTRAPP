@@ -692,7 +692,7 @@ prepare_trait_data_for_categorical_data <- function (
     {
       cat(paste0("WARNING: 'nb_simulations' is set to ",nb_simulations,". High number of simulations may be time-consuming and only improve marginally the robustness of the tests.\n"))
     }
-    if ((nb_simulations <= 100))
+    if ((nb_simulations < 100))
     {
       cat(paste0("WARNING: 'nb_simulations' is set to ",nb_simulations,". Low number of simulations may provide biased estimates of states/ranges and affect test outputs.\n"))
     }
@@ -955,12 +955,24 @@ prepare_trait_data_for_categorical_data <- function (
 
     if (!plot_overlay)
     {
+      ## Print progress for each state
+      if (verbose)
+      {
+        cat(paste0(Sys.time(), " - Plot one densityMap for each state.\n"))
+      }
+
       ## Plot one densityMap per state
       for (i in seq_along(densityMaps_all_states))
       {
         plot(densityMaps_all_states[[i]])
       }
     } else {
+
+      ## Print progress for each state
+      if (verbose)
+      {
+        cat(paste0(Sys.time(), " - Plot a unique densityMap with for all states overlaid.\n"))
+      }
 
       ## Plot the overlay of densityMaps with alpha
       plot_densityMaps_overlay(densityMaps = densityMaps_all_states,
@@ -975,6 +987,12 @@ prepare_trait_data_for_categorical_data <- function (
   ## Export densityMap(s) in PDF if requested
   if (!is.null(PDF_file_path))
   {
+    ## Print progress for each state
+    if (verbose)
+    {
+      cat(paste0(Sys.time(), " - Export PDF.\n"))
+    }
+
     # Allows plotting outside of figure range
     xpd_init <- par()$xpd
     par(xpd = TRUE)
@@ -1074,7 +1092,7 @@ prepare_trait_data_for_biogeographic_data <- function (
     {
       warning(paste0("'nb_simulations' is set to ",nb_simulations,". High number of simulations may be time-conusming and only improve marginally the robustness of the tests."))
     }
-    if ((nb_simulations <= 100))
+    if ((nb_simulations < 100))
     {
       warning(paste0("'nb_simulations' is set to ",nb_simulations,". Low number of simulations may provide bias estimates of states/ranges and affect test outputs."))
     }
