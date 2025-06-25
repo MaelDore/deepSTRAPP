@@ -216,25 +216,29 @@ Q_matrix = rbind(c(NA, 0, 0), c(1, NA, 2), c(0, 2, NA))
 colors_per_states <- c("limegreen", "orange", "dodgerblue")
 names(colors_per_states) <- c("bite", "kiss", "suction")
 
-mapped_cat_traits <- prepare_trait_data(tip_data = eel_data, phylo = eel.tree,
-                                        trait_data_type = "categorical",
-                                        colors_per_states = colors_per_states,
-                                        evolutionary_models = c("ER", "ARD", "matrix"),
-                                        Q_matrix = Q_matrix,
-                                        nb_simulations = 10, # Set to 10 to save time.
-                                        # But recommended value = 1000.
-                                        plot_map = TRUE,
-                                        plot_overlay = TRUE,
-                                        return_best_model_fit = TRUE,
-                                        return_model_selection_df = TRUE)
+\dontrun{  (May take several minutes to run)
+# Run evolutionary models
+eel_cat_data <- prepare_trait_data(tip_data = eel_data, phylo = eel.tree,
+    trait_data_type = "categorical",
+    colors_per_states = colors_per_states,
+    evolutionary_models = c("ER", "SYM", "ARD", "meristic", "matrix"),
+    Q_matrix = Q_matrix,
+    nb_simulations = 1000,
+    plot_map = TRUE,
+    plot_overlay = TRUE,
+    return_best_model_fit = TRUE,
+    return_model_selection_df = TRUE) }
+
+# Load directly output
+data(eel_cat_data, package = "deepSTRAPP")
 
 # Explore output
-plot(mapped_cat_traits$densityMaps[[1]]) # densityMap for state n°1 ("bite")
-mapped_cat_traits$model_selection_df # Summary of model selection
+plot(eel_cat_data$densityMaps[[1]]) # densityMap for state n°1 ("bite")
+eel_cat_data$model_selection_df # Summary of model selection
 # Parameter estimates and optimization summary of the best model
 # (Here, the best model is ER)
-print(mapped_cat_traits$best_model_fit)$ # Summary of the best evolutionary model
-mapped_cat_traits$ace # Posterior probabilities of each state (= ACE) at internal nodes
+print(eel_cat_data$best_model_fit)$ # Summary of the best evolutionary model
+eel_cat_data$ace # Posterior probabilities of each state (= ACE) at internal nodes
 
 
 # ----- Example 3: Biogeographic data ----- #

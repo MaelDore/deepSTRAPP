@@ -199,3 +199,49 @@ BAMM_template_diversification <- readLines(con = file.path("./inst/BAMM_template
 
 usethis::use_data(BAMM_template_diversification, overwrite = TRUE)
 
+
+### 8/ Generate categorical trait evolution data for eel using 3-level factor #####
+
+# Load phylogeny and tip data
+library(phytools)
+data(eel.tree)
+data(eel.data)
+
+# Transform feeding mode data into a 3-level factor
+eel_data <- stats::setNames(eel.data$feed_mode, rownames(eel.data))
+eel_data <- as.character(eel_data)
+eel_data[c(1, 5, 6, 7, 10, 11, 15, 16, 17, 24, 25, 28, 30, 51, 52, 53, 55, 58, 60)] <- "kiss"
+eel_data <- stats::setNames(eel_data, rownames(eel.data))
+table(eel_data)
+
+# Manually define a Q_matrix for rate classes of state transition to use in the 'matrix' model
+# Does not allow transitions from state 1 ("bite") to state 2 ("kiss") or state 3 ("suction")
+# Does not allow transitions from state 3 ("suction") to state 1 ("bite")
+# Set symmetrical rates between state 2 ("kiss") and state 3 ("suction")
+Q_matrix = rbind(c(NA, 0, 0), c(1, NA, 2), c(0, 2, NA))
+
+# Set colors per states
+colors_per_states <- c("limegreen", "orange", "dodgerblue")
+names(colors_per_states) <- c("bite", "kiss", "suction")
+
+eel_cat_data <- prepare_trait_data(tip_data = eel_data, phylo = eel.tree,
+                                        trait_data_type = "categorical",
+                                        colors_per_states = colors_per_states,
+                                        evolutionary_models = c("ER", "SYM", "ARD", "meristic", "matrix"),
+                                        Q_matrix = Q_matrix,
+                                        nb_simulations = 1000, # Set to 10 to save time.
+                                        # But recommended value = 1000.
+                                        plot_map = TRUE,
+                                        plot_overlay = TRUE,
+                                        return_best_model_fit = TRUE,
+                                        return_model_selection_df = TRUE)
+
+# Explore output
+plot(eel_cat_data$densityMaps[[1]]) # densityMap for state n°1 ("bite")
+eel_cat_data$model_selection_df # Summary of model selection
+# Parameter estimates and optimization summary of the best model
+# (Here, the best model is ER)
+print(eel_cat_data$best_model_fit)$ # Summary of the best evolutionary model
+eel_cat_data$ace # Posterior probabilities of each state (= ACE) at internal nodes
+
+usethis::use_data(eel_cat_data, overwrite = TRUE)

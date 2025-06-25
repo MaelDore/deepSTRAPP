@@ -43,6 +43,7 @@
 #' @author Maël Doré
 #'
 #' @seealso [deepSTRAPP::cut_phylo_for_focal_time()] [deepSTRAPP::extract_most_likely_trait_values_for_focal_time()]
+#'  [deepSTRAPP::extract_most_likely_trait_values_from_contMap_for_focal_time()]
 #'
 #' @examples
 #' # ----- Prepare data ----- #
@@ -114,7 +115,7 @@ cut_contMap_for_focal_time <- function(contMap, focal_time, keep_tip_labels = TR
     # contMap must be a "contMap" class object
     if (!("contMap" %in% class(contMap)))
     {
-      stop("'contMap' must have the 'contMap' class. See ?phytools::contMap() and ?deepSTRAPP::prepare_data() to learn how to generate those objects.")
+      stop("'contMap' must have the 'contMap' class. See ?phytools::contMap() and ?deepSTRAPP::prepare_trait_data() to learn how to generate those objects.")
     }
 
     ## contMap$tree
@@ -122,7 +123,7 @@ cut_contMap_for_focal_time <- function(contMap, focal_time, keep_tip_labels = TR
     if (!(all(c("simmap", "phylo") %in% class(contMap$tree))))
     {
       stop(paste0("'contMap$tree' must have the 'simmap' and 'phylo' classes indicating a trait is mapped on the phylogeny.\n",
-                  "See ?phytools::contMap() and ?deepSTRAPP::prepare_data() to learn how to generate those objects."))
+                  "See ?phytools::contMap() and ?deepSTRAPP::prepare_trait_data() to learn how to generate those objects."))
     }
     # contMap$tree must be rooted
     if (!(ape::is.rooted(contMap$tree)))

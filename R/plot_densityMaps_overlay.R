@@ -1,10 +1,10 @@
 
 
-#' @title Plot posterior probabilities of states/rangeson phylogeny from densityMaps
+#' @title Plot posterior probabilities of states/ranges on phylogeny from densityMaps
 #'
 #' @description Plot on a time-calibrated phylogeny the evolution of a categorical trait/biogeographic ranges
-#'   summarized from `densityMaps` typically generated with [deepSTRAPP::prepare_trait_data()] or [phytools::densityMap()].
-#'   Each branch is colored accroding to the posterior probability of being in a given state/range.
+#'   summarized from `densityMaps` typically generated with [deepSTRAPP::prepare_trait_data()].
+#'   Each branch is colored according to the posterior probability of being in a given state/range.
 #'   Color for each state/range are overlaid using transparency to produce a single plot for all states/ranges.
 #'
 #' @param densityMaps List of objects of class `"densityMap"`, typically generated with [deepSTRAPP::prepare_trait_data()],
@@ -13,10 +13,11 @@
 #' @param colors_per_states Named character string. To set the colors to use to map each state posterior probabilities. Names = states; values = colors.
 #'   If `NULL` (default), the color scale provided `densityMaps` will be used.
 #' @param add_ACE_pies Logical. Whether to add pies of posterior probabilities of states/ranges at internal nodes on the mapped phylogeny. Default = `TRUE`.
-#' @param ace Numerical matrix. To provide the posterior probabilities of ancestral states/ranges (characters) estimates (ACE) at internal nodes.
-#'   Rows are internal nodes. Columns are states/ranges. Values are posterior probabilities of each state per node.
+#' @param ace Numerical matrix. To provide the posterior probabilities of ancestral states/ranges (characters) estimates (ACE) at internal nodes
+#'   used to plot the ACE pies. Rows are internal nodes. Columns are states/ranges. Values are posterior probabilities of each state per node.
 #'   Typically generated with [deepSTRAPP::prepare_trait_data()] in the `$ace` slot.
-#'   If `NULL` (default), the ACE are extracted from the `densityMaps`.
+#'   If `NULL` (default), the ACE are extracted from the `densityMaps` with a possible slight discrepancy with the actual tip states
+#'   and estimated posterior probabilities of ancestral states.
 #' @param ... Additional arguments to pass down to [phytools::plot.simmap()] to control plotting.
 #'
 #' @export
@@ -44,33 +45,40 @@
 #' eel_data <- stats::setNames(eel_data, rownames(eel.data))
 #' table(eel_data)
 #'
+#' # Manually define a Q_matrix for rate classes of state transition to use in the 'matrix' model
+#' # Does not allow transitions from state 1 ("bite") to state 2 ("kiss") or state 3 ("suction")
+#' # Does not allow transitions from state 3 ("suction") to state 1 ("bite")
+#' # Set symmetrical rates between state 2 ("kiss") and state 3 ("suction")
+#' Q_matrix = rbind(c(NA, 0, 0), c(1, NA, 2), c(0, 2, NA))
+#'
 #' # Set colors per states
 #' colors_per_states <- c("limegreen", "orange", "dodgerblue")
 #' names(colors_per_states) <- c("bite", "kiss", "suction")
 #'
-#' # Run evolutionary models
-#' mapped_cat_traits <- prepare_trait_data(tip_data = eel_data, phylo = eel.tree,
-#'                                         trait_data_type = "categorical",
-#'                                         colors_per_states = colors_per_states,
-#'                                         evolutionary_models = "ER",
-#'                                         nb_simulations = 10, # Set to 10 to save time.
-#'                                         # But recommended value = 1000.
-#'                                         plot_map = FALSE,
-#'                                         plot_overlay = FALSE)
+#' \dontrun{  (May take several minutes to run)
+#' # Run evolutionary models to prepare trait data
+#' eel_cat_data <- prepare_trait_data(tip_data = eel_data, phylo = eel.tree,
+#'     trait_data_type = "categorical",
+#'     colors_per_states = colors_per_states,
+#'     evolutionary_models = c("ER", "SYM", "ARD", "meristic", "matrix"),
+#'     Q_matrix = Q_matrix,
+#'     nb_simulations = 1000,
+#'     plot_map = TRUE,
+#'     plot_overlay = TRUE,
+#'     return_best_model_fit = TRUE,
+#'     return_model_selection_df = TRUE) }
+#'
+#' # Load directly output
+#' data(eel_cat_data, package = "deepSTRAPP")
 #'
 #' # Plot densityMaps one by one
-#' plot(mapped_cat_traits$densityMaps[[1]]) # densityMap for state n°1 ("bite")
-#' plot(mapped_cat_traits$densityMaps[[2]]) # densityMap for state n°1 ("kiss")
-#' plot(mapped_cat_traits$densityMaps[[3]]) # densityMap for state n°1 ("suction")
+#' plot(eel_cat_data$densityMaps[[1]]) # densityMap for state n°1 ("bite")
+#' plot(eel_cat_data$densityMaps[[2]]) # densityMap for state n°1 ("kiss")
+#' plot(eel_cat_data$densityMaps[[3]]) # densityMap for state n°1 ("suction")
 #'
 #' # Plot overlay of all densityMaps
-#' plot_densityMaps_overlay(densityMaps = mapped_cat_traits$densityMaps)
+#' plot_densityMaps_overlay(densityMaps = eel_cat_data$densityMaps)
 #'
-
-## Integrate in prepare_trait_data
-## See if fix the issue with PDF export
-## Remove ACE estimates?
-## Make data available for results from eel_data 3-level prepare_data()
 
 
 plot_densityMaps_overlay <- function (

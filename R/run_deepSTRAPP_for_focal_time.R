@@ -252,7 +252,7 @@ run_deepSTRAPP_for_focal_time <- function (contMap, # Add densityMaps as alterna
     tip_data = tip_data,
     trait_data_type = trait_data_type,
     focal_time = focal_time,
-    update_contMap = return_updated_trait_data_with_contMap,
+    update_map = return_updated_trait_data_with_contMap, # Adjust contMap / densityMaps
     keep_tip_labels = keep_tip_labels)
 
   # ------ Extract diversification data ------ #

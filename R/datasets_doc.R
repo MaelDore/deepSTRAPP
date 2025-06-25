@@ -467,3 +467,40 @@
 "BAMM_template_diversification"
 
 
+### 11/ Categorical trait evolution data for eel using 3-level factor ####
+
+#' @title Data summarizing the evolution of feeding habits in eels using a 3-level factor as categorical trait
+#'
+#' @description A list containing feeding habits data of eels mapped on the phylogeny,
+#'  modeled with [geiger::fitDiscrete]. This object was obtained with [deepSTRAPP::prepare_trait_data()].
+#'  Initial data was altered arbitrarily to create three categories, adding a "kiss" feeding habit to the initial
+#'  "bite" and "suction" data. This is NOT real biological data. Please refer to the initial article for real data.
+#'
+#'  Original data source: Collar, D. C., P. C. Wainwright, M. E. Alfaro, L. J. Revell, and R. S. Mehta (2014) Biting disrupts integration to spur skull evolution in eels. Nature Communications, 5, 5505.
+#'  [https://doi.org/10.1038/ncomms6505]
+#'
+#' @usage data(eel_cat_data)
+#' @format A list with 5 elements.
+#'
+#' @details A list of five objects containing information on the evolution of feeding habits in eels.
+#'  This object was obtained with [deepSTRAPP::prepare_trait_data()].
+#'
+#'   * `$densityMaps` List of objects of class `"densityMap` that contains a phylogenetic tree and associated mapping of probability
+#'     to harbor a given state/range along branches. The list contains one `"densityMap` per state/range found in the `tip_data`.
+#'   * `$trait_data_type` Character string. Record the type of trait data. Here: "categorical".
+#'   * `$ace` Numerical matrix that record the posterior probabilities of ancestral states/ranges (characters) estimates (ACE) at internal nodes.
+#'     Rows are internal nodes. Columns are states/ranges. Values are posterior probabilities of each state per node.
+#'   * `$best_model_fit` List that provides the output of the best fitting model (Here: ER model).
+#'   * `$model_selection_df` Data.frame that summarizes model comparisons used to select the best fitting model.
+#'
+#' @docType data
+#' @keywords datasets
+#' @name eel_cat_data
+#'
+#' @references Collar, D. C., P. C. Wainwright, M. E. Alfaro, L. J. Revell, and R. S. Mehta (2014) Biting disrupts integration to spur skull evolution in eels. Nature Communications, 5, 5505.
+#'  \href{https://doi.org/10.1038/ncomms6505}{https://doi.org/10.1038/ncomms6505}
+#' @seealso [deepSTRAPP::prepare_trait_data()]
+#'
+"eel_cat_data"
+
+
