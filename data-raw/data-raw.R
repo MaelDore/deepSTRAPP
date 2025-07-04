@@ -28,12 +28,13 @@ focal_time <- 10
 
 # Extract from tip data and ML estimates of ancestral characters (values are true ML)
 Ponerinae_trait_data_10My <- extract_most_likely_trait_values_for_focal_time(
-  contMap = Ponerinae_contMap,
-  ace = Ponerinae_ACE, tip_data = Ponerinae_data_ln_HW,
-  focal_time = focal_time,
-  update_contMap = TRUE,
-  keep_tip_labels = TRUE)
+   contMap = Ponerinae_contMap,
+   ace = Ponerinae_ACE, tip_data = Ponerinae_data_ln_HW,
+   focal_time = focal_time,
+   update_map = TRUE,
+   keep_tip_labels = TRUE)
 
+# Export in deepSTRAPP
 usethis::use_data(Ponerinae_trait_data_10My, overwrite = TRUE)
 
 
@@ -57,6 +58,7 @@ Ponerinae_BAMM_object_10My <- update_rates_and_regimes_for_focal_time(
 
 str(Ponerinae_BAMM_object_10My, 1)
 
+# Export in deepSTRAPP
 usethis::use_data(Ponerinae_BAMM_object_10My, overwrite = TRUE)
 
 
@@ -80,6 +82,7 @@ Ponerinae_BAMM_object_25My <- update_rates_and_regimes_for_focal_time(
 
 str(Ponerinae_BAMM_object_25My, 1)
 
+# Export in deepSTRAPP
 usethis::use_data(Ponerinae_BAMM_object_25My, overwrite = TRUE)
 
 
@@ -104,7 +107,9 @@ summary(whale_BAMM_object$numberEvents)
 # Plot mean net diversification rates on the phylogeny
 plot.bammdata(whale_BAMM_object, labels = TRUE)
 
+# Export in deepSTRAPP
 usethis::use_data(whale_BAMM_object, overwrite = TRUE)
+
 
 # ### 5/ Generate whale_BAMM_object_5My ####
 #
@@ -129,9 +134,10 @@ usethis::use_data(whale_BAMM_object, overwrite = TRUE)
 # usethis::use_data(whale_BAMM_object_5My, overwrite = TRUE)
 
 
-### 6/ Generate Ponerinae_deepSTRAPP_0_40 ####
+### 6/ Generate Ponerinae_deepSTRAPP_cont_0_40 ####
 
 ## deepSTRAPP output for Ponerinae over time from 0 to 40My (steps = 10 My)
+# Tests for continuous trait
 
 ## Load trait df
 data(Ponerinae_trait_data, package = "deepSTRAPP")
@@ -169,38 +175,164 @@ time_step_duration <- 10
 
 # Run deepSTRAPP on net diversification rates
 ## This step is time-consuming. You can skip it and load directly the result if needed
-Ponerinae_deepSTRAPP_0_40 <- run_deepSTRAPP_over_time(
-  contMap = Ponerinae_contMap,
-  ace = Ponerinae_ACE,
-  tip_data = Ponerinae_data_ln_HW,
-  trait_data_type = "continuous",
-  BAMM_object = Ponerinae_BAMM_object,
-  nb_time_steps = nb_time_steps,
-  time_step_duration = time_step_duration,
-  return_perm_data = TRUE,
-  extract_trait_data_melted_df = TRUE,
-  extract_diversification_data_melted_df = TRUE,
-  return_STRAPP_results = TRUE,
-  return_updated_trait_data_with_contMap = TRUE,
-  return_updated_BAMM_object = TRUE,
-  verbose = TRUE,
-  verbose_extended = TRUE)
+Ponerinae_deepSTRAPP_cont_0_40 <- run_deepSTRAPP_over_time(
+   contMap = Ponerinae_contMap,
+   ace = Ponerinae_ACE,
+   tip_data = Ponerinae_data_ln_HW,
+   trait_data_type = "continuous",
+   BAMM_object = Ponerinae_BAMM_object,
+   nb_time_steps = nb_time_steps,
+   time_step_duration = time_step_duration,
+   return_perm_data = TRUE,
+   extract_trait_data_melted_df = TRUE,
+   extract_diversification_data_melted_df = TRUE,
+   return_STRAPP_results = TRUE,
+   return_updated_trait_data_with_Map = TRUE,
+   return_updated_BAMM_object = TRUE,
+   verbose = TRUE,
+   verbose_extended = TRUE)
 
 ## Explore output
-str(Ponerinae_deepSTRAPP_0_40, max.level = 1)
+str(Ponerinae_deepSTRAPP_cont_0_40, max.level = 1)
 
-usethis::use_data(Ponerinae_deepSTRAPP_0_40, overwrite = TRUE)
+# Export in deepSTRAPP
+usethis::use_data(Ponerinae_deepSTRAPP_cont_0_40, overwrite = TRUE)
 
 
-### 7/ Save diversification template file as .rds #####
+### 7/ Generate Ponerinae_deepSTRAPP_cat_0_40 ####
+
+## deepSTRAPP output for Ponerinae over time from 0 to 40My (steps = 10 My)
+# Tests for 3-factor categorical traits
+
+## Load data
+
+# Load phylogeny
+data(Ponerinae_trait_data, package = "deepSTRAPP")
+# Load trait df
+data(Ponerinae_tree, package = "deepSTRAPP")
+# Load the BAMM_object summarizing 1000 posterior samples of BAMM
+data(Ponerinae_BAMM_object, package = "deepSTRAPP")
+
+## Prepare trait data
+
+# Extract log(head with) data
+Ponerinae_data_ln_HW <- setNames(object = Ponerinae_trait_data$sim_ln_HW,
+                                 nm = Ponerinae_trait_data$Taxa)
+# Convert to three-factor categorical traits
+Ponerinae_data <- Ponerinae_data_ln_HW
+Ponerinae_data[seq_along(Ponerinae_data)] <- "small"
+Ponerinae_data[Ponerinae_data_ln_HW > -1] <- "medium"
+Ponerinae_data[Ponerinae_data_ln_HW > 0] <- "large"
+table(Ponerinae_data)
+
+# Select color scheme for states
+colors_per_states <- c("darkblue", "dodgerblue", "lightblue")
+names(colors_per_states) <- c("large", "medium", "small")
+
+# ## Produce densityMaps using stochastic character mapping based on an equal-rates (ER) Mk model
+# Ponerinae_cat_data <- prepare_trait_data(tip_data = Ponerinae_data, phylo = Ponerinae_tree,
+#                                          trait_data_type = "categorical",
+#                                          colors_per_states = colors_per_states,
+#                                          evolutionary_models = c("ER", "SYM", "ARD", "meristic"),
+#                                          nb_simulations = 1000,
+#                                          return_best_model_fit = TRUE,
+#                                          return_model_selection_df = TRUE,
+#                                          plot_map = FALSE)
+
+# Load directly output
+data(Ponerinae_cat_data, package = "deepSTRAPP")
+
+## Set for five time steps of 10 My. Will generate deepSTRAPP workflows for 0, 10, 20, 30, and 40 Mya.
+nb_time_steps <- 5
+time_step_duration <- 10
+
+## Run deepSTRAPP on net diversification rates for focal time = 10 Mya.
+Ponerinae_deepSTRAPP_cat_0_40 <- run_deepSTRAPP_over_time(
+    densityMaps = Ponerinae_cat_data$densityMaps,
+    ace = Ponerinae_cat_data$ace,
+    tip_data = Ponerinae_data,
+    trait_data_type = "categorical",
+    BAMM_object = Ponerinae_BAMM_object,
+    nb_time_steps = nb_time_steps,
+    time_step_duration = time_step_duration,
+    rate_type = "net_diversification",
+    posthoc_pairwise_tests = TRUE,
+    return_perm_data = TRUE,
+    extract_trait_data_melted_df = TRUE,
+    extract_diversification_data_melted_df = TRUE,
+    return_STRAPP_results = TRUE,
+    return_updated_trait_data_with_Map = TRUE,
+    return_updated_BAMM_object = TRUE,
+    verbose = TRUE,
+    verbose_extended = TRUE)
+
+## Explore output
+str(Ponerinae_deepSTRAPP_cat_0_40, max.level = 1)
+
+# Display test summaries
+# Can be passed down to [deepSTRAPP::plot_STRAPP_pvalues_over_time()] to generate a plot
+# showing the evolution of the test results across time.
+Ponerinae_deepSTRAPP_cat_0_40$pvalues_summary_df
+# Results for posthoc pairwise Dunn's tests over time-steps
+Ponerinae_deepSTRAPP_cat_0_40$pvalues_summary_df_for_posthoc_pairwise_tests
+
+# Access trait data in a melted data.frame
+head(Ponerinae_deepSTRAPP_cat_0_40$trait_data_df_over_time)
+
+# Access the diversification data in a melted data.frame
+head(Ponerinae_deepSTRAPP_cat_0_40$diversification_data_df_over_time)
+
+# Access details of deepSTRAPP results
+str(Ponerinae_deepSTRAPP_cat_0_40$STRAPP_results, max.level = 2)
+
+# Plot updated densityMaps for time step n°2 = 10My
+densityMaps_2 <- Ponerinae_deepSTRAPP_cat_0_40$updated_trait_data_with_Map_over_time[[2]]
+plot_densityMaps_overlay(densityMaps_2$densityMaps)
+
+# Plot diversification rates on updated phylogeny for time step n°2
+plot_BAMM_rates(BAMM_object = Ponerinae_deepSTRAPP_cat_0_40$updated_BAMM_objects_over_time[[2]], legend = TRUE, labels = FALSE,
+                colorbreaks = Ponerinae_deepSTRAPP_cat_0_40$updated_BAMM_objects_over_time[[2]]$initial_colorbreaks$net_diversification)
+
+# Plot p-values of overall Kruskal-Wallis test across all time-steps
+plot_STRAPP_pvalues_over_time(
+   STRAPP_tests_over_time = Ponerinae_deepSTRAPP_cat_0_40,
+   alpha = 0.05)
+
+# Plot p-values of post hoc pairwise Dunn's tests between pairs of tests across all time-steps
+plot_STRAPP_pvalues_over_time(
+   STRAPP_tests_over_time = Ponerinae_deepSTRAPP_cat_0_40,
+   plot_posthoc_tests = TRUE)
+
+# Plot histogram of test stats for time step n°2 = 10My
+plot_histogram_STRAPP_test_for_focal_time(
+  STRAPP_results = Ponerinae_deepSTRAPP_cat_0_40$STRAPP_results_over_time[[2]])
+
+# Plot histograms of STRAPP overall test results (One plot per time-step)
+plot_histograms_STRAPP_tests_over_time(
+   STRAPP_tests_over_time = Ponerinae_deepSTRAPP_cat_0_40,
+   display_plots = TRUE,
+   plot_posthoc_tests = FALSE)
+
+# Plot histograms of STRAPP post hoc test results (One multifaceted plot per time-step)
+plot_histograms_STRAPP_tests_over_time(
+   STRAPP_tests_over_time = Ponerinae_deepSTRAPP_cat_0_40,
+   display_plots = TRUE,
+   plot_posthoc_tests = TRUE)
+
+# Export in deepSTRAPP
+usethis::use_data(Ponerinae_deepSTRAPP_cat_0_40, overwrite = TRUE)
+
+
+### 8/ Save diversification template file as .rds #####
 
 # Load it from the /inst/ directory (works only in source/bundled version of the package)
 BAMM_template_diversification <- readLines(con = file.path("./inst/BAMM_template_diversification.txt"))
 
+# Export in deepSTRAPP
 usethis::use_data(BAMM_template_diversification, overwrite = TRUE)
 
 
-### 8/ Generate categorical trait evolution data for eel using 3-level factor #####
+### 9/ Generate categorical trait evolution data for eel using 3-level factor #####
 
 # Load phylogeny and tip data
 library(phytools)
@@ -244,10 +376,11 @@ eel_cat_data$model_selection_df # Summary of model selection
 print(eel_cat_data$best_model_fit)$ # Summary of the best evolutionary model
 eel_cat_data$ace # Posterior probabilities of each state (= ACE) at internal nodes
 
+# Export in deepSTRAPP
 usethis::use_data(eel_cat_data, overwrite = TRUE)
 
 
-### 9/ Generate categorical trait evolution data for Ponerinae ants using 3-level factor #####
+### 10/ Generate categorical trait evolution data for Ponerinae ants using 3-level factor #####
 
 ## Load data
 
@@ -292,5 +425,60 @@ Ponerinae_cat_data$model_selection_df # Summary of model selection
 print(Ponerinae_cat_data$best_model_fit) # Summary of the best evolutionary model
 Ponerinae_cat_data$ace # Posterior probabilities of each state (= ACE) at internal nodes
 
+# Export in deepSTRAPP
 usethis::use_data(Ponerinae_cat_data, overwrite = TRUE)
+
+
+### 11/ Generate biogeographic evolution data for eel #####
+
+# Load phylogeny and tip data
+library(phytools)
+data(eel.tree)
+data(eel.data)
+
+# Transform feeding mode data into biogeographic data with ranges A, B, and AB.
+eel_data <- stats::setNames(eel.data$feed_mode, rownames(eel.data))
+eel_data <- as.character(eel_data)
+eel_data[eel_data == "bite"] <- "A"
+eel_data[eel_data == "suction"] <- "B"
+eel_data[c(5, 6, 7, 15, 25, 32, 33, 34, 50, 52, 57, 58, 59)] <- "AB"
+eel_data <- stats::setNames(eel_data, rownames(eel.data))
+table(eel_data)
+
+colors_per_levels <- c("dodgerblue3", "gold")
+names(colors_per_levels) <- c("A", "B")
+
+eel_biogeo_data <- prepare_trait_data(
+    tip_data = eel_data,
+    trait_data_type = "biogeographic",
+    phylo = eel.tree,
+    evolutionary_models = c("DEC", "DEC+J"), # Default = "DEC" for biogeographic
+    prefix_for_files = "eel",
+    max_range_size = 2,
+    split_multi_area_ranges = TRUE, # Set to TRUE to display the two outputs
+    nb_simulations = 1000,
+    colors_per_levels = colors_per_levels,
+    return_BSM = TRUE,
+    return_simmaps = TRUE,
+    return_best_model_fit = TRUE,
+    return_model_selection_df = TRUE,
+    verbose = TRUE)
+
+# Explore output
+str(eel_biogeo_data, 1)
+eel_biogeo_data$model_selection_df # Summary of model selection
+# Parameter estimates and optimization summary of the best model
+# (Here, the best model is DEC+J)
+
+# Posterior probabilities of each state (= ACE) at internal nodes
+eel_biogeo_data$ace # Only with unique areas
+eel_biogeo_data$ace_all_ranges # Including multi-area ranges (Here, AB)
+
+# Plot densityMaps
+plot(eel_biogeo_data$densityMaps[[1]]) # densityMap for range n°1 ("A")
+plot_densityMaps_overlay(eel_biogeo_data$densityMaps) # densityMaps with all unique areas overlaid
+plot_densityMaps_overlay(eel_biogeo_data$densityMaps_all_ranges) # densityMaps with all ranges (including multi-area ranges) overlaid
+
+# Export in deepSTRAPP
+usethis::use_data(eel_biogeo_data, overwrite = TRUE)
 
