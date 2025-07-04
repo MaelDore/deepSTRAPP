@@ -358,23 +358,38 @@
 #'
 "STRAPP_tests_over_time_temp_example_2"
 
-### 8/ Temporary test sets as output from run_deepSTRAPP_over_time to use for plotting stuff ####
+### 8/ Temporary test sets as output from run_deepSTRAPP_over_time on continuous trait to use for plotting stuff ####
 
-#' @title Temporary test set as output from run_deepSTRAPP_over_time to use for plotting rates_through_time
+#' @title Temporary test set as output from run_deepSTRAPP_over_time on continuous trait to use for plotting rates_through_time
 #'
 #' @description Temporary test set as output from run_deepSTRAPP_over_time to use for plotting rates_through_time.
 #'
-#' @usage data(Ponerinae_deepSTRAPP_0_40)
+#' @usage data(Ponerinae_deepSTRAPP_cont_0_40)
 #' @format A list with X elements.
 #'
 #' @docType data
 #' @keywords datasets
-#' @name Ponerinae_deepSTRAPP_0_40
+#' @name Ponerinae_deepSTRAPP_cont_0_40
 #'
-"Ponerinae_deepSTRAPP_0_40"
+"Ponerinae_deepSTRAPP_cont_0_40"
+
+### 9/ Temporary test sets as output from run_deepSTRAPP_over_time on categorical trait to use for plotting stuff ####
+
+#' @title Temporary test set as output from run_deepSTRAPP_over_time on categorical trait to use for plotting rates_through_time
+#'
+#' @description Temporary test set as output from run_deepSTRAPP_over_time to use for plotting rates_through_time.
+#'
+#' @usage data(Ponerinae_deepSTRAPP_cat_0_40)
+#' @format A list with X elements.
+#'
+#' @docType data
+#' @keywords datasets
+#' @name Ponerinae_deepSTRAPP_cat_0_40
+#'
+"Ponerinae_deepSTRAPP_cat_0_40"
 
 
-### 9/ BAMM output for whale phylogeny ####
+### 10/ BAMM output for whale phylogeny ####
 
 #' @title Dataset summarizing 1000 posterior samples of BAMM for extant whales
 #'
@@ -438,7 +453,7 @@
 "whale_BAMM_object"
 
 
-### 10/ Template file for BAMM diversification analyses ####
+### 11/ Template file for BAMM diversification analyses ####
 
 #' @title Template file for BAMM diversification analyses
 #'
@@ -467,7 +482,7 @@
 "BAMM_template_diversification"
 
 
-### 11/ Categorical trait evolution data for eel using 3-level factor ####
+### 12/ Categorical trait evolution data for eel using 3-level factor ####
 
 #' @title Data summarizing the evolution of feeding habits in eels using a 3-level factor as categorical trait
 #'
@@ -503,7 +518,7 @@
 #'
 "eel_cat_data"
 
-### 12/ Categorical trait evolution data for Ponerinae ants using 3-level factor ####
+### 13/ Categorical trait evolution data for Ponerinae ants using 3-level factor ####
 
 #' @title Data summarizing the evolution of head width in Ponerinae ants using a 3-level factor as categorical trait
 #'
@@ -533,3 +548,49 @@
 #'
 "Ponerinae_cat_data"
 
+### 14/ Biogeographic range evolution data for eel ####
+
+#' @title Data summarizing the evolution of geographic ranges in eels
+#'
+#' @description A list containing (fake) geographic ranges data of eels mapped on the phylogeny,
+#'  modeled with R package `BioGeoBEARS`. This object was obtained with [deepSTRAPP::prepare_trait_data()].
+#'  Initial data based on feeding habits was altered to be transformed into range "A" and "B", and then adding arbitrarily multi-area "AB" ranges.
+#'  This is NOT real biogeographic data. Please refer to the initial article for real data.
+#'
+#'  Original data source: Collar, D. C., P. C. Wainwright, M. E. Alfaro, L. J. Revell, and R. S. Mehta (2014) Biting disrupts integration to spur skull evolution in eels. Nature Communications, 5, 5505.
+#'  \href{https://doi.org/10.1038/ncomms6505}{https://doi.org/10.1038/ncomms6505}
+#'
+#' @usage data(eel_biogeo_data)
+#' @format A list with 9 elements.
+#'
+#' @details A list of 9 elements containing information on the evolution of geographic ranges in eels.
+#'  This object was obtained with [deepSTRAPP::prepare_trait_data()].
+#'
+#'   * `$densityMaps` List of objects of class `"densityMap` that contains a phylogenetic tree and associated mapping of probability
+#'     to harbor a given range along branches. The list contains only a `"densityMap` per unique areas because `split_multi_area_ranges` was set to TRUE.
+#'   * `$densityMaps_all_ranges` List of objects of class `"densityMap` that contains a phylogenetic tree and associated mapping of probability
+#'     to harbor a given range along branches. The list contains one `"densityMap` per range found along branches during the simulated biogeographic histories.
+#'   * `$trait_data_type` Character string. Record the type of trait data. Here: "biogeographic".
+#'   * `$ace` Numerical matrix that record the posterior probabilities of ancestral ranges estimated at internal nodes.
+#'     Only unique areas are considered among the ranges. Multi-area ranges have been split among unique ranges.
+#'     Rows are internal nodes. Columns are ranges. Values are posterior probabilities of each range per node.
+#'   * `$ace_all_ranges` Numerical matrix that record the posterior probabilities of ancestral ranges estimated at internal nodes.
+#'     All ranges observed along branches during the simulated biogeographic histories are present.
+#'     Rows are internal nodes. Columns are ranges. Values are posterior probabilities of each range per node.
+#'   * `$BSM_output` List of two lists that contains summary information of cladogenetic (`$RES_caldo_events_tables`) and anagenetic (`$RES_ana_events_tables`) events
+#'     recording across the 1000 simulations of biogeographic histories performed during Biogeographic Stochastic Mapping (BSM).
+#'     Each element of the list is a data.frame recording events occurring during one simulation.
+#'   * `$simmaps` List of 1000 objects of class `"simmap"`.
+#'     Each simmap object is a phylogeny with one simulated biogeographic history (i.e., transitions in geographic ranges) mapped along branches.
+#'   * `$best_model_fit` List that provides the output of the best fitting model (Here: DEC+J model).
+#'   * `$model_selection_df` Data.frame that summarizes model comparisons used to select the best fitting model.
+#'
+#' @docType data
+#' @keywords datasets
+#' @name eel_biogeo_data
+#'
+#' @references Collar, D. C., P. C. Wainwright, M. E. Alfaro, L. J. Revell, and R. S. Mehta (2014) Biting disrupts integration to spur skull evolution in eels. Nature Communications, 5, 5505.
+#'  \href{https://doi.org/10.1038/ncomms6505}{https://doi.org/10.1038/ncomms6505}
+#' @seealso [deepSTRAPP::prepare_trait_data()]
+#'
+"eel_biogeo_data"

@@ -218,6 +218,7 @@
 #'    STRAPP_results = deepSTRAPP_output$STRAPP_results) }
 #'
 #' # ----- Example 2: Categorical trait ----- #
+#'
 #' ## Load data
 #'
 #' # Load phylogeny

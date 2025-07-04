@@ -297,7 +297,7 @@ prepare_diversification_data <- function (BAMM_install_directory_path,
       if (!is.character(prefix_for_files))
       {
         stop(paste0("'prefix_for_files' must be a character string.\n",
-                    "# Files will exported such as 'prefix_*' with an underscore separating the prefix and the file name."))
+                    "Files will exported such as 'prefix_*' with an underscore separating the prefix and the file name."))
       }
     }
 

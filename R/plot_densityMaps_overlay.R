@@ -9,8 +9,8 @@
 #'
 #' @param densityMaps List of objects of class `"densityMap"`, typically generated with [deepSTRAPP::prepare_trait_data()],
 #'   that contains a phylogenetic tree and associated posterior probability of being in a given state/range along branches.
-#'   Each object (i.e., `densityMap`) corresponds to a state/range.
-#' @param colors_per_states Named character string. To set the colors to use to map each state posterior probabilities. Names = states; values = colors.
+#'   Each object (i.e., `densityMap`) corresponds to a state/range. If no color is provided for multi-area ranges, they will be interpolated.
+#' @param colors_per_levels Named character string. To set the colors to use to map each state/range posterior probabilities. Names = states/ranges; values = colors.
 #'   If `NULL` (default), the color scale provided `densityMaps` will be used.
 #' @param add_ACE_pies Logical. Whether to add pies of posterior probabilities of states/ranges at internal nodes on the mapped phylogeny. Default = `TRUE`.
 #' @param ace Numerical matrix. To provide the posterior probabilities of ancestral states/ranges (characters) estimates (ACE) at internal nodes
@@ -52,14 +52,14 @@
 #' Q_matrix = rbind(c(NA, 0, 0), c(1, NA, 2), c(0, 2, NA))
 #'
 #' # Set colors per states
-#' colors_per_states <- c("limegreen", "orange", "dodgerblue")
-#' names(colors_per_states) <- c("bite", "kiss", "suction")
+#' colors_per_levels <- c("limegreen", "orange", "dodgerblue")
+#' names(colors_per_levels) <- c("bite", "kiss", "suction")
 #'
 #' \dontrun{  (May take several minutes to run)
 #' # Run evolutionary models to prepare trait data
 #' eel_cat_data <- prepare_trait_data(tip_data = eel_data, phylo = eel.tree,
 #'     trait_data_type = "categorical",
-#'     colors_per_states = colors_per_states,
+#'     colors_per_levels = colors_per_levels,
 #'     evolutionary_models = c("ER", "SYM", "ARD", "meristic", "matrix"),
 #'     Q_matrix = Q_matrix,
 #'     nb_simulations = 1000,
@@ -83,7 +83,7 @@
 
 plot_densityMaps_overlay <- function (
     densityMaps,
-    colors_per_states = NULL,
+    colors_per_levels = NULL,
     add_ACE_pies = TRUE,
     ace = NULL,
     ...) # To allow to pass down arguments in the plot.simmap() function
@@ -98,21 +98,21 @@ plot_densityMaps_overlay <- function (
   # Get number of nodes
   nb_nodes <- nb_tips + densityMaps[[1]]$tree$Nnode
 
-  ## colors_per_states
-  if (!is.null(colors_per_states))
+  ## colors_per_levels
+  if (!is.null(colors_per_levels))
   {
     # Check that the color scale match the states
-    if (!all(states_list %in% names(colors_per_states)))
+    if (!all(states_list %in% names(colors_per_levels)))
     {
-      missing_states <- states_list[!(states_list %in% names(colors_per_states))]
-      stop(paste0("Not all states are found in 'colors_per_states'.\n",
+      missing_states <- states_list[!(states_list %in% names(colors_per_levels))]
+      stop(paste0("Not all states are found in 'colors_per_levels'.\n",
                   "Missing: ", paste(missing_states, collapse = ", "), "."))
     }
     # Check whether all colors are valid
-    if (!all(is_color(colors_per_states)))
+    if (!all(is_color(colors_per_levels)))
     {
-      invalid_colors <- colors_per_states[!is_color(colors_per_states)]
-      stop(paste0("Some color names in 'colors_per_states' are not valid.\n",
+      invalid_colors <- colors_per_levels[!is_color(colors_per_levels)]
+      stop(paste0("Some color names in 'colors_per_levels' are not valid.\n",
                   "Invalid: ", paste(invalid_colors, collapse = ", "), "."))
     }
   }
@@ -134,11 +134,11 @@ plot_densityMaps_overlay <- function (
     }
   }
 
-  ## Retrieve colors_per_states if not provided
-  if (is.null(colors_per_states))
+  ## Retrieve colors_per_levels if not provided
+  if (is.null(colors_per_levels))
   {
-    colors_per_states <- unname(unlist(lapply(densityMaps, FUN = function (x) { x$cols[length(x$cols)] })))
-    names(colors_per_states) <- states_list
+    colors_per_levels <- unname(unlist(lapply(densityMaps, FUN = function (x) { x$cols[length(x$cols)] })))
+    names(colors_per_levels) <- states_list
   }
 
   # Allows plotting outside of figure range
@@ -154,7 +154,7 @@ plot_densityMaps_overlay <- function (
     densityMap_state_i <- densityMaps[[i]]
 
     # Set color gradient from transparent to focal color
-    focal_color <- colors_per_states[i]
+    focal_color <- colors_per_levels[i]
     focal_color_rgb <- grDevices::col2rgb(focal_color, alpha = TRUE)
     focal_color_hexa0 <- grDevices::rgb(red = focal_color_rgb[1,1], green = focal_color_rgb[2,1], blue = focal_color_rgb[3,1], alpha = 0, maxColorValue = 255)
     focal_color_hexa1 <- grDevices::rgb(red = focal_color_rgb[1,1], green = focal_color_rgb[2,1], blue = focal_color_rgb[3,1], alpha = 255, maxColorValue = 255)
@@ -238,11 +238,11 @@ plot_densityMaps_overlay <- function (
     }
 
     # Add ACE pies
-    ape::nodelabels(pie = ace_matrix, piecol = colors_per_states, cex = 0.5)
+    ape::nodelabels(pie = ace_matrix, piecol = colors_per_levels, cex = 0.5)
   }
 
   # Add legend
-  phytools::add.simmap.legend(colors = colors_per_states, x = par()$usr[1] + 0.05 * (par()$usr[2] - par()$usr[1]), y = par()$usr[3] - 0.01 * (par()$usr[4] - par()$usr[3]),
+  phytools::add.simmap.legend(colors = colors_per_levels, x = par()$usr[1] + 0.05 * (par()$usr[2] - par()$usr[1]), y = par()$usr[3] - 0.01 * (par()$usr[4] - par()$usr[3]),
                               vertical = FALSE,
                               prompt = FALSE)
 

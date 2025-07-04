@@ -435,8 +435,9 @@ compute_STRAPP_test_for_focal_time <- function (BAMM_object, trait_data_list,
   ## posthoc_pairwise_tests = TRUE. Only makes sense if more than 2 states/ranges in categorical/biogeographic data
   if (trait_data_type_for_stats != "multinominal" & posthoc_pairwise_tests == TRUE)
   {
-    stop(paste0("'posthoc_pairwise_tests = TRUE' only makes sense for categorical/biogeographic data with more than two states/ranges.\n",
-                "If you want to test specific hypotheses with continuous or categorical binary data, use 'two_tailed = FALSE' and provide the 'one_tailed_hypothesis'.\n"))
+    warning(paste0("There are only two states/ranges found at focal time = ",BAMM_object$focal_time,": ",paste(levels(as.factor(trait_data)), collapse = ", "),".\n",
+                   "'posthoc_pairwise_tests = TRUE' only makes sense for categorical/biogeographic data with more than two states/ranges.\n",
+                   "If you want to test specific hypotheses with continuous or categorical binary data, use 'two_tailed = FALSE' and provide the 'one_tailed_hypothesis'.\n"))
   }
 
   ## Compute the appropriate internal function depending on the type of data

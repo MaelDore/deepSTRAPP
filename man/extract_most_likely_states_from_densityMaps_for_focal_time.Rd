@@ -49,7 +49,7 @@ By default, the function returns a list with three elements.
 
 If \code{update_densityMaps = TRUE}, the output is a list with four elements: \verb{$trait_data}, \verb{$focal_time}, \verb{$trait_data_type}, and \verb{$densityMaps}.
 \itemize{
-\item \verb{$densityMaps} A list of objects of class \code{"densityMap"} that contains the updated \code{densityMap} of each state/range,
+\item \verb{$densityMaps} A list of objects of class \code{"densityMap"} that contains the updated \code{densityMap} of each state,
 with branches and mapping that are younger than the \code{focal_time} cut off.
 The function also adds multiple useful sub-elements to the \verb{$densityMaps$tree} elements.
 \itemize{
@@ -76,7 +76,7 @@ The mapped phylogeny (\code{densityMaps}) is cut at a specific time in the past
 ----- Extract \code{trait_data} -----
 
 Most likely states are extracted from the posterior probabilities displayed in the \code{densityMaps}.
-The states with the highest probability is assigned to each tip and cut branches at \code{focal_time}.
+The state with the highest probability is assigned to each tip and cut branches at \code{focal_time}.
 
 True ML estimates will be used if \code{tip_data} and/or \code{ace} are provided as optional inputs.
 In practice the discrepancy is negligible.

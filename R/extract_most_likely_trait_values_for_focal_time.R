@@ -815,7 +815,7 @@ extract_most_likely_trait_values_from_contMap_for_focal_time <- function (
 #'   ----- Extract `trait_data` -----
 #'
 #'   Most likely states are extracted from the posterior probabilities displayed in the `densityMaps`.
-#'   The states with the highest probability is assigned to each tip and cut branches at `focal_time`.
+#'   The state with the highest probability is assigned to each tip and cut branches at `focal_time`.
 #'
 #'   True ML estimates will be used if `tip_data` and/or `ace` are provided as optional inputs.
 #'   In practice the discrepancy is negligible.
@@ -841,7 +841,7 @@ extract_most_likely_trait_values_from_contMap_for_focal_time <- function (
 #'
 #'   If `update_densityMaps = TRUE`, the output is a list with four elements: `$trait_data`, `$focal_time`, `$trait_data_type`, and `$densityMaps`.
 #'
-#'   * `$densityMaps` A list of objects of class `"densityMap"` that contains the updated `densityMap` of each state/range,
+#'   * `$densityMaps` A list of objects of class `"densityMap"` that contains the updated `densityMap` of each state,
 #'      with branches and mapping that are younger than the `focal_time` cut off.
 #'      The function also adds multiple useful sub-elements to the `$densityMaps$tree` elements.
 #'     + `$root_age` Integer. Stores the age of the root of the tree.
@@ -1305,6 +1305,545 @@ extract_most_likely_states_from_densityMaps_for_focal_time <- function (
     }
   }
 }
+
+
+### Sub-function for biogeographic range data ####
+
+#' @title Extracts biogeographic range data mapped on a phylogeny at a given time in the past
+#'
+#' @description Extracts the most likely ranges found along branches
+#'   at a specific time in the past (i.e. the `focal_time`).
+#'   Optionally, the function can update the mapped phylogeny (`densityMaps`)
+#'   such as branches overlapping the `focal_time` are shorten to the `focal_time`,
+#'   and the range mapping for the cut off branches are removed
+#'   by updating the `$tree$maps` and `$tree$mapped.edge` elements.
+#'
+#' @param densityMaps List of objects of class `"densityMap"`, typically generated with [deepSTRAPP::prepare_trait_data()],
+#'   that contains a phylogenetic tree and associated posterior probability of being in a given range along branches.
+#'   Each object (i.e., `densityMap`) corresponds to a range. The phylogenetic tree must be rooted and fully resolved/dichotomous,
+#'   but it does not need to be ultrametric (it can includes fossils).
+#' @param ace (Optional) Numerical matrix that record the posterior probabilities of ancestral ranges at internal nodes,
+#'   obtained with [deepSTRAPP::prepare_trait_data()] as output in the `$ace` slot.
+#'   Rows are internal nodes_ID. Columns are ranges. Values are posterior probabilities of each range per node.
+#'   Needed to provide accurate estimates of ancestral ranges.
+#' @param tip_data (Optional) Named character string vector of tip ranges.
+#'   Names are nodes_ID of the internal nodes. Needed to provide accurate tip values.
+#' @param focal_time Integer. The time, in terms of time distance from the present,
+#'   at which the tree and mapping must be cut. It must be smaller than the root age of the phylogeny.
+#' @param update_densityMaps Logical. Specify whether the mapped phylogeny (`densityMaps`)
+#'   provided as input should be updated for visualization and returned among the outputs. Default is `FALSE`.
+#'   The update consists in cutting off branches and mapping that are younger than the `focal_time`.
+#' @param keep_tip_labels Logical. Specify whether terminal branches with a single descendant tip
+#'   must retained their initial `tip.label` on the updated densityMaps. Default is `TRUE`.
+#'   Used only if `update_map = TRUE`.
+#'
+#' @export
+#' @importFrom phytools nodeHeights plot.densityMap
+#' @importFrom ape nodelabels
+#' @importFrom dplyr left_join join_by
+#'
+#' @details The mapped phylogeny (`densityMaps`) is cut at a specific time in the past
+#'   (i.e. the `focal_time`) and the current trait values of the overlapping edges/branches are extracted.
+#'
+#'   ----- Extract `trait_data` -----
+#'
+#'   Most likely ranges are extracted from the posterior probabilities displayed in the `densityMaps`.
+#'   The range with the highest probability is assigned to each tip and cut branches at `focal_time`.
+#'
+#'   True ML estimates will be used if `tip_data` and/or `ace` are provided as optional inputs.
+#'   In practice the discrepancy is negligible.
+#'
+#'   ----- Update the `densityMaps` -----
+#'
+#'   To obtain updated `densityMaps` alongside the trait data, set `update_densityMaps = TRUE`.
+#'   The update consists in cutting off branches and mapping that are younger than the `focal_time`.
+#'   * When a branch with a single descendant tip is cut and `keep_tip_labels = TRUE`,
+#'       the leaf left is labeled with the tip.label of the unique descendant tip.
+#'   * When a branch with a single descendant tip is cut and `keep_tip_labels = FALSE`,
+#'     the leaf left is labeled with the node ID of the unique descendant tip.
+#'   * In all cases, when a branch with multiple descendant tips (i.e., a clade) is cut,
+#'     the leaf left is labeled with the node ID of the MRCA of the cut-off clade.
+#'
+#'   The ancestral range mapping in `densityMap` (`$tree$maps` and `$tree$mapped.edge`) is updated accordingly by removing mapping associated with the cut off branches.
+#'
+#' @return By default, the function returns a list with three elements.
+#'
+#'   * `$trait_data` A named character string vector with ML ranges found along branches overlapping the `focal_time`. Names are the tip.label/tipward node ID.
+#'   * `$focal_time` Integer. The time, in terms of time distance from the present, at which the trait data were extracted.
+#'   * `$trait_data_type` Character string. Define the type of trait data as "biogeographic". Used in downstream analyses to select appropriate statistical processing.
+#'
+#'   If `update_densityMaps = TRUE`, the output is a list with four elements: `$trait_data`, `$focal_time`, `$trait_data_type`, and `$densityMaps`.
+#'
+#'   * `$densityMaps` A list of objects of class `"densityMap"` that contains the updated `densityMap` of each range/range,
+#'      with branches and mapping that are younger than the `focal_time` cut off.
+#'      The function also adds multiple useful sub-elements to the `$densityMaps$tree` elements.
+#'     + `$root_age` Integer. Stores the age of the root of the tree.
+#'     + `$nodes_ID_df` Data.frame with two columns. Provides the conversion from the `new_node_ID` to the `initial_node_ID`. Each row is a node.
+#'     + `$initial_nodes_ID` Vector of character strings. Provides the initial ID of internal nodes. Used to plot internal node IDs as labels with [ape::nodelabels()].
+#'     + `$edges_ID_df` Data.frame with two columns. Provides the conversion from the `new_edge_ID` to the `initial_edge_ID`. Each row is an edge/branch.
+#'     + `$initial_edges_ID` Vector of character strings. Provides the initial ID of edges/branches. Used to plot edge/branch IDs as labels with [ape::edgelabels()].
+#'
+#' @author Maël Doré
+#'
+#' @seealso [deepSTRAPP::cut_phylo_for_focal_time()] [deepSTRAPP::cut_densityMaps_for_focal_time()]
+#'
+#' Associated main function: [deepSTRAPP::extract_most_likely_trait_values_for_focal_time()]
+#'
+#' Sub-functions for other types of trait data:
+#'
+#' [deepSTRAPP::extract_most_likely_trait_values_from_contMap_for_focal_time()]
+#' [deepSTRAPP::extract_most_likely_states_from_densityMaps_for_focal_time()]
+#'
+#' @examples
+#' # ----- Example 1: Only extent taxa (Ultrametric tree) ----- #
+#'
+#' ## Load biogeographic range data mapped on a phylogeny
+#' data(eel_biogeo_data, package = "deepSTRAPP")
+#'
+#' # Explore data
+#' str(eel_biogeo_data, 1)
+#' eel_biogeo_data$densityMaps # Three density maps: one per range
+
+# # Set focal time to 10 Mya
+# focal_time <- 10
+#
+# ## Extract trait data and update densityMaps for the given focal_time
+#
+# # Extract from the densityMaps
+# eel_biogeo_data_10My <- extract_most_likely_ranges_from_densityMaps_for_focal_time(
+#    densityMaps = eel_biogeo_data$densityMaps,
+#    focal_time = focal_time,
+#    update_densityMaps = TRUE)
+#
+# ## Print trait data
+# str(eel_biogeo_data_10My, 1)
+# eel_biogeo_data_10My$trait_data
+#
+# ## Plot density maps as overlay of all range posterior probabilities
+#
+# # Plot initial density maps with ACE pies
+# plot_densityMaps_overlay(densityMaps = eel_biogeo_data$densityMaps)
+# abline(v = max(phytools::nodeHeights(eel_biogeo_data$densityMaps[[1]]$tree)[,2]) - focal_time,
+#        col = "red", lty = 2, lwd = 2)
+#
+# # Plot updated densityMaps with ACE pies
+# plot_densityMaps_overlay(eel_biogeo_data_10My$densityMaps)
+#
+#
+# # ----- Example 2: Include fossils (Non-ultrametric tree) ----- #
+# ## Test with non-ultrametric trees like mammals in motmot
+#
+# ## Prepare data
+#
+# # Load mammals phylogeny and data from the R package motmot
+# # Data source: Slater, 2013; DOI: 10.1111/2041-210X.12084
+# library(motmot)
+#
+# data("mammals")
+# force(mammals)
+#
+# # Obtain mammal tree
+# mammals_tree <- mammals$mammal.phy
+# # Convert mass data into categories
+# mammals_mass <- setNames(object = mammals$mammal.mass$mean,
+#                          nm = row.names(mammals$mammal.mass))[mammals_tree$tip.label]
+# mammals_data <- mammals_mass
+# mammals_data[seq_along(mammals_data)] <- "small"
+# mammals_data[mammals_mass > 5] <- "medium"
+# mammals_data[mammals_mass > 10] <- "large"
+# table(mammals_data)
+#
+# ## Produce densityMaps using stochastic character mapping based on an equal-rates (ER) Mk model
+# mammals_biogeo_data <- prepare_trait_data(tip_data = mammals_data, phylo = mammals_tree,
+#                                        trait_data_type = "biogeographic",
+#                                        evolutionary_models = "ER",
+#                                        nb_simulations = 100)
+#
+# # Set focal time
+# focal_time <- 80
+#
+# ## Extract trait data and update densityMaps for the given focal_time
+#
+# # Extract from the densityMaps
+# mammals_biogeo_data_80My <- extract_most_likely_ranges_from_densityMaps_for_focal_time(
+#     densityMaps = mammals_biogeo_data$densityMaps,
+#     focal_time = focal_time,
+#     update_densityMaps = TRUE)
+#
+# ## Print trait data
+# str(mammals_biogeo_data_80My, 1)
+# mammals_biogeo_data_80My$trait_data
+#
+# ## Plot density maps as overlay of all range posterior probabilities
+#
+# # Plot initial density maps with ACE pies
+# plot_densityMaps_overlay(densityMaps = mammals_biogeo_data$densityMaps)
+# abline(v = max(phytools::nodeHeights(mammals_biogeo_data$densityMaps[[1]]$tree)[,2]) - focal_time,
+#        col = "red", lty = 2, lwd = 2)
+#
+# # Plot updated densityMaps with ACE pies
+# plot_densityMaps_overlay(mammals_biogeo_data_80My$densityMaps)
+#
+
+
+extract_most_likely_ranges_from_densityMaps_for_focal_time <- function (
+    densityMaps,
+    ace = NULL,
+    tip_data = NULL,
+    focal_time,
+    update_densityMaps = FALSE,
+    keep_tip_labels = TRUE)
+{
+  ### Check input validity
+
+  {
+    ## densityMaps
+    # Must provide densityMaps for biogeographic data
+    if (is.null(densityMaps))
+    {
+      stop(paste0("You must provide 'densityMaps' for biogeographic data).\n",
+                  "See ?BAMMtools::prepare_trait_data(), ?BAMMtools::BSMs_to_simmaps(), and ?phytools::densityMap() to learn how to generate those objects."))
+    }
+    # densityMaps must be a list of "densityMap" class objects
+    if (!is.list(densityMaps))
+    {
+      stop("'densityMaps' must be a list that contains only objects of the 'densityMap' class. See ?phytools::densityMap() and ?deepSTRAPP::prepare_trait_data() to learn how to generate those objects.")
+    }
+    all_classes <- unlist(lapply(X = densityMaps, FUN = class))
+    if (!all("densityMap" == all_classes))
+    {
+      stop("'densityMaps' must be a list that contains only objects of the 'densityMap' class. See ?phytools::densityMap() and ?deepSTRAPP::prepare_trait_data() to learn how to generate those objects.")
+    }
+    # densityMaps[[i]]$tree must have a $maps element
+    maps_check <- unlist(lapply(X = densityMaps, FUN = function (x) { is.null(x$tree$maps) }))
+    if (any(maps_check))
+    {
+      stop(paste0("'densityMaps' objects must have a $tree$maps element that provides the mapping of the evolution of the biogeographic ranges on the phylogeny
+                  as posterior probabilty for each edge to harbour a given range.\n",
+                  "See ?phytools::densityMap() and ?deepSTRAPP::prepare_trait_data() to learn how to generate those objects."))
+    }
+    # names(densityMap) should be the ranges
+    if (is.null(names(densityMaps)))
+    {
+      stop(paste0("'densityMaps' objects must be named after the associated ranges in this format: 'Density_map_X' where X is the range name.\n",
+                  "See ?deepSTRAPP::prepare_trait_data() to learn how to generate those objects."))
+    }
+
+    # Extract range list
+    range_list <- names(densityMaps)
+    range_list <- str_remove(string = range_list, pattern = "Density_map_")
+
+    ## ace
+    if (!is.null(ace))
+    {
+      # ace must be a numerical matrix
+      if (!is.matrix(ace))
+      {
+        stop(paste0("For biogeographic data, 'ace' must be a numerical matrix that provides posterior probability of each range per internal nodes.\n",
+                    "The object you provided is not a matrix."))
+      }
+      # ace should have as many rows as there are internal nodes in the densityMaps$tree
+      if (nrow(ace) != densityMaps[[1]]$tree$Nnode)
+      {
+        stop(paste0("'ace' should have as many rows as there are internal nodes in the densityMaps[[i]]$tree.\n",
+                    "Number of rows in 'ace' = ",nrow(ace),"; number of internal nodes in the densityMaps[[1]]$tree = ",densityMaps[[1]]$Nnode,"."))
+      }
+      internal_nodes_ID <- (length(densityMaps[[1]]$tree$tip.label) + 1):(length(densityMaps[[1]]$tree$tip.label) + densityMaps[[1]]$tree$Nnode)
+      # row.names(ace) = internal node IDs
+      if (!all(as.numeric(row.names(ace)) %in% internal_nodes_ID))
+      {
+        stop(paste0("'row.names(ace)' should match numerical ID of internal nodes in the densityMaps[[i]]$tree."))
+      }
+      if (!all(as.numeric(row.names(ace)) == internal_nodes_ID))
+      {
+        warning(paste0("Rows in 'ace' are not ordered in increasing numerical ID of internal nodes.\n",
+                       "They were reordered to follow the numerical ID of internal nodes."))
+      }
+      # ace should have as many columns as there are densityMaps associated to each range
+      if (ncol(ace) != length(densityMaps))
+      {
+        stop(paste0("'ace' should have as many columns as there are ranges = objects in the densityMaps.\n",
+                    "Number of columns in 'ace' = ",ncol(ace),"; number of ranges = objects in the 'densityMaps' = ",length(densityMaps),"."))
+      }
+      # ace columns should match ranges
+      if (!all(colnames(ace) %in% range_list))
+      {
+        stop(paste0("'ace' column names should match the ranges in the densityMaps.\n",
+                    "Column names in 'ace' = ",paste(colnames(ace), collapse = ", "),".\n",
+                    "Ranges in 'densityMaps' = ",paste(range_list, collapse = ", "),"."))
+      }
+      # ace columns should match ordered ranges
+      if (!identical(colnames(ace), range_list))
+      {
+        warning(paste0("'ace' columns should match the order of ranges in the densityMaps.\n",
+                       "They were reordered to follow the order of ranges in the densityMaps."))
+      }
+    }
+
+    ## tip_data
+    if (!is.null(tip_data))
+    {
+      # tip_data must be a named character string vector
+      if (!is.character(tip_data))
+      {
+        stop(paste0("For biogeographic data, 'tip_data' must be a character string vector that provides ranges for tips.\n",
+                    "The object you provided is not a character string vector."))
+      }
+      # tip_data should have many ranges as there are tips in the densityMaps[[i]]$tree
+      if (length(tip_data) != length(densityMaps[[1]]$tree$tip.label))
+      {
+        stop(paste0("'tip_data' should have as many ranges as there are tips in the densityMaps[[i]]$tree.\n",
+                    "Number of ranges in 'tip_data' = ",length(tip_data),"; number of tips in the densityMaps[[i]]$tree = ",length(densityMaps[[1]]$tree$tip.label),"."))
+      }
+      # names(tip_data) = densityMaps[[i]]$tree$tip.label
+      if (!all(names(tip_data) %in% densityMaps[[1]]$tree$tip.label))
+      {
+        stop(paste0("'names(tip_data)' should match tip labels in the densityMaps[[i]]$tree$tip.label."))
+      }
+      if (!all(names(tip_data) == densityMaps[[1]]$tree$tip.label))
+      {
+        warning(paste0("Ranges in 'tip_data' are not ordered as tip labels in the densityMaps[[i]]$tree.\n",
+                       "They were reordered to follow tip labels."))
+      }
+    }
+
+    ## focal_time
+
+    # Extract root age
+    root_age <- max(phytools::nodeHeights(densityMaps[[1]]$tree)[,2])
+
+    # focal_time must be positive and smaller than the root age
+    if (focal_time < 0)
+    {
+      stop(paste0("'focal_time' must be a positive number. It represents the time as a distance from the present."))
+    }
+    if (focal_time >= root_age)
+    {
+      stop(paste0("'focal_time' must be smaller than the root age of the phylogeny.\n",
+                  "'focal_time' = ",focal_time,"; root age = ",root_age,"."))
+    }
+  }
+
+  ## Warn against not providing ace and tip_data
+  if (is.null(ace))
+  {
+    cat(paste0("WARNING: No ancestral character estimates (ace) for internal nodes have been provided. Using most likely ranges extracted from the densityMaps instead.\n"))
+  }
+  if (is.null(tip_data))
+  {
+    cat(paste0("WARNING: No tip data have been provided. Using ranges extracted from the densityMaps instead.\n"))
+  }
+
+  ## Extract tip ranges if provided in tip_data
+  if (!is.null(ace))
+  {
+    # Reorder ranges in tip_data to match tip.label
+    tip_data <- tip_data[densityMaps[[1]]$tree$tip.label]
+
+    # Use them only for focal_time = 0
+    tip_data_is_provided <- T
+  } else {
+    tip_data_is_provided <- F
+  }
+
+  ## Extract node ranges if provided with 'ace'
+  if (!is.null(ace))
+  {
+    internal_nodes_ID <- (length(densityMaps[[1]]$tree$tip.label) + 1):(length(densityMaps[[1]]$tree$tip.label) + densityMaps[[1]]$tree$Nnode)
+    # Reorder ace rows according to their internal node index
+    ace <- ace[match(x = row.names(ace), table = internal_nodes_ID), ]
+
+    # Reorder ace columns as ranges in densityMaps
+    ace <- ace[ , range_list]
+
+    # Extract most likely range
+    ace_range_ID <- apply(X = ace, MARGIN = 1, FUN = which.max)
+    ace_ranges <- range_list[ace_range_ID]
+    names(ace_ranges) <- names(ace_range_ID)
+
+    # Use them only if a focal_time match exactly a node age
+    node_data_is_provided <- T
+  } else {
+    node_data_is_provided <- F
+  }
+
+  ## Identify edges present at focal time
+
+  # Edge, rootward_node, tipward_node, length (once cut)
+
+  # Get node ages per edge (no root edge)
+  all_edges_df <- phytools::nodeHeights(densityMaps[[1]]$tree)
+  root_age <- max(phytools::nodeHeights(densityMaps[[1]]$tree)[,2])
+  all_edges_df <- as.data.frame(round(root_age - all_edges_df, 5)) # # May be an issue for trees with very short time span
+  names(all_edges_df) <- c("rootward_node_age", "tipward_node_age")
+  all_edges_df$edge_ID <- row.names(all_edges_df)
+
+  # Get nodes ID per edge
+  all_edges_ID_df <- densityMaps[[1]]$tree$edge
+  colnames(all_edges_ID_df) <- c("rootward_node_ID", "tipward_node_ID")
+  all_edges_df <- cbind(all_edges_df, all_edges_ID_df)
+  all_edges_df <- all_edges_df[, c("edge_ID", "rootward_node_ID", "tipward_node_ID", "rootward_node_age", "tipward_node_age")]
+
+  # Assign tip.labels. Use tipward_node_ID for internal edges
+  all_edges_df$tip.label <- densityMaps[[1]]$tree$tip.label[match(x = all_edges_df$tipward_node_ID, 1:length(densityMaps[[1]]$tree$tip.label))]
+  all_edges_df$tip.label[is.na(all_edges_df$tip.label)] <- all_edges_df$tipward_node_ID[is.na(all_edges_df$tip.label)]
+
+  # # Detect root node ID as the only rootward node that is not also the tipward node of any edge
+  # root_node_ID <- densityMaps[[1]]$tree$edge[which.min(densityMaps[[1]]$tree$edge[, 1] %in% densityMaps[[1]]$tree$edge[, 2]), 1]
+
+  # Identify edges present at the focal time
+  all_edges_df$rootward_test <- all_edges_df$rootward_node_age > focal_time
+  all_edges_df$tipward_test <- all_edges_df$tipward_node_age <= focal_time
+  all_edges_df$time_test <- all_edges_df$rootward_test & all_edges_df$tipward_test
+
+  # If no edge present, send warning
+  if (sum(all_edges_df$time_test) == 0)
+  {
+    warning(paste0("No branch is present at focal time = ", focal_time, ". Return a NULL object.\n"))
+
+    # Return a NULL object for trait_data
+    trait_data <- NULL
+
+    if (!update_densityMaps)
+    {
+      return(list(trait_data = trait_data, focal_time = focal_time, data_type = "biogeographic"))
+    } else {
+      # Return a NULL object for densityMaps
+      updated_densityMaps <- NULL
+      return(list(trait_data = trait_data, focal_time = focal_time, data_type = "biogeographic", densityMaps = updated_densityMaps))
+    }
+
+  } else {
+
+    # Extract only edges that are present at the focal time
+    present_edges_df <- all_edges_df[all_edges_df$time_test, c("edge_ID", "rootward_node_ID", "tipward_node_ID", "rootward_node_age", "tipward_node_age", "tip.label")]
+
+    # Compute node distances to focal time
+    present_edges_df$rootward_node_dist <- abs(present_edges_df$rootward_node_age - focal_time)
+    present_edges_df$tipward_node_dist <- abs(present_edges_df$tipward_node_age - focal_time)
+
+    # Initiate field for ACE = range with the highest posterior probability at focal time
+    present_edges_df$ML_range_at_focal_time <- NA
+
+    # Loop per edge
+    for (i in 1:nrow(present_edges_df))
+    {
+      # i <- 1
+
+      ## Extract posterior probabilities at focal time from densityMaps
+
+      # Extract edge ID
+      edge_ID_i <- as.numeric(present_edges_df$edge_ID[i])
+
+      # Extract associated edge mappings across ranges
+      edge_maps_i <- lapply(X = densityMaps, FUN = function (x) { x$tree$maps[[edge_ID_i]] } )
+
+      # Compute rootward ages of segments
+      segment_rootward_ages_i <- rev(cumsum(rev(edge_maps_i[[1]])) + present_edges_df$tipward_node_age[i])
+      # Identify segment matching the given focal time
+      if (all(!(segment_rootward_ages_i < focal_time)))
+      {
+        # Case where all rootward ages are lower than focal_time, then focal_segment is the last one
+        focal_segment_ID <- length(segment_rootward_ages_i)
+      } else {
+        # Otherwise focal_segment is the last to have a rootward age > to focal_time
+        # focal_segment_ID <- which.max(segment_rootward_ages_i < focal_time) - 1
+        focal_segment_ID <- which.min(segment_rootward_ages_i >= focal_time) - 1
+      }
+
+      # Extract posterior probability for focal segments
+      edge_PP_i <- as.numeric(unlist(lapply(X = edge_maps_i, FUN = function (x) { names(x)[focal_segment_ID] } )))
+      # Extract ML ranges as the range with the highest posterior probabilities
+      ML_range_i <- range_list[which.max(edge_PP_i)]
+
+      # Export ML range in present_edges_df
+      present_edges_df$ML_range_at_focal_time[i] <- ML_range_i
+    }
+
+    ## Match ranges from ace and tip_data if needed to correct for possible discrepancy from the densityMaps
+
+    if (tip_data_is_provided | node_data_is_provided)
+    {
+      # Build df for tips/nodes to adjust
+      if (tip_data_is_provided)
+      {
+        tip_data_df <- as.data.frame(tip_data)
+        tip_data_df$node_label <- row.names(tip_data_df)
+        names(tip_data_df) <- c("range", "node_label")
+      }
+      if (node_data_is_provided)
+      {
+        ace_ranges_df <- as.data.frame(ace_ranges)
+        ace_ranges_df$node_label <- row.names(ace_ranges_df)
+        names(ace_ranges_df) <- c("range", "node_label")
+      }
+      if (tip_data_is_provided)
+      {
+        if (node_data_is_provided)
+        {
+          # Case with both tip and node data
+          accurate_ranges_df <- rbind(tip_data_df[, c("node_label", "range")], ace_ranges_df[, c("node_label", "range")])
+        } else {
+          # Case with only tip data
+          accurate_ranges_df <- tip_data_df[, c("node_label", "range")]
+        }
+      } else {
+        # Case with only node data
+        accurate_ranges_df <- ace_ranges_df[, c("node_label", "range")]
+      }
+      row.names(accurate_ranges_df) <- NULL
+
+      # Retrieve node ages
+      accurate_ranges_df <- dplyr::left_join(x = accurate_ranges_df,
+                                             y = all_edges_df[, c("tip.label", "tipward_node_age")],
+                                             by = dplyr::join_by("node_label" == "tip.label"))
+      # Remove root to avoid issue with NA
+      accurate_ranges_df <- accurate_ranges_df[!is.na(accurate_ranges_df$tipward_node_age), ]
+
+      # Detect matches based on focal time (apply a 10^-5 tolerance)
+      if (any(abs(accurate_ranges_df$tipward_node_age - focal_time) < 1e-05))
+      {
+        # Extract only matched node/tips
+        accurate_ranges_df_to_patch <- accurate_ranges_df[(abs(accurate_ranges_df$tipward_node_age - focal_time) < 1e-05), ]
+        # Replace ML_range_at_focal_time with provided tip/node data
+        present_edges_df$ML_range_at_focal_time[match(x = accurate_ranges_df_to_patch$node_label, table = present_edges_df$tip.label)] <- accurate_ranges_df_to_patch$range
+      }
+    }
+
+    ## Format "trait_data" output = named vector of most likely values at focal time
+    trait_data <- present_edges_df$ML_range_at_focal_time
+    # names(trait_data) <- present_edges_df$edge_ID
+    if (keep_tip_labels) # Names = tip.labels of tipward nodes
+    {
+      names(trait_data) <- present_edges_df$tip.label
+    } else { # Names = tipward nodes ID
+      names(trait_data) <- present_edges_df$tipward_node_ID
+    }
+
+    ## Update densityMaps if needed
+    # Not needed for STRAPP test. Useful only for visualization.
+    if (update_densityMaps)
+    {
+      ## Cut densityMap$tree at focal time and update trait mapping in density$tree$maps and density$tree$mapped.edge for all densityMaps in the list
+      updated_densityMaps <- cut_densityMaps_for_focal_time(densityMaps = densityMaps, focal_time = focal_time, keep_tip_labels = keep_tip_labels)
+    }
+
+    ## Export outputs
+    if (!update_densityMaps)
+    {
+      return(list(trait_data = trait_data, focal_time = focal_time, trait_data_type = "biogeographic"))
+
+    } else {
+      return(list(trait_data = trait_data, focal_time = focal_time, trait_data_type = "biogeographic", densityMaps = updated_densityMaps))
+    }
+  }
+}
+
+
+# # Extract most likely range
+#
+# Simply change "state"/"state" for "range"/"ranges"
+#
 
 
 ## Once datasets are included in my package, remove motmot from dependencies

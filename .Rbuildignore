@@ -10,3 +10,4 @@
 ^data-raw$
 ^software/*
 ^BAMM_outputs/*
+^BioGeoBEARS_directory/*

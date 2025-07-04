@@ -282,6 +282,7 @@ plot_histogram_STRAPP_test_for_focal_time(
    STRAPP_results = deepSTRAPP_output$STRAPP_results) }
 
 # ----- Example 2: Categorical trait ----- #
+
 ## Load data
 
 # Load phylogeny
@@ -362,7 +363,7 @@ plot_densityMaps_overlay(deepSTRAPP_output$updated_trait_data_with_Map$densityMa
 
 # Plot diversification rates on updated phylogeny
 plot_BAMM_rates(BAMM_object = deepSTRAPP_output$updated_BAMM_object, legend = TRUE, labels = FALSE,
-                colorbreaks = deepSTRAPP_output$updated_BAMM_object$initial_colorbreaks$net_diversification)
+   colorbreaks = deepSTRAPP_output$updated_BAMM_object$initial_colorbreaks$net_diversification)
 
 # Plot histogram of Kruskal-Wallis overall test stats
 plot_histogram_STRAPP_test_for_focal_time(

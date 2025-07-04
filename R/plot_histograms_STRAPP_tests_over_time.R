@@ -146,18 +146,27 @@ plot_histograms_STRAPP_tests_over_time <- function (STRAPP_tests_over_time,
       }
       # Check if $posthoc_pairwise_tests is present in elements of STRAPP_tests_over_time$STRAPP_results_over_time.
       posthoc_pairwise_tests_check_list <- unlist(lapply(X = STRAPP_tests_over_time$STRAPP_results_over_time, FUN = function (x) { "posthoc_pairwise_tests" %in% names(x) } ))
-      if (!all(posthoc_pairwise_tests_check_list))
+      if (all(!posthoc_pairwise_tests_check_list))
       {
         stop(paste0("Elements in 'STRAPP_tests_over_time$STRAPP_results_over_time' do not have a '$posthoc_pairwise_tests'.\n",
                     "You can inspect the structure of the input object with 'str(STRAPP_tests_over_time$STRAPP_results_over_time, 2)'.\n",
                     "See ?deepSTRAPP::run_deepSTRAPP_over_time() to learn how to generate those objects.\n",
                     "Especially, check if you used 'return_STRAPP_results = TRUE' AND 'posthoc_pairwise_tests = TRUE' to run post hoc tests ",
                     "and save the results in 'STRAPP_tests_over_time'."))
+      } else { # Case with '$posthoc_pairwise_tests' missing only for some time-steps
+        if (!all(posthoc_pairwise_tests_check_list))
+        {
+          time_steps_no_posthoc_tests <- focal_time_list[!posthoc_pairwise_tests_check_list]
+          warning(paste0("No posthoc pairwise tests recorded for these time-steps: ", paste(time_steps_no_posthoc_tests, collapse = ", "),".\n",
+                        "This is likely because two or less states/ranges where present at these time-steps.\n",
+                         "No histogram of test stats was generated for these time-steps."))
+        }
       }
+
       # Check if $posthoc_pairwise_tests$perm_data_array is present in elements of STRAPP_tests_over_time$STRAPP_results_over_time.
       posthoc_pairwise_tests_list <- lapply(X = STRAPP_tests_over_time$STRAPP_results_over_time, FUN = function (x) { x$posthoc_pairwise_tests } )
       perm_data_array_check_list <- unlist(lapply(X = posthoc_pairwise_tests_list, FUN = function (x) { "perm_data_array" %in% names(x) } ))
-      if (!all(perm_data_array_check_list))
+      if (all(!perm_data_array_check_list))
       {
         stop(paste0("Elements in 'STRAPP_tests_over_time$STRAPP_results_over_time' do not have a '$posthoc_pairwise_tests$perm_data_array'.\n",
                     "You can inspect the structure of the input object with 'str(STRAPP_tests_over_time$STRAPP_results_over_time, 3)'.\n",
@@ -276,13 +285,20 @@ plot_histograms_STRAPP_tests_over_time <- function (STRAPP_tests_over_time,
     # Initiate list of lists of ggplots
     ggplot_histo_list_of_lists <- list()
 
+    # Detect ID of time-steps with recorded posthoc tests
+    time_steps_ID_with_posthoc_tests <- which(posthoc_pairwise_tests_check_list)
+
     # Loop per time steps
-    for (i in seq_along(STRAPP_tests_over_time$time_steps))
+    # for (i in seq_along(STRAPP_tests_over_time$time_steps))
+    for (i in seq_along(time_steps_ID_with_posthoc_tests)) # Run only across time-steps with recorded posthoc tests
     {
       # i <- 1
 
+      # Extract ID of the time-step
+      time_steps_ID_i <- time_steps_ID_with_posthoc_tests[i]
+
       # Extract STRAPP_results
-      STRAPP_results_i <- STRAPP_tests_over_time$STRAPP_results_over_time[[i]]
+      STRAPP_results_i <- STRAPP_tests_over_time$STRAPP_results_over_time[[time_steps_ID_i]]
 
       # Create list of pairwise plots for time step i
       ggplots_histo_list_i <- list()

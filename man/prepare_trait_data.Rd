@@ -10,16 +10,23 @@ prepare_trait_data(
   phylo,
   evolutionary_models = NULL,
   Q_matrix = NULL,
+  BioGeoBEARS_directory_path = "./BioGeoBEARS_directory/",
+  keep_BioGeoBEARS_files = TRUE,
+  prefix_for_files = NULL,
+  nb_cores = 1,
+  max_range_size = 2,
+  split_multi_area_ranges = FALSE,
   ...,
   res = 100,
   nb_simulations = 1000,
-  colors_per_states = NULL,
+  colors_per_levels = NULL,
   plot_map = TRUE,
   plot_overlay = TRUE,
   add_ACE_pies = TRUE,
   PDF_file_path = NULL,
   return_ace = TRUE,
-  return_simmaps = TRUE,
+  return_BSM = FALSE,
+  return_simmaps = FALSE,
   return_best_model_fit = FALSE,
   return_model_selection_df = FALSE,
   verbose = TRUE
@@ -27,7 +34,9 @@ prepare_trait_data(
 }
 \arguments{
 \item{tip_data}{Named numerical or character string vector of trait values/states/ranges at tips.
-Names should be ordered as the tip labels in the phylogeny foudn in \code{phylo$tip.label}.}
+Names should be ordered as the tip labels in the phylogeny found in \code{phylo$tip.label}.
+For biogeographic data, ranges should follow the coding scheme of BioGeoBEARS with a unique CAPITAL letter per unique areas
+(ex: A, B), combined to form multi-area ranges (Ex: AB).}
 
 \item{trait_data_type}{Character string. Type of trait data. Either: "continuous", "categorical" or "biogeographic".}
 
@@ -38,21 +47,41 @@ Tip labels (\code{phylo$tip.label}) should match names in \code{tip_data}.}
 \itemize{
 \item Models available for continuous data are detailed in \code{\link[geiger:fitContinuous]{geiger::fitContinuous()}}.
 \item Models available for categorical data are detailed in \code{\link[geiger:fitDiscrete]{geiger::fitDiscrete()}}.
-\item Models for biogeographic data are fit with \code{BioGeoBEARS}.
+\item Models for biogeographic data are fit with R package \code{BioGeoBEARS} using \code{BioGeoBEARS::bears_optim_run()}.
 \item See list in "Details" section.
 }}
 
 \item{Q_matrix}{Custom Q-matrix for categorical data representing transition classes between states.
-Elements that are zero signify rates that are fixed to zero (i.e., impossible transition).}
+Elements that are zero signify rates that are fixed to zero (i.e., impossible transition). Only for categorical data.}
 
-\item{...}{Additional arguments to be passed down to the functions used to fit models (See \code{evolutionary_models}) and produce simmaps (See \code{\link[phytools:make.simmap]{phytools::make.simmap()}}).}
+\item{BioGeoBEARS_directory_path}{Character string. The path to the directory used to store input/output files generated
+for/by BioGeoBEARS during biogeographic historical inferences. Use '/' to separate directory and sub-directories. It must end with '/'.
+Default is \verb{./BioGeoBEARS_directory/}. Only for biogeographic data.}
+
+\item{keep_BioGeoBEARS_files}{Logical. Whether the \code{BioGeoBEARS_directory} and its content should be kept after the run. Default = \code{TRUE}. Only for biogeographic data.}
+
+\item{prefix_for_files}{Character string. Prefix to add to all BioGeoBEARS files stored in the \code{BioGeoBEARS_directory_path} if \code{keep_BioGeoBEARS_files = TRUE}.
+Files will be exported such as 'prefix_*' with an underscore separating the prefix and the file name.
+Default is \code{NULL} (no prefix is added). Only for biogeographic data.}
+
+\item{nb_cores}{Interger. Number of cores to use for parallel computation during BioGeoBEARS runs. Default = 1. Only for biogeographic data.}
+
+\item{max_range_size}{Integer. Maximum number of unique areas encompassed by multi-range areas. Default = 2. Only for biogeographic data.}
+
+\item{split_multi_area_ranges}{Logical. Whether to split multi-area ranges across unique areas when mapping ranges.
+Ex: For range EW, posterior probabilities will be split equally between Eastern Palearctic (E) and Western Palearctic (W).
+Only for biogeographic data.}
+
+\item{...}{Additional arguments to be passed down to the functions used to fit models (See \code{evolutionary_models})
+and produce simmaps with \code{\link[phytools:make.simmap]{phytools::make.simmap()}} or \code{BioGeoBEARS::runBSM()}.}
 
 \item{res}{Integer. Define the number of time steps used to interpolate/estimate trait value/state/range in \code{contMap}/\code{densityMaps}.}
 
 \item{nb_simulations}{Integer. Define the number of simulations generated for stochastic mapping. Default = 1000. Only for "categorical" and "biogeographic" data.}
 
-\item{colors_per_states}{Named character string. To set the colors to use to map each state posterior probabilities. Names = states; values = colors.
-If \code{NULL} (default), the \code{rainbow()} color scale will be used. Only for categorical and biogeographic data.}
+\item{colors_per_levels}{Named character string. To set the colors to use to map each state/range posterior probabilities. Names = states/ranges; values = colors.
+If \code{NULL} (default), the \code{rainbow()} color scale will be used for categorical trait; the \code{BioGeoBEARS::get_colors_for_states_list_0based()} will be used for biogeographic ranges.
+If no color is provided for multi-area ranges, they will be interpolated based on the colors provided for unique areas. Only for categorical and biogeographic data.}
 
 \item{plot_map}{Logical. Whether to plot or not the phylogeny with mapped trait evolution.}
 
@@ -66,6 +95,9 @@ Only for categorical and biogeographic data.}
 
 \item{return_ace}{Logical. Whether the named vector of ancestral characters estimates (ACE) at internal nodes should be returned in the output. Default = \code{TRUE}.}
 
+\item{return_BSM}{Logical. (Only for Biogeographic data) Whether the summary tables of anagenetic and cladogenetic events generated during the Biogeographic Stochastic Mapping (BSM)
+process should be returned in the output. Default = \code{FALSE}.}
+
 \item{return_simmaps}{Logical. Whether the evolutionary histories simulated during stochastic mapping (i.e., \code{simmaps}) should be returned in the output.
 Default = \code{TRUE}. Only for "categorical" and "biogeographic" data.}
 
@@ -73,7 +105,7 @@ Default = \code{TRUE}. Only for "categorical" and "biogeographic" data.}
 
 \item{return_model_selection_df}{Logical. Whether to include the data.frame summarizing model comparisons used to select the best fitting model should be returned in the output. Default = \code{FALSE}.}
 
-\item{verbose}{Logical. Should progression be displayed? A message will be printed for every steps in the process. Default is \code{FALSE}.}
+\item{verbose}{Logical. Should progression be displayed? A message will be printed for every steps in the process. Default is \code{TRUE}.}
 }
 \value{
 The function returns a list with at least two elements.
@@ -83,6 +115,9 @@ that contains a phylogenetic tree and associated continuous trait mapping.
 \item \verb{$densityMaps} (For "categorical" and "biogeographic" data) List of objects of class \verb{"densityMap},
 typically generated with \code{\link[phytools:densityMap]{phytools::densityMap()}}, that contains a phylogenetic tree and associated mapping of probability
 to harbor a given state/range along branches. The list contains one \verb{"densityMap} per state/range found in the \code{tip_data}.
+\item \verb{$densityMaps_all_ranges} (For "biogeographic" data only, if \code{split_multi_area_ranges = TRUE}) Same as \verb{$densityMaps},
+but for all ranges including the multi-areas ranges (e.g., AB) while \verb{$densityMaps} will display posterior probabilities for
+unique areas only (e.g., A and B), with multi-areas ranges split across the unique areas they encompass.
 \item \verb{$trait_data_type} Character string. Record the type of trait data. Either: "continuous", "categorical" or "biogeographic".
 }
 
@@ -91,6 +126,22 @@ If \code{return_ace = TRUE},
 \item \verb{$ace} For continuous traits: Named vector that record the ancestral characters estimates (ACE) at internal nodes.
 For categorical and biogeographic data: Matrix that record the posterior probabilities of ancestral states/ranges (characters) estimates (ACE) at internal nodes.
 Rows are internal nodes. Columns are states/ranges. Values are posterior probabilities of each state per node.
+\item \verb{$ace_all_ranges} For biogeographic data, if \code{split_multi_area_ranges = TRUE}: Named vector that record the ancestral characters estimates (ACE) at internal nodes,
+but including all ranges observed in the simmaps, including the multi-areas ranges (e.g., AB), while \verb{$ace} will display posterior probabilities
+for unique areas only (e.g., A and B), with multi-areas ranges split across the unique areas they encompass.
+}
+
+If \code{return_BSM = TRUE}, (Only for biogeographic data)
+\itemize{
+\item \verb{$BSM_output} List of two lists that contains summary information of cladogenetic (\verb{$RES_caldo_events_tables}) and anagenetic (\verb{$RES_ana_events_tables}) events
+recording across the N simulations of biogeographic histories performed during Biogeographic Stochastic Mapping (BSM).
+Each element of the list is a data.frame recording events occurring during one simulation.
+}
+
+If \code{return_simmaps = TRUE}, (Only for categorical and biogeographic data)
+\itemize{
+\item \verb{$simmaps} List that contains as many objects of class \code{"simmap"} that \code{nb_simulations} were requested.
+Each simmap object is a phylogeny with one simulated geographic history (i.e., transitions in geographic ranges) mapped along branches.
 }
 
 If \code{return_best_model_fit = TRUE},
@@ -102,6 +153,9 @@ If \code{model_selection_df = TRUE},
 \itemize{
 \item \verb{$model_selection_df} Data.frame that summarizes model comparisons used to select the best fitting model.
 }
+
+For biogeographic data, the function also produce input and output files associated with BioGeoBEARS and stored in the directory
+specified in \code{BioGeoBEARS_directory_path}. The directory and its content are kept if \code{keep_BioGeoBEARS_files = TRUE}
 }
 \description{
 Map trait evolution on a time-calibrated phylogeny in several steps:
@@ -159,10 +213,20 @@ such as trait-dependent multi-rate models (\code{\link[phytools:brownie.lite]{ph
 of location and number of regime shifts (Ex: BayesTraits, BAMM), or RRphylo for a penalized phylogenetic ridge regression approach that allows regime shifts across all branches.
 }
 
+\section{Note on macroevolutionary models of biogeographic history}{
+This function provides an easy solution to infer ancestral geographic ranges using the BioGeoBEARS framework.
+It allows to directly compare model fits across 6 models: DEC, DEC+J, DIVALIKE, DIVALIKE+J, BAYAREALIKE, BAYAREALIKE+J.
+It uses a step-wise approach by using MLE estimates of previous runs as staring parameter values when increasing complexity (adding +J parameters).
+However, it does not explore the most complex options for historical biogeography. You may need to explore more complex models
+to capture the dynamics of range evolution such as time-stratification with adjacency matrices, dispersal multipliers (+W),
+distance-based dispersal probabilities (+X), or other features.
+See for instance, \href{http://phylo.wikidot.com/biogeobears}{http://phylo.wikidot.com/biogeobears}).
+}
+
 \examples{
 # ----- Example 1: Continuous data ----- #
 
-# Load phylogeny and tip data
+## Load phylogeny and tip data
 library(phytools)
 data(eel.tree)
 data(eel.data)
@@ -171,7 +235,7 @@ data(eel.data)
 eel_data <- stats::setNames(eel.data$Max_TL_cm,
                             rownames(eel.data))
 
-# Map trait evolution on the phylogeny, selecting among four models ("BM", "OU", "lambda", "kappa")
+## Map trait evolution on the phylogeny
 mapped_cont_traits <- prepare_trait_data(
    tip_data = eel_data,
    trait_data_type = "continuous",
@@ -184,7 +248,7 @@ mapped_cont_traits <- prepare_trait_data(
    return_model_selection_df = TRUE,
    verbose = TRUE)
 
-# Explore output
+## Explore output
 plot(mapped_cont_traits$contMap) # contMap with interpolated trait values
 mapped_cont_traits$model_selection_df # Summary of model selection
 # Parameter estimates and optimization summary of the best model
@@ -194,7 +258,7 @@ mapped_cont_traits$ace # Ancestral character estimates at internal nodes
 
 # ----- Example 2: Categorical data ----- #
 
-# Load phylogeny and tip data
+## Load phylogeny and tip data
 library(phytools)
 data(eel.tree)
 data(eel.data)
@@ -213,14 +277,14 @@ table(eel_data)
 Q_matrix = rbind(c(NA, 0, 0), c(1, NA, 2), c(0, 2, NA))
 
 # Set colors per states
-colors_per_states <- c("limegreen", "orange", "dodgerblue")
-names(colors_per_states) <- c("bite", "kiss", "suction")
+colors_per_levels <- c("limegreen", "orange", "dodgerblue")
+names(colors_per_levels) <- c("bite", "kiss", "suction")
 
 \dontrun{  (May take several minutes to run)
-# Run evolutionary models
+## Run evolutionary models
 eel_cat_data <- prepare_trait_data(tip_data = eel_data, phylo = eel.tree,
     trait_data_type = "categorical",
-    colors_per_states = colors_per_states,
+    colors_per_levels = colors_per_levels,
     evolutionary_models = c("ER", "SYM", "ARD", "meristic", "matrix"),
     Q_matrix = Q_matrix,
     nb_simulations = 1000,
@@ -232,7 +296,7 @@ eel_cat_data <- prepare_trait_data(tip_data = eel_data, phylo = eel.tree,
 # Load directly output
 data(eel_cat_data, package = "deepSTRAPP")
 
-# Explore output
+## Explore output
 plot(eel_cat_data$densityMaps[[1]]) # densityMap for state n°1 ("bite")
 eel_cat_data$model_selection_df # Summary of model selection
 # Parameter estimates and optimization summary of the best model
@@ -243,7 +307,60 @@ eel_cat_data$ace # Posterior probabilities of each state (= ACE) at internal nod
 
 # ----- Example 3: Biogeographic data ----- #
 
-# TBA
+## Load phylogeny and tip data
+library(phytools)
+data(eel.tree)
+data(eel.data)
+
+# Transform feeding mode data into biogeographic data with ranges A, B, and AB.
+eel_data <- stats::setNames(eel.data$feed_mode, rownames(eel.data))
+eel_data <- as.character(eel_data)
+eel_data[eel_data == "bite"] <- "A"
+eel_data[eel_data == "suction"] <- "B"
+eel_data[c(5, 6, 7, 15, 25, 32, 33, 34, 50, 52, 57, 58, 59)] <- "AB"
+eel_data <- stats::setNames(eel_data, rownames(eel.data))
+table(eel_data)
+
+colors_per_levels <- c("dodgerblue3", "gold")
+names(colors_per_levels) <- c("A", "B")
+
+\dontrun{  (May take several minutes to run)
+## Run evolutionary models
+eel_biogeo_data <- prepare_trait_data(
+    tip_data = eel_data,
+    trait_data_type = "biogeographic",
+    phylo = eel.tree,
+    evolutionary_models = c("DEC", "DEC+J"), # Default = "DEC" for biogeographic
+    prefix_for_files = "eel",
+    max_range_size = 2,
+    split_multi_area_ranges = TRUE, # Set to TRUE to display the two outputs
+    nb_simulations = 1000,
+    colors_per_levels = colors_per_levels,
+    return_simmaps = TRUE,
+    return_best_model_fit = TRUE,
+    return_model_selection_df = TRUE,
+    verbose = TRUE) }
+
+# Load directly output
+data(eel_biogeo_data, package = "deepSTRAPP")
+
+## Explore output
+str(eel_biogeo_data, 1)
+eel_biogeo_data$model_selection_df # Summary of model selection
+# Parameter estimates and optimization summary of the best model
+# (Here, the best model is DEC+J)
+
+# Posterior probabilities of each state (= ACE) at internal nodes
+eel_biogeo_data$ace # Only with unique areas
+eel_biogeo_data$ace_all_ranges # Including multi-area ranges (Here, AB)
+
+## Plot densityMaps
+# densityMap for range n°1 ("A")
+plot(eel_biogeo_data$densityMaps[[1]])
+# densityMaps with all unique areas overlaid
+plot_densityMaps_overlay(eel_biogeo_data$densityMaps)
+# densityMaps with all ranges (including multi-area ranges) overlaid
+plot_densityMaps_overlay(eel_biogeo_data$densityMaps_all_ranges)
 
 }
 \references{
@@ -252,7 +369,7 @@ geiger v2. 0: an expanded suite of methods for fitting macroevolutionary models 
 \url{https://doi.org/10.1093/bioinformatics/btu181}.
 
 For BioGeoBEARS: Matzke, Nicholas J. (2018). BioGeoBEARS: BioGeography with Bayesian (and likelihood) Evolutionary Analysis with R Scripts.
-version 1.1.1, published on GitHub on November 6, 2018. DOI: \url{http://dx.doi.org/10.5281/zenodo.1478250}. Website: \url{http://phylo.wikidot.com/}.
+version 1.1.1, published on GitHub on November 6, 2018. DOI: \url{http://dx.doi.org/10.5281/zenodo.1478250}. Website: \url{http://phylo.wikidot.com/biogeobears}.
 }
 \seealso{
 \code{\link[geiger:fitContinuous]{geiger::fitContinuous()}} \code{\link[geiger:fitDiscrete]{geiger::fitDiscrete()}} \code{\link[phytools:contMap]{phytools::contMap()}} \code{\link[phytools:densityMap]{phytools::densityMap()}}

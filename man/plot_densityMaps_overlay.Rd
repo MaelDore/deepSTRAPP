@@ -6,7 +6,7 @@
 \usage{
 plot_densityMaps_overlay(
   densityMaps,
-  colors_per_states = NULL,
+  colors_per_levels = NULL,
   add_ACE_pies = TRUE,
   ace = NULL,
   ...
@@ -15,9 +15,9 @@ plot_densityMaps_overlay(
 \arguments{
 \item{densityMaps}{List of objects of class \code{"densityMap"}, typically generated with \code{\link[=prepare_trait_data]{prepare_trait_data()}},
 that contains a phylogenetic tree and associated posterior probability of being in a given state/range along branches.
-Each object (i.e., \code{densityMap}) corresponds to a state/range.}
+Each object (i.e., \code{densityMap}) corresponds to a state/range. If no color is provided for multi-area ranges, they will be interpolated.}
 
-\item{colors_per_states}{Named character string. To set the colors to use to map each state posterior probabilities. Names = states; values = colors.
+\item{colors_per_levels}{Named character string. To set the colors to use to map each state/range posterior probabilities. Names = states/ranges; values = colors.
 If \code{NULL} (default), the color scale provided \code{densityMaps} will be used.}
 
 \item{add_ACE_pies}{Logical. Whether to add pies of posterior probabilities of states/ranges at internal nodes on the mapped phylogeny. Default = \code{TRUE}.}
@@ -60,14 +60,14 @@ table(eel_data)
 Q_matrix = rbind(c(NA, 0, 0), c(1, NA, 2), c(0, 2, NA))
 
 # Set colors per states
-colors_per_states <- c("limegreen", "orange", "dodgerblue")
-names(colors_per_states) <- c("bite", "kiss", "suction")
+colors_per_levels <- c("limegreen", "orange", "dodgerblue")
+names(colors_per_levels) <- c("bite", "kiss", "suction")
 
 \dontrun{  (May take several minutes to run)
 # Run evolutionary models to prepare trait data
 eel_cat_data <- prepare_trait_data(tip_data = eel_data, phylo = eel.tree,
     trait_data_type = "categorical",
-    colors_per_states = colors_per_states,
+    colors_per_levels = colors_per_levels,
     evolutionary_models = c("ER", "SYM", "ARD", "meristic", "matrix"),
     Q_matrix = Q_matrix,
     nb_simulations = 1000,
