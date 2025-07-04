@@ -114,6 +114,7 @@ focal_time <- 10
 # Extract from the densityMaps
 eel_cat_data_10My <- extract_most_likely_states_from_densityMaps_for_focal_time(
    densityMaps = eel_cat_data$densityMaps,
+   # ace = eel_cat_data$ace,
    focal_time = focal_time,
    update_densityMaps = TRUE)
 

@@ -286,9 +286,9 @@ plot_histogram_STRAPP_test_for_focal_time(
 ## Load data
 
 # Load phylogeny
-data(Ponerinae_trait_data, package = "deepSTRAPP")
-# Load trait df
 data(Ponerinae_tree, package = "deepSTRAPP")
+# Load trait df
+data(Ponerinae_trait_data, package = "deepSTRAPP")
 # Load the BAMM_object summarizing 1000 posterior samples of BAMM
 data(Ponerinae_BAMM_object, package = "deepSTRAPP")
 
@@ -373,6 +373,99 @@ plot_histogram_STRAPP_test_for_focal_time(
 plot_histogram_STRAPP_test_for_focal_time(
   STRAPP_results = deepSTRAPP_output$STRAPP_results,
    plot_posthoc_tests = TRUE) }
+
+
+# ----- Example 3: Biogeographic ranges ----- #
+
+## Load data
+
+# Load phylogeny
+data(Ponerinae_tree, package = "deepSTRAPP")
+# Load trait df
+data(Ponerinae_binary_range_table, package = "deepSTRAPP")
+# Load the BAMM_object summarizing 1000 posterior samples of BAMM
+data(Ponerinae_BAMM_object, package = "deepSTRAPP")
+
+## Prepare range data for Old World vs. New World
+
+# No overlap in ranges
+table(Ponerinae_binary_range_table$Old_World, Ponerinae_binary_range_table$New_World)
+
+Ponerinae_ON_data <- stats::setNames(object = Ponerinae_binary_range_table$Old_World,
+                                     nm = Ponerinae_binary_range_table$Taxa)
+Ponerinae_ON_data <- as.character(Ponerinae_ON_data)
+Ponerinae_ON_data[Ponerinae_ON_data == "TRUE"] <- "O" # O = Old World
+Ponerinae_ON_data[Ponerinae_ON_data == "FALSE"] <- "N" # N = New World
+names(Ponerinae_ON_data) <- Ponerinae_binary_range_table$Taxa
+table(Ponerinae_ON_data)
+
+colors_per_levels <- c("mediumpurple2", "peachpuff2")
+names(colors_per_levels) <- c("N", "O")
+
+\dontrun{  (May take several minutes to run)
+## Run evolutionary models
+Ponerinae_biogeo_data <- prepare_trait_data(
+    tip_data = Ponerinae_ON_data,
+    trait_data_type = "biogeographic",
+    phylo = Ponerinae_tree,
+    evolutionary_models = c("DEC", "DEC+J"), # Default = "DEC" for biogeographic
+    prefix_for_files = "Ponerinae",
+    max_range_size = 2,
+    split_multi_area_ranges = TRUE, # Set to TRUE to display the two outputs
+    nb_simulations = 100,
+    colors_per_levels = colors_per_levels,
+    return_model_selection_df = TRUE,
+    verbose = TRUE) }
+
+# Load directly output
+data(Ponerinae_biogeo_data, package = "deepSTRAPP")
+
+## Explore output
+str(Ponerinae_biogeo_data, 1)
+
+## Set focal time to 10 Mya
+focal_time <- 10
+
+\dontrun{  (May take several minutes to run)
+## Run deepSTRAPP on net diversification rates for focal time = 10 Mya.
+
+deepSTRAPP_output <- run_deepSTRAPP_for_focal_time(
+    densityMaps = Ponerinae_biogeo_data$densityMaps,
+    ace = Ponerinae_biogeo_data$ace,
+    tip_data = Ponerinae_ON_data,
+    trait_data_type = "biogeographic",
+    BAMM_object = Ponerinae_BAMM_object,
+    focal_time = focal_time,
+    rate_type = "net_diversification",
+    return_perm_data = TRUE,
+    extract_diversification_data_melted_df = TRUE,
+    return_updated_trait_data_with_Map = TRUE,
+    return_updated_BAMM_object = TRUE)
+
+## Explore output
+str(deepSTRAPP_output, max.level = 1)
+
+# Access deepSTRAPP results
+str(deepSTRAPP_output$STRAPP_results, max.level = 2)
+# Result for Mann-Whitney-Wilcoxon test
+deepSTRAPP_output$STRAPP_results[1:3]
+
+# Access trait data
+head(deepSTRAPP_output$updated_trait_data_with_Map$trait_data)
+
+# Access the diversification data in a melted data.frame
+head(deepSTRAPP_output$diversification_data_df)
+
+# Plot updated densityMaps cut at focal time
+plot_densityMaps_overlay(deepSTRAPP_output$updated_trait_data_with_Map$densityMaps)
+
+# Plot diversification rates on updated phylogeny
+plot_BAMM_rates(BAMM_object = deepSTRAPP_output$updated_BAMM_object, legend = TRUE, labels = FALSE,
+   colorbreaks = deepSTRAPP_output$updated_BAMM_object$initial_colorbreaks$net_diversification)
+
+# Plot histogram of Mann-Whitney-Wilcoxon test
+plot_histogram_STRAPP_test_for_focal_time(
+   STRAPP_results = deepSTRAPP_output$STRAPP_results) }
 
 }
 \seealso{

@@ -264,14 +264,14 @@
 #'
 "Ponerinae_BAMM_object_25My"
 
+
 ### 5/ Ponerinae_trait_data ####
 
 #' @title Dataset providing head width trait data for extant ponerine ants
 #'
 #' @description A data.frame of head width measurements covering the 1534 extant ponerine ant taxa (Ponerinae subfamily).
 #'
-#'  Source: Doré, M., Borowiec, M. L., Branstetter, M. G., Camacho, G. P., Fisher, B. L., Longino, J. T., Ward, P. S., Blaimer, B. B., (2025),
-#'  Timing is everything: Evolution of ponerine ants highlights how dispersal history shapes modern biodiversity, Nature Communications.
+#'  Source: TBA
 #'  [https://doi_of_Paper_to_provide.html]
 #'
 #' @usage data(Ponerinae_trait_data)
@@ -288,8 +288,7 @@
 #' @keywords datasets
 #' @name Ponerinae_trait_data
 #'
-#' @references Doré, M., Borowiec, M. L., Branstetter, M. G., Camacho, G. P., Fisher, B. L., Longino, J. T., Ward, P. S., Blaimer, B. B., (2025),
-#'  Timing is everything: Evolution of ponerine ants highlights how dispersal history shapes modern biodiversity, Nature Communications.
+#' @references TBA
 #'  \url{https://doi_of_Paper_to_provide.html}
 #'
 "Ponerinae_trait_data"
@@ -330,7 +329,46 @@
 #'
 "Ponerinae_trait_data_10My"
 
-### 7/ Temporary test sets as output from run_deepSTRAPP_over_time to use for plotting p_values histogram ####
+
+### 7/ Ponerinae_binary_range_table ####
+
+#' @title Dataset providing biogeographic range data for extant ponerine ants
+#'
+#' @description A data.frame of range location for the 1534 extant ponerine ant taxa (Ponerinae subfamily).
+#'
+#'  Source: Doré, M., Borowiec, M. L., Branstetter, M. G., Camacho, G. P., Fisher, B. L., Longino, J. T., Ward, P. S., Blaimer, B. B., (2025),
+#'  Timing is everything: Evolution of ponerine ants highlights how dispersal history shapes modern biodiversity, Nature Communications.
+#'  [https://doi_of_Paper_to_provide.html]
+#'
+#' @usage data(Ponerinae_binary_range_table)
+#' @format A data.frame with 1534 rows and 10 columns.
+#'
+#' @details A data.frame of range locations covering the 1534 extant ponerine ant taxa (Ponerinae subfamily).
+#'   * `$Taxa` Character string. Names of ponerinae ant taxa.
+#'   * `$Afrotropics` Logical. Whether the range of the taxa extends to Afrotropics.
+#'   * `$Australasia` Logical. Whether the range of the taxa extends to Australasia.
+#'   * `$Indomalaya` Logical. Whether the range of the taxa extends to Indomalaya.
+#'   * `$Nearctic` Logical. Whether the range of the taxa extends to Nearctic.
+#'   * `$Neotropics` Logical. Whether the range of the taxa extends to Neotropics.
+#'   * `$Eastern_Palearctic` Logical. Whether the range of the taxa extends to Eastern Palearctic.
+#'   * `$Western_Palearctic` Logical. Whether the range of the taxa extends to Western Palearctic.
+#'   * `$Old_World` Logical. Whether the range of the taxa extends to the Old World: encompassing any bioregion among
+#'     Afrotropics, Australasia, Indomalaya, Eastern Palearctic, or Western Palearctic.
+#'   * `$New_World` Logical. Whether the range of the taxa extends to the New World: encompassing any bioregion among
+#'     Nearctic, or Neotropics.
+#'
+#' @docType data
+#' @keywords datasets
+#' @name Ponerinae_binary_range_table
+#'
+#' @references Doré, M., Borowiec, M. L., Branstetter, M. G., Camacho, G. P., Fisher, B. L., Longino, J. T., Ward, P. S., Blaimer, B. B., (2025),
+#'  Timing is everything: Evolution of ponerine ants highlights how dispersal history shapes modern biodiversity, Nature Communications.
+#'  \url{https://doi_of_Paper_to_provide.html}
+#'
+"Ponerinae_binary_range_table"
+
+
+### 8/ Temporary test sets as output from run_deepSTRAPP_over_time to use for plotting p_values histogram ####
 
 #' @title Temporary test set as output from run_deepSTRAPP_over_time to use for plotting p_values histogram
 #'
@@ -358,7 +396,7 @@
 #'
 "STRAPP_tests_over_time_temp_example_2"
 
-### 8/ Temporary test sets as output from run_deepSTRAPP_over_time on continuous trait to use for plotting stuff ####
+### 9/ Temporary test sets as output from run_deepSTRAPP_over_time on continuous trait to use for plotting stuff ####
 
 #' @title Temporary test set as output from run_deepSTRAPP_over_time on continuous trait to use for plotting rates_through_time
 #'
@@ -373,7 +411,7 @@
 #'
 "Ponerinae_deepSTRAPP_cont_0_40"
 
-### 9/ Temporary test sets as output from run_deepSTRAPP_over_time on categorical trait to use for plotting stuff ####
+### 10/ Temporary test sets as output from run_deepSTRAPP_over_time on categorical trait to use for plotting stuff ####
 
 #' @title Temporary test set as output from run_deepSTRAPP_over_time on categorical trait to use for plotting rates_through_time
 #'
@@ -388,8 +426,22 @@
 #'
 "Ponerinae_deepSTRAPP_cat_0_40"
 
+### 11/ Temporary test sets as output from run_deepSTRAPP_over_time on biogeographic ranges to use for plotting stuff ####
 
-### 10/ BAMM output for whale phylogeny ####
+#' @title Temporary test set as output from run_deepSTRAPP_over_time on categorical trait to use for plotting rates_through_time
+#'
+#' @description Temporary test set as output from run_deepSTRAPP_over_time to use for plotting rates_through_time.
+#'
+#' @usage data(Ponerinae_deepSTRAPP_biogeo_0_40)
+#' @format A list with X elements.
+#'
+#' @docType data
+#' @keywords datasets
+#' @name Ponerinae_deepSTRAPP_biogeo_0_40
+#'
+"Ponerinae_deepSTRAPP_biogeo_0_40"
+
+### 12/ BAMM output for whale phylogeny ####
 
 #' @title Dataset summarizing 1000 posterior samples of BAMM for extant whales
 #'
@@ -453,7 +505,7 @@
 "whale_BAMM_object"
 
 
-### 11/ Template file for BAMM diversification analyses ####
+### 13/ Template file for BAMM diversification analyses ####
 
 #' @title Template file for BAMM diversification analyses
 #'
@@ -482,7 +534,7 @@
 "BAMM_template_diversification"
 
 
-### 12/ Categorical trait evolution data for eel using 3-level factor ####
+### 14/ Categorical trait evolution data for eel using 3-level factor ####
 
 #' @title Data summarizing the evolution of feeding habits in eels using a 3-level factor as categorical trait
 #'
@@ -518,7 +570,7 @@
 #'
 "eel_cat_data"
 
-### 13/ Categorical trait evolution data for Ponerinae ants using 3-level factor ####
+### 15/ Categorical trait evolution data for Ponerinae ants using 3-level factor ####
 
 #' @title Data summarizing the evolution of head width in Ponerinae ants using a 3-level factor as categorical trait
 #'
@@ -548,7 +600,7 @@
 #'
 "Ponerinae_cat_data"
 
-### 14/ Biogeographic range evolution data for eel ####
+### 16/ Biogeographic range evolution data for eel ####
 
 #' @title Data summarizing the evolution of geographic ranges in eels
 #'
@@ -594,3 +646,46 @@
 #' @seealso [deepSTRAPP::prepare_trait_data()]
 #'
 "eel_biogeo_data"
+
+
+### 17/ Biogeographic range evolution for Ponerinae ants between Old World (O) and New World (N) ####
+
+#' @title Data summarizing the evolution of geographic ranges in Ponerinae ants
+#'
+#' @description A list containing geographic ranges data of Ponerinae mapped on the phylogeny,
+#'  modeled with R package `BioGeoBEARS`. Ranges are labeled between "Old World" (O) and New World (N).
+#'  This object was obtained with [deepSTRAPP::prepare_trait_data()].
+#'
+#'  Source: Doré, M., Borowiec, M. L., Branstetter, M. G., Camacho, G. P., Fisher, B. L., Longino, J. T., Ward, P. S., Blaimer, B. B., (2025),
+#'  Timing is everything: Evolution of ponerine ants highlights how dispersal history shapes modern biodiversity, Nature Communications.
+#'  [https://doi_of_Paper_to_provide.html]
+#'
+#' @usage data(Ponerinae_biogeo_data)
+#' @format A list with 6 elements.
+#'
+#' @details A list of five objects containing information on the evolution of feeding habits in eels.
+#'  This object was obtained with [deepSTRAPP::prepare_trait_data()].
+#'
+#'   * `$densityMaps` List of objects of class `"densityMap` that contains a phylogenetic tree and associated mapping of probability
+#'     to harbor a given range along branches. The list contains only a `"densityMap` per unique areas because `split_multi_area_ranges` was set to TRUE.
+#'     In this case, unique areas are "N" (= "New World") and "O" (= "Old World)
+#'   * `$densityMaps_all_ranges` List of objects of class `"densityMap` that contains a phylogenetic tree and associated mapping of probability
+#'     to harbor a given range along branches. The list contains one `"densityMap` per range found along branches during the simulated biogeographic histories.
+#'     Here those ranges are "N" (= "New World"), "O" (= "Old World), and "NO" for multi-area ranges encompassing both regions.
+#'   * `$trait_data_type` Character string. Record the type of trait data. Here: "biogeographic".
+#'   * `$ace` Numerical matrix that record the posterior probabilities of ancestral ranges estimated at internal nodes.
+#'     Only unique areas are considered among the ranges. Multi-area ranges have been split among unique ranges.
+#'     Rows are internal nodes. Columns are ranges. Values are posterior probabilities of each range per node.
+#'   * `$ace_all_ranges` Numerical matrix that record the posterior probabilities of ancestral ranges estimated at internal nodes.
+#'     All ranges observed along branches during the simulated biogeographic histories are present.
+#'     Rows are internal nodes. Columns are ranges. Values are posterior probabilities of each range per node.
+#'   * `$model_selection_df` Data.frame that summarizes model comparisons used to select the best fitting model.
+#'
+#' @docType data
+#' @keywords datasets
+#' @name Ponerinae_biogeo_data
+#'
+#' @seealso [deepSTRAPP::prepare_trait_data()]
+#'
+"Ponerinae_biogeo_data"
+

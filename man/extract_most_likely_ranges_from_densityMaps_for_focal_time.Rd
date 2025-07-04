@@ -97,14 +97,69 @@ the leaf left is labeled with the node ID of the MRCA of the cut-off clade.
 The ancestral range mapping in \code{densityMap} (\verb{$tree$maps} and \verb{$tree$mapped.edge}) is updated accordingly by removing mapping associated with the cut off branches.
 }
 \examples{
-# ----- Example 1: Only extent taxa (Ultrametric tree) ----- #
 
 ## Load biogeographic range data mapped on a phylogeny
 data(eel_biogeo_data, package = "deepSTRAPP")
 
 # Explore data
 str(eel_biogeo_data, 1)
-eel_biogeo_data$densityMaps # Three density maps: one per range
+eel_biogeo_data$densityMaps # Two density maps: one per unique area: A, B.
+eel_biogeo_data$densityMaps_all_ranges # Three density maps: one per range: A, B, and AB.
+
+# Set focal time to 10 Mya
+focal_time <- 10
+
+# ----- Example 1: Using only unique areas ----- #
+
+## Extract trait data and update densityMaps for the given focal_time
+
+# Extract from the densityMaps
+eel_biogeo_data_10My <- extract_most_likely_ranges_from_densityMaps_for_focal_time(
+   densityMaps = eel_biogeo_data$densityMaps,
+   # ace = eel_biogeo_data$ace,
+   focal_time = focal_time,
+   update_densityMaps = TRUE)
+
+## Print trait data
+str(eel_biogeo_data_10My, 1)
+eel_biogeo_data_10My$trait_data
+
+## Plot density maps as overlay of all range posterior probabilities
+
+# Plot initial density maps with ACE pies
+plot_densityMaps_overlay(densityMaps = eel_biogeo_data$densityMaps)
+abline(v = max(phytools::nodeHeights(eel_biogeo_data$densityMaps[[1]]$tree)[,2]) - focal_time,
+       col = "red", lty = 2, lwd = 2)
+
+# Plot updated densityMaps with ACE pies
+plot_densityMaps_overlay(eel_biogeo_data_10My$densityMaps)
+
+# ----- Example 2: Using all ranges ----- #
+
+## Extract trait data and update densityMaps_all_ranges for the given focal_time
+
+# Extract from the densityMaps
+eel_biogeo_data_10My <- extract_most_likely_ranges_from_densityMaps_for_focal_time(
+  densityMaps = eel_biogeo_data$densityMaps_all_ranges,
+  # ace = eel_biogeo_data$ace_all_ranges,
+  focal_time = focal_time,
+  update_densityMaps = TRUE)
+
+## Print trait data
+str(eel_biogeo_data_10My, 1)
+eel_biogeo_data_10My$trait_data
+
+## Plot density maps as overlay of all range posterior probabilities
+
+# Plot initial density maps with ACE pies
+root_age <- max(phytools::nodeHeights(eel_biogeo_data$densityMaps_all_ranges[[1]]$tree)[,2])
+plot_densityMaps_overlay(densityMaps = eel_biogeo_data$densityMaps_all_ranges)
+abline(v =  root_age - focal_time,
+       col = "red", lty = 2, lwd = 2)
+
+# Plot updated densityMaps with ACE pies
+plot_densityMaps_overlay(eel_biogeo_data_10My$densityMaps)
+
 }
 \seealso{
 \code{\link[=cut_phylo_for_focal_time]{cut_phylo_for_focal_time()}} \code{\link[=cut_densityMaps_for_focal_time]{cut_densityMaps_for_focal_time()}}

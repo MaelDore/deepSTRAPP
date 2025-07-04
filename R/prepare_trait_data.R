@@ -1208,23 +1208,6 @@ prepare_trait_data_for_categorical_data <- function (
 
 ### Sub-function to handle biogeographic data ####
 
-# prepare_trait_data_for_biogeographic_data() = For biogeographic traits
-
-# Default for Biogeographic = "DEC". "All" = DEC, DEC+J, DIVALIKE, DIVALIKE+J, BAYAREALIKE, BAYAREALIKE+J.
-# May need to use more complex models to capture the dynamics of trait evolution. +W, +X, DECX, ... (cite packages/refs)
-
-# Add an argument to deal with multi-area ranges => split_multi_area_ranges =>
-#  o	Split equally posterior probabilities across unique areas
-#  o	Ex: For range EW, posterior probabilities will be split equally between Eastern Palearctic (E) and Western Palearctic (W)
-# Transform the densityMaps during step 5. Get initial densityMaps with all ranges, split multiarea ranges in densityMaps
-# During ranges extraction at focal time, DO NOT use the tip_data and ACE as they will include multiarea ranges. Stick to the densityMaps extracts
-
-
-# Check reference to contMap in the doc => add DensityMaps
-
-# Make a dummy example for the eel to test biogeo
-
-
 prepare_trait_data_for_biogeographic_data <- function (
     tip_data,
     phylo,

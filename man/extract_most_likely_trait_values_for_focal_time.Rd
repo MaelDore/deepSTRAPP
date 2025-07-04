@@ -10,7 +10,7 @@ extract_most_likely_trait_values_for_focal_time(
   densityMaps = NULL,
   ace = NULL,
   tip_data = NULL,
-  trait_data_type = "continuous",
+  trait_data_type,
   focal_time,
   update_map = FALSE,
   keep_tip_labels = TRUE
@@ -181,21 +181,23 @@ focal_time <- 50
 ## Extract trait data and update contMap for the given focal_time
 
 # Extract from the contMap (values are not exact ML estimates)
-eel_test <- extract_most_likely_trait_values_for_focal_time(
+eel_cont_50 <- extract_most_likely_trait_values_for_focal_time(
    contMap = eel_contMap,
+   trait_data_type = "continuous",
    focal_time = focal_time,
    update_map = TRUE)
 # Extract from tip data and ML estimates of ancestral characters (values are true ML estimates)
-eel_test <- extract_most_likely_trait_values_for_focal_time(
+eel_cont_50 <- extract_most_likely_trait_values_for_focal_time(
    contMap = eel_contMap,
    ace = eel_ACE, tip_data = eel_data,
+   trait_data_type = "continuous",
    focal_time = focal_time,
    update_map = TRUE)
 
 ## Visualize outputs
 
 # Print trait data
-eel_test$trait_data
+eel_cont_50$trait_data
 
 # Plot node labels on initial stochastic map with cut-off
 plot(eel_contMap)
@@ -204,8 +206,82 @@ abline(v = max(phytools::nodeHeights(eel_contMap$tree)[,2]) - focal_time,
        col = "red", lty = 2, lwd = 2)
 
 # Plot updated contMap with initial node labels
-plot(eel_test$contMap)
-ape::nodelabels(text = eel_test$contMap$tree$initial_nodes_ID)
+plot(eel_cont_50$contMap)
+ape::nodelabels(text = eel_cont_50$contMap$tree$initial_nodes_ID)
+
+
+# ----- Example 2: Categorical trait ----- #
+
+## Load categorical trait data mapped on a phylogeny
+data(eel_cat_data, package = "deepSTRAPP")
+
+# Explore data
+str(eel_cat_data, 1)
+eel_cat_data$densityMaps # Three density maps: one per state
+
+# Set focal time to 10 Mya
+focal_time <- 10
+
+## Extract trait data and update densityMaps for the given focal_time
+
+# Extract from the densityMaps
+eel_cat_data_10My <- extract_most_likely_trait_values_for_focal_time(
+   densityMaps = eel_cat_data$densityMaps,
+   trait_data_type = "categorical",
+   focal_time = focal_time,
+   update_map = TRUE)
+
+## Print trait data
+str(eel_cat_data_10My, 1)
+eel_cat_data_10My$trait_data
+
+## Plot density maps as overlay of all state posterior probabilities
+
+# Plot initial density maps with ACE pies
+plot_densityMaps_overlay(densityMaps = eel_cat_data$densityMaps)
+abline(v = max(phytools::nodeHeights(eel_cat_data$densityMaps[[1]]$tree)[,2]) - focal_time,
+       col = "red", lty = 2, lwd = 2)
+
+# Plot updated densityMaps with ACE pies
+plot_densityMaps_overlay(eel_cat_data_10My$densityMaps)
+
+
+# ----- Example 3: Biogeographic ranges ----- #
+
+## Load biogeographic range data mapped on a phylogeny
+data(eel_biogeo_data, package = "deepSTRAPP")
+
+# Explore data
+str(eel_biogeo_data, 1)
+eel_biogeo_data$densityMaps # Two density maps: one per unique area: A, B.
+eel_biogeo_data$densityMaps_all_ranges # Three density maps: one per range: A, B, and AB.
+
+# Set focal time to 10 Mya
+focal_time <- 10
+
+## Extract trait data and update densityMaps for the given focal_time
+
+# Extract from the densityMaps
+eel_biogeo_data_10My <- extract_most_likely_trait_values_for_focal_time(
+   densityMaps = eel_biogeo_data$densityMaps,
+   # ace = eel_biogeo_data$ace,
+   trait_data_type = "biogeographic",
+   focal_time = focal_time,
+   update_map = TRUE)
+
+## Print trait data
+str(eel_biogeo_data_10My, 1)
+eel_biogeo_data_10My$trait_data
+
+## Plot density maps as overlay of all range posterior probabilities
+
+# Plot initial density maps with ACE pies
+plot_densityMaps_overlay(densityMaps = eel_biogeo_data$densityMaps)
+abline(v = max(phytools::nodeHeights(eel_biogeo_data$densityMaps[[1]]$tree)[,2]) - focal_time,
+       col = "red", lty = 2, lwd = 2)
+
+# Plot updated densityMaps with ACE pies
+plot_densityMaps_overlay(eel_biogeo_data_10My$densityMaps)
 
 }
 \seealso{

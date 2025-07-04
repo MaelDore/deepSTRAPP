@@ -159,21 +159,23 @@
 #' ## Extract trait data and update contMap for the given focal_time
 #'
 #' # Extract from the contMap (values are not exact ML estimates)
-#' eel_test <- extract_most_likely_trait_values_for_focal_time(
+#' eel_cont_50 <- extract_most_likely_trait_values_for_focal_time(
 #'    contMap = eel_contMap,
+#'    trait_data_type = "continuous",
 #'    focal_time = focal_time,
 #'    update_map = TRUE)
 #' # Extract from tip data and ML estimates of ancestral characters (values are true ML estimates)
-#' eel_test <- extract_most_likely_trait_values_for_focal_time(
+#' eel_cont_50 <- extract_most_likely_trait_values_for_focal_time(
 #'    contMap = eel_contMap,
 #'    ace = eel_ACE, tip_data = eel_data,
+#'    trait_data_type = "continuous",
 #'    focal_time = focal_time,
 #'    update_map = TRUE)
 #'
 #' ## Visualize outputs
 #'
 #' # Print trait data
-#' eel_test$trait_data
+#' eel_cont_50$trait_data
 #'
 #' # Plot node labels on initial stochastic map with cut-off
 #' plot(eel_contMap)
@@ -182,15 +184,89 @@
 #'        col = "red", lty = 2, lwd = 2)
 #'
 #' # Plot updated contMap with initial node labels
-#' plot(eel_test$contMap)
-#' ape::nodelabels(text = eel_test$contMap$tree$initial_nodes_ID)
+#' plot(eel_cont_50$contMap)
+#' ape::nodelabels(text = eel_cont_50$contMap$tree$initial_nodes_ID)
+#'
+#'
+#' # ----- Example 2: Categorical trait ----- #
+#'
+#' ## Load categorical trait data mapped on a phylogeny
+#' data(eel_cat_data, package = "deepSTRAPP")
+#'
+#' # Explore data
+#' str(eel_cat_data, 1)
+#' eel_cat_data$densityMaps # Three density maps: one per state
+#'
+#' # Set focal time to 10 Mya
+#' focal_time <- 10
+#'
+#' ## Extract trait data and update densityMaps for the given focal_time
+#'
+#' # Extract from the densityMaps
+#' eel_cat_data_10My <- extract_most_likely_trait_values_for_focal_time(
+#'    densityMaps = eel_cat_data$densityMaps,
+#'    trait_data_type = "categorical",
+#'    focal_time = focal_time,
+#'    update_map = TRUE)
+#'
+#' ## Print trait data
+#' str(eel_cat_data_10My, 1)
+#' eel_cat_data_10My$trait_data
+#'
+#' ## Plot density maps as overlay of all state posterior probabilities
+#'
+#' # Plot initial density maps with ACE pies
+#' plot_densityMaps_overlay(densityMaps = eel_cat_data$densityMaps)
+#' abline(v = max(phytools::nodeHeights(eel_cat_data$densityMaps[[1]]$tree)[,2]) - focal_time,
+#'        col = "red", lty = 2, lwd = 2)
+#'
+#' # Plot updated densityMaps with ACE pies
+#' plot_densityMaps_overlay(eel_cat_data_10My$densityMaps)
+#'
+#'
+#'# ----- Example 3: Biogeographic ranges ----- #
+#'
+#' ## Load biogeographic range data mapped on a phylogeny
+#' data(eel_biogeo_data, package = "deepSTRAPP")
+#'
+#' # Explore data
+#' str(eel_biogeo_data, 1)
+#' eel_biogeo_data$densityMaps # Two density maps: one per unique area: A, B.
+#' eel_biogeo_data$densityMaps_all_ranges # Three density maps: one per range: A, B, and AB.
+#'
+#' # Set focal time to 10 Mya
+#' focal_time <- 10
+#'
+#' ## Extract trait data and update densityMaps for the given focal_time
+#'
+#' # Extract from the densityMaps
+#' eel_biogeo_data_10My <- extract_most_likely_trait_values_for_focal_time(
+#'    densityMaps = eel_biogeo_data$densityMaps,
+#'    # ace = eel_biogeo_data$ace,
+#'    trait_data_type = "biogeographic",
+#'    focal_time = focal_time,
+#'    update_map = TRUE)
+#'
+#' ## Print trait data
+#' str(eel_biogeo_data_10My, 1)
+#' eel_biogeo_data_10My$trait_data
+#'
+#' ## Plot density maps as overlay of all range posterior probabilities
+#'
+#' # Plot initial density maps with ACE pies
+#' plot_densityMaps_overlay(densityMaps = eel_biogeo_data$densityMaps)
+#' abline(v = max(phytools::nodeHeights(eel_biogeo_data$densityMaps[[1]]$tree)[,2]) - focal_time,
+#'        col = "red", lty = 2, lwd = 2)
+#'
+#' # Plot updated densityMaps with ACE pies
+#' plot_densityMaps_overlay(eel_biogeo_data_10My$densityMaps)
 #'
 
 extract_most_likely_trait_values_for_focal_time <- function (contMap = NULL,
                                                              densityMaps = NULL,
                                                              ace = NULL,
                                                              tip_data = NULL,
-                                                             trait_data_type = "continuous", # Remove entry from the wrapper. Remove argument from the sub-functions
+                                                             trait_data_type,
                                                              focal_time,
                                                              update_map = FALSE, # Change for update_map in the wrapper. Adjust to update_contMap / update_densityMaps in the sub-functions
                                                              keep_tip_labels = TRUE)
@@ -879,6 +955,7 @@ extract_most_likely_trait_values_from_contMap_for_focal_time <- function (
 #' # Extract from the densityMaps
 #' eel_cat_data_10My <- extract_most_likely_states_from_densityMaps_for_focal_time(
 #'    densityMaps = eel_cat_data$densityMaps,
+#'    # ace = eel_cat_data$ace,
 #'    focal_time = focal_time,
 #'    update_densityMaps = TRUE)
 #'
@@ -1102,7 +1179,7 @@ extract_most_likely_states_from_densityMaps_for_focal_time <- function (
   }
 
   ## Extract tip states if provided in tip_data
-  if (!is.null(ace))
+  if (!is.null(tip_data))
   {
     # Reorder states in tip_data to match tip.label
     tip_data <- tip_data[densityMaps[[1]]$tree$tip.label]
@@ -1395,96 +1472,69 @@ extract_most_likely_states_from_densityMaps_for_focal_time <- function (
 #' [deepSTRAPP::extract_most_likely_states_from_densityMaps_for_focal_time()]
 #'
 #' @examples
-#' # ----- Example 1: Only extent taxa (Ultrametric tree) ----- #
 #'
 #' ## Load biogeographic range data mapped on a phylogeny
 #' data(eel_biogeo_data, package = "deepSTRAPP")
 #'
 #' # Explore data
 #' str(eel_biogeo_data, 1)
-#' eel_biogeo_data$densityMaps # Three density maps: one per range
-
-# # Set focal time to 10 Mya
-# focal_time <- 10
-#
-# ## Extract trait data and update densityMaps for the given focal_time
-#
-# # Extract from the densityMaps
-# eel_biogeo_data_10My <- extract_most_likely_ranges_from_densityMaps_for_focal_time(
-#    densityMaps = eel_biogeo_data$densityMaps,
-#    focal_time = focal_time,
-#    update_densityMaps = TRUE)
-#
-# ## Print trait data
-# str(eel_biogeo_data_10My, 1)
-# eel_biogeo_data_10My$trait_data
-#
-# ## Plot density maps as overlay of all range posterior probabilities
-#
-# # Plot initial density maps with ACE pies
-# plot_densityMaps_overlay(densityMaps = eel_biogeo_data$densityMaps)
-# abline(v = max(phytools::nodeHeights(eel_biogeo_data$densityMaps[[1]]$tree)[,2]) - focal_time,
-#        col = "red", lty = 2, lwd = 2)
-#
-# # Plot updated densityMaps with ACE pies
-# plot_densityMaps_overlay(eel_biogeo_data_10My$densityMaps)
-#
-#
-# # ----- Example 2: Include fossils (Non-ultrametric tree) ----- #
-# ## Test with non-ultrametric trees like mammals in motmot
-#
-# ## Prepare data
-#
-# # Load mammals phylogeny and data from the R package motmot
-# # Data source: Slater, 2013; DOI: 10.1111/2041-210X.12084
-# library(motmot)
-#
-# data("mammals")
-# force(mammals)
-#
-# # Obtain mammal tree
-# mammals_tree <- mammals$mammal.phy
-# # Convert mass data into categories
-# mammals_mass <- setNames(object = mammals$mammal.mass$mean,
-#                          nm = row.names(mammals$mammal.mass))[mammals_tree$tip.label]
-# mammals_data <- mammals_mass
-# mammals_data[seq_along(mammals_data)] <- "small"
-# mammals_data[mammals_mass > 5] <- "medium"
-# mammals_data[mammals_mass > 10] <- "large"
-# table(mammals_data)
-#
-# ## Produce densityMaps using stochastic character mapping based on an equal-rates (ER) Mk model
-# mammals_biogeo_data <- prepare_trait_data(tip_data = mammals_data, phylo = mammals_tree,
-#                                        trait_data_type = "biogeographic",
-#                                        evolutionary_models = "ER",
-#                                        nb_simulations = 100)
-#
-# # Set focal time
-# focal_time <- 80
-#
-# ## Extract trait data and update densityMaps for the given focal_time
-#
-# # Extract from the densityMaps
-# mammals_biogeo_data_80My <- extract_most_likely_ranges_from_densityMaps_for_focal_time(
-#     densityMaps = mammals_biogeo_data$densityMaps,
-#     focal_time = focal_time,
-#     update_densityMaps = TRUE)
-#
-# ## Print trait data
-# str(mammals_biogeo_data_80My, 1)
-# mammals_biogeo_data_80My$trait_data
-#
-# ## Plot density maps as overlay of all range posterior probabilities
-#
-# # Plot initial density maps with ACE pies
-# plot_densityMaps_overlay(densityMaps = mammals_biogeo_data$densityMaps)
-# abline(v = max(phytools::nodeHeights(mammals_biogeo_data$densityMaps[[1]]$tree)[,2]) - focal_time,
-#        col = "red", lty = 2, lwd = 2)
-#
-# # Plot updated densityMaps with ACE pies
-# plot_densityMaps_overlay(mammals_biogeo_data_80My$densityMaps)
-#
-
+#' eel_biogeo_data$densityMaps # Two density maps: one per unique area: A, B.
+#' eel_biogeo_data$densityMaps_all_ranges # Three density maps: one per range: A, B, and AB.
+#'
+#' # Set focal time to 10 Mya
+#' focal_time <- 10
+#'
+#' # ----- Example 1: Using only unique areas ----- #
+#'
+#' ## Extract trait data and update densityMaps for the given focal_time
+#'
+#' # Extract from the densityMaps
+#' eel_biogeo_data_10My <- extract_most_likely_ranges_from_densityMaps_for_focal_time(
+#'    densityMaps = eel_biogeo_data$densityMaps,
+#'    # ace = eel_biogeo_data$ace,
+#'    focal_time = focal_time,
+#'    update_densityMaps = TRUE)
+#'
+#' ## Print trait data
+#' str(eel_biogeo_data_10My, 1)
+#' eel_biogeo_data_10My$trait_data
+#'
+#' ## Plot density maps as overlay of all range posterior probabilities
+#'
+#' # Plot initial density maps with ACE pies
+#' plot_densityMaps_overlay(densityMaps = eel_biogeo_data$densityMaps)
+#' abline(v = max(phytools::nodeHeights(eel_biogeo_data$densityMaps[[1]]$tree)[,2]) - focal_time,
+#'        col = "red", lty = 2, lwd = 2)
+#'
+#' # Plot updated densityMaps with ACE pies
+#' plot_densityMaps_overlay(eel_biogeo_data_10My$densityMaps)
+#'
+#' # ----- Example 2: Using all ranges ----- #
+#'
+#' ## Extract trait data and update densityMaps_all_ranges for the given focal_time
+#'
+#' # Extract from the densityMaps
+#' eel_biogeo_data_10My <- extract_most_likely_ranges_from_densityMaps_for_focal_time(
+#'   densityMaps = eel_biogeo_data$densityMaps_all_ranges,
+#'   # ace = eel_biogeo_data$ace_all_ranges,
+#'   focal_time = focal_time,
+#'   update_densityMaps = TRUE)
+#'
+#' ## Print trait data
+#' str(eel_biogeo_data_10My, 1)
+#' eel_biogeo_data_10My$trait_data
+#'
+#' ## Plot density maps as overlay of all range posterior probabilities
+#'
+#' # Plot initial density maps with ACE pies
+#' root_age <- max(phytools::nodeHeights(eel_biogeo_data$densityMaps_all_ranges[[1]]$tree)[,2])
+#' plot_densityMaps_overlay(densityMaps = eel_biogeo_data$densityMaps_all_ranges)
+#' abline(v =  root_age - focal_time,
+#'        col = "red", lty = 2, lwd = 2)
+#'
+#' # Plot updated densityMaps with ACE pies
+#' plot_densityMaps_overlay(eel_biogeo_data_10My$densityMaps)
+#'
 
 extract_most_likely_ranges_from_densityMaps_for_focal_time <- function (
     densityMaps,
@@ -1634,8 +1684,24 @@ extract_most_likely_ranges_from_densityMaps_for_focal_time <- function (
     cat(paste0("WARNING: No tip data have been provided. Using ranges extracted from the densityMaps instead.\n"))
   }
 
+  ## Split multi-area ranges in tip_data if densityMaps only have unique areas
+  if (all(nchar(range_list) == 1))
+  {
+    # Update tip_data to host only unique areas
+    if (!is.null(tip_data))
+    {
+      # Split ranges at tips in unique areas
+      unique_areas_in_tip_data <- strsplit(x = tip_data, split = "")
+      # Select randomly an area
+      tip_data_split <- unlist(lapply(X = unique_areas_in_tip_data, FUN = function (x) { y <- sample(x = 1:length(x), size = 1) ; z <- x[y] ; return(z) }))
+      # Replace tip_data
+      tip_data <- tip_data_split
+    }
+    # No need to update 'ace' as the validity check ensure ranges are the same as in the densityMaps
+  }
+
   ## Extract tip ranges if provided in tip_data
-  if (!is.null(ace))
+  if (!is.null(tip_data))
   {
     # Reorder ranges in tip_data to match tip.label
     tip_data <- tip_data[densityMaps[[1]]$tree$tip.label]

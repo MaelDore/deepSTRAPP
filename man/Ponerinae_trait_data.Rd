@@ -13,8 +13,7 @@ data(Ponerinae_trait_data)
 \description{
 A data.frame of head width measurements covering the 1534 extant ponerine ant taxa (Ponerinae subfamily).
 
-Source: Doré, M., Borowiec, M. L., Branstetter, M. G., Camacho, G. P., Fisher, B. L., Longino, J. T., Ward, P. S., Blaimer, B. B., (2025),
-Timing is everything: Evolution of ponerine ants highlights how dispersal history shapes modern biodiversity, Nature Communications.
+Source: TBA
 \link{https://doi_of_Paper_to_provide.html}
 }
 \details{
@@ -28,8 +27,7 @@ A data.frame of head width measurements covering the 1534 extant ponerine ant ta
 }
 }
 \references{
-Doré, M., Borowiec, M. L., Branstetter, M. G., Camacho, G. P., Fisher, B. L., Longino, J. T., Ward, P. S., Blaimer, B. B., (2025),
-Timing is everything: Evolution of ponerine ants highlights how dispersal history shapes modern biodiversity, Nature Communications.
+TBA
 \url{https://doi_of_Paper_to_provide.html}
 }
 \keyword{datasets}

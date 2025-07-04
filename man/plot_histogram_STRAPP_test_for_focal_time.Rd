@@ -14,7 +14,7 @@ plot_histogram_STRAPP_test_for_focal_time(
 \arguments{
 \item{STRAPP_results}{List of elements generated with \code{\link[=compute_STRAPP_test_for_focal_time]{compute_STRAPP_test_for_focal_time()}},
 that summarize the results of a STRAPP test for a specific time in the past (i.e. the \code{focal_time}).
-\code{STRAPP_results} can also be extracted from the output of \code{\link[=run_deepSTRAPP_for_focal_time]{run_deepSTRAPP_for_focal_time()}} that
+\code{STRAPP_results} can also be extracted from the output of \code{\link[=run_deepSTRAPP_over_time]{run_deepSTRAPP_over_time()}} that
 run the whole deepSTRAPP workflow and store results inside \verb{$STRAPP_results}.}
 
 \item{display_plot}{Logical. Whether to display the histogram(s) generated in the R console. Default is \code{TRUE}.}
