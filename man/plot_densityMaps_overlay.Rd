@@ -8,6 +8,7 @@ plot_densityMaps_overlay(
   densityMaps,
   colors_per_levels = NULL,
   add_ACE_pies = TRUE,
+  cex_pies = 0.5,
   ace = NULL,
   ...
 )
@@ -21,6 +22,8 @@ Each object (i.e., \code{densityMap}) corresponds to a state/range. If no color 
 If \code{NULL} (default), the color scale provided \code{densityMaps} will be used.}
 
 \item{add_ACE_pies}{Logical. Whether to add pies of posterior probabilities of states/ranges at internal nodes on the mapped phylogeny. Default = \code{TRUE}.}
+
+\item{cex_pies}{Numerical. To adjust the size of the ACE pies. Default = \code{0.5}.}
 
 \item{ace}{Numerical matrix. To provide the posterior probabilities of ancestral states/ranges (characters) estimates (ACE) at internal nodes
 used to plot the ACE pies. Rows are internal nodes. Columns are states/ranges. Values are posterior probabilities of each state per node.

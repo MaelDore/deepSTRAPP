@@ -200,7 +200,7 @@ plot_BAMM_rates <- function (BAMM_object,
   ## Filter list of additional arguments to avoid warnings from par()
   add_args <- list(...)
   args_names_for_plot <- c("tau", "xlim", "ylim", "vtheta", "rbf", "show", "labels", "legend",
-                           "spex", "pal", "mask", "mask.color", "colorbreaks", "logcolor",
+                           "spex", "lwd", "cex", "pal", "mask", "mask.color", "colorbreaks", "logcolor",
                            "breaksmethod", "color.interval", "JenksSubset",
                            "par.reset", "direction")
   args_names_for_addBAMMshifts <- c("shiftnodes", "par.reset")

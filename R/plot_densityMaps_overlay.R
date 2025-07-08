@@ -13,6 +13,7 @@
 #' @param colors_per_levels Named character string. To set the colors to use to map each state/range posterior probabilities. Names = states/ranges; values = colors.
 #'   If `NULL` (default), the color scale provided `densityMaps` will be used.
 #' @param add_ACE_pies Logical. Whether to add pies of posterior probabilities of states/ranges at internal nodes on the mapped phylogeny. Default = `TRUE`.
+#' @param cex_pies Numerical. To adjust the size of the ACE pies. Default = `0.5`.
 #' @param ace Numerical matrix. To provide the posterior probabilities of ancestral states/ranges (characters) estimates (ACE) at internal nodes
 #'   used to plot the ACE pies. Rows are internal nodes. Columns are states/ranges. Values are posterior probabilities of each state per node.
 #'   Typically generated with [deepSTRAPP::prepare_trait_data()] in the `$ace` slot.
@@ -85,6 +86,7 @@ plot_densityMaps_overlay <- function (
     densityMaps,
     colors_per_levels = NULL,
     add_ACE_pies = TRUE,
+    cex_pies = 0.5,
     ace = NULL,
     ...) # To allow to pass down arguments in the plot.simmap() function
 {
@@ -134,6 +136,21 @@ plot_densityMaps_overlay <- function (
     }
   }
 
+  ## Filter list of additional arguments to ensure default values are used if not provided
+  add_args <- list(...)
+  # Extract additional args for phytools::plotSimmap()
+  args_names_for_plotSimmap <- c("fsize", "ftype", "lwd", "pts", "node.numbers", "mar", "offset", "direction",
+                                 "type", "setEnv", "part", "xlim", "ylim", "nodes", "tips", "maxY", "hold",
+                                 "split.vertical", "lend", "asp", "outline", "underscore", "arc_height")
+  add_args_for_plot.simmap <- add_args[names(add_args) %in% args_names_for_plotSimmap]
+  # Set default value if not provided
+  if ("fsize" %in% names(add_args_for_plot.simmap)) { fsize <- add_args_for_plot.simmap$fsize } else { fsize <- 0.7 }
+  if ("ftype" %in% names(add_args_for_plot.simmap)) { ftype <- add_args_for_plot.simmap$ftype } else { ftype <- "reg" }
+  if ("lwd" %in% names(add_args_for_plot.simmap)) { lwd <- add_args_for_plot.simmap$lwd } else { lwd <- 2 }
+  if ("mar" %in% names(add_args_for_plot.simmap)) { mar <- add_args_for_plot.simmap$mar } else { mar <- graphics::par()$mar }
+  if ("tips" %in% names(add_args_for_plot.simmap)) { tips <- add_args_for_plot.simmap$tips } else { tips <- stats::setNames(object = 1:nb_tips, nm = densityMaps[[1]]$tree$tip.label) }
+  add_args_for_plot.simmap <- add_args_for_plot.simmap[!(names(add_args_for_plot.simmap) %in% c("fsize", "ftype", "lwd", "mar", "tips"))]
+
   ## Retrieve colors_per_levels if not provided
   if (is.null(colors_per_levels))
   {
@@ -172,11 +189,20 @@ plot_densityMaps_overlay <- function (
     } else {
       add_plot <- TRUE
     }
-    # Plot each densityMap as a Simmap with transparent colors
-    plot(x = densityMap_state_i$tree, colors = densityMap_state_i$cols,
-         fsize = 0.7, lwd = 2, ftype = "reg", add = add_plot,
-         mar = par()$mar, tips = stats::setNames(object = 1:nb_tips, nm = densityMap_state_i$tree$tip.label),
-         ...)
+
+    # # Plot each densityMap as a Simmap with transparent colors
+    # plot(x = densityMap_state_i$tree, colors = densityMap_state_i$cols,
+    #      fsize = fsize, ftype = ftype, lwd = lwd, add = add_plot,
+    #      mar = graphics::par()$mar, tips = tips,
+    #      plot = TRUE, ...)
+
+    do.call(what = plot, # phytools::plot.simmap
+            args = c(list(x = densityMap_state_i$tree, colors = densityMap_state_i$cols,
+                          fsize = fsize, ftype = ftype, lwd = lwd, add = add_plot,
+                          mar = graphics::par()$mar, tips = tips,
+                          plot = TRUE),
+                     add_args_for_plot.simmap))
+
   }
 
   # Add node pies of ACE if requested
@@ -238,7 +264,7 @@ plot_densityMaps_overlay <- function (
     }
 
     # Add ACE pies
-    ape::nodelabels(pie = ace_matrix, piecol = colors_per_levels, cex = 0.5)
+    ape::nodelabels(pie = ace_matrix, piecol = colors_per_levels, cex = cex_pies)
   }
 
   # Add legend
