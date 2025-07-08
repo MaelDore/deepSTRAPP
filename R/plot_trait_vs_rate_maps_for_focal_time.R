@@ -14,9 +14,9 @@
 #'
 #'   This function is a wrapper multiple plotting functions:
 #'
-#'   * For continuous traits: [phytools::plot.contMap()]
+#'   * For continuous traits: [deepSTRAPP::plot_contMap()]
 #'   * For categorical and biogeographic data: [deepSTRAPP::plot_densityMaps_overlay()]
-#'   * For BAMM rates and regme shifts: [deepSTRAPP::plot_BAMM_rates()]
+#'   * For BAMM rates and regime shifts: [deepSTRAPP::plot_BAMM_rates()]
 #'
 #' @param STRAPP_outputs List of elements generated with [deepSTRAPP::compute_STRAPP_test_for_focal_time()],
 #'   that summarize the results of a STRAPP test for a specific time in the past (i.e. the `focal_time`).
@@ -80,7 +80,7 @@
 #'   A `$MSP_tree` element is required to scale the size of the symbols showing the location of regime shifts according marginal shift probabilities.
 #'   (If `adjust_size_to_prob = TRUE`).
 #'
-#'   Alternatively, the main input `STRAPP_outputs` can be the output of [deepSTRAPP::compute_STRAPP_test_over_time()],
+#'   Alternatively, the main input `STRAPP_outputs` can be the output of [deepSTRAPP::run_deepSTRAPP_over_time()],
 #'   providing results of STRAPP tests over multiple time-steps. In this case, you must provide a `focal_time` to select the
 #'   unique time-step used for plotting.
 #'   * `return_updated_trait_data_with_Map` must be set to `TRUE` so that the trait data extracted and
@@ -129,7 +129,7 @@
 #'                                        res = 100, # Number of time steps
 #'                                        plot = FALSE)
 #' # Plot contMap = stochastic mapping of continuous trait
-#' plot(Ponerinae_contMap)
+#' plot_contMap(Ponerinae_contMap)
 #'
 #' ## Set focal time to 40 Mya
 #' focal_time <- 40
@@ -252,7 +252,6 @@ plot_trait_vs_rate_maps_for_focal_time <- function (
     add_ACE_pies = TRUE,
     cex_pies = 0.5,
     rate_type = "net_diversification",
-    method = "phylogram",
     add_regime_shifts = TRUE,
     configuration_type = "MAP", # MAP, MSC, or index
     sample_index = 1,
@@ -293,7 +292,7 @@ plot_trait_vs_rate_maps_for_focal_time <- function (
     }
 
     ## focal_time
-    # Ensure a focal_time is provided if output is from [deepSTRAPP::compute_STRAPP_test_over_time()]
+    # Ensure a focal_time is provided if output is from [deepSTRAPP::run_deepSTRAPP_over_time()]
     if (inputs_over_time)
     {
       if (is.null(focal_time))
@@ -365,6 +364,16 @@ plot_trait_vs_rate_maps_for_focal_time <- function (
     {
       stop(paste0("You must request at least one option between displaying the plot (`display_plot` = TRUE), or producing a PDF (fill the `PDF_file_path` argument)."))
     }
+
+    ## PDF_file_path
+    # If provided, PDF_file_path must end with ".pdf"
+    if (!is.null(PDF_file_path))
+    {
+      if (length(grep(pattern = "\\.pdf$", x = PDF_file_path)) != 1)
+      {
+        stop("'PDF_file_path' must end with '.pdf'")
+      }
+    }
   }
 
   ### Display plots
@@ -378,26 +387,31 @@ plot_trait_vs_rate_maps_for_focal_time <- function (
     {
       ## Case 1: Continuous traits and contMap
 
-      # Update color scale if requested
-      if (!is.null(color_scale))
-      {
-        # Update color palette in contMap
-        updated_trait_data_with_Map$contMap <- phytools::setMap(x = updated_trait_data_with_Map$contMap, colors = color_scale)
-        # print(updated_trait_data_with_Map$contMap$cols)
-      }
+      # # Update color scale if requested
+      # if (!is.null(color_scale))
+      # {
+      #   # Update color palette in contMap
+      #   updated_trait_data_with_Map$contMap <- phytools::setMap(x = updated_trait_data_with_Map$contMap, colors = color_scale)
+      #   # print(updated_trait_data_with_Map$contMap$cols)
+      # }
+      #
+      # phytools::plot.contMap(x = updated_trait_data_with_Map$contMap,
+      #                        ...) # May need to be filtered
+
+      plot_contMap(x = updated_trait_data_with_Map$contMap,
+                   color_scale = color_scale,
+                   ...) # May need to be filtered
 
       ######
       ## Make it a function plot_contMap wrap function that also allows to control the color!!
-      # -	Check function from phytools to update colors: phytools::setMap()
-      # - Also add display_plot and PDF_file_path
+      # Change all uses of plot.contMap in all scripts!
 
       ## Copy the final version in the PDF_file_path section
 
-      ## Add display_plot and PDF_file_path to plot_densityMaps_overlay()?
+      ## Add display_plot and PDF_file_path to plot_densityMaps_overlay()
       ######
 
-      phytools::plot.contMap(x = updated_trait_data_with_Map$contMap,
-                             ...) # May need to be filtered
+
 
     } else {
 

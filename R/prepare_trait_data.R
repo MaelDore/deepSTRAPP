@@ -195,7 +195,7 @@
 #'    verbose = TRUE)
 #'
 #' ## Explore output
-#' plot(mapped_cont_traits$contMap) # contMap with interpolated trait values
+#' plot_contMap(mapped_cont_traits$contMap) # contMap with interpolated trait values
 #' mapped_cont_traits$model_selection_df # Summary of model selection
 #' # Parameter estimates and optimization summary of the best model
 #' # (Here, the best model is Pagel's lambda)
@@ -754,7 +754,7 @@ prepare_trait_data_for_continuous_data <- function (
     grDevices::pdf(file = file.path(PDF_file_path),
                    width = nb_tips/60*8, height = nb_tips/60*10)
 
-    plot(contMap)
+    plot_contMap(contMap)
 
     grDevices::dev.off()
 

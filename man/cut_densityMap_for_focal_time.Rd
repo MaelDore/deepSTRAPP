@@ -111,7 +111,7 @@ ape::nodelabels(text = updated_mammals_densityMap_small$tree$initial_nodes_ID)
 
 # ----- Example 2: keep_tip_labels = FALSE ----- #
 
-# Cut contMap to 80 Mya while NOT keeping tip.label
+# Cut densityMap to 80 Mya while NOT keeping tip.label
 updated_mammals_densityMap_small <- cut_densityMap_for_focal_time(
      densityMap = mammals_densityMap_small,
      focal_time = focal_time,

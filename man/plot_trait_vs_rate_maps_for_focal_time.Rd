@@ -12,7 +12,6 @@ plot_trait_vs_rate_maps_for_focal_time(
   add_ACE_pies = TRUE,
   cex_pies = 0.5,
   rate_type = "net_diversification",
-  method = "phylogram",
   add_regime_shifts = TRUE,
   configuration_type = "MAP",
   sample_index = 1,
@@ -117,9 +116,9 @@ stored in an object of class \code{bammdata}. Rates can vary along time, thus co
 
 This function is a wrapper multiple plotting functions:
 \itemize{
-\item For continuous traits: \code{\link[phytools:contMap]{phytools::plot.contMap()}}
+\item For continuous traits: \code{\link[=plot_contMap]{plot_contMap()}}
 \item For categorical and biogeographic data: \code{\link[=plot_densityMaps_overlay]{plot_densityMaps_overlay()}}
-\item For BAMM rates and regme shifts: \code{\link[=plot_BAMM_rates]{plot_BAMM_rates()}}
+\item For BAMM rates and regime shifts: \code{\link[=plot_BAMM_rates]{plot_BAMM_rates()}}
 }
 }
 \details{
@@ -139,7 +138,7 @@ cut-off at the \code{focal_time} are returned among the outputs under \verb{$upd
 A \verb{$MSP_tree} element is required to scale the size of the symbols showing the location of regime shifts according marginal shift probabilities.
 (If \code{adjust_size_to_prob = TRUE}).
 
-Alternatively, the main input \code{STRAPP_outputs} can be the output of \code{\link[=compute_STRAPP_test_over_time]{compute_STRAPP_test_over_time()}},
+Alternatively, the main input \code{STRAPP_outputs} can be the output of \code{\link[=run_deepSTRAPP_over_time]{run_deepSTRAPP_over_time()}},
 providing results of STRAPP tests over multiple time-steps. In this case, you must provide a \code{focal_time} to select the
 unique time-step used for plotting.
 \itemize{
@@ -177,7 +176,7 @@ Ponerinae_contMap <- phytools::contMap(Ponerinae_tree, x = Ponerinae_data_ln_HW,
                                        res = 100, # Number of time steps
                                        plot = FALSE)
 # Plot contMap = stochastic mapping of continuous trait
-plot(Ponerinae_contMap)
+plot_contMap(Ponerinae_contMap)
 
 ## Set focal time to 40 Mya
 focal_time <- 40

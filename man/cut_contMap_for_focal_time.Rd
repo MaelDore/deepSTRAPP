@@ -83,13 +83,13 @@ updated_contMap <- cut_contMap_for_focal_time(contMap = mammals_contMap,
                                               keep_tip_labels = TRUE)
 
 # Plot node labels on initial stochastic map with cut-off
-phytools::plot.contMap(mammals_contMap, lwd = 2)
+plot_contMap(mammals_contMap, lwd = 2)
 ape::nodelabels()
 abline(v = max(phytools::nodeHeights(mammals_contMap$tree)[,2]) - focal_time,
        col = "red", lty = 2, lwd = 2)
 
 # Plot initial node labels on cut stochastic map
-phytools::plot.contMap(updated_contMap)
+plot_contMap(updated_contMap)
 ape::nodelabels(text = updated_contMap$tree$initial_nodes_ID)
 
 # ----- Example 2: keep_tip_labels = FALSE ----- #
@@ -100,13 +100,13 @@ updated_contMap <- cut_contMap_for_focal_time(contMap = mammals_contMap,
                                               keep_tip_labels = FALSE)
 
 # Plot node labels on initial stochastic map with cut-off
-phytools::plot.contMap(mammals_contMap)
+plot_contMap(mammals_contMap)
 ape::nodelabels()
 abline(v = max(phytools::nodeHeights(mammals_contMap$tree)[,2]) - focal_time,
        col = "red", lty = 2, lwd = 2)
 
 # Plot initial node labels on cut stochastic map
-phytools::plot.contMap(updated_contMap)
+plot_contMap(updated_contMap)
 ape::nodelabels(text = updated_contMap$tree$initial_nodes_ID)
 
 }

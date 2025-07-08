@@ -189,7 +189,7 @@ Combined with \code{return_perm_data = TRUE}, it allows to plot the histograms o
 used to assess significance of the tests with \code{\link[=plot_histogram_STRAPP_test_for_focal_time]{plot_histogram_STRAPP_test_for_focal_time()}}.
 (for a single \code{focal_time}) and \code{\link[=plot_histograms_STRAPP_tests_over_time]{plot_histograms_STRAPP_tests_over_time()}} (for multiple \code{time_steps}).
 \item \verb{$updated_trait_data_with_Map_over_time} List of objects containing trait data and updated \code{contMap}/\code{densityMaps}.
-Updated \code{contMap}/\code{densityMaps} can be respectively plotted with \code{\link[phytools:contMap]{phytools::plot.contMap()}} or \code{\link[=plot_densityMaps_overlay]{plot_densityMaps_overlay()}},
+Updated \code{contMap}/\code{densityMaps} can be respectively plotted with \code{\link[=plot_contMap]{plot_contMap()}} or \code{\link[=plot_densityMaps_overlay]{plot_densityMaps_overlay()}},
 to display a phylogeny mapped with trait values with branches cut at each \code{focal_time}.
 \item \verb{$updated_BAMM_objects_over_time} List of objects containing rates and regimes ID mapped on phylogeny.
 Updated \code{BAMM_object} can be plotted with \code{\link[=plot_BAMM_rates]{plot_BAMM_rates()}} to display a phylogeny mapped with
@@ -243,7 +243,7 @@ Combined with \code{return_perm_data = TRUE}, it allows to plot the histograms o
 used to assess significance of the tests with \code{\link[=plot_histogram_STRAPP_test_for_focal_time]{plot_histogram_STRAPP_test_for_focal_time()}}.
 (for a single \code{focal_time}) and \code{\link[=plot_histograms_STRAPP_tests_over_time]{plot_histograms_STRAPP_tests_over_time()}} (for multiple \code{time_steps}).
 \item If \code{return_updated_trait_data_with_Map = TRUE}, a list of objects containing trait data and updated \code{contMap} or \code{densityMaps}
-is provided in \verb{$updated_trait_data_with_Map_over_time}. Updated \code{contMap}/\code{densityMaps} can be respectively plotted with \code{\link[phytools:contMap]{phytools::plot.contMap()}}
+is provided in \verb{$updated_trait_data_with_Map_over_time}. Updated \code{contMap}/\code{densityMaps} can be respectively plotted with \code{\link[=plot_contMap]{plot_contMap()}}
 or \code{\link[=plot_densityMaps_overlay]{plot_densityMaps_overlay()}}, to display a phylogeny mapped with trait values with branches cut at each \code{focal_time}.
 \item If \code{return_updated_BAMM_object = TRUE}, a list of updated \code{BAMM_object} of class \code{"bammdata"} that contains rates and regimes ID
 found at each \code{focal_time}. Updated \code{BAMM_object} can be plotted with \code{\link[=plot_BAMM_rates]{plot_BAMM_rates()}} to display
@@ -277,7 +277,7 @@ Ponerinae_contMap <- phytools::contMap(Ponerinae_tree, x = Ponerinae_data_ln_HW,
                                        res = 100, # Number of time steps
                                        plot = FALSE)
 # Plot contMap = stochastic mapping of continuous trait
-plot(Ponerinae_contMap)
+plot_contMap(Ponerinae_contMap)
 
 ## Set for five time steps of 10 My.
 # Will generate deepSTRAPP workflows for 0, 10, 20, 30, and 40 Mya.
@@ -326,7 +326,7 @@ str(Ponerinae_deepSTRAPP_cont_0_40$STRAPP_results, max.level = 2)
 
 # Plot updated contMap for time step n°2
 contMap_step2 <- Ponerinae_deepSTRAPP_cont_0_40$updated_trait_data_with_Map_over_time[[2]]
-phytools::plot.contMap(contMap_step2$contMap, ftype = "off")
+plot_contMap(contMap_step2$contMap, ftype = "off")
 
 # Plot diversification rates on updated phylogeny for time step n°2
 BAMM_object_step2 <- Ponerinae_deepSTRAPP_cont_0_40$updated_BAMM_objects_over_time[[2]]

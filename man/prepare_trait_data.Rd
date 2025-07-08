@@ -249,7 +249,7 @@ mapped_cont_traits <- prepare_trait_data(
    verbose = TRUE)
 
 ## Explore output
-plot(mapped_cont_traits$contMap) # contMap with interpolated trait values
+plot_contMap(mapped_cont_traits$contMap) # contMap with interpolated trait values
 mapped_cont_traits$model_selection_df # Summary of model selection
 # Parameter estimates and optimization summary of the best model
 # (Here, the best model is Pagel's lambda)

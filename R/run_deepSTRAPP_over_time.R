@@ -127,7 +127,7 @@
 #'     used to assess significance of the tests with [deepSTRAPP::plot_histogram_STRAPP_test_for_focal_time()].
 #'     (for a single `focal_time`) and [deepSTRAPP::plot_histograms_STRAPP_tests_over_time()] (for multiple `time_steps`).
 #'   * If `return_updated_trait_data_with_Map = TRUE`, a list of objects containing trait data and updated `contMap` or `densityMaps`
-#'     is provided in `$updated_trait_data_with_Map_over_time`. Updated `contMap`/`densityMaps` can be respectively plotted with [phytools::plot.contMap()]
+#'     is provided in `$updated_trait_data_with_Map_over_time`. Updated `contMap`/`densityMaps` can be respectively plotted with [deepSTRAPP::plot_contMap()]
 #'     or [deepSTRAPP::plot_densityMaps_overlay()], to display a phylogeny mapped with trait values with branches cut at each `focal_time`.
 #'   * If `return_updated_BAMM_object = TRUE`, a list of updated `BAMM_object` of class `"bammdata"` that contains rates and regimes ID
 #'     found at each `focal_time`. Updated `BAMM_object` can be plotted with [deepSTRAPP::plot_BAMM_rates()] to display
@@ -164,7 +164,7 @@
 #'     used to assess significance of the tests with [deepSTRAPP::plot_histogram_STRAPP_test_for_focal_time()].
 #'     (for a single `focal_time`) and [deepSTRAPP::plot_histograms_STRAPP_tests_over_time()] (for multiple `time_steps`).
 #'   * `$updated_trait_data_with_Map_over_time` List of objects containing trait data and updated `contMap`/`densityMaps`.
-#'     Updated `contMap`/`densityMaps` can be respectively plotted with [phytools::plot.contMap()] or [deepSTRAPP::plot_densityMaps_overlay()],
+#'     Updated `contMap`/`densityMaps` can be respectively plotted with [deepSTRAPP::plot_contMap()] or [deepSTRAPP::plot_densityMaps_overlay()],
 #'     to display a phylogeny mapped with trait values with branches cut at each `focal_time`.
 #'   * `$updated_BAMM_objects_over_time` List of objects containing rates and regimes ID mapped on phylogeny.
 #'     Updated `BAMM_object` can be plotted with [deepSTRAPP::plot_BAMM_rates()] to display a phylogeny mapped with
@@ -203,7 +203,7 @@
 #'                                        res = 100, # Number of time steps
 #'                                        plot = FALSE)
 #' # Plot contMap = stochastic mapping of continuous trait
-#' plot(Ponerinae_contMap)
+#' plot_contMap(Ponerinae_contMap)
 #'
 #' ## Set for five time steps of 10 My.
 #' # Will generate deepSTRAPP workflows for 0, 10, 20, 30, and 40 Mya.
@@ -252,7 +252,7 @@
 #'
 #' # Plot updated contMap for time step n°2
 #' contMap_step2 <- Ponerinae_deepSTRAPP_cont_0_40$updated_trait_data_with_Map_over_time[[2]]
-#' phytools::plot.contMap(contMap_step2$contMap, ftype = "off")
+#' plot_contMap(contMap_step2$contMap, ftype = "off")
 #'
 #' # Plot diversification rates on updated phylogeny for time step n°2
 #' BAMM_object_step2 <- Ponerinae_deepSTRAPP_cont_0_40$updated_BAMM_objects_over_time[[2]]

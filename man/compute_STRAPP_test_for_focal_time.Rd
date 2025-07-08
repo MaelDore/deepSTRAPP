@@ -204,7 +204,7 @@ plot_BAMM_rates(Ponerinae_BAMM_object_10My)
 data(Ponerinae_trait_data_10My, package = "deepSTRAPP")
 
 # Plot the associated contMap (continuous trait stochastic map)
-plot(Ponerinae_trait_data_10My$contMap)
+plot_contMap(Ponerinae_trait_data_10My$contMap)
 
 # Check that objects are ordered in the same fashion
 identical(names(Ponerinae_BAMM_object_10My$tipStates[[1]]),

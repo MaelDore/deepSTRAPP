@@ -136,7 +136,7 @@
 #'
 #'   Optional data updated for the `focal_time`:
 #'   * `$updated_trait_data_with_Map` A list with four elements that contains trait data found at the `focal_time` and an updated `contMap` or `densityMaps`
-#'     that can be used as input of [phytools::plot.contMap()] or [deepSTRAPP::plot_densityMaps_overlay()] to display a phylogeny mapped with trait values/states/ranges with branches cut at the `focal_time`.
+#'     that can be used as input of [deepSTRAPP::plot_contMap()] or [deepSTRAPP::plot_densityMaps_overlay()] to display a phylogeny mapped with trait values/states/ranges with branches cut at the `focal_time`.
 #'     See [deepSTRAPP::extract_most_likely_trait_values_for_focal_time()] for a detailed description of the output.
 #'   * `$updated_BAMM_object` An updated `BAMM_object` of class `"bammdata"` that contains rates and regimes ID found at the `focal_time`.
 #'     Can be used as input of [deepSTRAPP::plot_BAMM_rates()] to display a phylogeny mapped with diversification rates with branches cut at the `focal_time`.
@@ -174,7 +174,7 @@
 #'                                        res = 100, # Number of time steps
 #'                                        plot = FALSE)
 #' # Plot contMap = stochastic mapping of continuous trait
-#' plot(Ponerinae_contMap)
+#' plot_contMap(Ponerinae_contMap)
 #'
 #' ## Set focal time to 10 Mya
 #' focal_time <- 10
@@ -206,7 +206,7 @@
 #' head(deepSTRAPP_output$diversification_data_df)
 #'
 #' # Plot updated contMap
-#' phytools::plot.contMap(deepSTRAPP_output$updated_trait_data_with_Map$contMap)
+#' plot_contMap(deepSTRAPP_output$updated_trait_data_with_Map$contMap)
 #' ape::nodelabels(text =
 #'    deepSTRAPP_output$updated_trait_data_with_Map$contMap$tree$initial_nodes_ID)
 #'

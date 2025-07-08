@@ -115,7 +115,7 @@
 #'
 #' # ----- Example 2: keep_tip_labels = FALSE ----- #
 #'
-#' # Cut contMap to 80 Mya while NOT keeping tip.label
+#' # Cut densityMap to 80 Mya while NOT keeping tip.label
 #' updated_mammals_densityMap_small <- cut_densityMap_for_focal_time(
 #'      densityMap = mammals_densityMap_small,
 #'      focal_time = focal_time,
@@ -296,7 +296,7 @@ cut_densityMap_for_focal_time <- function(densityMap, focal_time, keep_tip_label
 #' # Cut densityMaps to 80 Mya while keeping tip.label
 #' # on terminal branches with a unique descending tip.
 #' updated_mammals_densityMaps <- cut_densityMaps_for_focal_time(
-#'     densityMap = mammals_densityMaps,
+#'     densityMaps = mammals_densityMaps,
 #'     focal_time = focal_time,
 #'     keep_tip_labels = TRUE)
 #'
@@ -313,9 +313,9 @@ cut_densityMap_for_focal_time <- function(densityMap, focal_time, keep_tip_label
 #'
 #' # ----- Example 2: keep_tip_labels = FALSE ----- #
 #'
-#' # Cut contMap to 80 Mya while NOT keeping tip.label
+#' # Cut densityMap to 80 Mya while NOT keeping tip.label
 #' updated_mammals_densityMaps <- cut_densityMaps_for_focal_time(
-#'     densityMap = mammals_densityMaps,
+#'     densityMaps = mammals_densityMaps,
 #'     focal_time = focal_time,
 #'     keep_tip_labels = FALSE)
 #'
