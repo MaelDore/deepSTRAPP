@@ -10,7 +10,9 @@ plot_densityMaps_overlay(
   add_ACE_pies = TRUE,
   cex_pies = 0.5,
   ace = NULL,
-  ...
+  ...,
+  display_plot = TRUE,
+  PDF_file_path = NULL
 )
 }
 \arguments{
@@ -32,9 +34,14 @@ If \code{NULL} (default), the ACE are extracted from the \code{densityMaps} with
 and estimated posterior probabilities of ancestral states.}
 
 \item{...}{Additional arguments to pass down to \code{\link[phytools:plotSimmap]{phytools::plot.simmap()}} to control plotting.}
+
+\item{display_plot}{Logical. Whether to display the plot generated in the R console. Default is \code{TRUE}.}
+
+\item{PDF_file_path}{Character string. If provided, the plot will be saved in a PDF file following the path provided here. The path must end with '.pdf'.}
 }
 \value{
-The function returns a plot with a time-calibrated phylogeny displaying the evolution of a categorical trait/biogeographic ranges.
+If \code{display_plot = TRUE}, the function plots a time-calibrated phylogeny displaying the evolution of a categorical trait/biogeographic ranges.
+If \code{PDF_file_path} is provided, the function exports the plot into a PDF file.
 }
 \description{
 Plot on a time-calibrated phylogeny the evolution of a categorical trait/biogeographic ranges

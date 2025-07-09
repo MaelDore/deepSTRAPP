@@ -18,11 +18,11 @@
 #'   * For categorical and biogeographic data: [deepSTRAPP::plot_densityMaps_overlay()]
 #'   * For BAMM rates and regime shifts: [deepSTRAPP::plot_BAMM_rates()]
 #'
-#' @param STRAPP_outputs List of elements generated with [deepSTRAPP::compute_STRAPP_test_for_focal_time()],
+#' @param deepSTRAPP_outputs List of elements generated with [deepSTRAPP::compute_STRAPP_test_for_focal_time()],
 #'   that summarize the results of a STRAPP test for a specific time in the past (i.e. the `focal_time`).
-#'   `STRAPP_outputs` can also be extracted from the output of [deepSTRAPP::run_deepSTRAPP_over_time()] that
+#'   `deepSTRAPP_outputs` can also be extracted from the output of [deepSTRAPP::run_deepSTRAPP_over_time()] that
 #'   run the whole deepSTRAPP workflow over multiple time-steps.
-#' @param focal_time Numerical. (Optional) If STRAPP_outputs comprises results over multiple time-steps
+#' @param focal_time Numerical. (Optional) If `deepSTRAPP_outputs` comprises results over multiple time-steps
 #'   (i.e., output of [deepSTRAPP::run_deepSTRAPP_over_time()], this is the time of the STRAPP test targeted for plotting.
 #' @param color_scale Vector of character string. List of colors to use to build the color scale with [grDevices::colorRampPalette()]
 #'   showing the evolution of a continuous trait. From lowest values to highest values. (For continuous trait data only)
@@ -62,16 +62,15 @@
 #'
 #' @export
 #' @importFrom graphics par
-#' @importFrom phytools setMap plot.contMap
 #' @importFrom grDevices pdf dev.off
 #'
-#' @details The main input `STRAPP_outputs` is the typical output of [deepSTRAPP::compute_STRAPP_test_for_focal_time()].
-#'   It provides information on results of a STRAPP test performed at a given `focal_time`, but can also encompass
+#' @details The main input `deepSTRAPP_outputs` is the typical output of [deepSTRAPP::compute_STRAPP_test_for_focal_time()].
+#'   It provides information on results of a STRAPP test performed at a given `focal_time`, and can also encompass
 #'   updated phylogenies with mapped trait evolution and diversification rates and regimes shifts if appropriate arguments are set.
 #'
 #'   * `return_updated_trait_data_with_Map` must be set to `TRUE` so that the trait data extracted for the given `focal_time`
 #'     and the updated version of mapped phylogeny (`contMap`/`densityMaps`) are returned among the outputs under `$updated_trait_data_with_Map`.
-#'     The updated `contMap`/`densityMaps` consists in cutting off branches and mapping that are younger than the `focal_time`.
+#'     The updated `contMap`/`densityMaps` consists in cutting off branches and mappings that are younger than the `focal_time`.
 #'   * `return_updated_BAMM_object` must be set to `TRUE` so that the `updated_BAMM_object` with phylogeny and mapped diversification rates
 #'     cut-off at the `focal_time` are returned among the outputs under `$updated_BAMM_object`.
 #'
@@ -80,7 +79,7 @@
 #'   A `$MSP_tree` element is required to scale the size of the symbols showing the location of regime shifts according marginal shift probabilities.
 #'   (If `adjust_size_to_prob = TRUE`).
 #'
-#'   Alternatively, the main input `STRAPP_outputs` can be the output of [deepSTRAPP::run_deepSTRAPP_over_time()],
+#'   Alternatively, the main input `deepSTRAPP_outputs` can be the output of [deepSTRAPP::run_deepSTRAPP_over_time()],
 #'   providing results of STRAPP tests over multiple time-steps. In this case, you must provide a `focal_time` to select the
 #'   unique time-step used for plotting.
 #'   * `return_updated_trait_data_with_Map` must be set to `TRUE` so that the trait data extracted and
@@ -100,7 +99,7 @@
 #'
 #' @seealso [phytools::plot.densityMap()] [deepSTRAPP::plot_densityMaps_overlay()] [deepSTRAPP::plot_BAMM_rates()]
 #'
-#' Functions in deepSTRAPP needed to produce the `STRAPP_outputs` as input: [deepSTRAPP::run_deepSTRAPP_for_focal_time] [deepSTRAPP::run_deepSTRAPP_over_time()]
+#' Functions in deepSTRAPP needed to produce the `deepSTRAPP_outputs` as input: [deepSTRAPP::run_deepSTRAPP_for_focal_time] [deepSTRAPP::run_deepSTRAPP_over_time()]
 #' Function in deepSTRAPP to plot all time-steps at once: [deepSTRAPP::plot_trait_vs_rate_maps_over_time]
 #'
 #' @examples
@@ -153,7 +152,7 @@
 #'
 #' ## Plot updated contMap vs. updated diversification rates
 #' plot_trait_vs_rate_maps_for_focal_time(
-#'    STRAPP_outputs = Ponerinae_deepSTRAPP_cont_40My,
+#'    deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_40My,
 #'    color_scale = c("limegreen", "orange", "red"), # Adjust color scale on contMap
 #'    legend = TRUE, labels = TRUE, # Show legend and label on BAMM plot
 #'    cex = 0.7) # Adjust label size on contMap
@@ -213,7 +212,7 @@
 #'
 #' ## Plot updated contMap vs. updated diversification rates
 #' plot_trait_vs_rate_maps_for_focal_time(
-#'     STRAPP_outputs = Ponerinae_deepSTRAPP_biogeo_40My,
+#'     deepSTRAPP_outputs = Ponerinae_deepSTRAPP_biogeo_40My,
 #'     # Adjust colors on densityMaps
 #'     colors_per_levels = c("N" = "dodgerblue2", "O" = "orange"),
 #'     # Show legend and label on BAMM plot
@@ -232,7 +231,7 @@
 #'
 #' ## Plot updated contMap vs. updated diversification rates for focal_time = 40My
 #' plot_trait_vs_rate_maps_for_focal_time(
-#'    STRAPP_outputs = Ponerinae_deepSTRAPP_biogeo_0_40,
+#'    deepSTRAPP_outputs = Ponerinae_deepSTRAPP_biogeo_0_40,
 #'    focal_time = 40, # Select focal_time = 40My
 #'    # Adjust colors on densityMaps
 #'    colors_per_levels = c("N" = "dodgerblue2", "O" = "orange"),
@@ -245,7 +244,7 @@
 
 
 plot_trait_vs_rate_maps_for_focal_time <- function (
-    STRAPP_outputs,
+    deepSTRAPP_outputs,
     focal_time = NULL,
     color_scale = NULL,
     colors_per_levels = NULL,
@@ -267,24 +266,24 @@ plot_trait_vs_rate_maps_for_focal_time <- function (
 {
   ### Check input validity
   {
-    ## STRAPP_outputs
+    ## deepSTRAPP_outputs
     # Check presence of updated trait map
-    if (is.null(STRAPP_outputs$updated_trait_data_with_Map) & is.null(STRAPP_outputs$updated_trait_data_with_Map_over_time))
+    if (is.null(deepSTRAPP_outputs$updated_trait_data_with_Map) & is.null(deepSTRAPP_outputs$updated_trait_data_with_Map_over_time))
     {
-      stop(paste0("`STRAPP_outputs` must have a `$updated_trait_data_with_Map` or `$updated_trait_data_with_Map_over_time` element.\n",
+      stop(paste0("`deepSTRAPP_outputs` must have a `$updated_trait_data_with_Map` or `$updated_trait_data_with_Map_over_time` element.\n",
                   "Be sure to set `return_updated_trait_data_with_Map = TRUE` in [deepSTRAPP::run_deepSTRAPP_for_focal_time] or [deepSTRAPP::run_deepSTRAPP_over_time].\n",
                   "This element is needed to plot the updated `contMap`/`densityMaps` with mapped trait/range evolution."))
     }
     # Check presence of updated trait map
-    if (is.null(STRAPP_outputs$updated_trait_data_with_Map) & is.null(STRAPP_outputs$updated_trait_data_with_Map_over_time))
+    if (is.null(deepSTRAPP_outputs$updated_trait_data_with_Map) & is.null(deepSTRAPP_outputs$updated_trait_data_with_Map_over_time))
     {
-      stop(paste0("'STRAPP_outputs' must have a '$updated_BAMM_object' or '$updated_BAMM_objects_over_time' element.\n",
+      stop(paste0("'deepSTRAPP_outputs' must have a '$updated_BAMM_object' or '$updated_BAMM_objects_over_time' element.\n",
                   "Be sure to set `return_updated_BAMM_object = TRUE` in [deepSTRAPP::run_deepSTRAPP_for_focal_time] or [deepSTRAPP::run_deepSTRAPP_over_time].\n",
                   "This element is needed to plot the updated `BAMM_object` with mapped diversification rates."))
     }
 
     ## Identify the type of inputs
-    if (is.null(STRAPP_outputs$updated_trait_data_with_Map_over_time))
+    if (is.null(deepSTRAPP_outputs$updated_trait_data_with_Map_over_time))
     {
       inputs_over_time <- FALSE
     } else {
@@ -297,26 +296,26 @@ plot_trait_vs_rate_maps_for_focal_time <- function (
     {
       if (is.null(focal_time))
       {
-        stop(paste0("You provided as input a `STRAPP_outputs` object with multiple time-steps resulting from [deepSTRAPP::run_deepSTRAPP_over_time].\n",
+        stop(paste0("You provided as input a `deepSTRAPP_outputs` object with multiple time-steps resulting from [deepSTRAPP::run_deepSTRAPP_over_time].\n",
                     "You must provide a `focal_time` to select the appropriate time-step to be plotted.\n",
                     "For plotting all time-steps at once, please see [deepSTRAPP::plot_trait_vs_rate_maps_over_time]."))
       }
-      # Ensure focal_time match (any) time in STRAPP_outputs
-      if (!(focal_time %in% STRAPP_outputs$time_steps))
+      # Ensure focal_time match (any) time in deepSTRAPP_outputs
+      if (!(focal_time %in% deepSTRAPP_outputs$time_steps))
       {
-        stop(paste0("You provided as input a `STRAPP_outputs` object with multiple time-steps resulting from [deepSTRAPP::run_deepSTRAPP_over_time].\n",
-                    "You must provide a `focal_time` that matches with the `$time_steps` recorded in the `STRAPP_outputs` object."))
+        stop(paste0("You provided as input a `deepSTRAPP_outputs` object with multiple time-steps resulting from [deepSTRAPP::run_deepSTRAPP_over_time].\n",
+                    "You must provide a `focal_time` that matches with the `$time_steps` recorded in the `deepSTRAPP_outputs` object."))
       }
     } else {
-      # Ensure focal_time match with the focal_time recorded in STRAPP_outputs
+      # Ensure focal_time match with the focal_time recorded in deepSTRAPP_outputs
       if (!is.null(focal_time))
       {
-        if (!(focal_time %in% STRAPP_outputs$focal_time))
+        if (!(focal_time %in% deepSTRAPP_outputs$focal_time))
         {
-          stop(paste0("You provided as input a `STRAPP_outputs` object with a unique time-step resulting from [deepSTRAPP::run_deepSTRAPP_for_focal_time].\n",
-                      "However, the `focal_time` you provided does not that match with the `$focal_time` recorded in the `STRAPP_outputs` object.\n",
+          stop(paste0("You provided as input a `deepSTRAPP_outputs` object with a unique time-step resulting from [deepSTRAPP::run_deepSTRAPP_for_focal_time].\n",
+                      "However, the `focal_time` you provided does not that match with the `$focal_time` recorded in the `deepSTRAPP_outputs` object.\n",
                       "focal_time provided: ",focal_time,".\n",
-                      "focal_time recorded in `STRAPP_outputs`: ",STRAPP_outputs$focal_time,"."))
+                      "focal_time recorded in `deepSTRAPP_outputs`: ",deepSTRAPP_outputs$focal_time,"."))
         }
       }
     }
@@ -325,13 +324,13 @@ plot_trait_vs_rate_maps_for_focal_time <- function (
     if (!inputs_over_time)
     {
       # For outputs from run_deepSTRAPP_for_focal_time
-      updated_trait_data_with_Map <- STRAPP_outputs$updated_trait_data_with_Map
-      updated_BAMM_object <- STRAPP_outputs$updated_BAMM_object
+      updated_trait_data_with_Map <- deepSTRAPP_outputs$updated_trait_data_with_Map
+      updated_BAMM_object <- deepSTRAPP_outputs$updated_BAMM_object
     } else {
       # For outputs from run_deepSTRAPP_over_time
-      focal_time_ID <- which(STRAPP_outputs$time_steps == focal_time)
-      updated_trait_data_with_Map <- STRAPP_outputs$updated_trait_data_with_Map_over_time[[focal_time_ID]]
-      updated_BAMM_object <- STRAPP_outputs$updated_BAMM_objects_over_time[[focal_time_ID]]
+      focal_time_ID <- which(deepSTRAPP_outputs$time_steps == focal_time)
+      updated_trait_data_with_Map <- deepSTRAPP_outputs$updated_trait_data_with_Map_over_time[[focal_time_ID]]
+      updated_BAMM_object <- deepSTRAPP_outputs$updated_BAMM_objects_over_time[[focal_time_ID]]
     }
 
     ## Extract the type of trait
@@ -376,10 +375,14 @@ plot_trait_vs_rate_maps_for_focal_time <- function (
     }
   }
 
+  ## Extract focal time
+  focal_time <- updated_trait_data_with_Map$focal_time
+
   ### Display plots
   if (display_plot)
   {
-    graphics::par(mfrow = c(1, 2))
+    initial_oma <- graphics::par()$oma
+    graphics::par(mfrow = c(1, 2), oma = c(0, 0, 3, 0))
 
     ### Plot facet A: Trait evolution
 
@@ -387,31 +390,9 @@ plot_trait_vs_rate_maps_for_focal_time <- function (
     {
       ## Case 1: Continuous traits and contMap
 
-      # # Update color scale if requested
-      # if (!is.null(color_scale))
-      # {
-      #   # Update color palette in contMap
-      #   updated_trait_data_with_Map$contMap <- phytools::setMap(x = updated_trait_data_with_Map$contMap, colors = color_scale)
-      #   # print(updated_trait_data_with_Map$contMap$cols)
-      # }
-      #
-      # phytools::plot.contMap(x = updated_trait_data_with_Map$contMap,
-      #                        ...) # May need to be filtered
-
-      plot_contMap(x = updated_trait_data_with_Map$contMap,
+      plot_contMap(contMap = updated_trait_data_with_Map$contMap,
                    color_scale = color_scale,
                    ...) # May need to be filtered
-
-      ######
-      ## Make it a function plot_contMap wrap function that also allows to control the color!!
-      # Change all uses of plot.contMap in all scripts!
-
-      ## Copy the final version in the PDF_file_path section
-
-      ## Add display_plot and PDF_file_path to plot_densityMaps_overlay()
-      ######
-
-
 
     } else {
 
@@ -422,6 +403,8 @@ plot_trait_vs_rate_maps_for_focal_time <- function (
                                add_ACE_pies = add_ACE_pies,
                                cex_pies = cex_pies,
                                ace = NULL,
+                               display_plot = TRUE,
+                               PDF_file_path = NULL,
                                ...) # May need to be filtered
     }
 
@@ -443,7 +426,11 @@ plot_trait_vs_rate_maps_for_focal_time <- function (
                     display_plot = TRUE,
                     PDF_file_path = NULL)
 
-    graphics::par(mfrow = c(1, 1))
+    ## Add a common main title across both plots
+    main_title <- paste0("Focal time = ", focal_time)
+    graphics::mtext(text = main_title, outer = TRUE, cex = 1.5, line = -1)
+
+    graphics::par(mfrow = c(1, 1), oma = initial_oma)
   }
 
   ## Save PDF
@@ -451,12 +438,16 @@ plot_trait_vs_rate_maps_for_focal_time <- function (
   {
     # Adjust width and height according to phylo
     nb_tips <- length(updated_BAMM_object$tip.label)
+    width <- min(nb_tips/60*8*2, 200) # Maximum PDF size = 200 inches
+    height <- width*10/8/2
 
     ## Open PDF
     grDevices::pdf(file = file.path(PDF_file_path),
-                  width = nb_tips/60*8*2, height = nb_tips/60*10)
+                  width = width, height = height)
 
-    graphics::par(mfrow = c(1, 2))
+    initial_oma <- graphics::par()$oma
+    top_outer_margin <- height * 0.20
+    graphics::par(mfrow = c(1, 2), oma = c(0, 0, top_outer_margin, 0))
 
     ### Plot facet A: Trait evolution
 
@@ -464,16 +455,9 @@ plot_trait_vs_rate_maps_for_focal_time <- function (
     {
       ## Case 1: Continuous traits and contMap
 
-      # Update color scale if requested
-      if (!is.null(color_scale))
-      {
-        # Update color palette in contMap
-        updated_trait_data_with_Map$contMap <- phytools::setMap(x = updated_trait_data_with_Map$contMap, colors = color_scale)
-        # print(updated_trait_data_with_Map$contMap$cols)
-      }
-
-      phytools::plot.contMap(x = updated_trait_data_with_Map$contMap,
-                             ...) # May need to be filtered
+      plot_contMap(contMap = updated_trait_data_with_Map$contMap,
+                   color_scale = color_scale,
+                   ...) # May need to be filtered
 
     } else {
 
@@ -484,6 +468,8 @@ plot_trait_vs_rate_maps_for_focal_time <- function (
                                add_ACE_pies = add_ACE_pies,
                                cex_pies = cex_pies,
                                ace = NULL,
+                               display_plot = TRUE,
+                               PDF_file_path = NULL,
                                ...) # May need to be filtered
     }
 
@@ -505,17 +491,16 @@ plot_trait_vs_rate_maps_for_focal_time <- function (
                     display_plot = TRUE,
                     PDF_file_path = NULL)
 
-    graphics::par(mfrow = c(1, 1))
+    ## Add a common main title across both plots
+    main_title <- paste0("Focal time = ", focal_time)
+    base_cex = width/12 # Scale the size of the text relative to PDF size so it appears constant
+    graphics::mtext(text = main_title, outer = TRUE, cex = base_cex*1.3, line = 0)
+
+    graphics::par(mfrow = c(1, 1), oma = initial_oma)
 
     ## Close PDF
     invisible(grDevices::dev.off())
   }
 }
-
-
-
-## Make examples for all three types of traits
-
-## Update examples in plot_histograms_STRAPP_tests_over_time()
 
 

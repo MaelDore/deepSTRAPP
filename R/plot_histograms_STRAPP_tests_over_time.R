@@ -1,9 +1,9 @@
 
-#' @title Wrapper function to plot histogram of STRAPP test statistics over time steps
+#' @title Plot multiple histograms of STRAPP test statistics over time-steps
 #'
 #' @description Plot an histogram of the distribution of the test statistics
 #'   obtained from a deepSTRAPP workflow carried out for each focal time in `$time_steps`.
-#'   (See [deepSTRAPP::run_deepSTRAPP_over_time()]).
+#'   Main input = output of a deepSTRAPP run over time using [deepSTRAPP::run_deepSTRAPP_over_time()]).
 #'
 #'   Returns one histogram for overall tests for each focal time in `$time_steps`.
 #'   If `plot_posthoc_tests = TRUE`, it will return one faceted plot with an histogram

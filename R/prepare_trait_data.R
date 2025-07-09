@@ -751,8 +751,11 @@ prepare_trait_data_for_continuous_data <- function (
   if (!is.null(PDF_file_path))
   {
     nb_tips <- length(phylo$tip.label)
+    height <- min(nb_tips/60*10, 200) # Maximum PDF size = 200 inches
+    width <- height*8/10
+
     grDevices::pdf(file = file.path(PDF_file_path),
-                   width = nb_tips/60*8, height = nb_tips/60*10)
+                   width = width, height = height)
 
     plot_contMap(contMap)
 
@@ -1159,11 +1162,15 @@ prepare_trait_data_for_categorical_data <- function (
     xpd_init <- par()$xpd
     par(xpd = TRUE)
 
+    # Adjust width/height according to the nb of tips
+    height <- min(nb_tips/60*10, 200) # Maximum PDF size = 200 inches
+    width <- height*8/10
+
     if (!plot_overlay)
     {
       ## Plot one densityMap per state
       grDevices::pdf(file = file.path(PDF_file_path),
-                     width = nb_tips/60*8, height = nb_tips/60*10)
+                     width = width, height = height)
 
       for (i in seq_along(densityMaps_all_states))
       {
@@ -1176,7 +1183,7 @@ prepare_trait_data_for_categorical_data <- function (
 
       ## Plot the overlay of densityMaps with alpha
       grDevices::pdf(file = file.path(PDF_file_path),
-                     width = nb_tips/60*8, height = nb_tips/60*10)
+                     width = width, height = height)
 
       plot_densityMaps_overlay(densityMaps = densityMaps_all_states,
                                add_ACE_pies = TRUE,
@@ -2280,11 +2287,15 @@ prepare_trait_data_for_biogeographic_data <- function (
     xpd_init <- par()$xpd
     par(xpd = TRUE)
 
+    # Adjust width/height according to the nb of tips
+    height <- min(nb_tips/60*10, 200) # Maximum PDF size = 200 inches
+    width <- height*8/10
+
     if (!plot_overlay)
     {
       ## Plot one densityMap per state
       grDevices::pdf(file = file.path(PDF_file_path),
-                     width = nb_tips/60*8, height = nb_tips/60*10)
+                     width = width, height = height)
 
       for (i in seq_along(densityMaps_all_ranges))
       {
@@ -2300,7 +2311,7 @@ prepare_trait_data_for_biogeographic_data <- function (
 
       ## Plot the overlay of densityMaps with alpha
       grDevices::pdf(file = file.path(PDF_file_path),
-                     width = nb_tips/60*8, height = nb_tips/60*10)
+                     width = width, height = height)
 
       plot_densityMaps_overlay(densityMaps = densityMaps_all_ranges,
                                add_ACE_pies = TRUE,

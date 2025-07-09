@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_histograms_STRAPP_tests_over_time.R
 \name{plot_histograms_STRAPP_tests_over_time}
 \alias{plot_histograms_STRAPP_tests_over_time}
-\title{Wrapper function to plot histogram of STRAPP test statistics over time steps}
+\title{Plot multiple histograms of STRAPP test statistics over time-steps}
 \usage{
 plot_histograms_STRAPP_tests_over_time(
   STRAPP_tests_over_time,
@@ -41,7 +41,7 @@ For post hoc tests, this will save the multifaceted plots.
 \description{
 Plot an histogram of the distribution of the test statistics
 obtained from a deepSTRAPP workflow carried out for each focal time in \verb{$time_steps}.
-(See \code{\link[=run_deepSTRAPP_over_time]{run_deepSTRAPP_over_time()}}).
+Main input = output of a deepSTRAPP run over time using \code{\link[=run_deepSTRAPP_over_time]{run_deepSTRAPP_over_time()}}).
 
 Returns one histogram for overall tests for each focal time in \verb{$time_steps}.
 If \code{plot_posthoc_tests = TRUE}, it will return one faceted plot with an histogram

@@ -26,7 +26,7 @@
 #'   * The plot can be exported in PDF using `PDF_file_path` to define the output file.
 #'
 #' @return If `display_plot = TRUE`, the function plots the time-calibrated phylogeny displaying the evolution of a continuous trait.
-#' If `PDF_file_path` is provided, the function export the plot into a PDF file.
+#' If `PDF_file_path` is provided, the function exports the plot into a PDF file.
 #'
 #' An object of class `"contMap"` with an (optionally) updated color scale (`$cols`) is returned invisibly.
 #'
@@ -103,10 +103,12 @@ plot_contMap <- function (contMap,
   {
     # Adjust width and height according to phylo
     nb_tips <- length(contMap$tree$tip.label)
+    height <- min(nb_tips/60*10, 200) # Maximum PDF size = 200 inches
+    width <- height*8/10
 
     # Open PDF
     grDevices::pdf(file = file.path(PDF_file_path),
-                   nb_tips/60*8, height = nb_tips/60*10)
+                   width = width, height = height)
 
     ## Plot the contMap
     updated_contMap <- phytools::plot.contMap(x = contMap,

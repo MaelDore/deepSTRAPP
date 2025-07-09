@@ -28,7 +28,7 @@ showing the evolution of a continuous trait. From lowest values to highest value
 }
 \value{
 If \code{display_plot = TRUE}, the function plots the time-calibrated phylogeny displaying the evolution of a continuous trait.
-If \code{PDF_file_path} is provided, the function export the plot into a PDF file.
+If \code{PDF_file_path} is provided, the function exports the plot into a PDF file.
 
 An object of class \code{"contMap"} with an (optionally) updated color scale (\verb{$cols}) is returned invisibly.
 }

@@ -20,13 +20,17 @@
 #'   If `NULL` (default), the ACE are extracted from the `densityMaps` with a possible slight discrepancy with the actual tip states
 #'   and estimated posterior probabilities of ancestral states.
 #' @param ... Additional arguments to pass down to [phytools::plot.simmap()] to control plotting.
+#' @param display_plot Logical. Whether to display the plot generated in the R console. Default is `TRUE`.
+#' @param PDF_file_path Character string. If provided, the plot will be saved in a PDF file following the path provided here. The path must end with '.pdf'.
 #'
 #' @export
 #' @importFrom graphics par
 #' @importFrom phytools add.simmap.legend
 #' @importFrom ape nodelabels
+#' @importFrom grDevices pdf dev.off
 #'
-#' @return The function returns a plot with a time-calibrated phylogeny displaying the evolution of a categorical trait/biogeographic ranges.
+#' @return If `display_plot = TRUE`, the function plots a time-calibrated phylogeny displaying the evolution of a categorical trait/biogeographic ranges.
+#' If `PDF_file_path` is provided, the function exports the plot into a PDF file.
 #'
 #' @author Maël Doré
 #'
@@ -88,51 +92,71 @@ plot_densityMaps_overlay <- function (
     add_ACE_pies = TRUE,
     cex_pies = 0.5,
     ace = NULL,
-    ...) # To allow to pass down arguments in the plot.simmap() function
+    ..., # To allow to pass down arguments in the plot.simmap() function
+    display_plot = TRUE,
+    PDF_file_path = NULL)
 {
   # Get list of states
   states_list <- unname(unlist(lapply(densityMaps, FUN = function (x) { x$states[2] })))
-
-  ### Check input validity
 
   # Get number of tips
   nb_tips <- length(densityMaps[[1]]$tree$tip.label)
   # Get number of nodes
   nb_nodes <- nb_tips + densityMaps[[1]]$tree$Nnode
 
-  ## colors_per_levels
-  if (!is.null(colors_per_levels))
+  ### Check input validity
   {
-    # Check that the color scale match the states
-    if (!all(states_list %in% names(colors_per_levels)))
+    ## colors_per_levels
+    if (!is.null(colors_per_levels))
     {
-      missing_states <- states_list[!(states_list %in% names(colors_per_levels))]
-      stop(paste0("Not all states are found in 'colors_per_levels'.\n",
-                  "Missing: ", paste(missing_states, collapse = ", "), "."))
+      # Check that the color scale match the states
+      if (!all(states_list %in% names(colors_per_levels)))
+      {
+        missing_states <- states_list[!(states_list %in% names(colors_per_levels))]
+        stop(paste0("Not all states are found in 'colors_per_levels'.\n",
+                    "Missing: ", paste(missing_states, collapse = ", "), "."))
+      }
+      # Check whether all colors are valid
+      if (!all(is_color(colors_per_levels)))
+      {
+        invalid_colors <- colors_per_levels[!is_color(colors_per_levels)]
+        stop(paste0("Some color names in 'colors_per_levels' are not valid.\n",
+                    "Invalid: ", paste(invalid_colors, collapse = ", "), "."))
+      }
     }
-    # Check whether all colors are valid
-    if (!all(is_color(colors_per_levels)))
-    {
-      invalid_colors <- colors_per_levels[!is_color(colors_per_levels)]
-      stop(paste0("Some color names in 'colors_per_levels' are not valid.\n",
-                  "Invalid: ", paste(invalid_colors, collapse = ", "), "."))
-    }
-  }
 
-  ## ace
-  if (!is.null(ace))
-  {
-    # Check that ace have proper rows (internal nodes)
-    if (!(identical(row.names(ace), as.character((nb_tips+1):nb_nodes))))
+    ## ace
+    if (!is.null(ace))
     {
-      stop(paste0("Row.names in 'ace' do not match internal node IDs."))
+      # Check that ace have proper rows (internal nodes)
+      if (!(identical(row.names(ace), as.character((nb_tips+1):nb_nodes))))
+      {
+        stop(paste0("Row.names in 'ace' do not match internal node IDs."))
+      }
+      # Check that ace have proper columns (states)
+      if (!(identical(colnames(ace), states_list)))
+      {
+        missing_states <- states_list[!(states_list %in% colnames(ace))]
+        stop(paste0("Not all states are found in 'ace'.\n",
+                    "Missing: ", paste(missing_states, collapse = ", "), "."))
+      }
     }
-    # Check that ace have proper columns (states)
-    if (!(identical(colnames(ace), states_list)))
+
+    ## display_plot OR PDF_file_path
+    # Check that at least one type of output is requested
+    if (!display_plot & is.null(PDF_file_path))
     {
-      missing_states <- states_list[!(states_list %in% colnames(ace))]
-      stop(paste0("Not all states are found in 'ace'.\n",
-                  "Missing: ", paste(missing_states, collapse = ", "), "."))
+      stop(paste0("You must request at least one option between displaying the plot (`display_plot` = TRUE), or producing a PDF (fill the `PDF_file_path` argument)."))
+    }
+
+    ## PDF_file_path
+    # If provided, PDF_file_path must end with ".pdf"
+    if (!is.null(PDF_file_path))
+    {
+      if (length(grep(pattern = "\\.pdf$", x = PDF_file_path)) != 1)
+      {
+        stop("'PDF_file_path' must end with '.pdf'")
+      }
     }
   }
 
@@ -158,122 +182,258 @@ plot_densityMaps_overlay <- function (
     names(colors_per_levels) <- states_list
   }
 
-  # Allows plotting outside of figure range
-  xpd_init <- par()$xpd
-  par(xpd = TRUE)
-
-  ## Loop per state
-  for (i in seq_along(states_list))
+  ### Display plots
+  if (display_plot)
   {
-    # i <- 1
+    # Allows plotting outside of figure range
+    xpd_init <- par()$xpd
+    par(xpd = TRUE)
 
-    # Extract densityMap
-    densityMap_state_i <- densityMaps[[i]]
-
-    # Set color gradient from transparent to focal color
-    focal_color <- colors_per_levels[i]
-    focal_color_rgb <- grDevices::col2rgb(focal_color, alpha = TRUE)
-    focal_color_hexa0 <- grDevices::rgb(red = focal_color_rgb[1,1], green = focal_color_rgb[2,1], blue = focal_color_rgb[3,1], alpha = 0, maxColorValue = 255)
-    focal_color_hexa1 <- grDevices::rgb(red = focal_color_rgb[1,1], green = focal_color_rgb[2,1], blue = focal_color_rgb[3,1], alpha = 255, maxColorValue = 255)
-    col_fn <- grDevices::colorRampPalette(colors = c(focal_color_hexa0, focal_color_hexa1), alpha = TRUE)
-    col_scale <- col_fn(n = 1001)
-
-    # Update color gradient
-    densityMap_state_i <- phytools::setMap(densityMap_state_i, c(focal_color_hexa0, focal_color_hexa1), alpha = TRUE)
-
-    # plot(densityMap_state_i, legend = FALSE)
-
-    if (i == 1)
+    ## Loop per state
+    for (i in seq_along(states_list))
     {
-      add_plot <- FALSE
-    } else {
-      add_plot <- TRUE
-    }
+      # i <- 1
 
-    # # Plot each densityMap as a Simmap with transparent colors
-    # plot(x = densityMap_state_i$tree, colors = densityMap_state_i$cols,
-    #      fsize = fsize, ftype = ftype, lwd = lwd, add = add_plot,
-    #      mar = graphics::par()$mar, tips = tips,
-    #      plot = TRUE, ...)
+      # Extract densityMap
+      densityMap_state_i <- densityMaps[[i]]
 
-    do.call(what = plot, # phytools::plot.simmap
-            args = c(list(x = densityMap_state_i$tree, colors = densityMap_state_i$cols,
-                          fsize = fsize, ftype = ftype, lwd = lwd, add = add_plot,
-                          mar = graphics::par()$mar, tips = tips,
-                          plot = TRUE),
-                     add_args_for_plot.simmap))
+      # Set color gradient from transparent to focal color
+      focal_color <- colors_per_levels[i]
+      focal_color_rgb <- grDevices::col2rgb(focal_color, alpha = TRUE)
+      focal_color_hexa0 <- grDevices::rgb(red = focal_color_rgb[1,1], green = focal_color_rgb[2,1], blue = focal_color_rgb[3,1], alpha = 0, maxColorValue = 255)
+      focal_color_hexa1 <- grDevices::rgb(red = focal_color_rgb[1,1], green = focal_color_rgb[2,1], blue = focal_color_rgb[3,1], alpha = 255, maxColorValue = 255)
+      col_fn <- grDevices::colorRampPalette(colors = c(focal_color_hexa0, focal_color_hexa1), alpha = TRUE)
+      col_scale <- col_fn(n = 1001)
 
-  }
+      # Update color gradient
+      densityMap_state_i <- phytools::setMap(densityMap_state_i, c(focal_color_hexa0, focal_color_hexa1), alpha = TRUE)
 
-  # Add node pies of ACE if requested
-  if (add_ACE_pies)
-  {
-    # Compute ACE if not provided
-    if (is.null(ace))
-    {
-      # Get root ID
-      # root_ID <- nb_tips + 1
-      root_ID <- (1:nb_nodes)[!(1:nb_nodes %in% densityMaps[[1]]$tree$edge[,2])]
+      # plot(densityMap_state_i, legend = FALSE)
 
-      # Initiate matrix of state posterior probability per nodes
-      PP_per_nodes <- matrix(data = NA, nrow = nb_nodes, ncol = length(densityMaps))
-
-      ## Loop per states
-      for (i in 1:length(densityMaps))
+      if (i == 1)
       {
-        # i <- 1
-
-        # Extract densityMap of state i
-        maps_i <- densityMaps[[i]]$tree$maps
-
-        # Get last posterior frequency per edges
-        last_freq_edges_i <- unlist(lapply(X = maps_i, FUN = function (x) { names(x)[length(x)] }))
-
-        # Match edges with tipward nodes
-        freqs_per_nodes <- data.frame(node = 1:nb_nodes, state = NA)
-        freqs_per_nodes$freq <- last_freq_edges_i[match(x = freqs_per_nodes$node, table = densityMaps[[1]]$tree$edge[,2])]
-
-        # Extract state for the root
-        root_edges_ID <- which(densityMaps[[1]]$tree$edge[,1] == root_ID)
-        root_state <- names(maps_i[root_edges_ID][[1]])[1] # Take the initial state of the first descending edge (should be equal among both descending edges)
-        freqs_per_nodes$freq[root_ID] <- root_state
-
-        # Store freqs in summary matrix
-        PP_per_nodes[, i] <- as.numeric(freqs_per_nodes$freq) / 1000
+        add_plot <- FALSE
+      } else {
+        add_plot <- TRUE
       }
 
-      ## Format in posterior probabilities for each state
-      row.names(PP_per_nodes) <- 1:nb_nodes
-      colnames(PP_per_nodes) <- states_list
+      # # Plot each densityMap as a Simmap with transparent colors
+      # plot(x = densityMap_state_i$tree, colors = densityMap_state_i$cols,
+      #      fsize = fsize, ftype = ftype, lwd = lwd, add = add_plot,
+      #      mar = graphics::par()$mar, tips = tips,
+      #      plot = TRUE, ...)
 
-      # Rearrange with internal nodes followed by tips
-      ace_matrix <- PP_per_nodes
-      ace_matrix[1:(nb_nodes-nb_tips), ] <- PP_per_nodes[(nb_tips+1):nb_nodes, ]
-      ace_matrix[(nb_nodes-nb_tips+1):nb_nodes, ] <- PP_per_nodes[1:nb_tips, ]
-      row.names(ace_matrix) <- c((nb_nodes-nb_tips+2):nb_nodes, densityMaps[[1]]$tree$tip.label)
+      do.call(what = plot, # phytools::plot.simmap
+              args = c(list(x = densityMap_state_i$tree, colors = densityMap_state_i$cols,
+                            fsize = fsize, ftype = ftype, lwd = lwd, add = add_plot,
+                            mar = graphics::par()$mar, tips = tips,
+                            plot = TRUE),
+                       add_args_for_plot.simmap))
 
-      ## Display ACE posterior probabilities
-      # print(PP_per_nodes)
-
-
-    } else {
-      # Add tip in ACE matrix
-      tip_matrix <- matrix(data = NA, nrow = nb_tips, ncol = ncol(ace))
-      ace_matrix <- rbind(ace, tip_matrix)
-      row.names(ace_matrix) <- c((nb_nodes-nb_tips+2):nb_nodes, densityMaps[[1]]$tree$tip.label)
     }
 
-    # Add ACE pies
-    ape::nodelabels(pie = ace_matrix, piecol = colors_per_levels, cex = cex_pies)
+    # Add node pies of ACE if requested
+    if (add_ACE_pies)
+    {
+      # Compute ACE if not provided
+      if (is.null(ace))
+      {
+        # Get root ID
+        # root_ID <- nb_tips + 1
+        root_ID <- (1:nb_nodes)[!(1:nb_nodes %in% densityMaps[[1]]$tree$edge[,2])]
+
+        # Initiate matrix of state posterior probability per nodes
+        PP_per_nodes <- matrix(data = NA, nrow = nb_nodes, ncol = length(densityMaps))
+
+        ## Loop per states
+        for (i in 1:length(densityMaps))
+        {
+          # i <- 1
+
+          # Extract densityMap of state i
+          maps_i <- densityMaps[[i]]$tree$maps
+
+          # Get last posterior frequency per edges
+          last_freq_edges_i <- unlist(lapply(X = maps_i, FUN = function (x) { names(x)[length(x)] }))
+
+          # Match edges with tipward nodes
+          freqs_per_nodes <- data.frame(node = 1:nb_nodes, state = NA)
+          freqs_per_nodes$freq <- last_freq_edges_i[match(x = freqs_per_nodes$node, table = densityMaps[[1]]$tree$edge[,2])]
+
+          # Extract state for the root
+          root_edges_ID <- which(densityMaps[[1]]$tree$edge[,1] == root_ID)
+          root_state <- names(maps_i[root_edges_ID][[1]])[1] # Take the initial state of the first descending edge (should be equal among both descending edges)
+          freqs_per_nodes$freq[root_ID] <- root_state
+
+          # Store freqs in summary matrix
+          PP_per_nodes[, i] <- as.numeric(freqs_per_nodes$freq) / 1000
+        }
+
+        ## Format in posterior probabilities for each state
+        row.names(PP_per_nodes) <- 1:nb_nodes
+        colnames(PP_per_nodes) <- states_list
+
+        # Rearrange with internal nodes followed by tips
+        ace_matrix <- PP_per_nodes
+        ace_matrix[1:(nb_nodes-nb_tips), ] <- PP_per_nodes[(nb_tips+1):nb_nodes, ]
+        ace_matrix[(nb_nodes-nb_tips+1):nb_nodes, ] <- PP_per_nodes[1:nb_tips, ]
+        row.names(ace_matrix) <- c((nb_nodes-nb_tips+2):nb_nodes, densityMaps[[1]]$tree$tip.label)
+
+        ## Display ACE posterior probabilities
+        # print(PP_per_nodes)
+
+
+      } else {
+        # Add tip in ACE matrix
+        tip_matrix <- matrix(data = NA, nrow = nb_tips, ncol = ncol(ace))
+        ace_matrix <- rbind(ace, tip_matrix)
+        row.names(ace_matrix) <- c((nb_nodes-nb_tips+2):nb_nodes, densityMaps[[1]]$tree$tip.label)
+      }
+
+      # Add ACE pies
+      ape::nodelabels(pie = ace_matrix, piecol = colors_per_levels, cex = cex_pies)
+    }
+
+    # Add legend
+    phytools::add.simmap.legend(colors = colors_per_levels, x = par()$usr[1] + 0.05 * (par()$usr[2] - par()$usr[1]), y = par()$usr[3] - 0.01 * (par()$usr[4] - par()$usr[3]),
+                                vertical = FALSE,
+                                prompt = FALSE)
+
+    # Reset $xpd to initial values
+    par(xpd = xpd_init)
   }
 
-  # Add legend
-  phytools::add.simmap.legend(colors = colors_per_levels, x = par()$usr[1] + 0.05 * (par()$usr[2] - par()$usr[1]), y = par()$usr[3] - 0.01 * (par()$usr[4] - par()$usr[3]),
-                              vertical = FALSE,
-                              prompt = FALSE)
+  ## Save PDF
+  if (!is.null(PDF_file_path))
+  {
+    # Adjust width/height according to the nb of tips
+    height <- min(nb_tips/60*10, 200) # Maximum PDF size = 200 inches
+    width <- height*8/10
 
-  # Reset $xpd to initial values
-  par(xpd = xpd_init)
+    ## Open PDF
+    grDevices::pdf(file = file.path(PDF_file_path),
+                   width = width, height = height)
+
+    # Allows plotting outside of figure range
+    xpd_init <- par()$xpd
+    par(xpd = TRUE)
+
+    ## Loop per state
+    for (i in seq_along(states_list))
+    {
+      # i <- 1
+
+      # Extract densityMap
+      densityMap_state_i <- densityMaps[[i]]
+
+      # Set color gradient from transparent to focal color
+      focal_color <- colors_per_levels[i]
+      focal_color_rgb <- grDevices::col2rgb(focal_color, alpha = TRUE)
+      focal_color_hexa0 <- grDevices::rgb(red = focal_color_rgb[1,1], green = focal_color_rgb[2,1], blue = focal_color_rgb[3,1], alpha = 0, maxColorValue = 255)
+      focal_color_hexa1 <- grDevices::rgb(red = focal_color_rgb[1,1], green = focal_color_rgb[2,1], blue = focal_color_rgb[3,1], alpha = 255, maxColorValue = 255)
+      col_fn <- grDevices::colorRampPalette(colors = c(focal_color_hexa0, focal_color_hexa1), alpha = TRUE)
+      col_scale <- col_fn(n = 1001)
+
+      # Update color gradient
+      densityMap_state_i <- phytools::setMap(densityMap_state_i, c(focal_color_hexa0, focal_color_hexa1), alpha = TRUE)
+
+      # plot(densityMap_state_i, legend = FALSE)
+
+      if (i == 1)
+      {
+        add_plot <- FALSE
+      } else {
+        add_plot <- TRUE
+      }
+
+      # # Plot each densityMap as a Simmap with transparent colors
+      # plot(x = densityMap_state_i$tree, colors = densityMap_state_i$cols,
+      #      fsize = fsize, ftype = ftype, lwd = lwd, add = add_plot,
+      #      mar = graphics::par()$mar, tips = tips,
+      #      plot = TRUE, ...)
+
+      do.call(what = plot, # phytools::plot.simmap
+              args = c(list(x = densityMap_state_i$tree, colors = densityMap_state_i$cols,
+                            fsize = fsize, ftype = ftype, lwd = lwd, add = add_plot,
+                            mar = graphics::par()$mar, tips = tips,
+                            plot = TRUE),
+                       add_args_for_plot.simmap))
+
+    }
+
+    # Add node pies of ACE if requested
+    if (add_ACE_pies)
+    {
+      # Compute ACE if not provided
+      if (is.null(ace))
+      {
+        # Get root ID
+        # root_ID <- nb_tips + 1
+        root_ID <- (1:nb_nodes)[!(1:nb_nodes %in% densityMaps[[1]]$tree$edge[,2])]
+
+        # Initiate matrix of state posterior probability per nodes
+        PP_per_nodes <- matrix(data = NA, nrow = nb_nodes, ncol = length(densityMaps))
+
+        ## Loop per states
+        for (i in 1:length(densityMaps))
+        {
+          # i <- 1
+
+          # Extract densityMap of state i
+          maps_i <- densityMaps[[i]]$tree$maps
+
+          # Get last posterior frequency per edges
+          last_freq_edges_i <- unlist(lapply(X = maps_i, FUN = function (x) { names(x)[length(x)] }))
+
+          # Match edges with tipward nodes
+          freqs_per_nodes <- data.frame(node = 1:nb_nodes, state = NA)
+          freqs_per_nodes$freq <- last_freq_edges_i[match(x = freqs_per_nodes$node, table = densityMaps[[1]]$tree$edge[,2])]
+
+          # Extract state for the root
+          root_edges_ID <- which(densityMaps[[1]]$tree$edge[,1] == root_ID)
+          root_state <- names(maps_i[root_edges_ID][[1]])[1] # Take the initial state of the first descending edge (should be equal among both descending edges)
+          freqs_per_nodes$freq[root_ID] <- root_state
+
+          # Store freqs in summary matrix
+          PP_per_nodes[, i] <- as.numeric(freqs_per_nodes$freq) / 1000
+        }
+
+        ## Format in posterior probabilities for each state
+        row.names(PP_per_nodes) <- 1:nb_nodes
+        colnames(PP_per_nodes) <- states_list
+
+        # Rearrange with internal nodes followed by tips
+        ace_matrix <- PP_per_nodes
+        ace_matrix[1:(nb_nodes-nb_tips), ] <- PP_per_nodes[(nb_tips+1):nb_nodes, ]
+        ace_matrix[(nb_nodes-nb_tips+1):nb_nodes, ] <- PP_per_nodes[1:nb_tips, ]
+        row.names(ace_matrix) <- c((nb_nodes-nb_tips+2):nb_nodes, densityMaps[[1]]$tree$tip.label)
+
+        ## Display ACE posterior probabilities
+        # print(PP_per_nodes)
+
+
+      } else {
+        # Add tip in ACE matrix
+        tip_matrix <- matrix(data = NA, nrow = nb_tips, ncol = ncol(ace))
+        ace_matrix <- rbind(ace, tip_matrix)
+        row.names(ace_matrix) <- c((nb_nodes-nb_tips+2):nb_nodes, densityMaps[[1]]$tree$tip.label)
+      }
+
+      # Add ACE pies
+      ape::nodelabels(pie = ace_matrix, piecol = colors_per_levels, cex = cex_pies)
+    }
+
+    # Add legend
+    phytools::add.simmap.legend(colors = colors_per_levels, x = par()$usr[1] + 0.05 * (par()$usr[2] - par()$usr[1]), y = par()$usr[3] - 0.01 * (par()$usr[4] - par()$usr[3]),
+                                vertical = FALSE,
+                                prompt = FALSE)
+
+    # Reset $xpd to initial values
+    par(xpd = xpd_init)
+
+    ## Close PDF
+    invisible(grDevices::dev.off())
+  }
 }
 
 

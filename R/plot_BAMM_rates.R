@@ -356,13 +356,15 @@ plot_BAMM_rates <- function (BAMM_object,
   {
     # Adjust width and height according to phylo
     nb_tips <- length(BAMM_object$tip.label)
+    height <- min(nb_tips/60*10, 200) # Maximum PDF size = 200 inches
+    width <- height*8/10
 
     ## Force the plot to be displayed in the exported graphics device
     display_plot <- TRUE
 
     ## Open PDF
     grDevices::pdf(file = file.path(PDF_file_path),
-                   nb_tips/60*8, height = nb_tips/60*10)
+                   width = width, height = height)
 
     # ## Plot rates
     # output <- BAMMtools::plot.bammdata(x = BAMM_object,
