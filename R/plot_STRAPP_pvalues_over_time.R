@@ -11,18 +11,18 @@
 #'
 #'   If a PDF file path is provided in `PDF_file_path`, the plot will be saved directly in a PDF file.
 #'
-#' @param STRAPP_tests_over_time List of elements generated with [deepSTRAPP::run_deepSTRAPP_over_time()],
+#' @param deepSTRAPP_outputs List of elements generated with [deepSTRAPP::run_deepSTRAPP_over_time()],
 #'   that summarize the results of multiple deepSTRAPP across `$time_steps`.
 #' @param time_range Vector of two numerical values. Time boundaries used for the plot.
-#'   If `NULL` (the default), the range of data provided in `STRAPP_tests_over_time` will be used.
+#'   If `NULL` (the default), the range of data provided in `deepSTRAPP_outputs` will be used.
 #' @param alpha Numerical. Significance level to display as a red dashed line on the plot. If set to `NULL`, no line will be added. Default is `0.05`.
 #' @param display_plot Logical. Whether to display the plot generated in the R console. Default is `TRUE`.
 #' @param plot_posthoc_tests Logical. For multinominal data only. Whether to plot the p-values for the overall Kruskal-Wallis test across all states (`plot_posthoc_tests = FALSE`),
 #'   or plot the p-values for the pairwise post hoc Dunn's test across pairs of states (`plot_posthoc_tests = TRUE`). Default is `FALSE`.
-#'   This is only possible if `STRAPP_tests_over_time` contains the `$pvalues_summary_df_for_posthoc_pairwise_tests` element returned by
+#'   This is only possible if `deepSTRAPP_outputs` contains the `$pvalues_summary_df_for_posthoc_pairwise_tests` element returned by
 #'   [deepSTRAPP::run_deepSTRAPP_over_time()] when `posthoc_pairwise_tests = TRUE`.
 #' @param select_posthoc_pairs Vector of character strings used to specify the pairs to include in the plot. Names of pairs must match the pairs found in
-#'   `STRAPP_tests_over_time$pvalues_summary_df_for_posthoc_pairwise_tests$pair`. Default is "all" to include all pairs.
+#'   `deepSTRAPP_outputs$pvalues_summary_df_for_posthoc_pairwise_tests$pair`. Default is "all" to include all pairs.
 #' @param PDF_file_path Character string. If provided, the plot will be saved in a PDF file following the path provided here. The path must end with '.pdf'.
 #'
 #' @export
@@ -36,7 +36,7 @@
 #'
 #'   For multinominal data (categorical or biogeographic data with more than 2 states), it is possible to plot p-values of post hoc pairwise tests.
 #'   Set `plot_posthoc_tests = TRUE` to generate plots for the pairwise post hoc Dunn's test across pairs of states.
-#'   To achieve this, the `STRAPP_tests_over_time` input object must contain a `$pvalues_summary_df_for_posthoc_pairwise_tests` element that summarizes p-values
+#'   To achieve this, the `deepSTRAPP_outputs` input object must contain a `$pvalues_summary_df_for_posthoc_pairwise_tests` element that summarizes p-values
 #'   computed across pairs of states for all post hoc tests. This is obtained from [deepSTRAPP::run_deepSTRAPP_over_time()] when setting
 #'   `posthoc_pairwise_tests = TRUE` to carry out post hoc tests.
 #'
@@ -53,26 +53,26 @@
 #'
 #' @examples
 #' ## Load results of run_deepSTRAPP_over_time()
-#' data(STRAPP_tests_over_time_temp_example, package = "deepSTRAPP")
+#' data(Ponerinae_deepSTRAPP_cat_0_40, package = "deepSTRAPP")
 #'
-#' ## Plot results of overall Kruskal-Wallis test across all tests
+#' ## Plot results of overall Kruskal-Wallis / Mann-Whitney-Wilcoxon tests across all time-steps
 #' plot_STRAPP_pvalues_over_time(
-#'    STRAPP_tests_over_time = STRAPP_tests_over_time_temp_example,
+#'    deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cat_0_40,
 #'    alpha = 0.1,
-#'    time_range = c(20, 150))
+#'    time_range = c(20, 50))
 #'
-#' ## Plot results of post hoc pairwise Dunn's tests between pairs of tests
+#' ## Plot results of post hoc pairwise Dunn's tests between pairs of states
 #' plot_STRAPP_pvalues_over_time(
-#'    STRAPP_tests_over_time = STRAPP_tests_over_time_temp_example,
+#'    deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cat_0_40,
 #'    plot_posthoc_tests = TRUE,
 #'    # PDF_file_path = "./pvalues_over_time.pdf",
-#'    select_posthoc_pairs = c("state_A != state_B",
-#'                             "state_A != state_C"))
+#'    select_posthoc_pairs = c("large != medium",
+#'                             "large != small"))
 #'
 
 
 plot_STRAPP_pvalues_over_time <-  function (
-    STRAPP_tests_over_time,
+    deepSTRAPP_outputs,
     time_range = NULL,
     alpha = 0.05,
     display_plot = TRUE,
@@ -83,11 +83,11 @@ plot_STRAPP_pvalues_over_time <-  function (
 {
   ### Check input validity
   {
-    ## STRAPP_tests_over_time
-    # STRAPP_tests_over_time must have element $pvalues_summary_df
-    if (is.null(STRAPP_tests_over_time$pvalues_summary_df))
+    ## deepSTRAPP_outputs
+    # deepSTRAPP_outputs must have element $pvalues_summary_df
+    if (is.null(deepSTRAPP_outputs$pvalues_summary_df))
     {
-      stop(paste0("'$pvalues_summary_df' is missing from 'STRAPP_tests_over_time'. You can inspect the structure of the input object with 'str(STRAPP_tests_over_time, 2)'.\n",
+      stop(paste0("'$pvalues_summary_df' is missing from 'deepSTRAPP_outputs'. You can inspect the structure of the input object with 'str(deepSTRAPP_outputs, 2)'.\n",
                   "See ?deepSTRAPP::run_deepSTRAPP_over_time() to learn how to generate those objects."))
     }
 
@@ -108,15 +108,15 @@ plot_STRAPP_pvalues_over_time <-  function (
       time_range <- range(time_range)
     } else {
       # Extract time range from data if not provided
-      time_range <- range(STRAPP_tests_over_time$pvalues_summary_df$focal_time)
+      time_range <- range(deepSTRAPP_outputs$pvalues_summary_df$focal_time)
     }
     # Check that time_range encompass multiple focal-time with recorded p-values to be able to draw a line
-    pvalues_summary_df_no_NA <- STRAPP_tests_over_time$pvalues_summary_df[stats::complete.cases(STRAPP_tests_over_time$pvalues_summary_df), ]
+    pvalues_summary_df_no_NA <- deepSTRAPP_outputs$pvalues_summary_df[stats::complete.cases(deepSTRAPP_outputs$pvalues_summary_df), ]
     focal_times_in_pvalues_df <- unique(pvalues_summary_df_no_NA$focal_time)
     focal_times_in_range <- (focal_times_in_pvalues_df >= time_range[1]) & (focal_times_in_pvalues_df <= time_range[2])
     if (sum(focal_times_in_range) < 2)
     {
-      stop(paste0("'time_range' must encompass at least two focal_time with p-value recorded in 'STRAPP_tests_over_time$pvalues_summary_df'.\n",
+      stop(paste0("'time_range' must encompass at least two focal_time with p-value recorded in 'deepSTRAPP_outputs$pvalues_summary_df'.\n",
                   "Current values of 'time_range' = ", paste(time_range, collapse = ", "), ".\n",
                   "'focal_time' with p-values recorded are: ", paste(focal_times_in_pvalues_df, collapse = ", "),"."))
     }
@@ -135,35 +135,35 @@ plot_STRAPP_pvalues_over_time <-  function (
     ## plot_posthoc_tests
     if (plot_posthoc_tests)
     {
-      # Extract $trait_data_type_for_stats from STRAPP_tests_over_time$STRAPP_results_over_time
-      trait_data_type_for_stats <- STRAPP_tests_over_time$trait_data_type_for_stats
+      # Extract $trait_data_type_for_stats from deepSTRAPP_outputs$STRAPP_results_over_time
+      trait_data_type_for_stats <- deepSTRAPP_outputs$trait_data_type_for_stats
       # plot_posthoc_tests = TRUE only for "multinominal" data
       if (trait_data_type_for_stats != "multinominal")
       {
         stop(paste0("'posthoc_pairwise_tests = TRUE' only makes sense for categorical/biogeographic data with more than two states/ranges.\n",
-                    "Set 'posthoc_pairwise_tests = FALSE', or provide 'STRAPP_tests_over_time' for a trait with more than two states/ranges'.\n",
+                    "Set 'posthoc_pairwise_tests = FALSE', or provide 'deepSTRAPP_outputs' for a trait with more than two states/ranges'.\n",
                     "See ?deepSTRAPP::run_deepSTRAPP_over_time() to learn how to generate those objects."))
       }
-      # Check if $pvalues_summary_df_for_posthoc_pairwise_tests is present in STRAPP_tests_over_time.
-      if (is.null(STRAPP_tests_over_time$pvalues_summary_df_for_posthoc_pairwise_tests))
+      # Check if $pvalues_summary_df_for_posthoc_pairwise_tests is present in deepSTRAPP_outputs.
+      if (is.null(deepSTRAPP_outputs$pvalues_summary_df_for_posthoc_pairwise_tests))
       {
-        stop(paste0("'$pvalues_summary_df_for_posthoc_pairwise_tests' is missing from 'STRAPP_tests_over_time'. You can inspect the structure of the input object with 'str(STRAPP_tests_over_time, 2)'.\n",
+        stop(paste0("'$pvalues_summary_df_for_posthoc_pairwise_tests' is missing from 'deepSTRAPP_outputs'. You can inspect the structure of the input object with 'str(deepSTRAPP_outputs, 2)'.\n",
                     "See ?deepSTRAPP::run_deepSTRAPP_over_time() to learn how to generate those objects.\n",
                     "Especially, check if you used 'posthoc_pairwise_tests = TRUE' to run post hoc tests."))
       }
 
       # Extract posthoc pairwise tests with recorded p-values
-      pvalues_summary_df_for_posthoc_no_NA <- STRAPP_tests_over_time$pvalues_summary_df_for_posthoc_pairwise_tests[stats::complete.cases(STRAPP_tests_over_time$pvalues_summary_df_for_posthoc_pairwise_tests), ]
+      pvalues_summary_df_for_posthoc_no_NA <- deepSTRAPP_outputs$pvalues_summary_df_for_posthoc_pairwise_tests[stats::complete.cases(deepSTRAPP_outputs$pvalues_summary_df_for_posthoc_pairwise_tests), ]
 
       ## select_posthoc_pairs
-      # Check that select_posthoc_pairs is "all" or match the pairs in STRAPP_tests_over_time$pvalues_summary_df_for_posthoc_pairwise_tests$pair
+      # Check that select_posthoc_pairs is "all" or match the pairs in deepSTRAPP_outputs$pvalues_summary_df_for_posthoc_pairwise_tests$pair
       if (!("all" %in% select_posthoc_pairs))
       {
         available_pairs <- unique(pvalues_summary_df_for_posthoc_no_NA$pair)
         available_pairs <- available_pairs[order(available_pairs)]
         if (!all(select_posthoc_pairs %in% available_pairs))
         {
-          stop(paste0("Some pairs of states/ranges listed in 'select_posthoc_pairs' are not found in the summary data.frame for posthoc tests ('STRAPP_tests_over_time$pvalues_summary_df_for_posthoc_pairwise_tests').\n",
+          stop(paste0("Some pairs of states/ranges listed in 'select_posthoc_pairs' are not found in the summary data.frame for posthoc tests ('deepSTRAPP_outputs$pvalues_summary_df_for_posthoc_pairwise_tests').\n",
                       "'select_posthoc_pairs' = ",paste(select_posthoc_pairs[order(select_posthoc_pairs)], collapse = ", "),".\n",
                       "Observed pairs of states/ranges with recorded p-values = ", paste(available_pairs, collapse = ", ")),".")
         }
@@ -182,7 +182,7 @@ plot_STRAPP_pvalues_over_time <-  function (
       {
         pairs_with_issue <- names(focal_times_in_range_per_pairs_counts)[focal_times_in_range_per_pairs_counts < 2]
         focal_times_for_pair_with_issue <- focal_times_per_pairs[[which.max(focal_times_in_range_per_pairs_counts < 2)]]
-        stop(paste0("'time_range' must encompass at least two focal_time with recorded p-value for each pair in 'STRAPP_tests_over_time$pvalues_summary_df_for_posthoc_pairwise_tests'.\n",
+        stop(paste0("'time_range' must encompass at least two focal_time with recorded p-value for each pair in 'deepSTRAPP_outputs$pvalues_summary_df_for_posthoc_pairwise_tests'.\n",
                     "Current values of 'time_range' = ", paste(time_range, collapse = ", "), ".\n",
                     "'focal_time' with p-values recorded for pair '",pairs_with_issue[1],"' are: ", paste(focal_times_for_pair_with_issue, collapse = ", "),"."))
       }
@@ -201,12 +201,15 @@ plot_STRAPP_pvalues_over_time <-  function (
 
 
   ## Remove "_" from $rate_type
-  rate_type <- gsub(pattern = "_", replacement = " ", x = STRAPP_tests_over_time$rate_type)
+  rate_type <- gsub(pattern = "_", replacement = " ", x = deepSTRAPP_outputs$rate_type)
 
   if (!plot_posthoc_tests) ## Case for overall test plot
   {
     # Extract summary df
-    pvalues_summary_df <- STRAPP_tests_over_time$pvalues_summary_df
+    pvalues_summary_df <- deepSTRAPP_outputs$pvalues_summary_df
+
+    # Remove NA
+    pvalues_summary_df <- pvalues_summary_df[stats::complete.cases(pvalues_summary_df), ]
 
     # Extract data for the selected time range
     pvalues_summary_df <- pvalues_summary_df[pvalues_summary_df$focal_time <= time_range[2], ]
@@ -276,7 +279,10 @@ plot_STRAPP_pvalues_over_time <-  function (
   } else { ## Case for post hoc tests plot
 
     # Extract summary df
-    pvalues_summary_df <- STRAPP_tests_over_time$pvalues_summary_df_for_posthoc_pairwise_tests
+    pvalues_summary_df <- deepSTRAPP_outputs$pvalues_summary_df_for_posthoc_pairwise_tests
+
+    # Remove NA
+    pvalues_summary_df <- pvalues_summary_df[stats::complete.cases(pvalues_summary_df), ]
 
     # Extract data for the selected time range
     if (!is.null(time_range))

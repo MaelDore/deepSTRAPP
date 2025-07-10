@@ -5,11 +5,13 @@
 \title{Plot evolution of diversification rates in relation to trait values over time}
 \usage{
 plot_rates_through_time(
-  STRAPP_tests_over_time,
+  deepSTRAPP_outputs,
   rate_type = "net_diversification",
   quantile_ranges = c(0, 0.25, 0.5, 0.75, 1),
   select_trait_states = "all",
   time_range = NULL,
+  color_scale = NULL,
+  colors_per_levels = NULL,
   plot_CI = FALSE,
   CI_type = "fuzzy",
   CI_quantiles = 0.95,
@@ -20,14 +22,14 @@ plot_rates_through_time(
 )
 }
 \arguments{
-\item{STRAPP_tests_over_time}{List of elements generated with \code{\link[=run_deepSTRAPP_over_time]{run_deepSTRAPP_over_time()}},
+\item{deepSTRAPP_outputs}{List of elements generated with \code{\link[=run_deepSTRAPP_over_time]{run_deepSTRAPP_over_time()}},
 that summarize the results of multiple STRAPP tests across \verb{$time_steps}. The list needs to include two data.frame:
 \verb{$trait_data_df_over_time} and \verb{$diversification_data_df_over_time} by setting \code{extract_trait_data_melted_df = TRUE}
 and \code{extract_diversification_data_melted_df = TRUE}.}
 
 \item{rate_type}{A character string specifying the type of diversification rates to use.
 Must be one of 'speciation', 'extinction' or 'net_diversification' (default).
-Even if the \code{STRAPP_tests_over_time} object was generated with \code{\link[=run_deepSTRAPP_over_time]{run_deepSTRAPP_over_time()}}
+Even if the \code{deepSTRAPP_outputs} object was generated with \code{\link[=run_deepSTRAPP_over_time]{run_deepSTRAPP_over_time()}}
 for testing another type of rates, the \verb{$trait_data_df_over_time} and \verb{$diversification_data_df_over_time} data frames
 will contain data for all types of rates.}
 
@@ -37,10 +39,17 @@ which produces four balanced quantile groups.}
 
 \item{select_trait_states}{(Vector of) character string. Only for categorical and biogeographic trait data.
 To provide a list of a subset of states/ranges to plot. Names must match the ones found in
-\code{STRAPP_tests_over_time$trait_data_df_over_time$trait_value}. Default is \code{all} which means all states/ranges will be plotted.}
+\code{deepSTRAPP_outputs$trait_data_df_over_time$trait_value}. Default is \code{all} which means all states/ranges will be plotted.}
 
 \item{time_range}{Vector of two numerical values. Time boundaries used for the plot.
-If \code{NULL} (the default), the range of data provided in \code{STRAPP_tests_over_time} will be used.}
+If \code{NULL} (the default), the range of data provided in \code{deepSTRAPP_outputs} will be used.}
+
+\item{color_scale}{Vector of character string. List of colors to use to build the color scale with \code{\link[grDevices:colorRamp]{grDevices::colorRampPalette()}}
+to display the quantile groups used to discretize the continuous trait data. From lowest values to highest values. Only for continuous data.
+Default = \code{NULL} will use the 'Spectral' color palette in \code{\link[RColorBrewer:ColorBrewer]{RColorBrewer::brewer.pal()}}.}
+
+\item{colors_per_levels}{Named character string. To set the colors to use to plot rates of each state/range. Names = states/ranges; values = colors.
+If \code{NULL} (default), the default ggplot2 color palette (\code{\link[scales:pal_hue]{scales::hue_pal()}}) will be used. Only for categorical and biogeographic data.}
 
 \item{plot_CI}{Logical. Whether to plot a confidence interval (CI) based on the distribution of rates found in posterior samples.}
 
@@ -96,26 +105,27 @@ Rates are averaged across branches at each time step (i.e., \code{focal_time}).
 }
 }
 \examples{
-## Load results of run_deepSTRAPP_over_time()
-data(STRAPP_tests_over_time_temp_example_2, package = "deepSTRAPP")
 
-# ------ Plot rates through time for continuous data ------ #
+# ------ Example 1: Plot rates through time for continuous data ------ #
+
+## Load results of run_deepSTRAPP_over_time()
+data(Ponerinae_deepSTRAPP_cont_0_40, package = "deepSTRAPP")
 
 # Visualize trait data
-hist(STRAPP_tests_over_time_temp_example_2$trait_data_df_over_time$trait_value)
+hist(Ponerinae_deepSTRAPP_cont_0_40$trait_data_df_over_time$trait_value)
 
 # Generate plot
 plotTT_continuous <- plot_rates_through_time(
-  STRAPP_tests_over_time = STRAPP_tests_over_time_temp_example_2,
-  quantile_ranges = c(0, 0.25, 0.5, 0.75, 1.0),
-  time_range = c(0, 15),
-  plot_CI = TRUE,
-  CI_type = "quantiles_rect",
-  CI_quantiles = 0.9,
-  # PDF_file_path = "./plotTT_continuous.pdf",
-  return_mean_data_per_samples_df = TRUE,
-  return_median_data_across_samples_df = TRUE
-  )
+   deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_0_40,
+   quantile_ranges = c(0, 0.25, 0.5, 0.75, 1.0),
+   time_range = c(0, 50), # Control range of the X-axis
+   # color_scale = c("limegreen", "red"),
+   plot_CI = TRUE,
+   CI_type = "quantiles_rect",
+   CI_quantiles = 0.9,
+   # PDF_file_path = "./plotTT_continuous.pdf",
+   return_mean_data_per_samples_df = TRUE,
+   return_median_data_across_samples_df = TRUE)
 
 # Explore output
 str(plotTT_continuous, max.level = 1)
@@ -127,68 +137,58 @@ plotTT_continuous_adj <- plotTT_continuous$rates_TT_ggplot +
     ggplot2::theme(plot.title = ggplot2::element_text(color = "red", size = 15))
 print(plotTT_continuous_adj)
 
-# ------ Plot rates through time for categorical data ------ #
+# ------ Example 2: Plot rates through time for categorical data ------ #
 
-# Turn trait data into multiple states
-trait_data_continuous <- STRAPP_tests_over_time_temp_example_2$trait_data_df_over_time$trait_value
-trait_data_multinominal <- trait_data_continuous
-trait_data_multinominal[trait_data_continuous < 0] <- "state_B"
-trait_data_multinominal[trait_data_continuous < -1] <- "state_A"
-trait_data_multinominal[trait_data_continuous >= 0] <- "state_C"
+## Load results of run_deepSTRAPP_over_time()
+data(Ponerinae_deepSTRAPP_cat_0_40, package = "deepSTRAPP")#'
 
-# Visualize trait data
-table(trait_data_multinominal)
+# Explore trait data
+table(Ponerinae_deepSTRAPP_cat_0_40$trait_data_df_over_time$trait_value)
 
-# Change trait data for categorical
-STRAPP_tests_over_time_temp_example_2$trait_data_df_over_time$trait_value <- trait_data_multinominal
-STRAPP_tests_over_time_temp_example_2$trait_data_type <- "categorical"
+# Set colors to use
+colors_per_levels <- c("red", "orange", "limegreen")
+names(colors_per_levels) <- c("large", "medium", "small")
 
-# Generate plot only for "state_A" and "state_C"
 plotTT_categorical <- plot_rates_through_time(
-  STRAPP_tests_over_time = STRAPP_tests_over_time_temp_example_2,
-  select_trait_states = c("state_A", "state_C"),
-  time_range = c(0, 10),
-  plot_CI = TRUE,
-  CI_type = "quantiles_rect",
-  CI_quantiles = 0.9,
-  # PDF_file_path = "./plotTT_categorical.pdf",
-  return_mean_data_per_samples_df = TRUE,
-  return_median_data_across_samples_df = TRUE
-)
+    deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cat_0_40,
+    select_trait_states = c("small", "large"),
+    time_range = c(0, 50),
+    colors_per_levels = colors_per_levels,
+    plot_CI = TRUE,
+    CI_type = "quantiles_rect",
+    CI_quantiles = 0.9,
+    # PDF_file_path = "./plotTT_categorical.pdf",
+    return_mean_data_per_samples_df = TRUE,
+    return_median_data_across_samples_df = TRUE)
 
 # Explore output
 str(plotTT_categorical, max.level = 1)
 # Plot again
 print(plotTT_categorical$rates_TT_ggplot)
 
-# ------ Plot rates through time for biogeographic data ------ #
+# ------ Example 3: Plot rates through time for biogeographic data ------ #
 
-# Turn trait data into multiple ranges
-trait_data_biogeographic <- trait_data_multinominal
-trait_data_biogeographic[trait_data_multinominal == "state_A"] <- "range_A"
-trait_data_biogeographic[trait_data_multinominal == "state_B"] <- "range_B"
-trait_data_biogeographic[trait_data_multinominal == "state_C"] <- "range_C"
+## Load results of run_deepSTRAPP_over_time()
+data(Ponerinae_deepSTRAPP_biogeo_0_40, package = "deepSTRAPP")
 
-# Visualize trait data
-table(trait_data_biogeographic)
+# Explore range data
+table(Ponerinae_deepSTRAPP_biogeo_0_40$trait_data_df_over_time$trait_value)
 
-# Change trait data for biogeographic
-trait_data_df_over_time <- STRAPP_tests_over_time_temp_example_2$trait_data_df_over_time
-trait_data_df_over_time$trait_value <- trait_data_biogeographic
-STRAPP_tests_over_time_temp_example_2$trait_data_df_over_time <- trait_data_df_over_time
-STRAPP_tests_over_time_temp_example_2$trait_data_type <- "biogeographic"
+# Set colors to use
+colors_per_levels <- c("mediumpurple2", "peachpuff2")
+names(colors_per_levels) <- c("N", "O")
 
 plotTT_biogeographic <- plot_rates_through_time(
-  STRAPP_tests_over_time = STRAPP_tests_over_time_temp_example_2,
-  select_trait_states = "all",
-  time_range = c(0, 10),
-  plot_CI = TRUE,
-  CI_type = "quantiles_rect",
-  CI_quantiles = 0.9,
-  # PDF_file_path = "./plotTT_biogeographic.pdf",
-  return_mean_data_per_samples_df = TRUE,
-  return_median_data_across_samples_df = TRUE
-)
+    deepSTRAPP_outputs = Ponerinae_deepSTRAPP_biogeo_0_40,
+    select_trait_states = "all",
+    time_range = c(0, 50),
+    colors_per_levels = colors_per_levels,
+    plot_CI = TRUE,
+    CI_type = "quantiles_rect",
+    CI_quantiles = 0.9,
+    # PDF_file_path = "./plotTT_biogeographic.pdf",
+    return_mean_data_per_samples_df = TRUE,
+    return_median_data_across_samples_df = TRUE)
 
 # Explore output
 str(plotTT_biogeographic, max.level = 1)

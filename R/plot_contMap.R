@@ -74,6 +74,18 @@ plot_contMap <- function (contMap,
 {
   ### Check input validity
   {
+    ## color_scale
+    # Check whether all colors are valid
+    if (!is.null(color_scale))
+    {
+      if (!all(is_color(color_scale)))
+      {
+        invalid_colors <- color_scale[!is_color(color_scale)]
+        stop(paste0("Some color names in 'color_scale' are not valid.\n",
+                    "Invalid: ", paste(invalid_colors, collapse = ", "), "."))
+      }
+    }
+
     ## PDF_file_path
     # If provided, PDF_file_path must end with ".pdf"
     if (!is.null(PDF_file_path))

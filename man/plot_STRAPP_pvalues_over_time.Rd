@@ -5,7 +5,7 @@
 \title{Plot evolution of p-values of STRAPP tests over time}
 \usage{
 plot_STRAPP_pvalues_over_time(
-  STRAPP_tests_over_time,
+  deepSTRAPP_outputs,
   time_range = NULL,
   alpha = 0.05,
   display_plot = TRUE,
@@ -15,11 +15,11 @@ plot_STRAPP_pvalues_over_time(
 )
 }
 \arguments{
-\item{STRAPP_tests_over_time}{List of elements generated with \code{\link[=run_deepSTRAPP_over_time]{run_deepSTRAPP_over_time()}},
+\item{deepSTRAPP_outputs}{List of elements generated with \code{\link[=run_deepSTRAPP_over_time]{run_deepSTRAPP_over_time()}},
 that summarize the results of multiple deepSTRAPP across \verb{$time_steps}.}
 
 \item{time_range}{Vector of two numerical values. Time boundaries used for the plot.
-If \code{NULL} (the default), the range of data provided in \code{STRAPP_tests_over_time} will be used.}
+If \code{NULL} (the default), the range of data provided in \code{deepSTRAPP_outputs} will be used.}
 
 \item{alpha}{Numerical. Significance level to display as a red dashed line on the plot. If set to \code{NULL}, no line will be added. Default is \code{0.05}.}
 
@@ -27,11 +27,11 @@ If \code{NULL} (the default), the range of data provided in \code{STRAPP_tests_o
 
 \item{plot_posthoc_tests}{Logical. For multinominal data only. Whether to plot the p-values for the overall Kruskal-Wallis test across all states (\code{plot_posthoc_tests = FALSE}),
 or plot the p-values for the pairwise post hoc Dunn's test across pairs of states (\code{plot_posthoc_tests = TRUE}). Default is \code{FALSE}.
-This is only possible if \code{STRAPP_tests_over_time} contains the \verb{$pvalues_summary_df_for_posthoc_pairwise_tests} element returned by
+This is only possible if \code{deepSTRAPP_outputs} contains the \verb{$pvalues_summary_df_for_posthoc_pairwise_tests} element returned by
 \code{\link[=run_deepSTRAPP_over_time]{run_deepSTRAPP_over_time()}} when \code{posthoc_pairwise_tests = TRUE}.}
 
 \item{select_posthoc_pairs}{Vector of character strings used to specify the pairs to include in the plot. Names of pairs must match the pairs found in
-\code{STRAPP_tests_over_time$pvalues_summary_df_for_posthoc_pairwise_tests$pair}. Default is "all" to include all pairs.}
+\code{deepSTRAPP_outputs$pvalues_summary_df_for_posthoc_pairwise_tests$pair}. Default is "all" to include all pairs.}
 
 \item{PDF_file_path}{Character string. If provided, the plot will be saved in a PDF file following the path provided here. The path must end with '.pdf'.}
 }
@@ -61,27 +61,27 @@ For overall tests, those p-values are found in \verb{$pvalues_summary_df}.
 
 For multinominal data (categorical or biogeographic data with more than 2 states), it is possible to plot p-values of post hoc pairwise tests.
 Set \code{plot_posthoc_tests = TRUE} to generate plots for the pairwise post hoc Dunn's test across pairs of states.
-To achieve this, the \code{STRAPP_tests_over_time} input object must contain a \verb{$pvalues_summary_df_for_posthoc_pairwise_tests} element that summarizes p-values
+To achieve this, the \code{deepSTRAPP_outputs} input object must contain a \verb{$pvalues_summary_df_for_posthoc_pairwise_tests} element that summarizes p-values
 computed across pairs of states for all post hoc tests. This is obtained from \code{\link[=run_deepSTRAPP_over_time]{run_deepSTRAPP_over_time()}} when setting
 \code{posthoc_pairwise_tests = TRUE} to carry out post hoc tests.
 }
 \examples{
 ## Load results of run_deepSTRAPP_over_time()
-data(STRAPP_tests_over_time_temp_example, package = "deepSTRAPP")
+data(Ponerinae_deepSTRAPP_cat_0_40, package = "deepSTRAPP")
 
-## Plot results of overall Kruskal-Wallis test across all tests
+## Plot results of overall Kruskal-Wallis / Mann-Whitney-Wilcoxon tests across all time-steps
 plot_STRAPP_pvalues_over_time(
-   STRAPP_tests_over_time = STRAPP_tests_over_time_temp_example,
+   deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cat_0_40,
    alpha = 0.1,
-   time_range = c(20, 150))
+   time_range = c(20, 50))
 
-## Plot results of post hoc pairwise Dunn's tests between pairs of tests
+## Plot results of post hoc pairwise Dunn's tests between pairs of states
 plot_STRAPP_pvalues_over_time(
-   STRAPP_tests_over_time = STRAPP_tests_over_time_temp_example,
+   deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cat_0_40,
    plot_posthoc_tests = TRUE,
    # PDF_file_path = "./pvalues_over_time.pdf",
-   select_posthoc_pairs = c("state_A != state_B",
-                            "state_A != state_C"))
+   select_posthoc_pairs = c("large != medium",
+                            "large != small"))
 
 }
 \seealso{

@@ -18,7 +18,7 @@
 #'   * For categorical and biogeographic data: [deepSTRAPP::plot_densityMaps_overlay()]
 #'   * For BAMM rates and regime shifts: [deepSTRAPP::plot_BAMM_rates()]
 #'
-#' @param deepSTRAPP_outputs List of elements generated with [deepSTRAPP::compute_STRAPP_test_for_focal_time()],
+#' @param deepSTRAPP_outputs List of elements generated with [deepSTRAPP::run_deepSTRAPP_for_focal_time()],
 #'   that summarize the results of a STRAPP test for a specific time in the past (i.e. the `focal_time`).
 #'   `deepSTRAPP_outputs` can also be extracted from the output of [deepSTRAPP::run_deepSTRAPP_over_time()] that
 #'   run the whole deepSTRAPP workflow over multiple time-steps.
@@ -64,7 +64,7 @@
 #' @importFrom graphics par
 #' @importFrom grDevices pdf dev.off
 #'
-#' @details The main input `deepSTRAPP_outputs` is the typical output of [deepSTRAPP::compute_STRAPP_test_for_focal_time()].
+#' @details The main input `deepSTRAPP_outputs` is the typical output of [deepSTRAPP::run_deepSTRAPP_for_focal_time()].
 #'   It provides information on results of a STRAPP test performed at a given `focal_time`, and can also encompass
 #'   updated phylogenies with mapped trait evolution and diversification rates and regimes shifts if appropriate arguments are set.
 #'
@@ -87,7 +87,7 @@
 #'   * `return_updated_BAMM_object` must be set to `TRUE` so that the `BAMM_objects` with phylogeny and mapped diversification rates
 #'     cut-off at the specified time-steps are returned among the outputs under `$updated_BAMM_objects_over_time`.
 #'
-#'  For plotting all time-steps at once, see [deepSTRAPP::plot_trait_vs_rate_maps_over_time].
+#'  For plotting all time-steps at once, see [deepSTRAPP::plot_trait_vs_rate_maps_over_time()].
 #'
 #' @return If `display_plot = TRUE`, the function displays a plot with two facets in the R console:
 #'  * (Left) A time-calibrated phylogeny displaying the evolution of trait/biogeographic data.
@@ -99,8 +99,8 @@
 #'
 #' @seealso [phytools::plot.densityMap()] [deepSTRAPP::plot_densityMaps_overlay()] [deepSTRAPP::plot_BAMM_rates()]
 #'
-#' Functions in deepSTRAPP needed to produce the `deepSTRAPP_outputs` as input: [deepSTRAPP::run_deepSTRAPP_for_focal_time] [deepSTRAPP::run_deepSTRAPP_over_time()]
-#' Function in deepSTRAPP to plot all time-steps at once: [deepSTRAPP::plot_trait_vs_rate_maps_over_time]
+#' Functions in deepSTRAPP needed to produce the `deepSTRAPP_outputs` as input: [deepSTRAPP::run_deepSTRAPP_for_focal_time()] [deepSTRAPP::run_deepSTRAPP_over_time()]
+#' Function in deepSTRAPP to plot all time-steps at once: [deepSTRAPP::plot_trait_vs_rate_maps_over_time()]
 #'
 #' @examples
 #' # ----- Example 1: Continuous trait ----- #
@@ -274,7 +274,7 @@ plot_trait_vs_rate_maps_for_focal_time <- function (
                   "Be sure to set `return_updated_trait_data_with_Map = TRUE` in [deepSTRAPP::run_deepSTRAPP_for_focal_time] or [deepSTRAPP::run_deepSTRAPP_over_time].\n",
                   "This element is needed to plot the updated `contMap`/`densityMaps` with mapped trait/range evolution."))
     }
-    # Check presence of updated trait map
+    # Check presence of updated BAMM_object
     if (is.null(deepSTRAPP_outputs$updated_trait_data_with_Map) & is.null(deepSTRAPP_outputs$updated_trait_data_with_Map_over_time))
     {
       stop(paste0("'deepSTRAPP_outputs' must have a '$updated_BAMM_object' or '$updated_BAMM_objects_over_time' element.\n",

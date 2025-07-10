@@ -338,16 +338,17 @@ plot_BAMM_rates(BAMM_object = BAMM_object_step2,
 
 # Plot p-values of Spearman tests across all time-steps
 plot_STRAPP_pvalues_over_time(
-  STRAPP_tests_over_time = Ponerinae_deepSTRAPP_cont_0_40,
+  deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_0_40,
   alpha = 0.10)
 
-# Plot histogram of test stats for time step n°2
+# Plot histogram of Spearman test stats for time step = 10 My
 plot_histogram_STRAPP_test_for_focal_time(
-   STRAPP_results = Ponerinae_deepSTRAPP_cont_0_40$STRAPP_results_over_time[[2]])
+   deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_0_40,
+   focal_time = 10)
 
-# Plot histograms of STRAPP overall test results (One plot per time-step)
+# Plot histograms of Spearman test results (One plot per time-step)
 plot_histograms_STRAPP_tests_over_time(
-   STRAPP_tests_over_time = Ponerinae_deepSTRAPP_cont_0_40,
+   deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_0_40,
    display_plots = TRUE)
 
 
@@ -457,27 +458,30 @@ plot_BAMM_rates(BAMM_object = BAMM_object_step2,
 
 # Plot p-values of overall Kruskal-Wallis test across all time-steps
 plot_STRAPP_pvalues_over_time(
-   STRAPP_tests_over_time = Ponerinae_deepSTRAPP_cat_0_40,
+   deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cat_0_40,
    alpha = 0.05)
 
 # Plot p-values of post hoc pairwise Dunn's tests between pairs of tests across all time-steps
 plot_STRAPP_pvalues_over_time(
-   STRAPP_tests_over_time = Ponerinae_deepSTRAPP_cat_0_40,
+   deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cat_0_40,
    plot_posthoc_tests = TRUE)
 
-# Plot histogram of test stats for time step n°2 = 10My
+# Plot histogram of overall Kruskal-Wallis test for time step n°2 = 10My
 plot_histogram_STRAPP_test_for_focal_time(
-   STRAPP_results = Ponerinae_deepSTRAPP_cat_0_40$STRAPP_results_over_time[[2]])
+   deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cat_0_40,
+   focal_time = 10)
 
-# Plot histograms of STRAPP overall test results (One plot per time-step)
+# Plot histograms of overall Kruskal-Wallis test results across all time-steps
+# (One plot per time-step)
 plot_histograms_STRAPP_tests_over_time(
-   STRAPP_tests_over_time = Ponerinae_deepSTRAPP_cat_0_40,
+   deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cat_0_40,
    display_plots = TRUE,
    plot_posthoc_tests = FALSE)
 
-# Plot histograms of STRAPP post hoc test results (One multifaceted plot per time-step)
+# Plot histograms of post hoc pairwise Dunn's test results across all time-steps
+# (One multifaceted plot per time-step)
 plot_histograms_STRAPP_tests_over_time(
-   STRAPP_tests_over_time = Ponerinae_deepSTRAPP_cat_0_40,
+   deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cat_0_40,
    display_plots = TRUE,
    plot_posthoc_tests = TRUE)
 
@@ -588,16 +592,17 @@ plot_BAMM_rates(BAMM_object = BAMM_object_step2,
 
 # Plot p-values of Mann-Whitney-Wilcoxon tests across all time-steps
 plot_STRAPP_pvalues_over_time(
-   STRAPP_tests_over_time = Ponerinae_deepSTRAPP_biogeo_0_40,
+   deepSTRAPP_outputs = Ponerinae_deepSTRAPP_biogeo_0_40,
    alpha = 0.05)
 
 # Plot histogram of Mann-Whitney-Wilcoxon test stats for time step n°2 = 10My
 plot_histogram_STRAPP_test_for_focal_time(
-   STRAPP_results = Ponerinae_deepSTRAPP_biogeo_0_40$STRAPP_results_over_time[[2]])
+   deepSTRAPP_outputs = Ponerinae_deepSTRAPP_biogeo_0_40,
+   focal_time = 10)
 
-# Plot histograms of STRAPP overall test results (One plot per time-step)
+# Plot histograms of Mann-Whitney-Wilcoxon test stats for all time-steps (One plot per time-step)
 plot_histograms_STRAPP_tests_over_time(
-   STRAPP_tests_over_time = Ponerinae_deepSTRAPP_biogeo_0_40,
+   deepSTRAPP_outputs = Ponerinae_deepSTRAPP_biogeo_0_40,
    display_plots = TRUE,
    plot_posthoc_tests = FALSE)
 

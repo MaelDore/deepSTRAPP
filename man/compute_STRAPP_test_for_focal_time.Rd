@@ -116,6 +116,9 @@ Combined with \code{posthoc_pairwise_tests = TRUE}, the stats data are also prov
 }
 \item \verb{$posthoc_pairwise_tests$perm_data_array} A 3D array containing stats data for all post hoc pairwise tests in a similar format that \verb{$perm_data_df}.
 }
+
+If no STRAPP test was performed in the case of categorical/biogeographic data with a single state/range at \code{focal_time},
+only the \verb{$trait_data_type}, \verb{$trait_data_type_for_stats} = "none", and \verb{$focal_time} are returned.
 }
 \description{
 Carries out the appropriate statistical method to test for a relationship between

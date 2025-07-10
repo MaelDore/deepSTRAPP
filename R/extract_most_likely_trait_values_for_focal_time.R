@@ -687,7 +687,14 @@ extract_most_likely_trait_values_from_contMap_for_focal_time <- function (
   # Get node ages per edge (no root edge)
   all_edges_df <- phytools::nodeHeights(contMap$tree)
   root_age <- max(phytools::nodeHeights(contMap$tree)[,2])
-  all_edges_df <- as.data.frame(round(root_age - all_edges_df, 5)) # # May be an issue for trees with very short time span
+
+  # Define level of tolerance used to round ages
+  tol <- root_age * 10^-5
+  closest_power <- round(log10(tol))
+  closest_power <- min(closest_power, 0) # Use 0 as the minimal power
+
+  # all_edges_df <- as.data.frame(round(root_age - all_edges_df, 5)) # # May be an issue for trees with very short time span
+  all_edges_df <- as.data.frame(round(root_age - all_edges_df, -1*closest_power))
   names(all_edges_df) <- c("rootward_node_age", "tipward_node_age")
   all_edges_df$edge_ID <- row.names(all_edges_df)
 
@@ -1218,7 +1225,14 @@ extract_most_likely_states_from_densityMaps_for_focal_time <- function (
   # Get node ages per edge (no root edge)
   all_edges_df <- phytools::nodeHeights(densityMaps[[1]]$tree)
   root_age <- max(phytools::nodeHeights(densityMaps[[1]]$tree)[,2])
-  all_edges_df <- as.data.frame(round(root_age - all_edges_df, 5)) # # May be an issue for trees with very short time span
+
+  # Define level of tolerance used to round ages
+  tol <- root_age * 10^-5
+  closest_power <- round(log10(tol))
+  closest_power <- min(closest_power, 0) # Use 0 as the minimal power
+
+  # all_edges_df <- as.data.frame(round(root_age - all_edges_df, 5)) # # May be an issue for trees with very short time span
+  all_edges_df <- as.data.frame(round(root_age - all_edges_df, -1*closest_power))
   names(all_edges_df) <- c("rootward_node_age", "tipward_node_age")
   all_edges_df$edge_ID <- row.names(all_edges_df)
 
@@ -1740,7 +1754,14 @@ extract_most_likely_ranges_from_densityMaps_for_focal_time <- function (
   # Get node ages per edge (no root edge)
   all_edges_df <- phytools::nodeHeights(densityMaps[[1]]$tree)
   root_age <- max(phytools::nodeHeights(densityMaps[[1]]$tree)[,2])
-  all_edges_df <- as.data.frame(round(root_age - all_edges_df, 5)) # # May be an issue for trees with very short time span
+
+  # Define level of tolerance used to round ages
+  tol <- root_age * 10^-5
+  closest_power <- round(log10(tol))
+  closest_power <- min(closest_power, 0) # Use 0 as the minimal power
+
+  # all_edges_df <- as.data.frame(round(root_age - all_edges_df, 5)) # # May be an issue for trees with very short time span
+  all_edges_df <- as.data.frame(round(root_age - all_edges_df, -1*closest_power))
   names(all_edges_df) <- c("rootward_node_age", "tipward_node_age")
   all_edges_df$edge_ID <- row.names(all_edges_df)
 

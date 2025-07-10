@@ -331,9 +331,15 @@ update_rates_and_regimes_for_focal_time <- function (BAMM_object, focal_time,
 
   # Edge, rootward_node, tipward_node, length (once cut)
 
+  # Define level of tolerance used to round ages
+  tol <- root_age * 10^-5
+  closest_power <- round(log10(tol))
+  closest_power <- min(closest_power, 0) # Use 0 as the minimal power
+
   # Get node ages per branch (no root edge)
   all_edges_df <- phytools::nodeHeights(updated_BAMM_object)
-  all_edges_df <- as.data.frame(round(root_age - all_edges_df, 5)) # Used to ensure ultrametricity of extant tips, but may be an issue for trees with very short time span
+  # all_edges_df <- as.data.frame(round(root_age - all_edges_df, 5)) # Used to ensure ultrametricity of extant tips, but may be an issue for trees with very short time span
+  all_edges_df <- as.data.frame(round(root_age - all_edges_df, -1*closest_power))
   names(all_edges_df) <- c("rootward_node_age", "tipward_node_age")
   all_edges_df$edge_ID <- row.names(all_edges_df)
 

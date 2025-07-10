@@ -440,6 +440,122 @@ plot_histograms_STRAPP_tests_over_time(
 usethis::use_data(Ponerinae_deepSTRAPP_biogeo_0_40, overwrite = TRUE)
 
 
+### 8b/ Generate Ponerinae_deepSTRAPP_biogeo_old_calib_0_40 ####
+
+## deepSTRAPP output for Ponerinae over time from 0 to 40My (steps = 10 My)
+# Tests for New World vs. Old World ranges
+# Using the old ill-calibrated phylogeny
+
+## Load data
+
+# Load phylogeny
+data(Ponerinae_tree_old_calib, package = "deepSTRAPP")
+# Load range data
+data(Ponerinae_binary_range_table, package = "deepSTRAPP")
+# Load the BAMM_object summarizing 1000 posterior samples of BAMM
+data(Ponerinae_BAMM_object_old_calib, package = "deepSTRAPP")
+
+## Prepare range data for Old World vs. New World
+
+# No overlap in ranges
+table(Ponerinae_binary_range_table$Old_World, Ponerinae_binary_range_table$New_World)
+
+Ponerinae_ON_data <- stats::setNames(object = Ponerinae_binary_range_table$Old_World,
+                                     nm = Ponerinae_binary_range_table$Taxa)
+Ponerinae_ON_data <- as.character(Ponerinae_ON_data)
+Ponerinae_ON_data[Ponerinae_ON_data == "TRUE"] <- "O" # O = Old World
+Ponerinae_ON_data[Ponerinae_ON_data == "FALSE"] <- "N" # N = New World
+names(Ponerinae_ON_data) <- Ponerinae_binary_range_table$Taxa
+table(Ponerinae_ON_data)
+
+colors_per_levels <- c("mediumpurple2", "peachpuff2")
+names(colors_per_levels) <- c("N", "O")
+
+# ## Run evolutionary models for biogeographic inferences
+# Ponerinae_biogeo_data_old_calib <- prepare_trait_data(
+#   tip_data = Ponerinae_ON_data,
+#   trait_data_type = "biogeographic",
+#   phylo = Ponerinae_tree_old_calib,
+#   evolutionary_models = "DEC+J", # Default = "DEC" for biogeographic
+#   prefix_for_files = "Ponerinae",
+#   max_range_size = 2,
+#   split_multi_area_ranges = TRUE, # Set to TRUE to display the two outputs
+#   nb_simulations = 100,
+#   colors_per_levels = colors_per_levels,
+#   return_model_selection_df = TRUE,
+#   verbose = TRUE)
+
+# Load directly output
+data(Ponerinae_biogeo_data_old_calib, package = "deepSTRAPP")
+
+## Set for five time steps of 10 My. Will generate deepSTRAPP workflows for 0, 10, 20, 30, and 40 Mya.
+nb_time_steps <- 5
+time_step_duration <- 10
+
+## Run deepSTRAPP on net diversification rates for time-steps = 0, 10, 20, 30, and 40 Mya.
+Ponerinae_deepSTRAPP_biogeo_old_calib_0_40 <- run_deepSTRAPP_over_time(
+   densityMaps = Ponerinae_biogeo_data_old_calib$densityMaps,
+   ace = Ponerinae_biogeo_data_old_calib$ace,
+   tip_data = Ponerinae_ON_data,
+   trait_data_type = "biogeographic",
+   BAMM_object = Ponerinae_BAMM_object_old_calib,
+   nb_time_steps = nb_time_steps,
+   time_step_duration = time_step_duration,
+   rate_type = "net_diversification",
+   return_perm_data = TRUE,
+   extract_trait_data_melted_df = TRUE,
+   extract_diversification_data_melted_df = TRUE,
+   return_STRAPP_results = TRUE,
+   return_updated_trait_data_with_Map = TRUE,
+   return_updated_BAMM_object = TRUE,
+   verbose = TRUE,
+   verbose_extended = TRUE)
+
+## Explore output
+str(Ponerinae_deepSTRAPP_biogeo_old_calib_0_40, max.level = 1)
+
+# Display test summaries
+# Can be passed down to [deepSTRAPP::plot_STRAPP_pvalues_over_time()] to generate a plot
+# showing the evolution of the test results across time.
+Ponerinae_deepSTRAPP_biogeo_old_calib_0_40$pvalues_summary_df
+
+# Access bioregeographic range data in a melted data.frame
+head(Ponerinae_deepSTRAPP_biogeo_old_calib_0_40$trait_data_df_over_time)
+
+# Access the diversification data in a melted data.frame
+head(Ponerinae_deepSTRAPP_biogeo_old_calib_0_40$diversification_data_df_over_time)
+
+# Access details of deepSTRAPP results
+str(Ponerinae_deepSTRAPP_biogeo_old_calib_0_40$STRAPP_results, max.level = 2)
+
+# Plot updated densityMaps for time step n°2 = 10My
+densityMaps_2 <- Ponerinae_deepSTRAPP_biogeo_old_calib_0_40$updated_trait_data_with_Map_over_time[[2]]
+plot_densityMaps_overlay(densityMaps_2$densityMaps)
+
+# Plot diversification rates on updated phylogeny for time step n°2
+plot_BAMM_rates(BAMM_object = Ponerinae_deepSTRAPP_biogeo_old_calib_0_40$updated_BAMM_objects_over_time[[2]], legend = TRUE, labels = FALSE,
+                colorbreaks = Ponerinae_deepSTRAPP_biogeo_old_calib_0_40$updated_BAMM_objects_over_time[[2]]$initial_colorbreaks$net_diversification)
+
+# Plot p-values of Mann-Whitney-Wilcoxon tests across all time-steps
+plot_STRAPP_pvalues_over_time(
+  STRAPP_tests_over_time = Ponerinae_deepSTRAPP_biogeo_old_calib_0_40,
+  alpha = 0.05)
+
+# Plot histogram of Mann-Whitney-Wilcoxon test stats for time step n°2 = 10My
+plot_histogram_STRAPP_test_for_focal_time(
+  STRAPP_results = Ponerinae_deepSTRAPP_biogeo_old_calib_0_40$STRAPP_results_over_time[[2]])
+
+# Plot histograms of STRAPP overall test results (One plot per time-step)
+plot_histograms_STRAPP_tests_over_time(
+  STRAPP_tests_over_time = Ponerinae_deepSTRAPP_biogeo_old_calib_0_40,
+  display_plots = TRUE,
+  plot_posthoc_tests = FALSE)
+
+
+# Export in deepSTRAPP
+usethis::use_data(Ponerinae_deepSTRAPP_biogeo_old_calib_0_40, overwrite = TRUE)
+
+
 ### 9/ Save diversification template file as .rds #####
 
 # Load it from the /inst/ directory (works only in source/bundled version of the package)
@@ -660,4 +776,96 @@ plot_densityMaps_overlay(Ponerinae_biogeo_data$densityMaps_all_ranges)
 
 # Export in deepSTRAPP
 usethis::use_data(Ponerinae_biogeo_data, overwrite = TRUE)
+
+### 14/ Generate Ponerinae_biogeo_data_old_calib  #####
+
+### Run Biogeographic inference for Ponerinae across New World and Old World ranges using the old ill-calibrated phylogeny for demonstration purpose
+
+## Load data
+
+# Load phylogeny
+data(Ponerinae_tree_old_calib, package = "deepSTRAPP")
+# Load range data
+data(Ponerinae_binary_range_table, package = "deepSTRAPP")
+# Load the BAMM_object summarizing 1000 posterior samples of BAMM
+data(Ponerinae_BAMM_object, package = "deepSTRAPP")
+
+## Prepare range data for Old World vs. New World
+
+# No overlap in ranges
+table(Ponerinae_binary_range_table$Old_World, Ponerinae_binary_range_table$New_World)
+
+Ponerinae_ON_data <- stats::setNames(object = Ponerinae_binary_range_table$Old_World,
+                                     nm = Ponerinae_binary_range_table$Taxa)
+Ponerinae_ON_data <- as.character(Ponerinae_ON_data)
+Ponerinae_ON_data[Ponerinae_ON_data == "TRUE"] <- "O" # O = Old World
+Ponerinae_ON_data[Ponerinae_ON_data == "FALSE"] <- "N" # N = New World
+names(Ponerinae_ON_data) <- Ponerinae_binary_range_table$Taxa
+table(Ponerinae_ON_data)
+
+colors_per_levels <- c("mediumpurple2", "peachpuff2")
+names(colors_per_levels) <- c("N", "O")
+
+## Run evolutionary models for biogeographic inferences
+Ponerinae_biogeo_data_old_calib <- prepare_trait_data(
+  tip_data = Ponerinae_ON_data,
+  trait_data_type = "biogeographic",
+  phylo = Ponerinae_tree_old_calib,
+  evolutionary_models = "DEC+J", # Default = "DEC" for biogeographic
+  prefix_for_files = "Ponerinae_old_calib",
+  max_range_size = 2,
+  split_multi_area_ranges = TRUE, # Set to TRUE to display the two outputs
+  nb_simulations = 100,
+  colors_per_levels = colors_per_levels,
+  return_model_selection_df = TRUE,
+  verbose = TRUE)
+
+## Explore output
+str(Ponerinae_biogeo_data_old_calib, 1)
+
+# Posterior probabilities of each state (= ACE) at internal nodes
+Ponerinae_biogeo_data_old_calib$ace # Only with unique areas
+Ponerinae_biogeo_data_old_calib$ace_all_ranges # Including multi-area ranges (Here, AB)
+
+## Plot densityMaps
+# densityMap for range n°1 (N = "New World")
+plot(Ponerinae_biogeo_data_old_calib$densityMaps[[1]])
+# densityMaps with all unique areas overlaid
+plot_densityMaps_overlay(Ponerinae_biogeo_data_old_calib$densityMaps)
+# densityMaps with all ranges (including multi-area ranges) overlaid
+plot_densityMaps_overlay(Ponerinae_biogeo_data_old_calib$densityMaps_all_ranges)
+
+# Export in deepSTRAPP
+usethis::use_data(Ponerinae_biogeo_data_old_calib, overwrite = TRUE)
+
+
+### 15/ Generate Ponerinae_BAMM_object_old_calib ####
+
+# Load phylogeny
+data("Ponerinae_tree_old_calib", package = "deepSTRAPP")
+plot(Ponerinae_tree_old_calib, show.tip.label = FALSE)
+
+# Run BAMM workflow with deepSTRAPP
+Ponerinae_BAMM_object_old_calib <- prepare_diversification_data(
+   BAMM_install_directory_path = "./software/bamm-2.5.0/",
+   phylo = Ponerinae_tree_old_calib,
+   prefix_for_files = "Ponerinae_old_calib",
+   numberOfGenerations = 10^7 # Set high for optimal run, but will take ages
+)
+
+###### To remove
+Ponerinae_BAMM_object_old_calib <- Ponerinae_BAMM_object
+
+# Explore output
+str(Ponerinae_BAMM_object_old_calib, 1)
+
+# Plot mean net diversification rates and regime shifts on the phylogeny
+plot_BAMM_rates(Ponerinae_BAMM_object_old_calib,
+                labels = FALSE, legend = TRUE)
+
+# Export in deepSTRAPP
+usethis::use_data(Ponerinae_BAMM_object_old_calib, overwrite = TRUE)
+
+#### Go to 8b to generate the deepSTRAPP run
+
 

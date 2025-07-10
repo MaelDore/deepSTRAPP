@@ -27,7 +27,7 @@ plot_trait_vs_rate_maps_for_focal_time(
 )
 }
 \arguments{
-\item{deepSTRAPP_outputs}{List of elements generated with \code{\link[=compute_STRAPP_test_for_focal_time]{compute_STRAPP_test_for_focal_time()}},
+\item{deepSTRAPP_outputs}{List of elements generated with \code{\link[=run_deepSTRAPP_for_focal_time]{run_deepSTRAPP_for_focal_time()}},
 that summarize the results of a STRAPP test for a specific time in the past (i.e. the \code{focal_time}).
 \code{deepSTRAPP_outputs} can also be extracted from the output of \code{\link[=run_deepSTRAPP_over_time]{run_deepSTRAPP_over_time()}} that
 run the whole deepSTRAPP workflow over multiple time-steps.}
@@ -122,7 +122,7 @@ This function is a wrapper multiple plotting functions:
 }
 }
 \details{
-The main input \code{deepSTRAPP_outputs} is the typical output of \code{\link[=compute_STRAPP_test_for_focal_time]{compute_STRAPP_test_for_focal_time()}}.
+The main input \code{deepSTRAPP_outputs} is the typical output of \code{\link[=run_deepSTRAPP_for_focal_time]{run_deepSTRAPP_for_focal_time()}}.
 It provides information on results of a STRAPP test performed at a given \code{focal_time}, and can also encompass
 updated phylogenies with mapped trait evolution and diversification rates and regimes shifts if appropriate arguments are set.
 \itemize{
@@ -148,7 +148,7 @@ the updated version of mapped phylogenies (\code{contMap}/\code{densityMaps}) ar
 cut-off at the specified time-steps are returned among the outputs under \verb{$updated_BAMM_objects_over_time}.
 }
 
-For plotting all time-steps at once, see \link{plot_trait_vs_rate_maps_over_time}.
+For plotting all time-steps at once, see \code{\link[=plot_trait_vs_rate_maps_over_time]{plot_trait_vs_rate_maps_over_time()}}.
 }
 \examples{
 # ----- Example 1: Continuous trait ----- #
@@ -293,8 +293,8 @@ plot_trait_vs_rate_maps_for_focal_time(
 \seealso{
 \code{\link[phytools:densityMap]{phytools::plot.densityMap()}} \code{\link[=plot_densityMaps_overlay]{plot_densityMaps_overlay()}} \code{\link[=plot_BAMM_rates]{plot_BAMM_rates()}}
 
-Functions in deepSTRAPP needed to produce the \code{deepSTRAPP_outputs} as input: \link{run_deepSTRAPP_for_focal_time} \code{\link[=run_deepSTRAPP_over_time]{run_deepSTRAPP_over_time()}}
-Function in deepSTRAPP to plot all time-steps at once: \link{plot_trait_vs_rate_maps_over_time}
+Functions in deepSTRAPP needed to produce the \code{deepSTRAPP_outputs} as input: \code{\link[=run_deepSTRAPP_for_focal_time]{run_deepSTRAPP_for_focal_time()}} \code{\link[=run_deepSTRAPP_over_time]{run_deepSTRAPP_over_time()}}
+Function in deepSTRAPP to plot all time-steps at once: \code{\link[=plot_trait_vs_rate_maps_over_time]{plot_trait_vs_rate_maps_over_time()}}
 }
 \author{
 Maël Doré

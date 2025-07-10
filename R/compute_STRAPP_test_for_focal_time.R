@@ -146,6 +146,9 @@
 #'   Combined with `posthoc_pairwise_tests = TRUE`, the stats data are also provided for the post hoc pairwise tests:
 #'   * `$posthoc_pairwise_tests$perm_data_array` A 3D array containing stats data for all post hoc pairwise tests in a similar format that `$perm_data_df`.
 #'
+#'   If no STRAPP test was performed in the case of categorical/biogeographic data with a single state/range at `focal_time`,
+#'   only the `$trait_data_type`, `$trait_data_type_for_stats` = "none", and `$focal_time` are returned.
+#'
 #' @author Maël Doré
 #'
 #' @seealso Associated functions in deepSTRAPP: [deepSTRAPP::extract_most_likely_trait_values_for_focal_time()] [deepSTRAPP::update_rates_and_regimes_for_focal_time()]
@@ -422,6 +425,21 @@ compute_STRAPP_test_for_focal_time <- function (BAMM_object, trait_data_list,
   if (trait_data_type %in% c("categorical", "biogeographic"))
   {
     nb_levels <- nlevels(as.factor(trait_data))
+    run_test <- TRUE
+
+    if (nb_levels == 1) # Case with a single state
+    {
+      # Send warning
+      warning(paste0("There are only a single state/range found at focal time = ",BAMM_object$focal_time,": '",levels(as.factor(trait_data)),"'.\n",
+                     "No STRAPP test for difference in rates can be performed with a single level.\n",
+                     "'STRAPP_results' were provided without test results and 'trait_data_type_for_stats' was tagged as 'none'.\n"))
+
+      ## Create empty STRAPP_results object with no test
+      STRAPP_results <- list(trait_data_type = trait_data_type,
+                             trait_data_type_for_stats = "none")
+      run_test <- FALSE
+    }
+
     if (nb_levels == 2) # Case with two states
     {
       trait_data_type_for_stats <- "binary"
@@ -433,67 +451,75 @@ compute_STRAPP_test_for_focal_time <- function (BAMM_object, trait_data_list,
   }
 
   ## posthoc_pairwise_tests = TRUE. Only makes sense if more than 2 states/ranges in categorical/biogeographic data
-  if (trait_data_type_for_stats != "multinominal" & posthoc_pairwise_tests == TRUE)
+  if (trait_data_type_for_stats == "continuous" & posthoc_pairwise_tests == TRUE)
+  {
+    stop(paste0("'posthoc_pairwise_tests = TRUE' does not make sense for a continuous trait.\n",
+                "Please set 'posthoc_pairwise_tests = FALSE' or provide categorical/biogeographic data with more than two states/ranges."))
+  }
+  if (trait_data_type_for_stats == "binary" & posthoc_pairwise_tests == TRUE)
   {
     warning(paste0("There are only two states/ranges found at focal time = ",BAMM_object$focal_time,": ",paste(levels(as.factor(trait_data)), collapse = ", "),".\n",
                    "'posthoc_pairwise_tests = TRUE' only makes sense for categorical/biogeographic data with more than two states/ranges.\n",
                    "If you want to test specific hypotheses with continuous or categorical binary data, use 'two_tailed = FALSE' and provide the 'one_tailed_hypothesis'.\n"))
   }
 
-  ## Compute the appropriate internal function depending on the type of data
+  if (run_test)
+  {
+    ## Compute the appropriate internal function depending on the type of data
 
-  switch(EXPR = trait_data_type_for_stats,
-         continuous =   { # Case for continuous data
-           # Stat test = Spearman's rank Rho test
-           STRAPP_results <- compute_STRAPP_test_for_continuous_data(
-             BAMM_data = BAMM_data,
-             trait_data = trait_data,
-             trait_data_type = trait_data_type,
-             rate_type = rate_type,
-             nb_permutations = nb_permutations,
-             replace_samples = replace_samples,
-             alpha = alpha,
-             two_tailed = two_tailed,
-             one_tailed_hypothesis = one_tailed_hypothesis,
-             return_perm_data = return_perm_data,
-             nthreads = nthreads,
-             print_hypothesis = print_hypothesis)
-         },
-         binary =       { # Case for binary data (Special case of categorical/biogeographic data with only two states)
-           # Stat test = Mann-Whitney U test
-           STRAPP_results <- compute_STRAPP_test_for_binary_data(
-             BAMM_data = BAMM_data,
-             trait_data = trait_data,
-             trait_data_type = trait_data_type,
-             rate_type = rate_type,
-             nb_permutations = nb_permutations,
-             replace_samples = replace_samples,
-             alpha = alpha,
-             two_tailed = two_tailed,
-             one_tailed_hypothesis = one_tailed_hypothesis,
-             return_perm_data = return_perm_data,
-             nthreads = nthreads,
-             print_hypothesis = print_hypothesis)
-         },
-         multinominal = { # Case for multinominal data (Case of categorical/biogeographic data with more than two states)
-           # Stat test = Kruskal-Wallis H test
-           # Can define the post-hoc pairwise tests to compute
-           STRAPP_results <- compute_STRAPP_test_for_multinominal_data(
-             BAMM_data = BAMM_data,
-             trait_data = trait_data,
-             trait_data_type = trait_data_type,
-             rate_type = rate_type,
-             nb_permutations = nb_permutations,
-             replace_samples = replace_samples,
-             alpha = alpha,
-             posthoc_pairwise_tests = posthoc_pairwise_tests, # See if I implement that for pairwise posthoc tests. Need to provide list of pairs with hypotheses
-             two_tailed = two_tailed,
-             p.adjust_method = p.adjust_method,
-             return_perm_data = return_perm_data,
-             nthreads = nthreads,
-             print_hypothesis = print_hypothesis)
-         }
-  )
+    switch(EXPR = trait_data_type_for_stats,
+           continuous =   { # Case for continuous data
+             # Stat test = Spearman's rank Rho test
+             STRAPP_results <- compute_STRAPP_test_for_continuous_data(
+               BAMM_data = BAMM_data,
+               trait_data = trait_data,
+               trait_data_type = trait_data_type,
+               rate_type = rate_type,
+               nb_permutations = nb_permutations,
+               replace_samples = replace_samples,
+               alpha = alpha,
+               two_tailed = two_tailed,
+               one_tailed_hypothesis = one_tailed_hypothesis,
+               return_perm_data = return_perm_data,
+               nthreads = nthreads,
+               print_hypothesis = print_hypothesis)
+           },
+           binary =       { # Case for binary data (Special case of categorical/biogeographic data with only two states)
+             # Stat test = Mann-Whitney U test
+             STRAPP_results <- compute_STRAPP_test_for_binary_data(
+               BAMM_data = BAMM_data,
+               trait_data = trait_data,
+               trait_data_type = trait_data_type,
+               rate_type = rate_type,
+               nb_permutations = nb_permutations,
+               replace_samples = replace_samples,
+               alpha = alpha,
+               two_tailed = two_tailed,
+               one_tailed_hypothesis = one_tailed_hypothesis,
+               return_perm_data = return_perm_data,
+               nthreads = nthreads,
+               print_hypothesis = print_hypothesis)
+           },
+           multinominal = { # Case for multinominal data (Case of categorical/biogeographic data with more than two states)
+             # Stat test = Kruskal-Wallis H test
+             # Can define the post-hoc pairwise tests to compute
+             STRAPP_results <- compute_STRAPP_test_for_multinominal_data(
+               BAMM_data = BAMM_data,
+               trait_data = trait_data,
+               trait_data_type = trait_data_type,
+               rate_type = rate_type,
+               nb_permutations = nb_permutations,
+               replace_samples = replace_samples,
+               alpha = alpha,
+               posthoc_pairwise_tests = posthoc_pairwise_tests, # See if I implement that for pairwise posthoc tests. Need to provide list of pairs with hypotheses
+               two_tailed = two_tailed,
+               p.adjust_method = p.adjust_method,
+               return_perm_data = return_perm_data,
+               nthreads = nthreads,
+               print_hypothesis = print_hypothesis)
+           }
+    )
+  }
 
   ## Include focal_time in the output
   STRAPP_results$focal_time <- BAMM_object$focal_time

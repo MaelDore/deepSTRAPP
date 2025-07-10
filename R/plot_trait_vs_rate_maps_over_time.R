@@ -62,7 +62,7 @@
 #' @export
 #' @importFrom qpdf pdf_combine
 #'
-#' @details The main input `deepSTRAPP_outputs` is the typical output of [deepSTRAPP::compute_STRAPP_test_over_time()].
+#' @details The main input `deepSTRAPP_outputs` is the typical output of [deepSTRAPP::run_deepSTRAPP_over_time()].
 #'   It provides information on results of a STRAPP run performed over multiple time-steps, and can also encompass
 #'   updated phylogenies with mapped trait evolution and diversification rates and regimes shifts if appropriate arguments are set.
 #'

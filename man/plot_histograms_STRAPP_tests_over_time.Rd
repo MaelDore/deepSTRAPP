@@ -5,21 +5,22 @@
 \title{Plot multiple histograms of STRAPP test statistics over time-steps}
 \usage{
 plot_histograms_STRAPP_tests_over_time(
-  STRAPP_tests_over_time,
+  deepSTRAPP_outputs,
   display_plots = TRUE,
   plot_posthoc_tests = FALSE,
   PDF_file_path = NULL
 )
 }
 \arguments{
-\item{STRAPP_tests_over_time}{List of elements generated with \code{\link[=run_deepSTRAPP_over_time]{run_deepSTRAPP_over_time()}},
+\item{deepSTRAPP_outputs}{List of elements generated with \code{\link[=run_deepSTRAPP_over_time]{run_deepSTRAPP_over_time()}},
 that summarize the results of multiple deepSTRAPP across \verb{$time_steps}. It needs to include the \verb{$STRAPP_results_over_time}
 element with \verb{$perm_data_df} obtained when setting both \code{return_STRAPP_results = TRUE} and \code{return_perm_data = TRUE}.}
 
 \item{display_plots}{Logical. Whether to display the histograms generated in the R console. Default is \code{TRUE}.}
 
 \item{plot_posthoc_tests}{Logical. For multinominal data only. Whether to plot the histograms for the overall Kruskal-Wallis test across all states (\code{plot_posthoc_tests = FALSE}),
-or plot the histograms for all the pairwise post hoc Dunn's tests across pairs of states (\code{plot_posthoc_tests = TRUE}). Default is \code{FALSE}.}
+or plot the histograms for all the pairwise post hoc Dunn's tests across pairs of states (\code{plot_posthoc_tests = TRUE}).
+Time-steps at which the data does not yield more than two states/ranges will show a warning and generate no plot. Default is \code{FALSE}.}
 
 \item{PDF_file_path}{Character string. If provided, the plots will be saved in a unique PDF file following the path provided here. The path must end with '.pdf'.
 Each page of the PDF corresponds to a focal time in \verb{$time_steps}.}
@@ -51,8 +52,11 @@ If a PDF file path is provided in \code{PDF_file_path}, the plots will be saved 
 with one page per focal time in \verb{$time_steps}.
 }
 \details{
+The main input \code{deepSTRAPP_outputs} is the typical output of \code{\link[=run_deepSTRAPP_over_time]{run_deepSTRAPP_over_time()}}.
+It provides information on results of a STRAPP tests performed over multiple time-steps.
+
 Histograms are build based on the distribution of the test statistics.
-Such distributions are recorded in the outputs of STRAPP tests carried out with \code{\link[=run_deepSTRAPP_over_time]{run_deepSTRAPP_over_time()}}
+Such distributions are recorded in the outputs of a deepSTRAPP run carried out with \code{\link[=run_deepSTRAPP_over_time]{run_deepSTRAPP_over_time()}}
 when \code{return_STRAPP_results = TRUE} AND \code{return_perm_data = TRUE}. The \verb{$STRAPP_results_over_time} objects provided within the input are lists that must contain
 a \verb{$perm_data_df} element that summarizes test statistics computed across posterior samples.
 
@@ -62,33 +66,176 @@ To achieve this, the \verb{$STRAPP_results_over_time} objects must contain a \ve
 computed across posterior samples for all pairwise post hoc tests. This is obtained from \code{\link[=run_deepSTRAPP_over_time]{run_deepSTRAPP_over_time()}} when setting
 \code{return_STRAPP_results = TRUE} to return the STRAPP results, \code{posthoc_pairwise_tests = TRUE} to carry out post hoc tests,
 and \code{return_perm_data = TRUE} to record distributions of test statistics.
+Time-steps for which the data do not yield more than two states/ranges will show a warning and generate no plot.
 }
 \examples{
-## Load results of run_deepSTRAPP_over_time()
-data(STRAPP_tests_over_time_temp_example, package = "deepSTRAPP")
+# ----- Example 1: Continuous trait ----- #
 
-## Plot histograms of STRAPP overall test results
+# Load phylogeny
+data(Ponerinae_trait_data, package = "deepSTRAPP")
+# Load trait df
+data(Ponerinae_tree, package = "deepSTRAPP")
+# Load the BAMM_object summarizing 1000 posterior samples of BAMM
+data(Ponerinae_BAMM_object, package = "deepSTRAPP")
+
+## Prepare trait data
+
+# Extract log(head with) data
+Ponerinae_data_ln_HW <- setNames(object = Ponerinae_trait_data$sim_ln_HW,
+                                 nm = Ponerinae_trait_data$Taxa)
+
+# Get Ancestral Character Estimates based on a Brownian Motion model
+# To obtain values at internal nodes
+Ponerinae_ACE <- phytools::fastAnc(tree = Ponerinae_tree, x = Ponerinae_data_ln_HW)
+
+# Run a Stochastic Mapping based on a Brownian Motion model
+# to interpolate values along branches and obtain a "contMap" object
+Ponerinae_contMap <- phytools::contMap(Ponerinae_tree, x = Ponerinae_data_ln_HW,
+                                       res = 100, # Number of time steps
+                                       plot = FALSE)
+# Plot contMap = stochastic mapping of continuous trait
+plot_contMap(Ponerinae_contMap)
+
+## Set for five time steps of 10 My.
+# Will generate deepSTRAPP workflows for 0, 10, 20, 30, and 40 Mya.
+nb_time_steps <- 5
+time_step_duration <- 10
+
+\dontrun{  (May take several minutes to run)
+## Run deepSTRAPP on net diversification rates
+Ponerinae_deepSTRAPP_cont_0_40 <- run_deepSTRAPP_over_time(
+   contMap = Ponerinae_contMap,
+   ace = Ponerinae_ACE, tip_data = Ponerinae_data_ln_HW,
+   trait_data_type = "continuous",
+   BAMM_object = Ponerinae_BAMM_object,
+   nb_time_steps = nb_time_steps,
+   time_step_duration = time_step_duration,
+   return_perm_data = TRUE,
+   extract_trait_data_melted_df = TRUE,
+   extract_diversification_data_melted_df = TRUE,
+   return_STRAPP_results = TRUE,
+   return_updated_trait_data_with_Map = TRUE,
+   return_updated_BAMM_object = TRUE,
+   verbose = TRUE,
+   verbose_extended = TRUE) }
+
+# Load directly trait data output
+data(Ponerinae_deepSTRAPP_cont_0_40, package = "deepSTRAPP")
+
+## Plot histogram of STRAPP overall test results
+# Tests are Spearman's rank correlation tests
+
 histogram_ggplots <- plot_histograms_STRAPP_tests_over_time(
-  STRAPP_tests_over_time = STRAPP_tests_over_time_temp_example,
-  display_plots = TRUE,
-  # PDF_file_path = "./plot_STRAPP_histograms_overall_tests_over_time.pdf",
-  plot_posthoc_tests = FALSE)
-# Print histogram for time step 1
+   deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_0_40,
+   display_plot = TRUE,
+   # PDF_file_path = "./plot_STRAPP_histogram_overall_test.pdf",
+   plot_posthoc_tests = FALSE)
+# Print histogram for time step 1 = 0 My
+print(histogram_ggplots[[1]])
+# Adjust aesthetics of plot for time step 1 a posteriori
+histogram_ggplot_adj <- histogram_ggplots[[1]] +
+   ggplot2::theme(plot.title = ggplot2::element_text(color = "red", size = 15))
+print(histogram_ggplot_adj)
+
+
+# ----- Example 2: Categorical data ----- #
+
+#' ## Load data
+
+# Load phylogeny
+data(Ponerinae_tree, package = "deepSTRAPP")
+# Load trait df
+data(Ponerinae_trait_data, package = "deepSTRAPP")
+# Load the BAMM_object summarizing 1000 posterior samples of BAMM
+data(Ponerinae_BAMM_object, package = "deepSTRAPP")
+
+## Prepare trait data
+
+# Extract log(head with) data
+Ponerinae_data_ln_HW <- setNames(object = Ponerinae_trait_data$sim_ln_HW,
+                                 nm = Ponerinae_trait_data$Taxa)
+# Convert to three-factor categorical traits
+Ponerinae_data <- Ponerinae_data_ln_HW
+Ponerinae_data[seq_along(Ponerinae_data)] <- "small"
+Ponerinae_data[Ponerinae_data_ln_HW > -1] <- "medium"
+Ponerinae_data[Ponerinae_data_ln_HW > 0] <- "large"
+table(Ponerinae_data)
+
+# Select color scheme for states
+colors_per_states <- c("darkblue", "dodgerblue", "lightblue")
+names(colors_per_states) <- c("large", "medium", "small")
+
+\dontrun{  (May take several minutes to run)
+## Produce densityMaps using stochastic character mapping based on an equal-rates (ER) Mk model
+Ponerinae_cat_data <- prepare_trait_data(tip_data = Ponerinae_data, phylo = Ponerinae_tree,
+                                         trait_data_type = "categorical",
+                                         colors_per_states = colors_per_states,
+                                         evolutionary_models = c("ER", "SYM", "ARD", "meristic"),
+                                         nb_simulations = 1000,
+                                         return_best_model_fit = TRUE,
+                                         return_model_selection_df = TRUE,
+                                         plot_map = FALSE) }
+
+# Load directly output
+data(Ponerinae_cat_data, package = "deepSTRAPP")
+
+## Set for five time steps of 10 My.
+# Will generate deepSTRAPP workflows for 0, 10, 20, 30, and 40 Mya.
+nb_time_steps <- 5
+time_step_duration <- 10
+
+\dontrun{  (May take several minutes to run)
+## Run deepSTRAPP on net diversification rates
+Ponerinae_deepSTRAPP_cat_0_40 <- run_deepSTRAPP_over_time(
+   densityMaps = Ponerinae_cat_data$densityMaps,
+   ace = Ponerinae_cat_data$ace,
+   tip_data = Ponerinae_data,
+   trait_data_type = "categorical",
+   BAMM_object = Ponerinae_BAMM_object,
+   nb_time_steps = nb_time_steps,
+   time_step_duration = time_step_duration,
+   rate_type = "net_diversification",
+   posthoc_pairwise_tests = TRUE,
+   return_perm_data = TRUE,
+   extract_trait_data_melted_df = TRUE,
+   extract_diversification_data_melted_df = TRUE,
+   return_STRAPP_results = TRUE,
+   return_updated_trait_data_with_Map = TRUE,
+   return_updated_BAMM_object = TRUE,
+   verbose = TRUE,
+   verbose_extended = TRUE) }
+
+## Explore output
+str(Ponerinae_deepSTRAPP_cat_0_40, max.level = 1)
+
+## Plot histograms of STRAPP overall test results #
+# Tests are Kruskall-Wallis H tests when more than two states/ranges are present.
+# Tests are Mann–Whitney–Wilcoxon rank-sum tests when only two states/ranges are present.
+
+histogram_ggplots <- plot_histograms_STRAPP_tests_over_time(
+   deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cat_0_40,
+   display_plot = TRUE,
+   # PDF_file_path = "./plot_STRAPP_histogram_overall_test.pdf",
+   plot_posthoc_tests = FALSE)
+# Print histogram for time step 1 = 0 My
 print(histogram_ggplots[[1]])
 # Adjust aesthetics of plot for time step 1 a posteriori
 histogram_ggplot_adj <- histogram_ggplots[[1]] +
     ggplot2::theme(plot.title = ggplot2::element_text(color = "red", size = 15))
 print(histogram_ggplot_adj)
 
-## Plot histograms of STRAPP post hoc test results
+## Plot histograms of STRAPP post hoc test results ------ #
+# Tests are Dunn's multiple comparison pairwise post-hoc tests possible
+# only when more than two states/ranges are present.
+
 histograms_ggplots_list <- plot_histograms_STRAPP_tests_over_time(
-  STRAPP_tests_over_time = STRAPP_tests_over_time_temp_example,
-  display_plots = TRUE,
-  # PDF_file_path = "./test_multi_histo.pdf"
-  plot_posthoc_tests = TRUE)
-# Print all histograms for time step 1 one by one
+    deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cat_0_40,
+    display_plot = TRUE,
+    # PDF_file_path = "./plot_STRAPP_histograms_posthoc_tests.pdf",
+    plot_posthoc_tests = TRUE)
+# Print all histograms for time step 1 (= 0 My) one by one
 print(histograms_ggplots_list[[1]])
-# Plot all histograms on one faceted plot
+# Plot all histograms for time step 1 (= 0 My) on one faceted plot
 cowplot::plot_grid(plotlist = histograms_ggplots_list[[1]])
 
 }

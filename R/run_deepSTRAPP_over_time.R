@@ -264,16 +264,17 @@
 #'
 #' # Plot p-values of Spearman tests across all time-steps
 #' plot_STRAPP_pvalues_over_time(
-#'   STRAPP_tests_over_time = Ponerinae_deepSTRAPP_cont_0_40,
+#'   deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_0_40,
 #'   alpha = 0.10)
 #'
-#' # Plot histogram of test stats for time step n°2
+#' # Plot histogram of Spearman test stats for time step = 10 My
 #' plot_histogram_STRAPP_test_for_focal_time(
-#'    STRAPP_results = Ponerinae_deepSTRAPP_cont_0_40$STRAPP_results_over_time[[2]])
+#'    deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_0_40,
+#'    focal_time = 10)
 #'
-#' # Plot histograms of STRAPP overall test results (One plot per time-step)
+#' # Plot histograms of Spearman test results (One plot per time-step)
 #' plot_histograms_STRAPP_tests_over_time(
-#'    STRAPP_tests_over_time = Ponerinae_deepSTRAPP_cont_0_40,
+#'    deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_0_40,
 #'    display_plots = TRUE)
 #'
 #'
@@ -383,27 +384,30 @@
 #'
 #' # Plot p-values of overall Kruskal-Wallis test across all time-steps
 #' plot_STRAPP_pvalues_over_time(
-#'    STRAPP_tests_over_time = Ponerinae_deepSTRAPP_cat_0_40,
+#'    deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cat_0_40,
 #'    alpha = 0.05)
 #'
 #' # Plot p-values of post hoc pairwise Dunn's tests between pairs of tests across all time-steps
 #' plot_STRAPP_pvalues_over_time(
-#'    STRAPP_tests_over_time = Ponerinae_deepSTRAPP_cat_0_40,
+#'    deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cat_0_40,
 #'    plot_posthoc_tests = TRUE)
 #'
-#' # Plot histogram of test stats for time step n°2 = 10My
+#' # Plot histogram of overall Kruskal-Wallis test for time step n°2 = 10My
 #' plot_histogram_STRAPP_test_for_focal_time(
-#'    STRAPP_results = Ponerinae_deepSTRAPP_cat_0_40$STRAPP_results_over_time[[2]])
+#'    deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cat_0_40,
+#'    focal_time = 10)
 #'
-#' # Plot histograms of STRAPP overall test results (One plot per time-step)
+#' # Plot histograms of overall Kruskal-Wallis test results across all time-steps
+#' # (One plot per time-step)
 #' plot_histograms_STRAPP_tests_over_time(
-#'    STRAPP_tests_over_time = Ponerinae_deepSTRAPP_cat_0_40,
+#'    deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cat_0_40,
 #'    display_plots = TRUE,
 #'    plot_posthoc_tests = FALSE)
 #'
-#' # Plot histograms of STRAPP post hoc test results (One multifaceted plot per time-step)
+#' # Plot histograms of post hoc pairwise Dunn's test results across all time-steps
+#' # (One multifaceted plot per time-step)
 #' plot_histograms_STRAPP_tests_over_time(
-#'    STRAPP_tests_over_time = Ponerinae_deepSTRAPP_cat_0_40,
+#'    deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cat_0_40,
 #'    display_plots = TRUE,
 #'    plot_posthoc_tests = TRUE)
 #'
@@ -514,19 +518,21 @@
 #'
 #' # Plot p-values of Mann-Whitney-Wilcoxon tests across all time-steps
 #' plot_STRAPP_pvalues_over_time(
-#'    STRAPP_tests_over_time = Ponerinae_deepSTRAPP_biogeo_0_40,
+#'    deepSTRAPP_outputs = Ponerinae_deepSTRAPP_biogeo_0_40,
 #'    alpha = 0.05)
 #'
 #' # Plot histogram of Mann-Whitney-Wilcoxon test stats for time step n°2 = 10My
 #' plot_histogram_STRAPP_test_for_focal_time(
-#'    STRAPP_results = Ponerinae_deepSTRAPP_biogeo_0_40$STRAPP_results_over_time[[2]])
+#'    deepSTRAPP_outputs = Ponerinae_deepSTRAPP_biogeo_0_40,
+#'    focal_time = 10)
 #'
-#' # Plot histograms of STRAPP overall test results (One plot per time-step)
+#' # Plot histograms of Mann-Whitney-Wilcoxon test stats for all time-steps (One plot per time-step)
 #' plot_histograms_STRAPP_tests_over_time(
-#'    STRAPP_tests_over_time = Ponerinae_deepSTRAPP_biogeo_0_40,
+#'    deepSTRAPP_outputs = Ponerinae_deepSTRAPP_biogeo_0_40,
 #'    display_plots = TRUE,
 #'    plot_posthoc_tests = FALSE)
 #'
+
 
 run_deepSTRAPP_over_time <- function (contMap = NULL,
                                       densityMaps = NULL,
@@ -791,13 +797,23 @@ run_deepSTRAPP_over_time <- function (contMap = NULL,
   ## Initiate list for final output
   final_ouput <- list()
 
+  ## Extract time-steps with STRAPP results
+  trait_data_type_for_stats_list <- unlist(lapply(X = deepSTRAPP_outputs_over_time, FUN = function (x) { x$STRAPP_results$trait_data_type_for_stats }))
+  time_steps_with_STRAPP_results_ID <- which(trait_data_type_for_stats_list != "none")
+  time_steps_with_STRAPP_results <- time_steps[time_steps_with_STRAPP_results_ID]
+
   ## Extract p_values and estimates in summary_df
-  p_values <- unlist(lapply(X = deepSTRAPP_outputs_over_time, FUN = function (x) { x$STRAPP_results$p_value} ))
-  estimates <- unlist(lapply(X = deepSTRAPP_outputs_over_time, FUN = function (x) { x$STRAPP_results$estimate} ))
+  p_values <- unlist(lapply(X = deepSTRAPP_outputs_over_time, FUN = function (x) { x$STRAPP_results$p_value }))
+  estimates <- unlist(lapply(X = deepSTRAPP_outputs_over_time, FUN = function (x) { x$STRAPP_results$estimate }))
+
+  # Store values for all sptes, including NA for time-steps without STRAPP results
+  estimates_all_steps <- p_values_all_steps <- rep(x = NA, times = length(time_steps))
+  estimates_all_steps[time_steps_with_STRAPP_results_ID] <- estimates
+  p_values_all_steps[time_steps_with_STRAPP_results_ID] <- p_values
 
   pvalues_summary_df <- data.frame(focal_time = time_steps,
-                                   estimate = estimates,
-                                   p_value = p_values)
+                                   estimate = estimates_all_steps,
+                                   p_value = p_values_all_steps)
 
   # Store pvalues_summary_df in final output
   final_ouput$pvalues_summary_df <- pvalues_summary_df

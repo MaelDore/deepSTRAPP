@@ -12,13 +12,13 @@
 #'   * For categorical data, branches are grouped by trait states.
 #'   * For biogeographic data, branches are grouped by ranges.
 #'
-#' @param STRAPP_tests_over_time List of elements generated with [deepSTRAPP::run_deepSTRAPP_over_time()],
+#' @param deepSTRAPP_outputs List of elements generated with [deepSTRAPP::run_deepSTRAPP_over_time()],
 #'   that summarize the results of multiple STRAPP tests across `$time_steps`. The list needs to include two data.frame:
 #'   `$trait_data_df_over_time` and `$diversification_data_df_over_time` by setting `extract_trait_data_melted_df = TRUE`
 #'   and `extract_diversification_data_melted_df = TRUE`.
 #' @param rate_type A character string specifying the type of diversification rates to use.
 #'   Must be one of 'speciation', 'extinction' or 'net_diversification' (default).
-#'   Even if the `STRAPP_tests_over_time` object was generated with [deepSTRAPP::run_deepSTRAPP_over_time()]
+#'   Even if the `deepSTRAPP_outputs` object was generated with [deepSTRAPP::run_deepSTRAPP_over_time()]
 #'   for testing another type of rates, the `$trait_data_df_over_time` and `$diversification_data_df_over_time` data frames
 #'   will contain data for all types of rates.
 #' @param quantile_ranges Vector of numerical. Only for continuous trait data. Quantiles used as thresholds to group branches
@@ -26,9 +26,14 @@
 #'  which produces four balanced quantile groups.
 #' @param select_trait_states (Vector of) character string. Only for categorical and biogeographic trait data.
 #'  To provide a list of a subset of states/ranges to plot. Names must match the ones found in
-#'  `STRAPP_tests_over_time$trait_data_df_over_time$trait_value`. Default is `all` which means all states/ranges will be plotted.
+#'  `deepSTRAPP_outputs$trait_data_df_over_time$trait_value`. Default is `all` which means all states/ranges will be plotted.
 #' @param time_range Vector of two numerical values. Time boundaries used for the plot.
-#'   If `NULL` (the default), the range of data provided in `STRAPP_tests_over_time` will be used.
+#'   If `NULL` (the default), the range of data provided in `deepSTRAPP_outputs` will be used.
+#' @param color_scale Vector of character string. List of colors to use to build the color scale with [grDevices::colorRampPalette()]
+#'   to display the quantile groups used to discretize the continuous trait data. From lowest values to highest values. Only for continuous data.
+#'   Default = `NULL` will use the 'Spectral' color palette in [RColorBrewer::brewer.pal()].
+#' @param colors_per_levels Named character string. To set the colors to use to plot rates of each state/range. Names = states/ranges; values = colors.
+#'   If `NULL` (default), the default ggplot2 color palette ([scales::hue_pal()]) will be used. Only for categorical and biogeographic data.
 #' @param plot_CI Logical. Whether to plot a confidence interval (CI) based on the distribution of rates found in posterior samples.
 #' @param CI_type Character string. To select the type of confidence interval (CI) to plot.
 #'  * `fuzzy` (default): to overlay the evolution of rates found in all posterior samples with high transparency levels.
@@ -49,6 +54,8 @@
 #' @importFrom cowplot save_plot
 #' @importFrom stringr str_to_title
 #' @importFrom stats quantile
+#' @importFrom RColorBrewer brewer.pal
+#' @importFrom scales hue_pal
 #'
 #' @return The function returns a list with at least one element.
 #'
@@ -71,26 +78,27 @@
 #' @seealso [deepSTRAPP::run_deepSTRAPP_over_time()]
 #'
 #' @examples
-#' ## Load results of run_deepSTRAPP_over_time()
-#' data(STRAPP_tests_over_time_temp_example_2, package = "deepSTRAPP")
 #'
-#' # ------ Plot rates through time for continuous data ------ #
+#' # ------ Example 1: Plot rates through time for continuous data ------ #
+#'
+#' ## Load results of run_deepSTRAPP_over_time()
+#' data(Ponerinae_deepSTRAPP_cont_0_40, package = "deepSTRAPP")
 #'
 #' # Visualize trait data
-#' hist(STRAPP_tests_over_time_temp_example_2$trait_data_df_over_time$trait_value)
+#' hist(Ponerinae_deepSTRAPP_cont_0_40$trait_data_df_over_time$trait_value)
 #'
 #' # Generate plot
 #' plotTT_continuous <- plot_rates_through_time(
-#'   STRAPP_tests_over_time = STRAPP_tests_over_time_temp_example_2,
-#'   quantile_ranges = c(0, 0.25, 0.5, 0.75, 1.0),
-#'   time_range = c(0, 15),
-#'   plot_CI = TRUE,
-#'   CI_type = "quantiles_rect",
-#'   CI_quantiles = 0.9,
-#'   # PDF_file_path = "./plotTT_continuous.pdf",
-#'   return_mean_data_per_samples_df = TRUE,
-#'   return_median_data_across_samples_df = TRUE
-#'   )
+#'    deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_0_40,
+#'    quantile_ranges = c(0, 0.25, 0.5, 0.75, 1.0),
+#'    time_range = c(0, 50), # Control range of the X-axis
+#'    # color_scale = c("limegreen", "red"),
+#'    plot_CI = TRUE,
+#'    CI_type = "quantiles_rect",
+#'    CI_quantiles = 0.9,
+#'    # PDF_file_path = "./plotTT_continuous.pdf",
+#'    return_mean_data_per_samples_df = TRUE,
+#'    return_median_data_across_samples_df = TRUE)
 #'
 #' # Explore output
 #' str(plotTT_continuous, max.level = 1)
@@ -102,68 +110,59 @@
 #'     ggplot2::theme(plot.title = ggplot2::element_text(color = "red", size = 15))
 #' print(plotTT_continuous_adj)
 #'
-#' # ------ Plot rates through time for categorical data ------ #
+#' # ------ Example 2: Plot rates through time for categorical data ------ #
 #'
-#' # Turn trait data into multiple states
-#' trait_data_continuous <- STRAPP_tests_over_time_temp_example_2$trait_data_df_over_time$trait_value
-#' trait_data_multinominal <- trait_data_continuous
-#' trait_data_multinominal[trait_data_continuous < 0] <- "state_B"
-#' trait_data_multinominal[trait_data_continuous < -1] <- "state_A"
-#' trait_data_multinominal[trait_data_continuous >= 0] <- "state_C"
+#' ## Load results of run_deepSTRAPP_over_time()
+#' data(Ponerinae_deepSTRAPP_cat_0_40, package = "deepSTRAPP")#'
 #'
-#' # Visualize trait data
-#' table(trait_data_multinominal)
+#' # Explore trait data
+#' table(Ponerinae_deepSTRAPP_cat_0_40$trait_data_df_over_time$trait_value)
 #'
-#' # Change trait data for categorical
-#' STRAPP_tests_over_time_temp_example_2$trait_data_df_over_time$trait_value <- trait_data_multinominal
-#' STRAPP_tests_over_time_temp_example_2$trait_data_type <- "categorical"
+#' # Set colors to use
+#' colors_per_levels <- c("red", "orange", "limegreen")
+#' names(colors_per_levels) <- c("large", "medium", "small")
 #'
-#' # Generate plot only for "state_A" and "state_C"
+# Generate plot only for "small" and "large"
 #' plotTT_categorical <- plot_rates_through_time(
-#'   STRAPP_tests_over_time = STRAPP_tests_over_time_temp_example_2,
-#'   select_trait_states = c("state_A", "state_C"),
-#'   time_range = c(0, 10),
-#'   plot_CI = TRUE,
-#'   CI_type = "quantiles_rect",
-#'   CI_quantiles = 0.9,
-#'   # PDF_file_path = "./plotTT_categorical.pdf",
-#'   return_mean_data_per_samples_df = TRUE,
-#'   return_median_data_across_samples_df = TRUE
-#' )
+#'     deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cat_0_40,
+#'     select_trait_states = c("small", "large"),
+#'     time_range = c(0, 50),
+#'     colors_per_levels = colors_per_levels,
+#'     plot_CI = TRUE,
+#'     CI_type = "quantiles_rect",
+#'     CI_quantiles = 0.9,
+#'     # PDF_file_path = "./plotTT_categorical.pdf",
+#'     return_mean_data_per_samples_df = TRUE,
+#'     return_median_data_across_samples_df = TRUE)
 #'
 #' # Explore output
 #' str(plotTT_categorical, max.level = 1)
 #' # Plot again
 #' print(plotTT_categorical$rates_TT_ggplot)
 #'
-#' # ------ Plot rates through time for biogeographic data ------ #
+#' # ------ Example 3: Plot rates through time for biogeographic data ------ #
 #'
-#' # Turn trait data into multiple ranges
-#' trait_data_biogeographic <- trait_data_multinominal
-#' trait_data_biogeographic[trait_data_multinominal == "state_A"] <- "range_A"
-#' trait_data_biogeographic[trait_data_multinominal == "state_B"] <- "range_B"
-#' trait_data_biogeographic[trait_data_multinominal == "state_C"] <- "range_C"
+#' ## Load results of run_deepSTRAPP_over_time()
+#' data(Ponerinae_deepSTRAPP_biogeo_0_40, package = "deepSTRAPP")
 #'
-#' # Visualize trait data
-#' table(trait_data_biogeographic)
+#' # Explore range data
+#' table(Ponerinae_deepSTRAPP_biogeo_0_40$trait_data_df_over_time$trait_value)
 #'
-#' # Change trait data for biogeographic
-#' trait_data_df_over_time <- STRAPP_tests_over_time_temp_example_2$trait_data_df_over_time
-#' trait_data_df_over_time$trait_value <- trait_data_biogeographic
-#' STRAPP_tests_over_time_temp_example_2$trait_data_df_over_time <- trait_data_df_over_time
-#' STRAPP_tests_over_time_temp_example_2$trait_data_type <- "biogeographic"
+#' # Set colors to use
+#' colors_per_levels <- c("mediumpurple2", "peachpuff2")
+#' names(colors_per_levels) <- c("N", "O")
 #'
 #' plotTT_biogeographic <- plot_rates_through_time(
-#'   STRAPP_tests_over_time = STRAPP_tests_over_time_temp_example_2,
-#'   select_trait_states = "all",
-#'   time_range = c(0, 10),
-#'   plot_CI = TRUE,
-#'   CI_type = "quantiles_rect",
-#'   CI_quantiles = 0.9,
-#'   # PDF_file_path = "./plotTT_biogeographic.pdf",
-#'   return_mean_data_per_samples_df = TRUE,
-#'   return_median_data_across_samples_df = TRUE
-#' )
+#'     deepSTRAPP_outputs = Ponerinae_deepSTRAPP_biogeo_0_40,
+#'     select_trait_states = "all",
+#'     time_range = c(0, 50),
+#'     colors_per_levels = colors_per_levels,
+#'     plot_CI = TRUE,
+#'     CI_type = "quantiles_rect",
+#'     CI_quantiles = 0.9,
+#'     # PDF_file_path = "./plotTT_biogeographic.pdf",
+#'     return_mean_data_per_samples_df = TRUE,
+#'     return_median_data_across_samples_df = TRUE)
 #'
 #' # Explore output
 #' str(plotTT_biogeographic, max.level = 1)
@@ -175,11 +174,13 @@
 ### Master function to prepare data and select the proper test function according to data type ####
 
 plot_rates_through_time <- function (
-    STRAPP_tests_over_time,
+    deepSTRAPP_outputs,
     rate_type = "net_diversification",
     quantile_ranges = c(0, 0.25, 0.5, 0.75, 1.0),
     select_trait_states = "all",
     time_range = NULL,
+    color_scale = NULL,
+    colors_per_levels = NULL,
     plot_CI = FALSE,
     CI_type = "fuzzy",
     CI_quantiles = 0.95,
@@ -191,19 +192,19 @@ plot_rates_through_time <- function (
 {
   ### Check input validity
   {
-    ## STRAPP_tests_over_time
-    # STRAPP_tests_over_time must have element $trait_data_df_over_time
-    if (is.null(STRAPP_tests_over_time$trait_data_df_over_time))
+    ## deepSTRAPP_outputs
+    # deepSTRAPP_outputs must have element $trait_data_df_over_time
+    if (is.null(deepSTRAPP_outputs$trait_data_df_over_time))
     {
-      stop(paste0("'$trait_data_df_over_time' is missing from 'STRAPP_tests_over_time'. You can inspect the structure of the input object with 'str(STRAPP_tests_over_time, 2)'.\n",
+      stop(paste0("'$trait_data_df_over_time' is missing from 'deepSTRAPP_outputs'. You can inspect the structure of the input object with 'str(deepSTRAPP_outputs, 2)'.\n",
                   "See ?deepSTRAPP::run_deepSTRAPP_over_time() to learn how to generate those objects.\n",
                   "Especially, check if you used 'extract_trait_data_melted_df = TRUE' to save the summary data.frame of trait values ",
                   "found along branches at each time-step, needed for the RTT plot."))
     }
-    # STRAPP_tests_over_time must have element $diversification_data_df_over_time
-    if (is.null(STRAPP_tests_over_time$diversification_data_df_over_time))
+    # deepSTRAPP_outputs must have element $diversification_data_df_over_time
+    if (is.null(deepSTRAPP_outputs$diversification_data_df_over_time))
     {
-      stop(paste0("'$diversification_data_df_over_time' is missing from 'STRAPP_tests_over_time'. You can inspect the structure of the input object with 'str(STRAPP_tests_over_time, 2)'.\n",
+      stop(paste0("'$diversification_data_df_over_time' is missing from 'deepSTRAPP_outputs'. You can inspect the structure of the input object with 'str(deepSTRAPP_outputs, 2)'.\n",
                   "See ?deepSTRAPP::run_deepSTRAPP_over_time() to learn how to generate those objects.\n",
                   "Especially, check if you used 'extract_diversification_data_melted_df = TRUE' to save the summary data.frame of diversification rates ",
                   "found along branches at each time-step, needed for the RTT plot."))
@@ -231,14 +232,14 @@ plot_rates_through_time <- function (
       # Ensure that time_range are properly ordered in increasing values
       time_range <- range(time_range)
       # Check that time_range encompass multiple focal-time to be able to draw a line
-      focal_times_in_trait_df <- unique(STRAPP_tests_over_time$trait_data_df_over_time$focal_time)
-      focal_times_in_diversification_df <- unique(STRAPP_tests_over_time$diversification_data_df_over_time$focal_time)
+      focal_times_in_trait_df <- unique(deepSTRAPP_outputs$trait_data_df_over_time$focal_time)
+      focal_times_in_diversification_df <- unique(deepSTRAPP_outputs$diversification_data_df_over_time$focal_time)
       shared_focal_times <- intersect(focal_times_in_trait_df, focal_times_in_diversification_df)
       shared_focal_times_in_range <- (shared_focal_times >= time_range[1]) & (shared_focal_times <= time_range[2])
       if (sum(shared_focal_times_in_range) < 2)
       {
         stop(paste0("'time_range' must encompass at least two focal_time recorded in the summary data.frames ",
-                    "for trait data ('STRAPP_tests_over_time$trait_data_df_over_time') and diversification rates ('STRAPP_tests_over_time$diversification_data_df_over_time').\n",
+                    "for trait data ('deepSTRAPP_outputs$trait_data_df_over_time') and diversification rates ('deepSTRAPP_outputs$diversification_data_df_over_time').\n",
                     "Current values of 'time_range' = ", paste(time_range, collapse = ", "), ".\n",
                     "'focal_time' with data recorded for traits and rates are: ", paste(shared_focal_times, collapse = ", "),"."))
       }
@@ -275,7 +276,7 @@ plot_rates_through_time <- function (
 
 
   ## Detect the type of trait data
-  trait_data_type <- STRAPP_tests_over_time$trait_data_type
+  trait_data_type <- deepSTRAPP_outputs$trait_data_type
 
   ## Compute the appropriate internal function depending on the type of data
 
@@ -283,10 +284,11 @@ plot_rates_through_time <- function (
          continuous =   { # Case for continuous data
            # Need quantile_ranges to define groups of branches per trait values
            plotTT_output <- plot_rates_through_time_for_continuous_data(
-             STRAPP_tests_over_time = STRAPP_tests_over_time,
+             deepSTRAPP_outputs = deepSTRAPP_outputs,
              rate_type = rate_type,
              quantile_ranges = quantile_ranges,
              time_range = time_range,
+             color_scale = color_scale,
              plot_CI = plot_CI,
              CI_type = CI_type,
              CI_quantiles = CI_quantiles,
@@ -299,10 +301,11 @@ plot_rates_through_time <- function (
          categorical =  { # Case for categorical data
            # Can select the states to plot
            plotTT_output <- plot_rates_through_time_for_categorical_data(
-             STRAPP_tests_over_time = STRAPP_tests_over_time,
+             deepSTRAPP_outputs = deepSTRAPP_outputs,
              rate_type = rate_type,
              select_trait_states = select_trait_states,
              time_range = time_range,
+             colors_per_levels = colors_per_levels,
              plot_CI = plot_CI,
              CI_type = CI_type,
              CI_quantiles = CI_quantiles,
@@ -315,10 +318,11 @@ plot_rates_through_time <- function (
          biogeographic = { # Case for biogeographic data
            # Can select the states/ranges to plot
            plotTT_output <- plot_rates_through_time_for_biogeographic_data(
-             STRAPP_tests_over_time = STRAPP_tests_over_time,
+             deepSTRAPP_outputs = deepSTRAPP_outputs,
              rate_type = rate_type,
              select_trait_states = select_trait_states,
              time_range = time_range,
+             colors_per_levels = colors_per_levels,
              plot_CI = plot_CI,
              CI_type = CI_type,
              CI_quantiles = CI_quantiles,
@@ -339,10 +343,11 @@ plot_rates_through_time <- function (
 ### Sub-function to handle continuous data ####
 
 plot_rates_through_time_for_continuous_data <- function (
-    STRAPP_tests_over_time,
+    deepSTRAPP_outputs,
     rate_type = "net_diversification",
     quantile_ranges = c(0, 0.25, 0.5, 0.75, 1.0),
     time_range = NULL,
+    color_scale = NULL,
     plot_CI = FALSE,
     CI_type = "fuzzy",
     CI_quantiles = 0.95,
@@ -384,6 +389,18 @@ plot_rates_through_time_for_continuous_data <- function (
     {
       cat(paste0("WARNING: New 'quantile_ranges' are ", paste(quantile_ranges, collapse = ", "),".\n"))
     }
+
+    ## color_scale
+    # Check whether all colors are valid
+    if (!is.null(color_scale))
+    {
+      if (!all(is_color(color_scale)))
+      {
+        invalid_colors <- color_scale[!is_color(color_scale)]
+        stop(paste0("Some color names in 'color_scale' are not valid.\n",
+                    "Invalid: ", paste(invalid_colors, collapse = ", "), "."))
+      }
+    }
   }
 
   ## Adjust rate_type for labels
@@ -398,8 +415,8 @@ plot_rates_through_time_for_continuous_data <- function (
   ## Merge diversification and trait data
   # Trait data are copied across BAMM samples
   data_per_samples_df <- dplyr::left_join(
-    x = STRAPP_tests_over_time$diversification_data_df_over_time,
-    y = STRAPP_tests_over_time$trait_data_df_over_time,
+    x = deepSTRAPP_outputs$diversification_data_df_over_time,
+    y = deepSTRAPP_outputs$trait_data_df_over_time,
     by = dplyr::join_by(focal_time, tip_ID))
 
   ## Filter data for selected rate_type
@@ -472,6 +489,19 @@ plot_rates_through_time_for_continuous_data <- function (
     dplyr::summarise(median_rates = median(mean_rates), .groups = "keep") |>
     dplyr::ungroup()
 
+  ## Prepare colors to use for quantile groups
+  nb_groups <- length(levels(as.factor(median_data_across_samples_df$quantile_ranges)))
+  if (!is.null(color_scale))
+  {
+    # Use the provided color to build the color palette
+    col_fn <- grDevices::colorRampPalette(colors = color_scale)
+    colors_per_groups <- col_fn(n = nb_groups)
+  } else {
+    # Default: use the 'Spectral' palette from RColorBrewer
+    colors_per_groups <- rev(RColorBrewer::brewer.pal(name = "Spectral", n = nb_groups))
+  }
+  names(colors_per_groups) <- levels(as.factor(median_data_across_samples_df$quantile_ranges))
+
   ## Case for plot without CI
   if (!plot_CI)
   {
@@ -501,7 +531,8 @@ plot_rates_through_time_for_continuous_data <- function (
                                   limits = rev(time_range)) +
 
       # Adjust color scheme and legend
-      ggplot2::scale_color_brewer(name = "Trait quantile groups", palette = "Spectral", direction = -1) +
+      # ggplot2::scale_color_brewer(name = "Trait quantile groups", palette = "Spectral", direction = -1) +
+      ggplot2::scale_color_manual(name = "Trait quantile groups", values = colors_per_groups) +
 
       # Adjust aesthetics
       ggplot2::theme(
@@ -568,7 +599,8 @@ plot_rates_through_time_for_continuous_data <- function (
                                     limits = rev(time_range)) +
 
         # Adjust color scheme and legend
-        ggplot2::scale_color_brewer(name = "Trait quantile groups", palette = "Spectral", direction = -1) +
+        # ggplot2::scale_color_brewer(name = "Trait quantile groups", palette = "Spectral", direction = -1) +
+        ggplot2::scale_color_manual(name = "Trait quantile groups", values = colors_per_groups) +
 
         # Adjust aesthetics
         ggplot2::theme(
@@ -658,10 +690,12 @@ plot_rates_through_time_for_continuous_data <- function (
                                     limits = rev(time_range)) +
 
         # Adjust fill scheme and legend
-        ggplot2::scale_fill_brewer(name = "Trait quantile groups", palette = "Spectral", direction = -1) +
+        # ggplot2::scale_fill_brewer(name = "Trait quantile groups", palette = "Spectral", direction = -1) +
+        ggplot2::scale_fill_manual(name = "Trait quantile groups", values = colors_per_groups) +
 
         # Adjust color scheme and legend
-        ggplot2::scale_color_brewer(name = "Trait quantile groups", palette = "Spectral", direction = -1) +
+        # ggplot2::scale_color_brewer(name = "Trait quantile groups", palette = "Spectral", direction = -1) +
+        ggplot2::scale_color_manual(name = "Trait quantile groups", values = colors_per_groups) +
 
         # Remove fill legend
         ggplot2::guides(fill = "none") +
@@ -731,10 +765,11 @@ plot_rates_through_time_for_continuous_data <- function (
 ### Sub-function to handle categorical data ####
 
 plot_rates_through_time_for_categorical_data <- function (
-    STRAPP_tests_over_time,
+    deepSTRAPP_outputs,
     rate_type = "net_diversification",
     select_trait_states = "all",
     time_range = NULL,
+    colors_per_levels = NULL,
     plot_CI = FALSE,
     CI_type = "fuzzy",
     CI_quantiles = 0.95,
@@ -746,17 +781,45 @@ plot_rates_through_time_for_categorical_data <- function (
 {
   ### Check input validity
   {
+    ## Extract state levels
+    states_in_trait_df <- unique(deepSTRAPP_outputs$trait_data_df_over_time$trait_value)
+    states_in_trait_df <- states_in_trait_df[order(states_in_trait_df)]
+
     ## select_trait_states
     if (!any(select_trait_states == "all"))
     {
       # Check that select_trait_states are all found in the summary data.frame $trait_data_df_over_time
-      states_in_trait_df <- unique(STRAPP_tests_over_time$trait_data_df_over_time$trait_value)
-      states_in_trait_df <- states_in_trait_df[order(states_in_trait_df)]
+
       if (!all(select_trait_states %in% states_in_trait_df))
       {
-        stop(paste0("Some states listed in 'select_trait_states' are not found in the summary data.frame for trait data ('STRAPP_tests_over_time$trait_data_df_over_time').\n",
+        stop(paste0("Some states listed in 'select_trait_states' are not found in the summary data.frame for trait data ('deepSTRAPP_outputs$trait_data_df_over_time').\n",
                     "'select_trait_states' = ",paste(select_trait_states[order(select_trait_states)], collapse = ", "),".\n",
                     "Observed states in trait data = ", paste(states_in_trait_df, collapse = ", ")),".")
+      }
+    }
+
+    # Update list of states to keep only the selected ones
+    if (!any(select_trait_states == "all"))
+    {
+      states_in_trait_df <- select_trait_states
+    }
+
+    ## colors_per_levels
+    # Check whether all colors are valid
+    if (!is.null(colors_per_levels))
+    {
+      # Check that the color match the selected states
+      if (!all(states_in_trait_df %in% names(colors_per_levels)))
+      {
+        missing_states <- states_in_trait_df[!(states_in_trait_df %in% names(colors_per_levels))]
+        stop(paste0("Not all selected states are found in 'colors_per_levels'.\n",
+                    "Missing states: ", paste(missing_states, collapse = ", "), "."))
+      }
+      if (!all(is_color(colors_per_levels)))
+      {
+        invalid_colors <- colors_per_levels[!is_color(colors_per_levels)]
+        stop(paste0("Some color names in 'colors_per_levels' are not valid.\n",
+                    "Invalid: ", paste(invalid_colors, collapse = ", "), "."))
       }
     }
   }
@@ -773,8 +836,8 @@ plot_rates_through_time_for_categorical_data <- function (
   ## Merge diversification and trait data
   # Trait data are copied across BAMM samples
   data_per_samples_df <- dplyr::left_join(
-    x = STRAPP_tests_over_time$diversification_data_df_over_time,
-    y = STRAPP_tests_over_time$trait_data_df_over_time,
+    x = deepSTRAPP_outputs$diversification_data_df_over_time,
+    y = deepSTRAPP_outputs$trait_data_df_over_time,
     by = dplyr::join_by(focal_time, tip_ID))
 
   ## Filter data for selected rate_type
@@ -813,6 +876,16 @@ plot_rates_through_time_for_categorical_data <- function (
     dplyr::summarise(median_rates = median(mean_rates), .groups = "keep") |>
     dplyr::ungroup()
 
+  ## Prepare colors_per_levels to use in plots
+  if (is.null(colors_per_levels))
+  {
+    nb_groups <- length(levels(as.factor(median_data_across_samples_df$trait_value)))
+    # Default: use the default ggplot palette from scales
+    col_fn <- scales::hue_pal()
+    colors_per_levels <- col_fn(n = nb_groups)
+    names(colors_per_levels) <- levels(as.factor(median_data_across_samples_df$trait_value))
+  }
+
   ## Case for plot without CI
   if (!plot_CI)
   {
@@ -842,7 +915,8 @@ plot_rates_through_time_for_categorical_data <- function (
                                   limits = rev(time_range)) +
 
       # Adjust color scheme and legend
-      ggplot2::scale_color_discrete(name = "States") +
+      # ggplot2::scale_color_discrete(name = "States") +
+      ggplot2::scale_color_manual(name = "States", values = colors_per_levels) +
 
       # Adjust aesthetics
       ggplot2::theme(
@@ -909,7 +983,8 @@ plot_rates_through_time_for_categorical_data <- function (
                                     limits = rev(time_range)) +
 
         # Adjust color scheme and legend
-        ggplot2::scale_color_discrete(name = "States") +
+        # ggplot2::scale_color_discrete(name = "States") +
+        ggplot2::scale_color_manual(name = "States", values = colors_per_levels) +
 
         # Adjust aesthetics
         ggplot2::theme(
@@ -999,10 +1074,12 @@ plot_rates_through_time_for_categorical_data <- function (
                                     limits = rev(time_range)) +
 
         # Adjust fill scheme and legend
-        ggplot2::scale_fill_discrete("States") +
+        # ggplot2::scale_fill_discrete("States") +
+        ggplot2::scale_fill_manual(name = "States", values = colors_per_levels) +
 
         # Adjust color scheme and legend
-        ggplot2::scale_color_discrete(name = "States") +
+        # ggplot2::scale_color_discrete(name = "States") +
+        ggplot2::scale_color_manual(name = "States", values = colors_per_levels) +
 
         # Remove fill legend
         ggplot2::guides(fill = "none") +
@@ -1072,10 +1149,11 @@ plot_rates_through_time_for_categorical_data <- function (
 ### Sub-function to handle biogeographic data ####
 
 plot_rates_through_time_for_biogeographic_data <- function (
-    STRAPP_tests_over_time,
+    deepSTRAPP_outputs,
     rate_type = "net_diversification",
     select_trait_states = "all",
     time_range = NULL,
+    colors_per_levels = NULL,
     plot_CI = FALSE,
     CI_type = "fuzzy",
     CI_quantiles = 0.95,
@@ -1087,17 +1165,44 @@ plot_rates_through_time_for_biogeographic_data <- function (
 {
   ### Check input validity
   {
+    ## Extract range levels
+    ranges_in_trait_df <- unique(deepSTRAPP_outputs$trait_data_df_over_time$trait_value)
+    ranges_in_trait_df <- ranges_in_trait_df[order(ranges_in_trait_df)]
+
     ## select_trait_states
     if (!any(select_trait_states == "all"))
     {
       # Check that select_trait_states are all found in the summary data.frame $trait_data_df_over_time
-      ranges_in_trait_df <- unique(STRAPP_tests_over_time$trait_data_df_over_time$trait_value)
-      ranges_in_trait_df <- ranges_in_trait_df[order(ranges_in_trait_df)]
       if (!all(select_trait_states %in% ranges_in_trait_df))
       {
-        stop(paste0("Some ranges listed in 'select_trait_states' are not found in the summary data.frame for trait data ('STRAPP_tests_over_time$trait_data_df_over_time').\n",
+        stop(paste0("Some ranges listed in 'select_trait_states' are not found in the summary data.frame for trait data ('deepSTRAPP_outputs$trait_data_df_over_time').\n",
                     "'select_trait_states' = ",paste(select_trait_states[order(select_trait_states)], collapse = ", "),".\n",
                     "Observed ranges in trait data = ", paste(ranges_in_trait_df, collapse = ", ")),".")
+      }
+    }
+
+    # Update list of ranges to keep only the selected ones
+    if (!any(select_trait_states == "all"))
+    {
+      ranges_in_trait_df <- select_trait_states
+    }
+
+    ## colors_per_levels
+    # Check whether all colors are valid
+    if (!is.null(colors_per_levels))
+    {
+      # Check that the color match the states
+      if (!all(ranges_in_trait_df %in% names(colors_per_levels)))
+      {
+        missing_ranges <- ranges_in_trait_df[!(ranges_in_trait_df %in% names(colors_per_levels))]
+        stop(paste0("Not all selected ranges are found in 'colors_per_levels'.\n",
+                    "Missing ranges: ", paste(missing_ranges, collapse = ", "), "."))
+      }
+      if (!all(is_color(colors_per_levels)))
+      {
+        invalid_colors <- colors_per_levels[!is_color(colors_per_levels)]
+        stop(paste0("Some color names in 'colors_per_levels' are not valid.\n",
+                    "Invalid: ", paste(invalid_colors, collapse = ", "), "."))
       }
     }
   }
@@ -1115,8 +1220,8 @@ plot_rates_through_time_for_biogeographic_data <- function (
   ## Merge diversification and trait data
   # Trait data are copied across BAMM samples
   data_per_samples_df <- dplyr::left_join(
-    x = STRAPP_tests_over_time$diversification_data_df_over_time,
-    y = STRAPP_tests_over_time$trait_data_df_over_time,
+    x = deepSTRAPP_outputs$diversification_data_df_over_time,
+    y = deepSTRAPP_outputs$trait_data_df_over_time,
     by = dplyr::join_by(focal_time, tip_ID))
 
   ## Filter data for selected rate_type
@@ -1155,6 +1260,16 @@ plot_rates_through_time_for_biogeographic_data <- function (
     dplyr::summarise(median_rates = median(mean_rates), .groups = "keep") |>
     dplyr::ungroup()
 
+  ## Prepare colors_per_levels to use in plots
+  if (is.null(colors_per_levels))
+  {
+    nb_groups <- length(levels(as.factor(median_data_across_samples_df$trait_value)))
+    # Default: use the default ggplot palette from scales
+    col_fn <- scales::hue_pal()
+    colors_per_levels <- col_fn(n = nb_groups)
+    names(colors_per_levels) <- levels(as.factor(median_data_across_samples_df$trait_value))
+  }
+
   ## Case for plot without CI
   if (!plot_CI)
   {
@@ -1184,7 +1299,8 @@ plot_rates_through_time_for_biogeographic_data <- function (
                                   limits = rev(time_range)) +
 
       # Adjust color scheme and legend
-      ggplot2::scale_color_discrete(name = "Ranges") +
+      # ggplot2::scale_color_discrete(name = "Ranges") +
+      ggplot2::scale_color_manual(name = "Ranges", values = colors_per_levels) +
 
       # Adjust aesthetics
       ggplot2::theme(
@@ -1251,7 +1367,8 @@ plot_rates_through_time_for_biogeographic_data <- function (
                                     limits = rev(time_range)) +
 
         # Adjust color scheme and legend
-        ggplot2::scale_color_discrete(name = "Ranges") +
+        # ggplot2::scale_color_discrete(name = "Ranges") +
+        ggplot2::scale_color_manual(name = "Ranges", values = colors_per_levels) +
 
         # Adjust aesthetics
         ggplot2::theme(
@@ -1341,10 +1458,12 @@ plot_rates_through_time_for_biogeographic_data <- function (
                                     limits = rev(time_range)) +
 
         # Adjust fill scheme and legend
-        ggplot2::scale_fill_discrete("Ranges") +
+        # ggplot2::scale_fill_discrete("Ranges") +
+        ggplot2::scale_fill_manual(name = "Ranges", values = colors_per_levels) +
 
         # Adjust color scheme and legend
-        ggplot2::scale_color_discrete(name = "Ranges") +
+        # ggplot2::scale_color_discrete(name = "Ranges") +
+        ggplot2::scale_color_manual(name = "Ranges", values = colors_per_levels) +
 
         # Remove fill legend
         ggplot2::guides(fill = "none") +

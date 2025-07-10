@@ -148,7 +148,7 @@ str(Ponerinae_trait_object, 1)
 
 # Extract the contMap representing continuous trait evolution on the phylogeny
 Ponerinae_contMap <- Ponerinae_trait_object$contMap
-plot(Ponerinae_contMap)
+plot_contMap(Ponerinae_contMap)
 
 # Extract the Ancestral Character Estimates (ACE) = trait values at nodes
 Ponerinae_ACE <- Ponerinae_trait_object$ace
@@ -234,7 +234,7 @@ time_step_duration <- 10
 
 # Run deepSTRAPP on net diversification rates
 ## This step is time-consuming. You can skip it and load directly the result if needed
-Ponerinae_deepSTRAPP_0_40 <- run_deepSTRAPP_over_time(
+Ponerinae_deepSTRAPP_cont_0_40 <- run_deepSTRAPP_over_time(
     contMap = Ponerinae_contMap,
     ace = Ponerinae_ACE,
     tip_data = Ponerinae_data_ln_HW,
@@ -246,46 +246,46 @@ Ponerinae_deepSTRAPP_0_40 <- run_deepSTRAPP_over_time(
     extract_trait_data_melted_df = TRUE, # Needed to get trait data and plot rates through time (See 4.3)
     extract_diversification_data_melted_df = TRUE, # Needed to get diversification data and plot rates through time (See 4.3)
     return_STRAPP_results = TRUE, # Needed to obtain STRAPP stats and plot evaluation histograms (See 4.2)
-    return_updated_trait_data_with_contMap = TRUE, # Needed to plot updated contMaps (See 4.4)
+    return_updated_trait_data_with_Map = TRUE, # Needed to plot updated contMaps (See 4.4)
     return_updated_BAMM_object = TRUE, # Needed to map diversification rates on updated phylogenies (See 4.5)
     verbose = TRUE,
     verbose_extended = TRUE)
 
 # Load the deepSTRAPP output summarizing results for 0 to 40 My
-data(Ponerinae_deepSTRAPP_0_40, package = "deepSTRAPP")
+data(Ponerinae_deepSTRAPP_cont_0_40, package = "deepSTRAPP")
 
 ## Explore output
-str(Ponerinae_deepSTRAPP_0_40, max.level = 1)
+str(Ponerinae_deepSTRAPP_cont_0_40, max.level = 1)
 
 # See next step for how to generate plots from those outputs
 
 # Display test summary
 # Can be passed down to [deepSTRAPP::plot_STRAPP_pvalues_over_time()] to generate a plot
 # showing the evolution of the test results across time
-Ponerinae_deepSTRAPP_0_40$pvalues_summary_df
+Ponerinae_deepSTRAPP_cont_0_40$pvalues_summary_df
 
 # Access STRAPP test results
 # Can be passed down to [deepSTRAPP::plot_histograms_STRAPP_tests_over_time()] to generate plot
 # showing the null distribution of the test statistics
-str(Ponerinae_deepSTRAPP_0_40$STRAPP_results, max.level = 2)
+str(Ponerinae_deepSTRAPP_cont_0_40$STRAPP_results, max.level = 2)
 
 # Access trait data in a melted data.frame
-head(Ponerinae_deepSTRAPP_0_40$trait_data_df_over_time)
+head(Ponerinae_deepSTRAPP_cont_0_40$trait_data_df_over_time)
 # Access the diversification data in a melted data.frame
-head(Ponerinae_deepSTRAPP_0_40$diversification_data_df_over_time)
+head(Ponerinae_deepSTRAPP_cont_0_40$diversification_data_df_over_time)
 # Both can be passed down to [deepSTRAPP::plot_rates_through_time()] to generate a plot
 # showing the evolution of diversification rates though time in relation to trait values
 
 # Access updated contMaps for each focal time
 # Can be used to plot contMap with branch cut-off at focal time with [phytools::plot.contMap()]
-str(Ponerinae_deepSTRAPP_0_40$updated_trait_data_with_contMap_over_time, max.level = 2)
+str(Ponerinae_deepSTRAPP_cont_0_40$updated_trait_data_with_Map_over_time, max.level = 2)
 
 # Access updated BAMM_object for each focal time
 # Can be used to map rates and regime shifts on phylogeny with branch cut-off 
 # at focal time with [deepSTRAPP::plot_BAMM_rates()]
-str(Ponerinae_deepSTRAPP_0_40$updated_trait_data_with_contMap_over_time, max.level = 2)
+str(Ponerinae_deepSTRAPP_cont_0_40$updated_trait_data_with_Map_over_time, max.level = 2)
 
-## Input needed for Step 4 is the deepSTRAPP object (Ponerinae_deepSTRAPP_0_40)
+## Input needed for Step 4 is the deepSTRAPP object (Ponerinae_deepSTRAPP_cont_0_40)
 
 ```
 
@@ -304,7 +304,7 @@ str(Ponerinae_deepSTRAPP_0_40$updated_trait_data_with_contMap_over_time, max.lev
 # Each plot is achieve through a dedicated function
 
 # Load the deepSTRAPP output summarizing results for 0 to 40 My
-data(Ponerinae_deepSTRAPP_0_40, package = "deepSTRAPP")
+data(Ponerinae_deepSTRAPP_cont_0_40, package = "deepSTRAPP")
 
 ### 1/ Plot evolution of STRAPP tests p-values through time ####
 
@@ -312,7 +312,7 @@ data(Ponerinae_deepSTRAPP_0_40, package = "deepSTRAPP")
 
 ## Plot results of Spearman's tests over time
 deepSTRAPP::plot_STRAPP_pvalues_over_time(
-   STRAPP_tests_over_time = Ponerinae_deepSTRAPP_0_40)
+   deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_0_40)
 
 # This is the main output of deepSTRAPP. It shows the evolution of the significance of the STRAPP test over time.
 
@@ -329,21 +329,23 @@ deepSTRAPP::plot_STRAPP_pvalues_over_time(
 # ?deepSTRAPP::plot_histograms_STRAPP_tests_over_time
 
 # Display the time-steps
-Ponerinae_deepSTRAPP_0_40$time_steps
+Ponerinae_deepSTRAPP_cont_0_40$time_steps
 
 # Plot the histogram of test stats for time-step n°3 = 20 My
 plot_histogram_STRAPP_test_for_focal_time(
-   STRAPP_results = Ponerinae_deepSTRAPP_0_40$STRAPP_results_over_time[[2]])
+   deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_0_40,
+   focal_time = 20)
 
 # Plot the histograms of test stats for all time-steps
 plot_histograms_STRAPP_tests_over_time(
-   STRAPP_tests_over_time = Ponerinae_deepSTRAPP_0_40)
+   deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_0_40)
 
 ```
 ```{r plot_histogram_STRAPP_tests_eval, eval = TRUE, echo = FALSE}
 # Plot the histogram of test stats for time-step n°3 = 20 My
 plot_histogram_STRAPP_test_for_focal_time(
-   STRAPP_results = Ponerinae_deepSTRAPP_0_40$STRAPP_results_over_time[[2]])
+   deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_0_40,
+   focal_time = 20)
 ```
 
 ```{r plot_rates_through_time}
@@ -352,7 +354,7 @@ plot_histogram_STRAPP_test_for_focal_time(
 # ?deepSTRAPP::plot_rates_through_time()
 
 # Generate ggplot
-plotTT_continuous <- plot_rates_through_time(STRAPP_tests_over_time = Ponerinae_deepSTRAPP_0_40,
+plotTT_continuous <- plot_rates_through_time(deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_0_40,
                                              display_plot = FALSE)
 
 # Plot results
@@ -364,7 +366,7 @@ print(plotTT_continuous_adj)
 
 ```
 ```{r plot_rates_through_time_eval, eval = TRUE, echo = FALSE}
-plot_rates_through_time(STRAPP_tests_over_time = Ponerinae_deepSTRAPP_0_40)
+plot_rates_through_time(deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_0_40)
 ```
 
 ```{r plot_updated_contMap, eval = TRUE, echo = TRUE}
@@ -373,19 +375,19 @@ plot_rates_through_time(STRAPP_tests_over_time = Ponerinae_deepSTRAPP_0_40)
 # ?phytools::plot.contMap()
 
 # Display the time-steps
-Ponerinae_deepSTRAPP_0_40$time_steps
+Ponerinae_deepSTRAPP_cont_0_40$time_steps
 
 # Extract root age
 root_age <- max(phytools::nodeHeights(Ponerinae_tree)[,2])
 
 # Plot initial contMap (t = 0)
-contMap_0My <- Ponerinae_deepSTRAPP_0_40$updated_trait_data_with_contMap_over_time[[1]]
-phytools::plot.contMap(contMap_0My$contMap)
+contMap_0My <- Ponerinae_deepSTRAPP_cont_0_40$updated_trait_data_with_Map_over_time[[1]]
+plot_contMap(contMap_0My$contMap)
 abline(v = root_age - 20, col = "red", lty = 2) # Show where the phylogeny will be cut
 
 # Plot updated contMap for time-step n°3 = 20 My
-contMap_20My <- Ponerinae_deepSTRAPP_0_40$updated_trait_data_with_contMap_over_time[[3]]
-phytools::plot.contMap(contMap_20My$contMap)
+contMap_20My <- Ponerinae_deepSTRAPP_cont_0_40$updated_trait_data_with_Map_over_time[[3]]
+plot_contMap(contMap_20My$contMap)
 
 ```
 
@@ -395,30 +397,30 @@ phytools::plot.contMap(contMap_20My$contMap)
 # ?deepSTRAPP::plot_BAMM_rates()
 
 # Display the time-steps
-Ponerinae_deepSTRAPP_0_40$time_steps
+Ponerinae_deepSTRAPP_cont_0_40$time_steps
 
 # Extract root age
 root_age <- max(phytools::nodeHeights(Ponerinae_tree)[,2])
 
 # Plot diversification rates on initial phylogeny (t = 0)
-BAMM_map_0My <- Ponerinae_deepSTRAPP_0_40$updated_BAMM_objects_over_time[[1]]
+BAMM_map_0My <- Ponerinae_deepSTRAPP_cont_0_40$updated_BAMM_objects_over_time[[1]]
 plot_BAMM_rates(BAMM_map_0My, labels = FALSE, par.reset = FALSE)
 abline(v = root_age - 20, col = "red", lty = 2) # Show where the phylogeny will be cut
 
 # Plot diversification rates on updated phylogeny for time-step n°3 = 20 My
-BAMM_map_20My <- Ponerinae_deepSTRAPP_0_40$updated_BAMM_objects_over_time[[3]]
+BAMM_map_20My <- Ponerinae_deepSTRAPP_cont_0_40$updated_BAMM_objects_over_time[[3]]
 plot_BAMM_rates(BAMM_map_20My, labels = FALSE,
                 colorbreaks = BAMM_map_20My$initial_colorbreaks$net_diversification)
 
 ```
 ```{r plot_BAMM_rates_eval, eval = TRUE, echo = FALSE}
 # Plot diversification rates on initial phylogeny (t = 0)
-BAMM_map_0My <- Ponerinae_deepSTRAPP_0_40$updated_BAMM_objects_over_time[[1]]
+BAMM_map_0My <- Ponerinae_deepSTRAPP_cont_0_40$updated_BAMM_objects_over_time[[1]]
 plot_BAMM_rates(BAMM_map_0My, labels = FALSE, legend = TRUE, par.reset = FALSE)
 abline(v = max(phytools::nodeHeights(Ponerinae_tree)[,2]) - 20, col = "red", lty = 2) # Show where the phylogeny will be cut
 
 # Plot diversification rates on updated phylogeny for time-step n°3 = 20 My
-BAMM_map_20My <- Ponerinae_deepSTRAPP_0_40$updated_BAMM_objects_over_time[[3]]
+BAMM_map_20My <- Ponerinae_deepSTRAPP_cont_0_40$updated_BAMM_objects_over_time[[3]]
 plot_BAMM_rates(BAMM_map_20My, labels = FALSE, legend = TRUE,
                 colorbreaks = BAMM_map_20My$initial_colorbreaks$net_diversification)
 ```
@@ -452,13 +454,21 @@ Points to vignettes for tutorials on how to use the package in more complex situ
 
 * Histo for STRAPP results
   + With pairwise tests
-* Plot rates and shifts => Options for shift location
+* Plot rates and shifts => Options for shift location: index, MAP, MSC
 * Plot traits: contMap, DensityMaps per states/ranges, DensityMap with alpha
 * Plot traits vs. rates + Updated BAMM and updated contMap/DensityMaps
 * RTT plots
   + For different type of data
   + With pairwise tests and options
 * Diversification/traits melted df
+
+**Advertise utility functions**
+
+* Select best model from geiger: continuous and categorical
+* Select best model from BioGeoBEARS: biogeographical
+* Split multi-area states in densityMaps
+* Cut phylogeny, contMap, densityMap for focal-time
+  
   
 ## How to Cite
 

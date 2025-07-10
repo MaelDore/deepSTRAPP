@@ -19,6 +19,7 @@ prepare_trait_data(
   ...,
   res = 100,
   nb_simulations = 1000,
+  color_scale = NULL,
   colors_per_levels = NULL,
   plot_map = TRUE,
   plot_overlay = TRUE,
@@ -78,6 +79,9 @@ and produce simmaps with \code{\link[phytools:make.simmap]{phytools::make.simmap
 \item{res}{Integer. Define the number of time steps used to interpolate/estimate trait value/state/range in \code{contMap}/\code{densityMaps}.}
 
 \item{nb_simulations}{Integer. Define the number of simulations generated for stochastic mapping. Default = 1000. Only for "categorical" and "biogeographic" data.}
+
+\item{color_scale}{Vector of character string. List of colors to use to build the color scale with \code{\link[grDevices:colorRamp]{grDevices::colorRampPalette()}}
+showing the evolution of a continuous trait on the \code{contMap}. From lowest values to highest values. Only for continuous data. Default = \code{NULL} will use the rainbow() color palette.}
 
 \item{colors_per_levels}{Named character string. To set the colors to use to map each state/range posterior probabilities. Names = states/ranges; values = colors.
 If \code{NULL} (default), the \code{rainbow()} color scale will be used for categorical trait; the \code{BioGeoBEARS::get_colors_for_states_list_0based()} will be used for biogeographic ranges.
@@ -243,6 +247,7 @@ mapped_cont_traits <- prepare_trait_data(
    evolutionary_models = c("BM", "OU", "lambda", "kappa"),
    # Example of an additional argument ('control') that can be provided to geiger::fitContinuous()
    control = list(niter = 200),
+   color_scale = c("darkgreen", "limegreen", "orange", "red"),
    plot_map = FALSE,
    return_best_model_fit = TRUE,
    return_model_selection_df = TRUE,

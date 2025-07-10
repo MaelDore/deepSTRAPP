@@ -29,6 +29,37 @@
 #'
 "Ponerinae_tree"
 
+### 1b/ Ponerinae_tree_old_calib ####
+
+#' @title Dataset providing the extensive time-calibrated phylogeny of extant ponerine ants using an old calibration for demonstration purposes
+#'
+#' @description A `phylo` object describing the time-calibrated phylogeny of the 1534 extant ponerine ants (Ponerinae subfamily).
+#'  THIS IS NOT a properly time-calibrated phylogeny. It uses an ill-designed old calibration for demonstration purposes.
+#'  For a proper time-calibrated phylogeny of ponerine ants, see the `Ponerinae_tree` in deepSTRAPP.
+#'
+#'  Source: Doré, M., Borowiec, M. L., Branstetter, M. G., Camacho, G. P., Fisher, B. L., Longino, J. T., Ward, P. S., Blaimer, B. B., (2025),
+#'  Timing is everything: Evolution of ponerine ants highlights how dispersal history shapes modern biodiversity, Nature Communications.
+#'  [https://doi_of_Paper_to_provide.html]
+#'
+#' @usage data(Ponerinae_tree_old_calib)
+#' @format A `phylo` object with 4 elements.
+#'
+#' @details A time-calibrated phylogeny as a `phylo` object with 4 elements.
+#'   * `$edge` Matrix of integers. Defines the tree topology by providing rootward and tipward node ID of each edge.
+#'   * `$edge.length` Vector of numerical. Length of edges/branches.
+#'   * `$Nnode` Integer. Number of internal nodes.
+#'   * `$tip.label` Vector of character strings. Labels of all tips.
+#'
+#' @docType data
+#' @keywords datasets
+#' @name Ponerinae_tree_old_calib
+#'
+#' @references Doré, M., Borowiec, M. L., Branstetter, M. G., Camacho, G. P., Fisher, B. L., Longino, J. T., Ward, P. S., Blaimer, B. B., (2025),
+#'  Timing is everything: Evolution of ponerine ants highlights how dispersal history shapes modern biodiversity, Nature Communications.
+#'  \url{https://doi_of_Paper_to_provide.html}
+#'
+"Ponerinae_tree_old_calib"
+
 
 ### 2/ Ponerinae_BAMM_object ####
 
@@ -689,3 +720,43 @@
 #'
 "Ponerinae_biogeo_data"
 
+### 17b/ Biogeographic range evolution for Ponerinae ants between Old World (O) and New World (N) ####
+
+#' @title Data summarizing the evolution of geographic ranges in Ponerinae ants using an old ill-calibrated phylogeny for demonstration purposes
+#'
+#' @description A list containing geographic ranges data of Ponerinae mapped on the old ill-calibrated phylogeny,
+#'  modeled with R package `BioGeoBEARS`. Ranges are labeled between "Old World" (O) and New World (N).
+#'  This object was obtained with [deepSTRAPP::prepare_trait_data()].
+#'
+#'  Source: Doré, M., Borowiec, M. L., Branstetter, M. G., Camacho, G. P., Fisher, B. L., Longino, J. T., Ward, P. S., Blaimer, B. B., (2025),
+#'  Timing is everything: Evolution of ponerine ants highlights how dispersal history shapes modern biodiversity, Nature Communications.
+#'  [https://doi_of_Paper_to_provide.html]
+#'
+#' @usage data(Ponerinae_biogeo_data_old_calib)
+#' @format A list with 6 elements.
+#'
+#' @details A list of five objects containing information on the evolution of feeding habits in eels.
+#'  This object was obtained with [deepSTRAPP::prepare_trait_data()].
+#'
+#'   * `$densityMaps` List of objects of class `"densityMap` that contains a phylogenetic tree and associated mapping of probability
+#'     to harbor a given range along branches. The list contains only a `"densityMap` per unique areas because `split_multi_area_ranges` was set to TRUE.
+#'     In this case, unique areas are "N" (= "New World") and "O" (= "Old World)
+#'   * `$densityMaps_all_ranges` List of objects of class `"densityMap` that contains a phylogenetic tree and associated mapping of probability
+#'     to harbor a given range along branches. The list contains one `"densityMap` per range found along branches during the simulated biogeographic histories.
+#'     Here those ranges are "N" (= "New World"), "O" (= "Old World), and "NO" for multi-area ranges encompassing both regions.
+#'   * `$trait_data_type` Character string. Record the type of trait data. Here: "biogeographic".
+#'   * `$ace` Numerical matrix that record the posterior probabilities of ancestral ranges estimated at internal nodes.
+#'     Only unique areas are considered among the ranges. Multi-area ranges have been split among unique ranges.
+#'     Rows are internal nodes. Columns are ranges. Values are posterior probabilities of each range per node.
+#'   * `$ace_all_ranges` Numerical matrix that record the posterior probabilities of ancestral ranges estimated at internal nodes.
+#'     All ranges observed along branches during the simulated biogeographic histories are present.
+#'     Rows are internal nodes. Columns are ranges. Values are posterior probabilities of each range per node.
+#'   * `$model_selection_df` Data.frame that summarizes model comparisons used to select the best fitting model.
+#'
+#' @docType data
+#' @keywords datasets
+#' @name Ponerinae_biogeo_data_old_calib
+#'
+#' @seealso [deepSTRAPP::prepare_trait_data()]
+#'
+"Ponerinae_biogeo_data_old_calib"

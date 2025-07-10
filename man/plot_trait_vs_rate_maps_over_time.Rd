@@ -26,7 +26,7 @@ plot_trait_vs_rate_maps_over_time(
 )
 }
 \arguments{
-\item{deepSTRAPP_outputs}{List of elements generated with \code{\link[=compute_STRAPP_test_over_time]{compute_STRAPP_test_over_time()}},
+\item{deepSTRAPP_outputs}{List of elements generated with \code{\link[=run_deepSTRAPP_over_time]{run_deepSTRAPP_over_time()}},
 that summarize the results of a STRAPP run over multiple time-steps in the past.}
 
 \item{color_scale}{Vector of character string. List of colors to use to build the color scale with \code{\link[grDevices:colorRamp]{grDevices::colorRampPalette()}}
@@ -118,7 +118,7 @@ If a PDF file path is provided in \code{PDF_file_path}, the plots will be saved 
 with one page per focal time in \verb{$time_steps}.
 }
 \details{
-The main input \code{deepSTRAPP_outputs} is the typical output of \code{\link[=compute_STRAPP_test_over_time]{compute_STRAPP_test_over_time()}}.
+The main input \code{deepSTRAPP_outputs} is the typical output of \code{\link[=run_deepSTRAPP_over_time]{run_deepSTRAPP_over_time()}}.
 It provides information on results of a STRAPP run performed over multiple time-steps, and can also encompass
 updated phylogenies with mapped trait evolution and diversification rates and regimes shifts if appropriate arguments are set.
 \itemize{

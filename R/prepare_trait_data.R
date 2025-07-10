@@ -46,6 +46,8 @@
 #'   and produce simmaps with [phytools::make.simmap()] or `BioGeoBEARS::runBSM()`.
 #' @param res Integer. Define the number of time steps used to interpolate/estimate trait value/state/range in `contMap`/`densityMaps`.
 #' @param nb_simulations Integer. Define the number of simulations generated for stochastic mapping. Default = 1000. Only for "categorical" and "biogeographic" data.
+#' @param color_scale Vector of character string. List of colors to use to build the color scale with [grDevices::colorRampPalette()]
+#'   showing the evolution of a continuous trait on the `contMap`. From lowest values to highest values. Only for continuous data. Default = `NULL` will use the rainbow() color palette.
 #' @param colors_per_levels Named character string. To set the colors to use to map each state/range posterior probabilities. Names = states/ranges; values = colors.
 #'   If `NULL` (default), the `rainbow()` color scale will be used for categorical trait; the `BioGeoBEARS::get_colors_for_states_list_0based()` will be used for biogeographic ranges.
 #'   If no color is provided for multi-area ranges, they will be interpolated based on the colors provided for unique areas. Only for categorical and biogeographic data.
@@ -189,6 +191,7 @@
 #'    evolutionary_models = c("BM", "OU", "lambda", "kappa"),
 #'    # Example of an additional argument ('control') that can be provided to geiger::fitContinuous()
 #'    control = list(niter = 200),
+#'    color_scale = c("darkgreen", "limegreen", "orange", "red"),
 #'    plot_map = FALSE,
 #'    return_best_model_fit = TRUE,
 #'    return_model_selection_df = TRUE,
@@ -327,6 +330,7 @@ prepare_trait_data <- function (
     ..., # To allow to pass down arguments in the functions used to fit the models
     res = 100, # Number of time steps used to interpolate trait value in the contMap
     nb_simulations = 1000, # Only for categorical and biogeographic data
+    color_scale = NULL, # Only for continuous data
     colors_per_levels = NULL, # Only for categorical and biogeographic data. To set the colors to use to map each state/range posterior probabilities
     plot_map = TRUE,
     plot_overlay = TRUE, # Only for categorical and biogeographic data
@@ -447,6 +451,7 @@ prepare_trait_data <- function (
              # ..., # Additional arguments for geiger::fitContinuous()
              args_for_fitContinuous = args_for_fitContinuous,
              res = res,
+             color_scale = color_scale,
              plot_map = plot_map,
              PDF_file_path = PDF_file_path,
              return_ace = return_ace,
@@ -524,6 +529,7 @@ prepare_trait_data_for_continuous_data <- function (
     # ..., # Additional arguments for geiger::fitContinuous()
     args_for_fitContinuous = NULL, # Additional arguments for geiger::fitContinuous()
     res = 100,
+    color_scale = NULL,
     plot_map = TRUE,
     PDF_file_path = NULL,
     return_ace = TRUE,
@@ -551,6 +557,17 @@ prepare_trait_data_for_continuous_data <- function (
       stop(paste0("'res' must be a positive integer defining the number of time steps used to interpolate trait value in the contMap."))
     }
 
+    ## color_scale
+    # Check whether all colors are valid
+    if (!is.null(color_scale))
+    {
+      if (!all(is_color(color_scale)))
+      {
+        invalid_colors <- color_scale[!is_color(color_scale)]
+        stop(paste0("Some color names in 'color_scale' are not valid.\n",
+                    "Invalid: ", paste(invalid_colors, collapse = ", "), "."))
+      }
+    }
   }
 
   # Set default model (BM) if absent
@@ -746,6 +763,14 @@ prepare_trait_data_for_continuous_data <- function (
                                anc.states = ACE_output,
                                res = res, # Number of time steps
                                plot = plot_map) # Plot only if requested
+
+  ## Update color scale if requested
+  if (!is.null(color_scale))
+  {
+    # Update color palette in contMap
+    contMap <- phytools::setMap(x = contMap, colors = color_scale)
+    # print(contMap$cols)
+  }
 
   ## Export contMap in PDF if requested
   if (!is.null(PDF_file_path))
