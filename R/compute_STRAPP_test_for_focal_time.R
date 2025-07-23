@@ -48,6 +48,7 @@
 #'   `$focal_time` informs on the time in the past at which the trait and rates data will be tested.
 #'   `$trait_data_type` informs on the type of trait data: continuous, categorical, or biogeographic.
 #' @param rate_type A character string specifying the type of diversification rates to use. Must be one of 'speciation', 'extinction' or 'net_diversification' (default).
+#' @param seed Integer. Set the seed to ensure reproducibility. Default is `NULL` (a random seed is used).
 #' @param nb_permutations Integer. To select the number of random permutations to perform during the tests.
 #'   If NULL (default), all posterior samples will be used once.
 #' @param replace_samples Logical. To specify whether to allow 'replacement' (i.e., multiple use) of a posterior sample when drawing samples used to carry out the test. Default is `FALSE`.
@@ -263,6 +264,7 @@
 
 compute_STRAPP_test_for_focal_time <- function (BAMM_object, trait_data_list,
                                                 rate_type = "net_diversification",
+                                                seed = NULL,
                                                 nb_permutations = NULL,
                                                 replace_samples = FALSE,
                                                 alpha = 0.05,
@@ -376,6 +378,15 @@ compute_STRAPP_test_for_focal_time <- function (BAMM_object, trait_data_list,
       stop("'rate_type' can only be 'speciation', 'extinction', or 'net_diversification'.")
     }
 
+    ## seed
+    if (!is.null(seed))
+    {
+      if (!is.numeric(seed))
+      {
+        stop(paste0("'seed' must be an interger."))
+      }
+    }
+
     ## nb_permutations
     # If nb_permutations is higher than number of posterior samples (length of $tipStates, $tipLambda and $tipMu) AND replace_samples = FALSE,
     # Send an error to say that replace_samples should be set to TRUE to allow multiple samplings of posterior in order to reach the requested number of permutations
@@ -412,6 +423,12 @@ compute_STRAPP_test_for_focal_time <- function (BAMM_object, trait_data_list,
     }
   }
 
+  ## Set seed
+  if (!is.null(seed))
+  {
+    set.seed(seed = seed)
+  }
+
   ## Extract BAMM rates and regimes data
   BAMM_data <- list(tipStates = BAMM_object$tipStates, tipLambda = BAMM_object$tipLambda, tipMu = BAMM_object$tipMu)
 
@@ -422,10 +439,10 @@ compute_STRAPP_test_for_focal_time <- function (BAMM_object, trait_data_list,
   trait_data_type <- trait_data_list$trait_data_type
 
   # If trait_data_type is "categorical" or "biogeographic", reclassify according to the number of states
+  run_test <- TRUE
   if (trait_data_type %in% c("categorical", "biogeographic"))
   {
     nb_levels <- nlevels(as.factor(trait_data))
-    run_test <- TRUE
 
     if (nb_levels == 1) # Case with a single state
     {
