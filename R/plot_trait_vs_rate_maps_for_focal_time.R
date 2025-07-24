@@ -55,7 +55,7 @@
 #'   Equivalent to the `col` argument in [BAMMtools::addBAMMshifts()]. Default is `"black"`.
 #' @param regimes_border_width Numerical. Set the width of the border of the symbols showing the location of regime shifts.
 #'   Equivalent to the `lwd` argument in [BAMMtools::addBAMMshifts()]. Default is `1`.
-#' @param ... Additional graphical arguments to pass down to [phytools::plot.contMap()], [phytools::plot.simmap()],
+#' @param ... Additional graphical arguments to pass down to [phytools::plot.contMap()], [phytools::plotSimmap()],
 #'   [deepSTRAPP::plot_densityMaps_overlay()], [BAMMtools::plot.bammdata()], [BAMMtools::addBAMMshifts()], and [par()].
 #' @param display_plot Logical. Whether to display the plot generated in the R console. Default is `TRUE`.
 #' @param PDF_file_path Character string. If provided, the plot will be saved in a PDF file following the path provided here. The path must end with '.pdf'.
@@ -375,8 +375,44 @@ plot_trait_vs_rate_maps_for_focal_time <- function (
     }
   }
 
-  ## Extract focal time
+  ## Extract focal time and nb_tips
   focal_time <- updated_trait_data_with_Map$focal_time
+  nb_tips <- length(updated_BAMM_object$tip.label)
+
+  ## Filter list of additional arguments to avoid warnings from par()
+  add_args <- list(...)
+
+  # Extract additional args for phytools::plot.contMap()
+  args_names_for_plot.contMap <- c("fsize", "ftype", "lwd", "legend", "outline", "sig",
+                                   "type", "direction", "plot", "method", "hold", "anc.states")
+  add_args_for_plot.contMap <- add_args[names(add_args) %in% args_names_for_plot.contMap]
+  # Set default value if not provided
+  if ("lwd" %in% names(add_args_for_plot.contMap)) { lwd <- add_args_for_plot.contMap$lwd } else { lwd <- 4 }
+  if ("outline" %in% names(add_args_for_plot.contMap)) { outline <- add_args_for_plot.contMap$outline } else { outline <- TRUE }
+  if ("sig" %in% names(add_args_for_plot.contMap)) { sig <- add_args_for_plot.contMap$sig } else { sig <- 3 }
+  if ("type" %in% names(add_args_for_plot.contMap)) { type <- add_args_for_plot.contMap$type } else { type <- "phylogram" }
+  if ("direction" %in% names(add_args_for_plot.contMap)) { direction <- add_args_for_plot.contMap$direction } else { direction <- "rightwards" }
+  if ("plot" %in% names(add_args_for_plot.contMap)) { plot <- add_args_for_plot.contMap$plot } else { plot <- TRUE }
+  add_args_for_plot.contMap <- add_args_for_plot.contMap[!(names(add_args_for_plot.contMap) %in% c("lwd", "outline", "sig", "type", "direction", "plot"))]
+
+  # Extract additional args for phytools::plotSimmap()
+  args_names_for_plotSimmap <- c("fsize", "ftype", "lwd", "pts", "node.numbers", "mar", "offset", "direction",
+                                 "type", "setEnv", "part", "xlim", "ylim", "nodes", "tips", "maxY", "hold",
+                                 "split.vertical", "lend", "asp", "outline", "underscore", "arc_height")
+  add_args_for_plotSimmap <- add_args[names(add_args) %in% args_names_for_plotSimmap]
+  # Set default value if not provided
+  if ("fsize" %in% names(add_args_for_plotSimmap)) { fsize <- add_args_for_plotSimmap$fsize } else { fsize <- 0.7 }
+  if ("ftype" %in% names(add_args_for_plotSimmap)) { ftype <- add_args_for_plotSimmap$ftype } else { ftype <- "reg" }
+  if ("lwd" %in% names(add_args_for_plotSimmap)) { lwd <- add_args_for_plotSimmap$lwd } else { lwd <- 2 }
+  if ("mar" %in% names(add_args_for_plotSimmap)) { mar <- add_args_for_plotSimmap$mar } else { mar <- graphics::par()$mar }
+  if ("tips" %in% names(add_args_for_plotSimmap)) { tips <- add_args_for_plotSimmap$tips } else { tips <- stats::setNames(object = 1:nb_tips, nm = updated_trait_data_with_Map$densityMaps[[1]]$tree$tip.label) }
+  add_args_for_plotSimmap <- add_args_for_plotSimmap[!(names(add_args_for_plotSimmap) %in% c("fsize", "ftype", "lwd", "mar", "tips"))]
+
+  # List arguments for previous functions that are not used in plot_BAMM_rates
+  args_not_in_plot_BAMM_rates <- c("fsize", "ftype", "outline", "sig", "type", "plot", "method", "hold", "anc.states",
+                                   "pts", "node.numbers", "offset", "setEnv", "part", "nodes", "tips", "maxY",
+                                   "split.vertical", "asp", "underscore", "arc_height")
+  add_args_for_plot_BAMM_rates <- add_args[!(names(add_args) %in% args_not_in_plot_BAMM_rates)]
 
   ### Display plots
   if (display_plot)
@@ -390,41 +426,80 @@ plot_trait_vs_rate_maps_for_focal_time <- function (
     {
       ## Case 1: Continuous traits and contMap
 
-      plot_contMap(contMap = updated_trait_data_with_Map$contMap,
-                   color_scale = color_scale,
-                   ...) # May need to be filtered
+      # plot_contMap(contMap = updated_trait_data_with_Map$contMap,
+      #              color_scale = color_scale,
+      #              ...) # May need to be filtered
+
+      do.call(what = plot_contMap,
+              args = c(list(contMap = updated_trait_data_with_Map$contMap,
+                            color_scale = color_scale,
+                            lwd = lwd, outline = outline,
+                            sig = sig, type = type, direction = direction,
+                            plot = TRUE),
+                       add_args_for_plot.contMap))
 
     } else {
 
       ## Case 2: Categorical or biogeographic traits and densityMaps
 
-      plot_densityMaps_overlay(densityMaps = updated_trait_data_with_Map$densityMaps,
-                               colors_per_levels = colors_per_levels,
-                               add_ACE_pies = add_ACE_pies,
-                               cex_pies = cex_pies,
-                               ace = NULL,
-                               display_plot = TRUE,
-                               PDF_file_path = NULL,
-                               ...) # May need to be filtered
+      # plot_densityMaps_overlay(densityMaps = updated_trait_data_with_Map$densityMaps,
+      #                          colors_per_levels = colors_per_levels,
+      #                          add_ACE_pies = add_ACE_pies,
+      #                          cex_pies = cex_pies,
+      #                          ace = NULL,
+      #                          display_plot = TRUE,
+      #                          PDF_file_path = NULL,
+      #                          ...) # May need to be filtered
+
+      do.call(what = plot_densityMaps_overlay,
+              args = c(list(densityMaps = updated_trait_data_with_Map$densityMaps,
+                            colors_per_levels = colors_per_levels,
+                            add_ACE_pies = add_ACE_pies,
+                            cex_pies = cex_pies,
+                            ace = NULL,
+                            display_plot = TRUE,
+                            PDF_file_path = NULL,
+                            fsize = fsize,
+                            ftype = ftype,
+                            lwd = lwd, mar = mar,
+                            tips = tips),
+                       add_args_for_plotSimmap))
     }
 
     ### Plot facet B: BAMM rates
 
-    plot_BAMM_rates(BAMM_object = updated_BAMM_object,
-                    rate_type = rate_type,
-                    method = "phylogram",
-                    add_regime_shifts = add_regime_shifts,
-                    configuration_type = configuration_type, # MAP, MSC, or index
-                    sample_index = sample_index,
-                    adjust_size_to_prob = adjust_size_to_prob, # To adjust size of points representing regime shifts to their marginal posterior probabilities
-                    regimes_fill = regimes_fill, # Replace 'bg' argument in BAMMtools::addBAMMshifts()
-                    regimes_size = regimes_size, # Replace 'cex' argument in BAMMtools::addBAMMshifts()
-                    regimes_pch = regimes_pch, # Replace 'pch' argument in BAMMtools::addBAMMshifts()
-                    regimes_border_col = regimes_border_col, # Replace 'col' argument in BAMMtools::addBAMMshifts()
-                    regimes_border_width = regimes_border_width, # Replace 'lwd' argument in BAMMtools::addBAMMshifts()
-                    ..., # To pass down to BAMMtools::plot.bammdata(), BAMMtools::addBAMMshifts(), and par()
-                    display_plot = TRUE,
-                    PDF_file_path = NULL)
+    # plot_BAMM_rates(BAMM_object = updated_BAMM_object,
+    #                 rate_type = rate_type,
+    #                 method = "phylogram",
+    #                 add_regime_shifts = add_regime_shifts,
+    #                 configuration_type = configuration_type, # MAP, MSC, or index
+    #                 sample_index = sample_index,
+    #                 adjust_size_to_prob = adjust_size_to_prob, # To adjust size of points representing regime shifts to their marginal posterior probabilities
+    #                 regimes_fill = regimes_fill, # Replace 'bg' argument in BAMMtools::addBAMMshifts()
+    #                 regimes_size = regimes_size, # Replace 'cex' argument in BAMMtools::addBAMMshifts()
+    #                 regimes_pch = regimes_pch, # Replace 'pch' argument in BAMMtools::addBAMMshifts()
+    #                 regimes_border_col = regimes_border_col, # Replace 'col' argument in BAMMtools::addBAMMshifts()
+    #                 regimes_border_width = regimes_border_width, # Replace 'lwd' argument in BAMMtools::addBAMMshifts()
+    #                 ..., # To pass down to BAMMtools::plot.bammdata(), BAMMtools::addBAMMshifts(), and par()
+    #                 display_plot = TRUE,
+    #                 PDF_file_path = NULL)
+
+    do.call(what = plot_BAMM_rates,
+            args = c(list(BAMM_object = updated_BAMM_object,
+                          rate_type = rate_type,
+                          method = "phylogram",
+                          add_regime_shifts = add_regime_shifts,
+                          configuration_type = configuration_type, # MAP, MSC, or index
+                          sample_index = sample_index,
+                          adjust_size_to_prob = adjust_size_to_prob, # To adjust size of points representing regime shifts to their marginal posterior probabilities
+                          regimes_fill = regimes_fill, # Replace 'bg' argument in BAMMtools::addBAMMshifts()
+                          regimes_size = regimes_size, # Replace 'cex' argument in BAMMtools::addBAMMshifts()
+                          regimes_pch = regimes_pch, # Replace 'pch' argument in BAMMtools::addBAMMshifts()
+                          regimes_border_col = regimes_border_col, # Replace 'col' argument in BAMMtools::addBAMMshifts()
+                          regimes_border_width = regimes_border_width, # Replace 'lwd' argument in BAMMtools::addBAMMshifts())
+                          display_plot = TRUE,
+                          PDF_file_path = NULL),
+                     add_args_for_plot_BAMM_rates))
 
     ## Add a common main title across both plots
     main_title <- paste0("Focal time = ", focal_time)
@@ -455,41 +530,80 @@ plot_trait_vs_rate_maps_for_focal_time <- function (
     {
       ## Case 1: Continuous traits and contMap
 
-      plot_contMap(contMap = updated_trait_data_with_Map$contMap,
-                   color_scale = color_scale,
-                   ...) # May need to be filtered
+      # plot_contMap(contMap = updated_trait_data_with_Map$contMap,
+      #              color_scale = color_scale,
+      #              ...) # May need to be filtered
+
+      do.call(what = plot_contMap,
+              args = c(list(contMap = updated_trait_data_with_Map$contMap,
+                            color_scale = color_scale,
+                            lwd = lwd, outline = outline,
+                            sig = sig, type = type, direction = direction,
+                            plot = TRUE),
+                       add_args_for_plot.contMap))
 
     } else {
 
       ## Case 2: Categorical or biogeographic traits and densityMaps
 
-      plot_densityMaps_overlay(densityMaps = updated_trait_data_with_Map$densityMaps,
-                               colors_per_levels = colors_per_levels,
-                               add_ACE_pies = add_ACE_pies,
-                               cex_pies = cex_pies,
-                               ace = NULL,
-                               display_plot = TRUE,
-                               PDF_file_path = NULL,
-                               ...) # May need to be filtered
+      # plot_densityMaps_overlay(densityMaps = updated_trait_data_with_Map$densityMaps,
+      #                          colors_per_levels = colors_per_levels,
+      #                          add_ACE_pies = add_ACE_pies,
+      #                          cex_pies = cex_pies,
+      #                          ace = NULL,
+      #                          display_plot = TRUE,
+      #                          PDF_file_path = NULL,
+      #                          ...) # May need to be filtered
+
+      do.call(what = plot_densityMaps_overlay,
+              args = c(list(densityMaps = updated_trait_data_with_Map$densityMaps,
+                            colors_per_levels = colors_per_levels,
+                            add_ACE_pies = add_ACE_pies,
+                            cex_pies = cex_pies,
+                            ace = NULL,
+                            display_plot = TRUE,
+                            PDF_file_path = NULL,
+                            fsize = fsize,
+                            ftype = ftype,
+                            lwd = lwd, mar = mar,
+                            tips = tips),
+                       add_args_for_plotSimmap))
     }
 
     ### Plot facet B: BAMM rates
 
-    plot_BAMM_rates(BAMM_object = updated_BAMM_object,
-                    rate_type = rate_type,
-                    method = "phylogram",
-                    add_regime_shifts = add_regime_shifts,
-                    configuration_type = configuration_type, # MAP, MSC, or index
-                    sample_index = sample_index,
-                    adjust_size_to_prob = adjust_size_to_prob, # To adjust size of points representing regime shifts to their marginal posterior probabilities
-                    regimes_fill = regimes_fill, # Replace 'bg' argument in BAMMtools::addBAMMshifts()
-                    regimes_size = regimes_size, # Replace 'cex' argument in BAMMtools::addBAMMshifts()
-                    regimes_pch = regimes_pch, # Replace 'pch' argument in BAMMtools::addBAMMshifts()
-                    regimes_border_col = regimes_border_col, # Replace 'col' argument in BAMMtools::addBAMMshifts()
-                    regimes_border_width = regimes_border_width, # Replace 'lwd' argument in BAMMtools::addBAMMshifts()
-                    ..., # To pass down to BAMMtools::plot.bammdata(), BAMMtools::addBAMMshifts(), and par()
-                    display_plot = TRUE,
-                    PDF_file_path = NULL)
+    # plot_BAMM_rates(BAMM_object = updated_BAMM_object,
+    #                 rate_type = rate_type,
+    #                 method = "phylogram",
+    #                 add_regime_shifts = add_regime_shifts,
+    #                 configuration_type = configuration_type, # MAP, MSC, or index
+    #                 sample_index = sample_index,
+    #                 adjust_size_to_prob = adjust_size_to_prob, # To adjust size of points representing regime shifts to their marginal posterior probabilities
+    #                 regimes_fill = regimes_fill, # Replace 'bg' argument in BAMMtools::addBAMMshifts()
+    #                 regimes_size = regimes_size, # Replace 'cex' argument in BAMMtools::addBAMMshifts()
+    #                 regimes_pch = regimes_pch, # Replace 'pch' argument in BAMMtools::addBAMMshifts()
+    #                 regimes_border_col = regimes_border_col, # Replace 'col' argument in BAMMtools::addBAMMshifts()
+    #                 regimes_border_width = regimes_border_width, # Replace 'lwd' argument in BAMMtools::addBAMMshifts()
+    #                 ..., # To pass down to BAMMtools::plot.bammdata(), BAMMtools::addBAMMshifts(), and par()
+    #                 display_plot = TRUE,
+    #                 PDF_file_path = NULL)
+
+    do.call(what = plot_BAMM_rates,
+            args = c(list(BAMM_object = updated_BAMM_object,
+                          rate_type = rate_type,
+                          method = "phylogram",
+                          add_regime_shifts = add_regime_shifts,
+                          configuration_type = configuration_type, # MAP, MSC, or index
+                          sample_index = sample_index,
+                          adjust_size_to_prob = adjust_size_to_prob, # To adjust size of points representing regime shifts to their marginal posterior probabilities
+                          regimes_fill = regimes_fill, # Replace 'bg' argument in BAMMtools::addBAMMshifts()
+                          regimes_size = regimes_size, # Replace 'cex' argument in BAMMtools::addBAMMshifts()
+                          regimes_pch = regimes_pch, # Replace 'pch' argument in BAMMtools::addBAMMshifts()
+                          regimes_border_col = regimes_border_col, # Replace 'col' argument in BAMMtools::addBAMMshifts()
+                          regimes_border_width = regimes_border_width, # Replace 'lwd' argument in BAMMtools::addBAMMshifts())
+                          display_plot = TRUE,
+                          PDF_file_path = NULL),
+                     add_args_for_plot_BAMM_rates))
 
     ## Add a common main title across both plots
     main_title <- paste0("Focal time = ", focal_time)

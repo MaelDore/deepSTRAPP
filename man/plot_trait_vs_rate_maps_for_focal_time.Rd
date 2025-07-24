@@ -82,7 +82,7 @@ Equivalent to the \code{col} argument in \code{\link[BAMMtools:addBAMMshifts]{BA
 \item{regimes_border_width}{Numerical. Set the width of the border of the symbols showing the location of regime shifts.
 Equivalent to the \code{lwd} argument in \code{\link[BAMMtools:addBAMMshifts]{BAMMtools::addBAMMshifts()}}. Default is \code{1}.}
 
-\item{...}{Additional graphical arguments to pass down to \code{\link[phytools:contMap]{phytools::plot.contMap()}}, \code{\link[phytools:plotSimmap]{phytools::plot.simmap()}},
+\item{...}{Additional graphical arguments to pass down to \code{\link[phytools:contMap]{phytools::plot.contMap()}}, \code{\link[phytools:plotSimmap]{phytools::plotSimmap()}},
 \code{\link[=plot_densityMaps_overlay]{plot_densityMaps_overlay()}}, \code{\link[BAMMtools:plot]{BAMMtools::plot.bammdata()}}, \code{\link[BAMMtools:addBAMMshifts]{BAMMtools::addBAMMshifts()}}, and \code{\link[=par]{par()}}.}
 
 \item{display_plot}{Logical. Whether to display the plot generated in the R console. Default is \code{TRUE}.}

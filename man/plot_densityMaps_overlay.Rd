@@ -33,7 +33,7 @@ Typically generated with \code{\link[=prepare_trait_data]{prepare_trait_data()}}
 If \code{NULL} (default), the ACE are extracted from the \code{densityMaps} with a possible slight discrepancy with the actual tip states
 and estimated posterior probabilities of ancestral states.}
 
-\item{...}{Additional arguments to pass down to \code{\link[phytools:plotSimmap]{phytools::plot.simmap()}} to control plotting.}
+\item{...}{Additional arguments to pass down to \code{\link[phytools:plotSimmap]{phytools::plotSimmap()}} to control plotting.}
 
 \item{display_plot}{Logical. Whether to display the plot generated in the R console. Default is \code{TRUE}.}
 

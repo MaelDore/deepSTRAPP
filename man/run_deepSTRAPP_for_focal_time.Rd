@@ -14,6 +14,7 @@ run_deepSTRAPP_for_focal_time(
   focal_time,
   keep_tip_labels = TRUE,
   rate_type = "net_diversification",
+  seed = NULL,
   nb_permutations = NULL,
   replace_samples = FALSE,
   alpha = 0.05,
@@ -74,6 +75,8 @@ It must be smaller than the root age of the phylogeny.}
 must retained their initial \code{tip.label} on the updated phylogeny. Default is \code{TRUE}.}
 
 \item{rate_type}{A character string specifying the type of diversification rates to use. Must be one of 'speciation', 'extinction' or 'net_diversification' (default).}
+
+\item{seed}{Integer. Set the seed to ensure reproducibility. Default is \code{NULL} (a random seed is used).}
 
 \item{nb_permutations}{Integer. To select the number of random permutations to perform during the tests.
 If NULL (default), all posterior samples will be used once.}

@@ -19,7 +19,7 @@
 #'   Typically generated with [deepSTRAPP::prepare_trait_data()] in the `$ace` slot.
 #'   If `NULL` (default), the ACE are extracted from the `densityMaps` with a possible slight discrepancy with the actual tip states
 #'   and estimated posterior probabilities of ancestral states.
-#' @param ... Additional arguments to pass down to [phytools::plot.simmap()] to control plotting.
+#' @param ... Additional arguments to pass down to [phytools::plotSimmap()] to control plotting.
 #' @param display_plot Logical. Whether to display the plot generated in the R console. Default is `TRUE`.
 #' @param PDF_file_path Character string. If provided, the plot will be saved in a PDF file following the path provided here. The path must end with '.pdf'.
 #'
@@ -92,7 +92,7 @@ plot_densityMaps_overlay <- function (
     add_ACE_pies = TRUE,
     cex_pies = 0.5,
     ace = NULL,
-    ..., # To allow to pass down arguments in the plot.simmap() function
+    ..., # To allow to pass down arguments in the plotSimmap() function
     display_plot = TRUE,
     PDF_file_path = NULL)
 {
@@ -164,16 +164,16 @@ plot_densityMaps_overlay <- function (
   add_args <- list(...)
   # Extract additional args for phytools::plotSimmap()
   args_names_for_plotSimmap <- c("fsize", "ftype", "lwd", "pts", "node.numbers", "mar", "offset", "direction",
-                                 "type", "setEnv", "part", "xlim", "ylim", "nodes", "tips", "maxY", "hold",
-                                 "split.vertical", "lend", "asp", "outline", "underscore", "arc_height")
-  add_args_for_plot.simmap <- add_args[names(add_args) %in% args_names_for_plotSimmap]
+                                  "type", "setEnv", "part", "xlim", "ylim", "nodes", "tips", "maxY", "hold",
+                                  "split.vertical", "lend", "asp", "outline", "underscore", "arc_height")
+  add_args_for_plotSimmap <- add_args[names(add_args) %in% args_names_for_plotSimmap]
   # Set default value if not provided
-  if ("fsize" %in% names(add_args_for_plot.simmap)) { fsize <- add_args_for_plot.simmap$fsize } else { fsize <- 0.7 }
-  if ("ftype" %in% names(add_args_for_plot.simmap)) { ftype <- add_args_for_plot.simmap$ftype } else { ftype <- "reg" }
-  if ("lwd" %in% names(add_args_for_plot.simmap)) { lwd <- add_args_for_plot.simmap$lwd } else { lwd <- 2 }
-  if ("mar" %in% names(add_args_for_plot.simmap)) { mar <- add_args_for_plot.simmap$mar } else { mar <- graphics::par()$mar }
-  if ("tips" %in% names(add_args_for_plot.simmap)) { tips <- add_args_for_plot.simmap$tips } else { tips <- stats::setNames(object = 1:nb_tips, nm = densityMaps[[1]]$tree$tip.label) }
-  add_args_for_plot.simmap <- add_args_for_plot.simmap[!(names(add_args_for_plot.simmap) %in% c("fsize", "ftype", "lwd", "mar", "tips"))]
+  if ("fsize" %in% names(add_args_for_plotSimmap)) { fsize <- add_args_for_plotSimmap$fsize } else { fsize <- 0.7 }
+  if ("ftype" %in% names(add_args_for_plotSimmap)) { ftype <- add_args_for_plotSimmap$ftype } else { ftype <- "reg" }
+  if ("lwd" %in% names(add_args_for_plotSimmap)) { lwd <- add_args_for_plotSimmap$lwd } else { lwd <- 2 }
+  if ("mar" %in% names(add_args_for_plotSimmap)) { mar <- add_args_for_plotSimmap$mar } else { mar <- graphics::par()$mar }
+  if ("tips" %in% names(add_args_for_plotSimmap)) { tips <- add_args_for_plotSimmap$tips } else { tips <- stats::setNames(object = 1:nb_tips, nm = densityMaps[[1]]$tree$tip.label) }
+  add_args_for_plotSimmap <- add_args_for_plotSimmap[!(names(add_args_for_plotSimmap) %in% c("fsize", "ftype", "lwd", "mar", "tips"))]
 
   ## Retrieve colors_per_levels if not provided
   if (is.null(colors_per_levels))
@@ -223,12 +223,12 @@ plot_densityMaps_overlay <- function (
       #      mar = graphics::par()$mar, tips = tips,
       #      plot = TRUE, ...)
 
-      do.call(what = plot, # phytools::plot.simmap
+      do.call(what = plot, # phytools::plotSimmap
               args = c(list(x = densityMap_state_i$tree, colors = densityMap_state_i$cols,
                             fsize = fsize, ftype = ftype, lwd = lwd, add = add_plot,
                             mar = graphics::par()$mar, tips = tips,
                             plot = TRUE),
-                       add_args_for_plot.simmap))
+                       add_args_for_plotSimmap))
 
     }
 
@@ -352,12 +352,12 @@ plot_densityMaps_overlay <- function (
       #      mar = graphics::par()$mar, tips = tips,
       #      plot = TRUE, ...)
 
-      do.call(what = plot, # phytools::plot.simmap
+      do.call(what = plot, # phytools::plotSimmap
               args = c(list(x = densityMap_state_i$tree, colors = densityMap_state_i$cols,
                             fsize = fsize, ftype = ftype, lwd = lwd, add = add_plot,
                             mar = graphics::par()$mar, tips = tips,
                             plot = TRUE),
-                       add_args_for_plot.simmap))
+                       add_args_for_plotSimmap))
 
     }
 

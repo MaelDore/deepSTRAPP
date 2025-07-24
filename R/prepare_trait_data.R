@@ -23,6 +23,7 @@
 #' @param trait_data_type Character string. Type of trait data. Either: "continuous", "categorical" or "biogeographic".
 #' @param phylo Time-calibrated phylogeny. Object of class `"phylo"` as defined in [ape].
 #'   Tip labels (`phylo$tip.label`) should match names in `tip_data`.
+#' @param seed Integer. Set the seed to ensure reproducibility. Default is `NULL` (a random seed is used).
 #' @param evolutionary_models (Vector of) character string(s). To provide the set of evolutionary models to fit on the data.
 #'   * Models available for continuous data are detailed in [geiger::fitContinuous()].
 #'   * Models available for categorical data are detailed in [geiger::fitDiscrete()].
@@ -319,6 +320,7 @@ prepare_trait_data <- function (
     tip_data,
     trait_data_type,
     phylo,
+    seed = NULL,
     evolutionary_models = NULL, # Default = "BM" for continuous data; "ARD" for categorical; "DEC" for biogeographic
     Q_matrix = NULL, # Custom Q-matrix for categorical data
     BioGeoBEARS_directory_path = "./BioGeoBEARS_directory/",
@@ -395,6 +397,15 @@ prepare_trait_data <- function (
       stop(paste0("'phylo' must be a fully resolved/dichotomous/binary phylogeny."))
     }
 
+    ## seed
+    if (!is.null(seed))
+    {
+      if (!is.numeric(seed))
+      {
+        stop(paste0("'seed' must be an interger."))
+      }
+    }
+
     ## PDF_file_path
     # If provided, PDF_file_path must end with ".pdf"
     if (!is.null(PDF_file_path))
@@ -438,6 +449,12 @@ prepare_trait_data <- function (
   args_for_make.simmap <- add_args[names(add_args) %in% args_names_for_make.simmap]
   args_for_define_BioGeoBEARS_run <- add_args[names(add_args) %in% args_names_for_define_BioGeoBEARS_run]
   args_for_define_runBSM <- add_args[names(add_args) %in% args_names_for_define_runBSM]
+
+  ## Set seed
+  if (!is.null(seed))
+  {
+    set.seed(seed = seed)
+  }
 
   ## Compute the appropriate internal sub-function depending on the type of data
 

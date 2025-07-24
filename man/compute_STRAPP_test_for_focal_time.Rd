@@ -8,6 +8,7 @@ compute_STRAPP_test_for_focal_time(
   BAMM_object,
   trait_data_list,
   rate_type = "net_diversification",
+  seed = NULL,
   nb_permutations = NULL,
   replace_samples = FALSE,
   alpha = 0.05,
@@ -32,6 +33,8 @@ that contains at least a \verb{$trait_data} element, a \verb{$focal_time} elemen
 \verb{$trait_data_type} informs on the type of trait data: continuous, categorical, or biogeographic.}
 
 \item{rate_type}{A character string specifying the type of diversification rates to use. Must be one of 'speciation', 'extinction' or 'net_diversification' (default).}
+
+\item{seed}{Integer. Set the seed to ensure reproducibility. Default is \code{NULL} (a random seed is used).}
 
 \item{nb_permutations}{Integer. To select the number of random permutations to perform during the tests.
 If NULL (default), all posterior samples will be used once.}

@@ -289,6 +289,14 @@ prepare_diversification_data <- function (BAMM_install_directory_path,
     {
       stop(paste0("'phylo' must be a fully resolved/dichotomous/binary phylogeny."))
     }
+    # phylo must be in "cladewise" order for BAMM to works
+    phylo_order <- attr(x = phylo, which = "order")
+    if (phylo_order != "cladewise")
+    {
+      phylo <- ape::reorder.phylo(phylo, order = "cladewise")
+      cat(paste0("WARNING: the internal ordering of edges in 'phylo$edge' must follow the 'cladewise' order for BAMM to work.\n",
+                 "Your 'phylo' object was in '", phylo_order,"'. It was modified to follow the 'cladewise' structure.\n\n"))
+    }
 
     ## prefix_for_files
     # If provided, prefix_for_files should be character string

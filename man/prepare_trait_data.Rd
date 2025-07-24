@@ -8,6 +8,7 @@ prepare_trait_data(
   tip_data,
   trait_data_type,
   phylo,
+  seed = NULL,
   evolutionary_models = NULL,
   Q_matrix = NULL,
   BioGeoBEARS_directory_path = "./BioGeoBEARS_directory/",
@@ -43,6 +44,8 @@ For biogeographic data, ranges should follow the coding scheme of BioGeoBEARS wi
 
 \item{phylo}{Time-calibrated phylogeny. Object of class \code{"phylo"} as defined in \link{ape}.
 Tip labels (\code{phylo$tip.label}) should match names in \code{tip_data}.}
+
+\item{seed}{Integer. Set the seed to ensure reproducibility. Default is \code{NULL} (a random seed is used).}
 
 \item{evolutionary_models}{(Vector of) character string(s). To provide the set of evolutionary models to fit on the data.
 \itemize{

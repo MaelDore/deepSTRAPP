@@ -48,12 +48,10 @@
 #' @examples
 #' # ----- Prepare data ----- #
 #'
-#' # Load mammals phylogeny and data from the R package motmot
-#' # Data source: Slater, 2013; DOI: 10.1111/2041-210X.12084
-#' library(motmot)
+#' # Load mammals phylogeny and data from the R package motmot (data included in deepSTRAPP)
+#' # Initial data source: Slater, 2013; DOI: 10.1111/2041-210X.12084
 #'
-#' data("mammals")
-#' force(mammals)
+#' data(mammals, package = "deepSTRAPP")
 #'
 #' mammals_tree <- mammals$mammal.phy
 #' mammals_data <- setNames(object = mammals$mammal.mass$mean,

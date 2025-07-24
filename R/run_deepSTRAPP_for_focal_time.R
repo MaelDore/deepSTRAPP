@@ -47,6 +47,7 @@
 #' @param keep_tip_labels Logical. Specify whether terminal branches with a single descendant tip
 #'   must retained their initial `tip.label` on the updated phylogeny. Default is `TRUE`.
 #' @param rate_type A character string specifying the type of diversification rates to use. Must be one of 'speciation', 'extinction' or 'net_diversification' (default).
+#' @param seed Integer. Set the seed to ensure reproducibility. Default is `NULL` (a random seed is used).
 #' @param nb_permutations Integer. To select the number of random permutations to perform during the tests.
 #'   If NULL (default), all posterior samples will be used once.
 #' @param replace_samples Logical. To specify whether to allow 'replacement' (i.e., multiple use) of a posterior sample
@@ -414,6 +415,7 @@ run_deepSTRAPP_for_focal_time <- function (contMap = NULL,
                                            focal_time,
                                            keep_tip_labels = TRUE,
                                            rate_type = "net_diversification",
+                                           seed = NULL,
                                            nb_permutations = NULL,
                                            replace_samples = FALSE,
                                            alpha = 0.05,
@@ -493,6 +495,7 @@ run_deepSTRAPP_for_focal_time <- function (contMap = NULL,
     BAMM_object = updated_BAMM_object,
     trait_data_list = trait_data_list,
     rate_type = rate_type,
+    seed = seed,
     nb_permutations = nb_permutations,
     replace_samples = replace_samples,
     alpha = alpha,
