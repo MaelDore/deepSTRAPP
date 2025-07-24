@@ -1156,7 +1156,7 @@ compute_STRAPP_test_for_multinominal_data <- function (
     # use the Khi-squared approximation by setting an extremely high p-value
     if (is.na(test_output$statistic))
     {
-      H_approximation <- stats::qchisq(p = 0.999, df = test_output$parameter)
+      H_approximation <- stats::qchisq(p = 1 - 10^-9, df = test_output$parameter)
       return(H_approximation)
     } else { # Otherwise, provide the computed H-stats
       return(test_output$statistic)
@@ -1259,24 +1259,48 @@ compute_STRAPP_test_for_multinominal_data <- function (
     ## Wrapped-up function to extract Z-stats from Dunn's post hoc pairwise rank-sum tests
     dunn_test <- function(rates, trait_data, two_tailed)
     {
-      # Compute the Dunn test for all possible unique pairs of states
-      invisible(utils::capture.output(test_output <- dunn.test::dunn.test(x = rates, g = trait_data)))
-
-      # Reformat test output
-      if (two_tailed) # For two-tailed tests
+      # If all rates are similar, dunn.test will throw an error
+      # Avoid this by providing a dummy test_output_df
+      if (length(unique(rates)) == 1)
       {
+        # Run fake Dunn test to get pairs
+        nb_taxa <- length(rates)
+        fake_rates <- c(rep(x = 1, times = nb_taxa/2), rep(x = 2, times = nb_taxa/2))
+        invisible(utils::capture.output(test_output <- dunn.test::dunn.test(x = fake_rates, g = trait_data)))
+        Z_approximation <- stats::qnorm(p = 1 - 10^-9)
+        # Create dummy test_output_df
+        if (two_tailed) # For two-tailed tests
+        {
         test_output_df <- data.frame(pairs = gsub(pattern = " - ", replacement = " != ", x = test_output$comparisons),
-                                     Z_stats = test_output$Z)
-      } else { # For one-tailed tests
-        test_output_df <- data.frame(pairs = c(gsub(pattern = " - ", replacement = " > ", x = test_output$comparisons), gsub(pattern = " - ", replacement = " < ", x = test_output$comparisons)),
-                                     Z_stats = c(test_output$Z, -test_output$Z))
+                                     Z_stats = Z_approximation)
+        } else { # For one-tailed tests
+          test_output_df <- data.frame(pairs = c(gsub(pattern = " - ", replacement = " > ", x = test_output$comparisons), gsub(pattern = " - ", replacement = " < ", x = test_output$comparisons)),
+                                       Z_stats = c(rep(x = Z_approximation, times = length(test_output$comparisons)), rep(x = -Z_approximation, times = length(test_output$comparisons))))
+        }
+      } else {
+
+        # Compute the Dunn test for all possible unique pairs of states
+        invisible(utils::capture.output(test_output <- dunn.test::dunn.test(x = rates, g = trait_data)))
+
+        # Reformat test output
+        if (two_tailed) # For two-tailed tests
+        {
+          test_output_df <- data.frame(pairs = gsub(pattern = " - ", replacement = " != ", x = test_output$comparisons),
+                                       Z_stats = test_output$Z)
+        } else { # For one-tailed tests
+          test_output_df <- data.frame(pairs = c(gsub(pattern = " - ", replacement = " > ", x = test_output$comparisons), gsub(pattern = " - ", replacement = " < ", x = test_output$comparisons)),
+                                       Z_stats = c(test_output$Z, -test_output$Z))
+        }
+
       }
+
+
 
       # If the test failed to provide a statistic because the value is reaching the ceiling for computation,
       # use the normal distribution and set an extremely high p-value to approximate a value
       if (any(is.na(test_output_df$Z_stats)))
       {
-        Z_approximation <- stats::qnorm(p = 0.999)
+        Z_approximation <- stats::qnorm(p = 1 - 10^-9)
         test_output_df$Z_stats[is.na(test_output_df$Z_stats)] <- Z_approximation
 
       }

@@ -395,6 +395,8 @@ update_rates_and_regimes_for_focal_time <- function (BAMM_object, focal_time,
 
         # Get descendant tipward nodes of regime j
         regime_nodes_j <- phytools::getDescendants(tree = updated_BAMM_object, node = tipward_node_ID_j)
+        # Remove tipward node of the starting edge
+        regime_nodes_j <- setdiff(regime_nodes_j, tipward_node_ID_j)
 
         # Assign regime ID
         all_edges_df$regime_ID[all_edges_df$tipward_node_ID %in% regime_nodes_j] <- j
