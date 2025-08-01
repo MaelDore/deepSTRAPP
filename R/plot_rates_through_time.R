@@ -34,7 +34,7 @@
 #'   Default = `NULL` will use the 'Spectral' color palette in [RColorBrewer::brewer.pal()].
 #' @param colors_per_levels Named character string. To set the colors to use to plot rates of each state/range. Names = states/ranges; values = colors.
 #'   If `NULL` (default), the default ggplot2 color palette ([scales::hue_pal()]) will be used. Only for categorical and biogeographic data.
-#' @param plot_CI Logical. Whether to plot a confidence interval (CI) based on the distribution of rates found in posterior samples.
+#' @param plot_CI Logical. Whether to plot a confidence interval (CI) based on the distribution of rates found in posterior samples. Default is `FALSE`.
 #' @param CI_type Character string. To select the type of confidence interval (CI) to plot.
 #'  * `fuzzy` (default): to overlay the evolution of rates found in all posterior samples with high transparency levels.
 #'  * `quantiles_rect`: to add a polygon encompassing a proportion of the rate values found in posterior samples.
@@ -43,10 +43,10 @@
 #' @param display_plot Logical. Whether to display the plot generated in the R console. Default is `TRUE`.
 #' @param PDF_file_path Character string. If provided, the plot will be saved in a PDF file following the path provided here. The path must end with '.pdf'.
 #' @param return_mean_data_per_samples_df Logical. Whether to include in the output the data.frame of mean rates per trait values computed for
-#'   each posterior sample at each time-step (aggregated across groups of branches based on trait data). This is used to draw the confidence interval.
+#'   each posterior sample at each time-step (aggregated across groups of branches based on trait data). This is used to draw the confidence interval. Default is `FALSE`.
 #' @param return_median_data_across_samples_df Logical. Whether to include in the output the data.frame of median rates per trait values
 #'  across posterior samples computed for at each time-step (aggregated across groups of branches based on trait data AND posterior samples).
-#'  This is used to draw the lines on the plot.
+#'  This is used to draw the lines on the plot. Default is `FALSE`.
 #'
 #' @export
 #' @importFrom ggplot2 ggplot geom_line aes geom_hline geom_polygon scale_y_continuous scale_x_continuous scale_color_discrete scale_color_brewer scale_fill_brewer xlab ylab ggtitle theme element_line element_rect element_text unit margin

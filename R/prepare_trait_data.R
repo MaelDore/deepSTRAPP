@@ -373,7 +373,17 @@ prepare_trait_data <- function (
     }
     if ((trait_data_type == "categorical") & !is.character(tip_data))
     {
-      stop("For 'trait_data_type = categorical', 'tip_data' must be a named vector of character strings providing tip states.")
+      if (is.factor(tip_data))
+      {
+        cat("WARNING: 'tip_data' was provided as factors. It is converted to a vector of character strings.\n")
+
+        tip_data_names <- names(tip_data)
+        tip_data <- as.character(tip_data)
+        names(tip_data) <- tip_data_names
+
+      } else {
+        stop("For 'trait_data_type = categorical', 'tip_data' must be a named vector of character strings providing tip states.")
+      }
     }
     if ((trait_data_type == "biogeographic") & !is.character(tip_data))
     {
@@ -599,7 +609,7 @@ prepare_trait_data_for_continuous_data <- function (
   # ?geiger::fitContinuous
 
   nb_models <- length(evolutionary_models)
-  if (verbose) { cat(paste0(Sys.time(), " - Fit ",nb_models," evolutionary model(s): ", paste(evolutionary_models, collapse = ", "), ".\n\n")) }
+  if (verbose) { cat(paste0("\n", Sys.time(), " - Fit ",nb_models," evolutionary model(s): ", paste(evolutionary_models, collapse = ", "), ".\n\n")) }
 
   # Initiate list to store models outputs
   models_fits <- list()
@@ -746,7 +756,7 @@ prepare_trait_data_for_continuous_data <- function (
 
   ### Step 3 - Get ACE (useful in all cases to build the contMap)
 
-  if (verbose) { cat(paste0("\n", Sys.time(), " - Infer Ancestral Character Estimates from the best fitting model: ",best_model_name,".\n")) }
+  if (verbose) { cat(paste0(Sys.time(), " - Infer Ancestral Character Estimates from the best fitting model: ",best_model_name,".\n\n")) }
 
   ## Rescale the tree such as the relative branch length account for trait rates in the best fitting model
   # ?geiger::rescale.phylo
@@ -772,7 +782,7 @@ prepare_trait_data_for_continuous_data <- function (
 
   ### Step 5 - Create contMap using ACE computed with the best fitting model
 
-  if (verbose) { cat(paste0("\n", Sys.time(), " - Create contMap by interpolating values along branches.\n\n")) }
+  if (verbose) { cat(paste0(Sys.time(), " - Create contMap by interpolating values along branches.\n\n")) }
 
   contMap <- phytools::contMap(tree = phylo,
                                method = "user",
@@ -927,7 +937,7 @@ prepare_trait_data_for_categorical_data <- function (
   # ?geiger::fitDiscrete
 
   nb_models <- length(evolutionary_models)
-  if (verbose) { cat(paste0(Sys.time(), " - Fit ",nb_models," evolutionary model(s): ", paste(evolutionary_models, collapse = ", "), ".\n\n")) }
+  if (verbose) { cat(paste0("\n", Sys.time(), " - Fit ",nb_models," evolutionary model(s): ", paste(evolutionary_models, collapse = ", "), ".\n\n")) }
 
   # Initiate list to store models outputs
   models_fits <- list()
@@ -1049,7 +1059,7 @@ prepare_trait_data_for_categorical_data <- function (
   # Display steps
   if (verbose)
   {
-    cat(paste0("\n", Sys.time(), " - Run simulations for stochastic mapping.\n\n"))
+    cat(paste0(Sys.time(), " - Run simulations for stochastic mapping.\n\n"))
   }
 
   # Extract Q-matrix from best model
@@ -1071,7 +1081,7 @@ prepare_trait_data_for_categorical_data <- function (
   # Display steps
   if (verbose)
   {
-    cat(paste0("\n", Sys.time(), " - Extract ACE as posterior sampling from stochastic mapping.\n"))
+    cat(paste0(Sys.time(), " - Extract ACE as posterior sampling from stochastic mapping.\n"))
   }
 
   # Use phytools summary function
@@ -1080,7 +1090,7 @@ prepare_trait_data_for_categorical_data <- function (
 
   ### Step 5 - Create densityMaps from simmaps
 
-  if (verbose) { cat(paste0("\n", Sys.time(), " - Create densityMaps by summarizing simulations of evolutionary history (simmaps).\n\n")) }
+  if (verbose) { cat(paste0(Sys.time(), " - Create densityMaps by summarizing simulations of evolutionary history (simmaps).\n\n")) }
 
   # Works only for binary traits.
   # Need to binarize every state as 0/1 with 0 = Not the focal state; 1 = Focal state.
@@ -1165,7 +1175,7 @@ prepare_trait_data_for_categorical_data <- function (
       ## Print progress for each state
       if (verbose)
       {
-        cat(paste0(Sys.time(), " - Plot one densityMap for each state.\n"))
+        cat(paste0("\n", Sys.time(), " - Plot one densityMap for each state.\n"))
       }
 
       ## Plot one densityMap per state
@@ -1178,7 +1188,7 @@ prepare_trait_data_for_categorical_data <- function (
       ## Print progress for each state
       if (verbose)
       {
-        cat(paste0(Sys.time(), " - Plot a unique densityMap with for all states overlaid.\n"))
+        cat(paste0("\n", Sys.time(), " - Plot a unique densityMap with for all states overlaid.\n"))
       }
 
       ## Plot the overlay of densityMaps with alpha
@@ -1197,7 +1207,7 @@ prepare_trait_data_for_categorical_data <- function (
     ## Print progress for each state
     if (verbose)
     {
-      cat(paste0(Sys.time(), " - Export PDF.\n"))
+      cat(paste0("\n", Sys.time(), " - Export PDF.\n"))
     }
 
     # Allows plotting outside of figure range
@@ -2287,7 +2297,7 @@ prepare_trait_data_for_biogeographic_data <- function (
       ## Print progress for each range
       if (verbose)
       {
-        cat(paste0(Sys.time(), " - Plot one densityMap for each range.\n"))
+        cat(paste0("\n", Sys.time(), " - Plot one densityMap for each range.\n"))
       }
 
       ## Plot one densityMap per range
@@ -2300,7 +2310,7 @@ prepare_trait_data_for_biogeographic_data <- function (
       ## Print progress for each range
       if (verbose)
       {
-        cat(paste0(Sys.time(), " - Plot a unique densityMap with for all ranges overlaid.\n"))
+        cat(paste0("\n", Sys.time(), " - Plot a unique densityMap with for all ranges overlaid.\n"))
       }
 
       ## Filter ace_matrix to display only slected ranges for internal nodes
@@ -2322,7 +2332,7 @@ prepare_trait_data_for_biogeographic_data <- function (
     ## Print progress for each state
     if (verbose)
     {
-      cat(paste0(Sys.time(), " - Export PDF.\n"))
+      cat(paste0("\n", Sys.time(), " - Export PDF.\n"))
     }
 
     # Allows plotting outside of figure range

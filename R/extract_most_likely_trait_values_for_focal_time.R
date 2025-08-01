@@ -1137,8 +1137,18 @@ extract_most_likely_states_from_densityMaps_for_focal_time <- function (
       # tip_data must be a named character string vector
       if (!is.character(tip_data))
       {
-        stop(paste0("For categorical traits, 'tip_data' must be a character string vector that provides states for tips.\n",
-                    "The object you provided is not a character string vector."))
+        if (is.factor(tip_data))
+        {
+          cat("WARNING: 'tip_data' was provided as factors. It is converted to a vector of character strings.\n")
+
+          tip_data_names <- names(tip_data)
+          tip_data <- as.character(tip_data)
+          names(tip_data) <- tip_data_names
+
+        } else {
+          stop(paste0("For categorical traits, 'tip_data' must be a character string vector that provides states for tips.\n",
+                      "The object you provided is not a character string vector."))
+        }
       }
       # tip_data should have many states as there are tips in the densityMaps[[i]]$tree
       if (length(tip_data) != length(densityMaps[[1]]$tree$tip.label))
