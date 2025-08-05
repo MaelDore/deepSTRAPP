@@ -348,17 +348,33 @@ prepare_trait_data <- function (
   ### Check input validity
   {
     ## tip_data
-    # tip_data must have the same names as the tip.label in the phylogeny
-    if (!all((names(tip_data) %in% phylo$tip.label)))
+    if (!any(c(is.matrix(tip_data), is.data.frame(tip_data))))
     {
-      stop(paste0("Names in 'tip_data' must match with '$tip.label' in 'phylo'."))
+      # tip_data must have the same names as the tip.label in the phylogeny
+      if (!all((names(tip_data) %in% phylo$tip.label)))
+      {
+        stop(paste0("Names in 'tip_data' must match with '$tip.label' in 'phylo'."))
+      }
+      # Check if tip_data need to be reorder to match phylo$tip.label. If so, do it, but send a warning
+      if (!all(names(tip_data) == phylo$tip.label))
+      {
+        tip_data <- tip_data[match(phylo$tip.label, table = names(tip_data))]
+        warning(paste0("Entries in 'tip_data' were reordered to match 'phylo$tip.label."))
+      }
+    } else {
+      # row.names(tip_data) must have the same names as the tip.label in the phylogeny
+      if (!all((row.names(tip_data) %in% phylo$tip.label)))
+      {
+        stop(paste0("Names in 'tip_data' must match with '$tip.label' in 'phylo'."))
+      }
+      # Check if tip_data need to be reorder to match phylo$tip.label. If so, do it, but send a warning
+      if (!all(row.names(tip_data) == phylo$tip.label))
+      {
+        tip_data <- tip_data[match(phylo$tip.label, table = row.names(tip_data)), ]
+        warning(paste0("Entries in 'tip_data' were reordered to match 'phylo$tip.label."))
+      }
     }
-    # Check if tip_data need to be reorder to match phylo$tip.label. If so, do it, but send a warning
-    if (!all(names(tip_data) == phylo$tip.label))
-    {
-      tip_data <- tip_data[match(phylo$tip.label, table = names(tip_data))]
-      warning(paste0("Entries in 'tip_data' were reordered to match 'phylo$tip.label."))
-    }
+
 
     ## trait_data_type
     # trait_data_type must be "continuous", categorical" or "biogeographic"
@@ -385,9 +401,12 @@ prepare_trait_data <- function (
         stop("For 'trait_data_type = categorical', 'tip_data' must be a named vector of character strings providing tip states.")
       }
     }
-    if ((trait_data_type == "biogeographic") & !is.character(tip_data))
+    if ((trait_data_type == "biogeographic") & !any(c(is.character(tip_data), is.matrix(tip_data), is.data.frame(tip_data))))
     {
-      stop("For 'trait_data_type = biogeographic', 'tip_data' must be a named vector of character strings providing tip ranges.")
+      stop("For 'trait_data_type = biogeographic', 'tip_data' must be a named vector of character strings providing tip ranges.\n",
+           "Alternatively, you can provide a matrix/data.frame providing presence/absence binary information (0/1).\n",
+           "In this case, colnames(tip_data) must be unique areas symbolized by a unique UPPERCASE letter each. row.names(tip_data) must be taxa named as in the phylogeny. Data must be numerical 0/1.\n",
+           "Taxa with multi-area range should record several presences (1) in their row.")
     }
 
     ## phylo
@@ -789,7 +808,7 @@ prepare_trait_data_for_continuous_data <- function (
                                x = tip_data,
                                anc.states = ACE_output,
                                res = res, # Number of time steps
-                               plot = plot_map) # Plot only if requested
+                               plot = FALSE)
 
   ## Update color scale if requested
   if (!is.null(color_scale))
@@ -797,6 +816,12 @@ prepare_trait_data_for_continuous_data <- function (
     # Update color palette in contMap
     contMap <- phytools::setMap(x = contMap, colors = color_scale)
     # print(contMap$cols)
+  }
+
+  ## Plot only if requested
+  if (plot_map)
+  {
+    plot(contMap)
   }
 
   ## Export contMap in PDF if requested
@@ -1293,6 +1318,46 @@ prepare_trait_data_for_biogeographic_data <- function (
     return_model_selection_df = FALSE,
     verbose = TRUE)
 {
+  ## Convert tip_data into vector of character strings if needed
+  if (any(c(is.matrix(tip_data), is.data.frame(tip_data))))
+  {
+    # Check initial format
+    PA_test <- apply(X = tip_data, MARGIN = 2, FUN = function (x) { all(x %in% c(0, 1)) })
+    if (!all(PA_test))
+    {
+      stop("You provided 'tip_data' for 'biogeographic' data as a matrix/data.frame.\n",
+           "Please ensure presences/absences are recorded as numerical 0/1 values.\n")
+    }
+    unique_letters_test <- all(nchar(colnames(tip_data)) == 1)
+    if (!all(unique_letters_test))
+    {
+      stop("You provided 'tip_data' for 'biogeographic' data as a matrix/data.frame.\n",
+           "Please ensure colnames(tip_data) are unique areas symbolized by a unique UPPERCASE letter each.\n")
+    }
+    uppercase_test <- colnames(tip_data) == toupper(colnames(tip_data))
+    if (!all(uppercase_test))
+    {
+      stop("You provided 'tip_data' for 'biogeographic' data as a matrix/data.frame.\n",
+           "Please ensure colnames(tip_data) are unique areas symbolized by a unique UPPERCASE letter each.\n")
+    }
+    # Convert to vector of character strings
+    tip_data_df <- as.data.frame(tip_data)
+    tip_data <- setNames(object = rep(NA, times = nrow(tip_data_df)), nm = row.names(tip_data_df))
+    for (i in 1:nrow(tip_data_df))
+    {
+      # i <- 1
+
+      # Extract unique areas
+      unique_areas_i <- names(tip_data_df)[tip_data_df[i, ] == 1]
+      unique_areas_i <- unique_areas_i[order(unique_areas_i)]
+
+      # Collapse into range
+      range_i <- paste(unique_areas_i, collapse = "")
+      # Store range
+      tip_data[i] <- range_i
+    }
+  }
+
   ## Extract and order ranges
   all_ranges <- unique(tip_data)
   all_ranges <- all_ranges[order(all_ranges)]
