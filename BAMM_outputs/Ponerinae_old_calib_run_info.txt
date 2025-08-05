@@ -1,0 +1,94 @@
+Command line: D:\Mael_D\R_projects\deepSTRAPP\software\bamm-2.5.0\bamm.exe -c ./BAMM_outputs/Ponerinae_old_calib_config_file.txt
+Git commit id: 462bc39af9d4c4b4dd81a481f32c953e93a076e7
+Random seed: 1752225220
+Start time: Fri Jul 11 11:13:40 2025
+
+Current parameter settings:
+       acceptanceInfoFileName    Ponerinae_old_calib_acceptance_info.txt
+          acceptanceResetFreq    500
+            alwaysRecomputeE0    0
+                     autotune    0
+         branchRatesWriteFreq    0
+            chainSwapFileName    Ponerinae_old_calib_chain_swap_log.txt
+             checkUltrametric    1
+     combineExtinctionAtNodes    if_different
+          conditionOnSurvival    -1
+                       deltaT    0.01
+              eventDataInfile    event_data_in.txt
+             eventDataOutfile    Ponerinae_old_calib_event_data.txt
+           eventDataWriteFreq    5000
+       expectedNumberOfShifts    15
+            extinctionProbMax    0.9999
+fastSimulatePriorExperimental    0
+     fastSimulatePrior_BurnIn    0.05
+fastSimulatePrior_Generations    5000000
+ fastSimulatePrior_SampleFreq    50
+       globalSamplingFraction    1
+          initialNumberEvents    0.122930812672825
+              initializeModel    1
+                  lambdaInit0    0.155657890588646
+              lambdaInitPrior    2.92395114195898
+          lambdaInitRootPrior    -1.0
+    lambdaIsTimeVariablePrior    1
+                lambdaOutfile    Ponerinae_old_calib_lambda_rates.txt
+                 lambdaShift0    0
+             lambdaShiftPrior    0.0118553635703881
+         lambdaShiftRootPrior    -1.0
+                loadEventData    0
+         localGlobalMoveRatio    10
+              maxNumberEvents    5000
+                  mcmcOutfile    Ponerinae_old_calib_mcmc_log.txt
+                mcmcWriteFreq    5000
+         minCladeSizeForShift    1
+                    modeltype    speciationextinction
+                      muInit0    0.122930812672825
+                  muInitPrior    2.92395114195898
+              muInitRootPrior    -1.0
+                    muOutfile    Ponerinae_old_calib_mu_rates.txt
+                     muShift0    0.0
+                 muShiftPrior    1.0
+             muShiftRootPrior    -1.0
+            numberOccurrences    0
+               numberOfChains    4
+          numberOfGenerations    10000000
+              observationTime    -1
+                      outName    Ponerinae_old_calib
+         outputAcceptanceInfo    0
+                    overwrite    1
+             poissonRatePrior    0.0666667
+         preservationRateInit    0
+        preservationRatePrior    1.0
+                    printFreq    1000
+          priorOutputFileName    Ponerinae_old_calib_prior_probs.txt
+ priorSim_IntervalGenerations    5000
+              runInfoFilename    Ponerinae_old_calib_run_info.txt
+                      runMCMC    1
+          sampleFromPriorOnly    0
+          sampleProbsFilename    taxa_sampling_probs.txt
+                         seed    -1
+                    segLength    0.01
+          simulatePriorShifts    0
+                   swapPeriod    1000
+                     treefile    ./BAMM_outputs/Ponerinae_old_calib_phylogeny.tree
+     updateEventLocationScale    0.05
+         updateEventRateScale    4
+        updateLambdaInitScale    2
+       updateLambdaShiftScale    0.1
+            updateMuInitScale    2
+           updateMuShiftScale    0.0
+  updatePreservationRateScale    1.0
+        updateRateEventNumber    0.1
+updateRateEventNumberForBranch    0.0
+      updateRateEventPosition    1
+          updateRateEventRate    1
+            updateRateLambda0    1
+        updateRateLambdaShift    1
+     updateRateLambdaTimeMode    0
+                updateRateMu0    1
+            updateRateMuShift    0.0
+   updateRatePreservationRate    -1
+ useGlobalSamplingProbability    1
+   validateEventConfiguration    1
+   writeMeanBranchLengthTrees    0
+End time: Fri Jul 11 13:31:12 2025
+
