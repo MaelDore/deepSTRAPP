@@ -31,6 +31,7 @@
 #' @param cex_pies Numerical. To adjust the size of the ACE pies. Default = `0.5`.
 #' @param rate_type A character string specifying the type of diversification rates to plot.
 #'   Must be one of 'speciation', 'extinction' or 'net_diversification' (default).
+#' @param keep_initial_colorbreaks Logical. Whether to keep the same color breaks as used for the most recent focal time. Typically, the current time (t = 0). Default = `FALSE`.
 #' @param add_regime_shifts Logical. Whether to add the location of regime shifts on the phylogeny (Step 2). Default is `TRUE`.
 #' @param configuration_type A character string specifying how to select the location of regime shifts across posterior samples.
 #'   * `configuration_type = "MAP"`: Use the average locations recorded in posterior samples with the Maximum A Posteriori probability (MAP) configuration.
@@ -158,6 +159,7 @@
 #' ## Plot updated contMap vs. updated diversification rates
 #' plot_trait_vs_rate_maps_over_time(
 #'    deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_0_40,
+#'    keep_initial_colorbreaks = TRUE, # To use the same color breaks as for t = 0 My in all BAMM plots
 #'    color_scale = c("limegreen", "orange", "red"), # Adjust color scale on contMap
 #'    legend = TRUE, labels = TRUE, # Show legend and label on BAMM plot
 #'    cex = 0.7) # Adjust label size on contMap
@@ -245,6 +247,7 @@ plot_trait_vs_rate_maps_over_time <- function (
     add_ACE_pies = TRUE,
     cex_pies = 0.5,
     rate_type = "net_diversification",
+    keep_initial_colorbreaks = FALSE,
     add_regime_shifts = TRUE,
     configuration_type = "MAP", # MAP, MSC, or index
     sample_index = 1,
@@ -324,6 +327,7 @@ plot_trait_vs_rate_maps_over_time <- function (
       add_ACE_pies = add_ACE_pies,
       cex_pies = cex_pies,
       rate_type = rate_type,
+      keep_initial_colorbreaks = keep_initial_colorbreaks,
       add_regime_shifts = add_regime_shifts,
       configuration_type = configuration_type, # MAP, MSC, or index
       sample_index = sample_index,

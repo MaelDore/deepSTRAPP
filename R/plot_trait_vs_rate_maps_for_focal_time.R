@@ -32,6 +32,8 @@
 #' @param cex_pies Numerical. To adjust the size of the ACE pies. Default = `0.5`.
 #' @param rate_type A character string specifying the type of diversification rates to plot.
 #'   Must be one of 'speciation', 'extinction' or 'net_diversification' (default).
+#' @param keep_initial_colorbreaks Logical. Whether to keep the same color breaks as used for the most recent focal time. Typically, the current time (t = 0).
+#'   This will only works if you provide the output of [deepSTRAPP::run_deepSTRAPP_over_time()] as `deepSTRAPP_outputs`. Default = `FALSE`.
 #' @param add_regime_shifts Logical. Whether to add the location of regime shifts on the phylogeny (Step 2). Default is `TRUE`.
 #' @param configuration_type A character string specifying how to select the location of regime shifts across posterior samples.
 #'   * `configuration_type = "MAP"`: Use the average locations recorded in posterior samples with the Maximum A Posteriori probability (MAP) configuration.
@@ -153,6 +155,7 @@
 #' ## Plot updated contMap vs. updated diversification rates
 #' plot_trait_vs_rate_maps_for_focal_time(
 #'    deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_40My,
+#'    keep_initial_colorbreaks = TRUE, # To use the same color breaks as for t = 0 My
 #'    color_scale = c("limegreen", "orange", "red"), # Adjust color scale on contMap
 #'    legend = TRUE, labels = TRUE, # Show legend and label on BAMM plot
 #'    cex = 0.7) # Adjust label size on contMap
@@ -251,6 +254,7 @@ plot_trait_vs_rate_maps_for_focal_time <- function (
     add_ACE_pies = TRUE,
     cex_pies = 0.5,
     rate_type = "net_diversification",
+    keep_initial_colorbreaks = FALSE,
     add_regime_shifts = TRUE,
     configuration_type = "MAP", # MAP, MSC, or index
     sample_index = 1,
@@ -381,6 +385,30 @@ plot_trait_vs_rate_maps_for_focal_time <- function (
 
   ## Filter list of additional arguments to avoid warnings from par()
   add_args <- list(...)
+
+  ## Update colorbreaks if needed
+  if (keep_initial_colorbreaks)
+  {
+    if (rate_type == "speciation")
+    {
+      colorbreaks <- deepSTRAPP_outputs$updated_BAMM_objects_over_time[[1]]$initial_colorbreaks$speciation
+    }
+    if (rate_type == "extinction")
+    {
+      colorbreaks <- deepSTRAPP_outputs$updated_BAMM_objects_over_time[[1]]$initial_colorbreaks$extinction
+    }
+    if (rate_type == "net_diversification")
+    {
+      colorbreaks <- deepSTRAPP_outputs$updated_BAMM_objects_over_time[[1]]$initial_colorbreaks$extinction
+    }
+    if ("colorbreaks" %in% names(add_args))
+    {
+      # Remove previous value if present
+      add_args <- add_args[!(names(add_args) == "colorbreaks")]
+    }
+    # Append list of additional arguments with colorbreaks
+    add_args <- append(x = add_args, values = list("colorbreaks" = colorbreaks))
+  }
 
   # Extract additional args for phytools::plot.contMap()
   args_names_for_plot.contMap <- c("fsize", "ftype", "lwd", "legend", "outline", "sig",
