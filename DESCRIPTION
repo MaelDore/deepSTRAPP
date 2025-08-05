@@ -36,7 +36,7 @@ Imports:
     stringr (>= 1.5.1),
     tidyr (>= 1.3.1)
 Depends: 
-    R (>= 3.5)
+    R (>= 4.4)
 LazyData: true
 LazyDataCompression: xz
 Suggests: 
