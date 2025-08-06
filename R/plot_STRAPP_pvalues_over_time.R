@@ -13,8 +13,10 @@
 #'
 #' @param deepSTRAPP_outputs List of elements generated with [deepSTRAPP::run_deepSTRAPP_over_time()],
 #'   that summarize the results of multiple deepSTRAPP across `$time_steps`.
-#' @param time_range Vector of two numerical values. Time boundaries used for the plot.
+#' @param time_range Vector of two numerical values. Time boundaries used for X-axis the plot.
 #'   If `NULL` (the default), the range of data provided in `deepSTRAPP_outputs` will be used.
+#' @param pvalues_range Vector of two numerical values. Boundaries used for the Y-axis of the plot.
+#'   If `NULL` (the default), the range of p-values provided in `deepSTRAPP_outputs` will be used.
 #' @param alpha Numerical. Significance level to display as a red dashed line on the plot. If set to `NULL`, no line will be added. Default is `0.05`.
 #' @param display_plot Logical. Whether to display the plot generated in the R console. Default is `TRUE`.
 #' @param plot_posthoc_tests Logical. For multinominal data only. Whether to plot the p-values for the overall Kruskal-Wallis test across all states (`plot_posthoc_tests = FALSE`),
@@ -74,6 +76,7 @@
 plot_STRAPP_pvalues_over_time <-  function (
     deepSTRAPP_outputs,
     time_range = NULL,
+    pvalues_range = NULL,
     alpha = 0.05,
     display_plot = TRUE,
     plot_posthoc_tests = FALSE,
@@ -97,12 +100,12 @@ plot_STRAPP_pvalues_over_time <-  function (
       # Check that two values are provided for time_range
       if (length(time_range) != 2)
       {
-        stop(paste0("'time_range' must be a vector of two positive numerical values providing the time boundaries used for the plot."))
+        stop(paste0("'time_range' must be a vector of two positive numerical values providing the time boundaries of the X-axis used for the plot."))
       }
       # Check that time_range is strictly positive
       if (!identical(time_range, abs(time_range)))
       {
-        stop(paste0("'time_range' must be strictly positive numerical values providing the time boundaries used for the plot."))
+        stop(paste0("'time_range' must be strictly positive numerical values providing the time boundaries of the X-axis used for the plot."))
       }
       # Ensure that time_range are properly ordered in increasing values
       time_range <- range(time_range)
@@ -119,6 +122,23 @@ plot_STRAPP_pvalues_over_time <-  function (
       stop(paste0("'time_range' must encompass at least two focal_time with p-value recorded in 'deepSTRAPP_outputs$pvalues_summary_df'.\n",
                   "Current values of 'time_range' = ", paste(time_range, collapse = ", "), ".\n",
                   "'focal_time' with p-values recorded are: ", paste(focal_times_in_pvalues_df, collapse = ", "),"."))
+    }
+
+    ## pvalues_range
+    if (!is.null(pvalues_range))
+    {
+      # Check that two values are provided for pvalues_range
+      if (length(pvalues_range) != 2)
+      {
+        stop(paste0("'pvalues_range' must be a vector of two numerical values between 0 and 1 providing the boundaries of the Y-axis used for the plot."))
+      }
+      # Check that pvalues_range are comprised within [0,1]
+      if ((min(pvalues_range) >= 0) & (max(pvalues_range) <= 1))
+      {
+        stop(paste0("'pvalues_range' must be strictly positive numerical values between 0 and 1 providing the boundaries of the Y-axis used for the plot."))
+      }
+      # Ensure that pvalues_range are properly ordered in increasing values
+      pvalues_range <- range(pvalues_range)
     }
 
     ## alpha
@@ -246,7 +266,7 @@ plot_STRAPP_pvalues_over_time <-  function (
       ggplot2::scale_y_continuous(
         transform = "reverse",
         expand = c(0, 0),
-        limits = c(1, 0) # Set limits
+        limits = pvalues_range # Set limits
       ) +
 
       # Adjust aesthetics
@@ -334,7 +354,7 @@ plot_STRAPP_pvalues_over_time <-  function (
       ggplot2::scale_y_continuous(
         transform = "reverse",
         expand = c(0, 0),
-        limits = c(1, 0) # Set limits
+        limits = pvalues_range # Set limits
       ) +
 
       # Adjust aesthetics
