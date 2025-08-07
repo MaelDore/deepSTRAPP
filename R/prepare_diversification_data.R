@@ -47,7 +47,7 @@
 #' @param burn_in Numerical. Proportion of posterior samples removed from the BAMM output to ensure that the remaining samples where drawn once the equilibrium distribution was reached.
 #'  This can be evaluated looking at the MCMC trace (see Evaluation step). Default is `0.25`.
 #' @param nb_posterior_samples Numerical. Number of posterior samples to extract, after removing the burn-in, in the final `BAMM_object` to use for downstream analyses.
-#'  Default = 1000.
+#'  Default = `1000`.
 #' @param additional_BAMM_settings List of named elements. Additional settings options for BAMM provided as a list of named arguments.
 #'  Ex: `list(lambdaInit0 = 0.5, muInit0 = 0)`. See available settings in the template file provided within the deepSTRAPP package files as 'BAMM_template_diversification.txt'.
 #'  The template can also be loaded directly in R with `utils::data(BAMM_template_diversification)` and displayed with `print(BAMM_template_diversification)`.

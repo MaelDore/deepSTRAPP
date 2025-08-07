@@ -25,9 +25,9 @@
 #'   Tip labels (`phylo$tip.label`) should match names in `tip_data`.
 #' @param seed Integer. Set the seed to ensure reproducibility. Default is `NULL` (a random seed is used).
 #' @param evolutionary_models (Vector of) character string(s). To provide the set of evolutionary models to fit on the data.
-#'   * Models available for continuous data are detailed in [geiger::fitContinuous()].
-#'   * Models available for categorical data are detailed in [geiger::fitDiscrete()].
-#'   * Models for biogeographic data are fit with R package `BioGeoBEARS` using `BioGeoBEARS::bears_optim_run()`.
+#'   * Models available for continuous data are detailed in [geiger::fitContinuous()]. Default is `"BM"`.
+#'   * Models available for categorical data are detailed in [geiger::fitDiscrete()]. Default is `"ARD"`.
+#'   * Models for biogeographic data are fit with R package `BioGeoBEARS` using `BioGeoBEARS::bears_optim_run()`. Default is `"DEC"`.
 #'   * See list in "Details" section.
 #' @param Q_matrix Custom Q-matrix for categorical data representing transition classes between states.
 #'   Elements that are zero signify rates that are fixed to zero (i.e., impossible transition). Only for categorical data.
@@ -38,21 +38,21 @@
 #' @param prefix_for_files Character string. Prefix to add to all BioGeoBEARS files stored in the `BioGeoBEARS_directory_path` if `keep_BioGeoBEARS_files = TRUE`.
 #'   Files will be exported such as 'prefix_*' with an underscore separating the prefix and the file name.
 #'   Default is `NULL` (no prefix is added). Only for biogeographic data.
-#' @param nb_cores Interger. Number of cores to use for parallel computation during BioGeoBEARS runs. Default = 1. Only for biogeographic data.
-#' @param max_range_size Integer. Maximum number of unique areas encompassed by multi-range areas. Default = 2. Only for biogeographic data.
+#' @param nb_cores Interger. Number of cores to use for parallel computation during BioGeoBEARS runs. Default = `1`. Only for biogeographic data.
+#' @param max_range_size Integer. Maximum number of unique areas encompassed by multi-range areas. Default = `2`. Only for biogeographic data.
 #' @param split_multi_area_ranges Logical. Whether to split multi-area ranges across unique areas when mapping ranges.
 #'   Ex: For range EW, posterior probabilities will be split equally between Eastern Palearctic (E) and Western Palearctic (W).
-#'   Only for biogeographic data.
+#'   Default = `FALSE`. Only for biogeographic data.
 #' @param ... Additional arguments to be passed down to the functions used to fit models (See `evolutionary_models`)
 #'   and produce simmaps with [phytools::make.simmap()] or `BioGeoBEARS::runBSM()`.
-#' @param res Integer. Define the number of time steps used to interpolate/estimate trait value/state/range in `contMap`/`densityMaps`.
-#' @param nb_simulations Integer. Define the number of simulations generated for stochastic mapping. Default = 1000. Only for "categorical" and "biogeographic" data.
+#' @param res Integer. Define the number of time steps used to interpolate/estimate trait value/state/range in `contMap`/`densityMaps`. Default = `100`.
+#' @param nb_simulations Integer. Define the number of simulations generated for stochastic mapping. Default = `1000`. Only for "categorical" and "biogeographic" data.
 #' @param color_scale Vector of character string. List of colors to use to build the color scale with [grDevices::colorRampPalette()]
 #'   showing the evolution of a continuous trait on the `contMap`. From lowest values to highest values. Only for continuous data. Default = `NULL` will use the rainbow() color palette.
 #' @param colors_per_levels Named character string. To set the colors to use to map each state/range posterior probabilities. Names = states/ranges; values = colors.
 #'   If `NULL` (default), the `rainbow()` color scale will be used for categorical trait; the `BioGeoBEARS::get_colors_for_states_list_0based()` will be used for biogeographic ranges.
 #'   If no color is provided for multi-area ranges, they will be interpolated based on the colors provided for unique areas. Only for categorical and biogeographic data.
-#' @param plot_map Logical. Whether to plot or not the phylogeny with mapped trait evolution.
+#' @param plot_map Logical. Whether to plot or not the phylogeny with mapped trait evolution. Default = `TRUE`.
 #' @param plot_overlay Logical. If `TRUE` (default), plot a unique `densityMap` with overlapping states/ranges using transparency.
 #'   If `FALSE`, plot a `densityMap` per state/range. Only for "categorical" and "biogeographic" data.
 #' @param add_ACE_pies Logical. Whether to add pies of posterior probabilities of states/ranges at internal nodes on the mapped phylogeny. Default = `TRUE`.
@@ -81,9 +81,9 @@
 #' @details Map trait evolution on a time-calibrated phylogeny in several steps:
 #'
 #'  Step 1: Models are fit using Maximum Likelihood approach:
-#'    * For "continuous" data models are fit with [geiger::fitContinuous()]: "BM", "OU", "EB", "rate_trend", "lambda", "kappa", "delta".
-#'    * For "categorical" data models are fit with [geiger::fitDiscrete()]: "ER", "SYM", "ARD".
-#'    * For "biogeographic" data models are fit with R package `BioGeoBEARS`: "BAYAREALIKE", "DIVALIKE", "DEC", "BAYAREALIKE+J", "DIVALIKE+J", "DEC+J".
+#'    * For "continuous" data models are fit with [geiger::fitContinuous()]: "BM", "OU", "EB", "rate_trend", "lambda", "kappa", "delta". Default is `"BM"`.
+#'    * For "categorical" data models are fit with [geiger::fitDiscrete()]: "ER", "SYM", "ARD". Default is `"ARD"`.
+#'    * For "biogeographic" data models are fit with R package `BioGeoBEARS`: "BAYAREALIKE", "DIVALIKE", "DEC", "BAYAREALIKE+J", "DIVALIKE+J", "DEC+J". Default is `"DEC"`.
 #'
 #'  Step 2: Best model is identified among the list of `evolutionary_models` by comparing the corrected AIC (AICc)
 #'    and selecting the  model with lowest AICc.
@@ -1412,8 +1412,14 @@ prepare_trait_data_for_biogeographic_data <- function (
     ## max_range_size
     if ((max_range_size != abs(max_range_size)) | (max_range_size != round(max_range_size)))
     {
-      stop(paste0("For 'trait_data_type = biogeographic', 'max_range_size' represent the maximum number of unique areas encompassed by multi-area ranges.\n",
+      stop(paste0("For 'trait_data_type = biogeographic', 'max_range_size' represents the maximum number of unique areas encompassed by multi-area ranges.\n",
                   "This must be a positive integer."))
+    }
+    if (max_range_size > length(unique_areas))
+    {
+      stop(paste0("For 'trait_data_type = biogeographic', 'max_range_size' represents the maximum number of unique areas encompassed by multi-area ranges.\n",
+                  "It cannot be larger than the number of unique areas found in 'tip_data'.\n",
+                  "Currently, 'max_range_size' = ", max_range_size,". Number of unique areas = ",length(unique_areas),"."))
     }
 
     ## split_multi_area_ranges

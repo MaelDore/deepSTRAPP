@@ -895,11 +895,11 @@ compute_STRAPP_test_for_binary_data <- function (
     if (print_hypothesis)
     {
       cat(paste0("Selected two-tailed Mann-Whitney-Wilcoxon rank-sum test:\n\n",
-                 "Null hypothesis: taxa with trait '",
-                 obs_trait_states[1], "' have equal ",rate_type," rates than those with trait '",
+                 "Null hypothesis: taxa with state/range '",
+                 obs_trait_states[1], "' have equal ",rate_type," rates than those with state/range '",
                  obs_trait_states[2], "'.\n",
-                 "Alternative hypothesis: taxa with trait '",
-                 obs_trait_states[1], "' have higher or lower ",rate_type," rates than those with trait '",
+                 "Alternative hypothesis: taxa with state/range '",
+                 obs_trait_states[1], "' have higher or lower ",rate_type," rates than those with state/range '",
                  obs_trait_states[2], "'.\n\n",
                  "'Estimate' stats is the ",alpha*100,"% quantile of absolute differences in U-stats between observed and permuted data.\n",
                  "Null hypothesis is rejected if 'estimate' is higher than zero / p-value lower than ",alpha,".\n\n"))
@@ -921,11 +921,11 @@ compute_STRAPP_test_for_binary_data <- function (
       if (print_hypothesis)
       {
         cat(paste0("Selected one-tailed Mann-Whitney-Wilcoxon rank-sum test:\n\n",
-                   "Null hypothesis: taxa with trait '",
-                   trait_states[1], "' have lower or equal ",rate_type," rates than those with trait '",
+                   "Null hypothesis: taxa with state/range '",
+                   trait_states[1], "' have lower or equal ",rate_type," rates than those with state/range '",
                    trait_states[2], "'.\n",
-                   "Alternative hypothesis: taxa with trait '",
-                   trait_states[1], "' have higher ",rate_type," rates than those with trait '",
+                   "Alternative hypothesis: taxa with state/range '",
+                   trait_states[1], "' have higher ",rate_type," rates than those with state/range '",
                    trait_states[2],"'.\n\n",
                    "'Estimate' stats is the ",alpha*100,"% quantile of differences in U-stats between observed and permuted data.\n",
                    "Null hypothesis is rejected if 'estimate' is higher than zero / p-value lower than ",alpha,".\n\n"))
@@ -1249,8 +1249,8 @@ compute_STRAPP_test_for_multinominal_data <- function (
         cat(paste0("# --------- Post hoc pairwise tests --------- #\n\n",
                    "Selected one-tailed Dunn's post hoc pairwise rank-sum test:\n",
                    "Tests will be ran across all possible asymmetric pairs of states.\n\n",
-                   "Null hypothesis: taxa with trait in the first state have lower or equal ",rate_type," rates than taxa with the second state in 'pairs'.\n",
-                   "Alternative hypothesis: taxa with trait the first state have higher ",rate_type," rates than taxa with the second state in 'pairs'.\n\n",
+                   "Null hypothesis: taxa in the first state/range have lower or equal ",rate_type," rates than taxa in the second state/range in 'pairs'.\n",
+                   "Alternative hypothesis: taxa in the first state/range have higher ",rate_type," rates than taxa in the second state/range in 'pairs'.\n\n",
                    "'Estimate' stats is the ",alpha*100,"% quantile of differences in Z-stats between observed and permuted data.\n",
                    "Null hypothesis is rejected if 'estimate' is higher than zero / p-value lower than ",alpha,".\n\n"))
       }
