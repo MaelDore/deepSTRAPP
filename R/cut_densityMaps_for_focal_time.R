@@ -192,8 +192,10 @@ cut_densityMap_for_focal_time <- function(densityMap, focal_time, keep_tip_label
   updated_densityMap$tree$maps <- updated_densityMap_maps$tree$maps
 
   ## Update $mapped.edge
+  # Obtain mapped.edge
   updated_densityMap$tree$mapped.edge <- makeMappedEdge(edge = updated_densityMap$tree$edge, maps = updated_densityMap$tree$maps)
-  updated_densityMap$tree$mapped.edge <- updated_densityMap$tree$mapped.edge[, order(as.numeric(colnames(updated_densityMap$tree$mapped.edge)))]
+  # Order columns by increasing PP
+  updated_densityMap$tree$mapped.edge <- updated_densityMap$tree$mapped.edge[, order(as.numeric(colnames(updated_densityMap$tree$mapped.edge))), drop = FALSE]
 
   # Export densityMap with updated tree and character mapping ($tree$maps and $tree$mapped.edge)
   return(updated_densityMap)
