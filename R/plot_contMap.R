@@ -37,23 +37,23 @@
 #'
 #' @examples
 #' # Load phylogeny
-#' data(Ponerinae_trait_data, package = "deepSTRAPP")
+#' data(Ponerinae_trait_tip_data, package = "deepSTRAPP")
 #' # Load trait df
 #' data(Ponerinae_tree, package = "deepSTRAPP")
 #'
 #' ## Prepare trait data
 #'
-#' # Extract log(head with) data
-#' Ponerinae_data_ln_HW <- setNames(object = Ponerinae_trait_data$sim_ln_HW,
-#'                                  nm = Ponerinae_trait_data$Taxa)
+#' # Extract continuous trait data as a named vector
+#' Ponerinae_cont_tip_data <- setNames(object = Ponerinae_trait_tip_data$fake_cont_tip_data,
+#'                                     nm = Ponerinae_trait_tip_data$Taxa)
 #'
 #' # Get Ancestral Character Estimates based on a Brownian Motion model
 #' # To obtain values at internal nodes
-#' Ponerinae_ACE <- phytools::fastAnc(tree = Ponerinae_tree, x = Ponerinae_data_ln_HW)
+#' Ponerinae_ACE <- phytools::fastAnc(tree = Ponerinae_tree, x = Ponerinae_cont_tip_data)
 #'
 #' # Infer Ancestral Character Estimates based on a Brownian Motion model
 #' # and run a Stochastic Mapping to interpolate values along branches and obtain a "contMap" object
-#' Ponerinae_contMap <- phytools::contMap(Ponerinae_tree, x = Ponerinae_data_ln_HW,
+#' Ponerinae_contMap <- phytools::contMap(Ponerinae_tree, x = Ponerinae_cont_tip_data,
 #'                                        res = 100, # Number of time steps
 #'                                        plot = FALSE)
 #'
