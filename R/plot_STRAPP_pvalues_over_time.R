@@ -57,22 +57,23 @@
 #' @seealso [deepSTRAPP::run_deepSTRAPP_over_time()]
 #'
 #' @examples
-#' ## Load results of run_deepSTRAPP_over_time()
-#' data(Ponerinae_deepSTRAPP_cat_0_40, package = "deepSTRAPP")
+#' ## Load results of run_deepSTRAPP_over_time() for categorical data with 3-levels
+#' data(Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40, package = "deepSTRAPP")
 #'
 #' ## Plot results of overall Kruskal-Wallis / Mann-Whitney-Wilcoxon tests across all time-steps
 #' plot_STRAPP_pvalues_over_time(
-#'    deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cat_0_40,
-#'    alpha = 0.1,
+#'    deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40,
+#'    alpha = 0.10,
 #'    time_range = c(20, 50))
 #'
-#' ## Plot results of post hoc pairwise Dunn's tests between pairs of states
+#' ## Plot results of post hoc pairwise Dunn's tests between selected pairs of states
 #' plot_STRAPP_pvalues_over_time(
-#'    deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cat_0_40,
+#'    deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40,
+#'    alpha = 0.10,
 #'    plot_posthoc_tests = TRUE,
 #'    # PDF_file_path = "./pvalues_over_time.pdf",
-#'    select_posthoc_pairs = c("large != medium",
-#'                             "large != small"))
+#'    select_posthoc_pairs = c("arboreal != subterranean",
+#'                             "arboreal != terricolous"))
 #'
 
 
@@ -242,6 +243,7 @@ plot_STRAPP_pvalues_over_time <-  function (
     # Extract data to avoid 'binding warning'
     p_value <- pvalues_summary_df$p_value
     focal_time <- time <- pvalues_summary_df$focal_time
+    y_axis <- poly_ID <- NA
 
     # Set pvalues_max
     if (is.null(pvalues_max))
@@ -329,7 +331,7 @@ plot_STRAPP_pvalues_over_time <-  function (
                                              by = join_by(time))
 
       # Remove polygons with p-value > alpha
-      significance_area_poly_df <- significance_area_poly_df %>%
+      significance_area_poly_df <- significance_area_poly_df |>
         filter(!(p_value > alpha))
     } else {
       significance_area_poly_df <- data.frame(time = numeric(), y_axis = numeric(), pvalue = numeric())
@@ -434,6 +436,7 @@ plot_STRAPP_pvalues_over_time <-  function (
     p_value <- pvalues_summary_df$p_value
     focal_time <- time <- pvalues_summary_df$focal_time
     pair <- pvalues_summary_df$pair
+    y_axis <- poly_ID <- NA
 
     # Set pvalues_max
     if (is.null(pvalues_max))
@@ -549,7 +552,7 @@ plot_STRAPP_pvalues_over_time <-  function (
                                              by = join_by(time))
 
       # Remove polygons with p-value > alpha
-      significance_area_poly_df <- significance_area_poly_df %>%
+      significance_area_poly_df <- significance_area_poly_df |>
         filter(!(p_value > alpha))
     } else {
       significance_area_poly_df <- data.frame(time = numeric(), y_axis = numeric(), pvalue = numeric())
