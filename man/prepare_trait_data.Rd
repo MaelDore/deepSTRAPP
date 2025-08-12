@@ -245,7 +245,7 @@ data(eel.data)
 eel_data <- stats::setNames(eel.data$Max_TL_cm,
                             rownames(eel.data))
 
-## Map trait evolution on the p# Reorderhylogeny
+## Map trait evolution on the phylogeny
 mapped_cont_traits <- prepare_trait_data(
    tip_data = eel_data,
    trait_data_type = "continuous",
