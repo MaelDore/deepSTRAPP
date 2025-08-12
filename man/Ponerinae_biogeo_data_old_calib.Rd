@@ -3,7 +3,7 @@
 \docType{data}
 \name{Ponerinae_biogeo_data_old_calib}
 \alias{Ponerinae_biogeo_data_old_calib}
-\title{Data summarizing the evolution of geographic ranges in Ponerinae ants using an old ill-calibrated phylogeny for demonstration purposes}
+\title{Data summarizing the evolution of geographic ranges in Ponerinae ants using an old ill-calibrated phylogeny for illustrative purposes}
 \format{
 A list with 6 elements.
 }
@@ -14,6 +14,7 @@ data(Ponerinae_biogeo_data_old_calib)
 A list containing geographic ranges data of Ponerinae mapped on the old ill-calibrated phylogeny,
 modeled with R package \code{BioGeoBEARS}. Ranges are labeled between "Old World" (O) and New World (N).
 This object was obtained with \code{\link[=prepare_trait_data]{prepare_trait_data()}}.
+The phylogeny used is also NOT a properly time-calibrated phylogeny. It uses an ill-designed old calibration for illustrative purposes.
 
 Source: Doré, M., Borowiec, M. L., Branstetter, M. G., Camacho, G. P., Fisher, B. L., Longino, J. T., Ward, P. S., Blaimer, B. B., (2025),
 Timing is everything: Evolution of ponerine ants highlights how dispersal history shapes modern biodiversity, Nature Communications.
@@ -31,10 +32,10 @@ to harbor a given range along branches. The list contains one \verb{"densityMap}
 Here those ranges are "N" (= "New World"), "O" (= "Old World), and "NO" for multi-area ranges encompassing both regions.
 \item \verb{$trait_data_type} Character string. Record the type of trait data. Here: "biogeographic".
 \item \verb{$ace} Numerical matrix that record the posterior probabilities of ancestral ranges estimated at internal nodes.
-Only unique areas are considered among the ranges. Multi-area ranges have been split among unique ranges.
+Only unique areas (i.e., "N" and "O") are considered among the ranges. Multi-area ranges (i.e., "NO") have been split among unique ranges.
 Rows are internal nodes. Columns are ranges. Values are posterior probabilities of each range per node.
 \item \verb{$ace_all_ranges} Numerical matrix that record the posterior probabilities of ancestral ranges estimated at internal nodes.
-All ranges observed along branches during the simulated biogeographic histories are present.
+All ranges observed along branches during the simulated biogeographic histories are present (i.e., "N", "O", and "NO").
 Rows are internal nodes. Columns are ranges. Values are posterior probabilities of each range per node.
 \item \verb{$model_selection_df} Data.frame that summarizes model comparisons used to select the best fitting model.
 }
