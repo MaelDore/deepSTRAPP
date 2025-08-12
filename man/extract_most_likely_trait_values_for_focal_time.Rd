@@ -213,11 +213,11 @@ ape::nodelabels(text = eel_cont_50$contMap$tree$initial_nodes_ID)
 # ----- Example 2: Categorical trait ----- #
 
 ## Load categorical trait data mapped on a phylogeny
-data(eel_cat_data, package = "deepSTRAPP")
+data(eel_cat_3lvl_data, package = "deepSTRAPP")
 
 # Explore data
-str(eel_cat_data, 1)
-eel_cat_data$densityMaps # Three density maps: one per state
+str(eel_cat_3lvl_data, 1)
+eel_cat_3lvl_data$densityMaps # Three density maps: one per state
 
 # Set focal time to 10 Mya
 focal_time <- 10
@@ -225,25 +225,25 @@ focal_time <- 10
 ## Extract trait data and update densityMaps for the given focal_time
 
 # Extract from the densityMaps
-eel_cat_data_10My <- extract_most_likely_trait_values_for_focal_time(
-   densityMaps = eel_cat_data$densityMaps,
+eel_cat_3lvl_data_10My <- extract_most_likely_trait_values_for_focal_time(
+   densityMaps = eel_cat_3lvl_data$densityMaps,
    trait_data_type = "categorical",
    focal_time = focal_time,
    update_map = TRUE)
 
 ## Print trait data
-str(eel_cat_data_10My, 1)
-eel_cat_data_10My$trait_data
+str(eel_cat_3lvl_data_10My, 1)
+eel_cat_3lvl_data_10My$trait_data
 
 ## Plot density maps as overlay of all state posterior probabilities
 
 # Plot initial density maps with ACE pies
-plot_densityMaps_overlay(densityMaps = eel_cat_data$densityMaps)
-abline(v = max(phytools::nodeHeights(eel_cat_data$densityMaps[[1]]$tree)[,2]) - focal_time,
+plot_densityMaps_overlay(densityMaps = eel_cat_3lvl_data$densityMaps)
+abline(v = max(phytools::nodeHeights(eel_cat_3lvl_data$densityMaps[[1]]$tree)[,2]) - focal_time,
        col = "red", lty = 2, lwd = 2)
 
 # Plot updated densityMaps with ACE pies
-plot_densityMaps_overlay(eel_cat_data_10My$densityMaps)
+plot_densityMaps_overlay(eel_cat_3lvl_data_10My$densityMaps)
 
 
 # ----- Example 3: Biogeographic ranges ----- #
