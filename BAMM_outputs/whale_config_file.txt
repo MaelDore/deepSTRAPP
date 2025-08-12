@@ -5,7 +5,7 @@
 # References: http://bamm-project.org/; https://github.com/macroevolution/bamm
 #
 # Authors: Daniel Rabosky (BAMM) & Pascal Title (BAMMtools)
-# Modified by Ma<U+00EB>l Dor<U+00E9> for deepSTRAPP
+# Modified by Maël Doré for deepSTRAPP
 #
 # Format
 # ------
@@ -61,7 +61,7 @@ globalSamplingFraction = 1
 sampleProbsFilename = taxa_sampling_probs.txt
 # File name containing species-specific sampling fractions
 
-seed = -1
+seed = 1234
 # Seed for the random number generator. 
 # If not specified (or is -1), a seed is obtained from the system clock
 

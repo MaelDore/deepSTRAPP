@@ -1,7 +1,7 @@
 Command line: D:\Mael_D\R_projects\deepSTRAPP\software\bamm-2.5.0\bamm.exe -c ./BAMM_outputs/whale_config_file.txt
 Git commit id: 462bc39af9d4c4b4dd81a481f32c953e93a076e7
-Random seed: 1744128073
-Start time: Tue Apr 08 18:01:13 2025
+Random seed: 1234
+Start time: Mon Aug 11 18:15:26 2025
 
 Current parameter settings:
        acceptanceInfoFileName    whale_acceptance_info.txt
@@ -65,7 +65,7 @@ fastSimulatePrior_Generations    5000000
                       runMCMC    1
           sampleFromPriorOnly    0
           sampleProbsFilename    taxa_sampling_probs.txt
-                         seed    -1
+                         seed    1234
                     segLength    0.01
           simulatePriorShifts    0
                    swapPeriod    1000
@@ -90,5 +90,5 @@ updateRateEventNumberForBranch    0.0
  useGlobalSamplingProbability    1
    validateEventConfiguration    1
    writeMeanBranchLengthTrees    0
-End time: Tue Apr 08 18:01:21 2025
+End time: Mon Aug 11 18:15:34 2025
 
