@@ -11,3 +11,4 @@
 ^software/*
 ^BAMM_outputs/*
 ^BioGeoBEARS_directory/*
+^test_Bonnie_script.R$

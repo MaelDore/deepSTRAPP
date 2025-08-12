@@ -176,17 +176,17 @@
 #' plot_BAMM_rates(Ponerinae_BAMM_object_10My)
 #'
 #' ## Load the object containing head width trait data for ponerine ants extracted for 10My ago.
-#' data(Ponerinae_trait_data_10My, package = "deepSTRAPP")
+#' data(Ponerinae_trait_cont_tip_data_10My, package = "deepSTRAPP")
 #'
 #' # Plot the associated contMap (continuous trait stochastic map)
-#' plot_contMap(Ponerinae_trait_data_10My$contMap)
+#' plot_contMap(Ponerinae_trait_cont_tip_data_10My$contMap)
 #'
 #' # Check that objects are ordered in the same fashion
 #' identical(names(Ponerinae_BAMM_object_10My$tipStates[[1]]),
-#'           names(Ponerinae_trait_data_10My$trait_data))
+#'           names(Ponerinae_trait_cont_tip_data_10My$trait_data))
 #'
 #' # Save continuous data
-#' trait_data_continuous <- Ponerinae_trait_data_10My
+#' trait_data_continuous <- Ponerinae_trait_cont_tip_data_10My
 #'
 #' ## Transform trait data into binary and multinominal data
 #'
@@ -519,7 +519,7 @@ compute_STRAPP_test_for_focal_time <- function (BAMM_object, trait_data_list,
            },
            multinominal = { # Case for multinominal data (Case of categorical/biogeographic data with more than two states)
              # Stat test = Kruskal-Wallis H test
-             # Can define the post-hoc pairwise tests to compute
+             # Can define the post hoc pairwise tests to compute
              STRAPP_results <- compute_STRAPP_test_for_multinominal_data(
                BAMM_data = BAMM_data,
                trait_data = trait_data,
