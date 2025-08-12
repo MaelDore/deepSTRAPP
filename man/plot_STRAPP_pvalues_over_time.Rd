@@ -7,10 +7,13 @@
 plot_STRAPP_pvalues_over_time(
   deepSTRAPP_outputs,
   time_range = NULL,
+  pvalues_max = NULL,
   alpha = 0.05,
   display_plot = TRUE,
+  plot_significant_time_frame = TRUE,
   plot_posthoc_tests = FALSE,
   select_posthoc_pairs = "all",
+  plot_adjusted_pvalues = FALSE,
   PDF_file_path = NULL
 )
 }
@@ -18,12 +21,17 @@ plot_STRAPP_pvalues_over_time(
 \item{deepSTRAPP_outputs}{List of elements generated with \code{\link[=run_deepSTRAPP_over_time]{run_deepSTRAPP_over_time()}},
 that summarize the results of multiple deepSTRAPP across \verb{$time_steps}.}
 
-\item{time_range}{Vector of two numerical values. Time boundaries used for the plot.
+\item{time_range}{Vector of two numerical values. Time boundaries used for X-axis the plot.
 If \code{NULL} (the default), the range of data provided in \code{deepSTRAPP_outputs} will be used.}
+
+\item{pvalues_max}{Numerical. Set the max boundary used for the Y-axis of the plot.
+If \code{NULL} (the default), the maximum p-value provided in \code{deepSTRAPP_outputs} will be used.}
 
 \item{alpha}{Numerical. Significance level to display as a red dashed line on the plot. If set to \code{NULL}, no line will be added. Default is \code{0.05}.}
 
 \item{display_plot}{Logical. Whether to display the plot generated in the R console. Default is \code{TRUE}.}
+
+\item{plot_significant_time_frame}{Logical. Whether to display a green band over the time frame that yields significant results according to the chosen alpha level. Default is \code{TRUE}.}
 
 \item{plot_posthoc_tests}{Logical. For multinominal data only. Whether to plot the p-values for the overall Kruskal-Wallis test across all states (\code{plot_posthoc_tests = FALSE}),
 or plot the p-values for the pairwise post hoc Dunn's test across pairs of states (\code{plot_posthoc_tests = TRUE}). Default is \code{FALSE}.
@@ -32,6 +40,9 @@ This is only possible if \code{deepSTRAPP_outputs} contains the \verb{$pvalues_s
 
 \item{select_posthoc_pairs}{Vector of character strings used to specify the pairs to include in the plot. Names of pairs must match the pairs found in
 \code{deepSTRAPP_outputs$pvalues_summary_df_for_posthoc_pairwise_tests$pair}. Default is "all" to include all pairs.}
+
+\item{plot_adjusted_pvalues}{Logical. Whether to display the p-values adjusted for multiple testing rather than the raw p-values.
+See argument 'p.adjust_method' in \code{\link[=run_deepSTRAPP_for_focal_time]{run_deepSTRAPP_for_focal_time()}} or \code{\link[=run_deepSTRAPP_over_time]{run_deepSTRAPP_over_time()}}. Default is \code{FALSE}.}
 
 \item{PDF_file_path}{Character string. If provided, the plot will be saved in a PDF file following the path provided here. The path must end with '.pdf'.}
 }
@@ -66,22 +77,23 @@ computed across pairs of states for all post hoc tests. This is obtained from \c
 \code{posthoc_pairwise_tests = TRUE} to carry out post hoc tests.
 }
 \examples{
-## Load results of run_deepSTRAPP_over_time()
-data(Ponerinae_deepSTRAPP_cat_0_40, package = "deepSTRAPP")
+## Load results of run_deepSTRAPP_over_time() for categorical data with 3-levels
+data(Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40, package = "deepSTRAPP")
 
 ## Plot results of overall Kruskal-Wallis / Mann-Whitney-Wilcoxon tests across all time-steps
 plot_STRAPP_pvalues_over_time(
-   deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cat_0_40,
-   alpha = 0.1,
+   deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40,
+   alpha = 0.10,
    time_range = c(20, 50))
 
-## Plot results of post hoc pairwise Dunn's tests between pairs of states
+## Plot results of post hoc pairwise Dunn's tests between selected pairs of states
 plot_STRAPP_pvalues_over_time(
-   deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cat_0_40,
+   deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40,
+   alpha = 0.10,
    plot_posthoc_tests = TRUE,
    # PDF_file_path = "./pvalues_over_time.pdf",
-   select_posthoc_pairs = c("large != medium",
-                            "large != small"))
+   select_posthoc_pairs = c("arboreal != subterranean",
+                            "arboreal != terricolous"))
 
 }
 \seealso{

@@ -61,7 +61,7 @@ If set to \code{NULL} (default), will set frequency such as 2000 posterior sampl
 This can be evaluated looking at the MCMC trace (see Evaluation step). Default is \code{0.25}.}
 
 \item{nb_posterior_samples}{Numerical. Number of posterior samples to extract, after removing the burn-in, in the final \code{BAMM_object} to use for downstream analyses.
-Default = 1000.}
+Default = \code{1000}.}
 
 \item{additional_BAMM_settings}{List of named elements. Additional settings options for BAMM provided as a list of named arguments.
 Ex: \code{list(lambdaInit0 = 0.5, muInit0 = 0)}. See available settings in the template file provided within the deepSTRAPP package files as 'BAMM_template_diversification.txt'.

@@ -218,30 +218,34 @@ If \code{posthoc_pairwise_tests = TRUE}, Dunn's post hoc pairwise rank-sum tests
 # ----- Example 1: Continuous trait ----- #
 ## Load data
 
-# Load phylogeny
-data(Ponerinae_trait_data, package = "deepSTRAPP")
 # Load trait df
-data(Ponerinae_tree, package = "deepSTRAPP")
+data(Ponerinae_trait_tip_data, package = "deepSTRAPP")
+# Load phylogeny with old calibration
+data(Ponerinae_tree_old_calib, package = "deepSTRAPP")
 # Load the BAMM_object summarizing 1000 posterior samples of BAMM
-data(Ponerinae_BAMM_object, package = "deepSTRAPP")
+data(Ponerinae_BAMM_object_old_calib, package = "deepSTRAPP")
 
 ## Prepare trait data
 
-# Extract log(head with) data
-Ponerinae_data_ln_HW <- setNames(object = Ponerinae_trait_data$sim_ln_HW,
-                                 nm = Ponerinae_trait_data$Taxa)
+# Extract continuous trait data as a named vector
+Ponerinae_cont_tip_data <- setNames(object = Ponerinae_trait_tip_data$fake_cont_tip_data,
+                                    nm = Ponerinae_trait_tip_data$Taxa)
+
+# Select a color scheme from lowest to highest values
+color_scale = c("darkgreen", "limegreen", "orange", "red")
 
 # Get Ancestral Character Estimates based on a Brownian Motion model
 # To obtain values at internal nodes
-Ponerinae_ACE <- phytools::fastAnc(tree = Ponerinae_tree, x = Ponerinae_data_ln_HW)
+Ponerinae_ACE <- phytools::fastAnc(tree = Ponerinae_tree_old_calib, x = Ponerinae_cont_tip_data)
 
 # Run a Stochastic Mapping based on a Brownian Motion model
 # to interpolate values along branches and obtain a "contMap" object
-Ponerinae_contMap <- phytools::contMap(Ponerinae_tree, x = Ponerinae_data_ln_HW,
+Ponerinae_contMap <- phytools::contMap(Ponerinae_tree, x = Ponerinae_cont_tip_data,
                                        res = 100, # Number of time steps
                                        plot = FALSE)
 # Plot contMap = stochastic mapping of continuous trait
-plot_contMap(Ponerinae_contMap)
+plot_contMap(contMap = Ponerinae_contMap,
+             color_scale = color_scale)
 
 ## Set focal time to 10 Mya
 focal_time <- 10
@@ -250,9 +254,11 @@ focal_time <- 10
 ## Run deepSTRAPP on net diversification rates for focal time = 10 Mya.
 
 deepSTRAPP_output <- run_deepSTRAPP_for_focal_time(
-  contMap = Ponerinae_contMap, ace = Ponerinae_ACE, tip_data = Ponerinae_data_ln_HW,
+  contMap = Ponerinae_contMap,
+  ace = Ponerinae_ACE,
+  tip_data = Ponerinae_cont_tip_data,
   trait_data_type = "continuous",
-  BAMM_object = Ponerinae_BAMM_object,
+  BAMM_object = Ponerinae_BAMM_object_old_calib,
   focal_time = focal_time,
   rate_type = "net_diversification",
   return_perm_data = TRUE,
@@ -291,39 +297,37 @@ plot_histogram_STRAPP_test_for_focal_time(
 # Load phylogeny
 data(Ponerinae_tree, package = "deepSTRAPP")
 # Load trait df
-data(Ponerinae_trait_data, package = "deepSTRAPP")
+data(Ponerinae_trait_tip_data, package = "deepSTRAPP")
 # Load the BAMM_object summarizing 1000 posterior samples of BAMM
-data(Ponerinae_BAMM_object, package = "deepSTRAPP")
+data(Ponerinae_BAMM_object_old_calib, package = "deepSTRAPP")
 
 ## Prepare trait data
 
-# Extract log(head with) data
-Ponerinae_data_ln_HW <- setNames(object = Ponerinae_trait_data$sim_ln_HW,
-                                 nm = Ponerinae_trait_data$Taxa)
-# Convert to three-factor categorical traits
-Ponerinae_data <- Ponerinae_data_ln_HW
-Ponerinae_data[seq_along(Ponerinae_data)] <- "small"
-Ponerinae_data[Ponerinae_data_ln_HW > -1] <- "medium"
-Ponerinae_data[Ponerinae_data_ln_HW > 0] <- "large"
-table(Ponerinae_data)
+# Extract categorical data with 3-levels
+Ponerinae_cat_3lvl_tip_data <- setNames(object = Ponerinae_trait_tip_data$fake_cat_3lvl_data,
+                                        nm = Ponerinae_trait_tip_data$Taxa)
+table(Ponerinae_cat_3lvl_tip_data)
 
 # Select color scheme for states
-colors_per_states <- c("darkblue", "dodgerblue", "lightblue")
-names(colors_per_states) <- c("large", "medium", "small")
+colors_per_states <- c("forestgreen", "sienna", "goldenrod")
+names(colors_per_states) <- c("arboreal", "subterranean", "terricolous")
 
 \dontrun{  (May take several minutes to run)
 ## Produce densityMaps using stochastic character mapping based on an equal-rates (ER) Mk model
-Ponerinae_cat_data <- prepare_trait_data(tip_data = Ponerinae_data, phylo = Ponerinae_tree,
-                                         trait_data_type = "categorical",
-                                         colors_per_states = colors_per_states,
-                                         evolutionary_models = c("ER", "SYM", "ARD", "meristic"),
-                                         nb_simulations = 1000,
-                                         return_best_model_fit = TRUE,
-                                         return_model_selection_df = TRUE,
-                                         plot_map = FALSE) }
+Ponerinae_cat_3lvl_data_old_calib <- prepare_trait_data(
+   tip_data = Ponerinae_cat_3lvl_tip_data,
+   phylo = Ponerinae_tree_old_calib,
+   trait_data_type = "categorical",
+   colors_per_states = colors_per_states,
+   evolutionary_models = "ARD", # Use default ARD model
+   nb_simulations = 100, # Reduce number of simulations to save time
+   seed = 1234, Seet seed for reproducibility
+   return_best_model_fit = TRUE,
+   return_model_selection_df = TRUE,
+   plot_map = FALSE) }
 
 # Load directly output
-data(Ponerinae_cat_data, package = "deepSTRAPP")
+data(Ponerinae_cat_3lvl_data_old_calib, package = "deepSTRAPP")
 
 ## Set focal time to 10 Mya
 focal_time <- 10
@@ -332,9 +336,9 @@ focal_time <- 10
 ## Run deepSTRAPP on net diversification rates for focal time = 10 Mya.
 
 deepSTRAPP_output <- run_deepSTRAPP_for_focal_time(
-    densityMaps = Ponerinae_cat_data$densityMaps,
-    ace = Ponerinae_cat_data$ace,
-    tip_data = Ponerinae_data,
+    densityMaps = Ponerinae_cat_data_old_calib$densityMaps,
+    ace = Ponerinae_cat_data_old_calib$ace,
+    tip_data = Ponerinae_cat_3lvl_tip_data,
     trait_data_type = "categorical",
     BAMM_object = Ponerinae_BAMM_object,
     focal_time = focal_time,
@@ -383,24 +387,24 @@ plot_histogram_STRAPP_test_for_focal_time(
 ## Load data
 
 # Load phylogeny
-data(Ponerinae_tree, package = "deepSTRAPP")
+data(Ponerinae_tree_old_calib, package = "deepSTRAPP")
 # Load trait df
 data(Ponerinae_binary_range_table, package = "deepSTRAPP")
 # Load the BAMM_object summarizing 1000 posterior samples of BAMM
-data(Ponerinae_BAMM_object, package = "deepSTRAPP")
+data(Ponerinae_BAMM_object_old_calib, package = "deepSTRAPP")
 
 ## Prepare range data for Old World vs. New World
 
 # No overlap in ranges
 table(Ponerinae_binary_range_table$Old_World, Ponerinae_binary_range_table$New_World)
 
-Ponerinae_ON_data <- stats::setNames(object = Ponerinae_binary_range_table$Old_World,
+Ponerinae_NO_data <- stats::setNames(object = Ponerinae_binary_range_table$Old_World,
                                      nm = Ponerinae_binary_range_table$Taxa)
-Ponerinae_ON_data <- as.character(Ponerinae_ON_data)
-Ponerinae_ON_data[Ponerinae_ON_data == "TRUE"] <- "O" # O = Old World
-Ponerinae_ON_data[Ponerinae_ON_data == "FALSE"] <- "N" # N = New World
-names(Ponerinae_ON_data) <- Ponerinae_binary_range_table$Taxa
-table(Ponerinae_ON_data)
+Ponerinae_NO_data <- as.character(Ponerinae_ON_data)
+Ponerinae_NO_data[Ponerinae_NO_data == "TRUE"] <- "O" # O = Old World
+Ponerinae_NO_data[Ponerinae_NO_data == "FALSE"] <- "N" # N = New World
+names(Ponerinae_NO_data) <- Ponerinae_binary_range_table$Taxa
+table(Ponerinae_NO_data)
 
 colors_per_levels <- c("mediumpurple2", "peachpuff2")
 names(colors_per_levels) <- c("N", "O")
@@ -408,23 +412,23 @@ names(colors_per_levels) <- c("N", "O")
 \dontrun{  (May take several minutes to run)
 ## Run evolutionary models
 Ponerinae_biogeo_data <- prepare_trait_data(
-    tip_data = Ponerinae_ON_data,
+    tip_data = Ponerinae_NO_data,
     trait_data_type = "biogeographic",
-    phylo = Ponerinae_tree,
-    evolutionary_models = c("DEC", "DEC+J"), # Default = "DEC" for biogeographic
-    prefix_for_files = "Ponerinae",
+    phylo = Ponerinae_tree_old_calib,
+    evolutionary_models = "DEC+J", # Default = "DEC" for biogeographic
+    prefix_for_files = "Ponerinae_old_calib",
     max_range_size = 2,
     split_multi_area_ranges = TRUE, # Set to TRUE to display the two outputs
-    nb_simulations = 100,
+    nb_simulations = 100, # Reduce to save time (Default = '1000')
     colors_per_levels = colors_per_levels,
     return_model_selection_df = TRUE,
     verbose = TRUE) }
 
 # Load directly output
-data(Ponerinae_biogeo_data, package = "deepSTRAPP")
+data(Ponerinae_biogeo_data_old_calib, package = "deepSTRAPP")
 
 ## Explore output
-str(Ponerinae_biogeo_data, 1)
+str(Ponerinae_biogeo_data_old_calib, 1)
 
 ## Set focal time to 10 Mya
 focal_time <- 10
@@ -433,11 +437,11 @@ focal_time <- 10
 ## Run deepSTRAPP on net diversification rates for focal time = 10 Mya.
 
 deepSTRAPP_output <- run_deepSTRAPP_for_focal_time(
-    densityMaps = Ponerinae_biogeo_data$densityMaps,
-    ace = Ponerinae_biogeo_data$ace,
-    tip_data = Ponerinae_ON_data,
+    densityMaps = Ponerinae_biogeo_data_old_calib$densityMaps,
+    ace = Ponerinae_biogeo_data_old_calib$ace,
+    tip_data = Ponerinae_NO_data,
     trait_data_type = "biogeographic",
-    BAMM_object = Ponerinae_BAMM_object,
+    BAMM_object = Ponerinae_BAMM_object_old_calib,
     focal_time = focal_time,
     rate_type = "net_diversification",
     return_perm_data = TRUE,

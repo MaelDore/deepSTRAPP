@@ -63,12 +63,9 @@ The continuous trait mapping is updated accordingly by removing mapping associat
 \examples{
 # ----- Prepare data ----- #
 
-# Load mammals phylogeny and data from the R package motmot
+# Load mammals phylogeny and data from the R package motmot, and implemented in deepSTRAPP
 # Data source: Slater, 2013; DOI: 10.1111/2041-210X.12084
-library(motmot)
-
-data("mammals")
-force(mammals)
+data("mammals", package = "deepSTRAPP")
 
 # Obtain mammal tree
 mammals_tree <- mammals$mammal.phy

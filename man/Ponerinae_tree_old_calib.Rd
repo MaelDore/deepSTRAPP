@@ -3,7 +3,7 @@
 \docType{data}
 \name{Ponerinae_tree_old_calib}
 \alias{Ponerinae_tree_old_calib}
-\title{Dataset providing the extensive time-calibrated phylogeny of extant ponerine ants using an old calibration for demonstration purposes}
+\title{Dataset providing the extensive time-calibrated phylogeny of extant ponerine ants using an old calibration for illustrative purposes}
 \format{
 A \code{phylo} object with 4 elements.
 }
@@ -12,8 +12,8 @@ data(Ponerinae_tree_old_calib)
 }
 \description{
 A \code{phylo} object describing the time-calibrated phylogeny of the 1534 extant ponerine ants (Ponerinae subfamily).
-THIS IS NOT a properly time-calibrated phylogeny. It uses an ill-designed old calibration for demonstration purposes.
-For a proper time-calibrated phylogeny of ponerine ants, see the \code{Ponerinae_tree} in deepSTRAPP.
+THIS IS NOT a properly time-calibrated phylogeny. It uses an ill-designed old calibration for illustrative purposes.
+For a proper time-calibrated phylogeny of ponerine ants, see the \code{Ponerinae_tree} object in deepSTRAPP.
 
 Source: Doré, M., Borowiec, M. L., Branstetter, M. G., Camacho, G. P., Fisher, B. L., Longino, J. T., Ward, P. S., Blaimer, B. B., (2025),
 Timing is everything: Evolution of ponerine ants highlights how dispersal history shapes modern biodiversity, Nature Communications.

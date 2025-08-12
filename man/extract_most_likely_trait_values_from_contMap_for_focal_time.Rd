@@ -161,12 +161,9 @@ ape::nodelabels(text = eel_test$contMap$tree$initial_nodes_ID)
 
 ## Prepare data
 
-# Load mammals phylogeny and data from the R package motmot
+# Load mammals phylogeny and data from the R package motmot included within deepSTRAPP
 # Data source: Slater, 2013; DOI: 10.1111/2041-210X.12084
-
-library(motmot)
-data("mammals")
-force(mammals)
+data("mammals", package = "deepSTRAPP")
 
 mammals_tree <- mammals$mammal.phy
 mammals_data <- setNames(object = mammals$mammal.mass$mean,

@@ -100,11 +100,11 @@ The categorical trait mapping in \code{densityMap} (\verb{$tree$maps} and \verb{
 # ----- Example 1: Only extent taxa (Ultrametric tree) ----- #
 
 ## Load categorical trait data mapped on a phylogeny
-data(eel_cat_data, package = "deepSTRAPP")
+data(eel_cat_3lvl_data, package = "deepSTRAPP")
 
 # Explore data
-str(eel_cat_data, 1)
-eel_cat_data$densityMaps # Three density maps: one per state
+str(eel_cat_3lvl_data, 1)
+eel_cat_3lvl_data$densityMaps # Three density maps: one per state
 
 # Set focal time to 10 Mya
 focal_time <- 10
@@ -112,25 +112,25 @@ focal_time <- 10
 ## Extract trait data and update densityMaps for the given focal_time
 
 # Extract from the densityMaps
-eel_cat_data_10My <- extract_most_likely_states_from_densityMaps_for_focal_time(
-   densityMaps = eel_cat_data$densityMaps,
-   # ace = eel_cat_data$ace,
+eel_cat_3lvl_data_10My <- extract_most_likely_states_from_densityMaps_for_focal_time(
+   densityMaps = eel_cat_3lvl_data$densityMaps,
+   # ace = eel_cat_3lvl_data$ace,
    focal_time = focal_time,
    update_densityMaps = TRUE)
 
 ## Print trait data
-str(eel_cat_data_10My, 1)
-eel_cat_data_10My$trait_data
+str(eel_cat_3lvl_data_10My, 1)
+eel_cat_3lvl_data_10My$trait_data
 
 ## Plot density maps as overlay of all state posterior probabilities
 
 # Plot initial density maps with ACE pies
-plot_densityMaps_overlay(densityMaps = eel_cat_data$densityMaps)
-abline(v = max(phytools::nodeHeights(eel_cat_data$densityMaps[[1]]$tree)[,2]) - focal_time,
+plot_densityMaps_overlay(densityMaps = eel_cat_3lvl_data$densityMaps)
+abline(v = max(phytools::nodeHeights(eel_cat_3lvl_data$densityMaps[[1]]$tree)[,2]) - focal_time,
        col = "red", lty = 2, lwd = 2)
 
 # Plot updated densityMaps with ACE pies
-plot_densityMaps_overlay(eel_cat_data_10My$densityMaps)
+plot_densityMaps_overlay(eel_cat_3lvl_data_10My$densityMaps)
 
 
 # ----- Example 2: Include fossils (Non-ultrametric tree) ----- #
@@ -138,12 +138,9 @@ plot_densityMaps_overlay(eel_cat_data_10My$densityMaps)
 
 ## Prepare data
 
-# Load mammals phylogeny and data from the R package motmot
+# Load mammals phylogeny and data from the R package motmot included within deepSTRAPP
 # Data source: Slater, 2013; DOI: 10.1111/2041-210X.12084
-library(motmot)
-
-data("mammals")
-force(mammals)
+data("mammals", package = "deepSTRAPP")
 
 # Obtain mammal tree
 mammals_tree <- mammals$mammal.phy

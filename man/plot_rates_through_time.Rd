@@ -51,7 +51,7 @@ Default = \code{NULL} will use the 'Spectral' color palette in \code{\link[RColo
 \item{colors_per_levels}{Named character string. To set the colors to use to plot rates of each state/range. Names = states/ranges; values = colors.
 If \code{NULL} (default), the default ggplot2 color palette (\code{\link[scales:pal_hue]{scales::hue_pal()}}) will be used. Only for categorical and biogeographic data.}
 
-\item{plot_CI}{Logical. Whether to plot a confidence interval (CI) based on the distribution of rates found in posterior samples.}
+\item{plot_CI}{Logical. Whether to plot a confidence interval (CI) based on the distribution of rates found in posterior samples. Default is \code{FALSE}.}
 
 \item{CI_type}{Character string. To select the type of confidence interval (CI) to plot.
 \itemize{
@@ -67,11 +67,11 @@ This proportion is defined with \code{CI_quantiles}.
 \item{PDF_file_path}{Character string. If provided, the plot will be saved in a PDF file following the path provided here. The path must end with '.pdf'.}
 
 \item{return_mean_data_per_samples_df}{Logical. Whether to include in the output the data.frame of mean rates per trait values computed for
-each posterior sample at each time-step (aggregated across groups of branches based on trait data). This is used to draw the confidence interval.}
+each posterior sample at each time-step (aggregated across groups of branches based on trait data). This is used to draw the confidence interval. Default is \code{FALSE}.}
 
 \item{return_median_data_across_samples_df}{Logical. Whether to include in the output the data.frame of median rates per trait values
 across posterior samples computed for at each time-step (aggregated across groups of branches based on trait data AND posterior samples).
-This is used to draw the lines on the plot.}
+This is used to draw the lines on the plot. Default is \code{FALSE}.}
 }
 \value{
 The function returns a list with at least one element.
@@ -109,14 +109,14 @@ Rates are averaged across branches at each time step (i.e., \code{focal_time}).
 # ------ Example 1: Plot rates through time for continuous data ------ #
 
 ## Load results of run_deepSTRAPP_over_time()
-data(Ponerinae_deepSTRAPP_cont_0_40, package = "deepSTRAPP")
+data(Ponerinae_deepSTRAPP_cont_old_calib_0_40, package = "deepSTRAPP")
 
 # Visualize trait data
-hist(Ponerinae_deepSTRAPP_cont_0_40$trait_data_df_over_time$trait_value)
+hist(Ponerinae_deepSTRAPP_cont_old_calib_0_40$trait_data_df_over_time$trait_value)
 
 # Generate plot
 plotTT_continuous <- plot_rates_through_time(
-   deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_0_40,
+   deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_old_calib_0_40,
    quantile_ranges = c(0, 0.25, 0.5, 0.75, 1.0),
    time_range = c(0, 50), # Control range of the X-axis
    # color_scale = c("limegreen", "red"),
@@ -140,20 +140,20 @@ print(plotTT_continuous_adj)
 # ------ Example 2: Plot rates through time for categorical data ------ #
 
 ## Load results of run_deepSTRAPP_over_time()
-data(Ponerinae_deepSTRAPP_cat_0_40, package = "deepSTRAPP")#'
+data(Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40, package = "deepSTRAPP")
 
 # Explore trait data
-table(Ponerinae_deepSTRAPP_cat_0_40$trait_data_df_over_time$trait_value)
+table(Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40$trait_data_df_over_time$trait_value)
 
 # Set colors to use
-colors_per_levels <- c("red", "orange", "limegreen")
-names(colors_per_levels) <- c("large", "medium", "small")
+colors_per_states <- c("forestgreen", "sienna", "goldenrod")
+names(colors_per_states) <- c("arboreal", "subterranean", "terricolous")
 
 plotTT_categorical <- plot_rates_through_time(
-    deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cat_0_40,
-    select_trait_states = c("small", "large"),
+    deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40,
+    select_trait_states = c("arboreal", "terricolous"),
     time_range = c(0, 50),
-    colors_per_levels = colors_per_levels,
+    colors_per_levels = colors_per_states,
     plot_CI = TRUE,
     CI_type = "quantiles_rect",
     CI_quantiles = 0.9,
@@ -169,20 +169,20 @@ print(plotTT_categorical$rates_TT_ggplot)
 # ------ Example 3: Plot rates through time for biogeographic data ------ #
 
 ## Load results of run_deepSTRAPP_over_time()
-data(Ponerinae_deepSTRAPP_biogeo_0_40, package = "deepSTRAPP")
+data(Ponerinae_deepSTRAPP_biogeo_old_calib_0_40, package = "deepSTRAPP")
 
 # Explore range data
-table(Ponerinae_deepSTRAPP_biogeo_0_40$trait_data_df_over_time$trait_value)
+table(Ponerinae_deepSTRAPP_biogeo_old_calib_0_40$trait_data_df_over_time$trait_value)
 
 # Set colors to use
-colors_per_levels <- c("mediumpurple2", "peachpuff2")
-names(colors_per_levels) <- c("N", "O")
+colors_per_ranges <- c("mediumpurple2", "peachpuff2")
+names(colors_per_ranges) <- c("N", "O")
 
 plotTT_biogeographic <- plot_rates_through_time(
-    deepSTRAPP_outputs = Ponerinae_deepSTRAPP_biogeo_0_40,
+    deepSTRAPP_outputs = Ponerinae_deepSTRAPP_biogeo_old_calib_0_40,
     select_trait_states = "all",
     time_range = c(0, 50),
-    colors_per_levels = colors_per_levels,
+    colors_per_levels = colors_per_ranges,
     plot_CI = TRUE,
     CI_type = "quantiles_rect",
     CI_quantiles = 0.9,

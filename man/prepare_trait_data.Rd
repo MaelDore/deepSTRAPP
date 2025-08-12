@@ -49,14 +49,17 @@ Tip labels (\code{phylo$tip.label}) should match names in \code{tip_data}.}
 
 \item{evolutionary_models}{(Vector of) character string(s). To provide the set of evolutionary models to fit on the data.
 \itemize{
-\item Models available for continuous data are detailed in \code{\link[geiger:fitContinuous]{geiger::fitContinuous()}}.
-\item Models available for categorical data are detailed in \code{\link[geiger:fitDiscrete]{geiger::fitDiscrete()}}.
-\item Models for biogeographic data are fit with R package \code{BioGeoBEARS} using \code{BioGeoBEARS::bears_optim_run()}.
+\item Models available for continuous data are detailed in \code{\link[geiger:fitContinuous]{geiger::fitContinuous()}}. Default is \code{"BM"}.
+\item Models available for categorical data are detailed in \code{\link[geiger:fitDiscrete]{geiger::fitDiscrete()}}. Default is \code{"ARD"}.
+\item Models for biogeographic data are fit with R package \code{BioGeoBEARS} using \code{BioGeoBEARS::bears_optim_run()}. Default is \code{"DEC"}.
 \item See list in "Details" section.
 }}
 
 \item{Q_matrix}{Custom Q-matrix for categorical data representing transition classes between states.
-Elements that are zero signify rates that are fixed to zero (i.e., impossible transition). Only for categorical data.}
+Transitions with similar integers are estimated with a shared rate parameter.
+Transitions with \code{0} represent rates that are fixed to zero (i.e., impossible transitions).
+Diagonal must be populated with \code{NA}. row.names(Q_matrix) and col.names(Q_matrix) are the states.
+Provide "matrix" among the model listed in 'evolutionary_models' to use the custom Q-matrix for modeling. Only for categorical data.}
 
 \item{BioGeoBEARS_directory_path}{Character string. The path to the directory used to store input/output files generated
 for/by BioGeoBEARS during biogeographic historical inferences. Use '/' to separate directory and sub-directories. It must end with '/'.
@@ -68,20 +71,20 @@ Default is \verb{./BioGeoBEARS_directory/}. Only for biogeographic data.}
 Files will be exported such as 'prefix_*' with an underscore separating the prefix and the file name.
 Default is \code{NULL} (no prefix is added). Only for biogeographic data.}
 
-\item{nb_cores}{Interger. Number of cores to use for parallel computation during BioGeoBEARS runs. Default = 1. Only for biogeographic data.}
+\item{nb_cores}{Interger. Number of cores to use for parallel computation during BioGeoBEARS runs. Default = \code{1}. Only for biogeographic data.}
 
-\item{max_range_size}{Integer. Maximum number of unique areas encompassed by multi-range areas. Default = 2. Only for biogeographic data.}
+\item{max_range_size}{Integer. Maximum number of unique areas encompassed by multi-range areas. Default = \code{2}. Only for biogeographic data.}
 
 \item{split_multi_area_ranges}{Logical. Whether to split multi-area ranges across unique areas when mapping ranges.
 Ex: For range EW, posterior probabilities will be split equally between Eastern Palearctic (E) and Western Palearctic (W).
-Only for biogeographic data.}
+Default = \code{FALSE}. Only for biogeographic data.}
 
 \item{...}{Additional arguments to be passed down to the functions used to fit models (See \code{evolutionary_models})
 and produce simmaps with \code{\link[phytools:make.simmap]{phytools::make.simmap()}} or \code{BioGeoBEARS::runBSM()}.}
 
-\item{res}{Integer. Define the number of time steps used to interpolate/estimate trait value/state/range in \code{contMap}/\code{densityMaps}.}
+\item{res}{Integer. Define the number of time steps used to interpolate/estimate trait value/state/range in \code{contMap}/\code{densityMaps}. Default = \code{100}.}
 
-\item{nb_simulations}{Integer. Define the number of simulations generated for stochastic mapping. Default = 1000. Only for "categorical" and "biogeographic" data.}
+\item{nb_simulations}{Integer. Define the number of simulations generated for stochastic mapping. Default = \code{1000}. Only for "categorical" and "biogeographic" data.}
 
 \item{color_scale}{Vector of character string. List of colors to use to build the color scale with \code{\link[grDevices:colorRamp]{grDevices::colorRampPalette()}}
 showing the evolution of a continuous trait on the \code{contMap}. From lowest values to highest values. Only for continuous data. Default = \code{NULL} will use the rainbow() color palette.}
@@ -90,7 +93,7 @@ showing the evolution of a continuous trait on the \code{contMap}. From lowest v
 If \code{NULL} (default), the \code{rainbow()} color scale will be used for categorical trait; the \code{BioGeoBEARS::get_colors_for_states_list_0based()} will be used for biogeographic ranges.
 If no color is provided for multi-area ranges, they will be interpolated based on the colors provided for unique areas. Only for categorical and biogeographic data.}
 
-\item{plot_map}{Logical. Whether to plot or not the phylogeny with mapped trait evolution.}
+\item{plot_map}{Logical. Whether to plot or not the phylogeny with mapped trait evolution. Default = \code{TRUE}.}
 
 \item{plot_overlay}{Logical. If \code{TRUE} (default), plot a unique \code{densityMap} with overlapping states/ranges using transparency.
 If \code{FALSE}, plot a \code{densityMap} per state/range. Only for "categorical" and "biogeographic" data.}
@@ -185,9 +188,9 @@ Map trait evolution on a time-calibrated phylogeny in several steps:
 
 Step 1: Models are fit using Maximum Likelihood approach:
 \itemize{
-\item For "continuous" data models are fit with \code{\link[geiger:fitContinuous]{geiger::fitContinuous()}}: "BM", "OU", "EB", "rate_trend", "lambda", "kappa", "delta".
-\item For "categorical" data models are fit with \code{\link[geiger:fitDiscrete]{geiger::fitDiscrete()}}: "ER", "SYM", "ARD".
-\item For "biogeographic" data models are fit with R package \code{BioGeoBEARS}: "BAYAREALIKE", "DIVALIKE", "DEC", "BAYAREALIKE+J", "DIVALIKE+J", "DEC+J".
+\item For "continuous" data models are fit with \code{\link[geiger:fitContinuous]{geiger::fitContinuous()}}: "BM", "OU", "EB", "rate_trend", "lambda", "kappa", "delta". Default is \code{"BM"}.
+\item For "categorical" data models are fit with \code{\link[geiger:fitDiscrete]{geiger::fitDiscrete()}}: "ER", "SYM", "ARD", "meristic", "matrix". Default is \code{"ARD"}.
+\item For "biogeographic" data models are fit with R package \code{BioGeoBEARS}: "BAYAREALIKE", "DIVALIKE", "DEC", "BAYAREALIKE+J", "DIVALIKE+J", "DEC+J". Default is \code{"DEC"}.
 }
 
 Step 2: Best model is identified among the list of \code{evolutionary_models} by comparing the corrected AIC (AICc)
@@ -242,7 +245,7 @@ data(eel.data)
 eel_data <- stats::setNames(eel.data$Max_TL_cm,
                             rownames(eel.data))
 
-## Map trait evolution on the phylogeny
+## Map trait evolution on the p# Reorderhylogeny
 mapped_cont_traits <- prepare_trait_data(
    tip_data = eel_data,
    trait_data_type = "continuous",
@@ -285,14 +288,14 @@ table(eel_data)
 Q_matrix = rbind(c(NA, 0, 0), c(1, NA, 2), c(0, 2, NA))
 
 # Set colors per states
-colors_per_levels <- c("limegreen", "orange", "dodgerblue")
-names(colors_per_levels) <- c("bite", "kiss", "suction")
+colors_per_states <- c("limegreen", "orange", "dodgerblue")
+names(colors_per_states) <- c("bite", "kiss", "suction")
 
 \dontrun{  (May take several minutes to run)
 ## Run evolutionary models
 eel_cat_data <- prepare_trait_data(tip_data = eel_data, phylo = eel.tree,
     trait_data_type = "categorical",
-    colors_per_levels = colors_per_levels,
+    colors_per_levels = colors_per_states,
     evolutionary_models = c("ER", "SYM", "ARD", "meristic", "matrix"),
     Q_matrix = Q_matrix,
     nb_simulations = 1000,
@@ -329,8 +332,8 @@ eel_data[c(5, 6, 7, 15, 25, 32, 33, 34, 50, 52, 57, 58, 59)] <- "AB"
 eel_data <- stats::setNames(eel_data, rownames(eel.data))
 table(eel_data)
 
-colors_per_levels <- c("dodgerblue3", "gold")
-names(colors_per_levels) <- c("A", "B")
+colors_per_ranges <- c("dodgerblue3", "gold")
+names(colors_per_ranges) <- c("A", "B")
 
 \dontrun{  (May take several minutes to run)
 ## Run evolutionary models
@@ -338,12 +341,15 @@ eel_biogeo_data <- prepare_trait_data(
     tip_data = eel_data,
     trait_data_type = "biogeographic",
     phylo = eel.tree,
-    evolutionary_models = c("DEC", "DEC+J"), # Default = "DEC" for biogeographic
+    # Default = "DEC" for biogeographic
+    evolutionary_models = c("BAYAREALIKE", "DIVALIKE", "DEC",
+                            "BAYAREALIKE+J", "DIVALIKE+J", "DEC+J"),
     prefix_for_files = "eel",
     max_range_size = 2,
     split_multi_area_ranges = TRUE, # Set to TRUE to display the two outputs
-    nb_simulations = 1000,
-    colors_per_levels = colors_per_levels,
+    # Reduce the number of Stochastic Mapping simulations to save time (Default = '1000')
+    nb_simulations = 100,
+    colors_per_levels = colors_per_ranges,
     return_simmaps = TRUE,
     return_best_model_fit = TRUE,
     return_model_selection_df = TRUE,

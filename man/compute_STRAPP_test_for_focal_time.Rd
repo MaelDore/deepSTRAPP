@@ -207,17 +207,17 @@ data(Ponerinae_BAMM_object_10My, package = "deepSTRAPP")
 plot_BAMM_rates(Ponerinae_BAMM_object_10My)
 
 ## Load the object containing head width trait data for ponerine ants extracted for 10My ago.
-data(Ponerinae_trait_data_10My, package = "deepSTRAPP")
+data(Ponerinae_trait_cont_tip_data_10My, package = "deepSTRAPP")
 
 # Plot the associated contMap (continuous trait stochastic map)
-plot_contMap(Ponerinae_trait_data_10My$contMap)
+plot_contMap(Ponerinae_trait_cont_tip_data_10My$contMap)
 
 # Check that objects are ordered in the same fashion
 identical(names(Ponerinae_BAMM_object_10My$tipStates[[1]]),
-          names(Ponerinae_trait_data_10My$trait_data))
+          names(Ponerinae_trait_cont_tip_data_10My$trait_data))
 
 # Save continuous data
-trait_data_continuous <- Ponerinae_trait_data_10My
+trait_data_continuous <- Ponerinae_trait_cont_tip_data_10My
 
 ## Transform trait data into binary and multinominal data
 
