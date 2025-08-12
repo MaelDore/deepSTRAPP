@@ -30,7 +30,10 @@
 #'   * Models for biogeographic data are fit with R package `BioGeoBEARS` using `BioGeoBEARS::bears_optim_run()`. Default is `"DEC"`.
 #'   * See list in "Details" section.
 #' @param Q_matrix Custom Q-matrix for categorical data representing transition classes between states.
-#'   Elements that are zero signify rates that are fixed to zero (i.e., impossible transition). Only for categorical data.
+#'   Transitions with similar integers are estimated with a shared rate parameter.
+#'   Transitions with `0` represent rates that are fixed to zero (i.e., impossible transitions).
+#'   Diagonal must be populated with `NA`. row.names(Q_matrix) and col.names(Q_matrix) are the states.
+#'   Provide "matrix" among the model listed in 'evolutionary_models' to use the custom Q-matrix for modeling. Only for categorical data.
 #' @param BioGeoBEARS_directory_path Character string. The path to the directory used to store input/output files generated
 #'   for/by BioGeoBEARS during biogeographic historical inferences. Use '/' to separate directory and sub-directories. It must end with '/'.
 #'   Default is `./BioGeoBEARS_directory/`. Only for biogeographic data.
@@ -82,7 +85,7 @@
 #'
 #'  Step 1: Models are fit using Maximum Likelihood approach:
 #'    * For "continuous" data models are fit with [geiger::fitContinuous()]: "BM", "OU", "EB", "rate_trend", "lambda", "kappa", "delta". Default is `"BM"`.
-#'    * For "categorical" data models are fit with [geiger::fitDiscrete()]: "ER", "SYM", "ARD". Default is `"ARD"`.
+#'    * For "categorical" data models are fit with [geiger::fitDiscrete()]: "ER", "SYM", "ARD", "meristic", "matrix". Default is `"ARD"`.
 #'    * For "biogeographic" data models are fit with R package `BioGeoBEARS`: "BAYAREALIKE", "DIVALIKE", "DEC", "BAYAREALIKE+J", "DIVALIKE+J", "DEC+J". Default is `"DEC"`.
 #'
 #'  Step 2: Best model is identified among the list of `evolutionary_models` by comparing the corrected AIC (AICc)
@@ -227,14 +230,14 @@
 #' Q_matrix = rbind(c(NA, 0, 0), c(1, NA, 2), c(0, 2, NA))
 #'
 #' # Set colors per states
-#' colors_per_levels <- c("limegreen", "orange", "dodgerblue")
-#' names(colors_per_levels) <- c("bite", "kiss", "suction")
+#' colors_per_states <- c("limegreen", "orange", "dodgerblue")
+#' names(colors_per_states) <- c("bite", "kiss", "suction")
 #'
 #' \dontrun{  (May take several minutes to run)
 #' ## Run evolutionary models
 #' eel_cat_data <- prepare_trait_data(tip_data = eel_data, phylo = eel.tree,
 #'     trait_data_type = "categorical",
-#'     colors_per_levels = colors_per_levels,
+#'     colors_per_levels = colors_per_states,
 #'     evolutionary_models = c("ER", "SYM", "ARD", "meristic", "matrix"),
 #'     Q_matrix = Q_matrix,
 #'     nb_simulations = 1000,
@@ -271,8 +274,8 @@
 #' eel_data <- stats::setNames(eel_data, rownames(eel.data))
 #' table(eel_data)
 #'
-#' colors_per_levels <- c("dodgerblue3", "gold")
-#' names(colors_per_levels) <- c("A", "B")
+#' colors_per_ranges <- c("dodgerblue3", "gold")
+#' names(colors_per_ranges) <- c("A", "B")
 #'
 #' \dontrun{  (May take several minutes to run)
 #' ## Run evolutionary models
@@ -280,12 +283,15 @@
 #'     tip_data = eel_data,
 #'     trait_data_type = "biogeographic",
 #'     phylo = eel.tree,
-#'     evolutionary_models = c("DEC", "DEC+J"), # Default = "DEC" for biogeographic
+#'     # Default = "DEC" for biogeographic
+#'     evolutionary_models = c("BAYAREALIKE", "DIVALIKE", "DEC",
+#'                             "BAYAREALIKE+J", "DIVALIKE+J", "DEC+J"),
 #'     prefix_for_files = "eel",
 #'     max_range_size = 2,
 #'     split_multi_area_ranges = TRUE, # Set to TRUE to display the two outputs
-#'     nb_simulations = 1000,
-#'     colors_per_levels = colors_per_levels,
+#'     # Reduce the number of Stochastic Mapping simulations to save time (Default = '1000')
+#'     nb_simulations = 100,
+#'     colors_per_levels = colors_per_ranges,
 #'     return_simmaps = TRUE,
 #'     return_best_model_fit = TRUE,
 #'     return_model_selection_df = TRUE,
@@ -464,20 +470,20 @@ prepare_trait_data <- function (
   args_names_for_fitContinuous <- c("SE", "bounds", "control", "ncores")
   args_names_for_fitDiscrete <- c("transform", "bounds", "control", "ncores", "symmetric")
   args_names_for_make.simmap <- c("pi", "message", "Q", "tol", "vQ", "prior")
-  args_names_for_define_BioGeoBEARS_run <- c("abbr", "description", "BioGeoBEARS_model_object", "timesfn", "distsfn",
+  args_names_to_define_BioGeoBEARS_run <- c("abbr", "description", "BioGeoBEARS_model_object", "timesfn", "distsfn",
                                              "dispersal_multipliers_fn", "area_of_areas_fn", "areas_allowed_fn",
                                              "detects_fn", "controls_fn", "states_list", "force_sparse",
                                              "use_detection_model", "tmpwd", "cluster_already_open", "use_optimx",
                                              "calc_TTL_loglike_from_condlikes_table", "calc_ancprobs", "fixnode",
                                              "fixlikes", "speedup")
-  args_names_for_define_runBSM <- c("maxtries_per_branch", "save_after_every_try", "seedval", "wait_before_save", "master_nodenum_toPrint")
+  args_names_to_define_runBSM <- c("maxtries_per_branch", "save_after_every_try", "seedval", "wait_before_save", "master_nodenum_toPrint")
 
   ## Extract additional arguments
   args_for_fitContinuous <- add_args[names(add_args) %in% args_names_for_fitContinuous]
   args_for_fitDiscrete <- add_args[names(add_args) %in% args_names_for_fitDiscrete]
   args_for_make.simmap <- add_args[names(add_args) %in% args_names_for_make.simmap]
-  args_for_define_BioGeoBEARS_run <- add_args[names(add_args) %in% args_names_for_define_BioGeoBEARS_run]
-  args_for_define_runBSM <- add_args[names(add_args) %in% args_names_for_define_runBSM]
+  args_to_define_BioGeoBEARS_run <- add_args[names(add_args) %in% args_names_to_define_BioGeoBEARS_run]
+  args_to_define_runBSM <- add_args[names(add_args) %in% args_names_to_define_runBSM]
 
   ## Set seed
   if (!is.null(seed))
@@ -543,8 +549,8 @@ prepare_trait_data <- function (
              max_range_size = max_range_size,
              split_multi_area_ranges = split_multi_area_ranges,
              # ..., # Additional arguments for BioGeoBEARS functions
-             args_for_define_BioGeoBEARS_run = args_for_define_BioGeoBEARS_run, # Additional arguments for BioGeoBEARS::define_BioGeoBEARS_run()
-             args_for_define_runBSM, # Additional arguments for BioGeoBEARS::runBSM()
+             args_to_define_BioGeoBEARS_run = args_to_define_BioGeoBEARS_run, # Additional arguments for BioGeoBEARS::define_BioGeoBEARS_run()
+             args_to_define_runBSM, # Additional arguments for BioGeoBEARS::runBSM()
              nb_simulations = nb_simulations, # Only for categorical and biogeographic data
              res = res,
              colors_per_levels = colors_per_levels, # Only for categorical and biogeographic data
@@ -1303,8 +1309,8 @@ prepare_trait_data_for_biogeographic_data <- function (
     max_range_size = 2,
     split_multi_area_ranges = FALSE,
     # ..., # Additional arguments for BioGeoBEARS::define_BioGeoBEARS_run() and BioGeoBEARS::runBSM()
-    args_for_define_BioGeoBEARS_run = args_for_define_BioGeoBEARS_run, # Additional arguments for BioGeoBEARS::define_BioGeoBEARS_run()
-    args_for_define_runBSM, # Additional arguments for BioGeoBEARS::runBSM()
+    args_to_define_BioGeoBEARS_run = args_to_define_BioGeoBEARS_run, # Additional arguments for BioGeoBEARS::define_BioGeoBEARS_run()
+    args_to_define_runBSM, # Additional arguments for BioGeoBEARS::runBSM()
     res = 100,
     colors_per_levels = NULL,
     nb_simulations = 1000, # Only for categorical and biogeographic data
@@ -1575,7 +1581,7 @@ prepare_trait_data_for_biogeographic_data <- function (
                                    geogfn = path_to_tip_ranges, # To provide path to the LagrangePHYLIP file with binary ranges
                                    return_condlikes_table = TRUE, # To ask to obtain all marginal likelihoods computed by the model and used to display ancestral states
                                    print_optim = verbose),
-                              args_for_define_BioGeoBEARS_run)) # Additional arguments
+                              args_to_define_BioGeoBEARS_run)) # Additional arguments
 
   # Check that starting parameter values are inside the min/max
   DEC_run <- BioGeoBEARS::fix_BioGeoBEARS_params_minmax(BioGeoBEARS_run_object = DEC_run)
@@ -1644,7 +1650,7 @@ prepare_trait_data_for_biogeographic_data <- function (
     # Similar to, but not identical to, Bayesian BAYAREA.
 
     # Nothing is happening during cladogenesis. Only inheritance of previous range (y = 1)
-    # Allows widespread sympatric speciation: (AB) => (AB, AB)
+    # Allows widespread sympatric speciation: AB => (AB),(AB)
     # No narrow or wide vicariance (v = 0)
     # No subset sympatric speciation (s = 0)
     # No jump dispersal (j = 0)
@@ -2115,7 +2121,7 @@ prepare_trait_data_for_biogeographic_data <- function (
                                                                   maxnum_maps_to_try = 100, # Maximum number of stochastic maps to try to simulate before giving up
                                                                   nummaps_goal = nb_simulations, # Number of accepted stochastic maps to target
                                                                   savedir = BioGeoBEARS_directory_path),
-                                                             args_for_define_runBSM))
+                                                             args_to_define_runBSM))
 
   ## Rename BSM outputs
   if (!is.null(prefix_for_files))

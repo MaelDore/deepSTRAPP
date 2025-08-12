@@ -82,14 +82,14 @@
 #' # ------ Example 1: Plot rates through time for continuous data ------ #
 #'
 #' ## Load results of run_deepSTRAPP_over_time()
-#' data(Ponerinae_deepSTRAPP_cont_0_40, package = "deepSTRAPP")
+#' data(Ponerinae_deepSTRAPP_cont_old_calib_0_40, package = "deepSTRAPP")
 #'
 #' # Visualize trait data
-#' hist(Ponerinae_deepSTRAPP_cont_0_40$trait_data_df_over_time$trait_value)
+#' hist(Ponerinae_deepSTRAPP_cont_old_calib_0_40$trait_data_df_over_time$trait_value)
 #'
 #' # Generate plot
 #' plotTT_continuous <- plot_rates_through_time(
-#'    deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_0_40,
+#'    deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_old_calib_0_40,
 #'    quantile_ranges = c(0, 0.25, 0.5, 0.75, 1.0),
 #'    time_range = c(0, 50), # Control range of the X-axis
 #'    # color_scale = c("limegreen", "red"),
@@ -113,21 +113,21 @@
 #' # ------ Example 2: Plot rates through time for categorical data ------ #
 #'
 #' ## Load results of run_deepSTRAPP_over_time()
-#' data(Ponerinae_deepSTRAPP_cat_0_40, package = "deepSTRAPP")#'
+#' data(Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40, package = "deepSTRAPP")
 #'
 #' # Explore trait data
-#' table(Ponerinae_deepSTRAPP_cat_0_40$trait_data_df_over_time$trait_value)
+#' table(Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40$trait_data_df_over_time$trait_value)
 #'
 #' # Set colors to use
-#' colors_per_levels <- c("red", "orange", "limegreen")
-#' names(colors_per_levels) <- c("large", "medium", "small")
+#' colors_per_states <- c("forestgreen", "sienna", "goldenrod")
+#' names(colors_per_states) <- c("arboreal", "subterranean", "terricolous")
 #'
-# Generate plot only for "small" and "large"
+# Generate plot only for "arboreal" and "terricolous"
 #' plotTT_categorical <- plot_rates_through_time(
-#'     deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cat_0_40,
-#'     select_trait_states = c("small", "large"),
+#'     deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40,
+#'     select_trait_states = c("arboreal", "terricolous"),
 #'     time_range = c(0, 50),
-#'     colors_per_levels = colors_per_levels,
+#'     colors_per_levels = colors_per_states,
 #'     plot_CI = TRUE,
 #'     CI_type = "quantiles_rect",
 #'     CI_quantiles = 0.9,
@@ -143,20 +143,20 @@
 #' # ------ Example 3: Plot rates through time for biogeographic data ------ #
 #'
 #' ## Load results of run_deepSTRAPP_over_time()
-#' data(Ponerinae_deepSTRAPP_biogeo_0_40, package = "deepSTRAPP")
+#' data(Ponerinae_deepSTRAPP_biogeo_old_calib_0_40, package = "deepSTRAPP")
 #'
 #' # Explore range data
-#' table(Ponerinae_deepSTRAPP_biogeo_0_40$trait_data_df_over_time$trait_value)
+#' table(Ponerinae_deepSTRAPP_biogeo_old_calib_0_40$trait_data_df_over_time$trait_value)
 #'
 #' # Set colors to use
-#' colors_per_levels <- c("mediumpurple2", "peachpuff2")
-#' names(colors_per_levels) <- c("N", "O")
+#' colors_per_ranges <- c("mediumpurple2", "peachpuff2")
+#' names(colors_per_ranges) <- c("N", "O")
 #'
 #' plotTT_biogeographic <- plot_rates_through_time(
-#'     deepSTRAPP_outputs = Ponerinae_deepSTRAPP_biogeo_0_40,
+#'     deepSTRAPP_outputs = Ponerinae_deepSTRAPP_biogeo_old_calib_0_40,
 #'     select_trait_states = "all",
 #'     time_range = c(0, 50),
-#'     colors_per_levels = colors_per_levels,
+#'     colors_per_levels = colors_per_ranges,
 #'     plot_CI = TRUE,
 #'     CI_type = "quantiles_rect",
 #'     CI_quantiles = 0.9,
