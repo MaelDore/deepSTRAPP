@@ -1,0 +1,86 @@
+---
+title: "deepSTRAPP"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{deepSTRAPP}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r set_options, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Advanced uses / tutorials
+
+This vignette points to **tutorials** detailing how to use the [deepSTRAPP] package beyond the simple use-case presented in the README file. 
+
+They present more **advanced usages** and provide explanations on available arguments and interpretations of results of deepSTRAPP.
+
+### Full deepSTRAPP workflows on different types of data
+
+&nbsp;&nbsp;&nbsp;&nbsp;&#x25CF;&nbsp;&nbsp;Full deepSTRAPP workflow for **continuous** trait data: `vignette("deepSTRAPP_continuous_data")`.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&#x25CF;&nbsp;&nbsp;Full deepSTRAPP workflow for **categorical** trait data with 3 levels: `vignette("deepSTRAPP_categorical_3lvl_data")`.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&#x25CF;&nbsp;&nbsp;Full deepSTRAPP workflow for **biogeographic** range data: `vignette("deepSTRAPP_biogeographic_data")`.
+
+<br>
+For a full deepSTRAPP workflow on categorical trait data with **2 levels**, please refer to the main tutorial in the **README file**.
+
+### Explore options for trait evolution
+
+&nbsp;&nbsp;&nbsp;&nbsp;&#x25CF;&nbsp;&nbsp;Model evolution of **continuous** trait data on a time-calibrated phylogeny: `vignette("model_continuous_trait_evolution")`.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&#x25CF;&nbsp;&nbsp;Model evolution of **categorical** trait data on a time-calibrated phylogeny: `vignette("model_categorical_trait_evolution")`.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&#x25CF;&nbsp;&nbsp;Model evolution of **biogeographic** range data on a time-calibrated phylogeny: `vignette("model_biogeographic_range_evolution")`.
+
+### Explore options for BAMM
+
+Model **diversification dynamics** with BAMM within deepSTRAPP: `vignette("model_diversification_dynamics")`.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&#x25CB;&nbsp;&nbsp;Detail the extent of possible parametrization.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&#x25CB;&nbsp;&nbsp;Explain evaluation plots.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&#x25CB;&nbsp;&nbsp;Show options for shift location on `deepSTRAPP::plot_BAMM_rates()`: index, MAP, MSC.
+
+<br>
+<br>
+
+ 
+**Explore the STRAPP test options**
+
+=> To include in the continuous / categorical / biogeographic data vignette?
+
+* two-tailed vs. one-tailed
+ + Continuous: "negative" or "positive"
+ + Binary: with hypothesis (A > B vs. B > A)
+ + Multinominal: all posthoc tests. Overall test is Kruskal-Wallis => only one-tailed.
+* Hypotheses for one-tailed (continuous and binary)
+* posthoc tests (multinominal)
+
+**Explore the extend of possible outputs**
+
+* Histo for STRAPP results
+  + With pairwise tests => To include in the categorical / biogeographic data vignette
+* Plot rates and shifts => Options for shift location: index, MAP, MSC => To include in the options for BAMM vignette
+* Plot traits: contMap, DensityMaps per states/ranges, DensityMap with alpha => To include in the options for trait evolution vignette
+* Plot traits vs. rates + Updated BAMM and updated contMap/DensityMaps => Simply add a link at the end of the BAMM and trait evolution vignettes?
+* RTT plots
+  + For different type of data
+  + Show how to adjust the different types of quartiles.
+  + With pairwise tests and options => To include in the categorical / biogeographic data vignette and in a dedicated RTT vignette
+  + Types of CI => To include in all data vignette and in a dedicated RTT vignette
+* Diversification/traits melted df => Shows how to extract trait information. To merge with the RTT plots vignette.
+
+**Advertise visible utility functions**
+
+* Select best model from geiger: continuous and categorical
+* Select best model from BioGeoBEARS: biogeographical
+* Split multi-area states in densityMaps => Explain the rationale and how it is done (?)
+* Cut phylogeny, contMap, densityMap for focal-time
