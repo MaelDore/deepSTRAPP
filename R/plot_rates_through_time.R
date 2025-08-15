@@ -39,7 +39,7 @@
 #'  * `fuzzy` (default): to overlay the evolution of rates found in all posterior samples with high transparency levels.
 #'  * `quantiles_rect`: to add a polygon encompassing a proportion of the rate values found in posterior samples.
 #'   This proportion is defined with `CI_quantiles`.
-#' @param CI_quantiles Numerical. Proportion of rate values across posterior samples encompassed by the confidence interval. Default is `0.95`.
+#' @param CI_quantiles Numerical. Proportion of rate values across posterior samples encompassed by the confidence interval. Only if `CI_type = "quantiles_rect"`. Default is `0.95`.
 #' @param display_plot Logical. Whether to display the plot generated in the R console. Default is `TRUE`.
 #' @param PDF_file_path Character string. If provided, the plot will be saved in a PDF file following the path provided here. The path must end with '.pdf'.
 #' @param return_mean_data_per_samples_df Logical. Whether to include in the output the data.frame of mean rates per trait values computed for
@@ -420,6 +420,8 @@ plot_rates_through_time_for_continuous_data <- function (
     by = dplyr::join_by(focal_time, tip_ID))
 
   ## Filter data for selected rate_type
+  if (rate_type == "speciation") { rate_type <- "lambda" }
+  if (rate_type == "extinction") { rate_type <- "mu" }
   data_per_samples_df <- data_per_samples_df[data_per_samples_df$rate_type == rate_type, ]
 
   # Filter data for the selected time range
@@ -841,6 +843,8 @@ plot_rates_through_time_for_categorical_data <- function (
     by = dplyr::join_by(focal_time, tip_ID))
 
   ## Filter data for selected rate_type
+  if (rate_type == "speciation") { rate_type <- "lambda" }
+  if (rate_type == "extinction") { rate_type <- "mu" }
   data_per_samples_df <- data_per_samples_df[data_per_samples_df$rate_type == rate_type, ]
 
   ## Filter data for selected states
@@ -1225,6 +1229,8 @@ plot_rates_through_time_for_biogeographic_data <- function (
     by = dplyr::join_by(focal_time, tip_ID))
 
   ## Filter data for selected rate_type
+  if (rate_type == "speciation") { rate_type <- "lambda" }
+  if (rate_type == "extinction") { rate_type <- "mu" }
   data_per_samples_df <- data_per_samples_df[data_per_samples_df$rate_type == rate_type, ]
 
   ## Filter data for selected states/ranges
