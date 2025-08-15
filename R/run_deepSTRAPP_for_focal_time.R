@@ -222,7 +222,7 @@
 #'
 #' # Plot histogram of test stats
 #' plot_histogram_STRAPP_test_for_focal_time(
-#'    STRAPP_results = deepSTRAPP_output$STRAPP_results) }
+#'    deepSTRAPP_outputs = deepSTRAPP_output) }
 #'
 #' # ----- Example 2: Categorical trait ----- #
 #'
@@ -238,7 +238,7 @@
 #' ## Prepare trait data
 #'
 #' # Extract categorical data with 3-levels
-#' Ponerinae_cat_3lvl_tip_data <- setNames(object = Ponerinae_trait_tip_data$fake_cat_3lvl_data,
+#' Ponerinae_cat_3lvl_tip_data <- setNames(object = Ponerinae_trait_tip_data$fake_cat_3lvl_tip_data,
 #'                                         nm = Ponerinae_trait_tip_data$Taxa)
 #' table(Ponerinae_cat_3lvl_tip_data)
 #'
@@ -308,11 +308,11 @@
 #'
 #' # Plot histogram of Kruskal-Wallis overall test stats
 #' plot_histogram_STRAPP_test_for_focal_time(
-#'    STRAPP_results = deepSTRAPP_output$STRAPP_results)
+#'    deepSTRAPP_outputs = deepSTRAPP_output)
 #'
 #' # Plot histograms of posthoc pairwise Dunn's test stats
 #' plot_histogram_STRAPP_test_for_focal_time(
-#'   STRAPP_results = deepSTRAPP_output$STRAPP_results,
+#'    deepSTRAPP_outputs = deepSTRAPP_output,
 #'    plot_posthoc_tests = TRUE) }
 #'
 #'
@@ -334,7 +334,7 @@
 #'
 #' Ponerinae_NO_data <- stats::setNames(object = Ponerinae_binary_range_table$Old_World,
 #'                                      nm = Ponerinae_binary_range_table$Taxa)
-#' Ponerinae_NO_data <- as.character(Ponerinae_ON_data)
+#' Ponerinae_NO_data <- as.character(Ponerinae_NO_data)
 #' Ponerinae_NO_data[Ponerinae_NO_data == "TRUE"] <- "O" # O = Old World
 #' Ponerinae_NO_data[Ponerinae_NO_data == "FALSE"] <- "N" # N = New World
 #' names(Ponerinae_NO_data) <- Ponerinae_binary_range_table$Taxa

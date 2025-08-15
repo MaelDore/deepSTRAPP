@@ -239,7 +239,7 @@
 #' data(Ponerinae_deepSTRAPP_cont_old_calib_0_40, package = "deepSTRAPP")
 #'
 #' ## Explore output
-#' str(Ponerinae_deepSTRAPP_con_old_calibt_0_40, max.level = 1)
+#' str(Ponerinae_deepSTRAPP_cont_old_calib_0_40, max.level = 1)
 #'
 #' # Display test summary
 #' # Can be passed down to [deepSTRAPP::plot_STRAPP_pvalues_over_time()] to generate a plot
@@ -436,7 +436,7 @@
 #'
 #' Ponerinae_NO_data <- stats::setNames(object = Ponerinae_binary_range_table$Old_World,
 #'                                      nm = Ponerinae_binary_range_table$Taxa)
-#' Ponerinae_NO_data <- as.character(Ponerinae_ON_data)
+#' Ponerinae_NO_data <- as.character(Ponerinae_NO_data)
 #' Ponerinae_NO_data[Ponerinae_NO_data == "TRUE"] <- "O" # O = Old World
 #' Ponerinae_NO_data[Ponerinae_NO_data == "FALSE"] <- "N" # N = New World
 #' names(Ponerinae_NO_data) <- Ponerinae_binary_range_table$Taxa

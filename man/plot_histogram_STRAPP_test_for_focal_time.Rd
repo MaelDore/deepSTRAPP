@@ -180,7 +180,7 @@ data(Ponerinae_BAMM_object_old_calib, package = "deepSTRAPP")
 ## Prepare trait data
 
 # Extract categorical data with 3-levels
-Ponerinae_cat_3lvl_tip_data <- setNames(object = Ponerinae_trait_tip_data$fake_cat_3lvl_data,
+Ponerinae_cat_3lvl_tip_data <- setNames(object = Ponerinae_trait_tip_data$fake_cat_3lvl_tip_data,
                                         nm = Ponerinae_trait_tip_data$Taxa)
 table(Ponerinae_cat_3lvl_tip_data)
 

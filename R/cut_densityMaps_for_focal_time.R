@@ -66,7 +66,7 @@
 #'
 #' # Load mammals phylogeny and data from the R package motmot included within deepSTRAPP
 #' # Data source: Slater, 2013; DOI: 10.1111/2041-210X.12084
-#' data("mammals", package = "deepSTRAPP)
+#' data("mammals", package = "deepSTRAPP")
 #'
 #' # Obtain mammal tree
 #' mammals_tree <- mammals$mammal.phy

@@ -191,7 +191,7 @@
 #'
 #' Ponerinae_NO_data <- stats::setNames(object = Ponerinae_binary_range_table$Old_World,
 #'                                      nm = Ponerinae_binary_range_table$Taxa)
-#' Ponerinae_NO_data <- as.character(Ponerinae_ON_data)
+#' Ponerinae_NO_data <- as.character(Ponerinae_NO_data)
 #' Ponerinae_NO_data[Ponerinae_NO_data == "TRUE"] <- "O" # O = Old World
 #' Ponerinae_NO_data[Ponerinae_NO_data == "FALSE"] <- "N" # N = New World
 #' names(Ponerinae_NO_data) <- Ponerinae_binary_range_table$Taxa

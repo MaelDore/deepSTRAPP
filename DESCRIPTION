@@ -40,5 +40,9 @@ Depends:
 LazyData: true
 LazyDataCompression: xz
 Suggests: 
-    parallel (>= 4.4.2)
+    knitr,
+    maps (>= 3.4.2),
+    parallel (>= 4.4.2),
+    rmarkdown
 LinkingTo: Rcpp
+VignetteBuilder: knitr

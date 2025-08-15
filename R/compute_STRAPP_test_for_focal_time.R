@@ -649,7 +649,7 @@ compute_STRAPP_test_for_continuous_data <- function (
       cat(paste0("Selected two-tailed Spearman's rank correlation test:\n\n",
                  "Null hypothesis: no correlation between trait data and diversification rates.\n\n",
                  "Alternative hypothesis: negative or positive correlation between trait data diversification rates.\n\n",
-                 "'Estimate' stats is the ",alpha*100,"% quantile of abolute rho differences between observed and permuted data.\n",
+                 "'Estimate' stats is the ",alpha*100,"% quantile of differences in absolute rho-stats between observed and permuted data.\n",
                  "Null hypothesis is rejected if 'estimate' is higher than zero / p-value lower than ",alpha,".\n\n"))
 
     } else { # For one-tailed test
@@ -901,7 +901,7 @@ compute_STRAPP_test_for_binary_data <- function (
                  "Alternative hypothesis: taxa with state/range '",
                  obs_trait_states[1], "' have higher or lower ",rate_type," rates than those with state/range '",
                  obs_trait_states[2], "'.\n\n",
-                 "'Estimate' stats is the ",alpha*100,"% quantile of absolute differences in U-stats between observed and permuted data.\n",
+                 "'Estimate' stats is the ",alpha*100,"% quantile of differences in absolute U-stats between observed and permuted data.\n",
                  "Null hypothesis is rejected if 'estimate' is higher than zero / p-value lower than ",alpha,".\n\n"))
     }
 
@@ -927,7 +927,7 @@ compute_STRAPP_test_for_binary_data <- function (
                    "Alternative hypothesis: taxa with state/range '",
                    trait_states[1], "' have higher ",rate_type," rates than those with state/range '",
                    trait_states[2],"'.\n\n",
-                   "'Estimate' stats is the ",alpha*100,"% quantile of differences in U-stats between observed and permuted data.\n",
+                   "'Estimate' stats is the ",alpha*100,"% quantile of differences in absolute U-stats between observed and permuted data.\n",
                    "Null hypothesis is rejected if 'estimate' is higher than zero / p-value lower than ",alpha,".\n\n"))
       }
     }

@@ -75,7 +75,7 @@ names(colors_per_levels) <- c("bite", "kiss", "suction")
 
 \dontrun{  (May take several minutes to run)
 # Run evolutionary models to prepare trait data
-eel_cat_data <- prepare_trait_data(tip_data = eel_data, phylo = eel.tree,
+eel_cat_3lvl_data <- prepare_trait_data(tip_data = eel_data, phylo = eel.tree,
     trait_data_type = "categorical",
     colors_per_levels = colors_per_levels,
     evolutionary_models = c("ER", "SYM", "ARD", "meristic", "matrix"),
@@ -87,15 +87,15 @@ eel_cat_data <- prepare_trait_data(tip_data = eel_data, phylo = eel.tree,
     return_model_selection_df = TRUE) }
 
 # Load directly output
-data(eel_cat_data, package = "deepSTRAPP")
+data(eel_cat_3lvl_data, package = "deepSTRAPP")
 
 # Plot densityMaps one by one
-plot(eel_cat_data$densityMaps[[1]]) # densityMap for state n°1 ("bite")
-plot(eel_cat_data$densityMaps[[2]]) # densityMap for state n°1 ("kiss")
-plot(eel_cat_data$densityMaps[[3]]) # densityMap for state n°1 ("suction")
+plot(eel_cat_3lvl_data$densityMaps[[1]]) # densityMap for state n°1 ("bite")
+plot(eel_cat_3lvl_data$densityMaps[[2]]) # densityMap for state n°1 ("kiss")
+plot(eel_cat_3lvl_data$densityMaps[[3]]) # densityMap for state n°1 ("suction")
 
 # Plot overlay of all densityMaps
-plot_densityMaps_overlay(densityMaps = eel_cat_data$densityMaps)
+plot_densityMaps_overlay(densityMaps = eel_cat_3lvl_data$densityMaps)
 
 }
 \seealso{
