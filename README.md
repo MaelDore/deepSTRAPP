@@ -78,15 +78,18 @@ examples of outputs)**
 > Systematic biology, 65(2), 181-193.
 > <https://doi.org/10.1093/sysbio/syv066>.
 
-> deepSTRAPP method: Doré, M., & Blaimer, B. deepSTRAPP: Testing for
-> differences in diversification rates over deep evolutionary time.
-> (provide DOI link)
-
 > deepSTRAPP application: Doré, M., Borowiec, M. L., Branstetter, M. G.,
 > Camacho, G. P., Fisher, B. L., Longino, J. T., Ward, P. S., Blaimer,
 > B. B., (2025), Timing is everything: Evolution of ponerine ants
 > highlights how dispersal history shapes modern biodiversity, Nature
 > Communications. <https://doi_of_Paper_to_provide.html>
+
+## How to Cite deepSTRAPP
+
+> Doré, M., & Blaimer, B. B., deepSTRAPP: Testing for differences in
+> diversification rates over deep evolutionary time. (provide DOI link)
+
+**May include a chunk of R script with a bibtex citation**
 
 ## Installation
 
@@ -637,10 +640,10 @@ They are listed below, and in this vignette: `vignette("deepSTRAPP")`.
 
 **Explore the STRAPP test options**
 
-Type of STRAPP tests: two-tailed vs. one-tailed:
+Type of STRAPP tests: **two-tailed** vs. **one-tailed**:
 `vignette("explore_STRAPP_test_types")`.
 
-- Continuous: “negative” or “positive”.
+- Continuous: “negative” or “positive” correlation.
 - Binary with hypothesis: (A \> B) vs. (B \> A).
 - Multinominal: Hypotheses for all post hoc tests.
 
@@ -651,7 +654,7 @@ relation to trait data: `vignette("plot_rates_through_time")`.
 
 **Cut phylogenies**
 
-Cut different types of (mapped) phylogenies for a given focal-time:
+Cut different types of **(mapped) phylogenies** for a given focal-time:
 phylogeny, contMap, densityMap, BAMM_object:
 `vignette("cut_phylogenies")`.
 
@@ -662,10 +665,3 @@ each focal time Make it a function??? And include it in the README +
 vignette for each deepSTRAPP workflow + the STRAPP test options
 
 Update the deepSTRAPP vignette that summarizes all vignettes!!!
-
-## How to Cite
-
-> Doré, M., & Blaimer, B. deepSTRAPP: Testing for differences in
-> diversification rates over deep evolutionary time. (provide DOI link)
-
-**May include a chunk of R script with a bibtex citation**
