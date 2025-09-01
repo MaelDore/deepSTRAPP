@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 
 ## Advanced uses / tutorials
 
-This vignette points to **tutorials** detailing how to use the [deepSTRAPP] package beyond the simple use-case presented in the README file. 
+This vignette points to **tutorials** detailing how to use the [deepSTRAPP] package beyond the **simple use-case** presented in the README file and also available here: `vignette("main_tutorial")`. 
 
 They present more **advanced usages** and provide explanations on available arguments and interpretations of results of deepSTRAPP.
 

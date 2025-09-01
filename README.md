@@ -103,7 +103,9 @@ From GitHub for the current development version
 You can install the development version of deepSTRAPP like so:
 
 ``` r
-remotes::install_github("MaelDore/deepSTRAPP")
+remotes::install_github(repo = "MaelDore/deepSTRAPP",
+                        # Time-consuming, but needed if you want to have access to the vignettes/tutorials
+                        build_vignettes = TRUE) 
 ```
 
 You may need additional tools for package compilation such as Rtools
@@ -113,15 +115,15 @@ for details.
 
 ## Quick-to-run example
 
-This is a simple example that shows how deepSTRAPP can be used to test
-for differences in diversification rates between trait values along
-evolutionary times. It presents the main functions in a typical
-deepSTRAPP workflow. For more advanced used, please refer to the
+This is a **simple use-case** that shows how deepSTRAPP can be used to
+**test for differences in diversification rates between trait values
+along evolutionary times**. It presents the main functions in a typical
+**deepSTRAPP workflow**. For more advanced used, please refer to the
 vignettes/tutorials below.
 
 Please note that the trait data and phylogeny calibration used in this
-example are not valid biological data. They were modified in order to
-provide results illustrating the usefulness of deepSTRAPP.
+example are **not** valid biological data. They were modified in order
+to provide results illustrating the usefulness of deepSTRAPP.
 
 ``` r
 # ------ Step 0: Load data ------ #
@@ -614,6 +616,11 @@ More tutorials are available to explore more **advanced usages** of
 deepSTRAPP. They provide explanations on available arguments and
 interpretations of results of deepSTRAPP across multiple type of data.
 They are listed below, and in this vignette: `vignette("deepSTRAPP")`.
+
+``` r
+# You can also use this to open access to all vignettes in an HTML Brower
+utils::browseVignettes(package = "deepSTRAPP")
+```
 
 **Full deepSTRAPP workflows on different types of data**
 
