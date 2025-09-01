@@ -240,7 +240,7 @@ Ponerinae_ACE <- phytools::fastAnc(tree = Ponerinae_tree_old_calib, x = Ponerina
 
 # Run a Stochastic Mapping based on a Brownian Motion model
 # to interpolate values along branches and obtain a "contMap" object
-Ponerinae_contMap <- phytools::contMap(Ponerinae_tree, x = Ponerinae_cont_tip_data,
+Ponerinae_contMap <- phytools::contMap(Ponerinae_tree_old_calib, x = Ponerinae_cont_tip_data,
                                        res = 100, # Number of time steps
                                        plot = FALSE)
 # Plot contMap = stochastic mapping of continuous trait
@@ -288,7 +288,7 @@ plot_BAMM_rates(deepSTRAPP_output$updated_BAMM_object, labels = TRUE)
 
 # Plot histogram of test stats
 plot_histogram_STRAPP_test_for_focal_time(
-   STRAPP_results = deepSTRAPP_output$STRAPP_results) }
+   deepSTRAPP_outputs = deepSTRAPP_output) }
 
 # ----- Example 2: Categorical trait ----- #
 
@@ -374,11 +374,11 @@ plot_BAMM_rates(BAMM_object = deepSTRAPP_output$updated_BAMM_object, legend = TR
 
 # Plot histogram of Kruskal-Wallis overall test stats
 plot_histogram_STRAPP_test_for_focal_time(
-   STRAPP_results = deepSTRAPP_output$STRAPP_results)
+   deepSTRAPP_outputs = deepSTRAPP_output)
 
 # Plot histograms of posthoc pairwise Dunn's test stats
 plot_histogram_STRAPP_test_for_focal_time(
-  STRAPP_results = deepSTRAPP_output$STRAPP_results,
+   deepSTRAPP_outputs = deepSTRAPP_output,
    plot_posthoc_tests = TRUE) }
 
 
