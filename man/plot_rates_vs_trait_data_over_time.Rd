@@ -64,7 +64,7 @@ This is the raw data used to draw each plot for each \code{focal_time}. Included
 If a \code{PDF_file_path} is provided, the function will also generate a unique PDF file with one plot/page per \verb{$time_steps}.
 }
 \description{
-Plot rates vs. trait data as extracted for all time-steps.
+Plot rates vs. trait data as extracted for all trait_data_dftime-steps.
 Data are extracted from the output of a deepSTRAPP run carried out with
 \code{\link[=run_deepSTRAPP_over_time]{run_deepSTRAPP_over_time()}}) over multiple time-steps.
 
@@ -140,7 +140,9 @@ Ponerinae_deepSTRAPP_cont_old_calib_0_40 <- run_deepSTRAPP_over_time(
    time_range = time_range,
    time_step_duration = time_step_duration,
    return_perm_data = TRUE,
+   # Need to be set to TRUE to save trait data
    extract_trait_data_melted_df = TRUE,
+   # Need to be set to TRUE to save diversification data
    extract_diversification_data_melted_df = TRUE,
    return_STRAPP_results = TRUE,
    return_updated_trait_data_with_Map = TRUE,
@@ -227,7 +229,9 @@ Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40 <- run_deepSTRAPP_over_time(
    alpha = 0.10, # Select a generous level of significance for the sake of the example
    posthoc_pairwise_tests = TRUE,
    return_perm_data = TRUE,
+   # Need to be set to TRUE to save trait data
    extract_trait_data_melted_df = TRUE,
+   # Need to be set to TRUE to save diversification data
    extract_diversification_data_melted_df = TRUE,
    return_STRAPP_results = TRUE,
    return_updated_trait_data_with_Map = TRUE,

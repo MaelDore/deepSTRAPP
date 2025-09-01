@@ -89,7 +89,7 @@
 #'   * `return_updated_BAMM_object` must be set to `TRUE` so that the `BAMM_objects` with phylogeny and mapped diversification rates
 #'     cut-off at the specified time-steps are returned among the outputs under `$updated_BAMM_objects_over_time`.
 #'
-#'  For plotting all time-steps at once, see [deepSTRAPP::plot_trait_vs_rate_maps_over_time()].
+#'  For plotting all time-steps at once, see [deepSTRAPP::plot_traits_vs_rates_on_phylogeny_over_time()].
 #'
 #' @return If `display_plot = TRUE`, the function displays a plot with two facets in the R console:
 #'  * (Left) A time-calibrated phylogeny displaying the evolution of trait/biogeographic data.
@@ -102,7 +102,7 @@
 #' @seealso [phytools::plot.densityMap()] [deepSTRAPP::plot_densityMaps_overlay()] [deepSTRAPP::plot_BAMM_rates()]
 #'
 #' Functions in deepSTRAPP needed to produce the `deepSTRAPP_outputs` as input: [deepSTRAPP::run_deepSTRAPP_for_focal_time()] [deepSTRAPP::run_deepSTRAPP_over_time()]
-#' Function in deepSTRAPP to plot all time-steps at once: [deepSTRAPP::plot_trait_vs_rate_maps_over_time()]
+#' Function in deepSTRAPP to plot all time-steps at once: [deepSTRAPP::plot_traits_vs_rates_on_phylogeny_over_time()]
 #'
 #' @examples
 #' # ----- Example 1: Continuous trait ----- #
@@ -160,7 +160,7 @@
 #' str(Ponerinae_deepSTRAPP_cont_old_calib_10My, max.level = 1)
 #'
 #' ## Plot updated contMap vs. updated diversification rates
-#' plot_trait_vs_rate_maps_for_focal_time(
+#' plot_traits_vs_rates_on_phylogeny_for_focal_time(
 #'    deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_old_calib_10My,
 #'    keep_initial_colorbreaks = TRUE, # To use the same color breaks as for t = 0 My
 #'    color_scale = c("limegreen", "orange", "red"), # Adjust color scale on contMap
@@ -240,7 +240,7 @@
 #' str(Ponerinae_deepSTRAPP_biogeo_old_calib_10My, max.level = 1)
 #'
 #' ## Plot updated contMap vs. updated diversification rates
-#' plot_trait_vs_rate_maps_for_focal_time(
+#' plot_traits_vs_rates_on_phylogeny_for_focal_time(
 #'     deepSTRAPP_outputs = Ponerinae_deepSTRAPP_biogeo_old_calib_10My,
 #'     # Adjust colors on densityMaps
 #'     colors_per_levels = c("N" = "dodgerblue2", "O" = "orange"),
@@ -259,7 +259,7 @@
 #' str(Ponerinae_deepSTRAPP_biogeo_old_calib_0_40, max.level =  1)
 #'
 #' ## Plot updated contMap vs. updated diversification rates for focal_time = 40My
-#' plot_trait_vs_rate_maps_for_focal_time(
+#' plot_traits_vs_rates_on_phylogeny_for_focal_time(
 #'    deepSTRAPP_outputs = Ponerinae_deepSTRAPP_biogeo_old_calib_0_40,
 #'    focal_time = 40, # Select focal_time = 40My
 #'    # Adjust colors on densityMaps
@@ -272,7 +272,7 @@
 #'
 
 
-plot_trait_vs_rate_maps_for_focal_time <- function (
+plot_traits_vs_rates_on_phylogeny_for_focal_time <- function (
     deepSTRAPP_outputs,
     focal_time = NULL,
     color_scale = NULL,
@@ -328,7 +328,7 @@ plot_trait_vs_rate_maps_for_focal_time <- function (
       {
         stop(paste0("You provided as input a `deepSTRAPP_outputs` object with multiple time-steps resulting from [deepSTRAPP::run_deepSTRAPP_over_time].\n",
                     "You must provide a `focal_time` to select the appropriate time-step to be plotted.\n",
-                    "For plotting all time-steps at once, please see [deepSTRAPP::plot_trait_vs_rate_maps_over_time]."))
+                    "For plotting all time-steps at once, please see [deepSTRAPP::plot_traits_vs_rates_on_phylogeny_over_time]."))
       }
       # Ensure focal_time match (any) time in deepSTRAPP_outputs
       if (!(focal_time %in% deepSTRAPP_outputs$time_steps))

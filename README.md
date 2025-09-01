@@ -595,7 +595,7 @@ title(main = "BAMM rates for 100-40 My")
 ``` r
 ### 4.7/ Plot both trait evolution and diversification rates and regimes updated for a given 'focal_time' ####
 
-# ?deepSTRAPP::plot_trait_vs_rate_maps_for_focal_time()
+# ?deepSTRAPP::plot_traits_vs_rates_on_phylogeny_for_focal_time()
 
 ## These plots help to visualize simultaneously the evolution of trait and diversification rates across the phylogeny, 
 ## and to focus on tip values at specific time-steps.
@@ -606,7 +606,7 @@ Ponerinae_deepSTRAPP_cat_2lvl_old_calib_0_40$time_steps
 ## The next plot shows the evolution of states and rates across the whole phylogeny (100-0 My).
 
 # Plot both mapped phylogenies in the present (t = 0)
-plot_trait_vs_rate_maps_for_focal_time(
+plot_traits_vs_rates_on_phylogeny_for_focal_time(
   deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cat_2lvl_old_calib_0_40,
   focal_time = 0,
   ftype = "off", lwd = 0.7,
@@ -617,7 +617,7 @@ plot_trait_vs_rate_maps_for_focal_time(
 ## The next plot shows the evolution of states and rates from root to 10 Mya (100-10 My).
 
 # Plot both mapped phylogenies for time-step n°3 = 10 My
-plot_trait_vs_rate_maps_for_focal_time(
+plot_traits_vs_rates_on_phylogeny_for_focal_time(
   deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cat_2lvl_old_calib_0_40,
   focal_time = 10, 
   ftype = "off", lwd = 1.2,
@@ -628,7 +628,7 @@ plot_trait_vs_rate_maps_for_focal_time(
 ## The next plot shows the evolution of states and rates from root to 40 Mya (100-40 My).
 
 # Plot both mapped phylogenies for time-step n°9 = 40 My
-plot_trait_vs_rate_maps_for_focal_time(
+plot_traits_vs_rates_on_phylogeny_for_focal_time(
   deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cat_2lvl_old_calib_0_40,
   focal_time = 40, 
   ftype = "off", lwd = 1.2,
@@ -637,7 +637,7 @@ plot_trait_vs_rate_maps_for_focal_time(
   par.reset = FALSE)
 ```
 
-<img src="man/figures/README-plot_trait_vs_rate_maps_cat_2lvl_eval-1.png" width="100%" /><img src="man/figures/README-plot_trait_vs_rate_maps_cat_2lvl_eval-2.png" width="100%" />
+<img src="man/figures/README-plot_traits_vs_rates_on_phylogeny_cat_2lvl_eval-1.png" width="100%" /><img src="man/figures/README-plot_traits_vs_rates_on_phylogeny_cat_2lvl_eval-2.png" width="100%" />
 
 ## Advanced uses / tutorials
 
@@ -704,11 +704,3 @@ Cut different types of **(mapped) phylogenies** for a given focal-time:
 phylogeny, contMap, densityMap, BAMM_object:
 `vignette("cut_phylogenies")`.
 [Link](https://github.com/MaelDore/deepSTRAPP/blob/master/doc/cut_phylogenies.html)
-
-**Plot rates vs. trait values/states**
-
-Show how to plot rates vs. trait values/states from the melted df for
-each focal time Make it a function??? And include it in the README +
-vignette for each deepSTRAPP workflow + the STRAPP test options
-
-Update the deepSTRAPP vignette that summarizes all vignettes!!!

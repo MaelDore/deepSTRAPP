@@ -151,8 +151,10 @@ Ponerinae_deepSTRAPP_cont_old_calib_10My <- run_deepSTRAPP_for_focal_time(
    focal_time = focal_time,
    rate_type = "net_diversification",
    return_perm_data = TRUE,
-   extract_diversification_data_melted_df = TRUE, # Need to be set to TRUE to save diversification data
-   return_updated_trait_data_with_Map = TRUE, # Need to be set to TRUE to save trait data
+   # Need to be set to TRUE to save diversification data
+   extract_diversification_data_melted_df = TRUE,
+   # Need to be set to TRUE to save trait data
+   return_updated_trait_data_with_Map = TRUE,
    return_updated_BAMM_object = TRUE)
 
 ## Explore output
@@ -224,9 +226,9 @@ Ponerinae_cat_3lvl_data_old_calib <- prepare_trait_data(
    tip_data = Ponerinae_cat_3lvl_tip_data,
    phylo = Ponerinae_tree_old_calib,
    trait_data_type = "categorical",
-  colors_per_states = colors_per_states,
-  evolutionary_models = "ARD", # Use default ARD model
-  nb_simulations = 100, # Reduce number of simulations to save time
+   colors_per_states = colors_per_states,
+   evolutionary_models = "ARD", # Use default ARD model
+   nb_simulations = 100, # Reduce number of simulations to save time
    seed = 1234, # Seet seed for reproducibility
    return_best_model_fit = TRUE,
    return_model_selection_df = TRUE,
@@ -249,9 +251,11 @@ Ponerinae_deepSTRAPP_cat_3lvl_old_calib_10My <- run_deepSTRAPP_for_focal_time(
     BAMM_object = Ponerinae_BAMM_object_old_calib,
     focal_time = focal_time,
     rate_type = "net_diversification",
-   posthoc_pairwise_tests = TRUE,
+    posthoc_pairwise_tests = TRUE,
     return_perm_data = TRUE,
+    # Need to be set to TRUE to save diversification data
     extract_diversification_data_melted_df = TRUE,
+    # Need to be set to TRUE to save trait data
     return_updated_trait_data_with_Map = TRUE,
     return_updated_BAMM_object = TRUE)
 
