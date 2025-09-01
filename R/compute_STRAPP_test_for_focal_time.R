@@ -162,8 +162,8 @@
 #'   Systematic biology, 65(2), 181-193. \url{https://doi.org/10.1093/sysbio/syv066}.
 #'
 #'   For STRAPP in deep times: Doré, M., Borowiec, M. L., Branstetter, M. G., Camacho, G. P., Fisher, B. L., Longino, J. T., Ward, P. S., Blaimer, B. B., (2025),
-#'   Timing is everything: Evolution of ponerine ants highlights how dispersal history shapes modern biodiversity, Nature Communications.
-#'   \url{https://doi_of_Paper_to_provide.html}
+#'   Evolutionary history of ponerine ants highlights how the timing of dispersal events shapes modern biodiversity, Nature Communications.
+#'   \url{https://doi.org/10.1038/s41467-025-63709-3}
 #'
 #' @examples
 #' # ------ Prepare data ------ #

@@ -30,7 +30,7 @@
 #' @details The main input `deepSTRAPP_outputs` is the typical output of [deepSTRAPP::run_deepSTRAPP_for_focal_time()].
 #'   It provides information on results of a STRAPP test performed at a given `focal_time`.
 #'
-#'   Histograms are build based on the distribution of the test statistics.
+#'   Histograms are built based on the distribution of the test statistics.
 #'   Such distributions are recorded in the outputs of a deepSTRAPP run carried out with [deepSTRAPP::run_deepSTRAPP_for_focal_time()]
 #'   when `return_perm_data = TRUE` so that the distributions of test stats computed across posterior samples are returned
 #'   among the outputs under `$STRAPP_results$perm_data_df`.
@@ -177,7 +177,7 @@
 #' names(colors_per_states) <- c("arboreal", "subterranean", "terricolous")
 #'
 #' \dontrun{  (May take several minutes to run)
-#' ## Produce densityMaps using stochastic character mapping based on an equal-rates (ER) Mk model
+#' ## Produce densityMaps using stochastic character mapping based on an ARD Mk model
 #' Ponerinae_cat_3lvl_data_old_calib <- prepare_trait_data(
 #'    tip_data = Ponerinae_cat_3lvl_tip_data,
 #'    phylo = Ponerinae_tree_old_calib,
@@ -185,7 +185,7 @@
 #'    colors_per_states = colors_per_states,
 #'    evolutionary_models = "ARD", # Use default ARD model
 #'    nb_simulations = 100, # Reduce number of simulations to save time
-#'    seed = 1234, Seet seed for reproducibility
+#'    seed = 1234, # Seet seed for reproducibility
 #'    return_best_model_fit = TRUE,
 #'    return_model_selection_df = TRUE,
 #'    plot_map = FALSE) }

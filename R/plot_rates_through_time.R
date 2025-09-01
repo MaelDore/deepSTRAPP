@@ -24,7 +24,7 @@
 #' @param quantile_ranges Vector of numerical. Only for continuous trait data. Quantiles used as thresholds to group branches
 #'  by trait values. It must start with 0 and finish with 1. Default is `c(0, 0.25, 0.5, 0.75, 1.0)`
 #'  which produces four balanced quantile groups.
-#' @param select_trait_states (Vector of) character string. Only for categorical and biogeographic trait data.
+#' @param select_trait_levels (Vector of) character string. Only for categorical and biogeographic trait data.
 #'  To provide a list of a subset of states/ranges to plot. Names must match the ones found in
 #'  `deepSTRAPP_outputs$trait_data_df_over_time$trait_value`. Default is `all` which means all states/ranges will be plotted.
 #' @param time_range Vector of two numerical values. Time boundaries used for the plot.
@@ -67,9 +67,10 @@
 #'   * `mean_data_per_samples_df` A data.frame with four columns providing the `$mean_rates` observed along branches
 #'     with a similar `$trait_value` (if categorical or biogeographic) or falling into the same `$quantile_ranges`.
 #'     Data are extracted for each posterior sample (`$BAMM_sample_ID`) at each time-step (i.e., `$focal_time`).
-#'     This is used to draw the confidence interval.
+#'     This is used to draw the confidence interval. Included if `return_mean_data_per_samples_df = TRUE`.
 #'   * `$median_data_across_samples_df` A data.frame with three columns providing the `$median_rates`
-#'   observed across all posterior samples in `$mean_data_per_samples_df`. This is used to draw the lines on the plot.
+#'     observed across all posterior samples in `$mean_data_per_samples_df`. This is used to draw the lines on the plot.
+#'     Included if `return_median_data_across_samples_df = TRUE`.
 #'
 #'   If a `PDF_file_path` is provided, the function will also generate a PDF file of the plot.
 #'
@@ -125,7 +126,7 @@
 # Generate plot only for "arboreal" and "terricolous"
 #' plotTT_categorical <- plot_rates_through_time(
 #'     deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40,
-#'     select_trait_states = c("arboreal", "terricolous"),
+#'     select_trait_levels = c("arboreal", "terricolous"),
 #'     time_range = c(0, 50),
 #'     colors_per_levels = colors_per_states,
 #'     plot_CI = TRUE,
@@ -154,7 +155,7 @@
 #'
 #' plotTT_biogeographic <- plot_rates_through_time(
 #'     deepSTRAPP_outputs = Ponerinae_deepSTRAPP_biogeo_old_calib_0_40,
-#'     select_trait_states = "all",
+#'     select_trait_levels = "all",
 #'     time_range = c(0, 50),
 #'     colors_per_levels = colors_per_ranges,
 #'     plot_CI = TRUE,
@@ -177,7 +178,7 @@ plot_rates_through_time <- function (
     deepSTRAPP_outputs,
     rate_type = "net_diversification",
     quantile_ranges = c(0, 0.25, 0.5, 0.75, 1.0),
-    select_trait_states = "all",
+    select_trait_levels = "all",
     time_range = NULL,
     color_scale = NULL,
     colors_per_levels = NULL,
@@ -303,7 +304,7 @@ plot_rates_through_time <- function (
            plotTT_output <- plot_rates_through_time_for_categorical_data(
              deepSTRAPP_outputs = deepSTRAPP_outputs,
              rate_type = rate_type,
-             select_trait_states = select_trait_states,
+             select_trait_levels = select_trait_levels,
              time_range = time_range,
              colors_per_levels = colors_per_levels,
              plot_CI = plot_CI,
@@ -320,7 +321,7 @@ plot_rates_through_time <- function (
            plotTT_output <- plot_rates_through_time_for_biogeographic_data(
              deepSTRAPP_outputs = deepSTRAPP_outputs,
              rate_type = rate_type,
-             select_trait_states = select_trait_states,
+             select_trait_levels = select_trait_levels,
              time_range = time_range,
              colors_per_levels = colors_per_levels,
              plot_CI = plot_CI,
@@ -769,7 +770,7 @@ plot_rates_through_time_for_continuous_data <- function (
 plot_rates_through_time_for_categorical_data <- function (
     deepSTRAPP_outputs,
     rate_type = "net_diversification",
-    select_trait_states = "all",
+    select_trait_levels = "all",
     time_range = NULL,
     colors_per_levels = NULL,
     plot_CI = FALSE,
@@ -787,23 +788,23 @@ plot_rates_through_time_for_categorical_data <- function (
     states_in_trait_df <- unique(deepSTRAPP_outputs$trait_data_df_over_time$trait_value)
     states_in_trait_df <- states_in_trait_df[order(states_in_trait_df)]
 
-    ## select_trait_states
-    if (!any(select_trait_states == "all"))
+    ## select_trait_levels
+    if (!any(select_trait_levels == "all"))
     {
-      # Check that select_trait_states are all found in the summary data.frame $trait_data_df_over_time
+      # Check that select_trait_levels are all found in the summary data.frame $trait_data_df_over_time
 
-      if (!all(select_trait_states %in% states_in_trait_df))
+      if (!all(select_trait_levels %in% states_in_trait_df))
       {
-        stop(paste0("Some states listed in 'select_trait_states' are not found in the summary data.frame for trait data ('deepSTRAPP_outputs$trait_data_df_over_time').\n",
-                    "'select_trait_states' = ",paste(select_trait_states[order(select_trait_states)], collapse = ", "),".\n",
+        stop(paste0("Some states listed in 'select_trait_levels' are not found in the summary data.frame for trait data ('deepSTRAPP_outputs$trait_data_df_over_time').\n",
+                    "'select_trait_levels' = ",paste(select_trait_levels[order(select_trait_levels)], collapse = ", "),".\n",
                     "Observed states in trait data = ", paste(states_in_trait_df, collapse = ", ")),".")
       }
     }
 
     # Update list of states to keep only the selected ones
-    if (!any(select_trait_states == "all"))
+    if (!any(select_trait_levels == "all"))
     {
-      states_in_trait_df <- select_trait_states
+      states_in_trait_df <- select_trait_levels
     }
 
     ## colors_per_levels
@@ -848,9 +849,9 @@ plot_rates_through_time_for_categorical_data <- function (
   data_per_samples_df <- data_per_samples_df[data_per_samples_df$rate_type == rate_type, ]
 
   ## Filter data for selected states
-  if (!("all" %in% select_trait_states))
+  if (!("all" %in% select_trait_levels))
   {
-    data_per_samples_df <- data_per_samples_df[data_per_samples_df$trait_value %in% select_trait_states, ]
+    data_per_samples_df <- data_per_samples_df[data_per_samples_df$trait_value %in% select_trait_levels, ]
   }
 
   # Filter data for the selected time range
@@ -865,7 +866,7 @@ plot_rates_through_time_for_categorical_data <- function (
 
   if (nrow(data_per_samples_df) == 0)
   {
-    stop("No data found in the time range c(",time_range[1],", ", time_range[2],") for ",paste(select_trait_states, collapse = ", ")," states.\n")
+    stop("No data found in the time range c(",time_range[1],", ", time_range[2],") for ",paste(select_trait_levels, collapse = ", ")," states.\n")
   }
 
   ## Aggregate across tip_ID (branches), per trait states
@@ -1155,7 +1156,7 @@ plot_rates_through_time_for_categorical_data <- function (
 plot_rates_through_time_for_biogeographic_data <- function (
     deepSTRAPP_outputs,
     rate_type = "net_diversification",
-    select_trait_states = "all",
+    select_trait_levels = "all",
     time_range = NULL,
     colors_per_levels = NULL,
     plot_CI = FALSE,
@@ -1173,22 +1174,22 @@ plot_rates_through_time_for_biogeographic_data <- function (
     ranges_in_trait_df <- unique(deepSTRAPP_outputs$trait_data_df_over_time$trait_value)
     ranges_in_trait_df <- ranges_in_trait_df[order(ranges_in_trait_df)]
 
-    ## select_trait_states
-    if (!any(select_trait_states == "all"))
+    ## select_trait_levels
+    if (!any(select_trait_levels == "all"))
     {
-      # Check that select_trait_states are all found in the summary data.frame $trait_data_df_over_time
-      if (!all(select_trait_states %in% ranges_in_trait_df))
+      # Check that select_trait_levels are all found in the summary data.frame $trait_data_df_over_time
+      if (!all(select_trait_levels %in% ranges_in_trait_df))
       {
-        stop(paste0("Some ranges listed in 'select_trait_states' are not found in the summary data.frame for trait data ('deepSTRAPP_outputs$trait_data_df_over_time').\n",
-                    "'select_trait_states' = ",paste(select_trait_states[order(select_trait_states)], collapse = ", "),".\n",
+        stop(paste0("Some ranges listed in 'select_trait_levels' are not found in the summary data.frame for trait data ('deepSTRAPP_outputs$trait_data_df_over_time').\n",
+                    "'select_trait_levels' = ",paste(select_trait_levels[order(select_trait_levels)], collapse = ", "),".\n",
                     "Observed ranges in trait data = ", paste(ranges_in_trait_df, collapse = ", ")),".")
       }
     }
 
     # Update list of ranges to keep only the selected ones
-    if (!any(select_trait_states == "all"))
+    if (!any(select_trait_levels == "all"))
     {
-      ranges_in_trait_df <- select_trait_states
+      ranges_in_trait_df <- select_trait_levels
     }
 
     ## colors_per_levels
@@ -1234,9 +1235,9 @@ plot_rates_through_time_for_biogeographic_data <- function (
   data_per_samples_df <- data_per_samples_df[data_per_samples_df$rate_type == rate_type, ]
 
   ## Filter data for selected states/ranges
-  if (!("all" %in% select_trait_states))
+  if (!("all" %in% select_trait_levels))
   {
-    data_per_samples_df <- data_per_samples_df[data_per_samples_df$trait_value %in% select_trait_states, ]
+    data_per_samples_df <- data_per_samples_df[data_per_samples_df$trait_value %in% select_trait_levels, ]
   }
 
   # Filter data for the selected time range
@@ -1251,7 +1252,7 @@ plot_rates_through_time_for_biogeographic_data <- function (
 
   if (nrow(data_per_samples_df) == 0)
   {
-    stop("No data found in the time range c(",time_range[1],", ", time_range[2],") in ",paste(select_trait_states, collapse = ", ")," ranges.\n")
+    stop("No data found in the time range c(",time_range[1],", ", time_range[2],") in ",paste(select_trait_levels, collapse = ", ")," ranges.\n")
   }
 
   ## Aggregate across tip_ID (branches), per trait ranges
