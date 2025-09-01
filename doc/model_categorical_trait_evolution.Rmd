@@ -1,0 +1,259 @@
+---
+title: "model_categorical_trait_evolution"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{model_categorical_trait_evolution}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r set_options, include = FALSE}
+knitr::opts_chunk$set(
+  eval = FALSE, # Chunks of codes will not be evaluated by default
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 7, fig.height = 5   # Set device size at rendering time (when plots are generated)
+)
+```
+
+```{r setup, eval = TRUE, include = FALSE}
+library(deepSTRAPP)
+```
+
+<br>
+This vignette presents the different options available to model __categorical trait evolution__ within deepSTRAPP.
+
+It builds mainly upon functions from R packages `[geiger]` and `[phytools]` to offer a simplify framework to model and visualize __categorical trait evolution__ on a __time-calibrated phylogeny__.
+
+<br>
+For an example with __continuous data__, see this vignette: `vignette("model_continuous_trait_evolution")`
+
+For an example with __biogeographic data__, see this vignette: `vignette("model_biogeographic_range_evolution")`
+
+<br>
+
+```{r model_trait_evolution_cat}
+
+# ------ Step 0: Load data ------ #
+
+## Load phylogeny and tip data
+
+library(phytools)
+data(eel.tree)
+data(eel.data)
+# Dataset of feeding mode and maximum total length from 61 species of elopomorph eels.
+# Source: Collar, D. C., P. C. Wainwright, M. E. Alfaro, L. J. Revell, and R. S. Mehta (2014)
+# Biting disrupts integration to spur skull evolution in eels. Nature Communications, 5, 5505.
+
+## Transform feeding mode data into a 3-level factor
+# This is NOT actual biological data anymore, but data adjusted for the sake of example!
+
+eel_tip_data <- stats::setNames(object = eel.data$feed_mode, nm = rownames(eel.data))
+eel_tip_data <- as.character(eel_tip_data)
+eel_tip_data[c(1, 5, 6, 7, 10, 11, 15, 16, 17, 24, 25, 28, 30, 51, 52, 53, 55, 58, 60)] <- "kiss"
+eel_tip_data <- stats::setNames(eel_tip_data, rownames(eel.data))
+table(eel_tip_data)
+
+plot(eel.tree)
+ ape::Ntip(eel.tree) == length(eel_tip_data)
+
+## Check that trait tip data and phylogeny are named and ordered similarly
+all(names(eel_tip_data) == eel.tree$tip.label)
+
+# Reorder tip_data as in phylogeny
+eel_tip_data <- eel_tip_data[eel.tree$tip.label]
+
+
+## Set colors per states
+colors_per_states <- c("limegreen", "orange", "dodgerblue")
+names(colors_per_states) <- c("bite", "kiss", "suction")
+
+
+# ------ Step 1: Prepare categorical trait data ------ #
+
+## Goal: Map categorical trait evolution on the time-calibrated phylogeny
+
+# 1.1/ Fit evolutionary models to trait data using Maximum Likelihood.
+# 1.2/ Select the best fitting model comparing AICc.
+# 1.3/ Infer ancestral characters estimates (ACE) at nodes.
+# 1.4/ Run stochastic mapping simulations to generate evolutionary histories
+#      compatible with the best model and inferred ACE.
+# 1.5/ Infer ancestral states along branches.
+#  - Compute posterior frequencies of each state/range
+#    to produce a `densityMap` for each state/range.
+
+library(deepSTRAPP)
+
+# All these actions are performed by a single function: deepSTRAPP::prepare_trait_data()
+?deepSTRAPP::prepare_trait_data()
+# Model selection is performed internally with deepSTRAPP::select_best_model_from_geiger()
+?deepSTRAPP::select_best_model_from_geiger()
+# Plotting of all densityMaps as a unique phylogeny is carried out 
+# with deepSTRAPP::plot_densityMaps_overlay()
+?deepSTRAPP::plot_densityMaps_overlay()
+  
+## Macroevolutionary models for categorical traits
+
+?geiger::fitDiscrete() # For more in-depth information on the models available
+
+## 5 models from geiger::fitDiscrete() are available
+ # "ER": Equal-Rates model.
+    # Default model where a single parameter governs all transition rates between states.
+    # Rates are symmetrical.
+       # Ex: A <-> B = A <-> C.
+ # "SYM": Symmetric model. 
+    # Forward and reverse transitions share the same parameter,
+    # but transitions between diffrent states have different rates.
+       # Ex: (A -> B = B -> A) ≠ (A -> C = C -> A).
+ # "ARD": All-Rates-Different model. 
+    # Each transition rate is a unique parameter.
+        # Ex: A -> B ≠ B -> A ≠ A -> C ≠ C -> A.
+ # "meristic": Step-stone model
+    # Transitions occur in a step-wise ordered fashion (e.g., 1 <-> 2 <-> 3).
+    # Transitions between non-adjacent states are forbidden (e.g., 1 <-> 3 is forbidden).
+    # Transitions rates are assumed to be symmetrical.
+        # Ex: (1 -> 2 = 2 -> 1) ≠ (2 -> 3 = 3 -> 2), with 1 <-> 3 set to zero.
+ # "matrix": Custom model.
+    # Allows to provide a custom "Q_matrix" defining transition classes between states. 
+    # Transitions with similar integers are estimated with a shared rate parameter.
+    # Transitions with `0` represent rates that are fixed to zero (i.e., impossible transitions).
+    # Diagonal must be populated with `NA`. row.names(Q_matrix) and col.names(Q_matrix) are the states.
+
+
+## Example of custom Q_matrix defining rate classes of state transitions to use in the 'matrix' model
+
+# Does not allow transitions from state 1 ("bite") to state 2 ("kiss") or state 3 ("suction")
+# Does not allow transitions from state 3 ("suction") to state 1 ("bite")
+# Set symmetrical rates between state 2 ("kiss") and state 3 ("suction")
+Q_matrix = rbind(c(NA, 0, 0), c(1, NA, 2), c(0, 2, NA))
+
+
+## Model trait data evolution
+eel_cat_3lvl_data <- prepare_trait_data(
+    tip_data = eel_tip_data,
+    trait_data_type = "categorical",
+    phylo = eel.tree,
+    seed = 1234, # Set seed for reproducibility
+    evolutionary_models = c("ER", "SYM", "ARD", "meristic", "matrix"), # All possible models
+    Q_matrix = Q_matrix, # Custom transition rate classes matrix for the "matrix" model
+    transform = "lambda", # Example of additional parameters that can be pass down 
+    # to geiger::fitDiscrete() to control tree transformation.
+    res = 100, # To set the resolution of the continuous mapping of states on the densityMaps
+    # Reduce the number of Stochastic Mapping simulations to save time (Default = '1000')
+    nb_simulations = 100, 
+    colors_per_levels = colors_per_states,
+    # Plot the densityMaps with plot_densityMaps_overlay() to show all states at once.
+    plot_overlay = TRUE, 
+    # To export in PDF the densityMaps generated (Here a single map as 'plot_overlay = TRUE')
+    # PDF_file_path = "./eel_densityMaps_overlay.pdf", 
+    return_ace = TRUE, # To include Ancestral Character Estimates (ACE) at nodes in the output
+    return_simmaps = TRUE, # To include the Stochastic Mapping simulations (simmaps) in the output
+    return_best_model_fit = TRUE, # To include the best model fit in the output
+    return_model_selection_df = TRUE, # To include the df for model selection in the output
+    verbose = TRUE) # To display progress
+
+
+# ------ Step 2: Explore output ------ #
+
+## Explore output
+str(eel_cat_3lvl_data, 1)
+
+## Extract the densityMaps showing posterior probabilities of states on the phylogeny
+## as estimated from the model
+eel_densityMaps <- eel_cat_3lvl_data$densityMaps
+
+# Plot densityMap for each state.
+# Grey represents absence of the state. Color represents presence of the state.
+plot(eel_densityMaps[[1]]) # densityMap for state n°1 ("bite")
+plot(eel_densityMaps[[2]]) # densityMap for state n°2 ("kiss")
+plot(eel_densityMaps[[3]]) # densityMap for state n°3 ("suction")
+
+# Plot all densityMaps overlaid in on a single phylogeny.
+# Each color highlights presence of its associated state.
+plot_densityMaps_overlay(eel_densityMaps)
+
+# Plot with a new color scheme
+new_colors_per_states <- c("red", "pink", "goldenrod")
+names(new_colors_per_states) <- c("bite", "kiss", "suction")
+
+plot_densityMaps_overlay(
+    densityMaps = eel_densityMaps,
+    colors_per_levels = new_colors_per_states)
+    # PDF_file_path = "./eel_densityMaps_overlay_new_colors.pdf")
+
+# The densityMaps are the main input needed to perform a deepSTRAPP run on categorical trait data.
+
+## Extract the Ancestral Character Estimates (ACE) = trait values at nodes
+eel_ACE <- eel_cat_3lvl_data$ace
+head(eel_ACE)
+# This is a matrix with row.names = internal node ID, colnames = ancestral states,
+# and values = posterior probabilities.
+# It can be used as an optional input in deepSTRAPP run to provide perfectly accurate estimates
+# for ancestral states at internal nodes. 
+
+## Explore summary of model selection
+eel_cat_3lvl_data$model_selection_df # Summary of model selection
+# Models are compared using the corrected Akaike's Information Criterion (AICc)
+# Akaike's weights represent the probability that a given model is the best
+# among the set of candidate models, given the data.
+# Here, the best model is the Equal-Rates model ('ER')
+
+## Explore best model fit (ER model)
+eel_cat_3lvl_data$best_model_fit # Summary of best model optimization by geiger::fitContinuous()
+eel_cat_3lvl_data$best_model_fit$opt # Parameter estimates and goodness-of-fit information
+# Unique transition parameter = 0.0208 transitions per branch per My.
+
+## Explore simmaps
+# Since we selected 'return_simmaps = TRUE',
+# Stochastic Mapping simulations (simmaps) are included in the output
+# Each simmap represents a simulated evolutionary history with final states compatible
+# with the tip_data and estimated ACE at nodes.
+# Each simmap also follows the transition parameters of the best fit model
+# to simulate transitions along branches.
+
+# Plot simmap n°1 using the same color scheme as in densityMaps
+plot(eel_cat_3lvl_data$simmaps[[1]], colors = colors_per_states, fsize = 0.7)
+# Plot simmap n°10 using the same color scheme as in densityMaps
+plot(eel_cat_3lvl_data$simmaps[[10]], colors = colors_per_states, fsize = 0.7)
+# Plot simmap n°100 using the same color scheme as in densityMaps
+plot(eel_cat_3lvl_data$simmaps[[100]], colors = colors_per_states, fsize = 0.7)
+
+
+## Inputs needed to run deepSTRAPP are the densityMaps (eel_densityMaps), and optionally,
+## the tip_data (eel_tip_data), and the ACE (eel_ACE)
+
+
+```
+```{r model_trait_evolution_cat_eval, fig.height = 7, eval = TRUE, echo = FALSE}
+# Load directly output
+data(eel_cat_3lvl_data, package = "deepSTRAPP")
+
+## Set colors per states
+colors_per_states <- c("limegreen", "orange", "dodgerblue")
+names(colors_per_states) <- c("bite", "kiss", "suction")
+
+## Plot densityMaps
+
+# Plot all densityMaps overlaid in on a single phylogeny.
+plot_densityMaps_overlay(eel_cat_3lvl_data$densityMaps, fsize = 0.6)
+
+# Plot with a new color scheme
+new_colors_per_states <- c("red", "pink", "goldenrod")
+names(new_colors_per_states) <- c("bite", "kiss", "suction")
+
+plot_densityMaps_overlay(
+    densityMaps = eel_cat_3lvl_data$densityMaps,
+    colors_per_levels = new_colors_per_states,
+    fsize = 0.6)
+
+## Explore summary of model selection
+eel_cat_3lvl_data$model_selection_df # Summary of model selection
+
+## Explore simmaps
+plot(eel_cat_3lvl_data$simmaps[[1]], colors = colors_per_states, fsize = 0.7)
+title(main = "\nStochastic Mapping simulation n°1")
+
+plot(eel_cat_3lvl_data$simmaps[[10]], colors = colors_per_states, fsize = 0.7)
+title(main = "\nStochastic Mapping simulation n°10")
+
+```

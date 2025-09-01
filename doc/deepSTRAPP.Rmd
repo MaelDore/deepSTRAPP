@@ -1,0 +1,72 @@
+---
+title: "deepSTRAPP"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{deepSTRAPP}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r set_options, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Advanced uses / tutorials
+
+This vignette points to **tutorials** detailing how to use the [deepSTRAPP] package beyond the simple use-case presented in the README file. 
+
+They present more **advanced usages** and provide explanations on available arguments and interpretations of results of deepSTRAPP.
+
+### Full deepSTRAPP workflows on different types of data
+
+&nbsp;&nbsp;&nbsp;&nbsp;&#x25CF;&nbsp;&nbsp;Full deepSTRAPP workflow for **continuous** trait data: `vignette("deepSTRAPP_continuous_data")`.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&#x25CF;&nbsp;&nbsp;Full deepSTRAPP workflow for **categorical** trait data with 3 levels: `vignette("deepSTRAPP_categorical_3lvl_data")`.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&#x25CF;&nbsp;&nbsp;Full deepSTRAPP workflow for **biogeographic** range data: `vignette("deepSTRAPP_biogeographic_data")`.
+
+<br>
+For a full deepSTRAPP workflow on categorical trait data with **2 levels**, please refer to the main tutorial in the **README file**.
+
+### Explore options for trait evolution
+
+&nbsp;&nbsp;&nbsp;&nbsp;&#x25CF;&nbsp;&nbsp;Model evolution of **continuous** trait data on a time-calibrated phylogeny: `vignette("model_continuous_trait_evolution")`.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&#x25CF;&nbsp;&nbsp;Model evolution of **categorical** trait data on a time-calibrated phylogeny: `vignette("model_categorical_trait_evolution")`.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&#x25CF;&nbsp;&nbsp;Model evolution of **biogeographic** range data on a time-calibrated phylogeny: `vignette("model_biogeographic_range_evolution")`.
+
+### Explore options for BAMM
+
+Model **diversification dynamics** with BAMM within deepSTRAPP: `vignette("model_diversification_dynamics")`.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&#x25CB;&nbsp;&nbsp;Detail the extent of possible parametrization.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&#x25CB;&nbsp;&nbsp;Explain evaluation plots.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&#x25CB;&nbsp;&nbsp;Show options for shift location on `deepSTRAPP::plot_BAMM_rates()`: index, MAP, MSC.
+
+### Explore the STRAPP test options
+
+Type of STRAPP tests: **two-tailed** vs. **one-tailed**: `vignette("explore_STRAPP_test_types")`.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&#x25CB;&nbsp;&nbsp;Continuous: "negative" or "positive" correlation.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&#x25CB;&nbsp;&nbsp;Binary with hypothesis: (A > B) vs. (B > A).
+
+&nbsp;&nbsp;&nbsp;&nbsp;&#x25CB;&nbsp;&nbsp;Multinominal: Hypotheses for all post hoc tests.
+ 
+### Plot rates through time (RTT)
+
+Explore options for plotting diversification **rates through time** in relation to trait data: `vignette("plot_rates_through_time")`.
+
+### Cut phylogenies
+
+Cut different types of **(mapped) phylogenies** for a given focal-time: phylogeny, contMap, densityMap, BAMM_object: `vignette("cut_phylogenies")`.
+
+<br>
+
+ 
