@@ -212,6 +212,9 @@
 #' # Access the diversification data in a melted data.frame
 #' head(deepSTRAPP_output$diversification_data_df)
 #'
+#' # Plot rates vs. trait values across branches
+#' plot_rates_vs_trait_data_for_focal_time(deepSTRAPP_output)
+#'
 #' # Plot updated contMap
 #' plot_contMap(deepSTRAPP_output$updated_trait_data_with_Map$contMap)
 #' ape::nodelabels(text =
@@ -252,7 +255,7 @@
 #'    tip_data = Ponerinae_cat_3lvl_tip_data,
 #'    phylo = Ponerinae_tree_old_calib,
 #'    trait_data_type = "categorical",
-#'    colors_per_states = colors_per_states,
+#'    colors_per_levels = colors_per_states,
 #'    evolutionary_models = "ARD", # Use default ARD model
 #'    nb_simulations = 100, # Reduce number of simulations to save time
 #'    seed = 1234, Seet seed for reproducibility
@@ -299,6 +302,11 @@
 #' # Access the diversification data in a melted data.frame
 #' head(deepSTRAPP_output$diversification_data_df)
 #'
+#' # Plot rates vs. states across branches
+#' plot_rates_vs_trait_data_for_focal_time(
+#'     deepSTRAPP_outputs = deepSTRAPP_output,
+#'     colors_per_levels = colors_per_states)
+#'
 #' # Plot updated densityMaps cut at focal time
 #' plot_densityMaps_overlay(deepSTRAPP_output$updated_trait_data_with_Map$densityMaps)
 #'
@@ -340,8 +348,8 @@
 #' names(Ponerinae_NO_data) <- Ponerinae_binary_range_table$Taxa
 #' table(Ponerinae_NO_data)
 #'
-#' colors_per_levels <- c("mediumpurple2", "peachpuff2")
-#' names(colors_per_levels) <- c("N", "O")
+#' colors_per_ranges <- c("mediumpurple2", "peachpuff2")
+#' names(colors_per_ranges) <- c("N", "O")
 #'
 #' \dontrun{  (May take several minutes to run)
 #' ## Run evolutionary models
@@ -354,7 +362,7 @@
 #'     max_range_size = 2,
 #'     split_multi_area_ranges = TRUE, # Set to TRUE to display the two outputs
 #'     nb_simulations = 100, # Reduce to save time (Default = '1000')
-#'     colors_per_levels = colors_per_levels,
+#'     colors_per_levels = colors_per_ranges,
 #'     return_model_selection_df = TRUE,
 #'     verbose = TRUE) }
 #'
@@ -396,6 +404,11 @@
 #'
 #' # Access the diversification data in a melted data.frame
 #' head(deepSTRAPP_output$diversification_data_df)
+#'
+#' # Plot rates vs. ranges across branches
+#' plot_rates_vs_trait_data_for_focal_time(
+#'     deepSTRAPP_outputs = deepSTRAPP_output,
+#'     colors_per_levels = colors_per_ranges)
 #'
 #' # Plot updated densityMaps cut at focal time
 #' plot_densityMaps_overlay(deepSTRAPP_output$updated_trait_data_with_Map$densityMaps)

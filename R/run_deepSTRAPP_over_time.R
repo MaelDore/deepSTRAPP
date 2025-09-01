@@ -274,6 +274,14 @@
 #'   deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_old_calib_0_40,
 #'   alpha = 0.10)
 #'
+#' # Plot evolution of mean rates through time
+#' plot_rates_through_time(deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_old_calib_0_40)
+#'
+#' # Plot rates vs. trait values across branches for time step = 10 My
+#' plot_rates_vs_trait_data_for_focal_time(
+#'    deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_old_calib_0_40,
+#'    focal_time = 10)
+#'
 #' # Plot histogram of Spearman test stats for time step = 10 My
 #' plot_histogram_STRAPP_test_for_focal_time(
 #'    deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_old_calib_0_40,
@@ -400,7 +408,17 @@
 #'    alpha = 0.10,
 #'    plot_posthoc_tests = TRUE)
 #'
-#' # Plot histogram of overall Kruskal-Wallis test for time step n°2 = 10My
+#' # Plot evolution of mean rates through time
+#' plot_rates_through_time(deepSTRAPP_outputs = deepSTRAPP_outputs,
+#'    colors_per_levels = colors_per_states)
+#'
+#' # Plot rates vs. trait values across branches for time step n°2 = 10 My
+#' plot_rates_vs_trait_data_for_focal_time(
+#'    deepSTRAPP_outputs = deepSTRAPP_outputs,
+#'    focal_time = 10,
+#'    colors_per_levels = colors_per_states)
+#'
+#' # Plot histogram of overall Kruskal-Wallis test for time step n°2 = 10 My
 #' plot_histogram_STRAPP_test_for_focal_time(
 #'    deepSTRAPP_outputs = deepSTRAPP_outputs,
 #'    focal_time = 10)
@@ -442,8 +460,8 @@
 #' names(Ponerinae_NO_data) <- Ponerinae_binary_range_table$Taxa
 #' table(Ponerinae_NO_data)
 #'
-#' colors_per_levels <- c("mediumpurple2", "peachpuff2")
-#' names(colors_per_levels) <- c("N", "O")
+#' colors_per_ranges <- c("mediumpurple2", "peachpuff2")
+#' names(colors_per_ranges) <- c("N", "O")
 #'
 #' \dontrun{  (May take several minutes to run)
 #' ## Run evolutionary models
@@ -456,7 +474,7 @@
 #'     max_range_size = 2,
 #'     split_multi_area_ranges = TRUE, # Set to TRUE to use only unique areas "A" and "B"
 #'     nb_simulations = 100, # Reduce to save time (Default = '1000')
-#'     colors_per_levels = colors_per_levels,
+#'     colors_per_levels = colors_per_ranges,
 #'     return_model_selection_df = TRUE,
 #'     verbose = TRUE) }
 #'
@@ -528,6 +546,16 @@
 #' plot_STRAPP_pvalues_over_time(
 #'    deepSTRAPP_outputs = deepSTRAPP_outputs,
 #'    alpha = 0.05)
+#'
+#' # Plot evolution of mean rates through time
+#' plot_rates_through_time(deepSTRAPP_outputs = deepSTRAPP_outputs,
+#'    colors_per_levels = colors_per_ranges)
+#'
+#' # Plot rates vs. trait values across branches for time step n°2 = 10 My
+#' plot_rates_vs_trait_data_for_focal_time(
+#'    deepSTRAPP_outputs = deepSTRAPP_outputs,
+#'    focal_time = 10,
+#'    colors_per_levels = colors_per_ranges)
 #'
 #' # Plot histogram of Mann-Whitney-Wilcoxon test stats for time step n°2 = 10My
 #' plot_histogram_STRAPP_test_for_focal_time(
