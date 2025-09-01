@@ -55,7 +55,7 @@ with one page per focal time in \verb{$time_steps}.
 The main input \code{deepSTRAPP_outputs} is the typical output of \code{\link[=run_deepSTRAPP_over_time]{run_deepSTRAPP_over_time()}}.
 It provides information on results of a STRAPP tests performed over multiple time-steps.
 
-Histograms are build based on the distribution of the test statistics.
+Histograms are built based on the distribution of the test statistics.
 Such distributions are recorded in the outputs of a deepSTRAPP run carried out with \code{\link[=run_deepSTRAPP_over_time]{run_deepSTRAPP_over_time()}}
 when \code{return_STRAPP_results = TRUE} AND \code{return_perm_data = TRUE}. The \verb{$STRAPP_results_over_time} objects provided within the input are lists that must contain
 a \verb{$perm_data_df} element that summarizes test statistics computed across posterior samples.
@@ -201,7 +201,7 @@ Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40 <- run_deepSTRAPP_over_time(
    time_range = time_range,
    time_step_duration = time_step_duration,
    rate_type = "net_diversification",
-   seed = 1234,
+   seed = 1234, # Set for reproducibility
    alpha = 0.10, # Select a generous level of significance for the sake of the example
    posthoc_pairwise_tests = TRUE,
    return_perm_data = TRUE,

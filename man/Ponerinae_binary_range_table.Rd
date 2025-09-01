@@ -14,7 +14,7 @@ data(Ponerinae_binary_range_table)
 A data.frame of range location for the 1534 extant ponerine ant taxa (Ponerinae subfamily).
 
 Source: Doré, M., Borowiec, M. L., Branstetter, M. G., Camacho, G. P., Fisher, B. L., Longino, J. T., Ward, P. S., Blaimer, B. B., (2025),
-Timing is everything: Evolution of ponerine ants highlights how dispersal history shapes modern biodiversity, Nature Communications.
+Evolutionary history of ponerine ants highlights how the timing of dispersal events shapes modern biodiversity, Nature Communications.
 \link{https://doi_of_Paper_to_provide.html}
 }
 \details{
@@ -36,7 +36,7 @@ Nearctic, or Neotropics.
 }
 \references{
 Doré, M., Borowiec, M. L., Branstetter, M. G., Camacho, G. P., Fisher, B. L., Longino, J. T., Ward, P. S., Blaimer, B. B., (2025),
-Timing is everything: Evolution of ponerine ants highlights how dispersal history shapes modern biodiversity, Nature Communications.
-\url{https://doi_of_Paper_to_provide.html}
+Evolutionary history of ponerine ants highlights how the timing of dispersal events shapes modern biodiversity, Nature Communications.
+\url{https://doi.org/10.1038/s41467-025-63709-3}
 }
 \keyword{datasets}

@@ -8,7 +8,7 @@ plot_rates_through_time(
   deepSTRAPP_outputs,
   rate_type = "net_diversification",
   quantile_ranges = c(0, 0.25, 0.5, 0.75, 1),
-  select_trait_states = "all",
+  select_trait_levels = "all",
   time_range = NULL,
   color_scale = NULL,
   colors_per_levels = NULL,
@@ -37,7 +37,7 @@ will contain data for all types of rates.}
 by trait values. It must start with 0 and finish with 1. Default is \code{c(0, 0.25, 0.5, 0.75, 1.0)}
 which produces four balanced quantile groups.}
 
-\item{select_trait_states}{(Vector of) character string. Only for categorical and biogeographic trait data.
+\item{select_trait_levels}{(Vector of) character string. Only for categorical and biogeographic trait data.
 To provide a list of a subset of states/ranges to plot. Names must match the ones found in
 \code{deepSTRAPP_outputs$trait_data_df_over_time$trait_value}. Default is \code{all} which means all states/ranges will be plotted.}
 
@@ -60,7 +60,7 @@ If \code{NULL} (default), the default ggplot2 color palette (\code{\link[scales:
 This proportion is defined with \code{CI_quantiles}.
 }}
 
-\item{CI_quantiles}{Numerical. Proportion of rate values across posterior samples encompassed by the confidence interval. Default is \code{0.95}.}
+\item{CI_quantiles}{Numerical. Proportion of rate values across posterior samples encompassed by the confidence interval. Only if \code{CI_type = "quantiles_rect"}. Default is \code{0.95}.}
 
 \item{display_plot}{Logical. Whether to display the plot generated in the R console. Default is \code{TRUE}.}
 
@@ -86,9 +86,10 @@ Optional summary data frames:
 \item \code{mean_data_per_samples_df} A data.frame with four columns providing the \verb{$mean_rates} observed along branches
 with a similar \verb{$trait_value} (if categorical or biogeographic) or falling into the same \verb{$quantile_ranges}.
 Data are extracted for each posterior sample (\verb{$BAMM_sample_ID}) at each time-step (i.e., \verb{$focal_time}).
-This is used to draw the confidence interval.
+This is used to draw the confidence interval. Included if \code{return_mean_data_per_samples_df = TRUE}.
 \item \verb{$median_data_across_samples_df} A data.frame with three columns providing the \verb{$median_rates}
 observed across all posterior samples in \verb{$mean_data_per_samples_df}. This is used to draw the lines on the plot.
+Included if \code{return_median_data_across_samples_df = TRUE}.
 }
 
 If a \code{PDF_file_path} is provided, the function will also generate a PDF file of the plot.
@@ -151,7 +152,7 @@ names(colors_per_states) <- c("arboreal", "subterranean", "terricolous")
 
 plotTT_categorical <- plot_rates_through_time(
     deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40,
-    select_trait_states = c("arboreal", "terricolous"),
+    select_trait_levels = c("arboreal", "terricolous"),
     time_range = c(0, 50),
     colors_per_levels = colors_per_states,
     plot_CI = TRUE,
@@ -180,7 +181,7 @@ names(colors_per_ranges) <- c("N", "O")
 
 plotTT_biogeographic <- plot_rates_through_time(
     deepSTRAPP_outputs = Ponerinae_deepSTRAPP_biogeo_old_calib_0_40,
-    select_trait_states = "all",
+    select_trait_levels = "all",
     time_range = c(0, 50),
     colors_per_levels = colors_per_ranges,
     plot_CI = TRUE,

@@ -21,8 +21,8 @@ A list containing two elements:
 \item \verb{$mammal.phy} A time-calibrated phylogeny of extinct and extant mammal families/genera.
 }
 
-Source: Slater, G. J. (2013). Phylogenetic evidence for a shift in the mode of mammalian body size evolution at the Cretaceous‐Palaeogene boundary.
-Methods in Ecology and Evolution, 4(8), 734-744. \url{https://doi.org/10.1111/2041-210X.12084.html}
+Source: Slater, G. J. (2013). Phylogenetic evidence for a shift in the mode of mammalian body size evolution at the Cretaceous-Palaeogene boundary.
+Methods in Ecology and Evolution, 4(8), 734-744. \url{https://doi.org/10.1111/2041-210X.12084}
 }
 \details{
 Initial dataset from Slater, G. J. (2013). The R object was imported from R package \code{motmot} to include in deepSTRAPP.
