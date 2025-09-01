@@ -80,9 +80,9 @@ examples of outputs)**
 
 > deepSTRAPP application: Doré, M., Borowiec, M. L., Branstetter, M. G.,
 > Camacho, G. P., Fisher, B. L., Longino, J. T., Ward, P. S., Blaimer,
-> B. B., (2025), Timing is everything: Evolution of ponerine ants
-> highlights how dispersal history shapes modern biodiversity, Nature
-> Communications. <https://doi_of_Paper_to_provide.html>
+> B. B., (2025), Evolutionary history of ponerine ants highlights how
+> the timing of dispersal events shapes modern biodiversity, Nature
+> Communications. <https://doi.org/10.1038/s41467-025-63709-3>
 
 ## How to Cite deepSTRAPP
 
@@ -385,10 +385,11 @@ str(Ponerinae_deepSTRAPP_cat_2lvl_old_calib_0_40$updated_BAMM_objects_over_time,
 # 4.1/ Plot evolution of STRAPP tests p-values through time
 # 4.2/ Plot histogram of STRAPP test stats
 # 4.3/ Plot evolution of rates though time in relation to trait values
-# 4.4/ Plot updated densityMaps mapping trait evolution for a given 'focal_time'
-# 4.5/ Plot updated diversification rates and regimes for a given 'focal_time'
-# 4.6/ Combine 4.4 and 4.5 to plot both mapped phylogenies with trait evolution (4)
-#      and diversification rates and regimes (5).
+# 4.4/ Plot rates vs. trait data across branches for a given 'focal_time'
+# 4.5/ Plot updated densityMaps mapping trait evolution for a given 'focal_time'
+# 4.6/ Plot updated diversification rates and regimes for a given 'focal_time'
+# 4.7/ Combine 4.5 and 4.6 to plot both mapped phylogenies with trait evolution (4.5)
+#      and diversification rates and regimes (4.6).
 
 # Each plot is achieve through a dedicated function
 
@@ -481,7 +482,35 @@ plot_rates_through_time(deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cat_2lvl_old_c
 <img src="man/figures/README-plot_rates_through_time_cat_2lvl_eval-1.png" width="100%" />
 
 ``` r
-### 4.4/ Plot updated densityMaps mapping trait evolution for a given 'focal_time' ####
+### 4.4/ Plot rates vs. trait data across branches for a given focal time ####
+
+# ?deepSTRAPP::plot_rates_vs_trait_data_for_focal_time()
+# ?deepSTRAPP::plot_rates_vs_trait_data_over_time()
+
+# This plot help to visualize differences in rates vs. states across all branches
+# found at specific time-steps (i.e., 'focal_time').
+
+# Generate ggplot for time = 10 My
+plot_rates_vs_trait_data_for_focal_time(
+   deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cat_2lvl_old_calib_0_40,
+   focal_time = 10,
+   colors_per_levels = colors_per_states)
+
+# Here we focus on T = 10 My to highlight the differences detected in the previous steps.
+# You can see that "small" ants tend to have higher rates than "large" ants at this time-step.
+# This plot, alongside other results of deepSTRAPP, supports the Diversification Rate Hypothesis in showing 
+# how "small" ant lineages may have accumulated faster, especially between 5 to 15 My.
+
+# Plot rates vs. trait data for all time-steps
+plot_rates_vs_trait_data_over_time(
+   deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cat_2lvl_old_calib_0_40,
+   colors_per_levels = colors_per_states)
+```
+
+<img src="man/figures/README-plot_rates_vs_traits_cat_2lvl_eval-1.png" width="100%" />
+
+``` r
+### 4.5/ Plot updated densityMaps mapping trait evolution for a given 'focal_time' ####
 
 # ?deepSTRAPP::plot_densityMaps_overlay()
 
@@ -522,7 +551,7 @@ title(main = "Trait evolution for 100-40 My")
 <img src="man/figures/README-plot_updated_densityMaps_cat_2lvl_eval-1.png" width="100%" /><img src="man/figures/README-plot_updated_densityMaps_cat_2lvl_eval-2.png" width="100%" />
 
 ``` r
-### 4.5/ Plot updated diversification rates and regimes for a given 'focal_time' ####
+### 4.6/ Plot updated diversification rates and regimes for a given 'focal_time' ####
 
 # ?deepSTRAPP::plot_BAMM_rates()
 
@@ -564,7 +593,7 @@ title(main = "BAMM rates for 100-40 My")
 <img src="man/figures/README-plot_BAMM_rates_cat_2lvl_eval-1.png" width="100%" />
 
 ``` r
-### 4.6/ Plot both trait evolution and diversification rates and regimes updated for a given 'focal_time' ####
+### 4.7/ Plot both trait evolution and diversification rates and regimes updated for a given 'focal_time' ####
 
 # ?deepSTRAPP::plot_trait_vs_rate_maps_for_focal_time()
 
@@ -616,6 +645,7 @@ More tutorials are available to explore more **advanced usages** of
 deepSTRAPP. They provide explanations on available arguments and
 interpretations of results of deepSTRAPP across multiple type of data.
 They are listed below, and in this vignette: `vignette("deepSTRAPP")`.
+[Link](https://github.com/MaelDore/deepSTRAPP/blob/master/doc/deepSTRAPP.html)
 
 ``` r
 # You can also use this to open access to all vignettes in an HTML Brower
@@ -626,29 +656,37 @@ utils::browseVignettes(package = "deepSTRAPP")
 
 - Full deepSTRAPP workflow for **continuous** trait data:
   `vignette("deepSTRAPP_continuous_data")`.
+  [Link](https://github.com/MaelDore/deepSTRAPP/blob/master/doc/deepSTRAPP_continuous_data.html)
 - Full deepSTRAPP workflow for **categorical** trait data with 3-levels:
   `vignette("deepSTRAPP_categorical_3lvl_data")`.
+  [Link](https://github.com/MaelDore/deepSTRAPP/blob/master/doc/deepSTRAPP_categorical_3lvl_data.html)
 - Full deepSTRAPP workflow for **biogeographic** range data:
   `vignette("deepSTRAPP_biogeographic_data")`.
+  [Link](https://github.com/MaelDore/deepSTRAPP/blob/master/doc/deepSTRAPP_biogeographic_data.html)
 
 **Explore options for trait evolution**
 
 - Model evolution of **continuous** trait data on time-calibrated
   phylogeny: `vignette("model_continuous_trait_evolution")`.
+  [Link](https://github.com/MaelDore/deepSTRAPP/blob/master/doc/model_continuous_trait_evolution.html)
 - Model evolution of **categorical** trait data on time-calibrated
   phylogeny: `vignette("model_categorical_trait_evolution")`.
+  [Link](https://github.com/MaelDore/deepSTRAPP/blob/master/doc/model_categorical_trait_evolution.html)
 - Model evolution of **biogeographic** range data on time-calibrated
   phylogeny: `vignette("model_biogeographic_range_evolution")`.
+  [Link](https://github.com/MaelDore/deepSTRAPP/blob/master/doc/model_biogeographic_range_evolution.html)
 
 **Explore options for BAMM**
 
 - Model **diversification dynamics** with BAMM within deepSTRAPP:
   `vignette("model_diversification_dynamics")`.
+  [Link](https://github.com/MaelDore/deepSTRAPP/blob/master/doc/model_diversification_dynamics.html)
 
 **Explore the STRAPP test options**
 
 Type of STRAPP tests: **two-tailed** vs. **one-tailed**:
 `vignette("explore_STRAPP_test_types")`.
+[Link](https://github.com/MaelDore/deepSTRAPP/blob/master/doc/explore_STRAPP_test_types.html)
 
 - Continuous: “negative” or “positive” correlation.
 - Binary with hypothesis: (A \> B) vs. (B \> A).
@@ -658,12 +696,14 @@ Type of STRAPP tests: **two-tailed** vs. **one-tailed**:
 
 Explore options for plotting diversification **rates through time** in
 relation to trait data: `vignette("plot_rates_through_time")`.
+[Link](https://github.com/MaelDore/deepSTRAPP/blob/master/doc/plot_rates_through_time.html)
 
 **Cut phylogenies**
 
 Cut different types of **(mapped) phylogenies** for a given focal-time:
 phylogeny, contMap, densityMap, BAMM_object:
 `vignette("cut_phylogenies")`.
+[Link](https://github.com/MaelDore/deepSTRAPP/blob/master/doc/cut_phylogenies.html)
 
 **Plot rates vs. trait values/states**
 
