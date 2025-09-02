@@ -20,7 +20,7 @@ library(deepSTRAPP)
 # View(Ponerinae_trait_tip_data)
 # 
 # # Extract categorical data with 3-levels
-# Ponerinae_cat_3lvl_tip_data <- setNames(object = Ponerinae_trait_tip_data$fake_cat_3lvl_data,
+# Ponerinae_cat_3lvl_tip_data <- setNames(object = Ponerinae_trait_tip_data$fake_cat_3lvl_tip_data,
 #                                     nm = Ponerinae_trait_tip_data$Taxa)
 # table(Ponerinae_cat_3lvl_tip_data)
 # 
@@ -307,10 +307,11 @@ names(colors_per_states) <- c("arboreal", "subterranean", "terricolous")
 # # 4.1/ Plot evolution of STRAPP tests p-values through time
 # # 4.2/ Plot histogram of STRAPP test stats
 # # 4.3/ Plot evolution of rates though time in relation to trait values
-# # 4.4/ Plot updated densityMaps mapping trait evolution for a given 'focal_time'
-# # 4.5/ Plot updated diversification rates and regimes for a given 'focal_time'
-# # 4.6/ Combine 4.4 and 4.5 to plot both mapped phylogenies with trait evolution (4)
-# #      and diversification rates and regimes (5).
+# # 4.4/ Plot rates vs. states across branches for a given 'focal_time'
+# # 4.5/ Plot updated densityMaps mapping trait evolution for a given 'focal_time'
+# # 4.6/ Plot updated diversification rates and regimes for a given 'focal_time'
+# # 4.7/ Combine 4.5 and 4.6 to plot both mapped phylogenies with trait evolution (4.5)
+# #      and diversification rates and regimes (4.6).
 # 
 # # Each plot is achieve through a dedicated function
 # 
@@ -510,8 +511,42 @@ ggplot_RTT <- ggplot_RTT_list$rates_TT_ggplot +
 print(ggplot_RTT)
 
 
+## ----plot_rates_vs_traits_cat_3lvl--------------------------------------------
+# ### 4.4/ Plot rates vs. states across branches for a given focal time ####
+# 
+# # ?deepSTRAPP::plot_rates_vs_trait_data_for_focal_time()
+# # ?deepSTRAPP::plot_rates_vs_trait_data_over_time()
+# 
+# # This plot help to visualize differences in rates vs. states across all branches
+# # found at specific time-steps (i.e., 'focal_time').
+# 
+# # Generate ggplot for time = 10 My
+# plot_rates_vs_trait_data_for_focal_time(
+#    deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40,
+#    focal_time = 10,
+#    colors_per_levels = colors_per_states)
+# 
+# # Here we focus on T = 10 My to highlight the differences detected in the previous steps.
+# # You can see that "terricolous" ants tend to have higher rates than "subterranean" ants,
+# # who tends to have higher rates than "arboreal" ants, at this time-step.
+# # This plot, alongside other results of deepSTRAPP, supports the Diversification Rate Hypothesis in showing
+# # how "terricolous" ant lineages may have accumulated faster, especially between 5 to 15 My.
+# 
+# # Plot rates vs. trait data for all time-steps
+# plot_rates_vs_trait_data_over_time(
+#    deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40,
+#    colors_per_levels = colors_per_states)
+# 
+
+## ----plot_rates_vs_traits_cat_3lvl_eval, fig.height = 7, fig.width = 8.5, out.width = "100%", eval = TRUE, echo = FALSE----
+# Generate ggplot for time = 10 My
+plot_rates_vs_trait_data_for_focal_time(
+   deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40,
+   focal_time = 10,
+   colors_per_levels = colors_per_states)
+
 ## ----plot_updated_densityMaps_cat_3lvl----------------------------------------
-# ### 4.4/ Plot updated densityMaps mapping trait evolution for a given 'focal_time' ####
+# ### 4.5/ Plot updated densityMaps mapping trait evolution for a given 'focal_time' ####
 # 
 # # ?deepSTRAPP::plot_densityMaps_overlay()
 # 
@@ -572,7 +607,7 @@ plot_densityMaps_overlay(densityMaps_40My$densityMaps,
 title(main = "Trait evolution for 100-40 My")
 
 ## ----plot_BAMM_rates_cat_3lvl-------------------------------------------------
-# ### 4.5/ Plot updated diversification rates and regimes for a given 'focal_time' ####
+# ### 4.6/ Plot updated diversification rates and regimes for a given 'focal_time' ####
 # 
 # # ?deepSTRAPP::plot_BAMM_rates()
 # 
@@ -628,10 +663,10 @@ title(main = "BAMM rates for 100-10 My")
 
 par(mfrow = c(1, 1))
 
-## ----plot_trait_vs_rate_maps_cat_3lvl-----------------------------------------
-# ### 4.6/ Plot both trait evolution and diversification rates and regimes updated for a given 'focal_time' ####
+## ----plot_traits_vs_rates_on_phylogeny_cat_3lvl-------------------------------
+# ### 4.7/ Plot both trait evolution and diversification rates and regimes updated for a given 'focal_time' ####
 # 
-# # ?deepSTRAPP::plot_trait_vs_rate_maps_for_focal_time()
+# # ?deepSTRAPP::plot_traits_vs_rates_on_phylogeny_for_focal_time()
 # 
 # ## These plots help to visualize simultaneously the evolution of trait and diversification rates
 # ## across the phylogeny, and to focus on tip values at specific time-steps.
@@ -642,7 +677,7 @@ par(mfrow = c(1, 1))
 # ## The next plot shows the evolution of states and rates across the whole phylogeny (100-0 My).
 # 
 # # Plot both mapped phylogenies in the present (t = 0)
-# plot_trait_vs_rate_maps_for_focal_time(
+# plot_traits_vs_rates_on_phylogeny_for_focal_time(
 #   deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40,
 #   focal_time = 0,
 #   ftype = "off", lwd = 0.7,
@@ -653,7 +688,7 @@ par(mfrow = c(1, 1))
 # ## The next plot shows the evolution of states and rates from root to 10 Mya (100-10 My).
 # 
 # # Plot both mapped phylogenies for time-step n°3 = 10 My
-# plot_trait_vs_rate_maps_for_focal_time(
+# plot_traits_vs_rates_on_phylogeny_for_focal_time(
 #   deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40,
 #   focal_time = 10,
 #   ftype = "off", lwd = 1.2,
@@ -664,7 +699,7 @@ par(mfrow = c(1, 1))
 # ## The next plot shows the evolution of states and rates from root to 40 Mya (100-40 My).
 # 
 # # Plot both mapped phylogenies for time-step n°9 = 40 My
-# plot_trait_vs_rate_maps_for_focal_time(
+# plot_traits_vs_rates_on_phylogeny_for_focal_time(
 #   deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40,
 #   focal_time = 40,
 #   ftype = "off", lwd = 1.2,
@@ -673,9 +708,9 @@ par(mfrow = c(1, 1))
 #   par.reset = FALSE)
 # 
 
-## ----plot_trait_vs_rate_maps_cat_3lvl_eval, fig.height = 7, eval = TRUE, echo = FALSE----
+## ----plot_traits_vs_rates_on_phylogeny_cat_3lvl_eval, fig.height = 7, eval = TRUE, echo = FALSE----
 # Plot both mapped phylogenies in the present (t = 0)
-plot_trait_vs_rate_maps_for_focal_time(
+plot_traits_vs_rates_on_phylogeny_for_focal_time(
   deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40,
   focal_time = 0,
   ftype = "off", lwd = 0.7,
@@ -684,7 +719,7 @@ plot_trait_vs_rate_maps_for_focal_time(
   par.reset = FALSE)
 
 # Plot both mapped phylogenies for time-step n°9 = 40 My
-plot_trait_vs_rate_maps_for_focal_time(
+plot_traits_vs_rates_on_phylogeny_for_focal_time(
   deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40,
   focal_time = 40, 
   ftype = "off", lwd = 1.2,

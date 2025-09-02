@@ -218,10 +218,11 @@ library(deepSTRAPP)
 # # 4.1/ Plot evolution of STRAPP tests p-values through time
 # # 4.2/ Plot histogram of STRAPP test stats
 # # 4.3/ Plot evolution of rates though time in relation to trait values
-# # 4.4/ Plot updated contMap mapping trait evolution for a given 'focal_time'
-# # 4.5/ Plot updated diversification rates and regimes for a given 'focal_time'
-# # 4.6/ Combine 4 and 5 to plot both mapped phylogenies with trait evolution (A)
-# #      and diversification rates and regimes (B).
+# # 4.4/ Plot rates vs. trait values across branches for a given 'focal_time'
+# # 4.5/ Plot updated densityMaps mapping trait evolution for a given 'focal_time'
+# # 4.6/ Plot updated diversification rates and regimes for a given 'focal_time'
+# # 4.7/ Combine 4.5 and 4.6 to plot both mapped phylogenies with trait evolution (4.5)
+# #      and diversification rates and regimes (4.6).
 # 
 # # Each plot is achieve through a dedicated function
 # 
@@ -344,8 +345,42 @@ ggplot_RTT <- ggplot_RTT_list$rates_TT_ggplot +
 # Print plot
 print(ggplot_RTT)
 
+## ----plot_rates_vs_traits_cont------------------------------------------------
+# ### 4.4/ Plot rates vs. ranges across branches for a given focal time ####
+# 
+# # ?deepSTRAPP::plot_rates_vs_trait_data_for_focal_time()
+# # ?deepSTRAPP::plot_rates_vs_trait_data_over_time()
+# 
+# # This plot help to visualize differences in rates vs. ranges across all branches
+# # found at specific time-steps (i.e., 'focal_time').
+# 
+# # Generate ggplot for time = 15 My
+# plot_rates_vs_trait_data_for_focal_time(
+#    deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_old_calib_0_40,
+#    focal_time = 15,
+#    color_scale = color_scale)
+# 
+# # Here we focus on T = 15 My to highlight the correlation detected in the previous steps.
+# # You can see that ants in the highest trait values (in red) exhibits the lowest rates, at this time-step.
+# # This plot, alongside other results of deepSTRAPP, supports the Diversification Rate Hypothesis in showing
+# # how ant lineages with low trait values (e.g., small size) may have accumulated faster
+# # than ant lineages with high trait value (e.g., large size), especially between 5 to 25 My.
+# 
+# # Plot rates vs. ranges for all time-steps
+# plot_rates_vs_trait_data_over_time(
+#    deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_old_calib_0_40,
+#    colors_per_levels = colors_per_ranges)
+# 
+
+## ----plot_rates_vs_traits_cont_eval, fig.height = 7, fig.width = 8.5, out.width = "100%", eval = TRUE, echo = FALSE----
+# Generate ggplot for time = 15 My
+plot_rates_vs_trait_data_for_focal_time(
+   deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_old_calib_0_40,
+   focal_time = 15,
+   colors_per_levels = colors_per_ranges)
+
 ## ----plot_updated_contMap_cont, eval = TRUE, echo = TRUE----------------------
-### 4.4/ Plot updated contMap mapping trait evolution for a given 'focal_time' ####
+### 4.5/ Plot updated contMap mapping trait evolution for a given 'focal_time' ####
 
 # ?deepSTRAPP::plot_contMap()
 
@@ -376,7 +411,7 @@ plot_contMap(contMap_20My$contMap,
              fsize = c(0.2, 1)) # Reduce tip label size
 
 ## ----plot_BAMM_rates_cont-----------------------------------------------------
-# ### 4.5/ Plot updated diversification rates and regimes for a given 'focal_time' ####
+# ### 4.6/ Plot updated diversification rates and regimes for a given 'focal_time' ####
 # 
 # # ?deepSTRAPP::plot_BAMM_rates()
 # 
@@ -424,9 +459,9 @@ title(main = "BAMM rates for 100-20 My")
 par(mfrow = c(1, 1))
 
 ## ----plot_traits_vs_rate_maps_cont--------------------------------------------
-# ### 4.6/ Plot both trait evolution and diversification rates and regimes updated for a given 'focal_time' ####
+# ### 4.7/ Plot both trait evolution and diversification rates and regimes updated for a given 'focal_time' ####
 # 
-# # ?deepSTRAPP::plot_trait_vs_rate_maps_for_focal_time()
+# # ?deepSTRAPP::plot_traits_vs_rates_on_phylogeny_for_focal_time()
 # 
 # ## These plots help to visualize simultaneously the evolution of trait and diversification rates
 # ## across the phylogeny, and to focus on tip values at specific time-steps.
@@ -437,7 +472,7 @@ par(mfrow = c(1, 1))
 # ## The next plot shows the evolution of trait values and rates across the whole phylogeny (100-0 My).
 # 
 # # Plot diversification rates on initial phylogeny (t = 0)
-# plot_trait_vs_rate_maps_for_focal_time(
+# plot_traits_vs_rates_on_phylogeny_for_focal_time(
 #   deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_old_calib_0_40,
 #   focal_time = 0,
 #   ftype = "off", lwd = 0.7,
@@ -448,7 +483,7 @@ par(mfrow = c(1, 1))
 # ## The next plot shows the evolution of trait values and rates from root to 20 Mya (100-20 My).
 # 
 # # Plot diversification rates on updated phylogeny for time-step n°5 = 20 My
-# plot_trait_vs_rate_maps_for_focal_time(
+# plot_traits_vs_rates_on_phylogeny_for_focal_time(
 #   deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_old_calib_0_40,
 #   focal_time = 20,
 #   ftype = "off", lwd = 1.2,
@@ -459,7 +494,7 @@ par(mfrow = c(1, 1))
 
 ## ----plot_traits_vs_rate_maps_cont_eval, fig.height = 7, eval = TRUE, echo = FALSE----
 # Plot diversification rates on initial phylogeny (t = 0)
-plot_trait_vs_rate_maps_for_focal_time(
+plot_traits_vs_rates_on_phylogeny_for_focal_time(
   deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_old_calib_0_40,
   focal_time = 0,
   ftype = "off", lwd = 0.7,
@@ -468,7 +503,7 @@ plot_trait_vs_rate_maps_for_focal_time(
   par.reset = FALSE)
 
 # Plot diversification rates on updated phylogeny for time-step n°5 = 20 My
-plot_trait_vs_rate_maps_for_focal_time(
+plot_traits_vs_rates_on_phylogeny_for_focal_time(
   deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_old_calib_0_40,
   focal_time = 20, 
   ftype = "off", lwd = 1.2,

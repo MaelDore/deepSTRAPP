@@ -11,3 +11,4 @@ test_Bonnie_script.R
 inst/doc
 # /doc/ # To include, so I can link to rendered vignettes from the GitHub README
 /Meta/
+/doc/

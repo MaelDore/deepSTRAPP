@@ -25,7 +25,7 @@ library(deepSTRAPP)
 # # Transform feeding mode data into biogeographic data with ranges A, B, and AB.
 # # This is NOT actual biogeographic data, but data fake generated for the sake of example!
 # eel_range_tip_data <- stats::setNames(eel.data$feed_mode, rownames(eel.data))
-# eel_range_tip_data <- as.character(eel_data)
+# eel_range_tip_data <- as.character(eel_range_tip_data)
 # eel_range_tip_data[eel_range_tip_data == "bite"] <- "A"
 # eel_range_tip_data[eel_range_tip_data == "suction"] <- "B"
 # eel_range_tip_data[c(5, 6, 7, 15, 25, 32, 33, 34, 50, 52, 57, 58, 59)] <- "AB"

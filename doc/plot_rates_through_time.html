@@ -500,7 +500,7 @@ multinominal data</strong> (Example 2).</p>
 <span id="cb2-44"><a href="#cb2-44" tabindex="-1"></a><span class="do">## Subset to plot only &quot;arboreal&quot; and &quot;terricolous&quot; states</span></span>
 <span id="cb2-45"><a href="#cb2-45" tabindex="-1"></a>plot_RTT_categorical <span class="ot">&lt;-</span> <span class="fu">plot_rates_through_time</span>(</span>
 <span id="cb2-46"><a href="#cb2-46" tabindex="-1"></a>   <span class="at">deepSTRAPP_outputs =</span> Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40,</span>
-<span id="cb2-47"><a href="#cb2-47" tabindex="-1"></a>   <span class="at">select_trait_states =</span> <span class="fu">c</span>(<span class="st">&quot;arboreal&quot;</span>, <span class="st">&quot;terricolous&quot;</span>), <span class="co"># List the states to plot</span></span>
+<span id="cb2-47"><a href="#cb2-47" tabindex="-1"></a>   <span class="at">select_trait_levels =</span> <span class="fu">c</span>(<span class="st">&quot;arboreal&quot;</span>, <span class="st">&quot;terricolous&quot;</span>), <span class="co"># List the states to plot</span></span>
 <span id="cb2-48"><a href="#cb2-48" tabindex="-1"></a>   <span class="at">colors_per_levels =</span> colors_per_states[<span class="fu">c</span>(<span class="st">&quot;arboreal&quot;</span>, <span class="st">&quot;terricolous&quot;</span>)], <span class="co"># Subset colors</span></span>
 <span id="cb2-49"><a href="#cb2-49" tabindex="-1"></a>   <span class="at">plot_CI =</span> <span class="cn">TRUE</span>, </span>
 <span id="cb2-50"><a href="#cb2-50" tabindex="-1"></a>   <span class="at">CI_type =</span> <span class="st">&quot;quantiles_rect&quot;</span>)</span></code></pre></div>

@@ -235,7 +235,7 @@ cowplot::plot_grid(plotlist = list(plot_RTT_continuous_1, plot_RTT_continuous_2,
 # ## Subset to plot only "arboreal" and "terricolous" states
 # plot_RTT_categorical <- plot_rates_through_time(
 #    deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40,
-#    select_trait_states = c("arboreal", "terricolous"), # List the states to plot
+#    select_trait_levels = c("arboreal", "terricolous"), # List the states to plot
 #    colors_per_levels = colors_per_states[c("arboreal", "terricolous")], # Subset colors
 #    plot_CI = TRUE,
 #    CI_type = "quantiles_rect")
@@ -280,7 +280,7 @@ plot_RTT_categorical_3 <- plot_RTT_categorical_3$rates_TT_ggplot +
 ## Subset to plot only "arboreal" and "terricolous" states
 plot_RTT_categorical_4 <- plot_rates_through_time(
    deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40,
-   select_trait_states = c("arboreal", "terricolous"), # List the states to plot
+   select_trait_levels = c("arboreal", "terricolous"), # List the states to plot
    colors_per_levels = colors_per_states[c("arboreal", "terricolous")], # Subset colors
    plot_CI = TRUE, 
    CI_type = "quantiles_rect",
