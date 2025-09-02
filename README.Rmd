@@ -85,12 +85,34 @@ From GitHub for the current development version
 You can install the development version of deepSTRAPP like so:
 
 ``` r
+library(devtools)
 remotes::install_github(repo = "MaelDore/deepSTRAPP",
                         # Time-consuming, but needed if you want to have access to the vignettes/tutorials
                         build_vignettes = TRUE) 
 ```
 
 You may need additional tools for package compilation such as Rtools (Windows) and Xcode (Mac OS). See [this page](https://support.posit.co/hc/en-us/articles/200486498-Package-Development-Prerequisites) for details.
+
+## Dependencies
+
+deepSTRAPP relies on other software and R packages to perform some of its core tasks. R package dependencies will automatically be downloaded and installed alongside deepSTRAPP. However, R packages that are not currently available on CRAN, and external software may need to be installed independently.
+
+* The R package **BioGeoBEARS** is used to infer ancestral ranges on time-calibrated phylogenies. It is needed by deepSTRAPP to perform the tests based on biogeographic ranges. You can install the latest version of BioGeoBEARS from its [author's repository on GitHub](https://github.com/nmatzke/BioGeoBEARS) like so:
+
+``` r
+library(devtools)
+devtools::install_github(repo="nmatzke/BioGeoBEARS")
+
+```
+For more information, please refer to the [official BioGeoBEARS Wiki](http://phylo.wikidot.com/biogeobears).
+
+Reference: Matzke, Nicholas J. (2018). BioGeoBEARS: BioGeography with Bayesian (and likelihood) Evolutionary Analysis with R Scripts. version 1.1.1, published on GitHub on November 6, 2018. DOI: http://dx.doi.org/10.5281/zenodo.1478250
+
+
+* The C++ software **BAMM** is used to model diversification dynamics on time-calibrated phylogenies. It is needed by deepSTRAPP to obtain estimates of diversification rates along branches. You can install the latest version of BioGeoBEARS from its [official website](http://bamm-project.org/). 
+You will later need to provide to deepSTRAPP the path to your BAMM installation folder as an argument to the dedicated function [prepare_diversification_data()], so it can call BAMM within R to perform its tasks.
+
+Reference: Rabosky, DL. Automatic detection of key innovations, rate shifts, and diversity-dependence on phylogenetic trees. PLoS One 9, e89543 (2014). DOI: https://doi.org/10.1371/journal.pone.0089543
 
 
 ## Quick-to-run example
