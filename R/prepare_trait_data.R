@@ -168,6 +168,11 @@
 #'
 #' @seealso [geiger::fitContinuous()] [geiger::fitDiscrete()] [phytools::contMap()] [phytools::densityMap()]
 #'
+#' For a guided tutorial, see the associated vignettes:
+#' * For continuous trait data: \code{vignette("model_continuous_trait_evolution", package = "deepSTRAPP")}
+#' * For categorical trait data: \code{vignette("model_categorical_trait_evolution", package = "deepSTRAPP")}
+#' * For biogeographic range data: \code{vignette("model_biogeographic_range_evolution", package = "deepSTRAPP")}
+#'
 #' @references For macroevolutionary models in geiger: Pennell, M. W., Eastman, J. M., Slater, G. J., Brown, J. W., Uyeda, J. C., FitzJohn, R. G., ... & Harmon, L. J. (2014).
 #'  geiger v2. 0: an expanded suite of methods for fitting macroevolutionary models to phylogenetic trees. Bioinformatics, 30(15), 2216-2218..
 #'  \url{https://doi.org/10.1093/bioinformatics/btu181}.

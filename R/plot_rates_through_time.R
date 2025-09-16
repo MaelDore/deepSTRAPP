@@ -78,6 +78,8 @@
 #'
 #' @seealso [deepSTRAPP::run_deepSTRAPP_over_time()]
 #'
+#' For a guided tutorial, see this vignette: \code{vignette("plot_rates_through_time", package = "deepSTRAPP")}
+#'
 #' @examples
 #'
 #' # ------ Example 1: Plot rates through time for continuous data ------ #

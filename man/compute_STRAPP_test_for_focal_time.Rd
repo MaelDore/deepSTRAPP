@@ -304,6 +304,8 @@ Associated functions in deepSTRAPP: \code{\link[=extract_most_likely_trait_value
 Original function in BAMMtools: \code{\link[BAMMtools:traitDependentBAMM]{BAMMtools::traitDependentBAMM()}}
 
 Statistical tests: \code{\link[stats:cor.test]{stats::cor.test()}} \code{\link[stats:wilcox.test]{stats::wilcox.test()}} \code{\link[stats:kruskal.test]{stats::kruskal.test()}} \code{\link[dunn.test:dunn.test]{dunn.test::dunn.test()}}
+
+For a guided tutorial, see this vignette: \code{vignette("explore_STRAPP_test_types", package = "deepSTRAPP")}
 }
 \author{
 Maël Doré

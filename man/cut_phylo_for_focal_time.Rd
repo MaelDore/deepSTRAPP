@@ -83,7 +83,9 @@ plot(cut_eel.tree)
 
 }
 \seealso{
-\code{\link[=cut_contMap_for_focal_time]{cut_contMap_for_focal_time()}}
+\code{\link[=cut_contMap_for_focal_time]{cut_contMap_for_focal_time()}} \code{\link[=cut_densityMaps_for_focal_time]{cut_densityMaps_for_focal_time()}}
+
+For a guided tutorial, see this vignette: \code{vignette("cut_phylogenies", package = "deepSTRAPP")}
 }
 \author{
 Maël Doré

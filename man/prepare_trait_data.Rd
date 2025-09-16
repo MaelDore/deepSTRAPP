@@ -387,6 +387,13 @@ version 1.1.1, published on GitHub on November 6, 2018. DOI: \url{http://dx.doi.
 }
 \seealso{
 \code{\link[geiger:fitContinuous]{geiger::fitContinuous()}} \code{\link[geiger:fitDiscrete]{geiger::fitDiscrete()}} \code{\link[phytools:contMap]{phytools::contMap()}} \code{\link[phytools:densityMap]{phytools::densityMap()}}
+
+For a guided tutorial, see the associated vignettes:
+\itemize{
+\item For continuous trait data: \code{vignette("model_continuous_trait_evolution", package = "deepSTRAPP")}
+\item For categorical trait data: \code{vignette("model_categorical_trait_evolution", package = "deepSTRAPP")}
+\item For biogeographic range data: \code{vignette("model_biogeographic_range_evolution", package = "deepSTRAPP")}
+}
 }
 \author{
 Maël Doré

@@ -177,6 +177,11 @@
 #' [deepSTRAPP::extract_most_likely_trait_values_for_focal_time()] [deepSTRAPP::update_rates_and_regimes_for_focal_time()]
 #' [deepSTRAPP::extract_diversification_data_melted_df_for_focal_time()] [deepSTRAPP::compute_STRAPP_test_for_focal_time()]
 #'
+#' For a guided tutorial on complete deepSTRAPP workflow, see the associated vignettes:
+#' * For continuous trait data: \code{vignette("deepSTRAPP_continuous_data", package = "deepSTRAPP")}
+#' * For categorical trait data: \code{vignette("deepSTRAPP_categorical_3lvl_data", package = "deepSTRAPP")}
+#' * For biogeographic range data: \code{vignette("deepSTRAPP_biogeographic_data", package = "deepSTRAPP")}
+#'
 #' @examples
 #' # ----- Example 1: Continuous trait ----- #
 #' ## Load data

@@ -158,6 +158,8 @@
 #'
 #'   Statistical tests: [stats::cor.test()] [stats::wilcox.test()] [stats::kruskal.test()] [dunn.test::dunn.test()]
 #'
+#'   For a guided tutorial, see this vignette: \code{vignette("explore_STRAPP_test_types", package = "deepSTRAPP")}
+#'
 #' @references For STRAPP: Rabosky, D. L., & Huang, H. (2016). A robust semi-parametric test for detecting trait-dependent diversification.
 #'   Systematic biology, 65(2), 181-193. \url{https://doi.org/10.1093/sysbio/syv066}.
 #'

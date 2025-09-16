@@ -649,6 +649,13 @@ plot_histograms_STRAPP_tests_over_time(
 To run the deepSTRAPP workflow for a single \code{focal_time}: \code{\link[=run_deepSTRAPP_for_focal_time]{run_deepSTRAPP_for_focal_time()}}
 \code{\link[=extract_most_likely_trait_values_for_focal_time]{extract_most_likely_trait_values_for_focal_time()}} \code{\link[=update_rates_and_regimes_for_focal_time]{update_rates_and_regimes_for_focal_time()}}
 \code{\link[=extract_diversification_data_melted_df_for_focal_time]{extract_diversification_data_melted_df_for_focal_time()}} \code{\link[=compute_STRAPP_test_for_focal_time]{compute_STRAPP_test_for_focal_time()}}
+
+For a guided tutorial on complete deepSTRAPP workflow, see the associated vignettes:
+\itemize{
+\item For continuous trait data: \code{vignette("deepSTRAPP_continuous_data", package = "deepSTRAPP")}
+\item For categorical trait data: \code{vignette("deepSTRAPP_categorical_3lvl_data", package = "deepSTRAPP")}
+\item For biogeographic range data: \code{vignette("deepSTRAPP_biogeographic_data", package = "deepSTRAPP")}
+}
 }
 \author{
 Maël Doré

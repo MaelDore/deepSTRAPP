@@ -45,6 +45,8 @@
 #' @seealso [deepSTRAPP::cut_phylo_for_focal_time()] [deepSTRAPP::extract_most_likely_trait_values_for_focal_time()]
 #'  [deepSTRAPP::extract_most_likely_trait_values_from_contMap_for_focal_time()]
 #'
+#' For a guided tutorial, see this vignette: \code{vignette("cut_phylogenies", package = "deepSTRAPP")}
+#'
 #' @examples
 #' # ----- Prepare data ----- #
 #'

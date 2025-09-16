@@ -185,6 +185,8 @@
 #'
 #' @seealso [deepSTRAPP::run_deepSTRAPP_for_focal_time()] [deepSTRAPP::run_deepSTRAPP_over_time()] [deepSTRAPP::update_rates_and_regimes_for_focal_time()] [deepSTRAPP::prepare_trait_data()] [deepSTRAPP::plot_BAMM_rates()]
 #'
+#' For a guided tutorial, see this vignette: \code{vignette("model_diversification_dynamics", package = "deepSTRAPP")}
+#'
 #' @references For BAMM: Rabosky, D. L. (2014). Automatic detection of key innovations, rate shifts, and diversity-dependence on phylogenetic trees.
 #'  PloS one, 9(2), e89543. DOI: \url{https://doi.org/10.1371/journal.pone.0089543}. Website: \url{http://bamm-project.org/}.
 #'

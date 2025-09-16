@@ -199,6 +199,8 @@ print(plotTT_biogeographic$rates_TT_ggplot)
 }
 \seealso{
 \code{\link[=run_deepSTRAPP_over_time]{run_deepSTRAPP_over_time()}}
+
+For a guided tutorial, see this vignette: \code{vignette("plot_rates_through_time", package = "deepSTRAPP")}
 }
 \author{
 Maël Doré

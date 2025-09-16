@@ -300,6 +300,8 @@ DOI: \url{https://doi.org/10.1111/2041-210X.12199}
 }
 \seealso{
 \code{\link[=run_deepSTRAPP_for_focal_time]{run_deepSTRAPP_for_focal_time()}} \code{\link[=run_deepSTRAPP_over_time]{run_deepSTRAPP_over_time()}} \code{\link[=update_rates_and_regimes_for_focal_time]{update_rates_and_regimes_for_focal_time()}} \code{\link[=prepare_trait_data]{prepare_trait_data()}} \code{\link[=plot_BAMM_rates]{plot_BAMM_rates()}}
+
+For a guided tutorial, see this vignette: \code{vignette("model_diversification_dynamics", package = "deepSTRAPP")}
 }
 \author{
 Maël Doré
