@@ -7,11 +7,15 @@ navbar:
    articles:
     text: Articles / Vignettes
     menu:
+    - text: "Main tutorial"
+    - text: Quick-to-run example
+      href: articles/main_tutorial.html
+    - text: -------
     - text: "Full deepSTRAPP workflows"
     - text: For continuous trait data
       href: articles/deepSTRAPP_continuous_data.html
     - text: For categorical trait data (3-levels)
-      href: articles/deepSTRAPP_categorical_3lvl_data.html
+      href: articles/deepSTRAPP_categorical_data.html
     - text: For biogeographic range data
       href: articles/deepSTRAPP_biogeographic_data.html
     - text: -------
@@ -38,4 +42,104 @@ navbar:
     - text: "Cut phylogenies"
     - text: Cut different types of (mapped) phylogenies for a given focal-time
       href: articles/cut_phylogenies.html
+
+reference:
+- title: Prepare data for deepSTRAPP
+  desc: >
+    Prepare trait and diversification data to use as inputs for a deepSTRAPP test.
+  contents:
+  - prepare_trait_data
+  - prepare_diversification_data
+
+- title: Run deepSTRAPP worflow
+  contents:
+  - run_deepSTRAPP_for_focal_time
+  - run_deepSTRAPP_over_time
+  - compute_STRAPP_test_for_focal_time
+
+- title: Extract data from mapped phylogenies
+  contents:
+  - extract_most_likely_trait_values_for_focal_time
+  - extract_most_likely_trait_values_from_contMap_for_focal_time
+  - extract_most_likely_states_from_densityMaps_for_focal_time
+  - extract_most_likely_ranges_from_densityMaps_for_focal_time
+
+- title: Extract data from BAMM objects
+  contents:
+  - extract_diversification_data_melted_df_for_focal_time
+  - update_rates_and_regimes_for_focal_time
+
+- title: Cut phylogenies
+  desc: >
+    Cut different types of mapped phylogenies to a given focal-time.
+  contents:
+  - cut_phylo_for_focal_time
+  - cut_contMap_for_focal_time
+  - cut_densityMap_for_focal_time
+  - cut_densityMaps_for_focal_time
+
+- title: Plot mapped phylogenies
+  contents:
+  - plot_contMap
+  - plot_densityMaps_overlay
+  - plot_BAMM_rates
+  - plot_traits_vs_rates_on_phylogeny_for_focal_time
+  - plot_traits_vs_rates_on_phylogeny_over_time
+
+- title: Plot deepSTRAPP outputs
+  contents:
+  - plot_STRAPP_pvalues_over_time
+  - plot_histogram_STRAPP_test_for_focal_time
+  - plot_histograms_STRAPP_tests_over_time
+  - plot_rates_through_time
+  - plot_rates_vs_trait_data_for_focal_time
+  - plot_rates_vs_trait_data_over_time
+
+- title: Miscellaneous functions
+  desc: >
+    Additional utility functions used mostly internally.
+  contents:
+  - BSM_to_phytools_simmap
+  - BSMs_to_phytools_simmaps
+  - select_best_trait_model_from_geiger
+  - select_best_model_from_BioGeoBEARS
+
+- title: Datasets
+  desc: >
+    Datasets used to run examples and display expected results.
+
+- subtitle: Phylogenies
+  contents:
+  - Ponerinae_tree
+  - Ponerinae_tree_old_calib
+
+- subtitle: Trait datasets
+  contents:
+  - mammals
+  - Ponerinae_trait_tip_data
+  - Ponerinae_binary_range_table
+
+- subtitle: Trait evolution data
+  contents:
+  - Ponerinae_trait_cont_tip_data_10My
+  - eel_cat_3lvl_data
+  - Ponerinae_cat_2lvl_data_old_calib
+  - Ponerinae_cat_3lvl_data_old_calib
+  - eel_biogeo_data
+  - Ponerinae_biogeo_data_old_calib
+
+- subtitle: BAMM data
+  contents:
+  - BAMM_template_diversification
+  - whale_BAMM_object
+  - Ponerinae_BAMM_object
+  - Ponerinae_BAMM_object_old_calib
+  - Ponerinae_BAMM_object_10My
+
+- subtitle: deepSTRAPP data
+  contents:
+  - Ponerinae_deepSTRAPP_cont_old_calib_0_40
+  - Ponerinae_deepSTRAPP_cat_2lvl_old_calib_0_40
+  - Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40
+  - Ponerinae_deepSTRAPP_biogeo_old_calib_0_40
 
