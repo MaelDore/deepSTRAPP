@@ -80,9 +80,9 @@ examples of outputs)**
 
 > deepSTRAPP application: Doré, M., Borowiec, M. L., Branstetter, M. G.,
 > Camacho, G. P., Fisher, B. L., Longino, J. T., Ward, P. S., Blaimer,
-> B. B., (2025), Evolutionary history of ponerine ants highlights how
-> the timing of dispersal events shapes modern biodiversity, Nature
-> Communications. <https://doi.org/10.1038/s41467-025-63709-3>
+> B. B. (2025). Evolutionary history of ponerine ants highlights how the
+> timing of dispersal events shapes modern biodiversity, Nature
+> Communications, 16, 8297. <https://doi.org/10.1038/s41467-025-63709-3>
 
 ## How to Cite deepSTRAPP
 
@@ -686,7 +686,6 @@ More tutorials are available to explore more **advanced usages** of
 deepSTRAPP. They provide explanations on available arguments and
 interpretations of results of deepSTRAPP across multiple type of data.
 They are listed below, and in this vignette: `vignette("deepSTRAPP")`.
-[Link](https://github.com/MaelDore/deepSTRAPP/blob/master/doc/deepSTRAPP.html)
 
 ``` r
 # You can also use this to open access to all vignettes in an HTML Brower
@@ -697,37 +696,29 @@ utils::browseVignettes(package = "deepSTRAPP")
 
 - Full deepSTRAPP workflow for **continuous** trait data:
   `vignette("deepSTRAPP_continuous_data")`.
-  [Link](https://github.com/MaelDore/deepSTRAPP/blob/master/doc/deepSTRAPP_continuous_data.html)
 - Full deepSTRAPP workflow for **categorical** trait data with 3-levels:
   `vignette("deepSTRAPP_categorical_3lvl_data")`.
-  [Link](https://github.com/MaelDore/deepSTRAPP/blob/master/doc/deepSTRAPP_categorical_3lvl_data.html)
 - Full deepSTRAPP workflow for **biogeographic** range data:
   `vignette("deepSTRAPP_biogeographic_data")`.
-  [Link](https://github.com/MaelDore/deepSTRAPP/blob/master/doc/deepSTRAPP_biogeographic_data.html)
 
 **Explore options for trait evolution**
 
 - Model evolution of **continuous** trait data on time-calibrated
   phylogeny: `vignette("model_continuous_trait_evolution")`.
-  [Link](https://github.com/MaelDore/deepSTRAPP/blob/master/doc/model_continuous_trait_evolution.html)
 - Model evolution of **categorical** trait data on time-calibrated
   phylogeny: `vignette("model_categorical_trait_evolution")`.
-  [Link](https://github.com/MaelDore/deepSTRAPP/blob/master/doc/model_categorical_trait_evolution.html)
 - Model evolution of **biogeographic** range data on time-calibrated
   phylogeny: `vignette("model_biogeographic_range_evolution")`.
-  [Link](https://github.com/MaelDore/deepSTRAPP/blob/master/doc/model_biogeographic_range_evolution.html)
 
 **Explore options for BAMM**
 
 - Model **diversification dynamics** with BAMM within deepSTRAPP:
   `vignette("model_diversification_dynamics")`.
-  [Link](https://github.com/MaelDore/deepSTRAPP/blob/master/doc/model_diversification_dynamics.html)
 
 **Explore the STRAPP test options**
 
 Type of STRAPP tests: **two-tailed** vs. **one-tailed**:
 `vignette("explore_STRAPP_test_types")`.
-[Link](https://github.com/MaelDore/deepSTRAPP/blob/master/doc/explore_STRAPP_test_types.html)
 
 - Continuous: “negative” or “positive” correlation.
 - Binary with hypothesis: (A \> B) vs. (B \> A).
@@ -737,11 +728,9 @@ Type of STRAPP tests: **two-tailed** vs. **one-tailed**:
 
 Explore options for plotting diversification **rates through time** in
 relation to trait data: `vignette("plot_rates_through_time")`.
-[Link](https://github.com/MaelDore/deepSTRAPP/blob/master/doc/plot_rates_through_time.html)
 
 **Cut phylogenies**
 
 Cut different types of **(mapped) phylogenies** for a given focal-time:
 phylogeny, contMap, densityMap, BAMM_object:
 `vignette("cut_phylogenies")`.
-[Link](https://github.com/MaelDore/deepSTRAPP/blob/master/doc/cut_phylogenies.html)
