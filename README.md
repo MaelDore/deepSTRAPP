@@ -1,9 +1,9 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# deepSTRAPP
+# deepSTRAPP <img src="man/figures/logo.png" align="right" height="140" />
 
-### Add the Hex logo
+### Update the Hex logo + Add link to the pckdown Website
 
 <!-- badges: start -->
 <!-- 
