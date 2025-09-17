@@ -1,8 +1,8 @@
 ---
-title: "deepSTRAPP"
+title: "deepSTRAPP: All tutorials"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{deepSTRAPP}
+  %\VignetteIndexEntry{deepSTRAPP: All tutorials}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -13,6 +13,15 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 ```
+
+## Main tutorial
+
+### Quick-to-run example
+
+A **simple use-case** that shows how deepSTRAPP can be used to **test for differences in diversification rates between two trait states along evolutionary times** is available here: `vignette("main_tutorial")`.
+
+This tutorial presents the main functions in a typical **deepSTRAPP workflow**. 
+For more advanced used, please refer to the vignettes/tutorials below.
 
 ## Advanced uses / tutorials
 

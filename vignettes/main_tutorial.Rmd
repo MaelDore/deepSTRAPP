@@ -1,8 +1,8 @@
 ---
-title: "main_tutorial"
+title: "Main tutorial"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{main_tutorial}
+  %\VignetteIndexEntry{Main tutorial}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

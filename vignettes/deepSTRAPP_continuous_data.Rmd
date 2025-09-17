@@ -1,8 +1,8 @@
 ---
-title: "deepSTRAPP_continuous_data"
+title: "deepSTRAPP: Continuous trait data"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{deepSTRAPP_continuous_data}
+  %\VignetteIndexEntry{deepSTRAPP: Continuous trait data}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -25,7 +25,7 @@ This is a simple example that shows how deepSTRAPP can be used to test for __cor
 It presents the main functions in a typical __deepSTRAPP workflow__.
 
 <br>
-For an example with __binary data__ (2 levels), please see the example in the main tutorial in the __README__ file.
+For an example with __binary data__ (2 levels), please see the example in the __Main tutorial__: `vignette("main_tutorial")`.
 
 For an example with __biogeographic data__, see this vignette: `vignette("deepSTRAPP_biogeographic_data")`.
 

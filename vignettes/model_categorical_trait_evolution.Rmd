@@ -1,8 +1,8 @@
 ---
-title: "model_categorical_trait_evolution"
+title: "Model categorical trait evolution"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{model_categorical_trait_evolution}
+  %\VignetteIndexEntry{Model categorical trait evolution}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

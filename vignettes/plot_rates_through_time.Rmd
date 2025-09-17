@@ -1,8 +1,8 @@
 ---
-title: "plot_rates_through_time"
+title: "Plot rates through time"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{plot_rates_through_time}
+  %\VignetteIndexEntry{Plot rates through time}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
