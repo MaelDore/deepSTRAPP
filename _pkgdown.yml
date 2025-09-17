@@ -1,9 +1,20 @@
 url: ~
+
 template:
   light-switch: true
   bootstrap: 5
+
 navbar:
  components:
+
+   intro:
+    text: Tutorials
+    href: articles/deepSTRAPP.html
+
+   reference:
+    text: References / Functions
+    href: reference/index.html
+
    articles:
     text: Articles / Vignettes
     menu:
