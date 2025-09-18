@@ -1,0 +1,20 @@
+pandoc: 3.1.11
+pkgdown: 2.1.3
+pkgdown_sha: ~
+articles:
+  cut_phylogenies: cut_phylogenies.html
+  deepSTRAPP_biogeographic_data: deepSTRAPP_biogeographic_data.html
+  deepSTRAPP_categorical_data: deepSTRAPP_categorical_data.html
+  deepSTRAPP_continuous_data: deepSTRAPP_continuous_data.html
+  deepSTRAPP: deepSTRAPP.html
+  explore_STRAPP_test_types: explore_STRAPP_test_types.html
+  main_tutorial: main_tutorial.html
+  model_biogeographic_range_evolution: model_biogeographic_range_evolution.html
+  model_categorical_trait_evolution: model_categorical_trait_evolution.html
+  model_continuous_data_trait_evolution: model_continuous_data_trait_evolution.html
+  model_diversification_dynamics: model_diversification_dynamics.html
+  plot_rates_through_time: plot_rates_through_time.html
+last_built: 2025-09-18T13:09Z
+urls:
+  reference: https://maeldore.github.io/deepSTRAPP/reference
+  article: https://maeldore.github.io/deepSTRAPP/articles
