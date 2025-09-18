@@ -2,6 +2,8 @@ url: https://maeldore.github.io/deepSTRAPP/
 template:
   light-switch: yes
   bootstrap: 5
+  assets:
+    - pkgdown/extra.css
 navbar:
   components:
     intro:

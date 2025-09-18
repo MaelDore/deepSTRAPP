@@ -1,0 +1,5 @@
+/* Make code font smaller in the R chunks of articles */
+.sourceCode, pre, code {
+  font-size: 0.8rem;   /* adjust until it matches vignette style */
+  line-height: 1.4;
+}
