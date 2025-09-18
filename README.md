@@ -3,7 +3,7 @@
 
 # deepSTRAPP <img src="man/figures/logo.png" align="right" height="140" />
 
-### Update the Hex logo + Add link to the pckdown Website
+### Update the Hex logo
 
 <!-- badges: start -->
 <!-- 
@@ -87,7 +87,7 @@ examples of outputs)**
 ## How to Cite deepSTRAPP
 
 > Doré, M., & Blaimer, B. B., deepSTRAPP: Testing for differences in
-> diversification rates over deep evolutionary time. (provide DOI link)
+> diversification rates over deep evolutionary time. (DOI TBA)
 
 **May include a chunk of R script with a bibtex citation**
 
@@ -153,6 +153,12 @@ Bayesian (and likelihood) Evolutionary Analysis with R Scripts. version
 Reference: Rabosky, DL. Automatic detection of key innovations, rate
 shifts, and diversity-dependence on phylogenetic trees. PLoS One 9,
 e89543 (2014). DOI: <https://doi.org/10.1371/journal.pone.0089543>
+
+## Website
+
+A company website is available to browse interactively the different
+tutorials and functions of **deepSTRAPP** at this URL:
+<https://maeldore.github.io/deepSTRAPP/>
 
 ## Quick-to-run example
 

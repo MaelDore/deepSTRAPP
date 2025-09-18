@@ -23,7 +23,7 @@ library(deepSTRAPP)
 
 # deepSTRAPP <img src="man/figures/logo.png" align="right" height="140" />
 
-### Update the Hex logo + Add link to the pckdown Website
+### Update the Hex logo
 
 <!-- badges: start -->
 
@@ -69,7 +69,7 @@ https://doi.org/10.1038/s41467-025-63709-3
   
 ## How to Cite deepSTRAPP
 
-> Doré, M., & Blaimer, B. B., deepSTRAPP: Testing for differences in diversification rates over deep evolutionary time. (provide DOI link)
+> Doré, M., & Blaimer, B. B., deepSTRAPP: Testing for differences in diversification rates over deep evolutionary time. (DOI TBA)
 
 **May include a chunk of R script with a bibtex citation**
 
@@ -113,6 +113,10 @@ Reference: Matzke, Nicholas J. (2018). BioGeoBEARS: BioGeography with Bayesian (
 You will later need to provide to deepSTRAPP the path to your BAMM installation folder as an argument to the dedicated function [prepare_diversification_data()], so it can call BAMM within R to perform its tasks.
 
 Reference: Rabosky, DL. Automatic detection of key innovations, rate shifts, and diversity-dependence on phylogenetic trees. PLoS One 9, e89543 (2014). DOI: https://doi.org/10.1371/journal.pone.0089543
+
+## Website
+
+A companion website is available to browse interactively the different tutorials and functions of __deepSTRAPP__ at this URL: https://maeldore.github.io/deepSTRAPP/
 
 
 ## Quick-to-run example
