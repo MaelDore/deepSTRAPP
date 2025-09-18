@@ -201,7 +201,7 @@ plot(Ponerinae_biogeo_data_old_calib$densityMaps_all_ranges[[3]])
 ## Plot densityMaps for all ranges together
 
 # densityMaps with all unique areas overlaid
-plot_densityMaps_overlay(Ponerinae_densityMaps)
+plot_densityMaps_overlay(Ponerinae_biogeo_data_old_calib$densityMaps)
 # densityMaps with all ranges (including multi-area ranges) overlaid
 plot_densityMaps_overlay(Ponerinae_biogeo_data_old_calib$densityMaps_all_ranges)
 

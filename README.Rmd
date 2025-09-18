@@ -23,8 +23,6 @@ library(deepSTRAPP)
 
 # deepSTRAPP <img src="man/figures/logo.png" align="right" height="140" />
 
-### Update the Hex logo
-
 <!-- badges: start -->
 
 <!-- 
@@ -55,8 +53,8 @@ A full deepSTRAPP workflow runs as follows:
  + Step 3.3: Repeat steps 3.1 & 3.2 for many timesteps along evolution time
 * Step 4: Summarize tests results
 
-**(Insert simplified workflow diagram that shows how the main functions interact with each other in a workflow to achieve a typical goal + examples of outputs)**
-
+![Simplified deepSTRAPP workflow](man/figures/deepSTRAPP_workflow.png)
+__Figure 1: Simplified deepSTRAPP workflow showing the main functions (_in italic_) involved in each step from 1 to 5__. Input data in grey. Data processing in blue (main) and beige (internal). Intermediate objects in green. Final outputs in pink.
 
 **References:**
 

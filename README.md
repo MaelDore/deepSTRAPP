@@ -3,8 +3,6 @@
 
 # deepSTRAPP <img src="man/figures/logo.png" align="right" height="140" />
 
-### Update the Hex logo
-
 <!-- badges: start -->
 <!-- 
 usethis::use_cran_badge() reports the current version of your package on CRAN.
@@ -67,9 +65,11 @@ A full deepSTRAPP workflow runs as follows:
   time
 - Step 4: Summarize tests results
 
-**(Insert simplified workflow diagram that shows how the main functions
-interact with each other in a workflow to achieve a typical goal +
-examples of outputs)**
+![Simplified deepSTRAPP workflow](man/figures/deepSTRAPP_workflow.png)
+**Figure 1: Simplified deepSTRAPP workflow showing the main functions
+(*in italic*) involved in each step from 1 to 5**. Input data in grey.
+Data processing in blue (main) and beige (internal). Intermediate
+objects in green. Final outputs in pink.
 
 **References:**
 
@@ -156,7 +156,7 @@ e89543 (2014). DOI: <https://doi.org/10.1371/journal.pone.0089543>
 
 ## Website
 
-A company website is available to browse interactively the different
+A companion website is available to browse interactively the different
 tutorials and functions of **deepSTRAPP** at this URL:
 <https://maeldore.github.io/deepSTRAPP/>
 
