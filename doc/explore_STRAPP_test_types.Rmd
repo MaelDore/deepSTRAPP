@@ -1,8 +1,8 @@
 ---
-title: "explore_STRAPP_test_types"
+title: "Explore STRAPP test options"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{explore_STRAPP_test_types}
+  %\VignetteIndexEntry{Explore STRAPP test options}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

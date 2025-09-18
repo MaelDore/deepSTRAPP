@@ -1,8 +1,8 @@
 ---
-title: "cut_phylogenies"
+title: "Cut phylogenies"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{cut_phylogenies}
+  %\VignetteIndexEntry{Cut phylogenies}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
