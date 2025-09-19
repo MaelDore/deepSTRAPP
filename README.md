@@ -67,7 +67,7 @@ A full deepSTRAPP workflow runs as follows:
 
 ![Simplified deepSTRAPP workflow](man/figures/deepSTRAPP_workflow.png)
 **Figure 1: Simplified deepSTRAPP workflow showing the main functions
-(*in italic*) involved in each step from 1 to 5**. Input data in grey.
+*(in italics)* involved in each step from 1 to 5**. Input data in grey.
 Data processing in blue (main) and beige (internal). Intermediate
 objects in green. Final outputs in pink.
 
