@@ -61,7 +61,7 @@ __Figure 1: Simplified deepSTRAPP workflow showing the main functions _(in itali
 > STRAPP test: Rabosky, D. L., & Huang, H. (2016). A robust semi-parametric test for detecting trait-dependent diversification. Systematic biology, 65(2), 181-193. https://doi.org/10.1093/sysbio/syv066.
 
 > deepSTRAPP application: Doré, M., Borowiec, M. L., Branstetter, M. G., Camacho, G. P., Fisher, B. L., Longino, J. T., Ward, P. S., Blaimer, B. B. (2025).
-Evolutionary history of ponerine ants highlights how the timing of dispersal events shapes modern biodiversity, Nature Communications, 16, 8297.
+Evolutionary history of ponerine ants highlights how the timing of dispersal events shapes modern biodiversity. Nature Communications, 16, 8297.
 https://doi.org/10.1038/s41467-025-63709-3
 
   

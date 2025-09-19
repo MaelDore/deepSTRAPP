@@ -8,9 +8,9 @@
 #'
 #' @description A `phylo` object describing the time-calibrated phylogeny of the 1534 extant ponerine ants (Ponerinae subfamily).
 #'
-#'  Source: Doré, M., Borowiec, M. L., Branstetter, M. G., Camacho, G. P., Fisher, B. L., Longino, J. T., Ward, P. S., Blaimer, B. B., (2025),
-#'  Evolutionary history of ponerine ants highlights how the timing of dispersal events shapes modern biodiversity, Nature Communications.
-#'  [https://doi_of_Paper_to_provide.html]
+#'  Source: Doré, M., Borowiec, M. L., Branstetter, M. G., Camacho, G. P., Fisher, B. L., Longino, J. T., Ward, P. S., Blaimer, B. B. (2025).
+#'  Evolutionary history of ponerine ants highlights how the timing of dispersal events shapes modern biodiversity. Nature Communications, 16, 8297.
+#'  [https://doi.org/10.1038/s41467-025-63709-3.html]
 #'
 #' @usage data(Ponerinae_tree)
 #' @format A `phylo` object with 4 elements.
@@ -25,8 +25,8 @@
 #' @keywords datasets
 #' @name Ponerinae_tree
 #'
-#' @references Doré, M., Borowiec, M. L., Branstetter, M. G., Camacho, G. P., Fisher, B. L., Longino, J. T., Ward, P. S., Blaimer, B. B., (2025),
-#'  Evolutionary history of ponerine ants highlights how the timing of dispersal events shapes modern biodiversity, Nature Communications.
+#' @references Doré, M., Borowiec, M. L., Branstetter, M. G., Camacho, G. P., Fisher, B. L., Longino, J. T., Ward, P. S., Blaimer, B. B. (2025).
+#'  Evolutionary history of ponerine ants highlights how the timing of dispersal events shapes modern biodiversity. Nature Communications, 16, 8297.
 #'  \url{https://doi.org/10.1038/s41467-025-63709-3}
 #'
 "Ponerinae_tree"
@@ -39,9 +39,9 @@
 #'  THIS IS NOT a properly time-calibrated phylogeny. It uses an ill-designed old calibration for illustrative purposes.
 #'  For a proper time-calibrated phylogeny of ponerine ants, see the `Ponerinae_tree` object in deepSTRAPP.
 #'
-#'  Source: Doré, M., Borowiec, M. L., Branstetter, M. G., Camacho, G. P., Fisher, B. L., Longino, J. T., Ward, P. S., Blaimer, B. B., (2025),
-#'  Evolutionary history of ponerine ants highlights how the timing of dispersal events shapes modern biodiversity, Nature Communications.
-#'  [https://doi_of_Paper_to_provide.html]
+#'  Source: Doré, M., Borowiec, M. L., Branstetter, M. G., Camacho, G. P., Fisher, B. L., Longino, J. T., Ward, P. S., Blaimer, B. B. (2025).
+#'  Evolutionary history of ponerine ants highlights how the timing of dispersal events shapes modern biodiversity. Nature Communications, 16, 8297.
+#'  [https://doi.org/10.1038/s41467-025-63709-3.html]
 #'
 #' @usage data(Ponerinae_tree_old_calib)
 #' @format A `phylo` object with 4 elements.
@@ -56,8 +56,8 @@
 #' @keywords datasets
 #' @name Ponerinae_tree_old_calib
 #'
-#' @references Doré, M., Borowiec, M. L., Branstetter, M. G., Camacho, G. P., Fisher, B. L., Longino, J. T., Ward, P. S., Blaimer, B. B., (2025),
-#'  Evolutionary history of ponerine ants highlights how the timing of dispersal events shapes modern biodiversity, Nature Communications.
+#' @references Doré, M., Borowiec, M. L., Branstetter, M. G., Camacho, G. P., Fisher, B. L., Longino, J. T., Ward, P. S., Blaimer, B. B. (2025).
+#'  Evolutionary history of ponerine ants highlights how the timing of dispersal events shapes modern biodiversity. Nature Communications, 16, 8297.
 #'  \url{https://doi.org/10.1038/s41467-025-63709-3}
 #'
 "Ponerinae_tree_old_calib"
@@ -120,9 +120,9 @@
 #'
 #' @description A data.frame of range location for the 1534 extant ponerine ant taxa (Ponerinae subfamily).
 #'
-#'  Source: Doré, M., Borowiec, M. L., Branstetter, M. G., Camacho, G. P., Fisher, B. L., Longino, J. T., Ward, P. S., Blaimer, B. B., (2025),
-#'  Evolutionary history of ponerine ants highlights how the timing of dispersal events shapes modern biodiversity, Nature Communications.
-#'  [https://doi_of_Paper_to_provide.html]
+#'  Source: Doré, M., Borowiec, M. L., Branstetter, M. G., Camacho, G. P., Fisher, B. L., Longino, J. T., Ward, P. S., Blaimer, B. B. (2025).
+#'  Evolutionary history of ponerine ants highlights how the timing of dispersal events shapes modern biodiversity. Nature Communications, 16, 8297.
+#'  [https://doi.org/10.1038/s41467-025-63709-3.html]
 #'
 #' @usage data(Ponerinae_binary_range_table)
 #' @format A data.frame with 1534 rows and 10 columns.
@@ -145,8 +145,8 @@
 #' @keywords datasets
 #' @name Ponerinae_binary_range_table
 #'
-#' @references Doré, M., Borowiec, M. L., Branstetter, M. G., Camacho, G. P., Fisher, B. L., Longino, J. T., Ward, P. S., Blaimer, B. B., (2025),
-#'  Evolutionary history of ponerine ants highlights how the timing of dispersal events shapes modern biodiversity, Nature Communications.
+#' @references Doré, M., Borowiec, M. L., Branstetter, M. G., Camacho, G. P., Fisher, B. L., Longino, J. T., Ward, P. S., Blaimer, B. B. (2025).
+#'  Evolutionary history of ponerine ants highlights how the timing of dispersal events shapes modern biodiversity. Nature Communications, 16, 8297.
 #'  \url{https://doi.org/10.1038/s41467-025-63709-3}
 #'
 "Ponerinae_binary_range_table"
@@ -342,9 +342,9 @@
 #'  This object was obtained with [deepSTRAPP::prepare_trait_data()].
 #'  The phylogeny used is also NOT a properly time-calibrated phylogeny. It uses an ill-designed old calibration for illustrative purposes.
 #'
-#'  Source: Doré, M., Borowiec, M. L., Branstetter, M. G., Camacho, G. P., Fisher, B. L., Longino, J. T., Ward, P. S., Blaimer, B. B., (2025),
-#'  Evolutionary history of ponerine ants highlights how the timing of dispersal events shapes modern biodiversity, Nature Communications.
-#'  [https://doi_of_Paper_to_provide.html]
+#'  Source: Doré, M., Borowiec, M. L., Branstetter, M. G., Camacho, G. P., Fisher, B. L., Longino, J. T., Ward, P. S., Blaimer, B. B. (2025).
+#'  Evolutionary history of ponerine ants highlights how the timing of dispersal events shapes modern biodiversity. Nature Communications, 16, 8297.
+#'  [https://doi.org/10.1038/s41467-025-63709-3.html]
 #'
 #' @usage data(Ponerinae_biogeo_data_old_calib)
 #' @format A list with 6 elements.
@@ -372,6 +372,10 @@
 #' @name Ponerinae_biogeo_data_old_calib
 #'
 #' @seealso [deepSTRAPP::prepare_trait_data()]
+#'
+#' @references Doré, M., Borowiec, M. L., Branstetter, M. G., Camacho, G. P., Fisher, B. L., Longino, J. T., Ward, P. S., Blaimer, B. B. (2025).
+#'  Evolutionary history of ponerine ants highlights how the timing of dispersal events shapes modern biodiversity. Nature Communications, 16, 8297.
+#'  \url{https://doi.org/10.1038/s41467-025-63709-3}
 #'
 "Ponerinae_biogeo_data_old_calib"
 
@@ -478,9 +482,9 @@
 #' @description An object of class `"bammdata"` containing information of diversification dynamics
 #'  of extant ponerine ants (Ponerinae subfamily) modeled with BAMM.
 #'
-#'  Source: Doré, M., Borowiec, M. L., Branstetter, M. G., Camacho, G. P., Fisher, B. L., Longino, J. T., Ward, P. S., Blaimer, B. B., (2025),
-#'  Evolutionary history of ponerine ants highlights how the timing of dispersal events shapes modern biodiversity, Nature Communications.
-#'  [https://doi_of_Paper_to_provide.html]
+#'  Source: Doré, M., Borowiec, M. L., Branstetter, M. G., Camacho, G. P., Fisher, B. L., Longino, J. T., Ward, P. S., Blaimer, B. B. (2025).
+#'  Evolutionary history of ponerine ants highlights how the timing of dispersal events shapes modern biodiversity. Nature Communications, 16, 8297.
+#'  [https://doi.org/10.1038/s41467-025-63709-3.html]
 #'
 #' @usage data(Ponerinae_BAMM_object)
 #' @format A list with 24 elements.
@@ -529,8 +533,8 @@
 #' @keywords datasets
 #' @name Ponerinae_BAMM_object
 #'
-#' @references Doré, M., Borowiec, M. L., Branstetter, M. G., Camacho, G. P., Fisher, B. L., Longino, J. T., Ward, P. S., Blaimer, B. B., (2025),
-#'  Evolutionary history of ponerine ants highlights how the timing of dispersal events shapes modern biodiversity, Nature Communications.
+#' @references Doré, M., Borowiec, M. L., Branstetter, M. G., Camacho, G. P., Fisher, B. L., Longino, J. T., Ward, P. S., Blaimer, B. B. (2025).
+#'  Evolutionary history of ponerine ants highlights how the timing of dispersal events shapes modern biodiversity. Nature Communications, 16, 8297.
 #'  \url{https://doi.org/10.1038/s41467-025-63709-3}
 #' @seealso BAMM software website: \url{http://bamm-project.org/}
 #'
@@ -545,9 +549,9 @@
 #'  of extant ponerine ants (Ponerinae subfamily) modeled with BAMM based on an old time-calibration for illustrative purposes.
 #'  For a BAMM based on the proper time-calibrated phylogeny of ponerine ants, see the `Ponerinae_BAMM_object` in deepSTRAPP.
 #'
-#'  Source: Doré, M., Borowiec, M. L., Branstetter, M. G., Camacho, G. P., Fisher, B. L., Longino, J. T., Ward, P. S., Blaimer, B. B., (2025),
-#'  Evolutionary history of ponerine ants highlights how the timing of dispersal events shapes modern biodiversity, Nature Communications.
-#'  [https://doi_of_Paper_to_provide.html]
+#'  Source: Doré, M., Borowiec, M. L., Branstetter, M. G., Camacho, G. P., Fisher, B. L., Longino, J. T., Ward, P. S., Blaimer, B. B. (2025).
+#'  Evolutionary history of ponerine ants highlights how the timing of dispersal events shapes modern biodiversity. Nature Communications, 16, 8297.
+#'  [https://doi.org/10.1038/s41467-025-63709-3.html]
 #'
 #' @usage data(Ponerinae_BAMM_object_old_calib)
 #' @format A list with 24 elements.
@@ -596,8 +600,8 @@
 #' @keywords datasets
 #' @name Ponerinae_BAMM_object_old_calib
 #'
-#' @references Doré, M., Borowiec, M. L., Branstetter, M. G., Camacho, G. P., Fisher, B. L., Longino, J. T., Ward, P. S., Blaimer, B. B., (2025),
-#'  Evolutionary history of ponerine ants highlights how the timing of dispersal events shapes modern biodiversity, Nature Communications.
+#' @references Doré, M., Borowiec, M. L., Branstetter, M. G., Camacho, G. P., Fisher, B. L., Longino, J. T., Ward, P. S., Blaimer, B. B. (2025).
+#'  Evolutionary history of ponerine ants highlights how the timing of dispersal events shapes modern biodiversity. Nature Communications, 16, 8297.
 #'  \url{https://doi.org/10.1038/s41467-025-63709-3}
 #' @seealso BAMM software website: \url{http://bamm-project.org/}
 #'
@@ -612,9 +616,9 @@
 #'  of extant ponerine ants (Ponerinae subfamily) modeled with BAMM and cut-off for a `focal_time` of 10 My.
 #'  This object was obtained with [deepSTRAPP::update_rates_and_regimes_for_focal_time()].
 #'
-#'  Source: Doré, M., Borowiec, M. L., Branstetter, M. G., Camacho, G. P., Fisher, B. L., Longino, J. T., Ward, P. S., Blaimer, B. B., (2025),
-#'  Evolutionary history of ponerine ants highlights how the timing of dispersal events shapes modern biodiversity, Nature Communications.
-#'  [https://doi_of_Paper_to_provide.html]
+#'  Source: Doré, M., Borowiec, M. L., Branstetter, M. G., Camacho, G. P., Fisher, B. L., Longino, J. T., Ward, P. S., Blaimer, B. B. (2025).
+#'  Evolutionary history of ponerine ants highlights how the timing of dispersal events shapes modern biodiversity. Nature Communications, 16, 8297.
+#'  [https://doi.org/10.1038/s41467-025-63709-3.html]
 #'
 #' @usage data(Ponerinae_BAMM_object_10My)
 #' @format A list with 32 elements.
@@ -679,8 +683,8 @@
 #' @keywords datasets
 #' @name Ponerinae_BAMM_object_10My
 #'
-#' @references Doré, M., Borowiec, M. L., Branstetter, M. G., Camacho, G. P., Fisher, B. L., Longino, J. T., Ward, P. S., Blaimer, B. B., (2025),
-#'  Evolutionary history of ponerine ants highlights how the timing of dispersal events shapes modern biodiversity, Nature Communications.
+#' @references Doré, M., Borowiec, M. L., Branstetter, M. G., Camacho, G. P., Fisher, B. L., Longino, J. T., Ward, P. S., Blaimer, B. B. (2025).
+#'  Evolutionary history of ponerine ants highlights how the timing of dispersal events shapes modern biodiversity. Nature Communications, 16, 8297.
 #'  \url{https://doi.org/10.1038/s41467-025-63709-3}
 #' @seealso [deepSTRAPP::update_rates_and_regimes_for_focal_time()]
 #'
