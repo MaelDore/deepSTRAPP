@@ -19,7 +19,7 @@
 #' @param plot_posthoc_tests Logical. For multinominal data only. Whether to plot the histograms for the overall Kruskal-Wallis test across all states (`plot_posthoc_tests = FALSE`),
 #'   or plot the histograms for all the pairwise post hoc Dunn's tests across pairs of states (`plot_posthoc_tests = TRUE`).
 #'   Time-steps at which the data does not yield more than two states/ranges will show a warning and generate no plot. Default is `FALSE`.
-#' @param PDF_file_path Character string. If provided, the plots will be saved in a unique PDF file following the path provided here. The path must end with '.pdf'.
+#' @param PDF_file_path Character string. If provided, the plots will be saved in a unique PDF file following the path provided here. The path must end with ".pdf".
 #'   Each page of the PDF corresponds to a focal time in `$time_steps`.
 #'
 #' @export

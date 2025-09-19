@@ -45,7 +45,7 @@
 #'   Equivalent to the `lwd` argument in [BAMMtools::addBAMMshifts()]. Default is `1`.
 #' @param ... Additional graphical arguments to pass down to [BAMMtools::plot.bammdata()], [BAMMtools::addBAMMshifts()], and [par()].
 #' @param display_plot Logical. Whether to display the plot generated in the R console. Default is `TRUE`.
-#' @param PDF_file_path Character string. If provided, the plot will be saved in a PDF file following the path provided here. The path must end with '.pdf'.
+#' @param PDF_file_path Character string. If provided, the plot will be saved in a PDF file following the path provided here. The path must end with ".pdf".
 #'
 #' @export
 #' @importFrom grDevices pdf dev.off gray
@@ -71,10 +71,11 @@
 #'  * `$colordens`: A matrix of the kernel density estimates (column 2) of evolutionary rates (column 1) and the color (column 3) corresponding to each rate value.
 #'
 #' @author Maël Doré
+#' @author Original functions by Mike Grundler & Pascal Title in R package [BAMMtools].
 #'
 #' @seealso Initial functions in BAMMtools: [BAMMtools::plot.bammdata()] [BAMMtools::addBAMMshifts()]
 #'
-#' Associated functions in deepSTRAPP: [deepSTRAPP::prepare_diversification_data()] [deepSTRAPP::update_rates_and_regimes_for_focal_time()] [deepSTRAPP::run_deepSTRAPP_for_focal_time] [deepSTRAPP::run_deepSTRAPP_over_time()]
+#' Associated functions in deepSTRAPP: [deepSTRAPP::prepare_diversification_data()] [deepSTRAPP::update_rates_and_regimes_for_focal_time()] [deepSTRAPP::run_deepSTRAPP_for_focal_time()] [deepSTRAPP::run_deepSTRAPP_over_time()]
 #'
 #' @examples
 #' # Load BAMM output

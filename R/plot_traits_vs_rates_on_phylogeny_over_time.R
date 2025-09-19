@@ -58,7 +58,7 @@
 #' @param ... Additional graphical arguments to pass down to [phytools::plot.contMap()], [phytools::plot.simmap()],
 #'   [deepSTRAPP::plot_densityMaps_overlay()], [BAMMtools::plot.bammdata()], [BAMMtools::addBAMMshifts()], and [par()].
 #' @param display_plot Logical. Whether to display the plot generated in the R console. Default is `TRUE`.
-#' @param PDF_file_path Character string. If provided, the plot will be saved in a PDF file following the path provided here. The path must end with '.pdf'.
+#' @param PDF_file_path Character string. If provided, the plot will be saved in a PDF file following the path provided here. The path must end with ".pdf".
 #'
 #' @export
 #' @importFrom qpdf pdf_combine
@@ -86,7 +86,7 @@
 #'   * `return_updated_BAMM_object` must be set to `TRUE` so that the `BAMM_objects` with phylogeny and mapped diversification rates
 #'     cut-off at the specified time-steps are returned among the outputs under `$updated_BAMM_objects_over_time`.
 #'
-#'  For plotting a single time-step (i.e., `$focal_time`) at once, see [deepSTRAPP::plot_traits_vs_rates_on_phylogeny_for_focal_time].
+#'  For plotting a single time-step (i.e., `$focal_time`) at once, see [deepSTRAPP::plot_traits_vs_rates_on_phylogeny_for_focal_time()].
 #'
 #' @return If `display_plot = TRUE`, the function displays the successive plots with two facets in the R console:
 #'  * (Left) A time-calibrated phylogeny displaying the evolution of trait/biogeographic data.
@@ -100,7 +100,7 @@
 #' @seealso [deepSTRAPP::plot_contMap()] [phytools::plot.densityMap()] [deepSTRAPP::plot_densityMaps_overlay()] [deepSTRAPP::plot_BAMM_rates()]
 #'
 #' Function in deepSTRAPP needed to produce the `deepSTRAPP_outputs` as input: [deepSTRAPP::run_deepSTRAPP_over_time()]
-#' Function in deepSTRAPP to a single time-step at once: [deepSTRAPP::plot_traits_vs_rates_on_phylogeny_for_focal_time]
+#' Function in deepSTRAPP to a single time-step at once: [deepSTRAPP::plot_traits_vs_rates_on_phylogeny_for_focal_time()]
 #'
 #' @examples
 #' # ----- Example 1: Continuous trait ----- #

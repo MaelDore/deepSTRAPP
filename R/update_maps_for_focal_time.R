@@ -1,4 +1,4 @@
-#' @title Cuts off the character mapping on a phylogeny for a given focal time in the past
+#' @title Cut off the character mapping on a phylogeny for a given focal time in the past
 #'
 #' @description Cuts off the mapping of a trait on a phylogeny over all branches
 #'   younger than a specific time in the past (i.e. the `focal_time`).

@@ -1,4 +1,4 @@
-#' @title Cuts the phylogeny for a given time in the past
+#' @title Cut the phylogeny for a given time in the past
 #'
 #' @description Cuts off all the branches of the phylogeny which are
 #'   younger than a specific time in the past (i.e. the `focal_time`).

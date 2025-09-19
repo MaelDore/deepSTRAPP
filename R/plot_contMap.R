@@ -15,7 +15,7 @@
 #'   showing the evolution of a continuous trait. From lowest values to highest values.
 #' @param ... Additional arguments to pass down to [phytools::plot.contMap()] to control plotting.
 #' @param display_plot Logical. Whether to display the plot generated in the R console. Default is `TRUE`.
-#' @param PDF_file_path Character string. If provided, the plot will be saved in a PDF file following the path provided here. The path must end with '.pdf'.
+#' @param PDF_file_path Character string. If provided, the plot will be saved in a PDF file following the path provided here. The path must end with ".pdf".
 #'
 #' @export
 #' @importFrom phytools setMap
@@ -31,7 +31,7 @@
 #' An object of class `"contMap"` with an (optionally) updated color scale (`$cols`) is returned invisibly.
 #'
 #' @author Maël Doré
-#' Original functions by Liam Revell in R package [phytools] \email{liam.revell@umb.edu}
+#' @author Original functions by Liam Revell in R package [phytools]. Contact: \email{liam.revell@umb.edu}
 #'
 #' @seealso [phytools::plot.contMap()] [deepSTRAPP::plot_densityMaps_overlay()]
 #'

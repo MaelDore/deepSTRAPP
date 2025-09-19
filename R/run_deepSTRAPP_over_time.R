@@ -1,5 +1,5 @@
 
-#' @title Runs deepSTRAPP to test for a relationship between diversification rates and trait data over multiple time steps
+#' @title Run deepSTRAPP to test for a relationship between diversification rates and trait data over multiple time steps
 #'
 #' @description Wrapper function to run deepSTRAPP workflows over multiple time steps in the past.
 #'   It starts from traits mapped on a phylogeny (trait data) and BAMM output (diversification data)

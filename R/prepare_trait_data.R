@@ -32,11 +32,11 @@
 #' @param Q_matrix Custom Q-matrix for categorical data representing transition classes between states.
 #'   Transitions with similar integers are estimated with a shared rate parameter.
 #'   Transitions with `0` represent rates that are fixed to zero (i.e., impossible transitions).
-#'   Diagonal must be populated with `NA`. row.names(Q_matrix) and col.names(Q_matrix) are the states.
-#'   Provide "matrix" among the model listed in 'evolutionary_models' to use the custom Q-matrix for modeling. Only for categorical data.
+#'   Diagonal must be populated with `NA`. `row.names(Q_matrix)` and `col.names(Q_matrix)` are the states.
+#'   Provide `"matrix"` among the model listed in 'evolutionary_models' to use the custom Q-matrix for modeling. Only for categorical data.
 #' @param BioGeoBEARS_directory_path Character string. The path to the directory used to store input/output files generated
 #'   for/by BioGeoBEARS during biogeographic historical inferences. Use '/' to separate directory and sub-directories. It must end with '/'.
-#'   Default is `./BioGeoBEARS_directory/`. Only for biogeographic data.
+#'   Default is `"./BioGeoBEARS_directory/"`. Only for biogeographic data.
 #' @param keep_BioGeoBEARS_files Logical. Whether the `BioGeoBEARS_directory` and its content should be kept after the run. Default = `TRUE`. Only for biogeographic data.
 #' @param prefix_for_files Character string. Prefix to add to all BioGeoBEARS files stored in the `BioGeoBEARS_directory_path` if `keep_BioGeoBEARS_files = TRUE`.
 #'   Files will be exported such as 'prefix_*' with an underscore separating the prefix and the file name.
@@ -60,7 +60,7 @@
 #'   If `FALSE`, plot a `densityMap` per state/range. Only for "categorical" and "biogeographic" data.
 #' @param add_ACE_pies Logical. Whether to add pies of posterior probabilities of states/ranges at internal nodes on the mapped phylogeny. Default = `TRUE`.
 #'   Only for categorical and biogeographic data.
-#' @param PDF_file_path Character string. If provided, the plot will be saved in a PDF file following the path provided here. The path must end with '.pdf'.
+#' @param PDF_file_path Character string. If provided, the plot will be saved in a PDF file following the path provided here. The path must end with ".pdf".
 #' @param return_ace Logical. Whether the named vector of ancestral characters estimates (ACE) at internal nodes should be returned in the output. Default = `TRUE`.
 #' @param return_BSM Logical. (Only for Biogeographic data) Whether the summary tables of anagenetic and cladogenetic events generated during the Biogeographic Stochastic Mapping (BSM)
 #'  process should be returned in the output. Default = `FALSE`.
@@ -3269,8 +3269,8 @@ densityMap_custom <- function (trees, res = 100, fsize = NULL, ftype = NULL, lwd
 #' `BioGeoBEARS::simulate_source_areas_ana_clado()` `BioGeoBEARS::get_dmat_times_from_res()`
 #' `BioGeoBEARS::count_ana_clado_events()` `BioGeoBEARS::hist_event_counts()`
 #'
-#' @author Nicholas J. Matzke \email{matzke@@berkeley.edu}
-#' Changes by Maël Doré (see details)
+#' @author Nicholas J. Matzke. Contact: \email{matzke@@berkeley.edu}
+#' @author Changes by Maël Doré (see Details)
 #'
 #' @references For BioGeoBEARS: Matzke, Nicholas J. (2018). BioGeoBEARS: BioGeography with Bayesian (and likelihood) Evolutionary Analysis with R Scripts.
 #'    version 1.1.1, published on GitHub on November 6, 2018. DOI: \url{http://dx.doi.org/10.5281/zenodo.1478250}. Website: \url{http://phylo.wikidot.com/biogeobears}.

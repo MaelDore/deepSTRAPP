@@ -4,7 +4,7 @@
 
 ### Master function to select the proper sub-function according to data type ####
 
-#' @title Extracts trait data mapped on a phylogeny at a given time in the past
+#' @title Extract trait data mapped on a phylogeny at a given time in the past
 #'
 #' @description Extracts the most likely trait values found along branches
 #'   at a specific time in the past (i.e. the `focal_time`).
@@ -347,7 +347,7 @@ extract_most_likely_trait_values_for_focal_time <- function (contMap = NULL,
 
 ### Sub-function for continuous trait data ####
 
-#' @title Extracts continuous trait data mapped on a phylogeny at a given time in the past
+#' @title Extract continuous trait data mapped on a phylogeny at a given time in the past
 #'
 #' @description Extracts the most likely trait values found along branches
 #'   at a specific time in the past (i.e. the `focal_time`).
@@ -856,7 +856,7 @@ extract_most_likely_trait_values_from_contMap_for_focal_time <- function (
 
 ### Sub-function for categorical trait data ####
 
-#' @title Extracts categorical trait data mapped on a phylogeny at a given time in the past
+#' @title Extract categorical trait data mapped on a phylogeny at a given time in the past
 #'
 #' @description Extracts the most likely states found along branches
 #'   at a specific time in the past (i.e. the `focal_time`).
@@ -1404,7 +1404,7 @@ extract_most_likely_states_from_densityMaps_for_focal_time <- function (
 
 ### Sub-function for biogeographic range data ####
 
-#' @title Extracts biogeographic range data mapped on a phylogeny at a given time in the past
+#' @title Extract biogeographic range data mapped on a phylogeny at a given time in the past
 #'
 #' @description Extracts the most likely ranges found along branches
 #'   at a specific time in the past (i.e. the `focal_time`).

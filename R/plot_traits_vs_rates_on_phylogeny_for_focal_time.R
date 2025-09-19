@@ -60,7 +60,7 @@
 #' @param ... Additional graphical arguments to pass down to [phytools::plot.contMap()], [phytools::plotSimmap()],
 #'   [deepSTRAPP::plot_densityMaps_overlay()], [BAMMtools::plot.bammdata()], [BAMMtools::addBAMMshifts()], and [par()].
 #' @param display_plot Logical. Whether to display the plot generated in the R console. Default is `TRUE`.
-#' @param PDF_file_path Character string. If provided, the plot will be saved in a PDF file following the path provided here. The path must end with '.pdf'.
+#' @param PDF_file_path Character string. If provided, the plot will be saved in a PDF file following the path provided here. The path must end with ".pdf".
 #'
 #' @export
 #' @importFrom graphics par

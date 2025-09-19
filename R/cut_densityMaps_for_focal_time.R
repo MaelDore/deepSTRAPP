@@ -6,7 +6,7 @@
 
 ## Function to cut a single densityMap object ####
 
-#' @title Cuts the phylogeny and posterior probability mapping of a categorical trait for a given focal time in the past
+#' @title Cut the phylogeny and posterior probability mapping of a categorical trait for a given focal time in the past
 #'
 #' @description Cuts off all the branches of the phylogeny which are
 #'   younger than a specific time in the past (i.e. the `focal_time`).
@@ -202,7 +202,7 @@ cut_densityMap_for_focal_time <- function(densityMap, focal_time, keep_tip_label
 
 ## Function to cut a list of densityMap objects ####
 
-#' @title Update densityMaps object for a given focal time
+#' @title Cut phylogenies and posterior probability mapping of each state for a given focal time in the past
 #'
 #' @description Cuts off all the branches of the phylogeny which are
 #'   younger than a specific time in the past (i.e. the `focal_time`).
@@ -255,7 +255,7 @@ cut_densityMap_for_focal_time <- function(densityMap, focal_time, keep_tip_label
 #'
 #' @author Maël Doré
 #'
-#' @seealso [deepSTRAPP::cut_phylo_for_focal_time()] [deepSTRAPP::cut_densityMap_for_focal_time]
+#' @seealso [deepSTRAPP::cut_phylo_for_focal_time()] [deepSTRAPP::cut_densityMap_for_focal_time()]
 #'  [deepSTRAPP::extract_most_likely_trait_values_for_focal_time()]
 #'  [deepSTRAPP::extract_most_likely_states_from_densityMaps_for_focal_time()]
 #'

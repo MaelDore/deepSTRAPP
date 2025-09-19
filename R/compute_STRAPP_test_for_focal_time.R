@@ -2,7 +2,7 @@
 # One master function to prepare data and select the proper test function according to data type
 # There sub-functions carrying out tests according to data type
 
-#' @title Computes STRAPP to test for a relationship between diversification rates and trait data
+#' @title Compute STRAPP to test for a relationship between diversification rates and trait data
 #'
 #' @description Carries out the appropriate statistical method to test for a relationship between
 #'   diversification rates and trait data for a given point in the past (i.e. the `focal_time`).

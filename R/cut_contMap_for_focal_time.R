@@ -1,4 +1,4 @@
-#' @title Cuts the phylogeny and continuous trait mapping for a given focal time in the past
+#' @title Cut the phylogeny and continuous trait mapping for a given focal time in the past
 #'
 #' @description Cuts off all the branches of the phylogeny which are
 #'   younger than a specific time in the past (i.e. the `focal_time`).

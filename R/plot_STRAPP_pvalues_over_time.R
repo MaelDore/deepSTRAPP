@@ -28,7 +28,7 @@
 #'   `deepSTRAPP_outputs$pvalues_summary_df_for_posthoc_pairwise_tests$pair`. Default is "all" to include all pairs.
 #' @param plot_adjusted_pvalues Logical. Whether to display the p-values adjusted for multiple testing rather than the raw p-values.
 #'   See argument 'p.adjust_method' in [deepSTRAPP::run_deepSTRAPP_for_focal_time()] or [deepSTRAPP::run_deepSTRAPP_over_time()]. Default is `FALSE`.
-#' @param PDF_file_path Character string. If provided, the plot will be saved in a PDF file following the path provided here. The path must end with '.pdf'.
+#' @param PDF_file_path Character string. If provided, the plot will be saved in a PDF file following the path provided here. The path must end with ".pdf".
 #'
 #' @export
 #' @importFrom ggplot2 ggplot geom_line aes geom_hline scale_y_continuous scale_x_continuous scale_color_discrete xlab ylab ggtitle theme element_line element_rect element_text unit margin

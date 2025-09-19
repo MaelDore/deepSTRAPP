@@ -1,4 +1,4 @@
-#' @title Extracts diversification data from a BAMM_object
+#' @title Extract diversification data from a BAMM_object
 #'
 #' @description Extracts regimes ID and tip rates from a `BAMM_object` that have been
 #'   updated to provide diversification data for a specific time in the past (i.e. the `focal_time`).

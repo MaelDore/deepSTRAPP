@@ -1,5 +1,5 @@
 
-#' @title Runs deepSTRAPP to test for a relationship between diversification rates and trait data at a given focal time
+#' @title Run deepSTRAPP to test for a relationship between diversification rates and trait data at a given focal time
 #'
 #' @description Wrapper function to run deepSTRAPP workflow for a given point in the past (i.e. the `focal_time`).
 #'   It starts from traits mapped on a phylogeny (trait data) and BAMM output (diversification data)

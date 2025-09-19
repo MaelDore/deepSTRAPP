@@ -1,4 +1,4 @@
-#' @title Updates diversification rates/regimes mapped on a phylogeny up to a given time in the past
+#' @title Update diversification rates/regimes mapped on a phylogeny up to a given time in the past
 #'
 #' @description Updates an object of class `"bammdata"` to obtain the diversification rates/regimes
 #'   found along branches at a specific time in the past (i.e. the `focal_time`).

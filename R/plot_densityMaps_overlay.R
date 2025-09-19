@@ -21,7 +21,7 @@
 #'   and estimated posterior probabilities of ancestral states.
 #' @param ... Additional arguments to pass down to [phytools::plotSimmap()] to control plotting.
 #' @param display_plot Logical. Whether to display the plot generated in the R console. Default is `TRUE`.
-#' @param PDF_file_path Character string. If provided, the plot will be saved in a PDF file following the path provided here. The path must end with '.pdf'.
+#' @param PDF_file_path Character string. If provided, the plot will be saved in a PDF file following the path provided here. The path must end with ".pdf".
 #'
 #' @export
 #' @importFrom graphics par
@@ -33,6 +33,7 @@
 #' If `PDF_file_path` is provided, the function exports the plot into a PDF file.
 #'
 #' @author Maël Doré
+#' @author Original functions by Liam Revell in R package [phytools]. Contact: \email{liam.revell@umb.edu}
 #'
 #' @seealso [phytools::plot.densityMap()] [phytools::plotSimmap()]
 #'
