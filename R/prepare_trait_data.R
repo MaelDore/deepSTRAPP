@@ -310,6 +310,7 @@
 #' eel_biogeo_data$model_selection_df # Summary of model selection
 #' # Parameter estimates and optimization summary of the best model
 #' # (Here, the best model is DEC+J)
+#' eel_biogeo_data$best_model_fit$optim_result
 #'
 #' # Posterior probabilities of each state (= ACE) at internal nodes
 #' eel_biogeo_data$ace # Only with unique areas
