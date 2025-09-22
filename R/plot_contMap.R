@@ -101,14 +101,16 @@ plot_contMap <- function (contMap,
   if (!is.null(color_scale))
   {
     # Update color palette in contMap
-    contMap <- phytools::setMap(x = contMap, colors = color_scale)
+    updated_contMap <- phytools::setMap(x = contMap, colors = color_scale)
     # print(contMap$cols)
+  } else {
+    updated_contMap <- contMap
   }
 
   ## Plot the contMap
-  updated_contMap <- phytools::plot.contMap(x = contMap,
-                                            plot = display_plot,
-                                            ...)
+  phytools::plot.contMap(x = contMap,
+                         plot = display_plot,
+                         ...)
 
   ## Export PDF if requested
   if (!is.null(PDF_file_path))
@@ -123,9 +125,9 @@ plot_contMap <- function (contMap,
                    width = width, height = height)
 
     ## Plot the contMap
-    updated_contMap <- phytools::plot.contMap(x = contMap,
-                                              plot = TRUE,
-                                              ...)
+    phytools::plot.contMap(x = contMap,
+                           plot = TRUE,
+                           ...)
     # Close PDF
     grDevices::dev.off()
   }
