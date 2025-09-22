@@ -108,9 +108,12 @@ plot_contMap <- function (contMap,
   }
 
   ## Plot the contMap
-  phytools::plot.contMap(x = contMap,
-                         plot = display_plot,
-                         ...)
+  if (display_plot)
+  {
+    phytools::plot.contMap(x = contMap,
+                           plot = display_plot,
+                           ...)
+  }
 
   ## Export PDF if requested
   if (!is.null(PDF_file_path))
