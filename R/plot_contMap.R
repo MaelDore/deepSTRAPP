@@ -110,7 +110,7 @@ plot_contMap <- function (contMap,
   ## Plot the contMap
   if (display_plot)
   {
-    phytools::plot.contMap(x = contMap,
+    phytools::plot.contMap(x = updated_contMap,
                            plot = display_plot,
                            ...)
   }
