@@ -90,6 +90,7 @@ green. Final outputs in pink.
 > B. B. (2025). Evolutionary history of ponerine ants highlights how the
 > timing of dispersal events shapes modern biodiversity. Nature
 > Communications, 16, 8297. <https://doi.org/10.1038/s41467-025-63709-3>
+> <br>
 
 ## :envelope_with_arrow: Installation
 
@@ -112,7 +113,7 @@ remotes::install_github(repo = "MaelDore/deepSTRAPP")
 You may need additional tools for package compilation such as Rtools
 (Windows) and Xcode (Mac OS). <br> See [this
 page](https://support.posit.co/hc/en-us/articles/200486498-Package-Development-Prerequisites)
-for details.
+for details. <br>
 
 ## :link: Dependencies
 
@@ -156,7 +157,7 @@ Wiki](http://phylo.wikidot.com/biogeobears).
 
 > Rabosky, DL. Automatic detection of key innovations, rate shifts, and
 > diversity-dependence on phylogenetic trees. PLoS One 9, e89543 (2014).
-> DOI: <https://doi.org/10.1371/journal.pone.0089543>
+> DOI: <https://doi.org/10.1371/journal.pone.0089543> <br>
 
 ## :desktop_computer: Website
 
@@ -165,7 +166,7 @@ tutorials and functions of **deepSTRAPP** at this URL:
 <https://maeldore.github.io/deepSTRAPP/>.
 
 An overview of all functions and datasets is available
-[here](https://maeldore.github.io/deepSTRAPP/reference/index.html).
+[here](https://maeldore.github.io/deepSTRAPP/reference/index.html). <br>
 
 ## :joystick: Quick-to-run example
 
@@ -177,7 +178,7 @@ and within R: `vignette("main_tutorial")`.
 
 This tutorial presents the main functions in a typical **deepSTRAPP
 workflow**. <br> For more advanced used, please refer to the
-vignettes/tutorials below.
+vignettes/tutorials below. <br>
 
 ## :scroll: Advanced uses / tutorials
 
@@ -271,7 +272,7 @@ utils::browseVignettes(package = "deepSTRAPP")
 Thank you for finding it! Head over to the [GitHub Issues
 tab](https://github.com/MaelDore/deepSTRAPP/issues) and let me know
 about it. <br> You can also [send me an
-e-mail](mailto:mael.dore@gmail.com).
+e-mail](mailto:mael.dore@gmail.com). <br>
 
 ## :black_nib: How to Cite deepSTRAPP
 

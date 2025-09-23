@@ -16,8 +16,8 @@ knitr::opts_chunk$set(
 
 ```{r load_dev_version, eval = TRUE, include = FALSE}
 
-devtools::load_all(".")
-library(deepSTRAPP)
+# devtools::load_all(".")
+# library(deepSTRAPP)
 
 ```
 
@@ -72,7 +72,7 @@ __Figure 1: Simplified deepSTRAPP workflow showing the main functions _(in itali
 > deepSTRAPP application: Doré, M., Borowiec, M. L., Branstetter, M. G., Camacho, G. P., Fisher, B. L., Longino, J. T., Ward, P. S., Blaimer, B. B. (2025).
 Evolutionary history of ponerine ants highlights how the timing of dispersal events shapes modern biodiversity. Nature Communications, 16, 8297.
 https://doi.org/10.1038/s41467-025-63709-3
-
+<br>  
   
 ## :envelope_with_arrow: Installation
 
@@ -96,7 +96,7 @@ remotes::install_github(repo = "MaelDore/deepSTRAPP")
 
 You may need additional tools for package compilation such as Rtools (Windows) and Xcode (Mac OS). <br>
 See [this page](https://support.posit.co/hc/en-us/articles/200486498-Package-Development-Prerequisites) for details.
-
+<br>
 
 ## :link: Dependencies
 
@@ -122,14 +122,14 @@ You will later need to provide to deepSTRAPP the path to your BAMM installation 
 __Reference:__
 
 >  Rabosky, DL. Automatic detection of key innovations, rate shifts, and diversity-dependence on phylogenetic trees. PLoS One 9, e89543 (2014). DOI: https://doi.org/10.1371/journal.pone.0089543
-
+<br>
 
 ## :desktop_computer: Website
 
 A companion website is available to browse interactively the different tutorials and functions of __deepSTRAPP__ at this URL: https://maeldore.github.io/deepSTRAPP/.
 
 An overview of all functions and datasets is available [here](https://maeldore.github.io/deepSTRAPP/reference/index.html).
-
+<br>
 
 ## :joystick: Quick-to-run example
 
@@ -137,7 +137,7 @@ A **simple use-case** that shows how deepSTRAPP can be used to **test for differ
 
 This tutorial presents the main functions in a typical **deepSTRAPP workflow**. <br>
 For more advanced used, please refer to the vignettes/tutorials below.
-
+<br>
 
 ## :scroll: Advanced uses / tutorials
 
@@ -202,12 +202,11 @@ vignette("deepSTRAPP")
 utils::browseVignettes(package = "deepSTRAPP")
 ```
 
-
 ## :bug: Find a bug?
 
 Thank you for finding it! Head over to the [GitHub Issues tab](https://github.com/MaelDore/deepSTRAPP/issues) and let me know about it. <br> 
 You can also [send me an e-mail](mailto:mael.dore@gmail.com).
-
+<br>
 
 ## :black_nib: How to Cite deepSTRAPP
 
