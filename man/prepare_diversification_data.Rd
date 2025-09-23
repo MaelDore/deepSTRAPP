@@ -229,7 +229,7 @@ This function relies on BAMM to provide a reliable solution to map diversificati
 and obtain the \code{BAMM_object} object needed to run the deepSTRAPP workflow (\link{run_deepSTRAPP_for_focal_time}, \link{run_deepSTRAPP_over_time}).
 However, it is one option among others for modeling diversification on phylogenies.
 You may wish to explore alternatives models such as LSBDS model in RevBayes (Höhna et al., 2016), the MTBD model (Barido-Sottani et al., 2020),
-or the ClaDS2 model (Maliet et al., 2019) for our own data.
+or the ClaDS2 model (Maliet et al., 2019) for your own data.
 However, you will need Bayesian models that infer regime shifts to be able to perform STRAPP tests (Rabosky & Huang, 2016).
 Additionally, you need to format the model output such as in \code{BAMM_object}, so it can be used in a deepSTRAPP workflow.
 
