@@ -30,26 +30,26 @@ by updating the $tree$maps and $tree$mapped.edge elements."><meta property="og:i
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles-vignettes"><li><h6 class="dropdown-header" data-toc-skip>Main tutorial</h6></li>
     <li><a class="dropdown-item" href="../articles/main_tutorial.html">Quick-to-run example</a></li>
     <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Full deepSTRAPP workflows</h6></li>
-    <li><a class="dropdown-item" href="../articles/deepSTRAPP_continuous_data.html">For continuous trait data</a></li>
-    <li><a class="dropdown-item" href="../articles/deepSTRAPP_categorical_data.html">For categorical trait data (3-levels)</a></li>
-    <li><a class="dropdown-item" href="../articles/deepSTRAPP_biogeographic_data.html">For biogeographic range data</a></li>
+    <li><h6 class="dropdown-header" data-toc-skip>1/ Full deepSTRAPP workflows</h6></li>
+    <li><a class="dropdown-item" href="../articles/deepSTRAPP_continuous_data.html">1.1/ For continuous trait data</a></li>
+    <li><a class="dropdown-item" href="../articles/deepSTRAPP_categorical_data.html">1.2/ For categorical trait data (3-levels)</a></li>
+    <li><a class="dropdown-item" href="../articles/deepSTRAPP_biogeographic_data.html">1.3/ For biogeographic range data</a></li>
     <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Explore options for trait evolution</h6></li>
-    <li><a class="dropdown-item" href="../articles/model_continuous_trait_evolution.html">For continuous trait data</a></li>
-    <li><a class="dropdown-item" href="../articles/model_categorical_trait_evolution.html">For categorical trait data</a></li>
-    <li><a class="dropdown-item" href="../articles/model_biogeographic_range_evolution.html">For biogeographic range data</a></li>
+    <li><h6 class="dropdown-header" data-toc-skip>2/ Explore options for trait evolution</h6></li>
+    <li><a class="dropdown-item" href="../articles/model_continuous_trait_evolution.html">2.1/ For continuous trait data</a></li>
+    <li><a class="dropdown-item" href="../articles/model_categorical_trait_evolution.html">2.2/ For categorical trait data</a></li>
+    <li><a class="dropdown-item" href="../articles/model_biogeographic_range_evolution.html">2.3/ For biogeographic range data</a></li>
     <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Explore options for BAMM</h6></li>
+    <li><h6 class="dropdown-header" data-toc-skip>3/ Explore options for BAMM</h6></li>
     <li><a class="dropdown-item" href="../articles/model_diversification_dynamics.html">Model diversification dynamics with BAMM within deepSTRAPP</a></li>
     <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Explore the STRAPP test options</h6></li>
+    <li><h6 class="dropdown-header" data-toc-skip>4/ Explore the STRAPP test options</h6></li>
     <li><a class="dropdown-item" href="../articles/explore_STRAPP_test_types.html">Test different hypotheses</a></li>
     <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Plot rates through time (RTT)</h6></li>
+    <li><h6 class="dropdown-header" data-toc-skip>5/ Plot rates through time (RTT)</h6></li>
     <li><a class="dropdown-item" href="../articles/plot_rates_through_time.html">Explore options for RTT plots</a></li>
     <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Cut phylogenies</h6></li>
+    <li><h6 class="dropdown-header" data-toc-skip>6/ Cut phylogenies</h6></li>
     <li><a class="dropdown-item" href="../articles/cut_phylogenies.html">Cut different types of (mapped) phylogenies for a given focal-time</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -173,7 +173,7 @@ the leaf left is labeled with the node ID of the MRCA of the cut-off clade.</p>
 <span class="r-in"><span>                                       evolutionary_models <span class="op">=</span> <span class="st">"ER"</span>,</span></span>
 <span class="r-in"><span>                                       nb_simulations <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-09-23 09:59:00.593042 - Fit 1 evolutionary model(s): ER.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-09-23 14:29:18.193651 - Fit 1 evolutionary model(s): ER.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ------ ER model ------ </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -202,11 +202,11 @@ the leaf left is labeled with the node ID of the MRCA of the cut-off clade.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 	'res' -- optimization iteration summary</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 	'opt' -- maximum likelihood parameter estimates</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-09-23 09:59:02.206668 - Compare model fits.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-09-23 14:29:19.20608 - Compare model fits.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    model     logL k     AICc Akaike_weights rank</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ER    ER -152.749 1 307.5172            100    1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-09-23 09:59:02.208208 - Run simulations for stochastic mapping.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-09-23 14:29:19.207742 - Run simulations for stochastic mapping.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> make.simmap is sampling character histories conditioned on</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> the transition matrix</span>
@@ -222,26 +222,26 @@ the leaf left is labeled with the node ID of the MRCA of the cut-off clade.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     large    medium     small </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 0.3333333 0.3333333 0.3333333 </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Done.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-09-23 09:59:17.788771 - Extract ACE as posterior sampling from stochastic mapping.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-09-23 09:59:18.277133 - Create densityMaps by summarizing simulations of evolutionary history (simmaps).</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-09-23 14:29:35.183045 - Extract ACE as posterior sampling from stochastic mapping.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-09-23 14:29:35.685324 - Create densityMaps by summarizing simulations of evolutionary history (simmaps).</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-09-23 09:59:19.641734 - Posterior probability computed for edge n°100/420</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-09-23 09:59:20.541591 - Posterior probability computed for edge n°200/420</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-09-23 09:59:21.650883 - Posterior probability computed for edge n°300/420</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-09-23 09:59:22.791751 - Posterior probability computed for edge n°400/420</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-09-23 09:59:23.131531 - Posterior probabilities computed for State = large - n°1/3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-09-23 09:59:24.500058 - Posterior probability computed for edge n°100/420</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-09-23 09:59:25.417078 - Posterior probability computed for edge n°200/420</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-09-23 09:59:26.57046 - Posterior probability computed for edge n°300/420</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-09-23 09:59:27.7957 - Posterior probability computed for edge n°400/420</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-09-23 09:59:28.161225 - Posterior probabilities computed for State = medium - n°2/3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-09-23 09:59:29.552952 - Posterior probability computed for edge n°100/420</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-09-23 09:59:30.462214 - Posterior probability computed for edge n°200/420</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-09-23 09:59:31.601724 - Posterior probability computed for edge n°300/420</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-09-23 09:59:32.803367 - Posterior probability computed for edge n°400/420</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-09-23 09:59:33.169702 - Posterior probabilities computed for State = small - n°3/3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-09-23 14:29:37.101448 - Posterior probability computed for edge n°100/420</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-09-23 14:29:38.028759 - Posterior probability computed for edge n°200/420</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-09-23 14:29:39.187452 - Posterior probability computed for edge n°300/420</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-09-23 14:29:40.362559 - Posterior probability computed for edge n°400/420</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-09-23 14:29:40.712564 - Posterior probabilities computed for State = large - n°1/3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-09-23 14:29:42.139262 - Posterior probability computed for edge n°100/420</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-09-23 14:29:43.083107 - Posterior probability computed for edge n°200/420</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-09-23 14:29:44.275082 - Posterior probability computed for edge n°300/420</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-09-23 14:29:45.520404 - Posterior probability computed for edge n°400/420</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-09-23 14:29:45.900782 - Posterior probabilities computed for State = medium - n°2/3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-09-23 14:29:47.348103 - Posterior probability computed for edge n°100/420</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-09-23 14:29:48.283165 - Posterior probability computed for edge n°200/420</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-09-23 14:29:49.455238 - Posterior probability computed for edge n°300/420</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-09-23 14:29:50.717165 - Posterior probability computed for edge n°400/420</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-09-23 14:29:51.093991 - Posterior probabilities computed for State = small - n°3/3</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-09-23 09:59:33.16995 - Plot a unique densityMap with for all states overlaid.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-09-23 14:29:51.094292 - Plot a unique densityMap with for all states overlaid.</span>
 <span class="r-plt img"><img src="cut_densityMap_for_focal_time-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Set focal time</span></span></span>

@@ -26,26 +26,26 @@ Identify the best model and extract its results."><meta property="og:image" cont
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles-vignettes"><li><h6 class="dropdown-header" data-toc-skip>Main tutorial</h6></li>
     <li><a class="dropdown-item" href="../articles/main_tutorial.html">Quick-to-run example</a></li>
     <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Full deepSTRAPP workflows</h6></li>
-    <li><a class="dropdown-item" href="../articles/deepSTRAPP_continuous_data.html">For continuous trait data</a></li>
-    <li><a class="dropdown-item" href="../articles/deepSTRAPP_categorical_data.html">For categorical trait data (3-levels)</a></li>
-    <li><a class="dropdown-item" href="../articles/deepSTRAPP_biogeographic_data.html">For biogeographic range data</a></li>
+    <li><h6 class="dropdown-header" data-toc-skip>1/ Full deepSTRAPP workflows</h6></li>
+    <li><a class="dropdown-item" href="../articles/deepSTRAPP_continuous_data.html">1.1/ For continuous trait data</a></li>
+    <li><a class="dropdown-item" href="../articles/deepSTRAPP_categorical_data.html">1.2/ For categorical trait data (3-levels)</a></li>
+    <li><a class="dropdown-item" href="../articles/deepSTRAPP_biogeographic_data.html">1.3/ For biogeographic range data</a></li>
     <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Explore options for trait evolution</h6></li>
-    <li><a class="dropdown-item" href="../articles/model_continuous_trait_evolution.html">For continuous trait data</a></li>
-    <li><a class="dropdown-item" href="../articles/model_categorical_trait_evolution.html">For categorical trait data</a></li>
-    <li><a class="dropdown-item" href="../articles/model_biogeographic_range_evolution.html">For biogeographic range data</a></li>
+    <li><h6 class="dropdown-header" data-toc-skip>2/ Explore options for trait evolution</h6></li>
+    <li><a class="dropdown-item" href="../articles/model_continuous_trait_evolution.html">2.1/ For continuous trait data</a></li>
+    <li><a class="dropdown-item" href="../articles/model_categorical_trait_evolution.html">2.2/ For categorical trait data</a></li>
+    <li><a class="dropdown-item" href="../articles/model_biogeographic_range_evolution.html">2.3/ For biogeographic range data</a></li>
     <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Explore options for BAMM</h6></li>
+    <li><h6 class="dropdown-header" data-toc-skip>3/ Explore options for BAMM</h6></li>
     <li><a class="dropdown-item" href="../articles/model_diversification_dynamics.html">Model diversification dynamics with BAMM within deepSTRAPP</a></li>
     <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Explore the STRAPP test options</h6></li>
+    <li><h6 class="dropdown-header" data-toc-skip>4/ Explore the STRAPP test options</h6></li>
     <li><a class="dropdown-item" href="../articles/explore_STRAPP_test_types.html">Test different hypotheses</a></li>
     <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Plot rates through time (RTT)</h6></li>
+    <li><h6 class="dropdown-header" data-toc-skip>5/ Plot rates through time (RTT)</h6></li>
     <li><a class="dropdown-item" href="../articles/plot_rates_through_time.html">Explore options for RTT plots</a></li>
     <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Cut phylogenies</h6></li>
+    <li><h6 class="dropdown-header" data-toc-skip>6/ Cut phylogenies</h6></li>
     <li><a class="dropdown-item" href="../articles/cut_phylogenies.html">Cut different types of (mapped) phylogenies for a given focal-time</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -124,9 +124,6 @@ the Akaike weights (<code>$Akaike_weights</code>), and their rank based on AICc 
 <span class="r-in"><span><span class="va">BM_fit</span> <span class="op">&lt;-</span> <span class="fu">geiger</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/geiger/man/fitContinuous.html" class="external-link">fitContinuous</a></span><span class="op">(</span>phy <span class="op">=</span> <span class="va">eel.tree</span>, dat <span class="op">=</span> <span class="va">eel_data</span>, model <span class="op">=</span> <span class="st">"BM"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># Fit EB model</span></span></span>
 <span class="r-in"><span><span class="va">EB_fit</span> <span class="op">&lt;-</span> <span class="fu">geiger</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/geiger/man/fitContinuous.html" class="external-link">fitContinuous</a></span><span class="op">(</span>phy <span class="op">=</span> <span class="va">eel.tree</span>, dat <span class="op">=</span> <span class="va">eel_data</span>, model <span class="op">=</span> <span class="st">"EB"</span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Parameter estimates appear at bounds:</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> 	a</span>
 <span class="r-in"><span><span class="co"># Fit OU model</span></span></span>
 <span class="r-in"><span><span class="va">OU_fit</span> <span class="op">&lt;-</span> <span class="fu">geiger</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/geiger/man/fitContinuous.html" class="external-link">fitContinuous</a></span><span class="op">(</span>phy <span class="op">=</span> <span class="va">eel.tree</span>, dat <span class="op">=</span> <span class="va">eel_data</span>, model <span class="op">=</span> <span class="st">"OU"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
@@ -154,7 +151,7 @@ the Akaike weights (<code>$Akaike_weights</code>), and their rank based on AICc 
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..- attr(*, "class")= chr [1:2] "bm" "function"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..- attr(*, "model")= chr "OU"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ bnd:'data.frame':	2 obs. of  2 variables:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ res: num [1:100, 1:4] 4.77e-81 7.12e-218 4.34e-02 4.34e-02 7.15e-189 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ res: num [1:100, 1:4] 7.12e-218 1.61e-98 3.96e-194 2.66e-89 3.15e-140 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..- attr(*, "dimnames")=List of 2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ opt:List of 8</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..- attr(*, "class")= chr [1:2] "gfit" "list"</span>
@@ -168,9 +165,9 @@ the Akaike weights (<code>$Akaike_weights</code>), and their rank based on AICc 
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">model_comparison_output</span><span class="op">$</span><span class="va">best_model_fit</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> GEIGER-fitted comparative model of continuous data</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  fitted ‘OU’ model parameters:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 	alpha = 0.043393</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 	sigsq = 278.039659</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 	z0 = 92.068484</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 	alpha = 0.043394</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 	sigsq = 278.049198</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 	z0 = 92.068651</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  model summary:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 	log-likelihood = -329.253814</span>
@@ -181,8 +178,8 @@ the Akaike weights (<code>$Akaike_weights</code>), and their rank based on AICc 
 <span class="r-out co"><span class="r-pr">#&gt;</span> Convergence diagnostics:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 	optimization iterations = 100</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 	failed iterations = 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 	number of iterations with same best fit = 5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 	frequency of best fit = 0.050</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 	number of iterations with same best fit = 12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 	frequency of best fit = 0.120</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  object summary:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 	'lik' -- likelihood function</span>

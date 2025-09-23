@@ -43,26 +43,26 @@
 <li><h6 class="dropdown-header" data-toc-skip>Main tutorial</h6></li>
     <li><a class="dropdown-item" href="../articles/main_tutorial.html">Quick-to-run example</a></li>
     <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Full deepSTRAPP workflows</h6></li>
-    <li><a class="dropdown-item" href="../articles/deepSTRAPP_continuous_data.html">For continuous trait data</a></li>
-    <li><a class="dropdown-item" href="../articles/deepSTRAPP_categorical_data.html">For categorical trait data (3-levels)</a></li>
-    <li><a class="dropdown-item" href="../articles/deepSTRAPP_biogeographic_data.html">For biogeographic range data</a></li>
+    <li><h6 class="dropdown-header" data-toc-skip>1/ Full deepSTRAPP workflows</h6></li>
+    <li><a class="dropdown-item" href="../articles/deepSTRAPP_continuous_data.html">1.1/ For continuous trait data</a></li>
+    <li><a class="dropdown-item" href="../articles/deepSTRAPP_categorical_data.html">1.2/ For categorical trait data (3-levels)</a></li>
+    <li><a class="dropdown-item" href="../articles/deepSTRAPP_biogeographic_data.html">1.3/ For biogeographic range data</a></li>
     <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Explore options for trait evolution</h6></li>
-    <li><a class="dropdown-item" href="../articles/model_continuous_trait_evolution.html">For continuous trait data</a></li>
-    <li><a class="dropdown-item" href="../articles/model_categorical_trait_evolution.html">For categorical trait data</a></li>
-    <li><a class="dropdown-item" href="../articles/model_biogeographic_range_evolution.html">For biogeographic range data</a></li>
+    <li><h6 class="dropdown-header" data-toc-skip>2/ Explore options for trait evolution</h6></li>
+    <li><a class="dropdown-item" href="../articles/model_continuous_trait_evolution.html">2.1/ For continuous trait data</a></li>
+    <li><a class="dropdown-item" href="../articles/model_categorical_trait_evolution.html">2.2/ For categorical trait data</a></li>
+    <li><a class="dropdown-item" href="../articles/model_biogeographic_range_evolution.html">2.3/ For biogeographic range data</a></li>
     <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Explore options for BAMM</h6></li>
+    <li><h6 class="dropdown-header" data-toc-skip>3/ Explore options for BAMM</h6></li>
     <li><a class="dropdown-item" href="../articles/model_diversification_dynamics.html">Model diversification dynamics with BAMM within deepSTRAPP</a></li>
     <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Explore the STRAPP test options</h6></li>
+    <li><h6 class="dropdown-header" data-toc-skip>4/ Explore the STRAPP test options</h6></li>
     <li><a class="dropdown-item" href="../articles/explore_STRAPP_test_types.html">Test different hypotheses</a></li>
     <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Plot rates through time (RTT)</h6></li>
+    <li><h6 class="dropdown-header" data-toc-skip>5/ Plot rates through time (RTT)</h6></li>
     <li><a class="dropdown-item" href="../articles/plot_rates_through_time.html">Explore options for RTT plots</a></li>
     <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Cut phylogenies</h6></li>
+    <li><h6 class="dropdown-header" data-toc-skip>6/ Cut phylogenies</h6></li>
     <li><a class="dropdown-item" href="../articles/cut_phylogenies.html">Cut different types of (mapped) phylogenies for a given focal-time</a></li>
   </ul>
 </li>
@@ -94,7 +94,9 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Model diversification dynamics</h1>
+                        <h4 data-toc-skip class="author">Maël Doré</h4>
             
+            <h4 data-toc-skip class="date">2025-09-23</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/MaelDore/deepSTRAPP/blob/master/vignettes/model_diversification_dynamics.Rmd" class="external-link"><code>vignettes/model_diversification_dynamics.Rmd</code></a></small>
       <div class="d-none name"><code>model_diversification_dynamics.Rmd</code></div>
@@ -105,10 +107,10 @@
 <p><br> This vignette presents the different options available to model
 <strong>diversification dynamics</strong> with <strong>BAMM</strong>
 within deepSTRAPP.</p>
-<p>BAMM (Bayesian Analysis of Macroevolutionary Mixtures) is a fully
-independent C++ software developed by Daniel L. Rabosky. You need to
-install BAMM first on your machine to be able to run this section of
-deepSTRAPP.</p>
+<p><strong>BAMM (Bayesian Analysis of Macroevolutionary
+Mixtures)</strong> is a fully independent C++ software developed by
+Daniel L. Rabosky. You need to install BAMM first on your machine to be
+able to run this section of deepSTRAPP.</p>
 <p>Source: Rabosky, D. L. (2014). Automatic detection of key
 innovations, rate shifts, and diversity-dependence on phylogenetic
 trees. PloS one, 9(2), e89543. <br></p>
@@ -360,13 +362,14 @@ model and visualize <strong>diversification dynamics</strong> on a
 <span><span class="co"># to run the deepSTRAPP workflow ([run_deepSTRAPP_for_focal_time], [run_deepSTRAPP_over_time]).</span></span>
 <span><span class="co"># However, it is one option among others for modeling diversification on phylogenies.</span></span>
 <span><span class="co"># You may wish to explore alternatives models such as LSBDS model in RevBayes (Höhna et al., 2016),</span></span>
-<span><span class="co"># the MTBD model (Barido-Sottani et al., 2020), or the ClaDS2 model (Maliet et al., 2019) for our own data.</span></span>
+<span><span class="co"># the MTBD model (Barido-Sottani et al., 2020), or the ClaDS2 model (Maliet et al., 2019) for your own data.</span></span>
 <span><span class="co"># However, you will need Bayesian models that infer regime shifts</span></span>
 <span><span class="co"># to be able to perform STRAPP tests (Rabosky &amp; Huang, 2016).</span></span>
 <span><span class="co"># Additionally, you need to format the model output such as in `BAMM_object`,</span></span>
 <span><span class="co"># so it can be used in a deepSTRAPP workflow.</span></span></code></pre></div>
 <p><img src="model_diversification_dynamics_files/figure-html/explore_diversity_dynamics_eval-1.png" width="672"><img src="model_diversification_dynamics_files/figure-html/explore_diversity_dynamics_eval-2.png" width="672"><img src="model_diversification_dynamics_files/figure-html/explore_diversity_dynamics_eval-3.png" width="672"><img src="model_diversification_dynamics_files/figure-html/explore_diversity_dynamics_eval-4.png" width="672"><img src="model_diversification_dynamics_files/figure-html/explore_diversity_dynamics_eval-5.png" width="672"></p>
-  </main>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    </nav></aside>
 </div>
 
 
