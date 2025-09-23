@@ -14,68 +14,63 @@ knitr::opts_chunk$set(
 )
 ```
 
-## Main tutorial
+## :joystick: Main tutorial
 
 ### Quick-to-run example
 
-A **simple use-case** that shows how deepSTRAPP can be used to **test for differences in diversification rates between two trait states along evolutionary times** is available here: `vignette("main_tutorial")`.
+A **simple use-case** that shows how deepSTRAPP can be used to **test for differences in diversification rates between two trait states along evolutionary times** is available [here](https://maeldore.github.io/deepSTRAPP/articles/main_tutorial.html) and within R: `vignette("main_tutorial")`.
 
-This tutorial presents the main functions in a typical **deepSTRAPP workflow**. 
+This tutorial presents the main functions in a typical **deepSTRAPP workflow**. <br>
 For more advanced used, please refer to the vignettes/tutorials below.
 
-## Advanced uses / tutorials
+
+## :scroll: Advanced uses / tutorials
 
 This vignette points to **tutorials** detailing how to use the [deepSTRAPP] package beyond the **simple use-case** presented in the README file and also available here: `vignette("main_tutorial")`.
 
-They present more **advanced usages** and provide explanations on available arguments and interpretations of results of deepSTRAPP.
+The following tutorials present more **advanced usages** of deepSTRAPP.
+They provide explanations on available arguments and interpretations of results of deepSTRAPP across multiple type of data. 
 
-### Full deepSTRAPP workflows on different types of data
+### **1/ Full deepSTRAPP workflows on different types of data**
 
-&nbsp;&nbsp;&nbsp;&nbsp;&#x25CF;&nbsp;&nbsp;Full deepSTRAPP workflow for **continuous** trait data: `vignette("deepSTRAPP_continuous_data")`.
+&nbsp;&nbsp;&nbsp;&nbsp;&#x25CF;&nbsp;&nbsp; [1.1/ Full deepSTRAPP workflow for __continuous__ trait data](https://maeldore.github.io/deepSTRAPP/articles/deepSTRAPP_continuous_data.html): `vignette("deepSTRAPP_continuous_data")`.
 
-&nbsp;&nbsp;&nbsp;&nbsp;&#x25CF;&nbsp;&nbsp;Full deepSTRAPP workflow for **categorical** trait data with 3 levels: `vignette("deepSTRAPP_categorical_3lvl_data")`.
+&nbsp;&nbsp;&nbsp;&nbsp;&#x25CF;&nbsp;&nbsp; [1.2/ Full deepSTRAPP workflow for __categorical__ trait data with 3-levels](https://maeldore.github.io/deepSTRAPP/articles/deepSTRAPP_categorical_3lvl_data.html): `vignette("deepSTRAPP_categorical_3lvl_data")`.
 
-&nbsp;&nbsp;&nbsp;&nbsp;&#x25CF;&nbsp;&nbsp;Full deepSTRAPP workflow for **biogeographic** range data: `vignette("deepSTRAPP_biogeographic_data")`.
+&nbsp;&nbsp;&nbsp;&nbsp;&#x25CF;&nbsp;&nbsp; [1.3/ Full deepSTRAPP workflow for __biogeographic__ range data](https://maeldore.github.io/deepSTRAPP/articles/deepSTRAPP_biogeographic_data.html): `vignette("deepSTRAPP_biogeographic_data")`.
 
+### **2/ Explore options for trait evolution**
+
+&nbsp;&nbsp;&nbsp;&nbsp;&#x25CF;&nbsp;&nbsp; [2.1/ Model evolution of __continuous__ trait data](https://maeldore.github.io/deepSTRAPP/articles/model_continuous_trait_evolution.html): `vignette("model_continuous_trait_evolution")`.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&#x25CF;&nbsp;&nbsp; [2.2/ Model evolution of __categorical__ trait data](https://maeldore.github.io/deepSTRAPP/articles/model_categorical_trait_evolution.html): `vignette("model_categorical_trait_evolution")`.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&#x25CF;&nbsp;&nbsp; [2.3/ Model evolution of __biogeographic__ range data](https://maeldore.github.io/deepSTRAPP/articles/model_biogeographic_range_evolution.html): `vignette("model_biogeographic_range_evolution")`.
+
+### **3/ Explore options for BAMM**
+
+&nbsp;&nbsp;&nbsp;&nbsp;&#x25CF;&nbsp;&nbsp; [Model __diversification dynamics__ with BAMM within deepSTRAPP](https://maeldore.github.io/deepSTRAPP/articles/model_diversification_dynamics.html): `vignette("model_diversification_dynamics")`.
+
+### **4/ Explore the STRAPP test options**
+
+&nbsp;&nbsp;&nbsp;&nbsp;&#x25CF;&nbsp;&nbsp; [Test difference hypotheses](https://maeldore.github.io/deepSTRAPP/articles/explore_STRAPP_test_types.html): `vignette("explore_STRAPP_test_types")`.
+
+  - Type of STRAPP tests: __two-tailed__ vs. __one-tailed__.
+  - Continuous: "negative" or "positive" correlation.
+  - Binary with hypothesis: (A > B) vs. (B > A).
+  - Multinominal: Hypotheses for all post hoc tests.
+
+### **5/ Plot rates through time (RTT)**
+
+&nbsp;&nbsp;&nbsp;&nbsp;&#x25CF;&nbsp;&nbsp; [Explore options for plotting diversification __rates through time__ in relation to trait data](https://maeldore.github.io/deepSTRAPP/articles/plot_rates_through_time.html): `vignette("plot_rates_through_time")`.
+
+### **6/ Cut phylogenies**
+
+&nbsp;&nbsp;&nbsp;&nbsp;&#x25CF;&nbsp;&nbsp; [Cut different types of __(mapped) phylogenies__ for a given focal-time](https://maeldore.github.io/deepSTRAPP/articles/cut_phylogenies.html): `vignette("cut_phylogenies")`.
+
+  - time-calibrated phylogenies.
+  - contMap for continuous traits.
+  - densityMap for categorical and biogeogrpahic traits.
+  - BAMM_object for diversification dynamics.
 <br>
-For a full deepSTRAPP workflow on categorical trait data with **2 levels**, please refer to the Main tutorial: `vignette("main_tutorial")`.
-
-### Explore options for trait evolution
-
-&nbsp;&nbsp;&nbsp;&nbsp;&#x25CF;&nbsp;&nbsp;Model evolution of **continuous** trait data on a time-calibrated phylogeny: `vignette("model_continuous_trait_evolution")`.
-
-&nbsp;&nbsp;&nbsp;&nbsp;&#x25CF;&nbsp;&nbsp;Model evolution of **categorical** trait data on a time-calibrated phylogeny: `vignette("model_categorical_trait_evolution")`.
-
-&nbsp;&nbsp;&nbsp;&nbsp;&#x25CF;&nbsp;&nbsp;Model evolution of **biogeographic** range data on a time-calibrated phylogeny: `vignette("model_biogeographic_range_evolution")`.
-
-### Explore options for BAMM
-
-Model **diversification dynamics** with BAMM within deepSTRAPP: `vignette("model_diversification_dynamics")`.
-
-&nbsp;&nbsp;&nbsp;&nbsp;&#x25CB;&nbsp;&nbsp;Detail the extent of possible parametrization.
-
-&nbsp;&nbsp;&nbsp;&nbsp;&#x25CB;&nbsp;&nbsp;Explain evaluation plots.
-
-&nbsp;&nbsp;&nbsp;&nbsp;&#x25CB;&nbsp;&nbsp;Show options for shift location on `deepSTRAPP::plot_BAMM_rates()`: index, MAP, MSC.
-
-### Explore the STRAPP test options
-
-Type of STRAPP tests: **two-tailed** vs. **one-tailed**: `vignette("explore_STRAPP_test_types")`.
-
-&nbsp;&nbsp;&nbsp;&nbsp;&#x25CB;&nbsp;&nbsp;Continuous: "negative" or "positive" correlation.
-
-&nbsp;&nbsp;&nbsp;&nbsp;&#x25CB;&nbsp;&nbsp;Binary with hypothesis: (A > B) vs. (B > A).
-
-&nbsp;&nbsp;&nbsp;&nbsp;&#x25CB;&nbsp;&nbsp;Multinominal: Hypotheses for all post hoc tests.
- 
-### Plot rates through time (RTT)
-
-Explore options for plotting diversification **rates through time** in relation to trait data: `vignette("plot_rates_through_time")`.
-
-### Cut phylogenies
-
-Cut different types of **(mapped) phylogenies** for a given focal-time: phylogeny, contMap, densityMap, BAMM_object: `vignette("cut_phylogenies")`.
-
-<br>
-
  
