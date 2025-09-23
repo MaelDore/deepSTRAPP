@@ -171,14 +171,14 @@ Tip labels (<code>phylo$tip.label</code>) should match names in <code>tip_data</
 <dd><p>Custom Q-matrix for categorical data representing transition classes between states.
 Transitions with similar integers are estimated with a shared rate parameter.
 Transitions with <code>0</code> represent rates that are fixed to zero (i.e., impossible transitions).
-Diagonal must be populated with <code>NA</code>. row.names(Q_matrix) and col.names(Q_matrix) are the states.
-Provide "matrix" among the model listed in 'evolutionary_models' to use the custom Q-matrix for modeling. Only for categorical data.</p></dd>
+Diagonal must be populated with <code>NA</code>. <code>row.names(Q_matrix)</code> and <code>col.names(Q_matrix)</code> are the states.
+Provide <code>"matrix"</code> among the model listed in 'evolutionary_models' to use the custom Q-matrix for modeling. Only for categorical data.</p></dd>
 
 
 <dt id="arg-biogeobears-directory-path">BioGeoBEARS_directory_path<a class="anchor" aria-label="anchor" href="#arg-biogeobears-directory-path"></a></dt>
 <dd><p>Character string. The path to the directory used to store input/output files generated
 for/by BioGeoBEARS during biogeographic historical inferences. Use '/' to separate directory and sub-directories. It must end with '/'.
-Default is <code>./BioGeoBEARS_directory/</code>. Only for biogeographic data.</p></dd>
+Default is <code>"./BioGeoBEARS_directory/"</code>. Only for biogeographic data.</p></dd>
 
 
 <dt id="arg-keep-biogeobears-files">keep_BioGeoBEARS_files<a class="anchor" aria-label="anchor" href="#arg-keep-biogeobears-files"></a></dt>
@@ -244,7 +244,7 @@ Only for categorical and biogeographic data.</p></dd>
 
 
 <dt id="arg-pdf-file-path">PDF_file_path<a class="anchor" aria-label="anchor" href="#arg-pdf-file-path"></a></dt>
-<dd><p>Character string. If provided, the plot will be saved in a PDF file following the path provided here. The path must end with '.pdf'.</p></dd>
+<dd><p>Character string. If provided, the plot will be saved in a PDF file following the path provided here. The path must end with ".pdf".</p></dd>
 
 
 <dt id="arg-return-ace">return_ace<a class="anchor" aria-label="anchor" href="#arg-return-ace"></a></dt>
