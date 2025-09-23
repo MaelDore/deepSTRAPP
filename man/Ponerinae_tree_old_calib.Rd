@@ -15,9 +15,9 @@ A \code{phylo} object describing the time-calibrated phylogeny of the 1534 extan
 THIS IS NOT a properly time-calibrated phylogeny. It uses an ill-designed old calibration for illustrative purposes.
 For a proper time-calibrated phylogeny of ponerine ants, see the \code{Ponerinae_tree} object in deepSTRAPP.
 
-Source: Doré, M., Borowiec, M. L., Branstetter, M. G., Camacho, G. P., Fisher, B. L., Longino, J. T., Ward, P. S., Blaimer, B. B., (2025),
-Evolutionary history of ponerine ants highlights how the timing of dispersal events shapes modern biodiversity, Nature Communications.
-\link{https://doi_of_Paper_to_provide.html}
+Source: Doré, M., Borowiec, M. L., Branstetter, M. G., Camacho, G. P., Fisher, B. L., Longino, J. T., Ward, P. S., Blaimer, B. B. (2025).
+Evolutionary history of ponerine ants highlights how the timing of dispersal events shapes modern biodiversity. Nature Communications, 16, 8297.
+\url{https://doi.org/10.1038/s41467-025-63709-3}
 }
 \details{
 A time-calibrated phylogeny as a \code{phylo} object with 4 elements.
@@ -29,8 +29,8 @@ A time-calibrated phylogeny as a \code{phylo} object with 4 elements.
 }
 }
 \references{
-Doré, M., Borowiec, M. L., Branstetter, M. G., Camacho, G. P., Fisher, B. L., Longino, J. T., Ward, P. S., Blaimer, B. B., (2025),
-Evolutionary history of ponerine ants highlights how the timing of dispersal events shapes modern biodiversity, Nature Communications.
+Doré, M., Borowiec, M. L., Branstetter, M. G., Camacho, G. P., Fisher, B. L., Longino, J. T., Ward, P. S., Blaimer, B. B. (2025).
+Evolutionary history of ponerine ants highlights how the timing of dispersal events shapes modern biodiversity. Nature Communications, 16, 8297.
 \url{https://doi.org/10.1038/s41467-025-63709-3}
 }
 \keyword{datasets}

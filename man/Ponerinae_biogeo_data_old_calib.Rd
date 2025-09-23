@@ -16,9 +16,9 @@ modeled with R package \code{BioGeoBEARS}. Ranges are labeled between "Old World
 This object was obtained with \code{\link[=prepare_trait_data]{prepare_trait_data()}}.
 The phylogeny used is also NOT a properly time-calibrated phylogeny. It uses an ill-designed old calibration for illustrative purposes.
 
-Source: Doré, M., Borowiec, M. L., Branstetter, M. G., Camacho, G. P., Fisher, B. L., Longino, J. T., Ward, P. S., Blaimer, B. B., (2025),
-Evolutionary history of ponerine ants highlights how the timing of dispersal events shapes modern biodiversity, Nature Communications.
-\link{https://doi_of_Paper_to_provide.html}
+Source: Doré, M., Borowiec, M. L., Branstetter, M. G., Camacho, G. P., Fisher, B. L., Longino, J. T., Ward, P. S., Blaimer, B. B. (2025).
+Evolutionary history of ponerine ants highlights how the timing of dispersal events shapes modern biodiversity. Nature Communications, 16, 8297.
+\url{https://doi.org/10.1038/s41467-025-63709-3}
 }
 \details{
 A list of five objects containing information on the evolution of feeding habits in eels.
@@ -39,6 +39,11 @@ All ranges observed along branches during the simulated biogeographic histories 
 Rows are internal nodes. Columns are ranges. Values are posterior probabilities of each range per node.
 \item \verb{$model_selection_df} Data.frame that summarizes model comparisons used to select the best fitting model.
 }
+}
+\references{
+Doré, M., Borowiec, M. L., Branstetter, M. G., Camacho, G. P., Fisher, B. L., Longino, J. T., Ward, P. S., Blaimer, B. B. (2025).
+Evolutionary history of ponerine ants highlights how the timing of dispersal events shapes modern biodiversity. Nature Communications, 16, 8297.
+\url{https://doi.org/10.1038/s41467-025-63709-3}
 }
 \seealso{
 \code{\link[=prepare_trait_data]{prepare_trait_data()}}

@@ -14,9 +14,9 @@ data(Ponerinae_BAMM_object)
 An object of class \code{"bammdata"} containing information of diversification dynamics
 of extant ponerine ants (Ponerinae subfamily) modeled with BAMM.
 
-Source: Doré, M., Borowiec, M. L., Branstetter, M. G., Camacho, G. P., Fisher, B. L., Longino, J. T., Ward, P. S., Blaimer, B. B., (2025),
-Evolutionary history of ponerine ants highlights how the timing of dispersal events shapes modern biodiversity, Nature Communications.
-\link{https://doi_of_Paper_to_provide.html}
+Source: Doré, M., Borowiec, M. L., Branstetter, M. G., Camacho, G. P., Fisher, B. L., Longino, J. T., Ward, P. S., Blaimer, B. B. (2025).
+Evolutionary history of ponerine ants highlights how the timing of dispersal events shapes modern biodiversity. Nature Communications, 16, 8297.
+\url{https://doi.org/10.1038/s41467-025-63709-3}
 }
 \details{
 An object of class \code{"bammdata"} containing information of diversification dynamics
@@ -68,8 +68,8 @@ this mean diversification history.
 }
 }
 \references{
-Doré, M., Borowiec, M. L., Branstetter, M. G., Camacho, G. P., Fisher, B. L., Longino, J. T., Ward, P. S., Blaimer, B. B., (2025),
-Evolutionary history of ponerine ants highlights how the timing of dispersal events shapes modern biodiversity, Nature Communications.
+Doré, M., Borowiec, M. L., Branstetter, M. G., Camacho, G. P., Fisher, B. L., Longino, J. T., Ward, P. S., Blaimer, B. B. (2025).
+Evolutionary history of ponerine ants highlights how the timing of dispersal events shapes modern biodiversity. Nature Communications, 16, 8297.
 \url{https://doi.org/10.1038/s41467-025-63709-3}
 }
 \seealso{
