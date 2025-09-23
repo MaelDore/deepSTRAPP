@@ -1,5 +1,7 @@
 ---
 title: "Cut phylogenies"
+author: "Maël Doré"
+date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Cut phylogenies}

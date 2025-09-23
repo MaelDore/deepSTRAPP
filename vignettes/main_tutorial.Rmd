@@ -1,5 +1,7 @@
 ---
 title: "Main tutorial"
+author: "Maël Doré"
+date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Main tutorial}
@@ -23,9 +25,9 @@ library(deepSTRAPP)
 <br>
 This vignette presents a **simple use-case** that shows how deepSTRAPP can be used to **test for differences in diversification rates between trait values along evolutionary times**.
 
-It presents the main functions in a typical **deepSTRAPP workflow**. For more advanced used, please refer to the vignettes/tutorials listed here: `vignette("deepSTRAPP")`.
+It presents the main functions in a typical **deepSTRAPP workflow**. For more advanced used, please refer to the vignettes/tutorials listed [here](https://maeldore.github.io/deepSTRAPP/articles/deepSTRAPP.html): `vignette("deepSTRAPP")`.
 
-Please note that the trait data and phylogeny calibration used in this example are **not** valid biological data. They were modified in order to provide results illustrating the usefulness of deepSTRAPP.
+Please note that the trait data and phylogeny calibration used in this example are **NOT** valid biological data. They were modified in order to provide results illustrating the usefulness of deepSTRAPP.
 
 <br>
 

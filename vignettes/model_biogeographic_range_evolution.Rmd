@@ -1,5 +1,7 @@
 ---
 title: "Model biogeographic range evolution"
+author: "Maël Doré"
+date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Model biogeographic range evolution}

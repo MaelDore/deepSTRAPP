@@ -1,5 +1,7 @@
 ---
 title: "Model categorical trait evolution"
+author: "Maël Doré"
+date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Model categorical trait evolution}

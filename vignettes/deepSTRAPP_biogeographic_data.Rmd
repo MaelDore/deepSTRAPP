@@ -1,5 +1,7 @@
 ---
 title: "deepSTRAPP: Biogeographic range data"
+author: "Maël Doré"
+date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{deepSTRAPP: Biogeographic range data}
