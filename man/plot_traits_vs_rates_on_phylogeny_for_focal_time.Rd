@@ -92,7 +92,7 @@ Equivalent to the \code{lwd} argument in \code{\link[BAMMtools:addBAMMshifts]{BA
 
 \item{display_plot}{Logical. Whether to display the plot generated in the R console. Default is \code{TRUE}.}
 
-\item{PDF_file_path}{Character string. If provided, the plot will be saved in a PDF file following the path provided here. The path must end with '.pdf'.}
+\item{PDF_file_path}{Character string. If provided, the plot will be saved in a PDF file following the path provided here. The path must end with ".pdf".}
 }
 \value{
 If \code{display_plot = TRUE}, the function displays a plot with two facets in the R console:

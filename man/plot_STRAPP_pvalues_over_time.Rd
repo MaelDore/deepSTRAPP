@@ -44,7 +44,7 @@ This is only possible if \code{deepSTRAPP_outputs} contains the \verb{$pvalues_s
 \item{plot_adjusted_pvalues}{Logical. Whether to display the p-values adjusted for multiple testing rather than the raw p-values.
 See argument 'p.adjust_method' in \code{\link[=run_deepSTRAPP_for_focal_time]{run_deepSTRAPP_for_focal_time()}} or \code{\link[=run_deepSTRAPP_over_time]{run_deepSTRAPP_over_time()}}. Default is \code{FALSE}.}
 
-\item{PDF_file_path}{Character string. If provided, the plot will be saved in a PDF file following the path provided here. The path must end with '.pdf'.}
+\item{PDF_file_path}{Character string. If provided, the plot will be saved in a PDF file following the path provided here. The path must end with ".pdf".}
 }
 \value{
 The function returns a list of classes \code{gg} and \code{ggplot}.

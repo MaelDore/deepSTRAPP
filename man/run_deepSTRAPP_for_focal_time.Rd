@@ -2,7 +2,7 @@
 % Please edit documentation in R/run_deepSTRAPP_for_focal_time.R
 \name{run_deepSTRAPP_for_focal_time}
 \alias{run_deepSTRAPP_for_focal_time}
-\title{Runs deepSTRAPP to test for a relationship between diversification rates and trait data at a given focal time}
+\title{Run deepSTRAPP to test for a relationship between diversification rates and trait data at a given focal time}
 \usage{
 run_deepSTRAPP_for_focal_time(
   contMap = NULL,

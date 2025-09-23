@@ -3,7 +3,7 @@
 %   R/extract_diversification_data_melted_df_for_focal_time.R
 \name{extract_diversification_data_melted_df_for_focal_time}
 \alias{extract_diversification_data_melted_df_for_focal_time}
-\title{Extracts diversification data from a BAMM_object}
+\title{Extract diversification data from a BAMM_object}
 \usage{
 extract_diversification_data_melted_df_for_focal_time(
   BAMM_object,

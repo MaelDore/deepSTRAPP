@@ -2,7 +2,7 @@
 % Please edit documentation in R/compute_STRAPP_test_for_focal_time.R
 \name{compute_STRAPP_test_for_focal_time}
 \alias{compute_STRAPP_test_for_focal_time}
-\title{Computes STRAPP to test for a relationship between diversification rates and trait data}
+\title{Compute STRAPP to test for a relationship between diversification rates and trait data}
 \usage{
 compute_STRAPP_test_for_focal_time(
   BAMM_object,

@@ -2,7 +2,7 @@
 % Please edit documentation in R/cut_densityMaps_for_focal_time.R
 \name{cut_densityMaps_for_focal_time}
 \alias{cut_densityMaps_for_focal_time}
-\title{Update densityMaps object for a given focal time}
+\title{Cut phylogenies and posterior probability mapping of each state for a given focal time in the past}
 \usage{
 cut_densityMaps_for_focal_time(densityMaps, focal_time, keep_tip_labels = TRUE)
 }
@@ -128,7 +128,7 @@ plot_densityMaps_overlay(densityMaps = updated_mammals_densityMaps)
 
 }
 \seealso{
-\code{\link[=cut_phylo_for_focal_time]{cut_phylo_for_focal_time()}} \link{cut_densityMap_for_focal_time}
+\code{\link[=cut_phylo_for_focal_time]{cut_phylo_for_focal_time()}} \code{\link[=cut_densityMap_for_focal_time]{cut_densityMap_for_focal_time()}}
 \code{\link[=extract_most_likely_trait_values_for_focal_time]{extract_most_likely_trait_values_for_focal_time()}}
 \code{\link[=extract_most_likely_states_from_densityMaps_for_focal_time]{extract_most_likely_states_from_densityMaps_for_focal_time()}}
 }

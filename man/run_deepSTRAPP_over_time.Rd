@@ -2,7 +2,7 @@
 % Please edit documentation in R/run_deepSTRAPP_over_time.R
 \name{run_deepSTRAPP_over_time}
 \alias{run_deepSTRAPP_over_time}
-\title{Runs deepSTRAPP to test for a relationship between diversification rates and trait data over multiple time steps}
+\title{Run deepSTRAPP to test for a relationship between diversification rates and trait data over multiple time steps}
 \usage{
 run_deepSTRAPP_over_time(
   contMap = NULL,

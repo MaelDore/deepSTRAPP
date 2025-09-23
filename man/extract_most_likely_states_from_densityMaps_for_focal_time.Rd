@@ -3,7 +3,7 @@
 %   R/extract_most_likely_trait_values_for_focal_time.R
 \name{extract_most_likely_states_from_densityMaps_for_focal_time}
 \alias{extract_most_likely_states_from_densityMaps_for_focal_time}
-\title{Extracts categorical trait data mapped on a phylogeny at a given time in the past}
+\title{Extract categorical trait data mapped on a phylogeny at a given time in the past}
 \usage{
 extract_most_likely_states_from_densityMaps_for_focal_time(
   densityMaps,

@@ -2,7 +2,7 @@
 % Please edit documentation in R/update_rates_and_regimes_for_focal_time.R
 \name{update_rates_and_regimes_for_focal_time}
 \alias{update_rates_and_regimes_for_focal_time}
-\title{Updates diversification rates/regimes mapped on a phylogeny up to a given time in the past}
+\title{Update diversification rates/regimes mapped on a phylogeny up to a given time in the past}
 \usage{
 update_rates_and_regimes_for_focal_time(
   BAMM_object,

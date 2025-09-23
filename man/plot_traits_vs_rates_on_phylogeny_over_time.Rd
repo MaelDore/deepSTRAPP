@@ -84,7 +84,7 @@ Equivalent to the \code{lwd} argument in \code{\link[BAMMtools:addBAMMshifts]{BA
 
 \item{display_plot}{Logical. Whether to display the plot generated in the R console. Default is \code{TRUE}.}
 
-\item{PDF_file_path}{Character string. If provided, the plot will be saved in a PDF file following the path provided here. The path must end with '.pdf'.}
+\item{PDF_file_path}{Character string. If provided, the plot will be saved in a PDF file following the path provided here. The path must end with ".pdf".}
 }
 \value{
 If \code{display_plot = TRUE}, the function displays the successive plots with two facets in the R console:
@@ -147,7 +147,7 @@ the updated version of mapped phylogenies (\code{contMap}/\code{densityMaps}) ar
 cut-off at the specified time-steps are returned among the outputs under \verb{$updated_BAMM_objects_over_time}.
 }
 
-For plotting a single time-step (i.e., \verb{$focal_time}) at once, see \link{plot_traits_vs_rates_on_phylogeny_for_focal_time}.
+For plotting a single time-step (i.e., \verb{$focal_time}) at once, see \code{\link[=plot_traits_vs_rates_on_phylogeny_for_focal_time]{plot_traits_vs_rates_on_phylogeny_for_focal_time()}}.
 }
 \examples{
 # ----- Example 1: Continuous trait ----- #
@@ -312,7 +312,7 @@ plot_traits_vs_rates_on_phylogeny_over_time(
 \code{\link[=plot_contMap]{plot_contMap()}} \code{\link[phytools:densityMap]{phytools::plot.densityMap()}} \code{\link[=plot_densityMaps_overlay]{plot_densityMaps_overlay()}} \code{\link[=plot_BAMM_rates]{plot_BAMM_rates()}}
 
 Function in deepSTRAPP needed to produce the \code{deepSTRAPP_outputs} as input: \code{\link[=run_deepSTRAPP_over_time]{run_deepSTRAPP_over_time()}}
-Function in deepSTRAPP to a single time-step at once: \link{plot_traits_vs_rates_on_phylogeny_for_focal_time}
+Function in deepSTRAPP to a single time-step at once: \code{\link[=plot_traits_vs_rates_on_phylogeny_for_focal_time]{plot_traits_vs_rates_on_phylogeny_for_focal_time()}}
 }
 \author{
 Maël Doré

@@ -58,12 +58,12 @@ Tip labels (\code{phylo$tip.label}) should match names in \code{tip_data}.}
 \item{Q_matrix}{Custom Q-matrix for categorical data representing transition classes between states.
 Transitions with similar integers are estimated with a shared rate parameter.
 Transitions with \code{0} represent rates that are fixed to zero (i.e., impossible transitions).
-Diagonal must be populated with \code{NA}. row.names(Q_matrix) and col.names(Q_matrix) are the states.
-Provide "matrix" among the model listed in 'evolutionary_models' to use the custom Q-matrix for modeling. Only for categorical data.}
+Diagonal must be populated with \code{NA}. \code{row.names(Q_matrix)} and \code{col.names(Q_matrix)} are the states.
+Provide \code{"matrix"} among the model listed in 'evolutionary_models' to use the custom Q-matrix for modeling. Only for categorical data.}
 
 \item{BioGeoBEARS_directory_path}{Character string. The path to the directory used to store input/output files generated
 for/by BioGeoBEARS during biogeographic historical inferences. Use '/' to separate directory and sub-directories. It must end with '/'.
-Default is \verb{./BioGeoBEARS_directory/}. Only for biogeographic data.}
+Default is \code{"./BioGeoBEARS_directory/"}. Only for biogeographic data.}
 
 \item{keep_BioGeoBEARS_files}{Logical. Whether the \code{BioGeoBEARS_directory} and its content should be kept after the run. Default = \code{TRUE}. Only for biogeographic data.}
 
@@ -101,7 +101,7 @@ If \code{FALSE}, plot a \code{densityMap} per state/range. Only for "categorical
 \item{add_ACE_pies}{Logical. Whether to add pies of posterior probabilities of states/ranges at internal nodes on the mapped phylogeny. Default = \code{TRUE}.
 Only for categorical and biogeographic data.}
 
-\item{PDF_file_path}{Character string. If provided, the plot will be saved in a PDF file following the path provided here. The path must end with '.pdf'.}
+\item{PDF_file_path}{Character string. If provided, the plot will be saved in a PDF file following the path provided here. The path must end with ".pdf".}
 
 \item{return_ace}{Logical. Whether the named vector of ancestral characters estimates (ACE) at internal nodes should be returned in the output. Default = \code{TRUE}.}
 
@@ -363,6 +363,7 @@ str(eel_biogeo_data, 1)
 eel_biogeo_data$model_selection_df # Summary of model selection
 # Parameter estimates and optimization summary of the best model
 # (Here, the best model is DEC+J)
+eel_biogeo_data$best_model_fit$optim_result
 
 # Posterior probabilities of each state (= ACE) at internal nodes
 eel_biogeo_data$ace # Only with unique areas

@@ -2,7 +2,7 @@
 % Please edit documentation in R/cut_contMap_for_focal_time.R
 \name{cut_contMap_for_focal_time}
 \alias{cut_contMap_for_focal_time}
-\title{Cuts the phylogeny and continuous trait mapping for a given focal time in the past}
+\title{Cut the phylogeny and continuous trait mapping for a given focal time in the past}
 \usage{
 cut_contMap_for_focal_time(contMap, focal_time, keep_tip_labels = TRUE)
 }

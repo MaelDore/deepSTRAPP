@@ -3,7 +3,7 @@
 %   R/extract_most_likely_trait_values_for_focal_time.R
 \name{extract_most_likely_trait_values_from_contMap_for_focal_time}
 \alias{extract_most_likely_trait_values_from_contMap_for_focal_time}
-\title{Extracts continuous trait data mapped on a phylogeny at a given time in the past}
+\title{Extract continuous trait data mapped on a phylogeny at a given time in the past}
 \usage{
 extract_most_likely_trait_values_from_contMap_for_focal_time(
   contMap,

@@ -75,7 +75,7 @@ Equivalent to the \code{lwd} argument in \code{\link[BAMMtools:addBAMMshifts]{BA
 
 \item{display_plot}{Logical. Whether to display the plot generated in the R console. Default is \code{TRUE}.}
 
-\item{PDF_file_path}{Character string. If provided, the plot will be saved in a PDF file following the path provided here. The path must end with '.pdf'.}
+\item{PDF_file_path}{Character string. If provided, the plot will be saved in a PDF file following the path provided here. The path must end with ".pdf".}
 }
 \value{
 The function returns (invisibly) a list with three three elements similarly to \code{\link[BAMMtools:plot]{BAMMtools::plot.bammdata()}}.
@@ -144,8 +144,10 @@ plot_BAMM_rates(whale_BAMM_object$MSC_BAMM_object, add_regime_shifts = TRUE,
 \seealso{
 Initial functions in BAMMtools: \code{\link[BAMMtools:plot]{BAMMtools::plot.bammdata()}} \code{\link[BAMMtools:addBAMMshifts]{BAMMtools::addBAMMshifts()}}
 
-Associated functions in deepSTRAPP: \code{\link[=prepare_diversification_data]{prepare_diversification_data()}} \code{\link[=update_rates_and_regimes_for_focal_time]{update_rates_and_regimes_for_focal_time()}} \link{run_deepSTRAPP_for_focal_time} \code{\link[=run_deepSTRAPP_over_time]{run_deepSTRAPP_over_time()}}
+Associated functions in deepSTRAPP: \code{\link[=prepare_diversification_data]{prepare_diversification_data()}} \code{\link[=update_rates_and_regimes_for_focal_time]{update_rates_and_regimes_for_focal_time()}} \code{\link[=run_deepSTRAPP_for_focal_time]{run_deepSTRAPP_for_focal_time()}} \code{\link[=run_deepSTRAPP_over_time]{run_deepSTRAPP_over_time()}}
 }
 \author{
 Maël Doré
+
+Original functions by Mike Grundler & Pascal Title in R package \link{BAMMtools}.
 }

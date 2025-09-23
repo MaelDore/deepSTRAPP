@@ -2,7 +2,7 @@
 % Please edit documentation in R/cut_densityMaps_for_focal_time.R
 \name{cut_densityMap_for_focal_time}
 \alias{cut_densityMap_for_focal_time}
-\title{Cuts the phylogeny and posterior probability mapping of a categorical trait for a given focal time in the past}
+\title{Cut the phylogeny and posterior probability mapping of a categorical trait for a given focal time in the past}
 \usage{
 cut_densityMap_for_focal_time(densityMap, focal_time, keep_tip_labels = TRUE)
 }

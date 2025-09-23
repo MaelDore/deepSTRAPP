@@ -37,7 +37,7 @@ and estimated posterior probabilities of ancestral states.}
 
 \item{display_plot}{Logical. Whether to display the plot generated in the R console. Default is \code{TRUE}.}
 
-\item{PDF_file_path}{Character string. If provided, the plot will be saved in a PDF file following the path provided here. The path must end with '.pdf'.}
+\item{PDF_file_path}{Character string. If provided, the plot will be saved in a PDF file following the path provided here. The path must end with ".pdf".}
 }
 \value{
 If \code{display_plot = TRUE}, the function plots a time-calibrated phylogeny displaying the evolution of a categorical trait/biogeographic ranges.
@@ -103,4 +103,6 @@ plot_densityMaps_overlay(densityMaps = eel_cat_3lvl_data$densityMaps)
 }
 \author{
 Maël Doré
+
+Original functions by Liam Revell in R package \link{phytools}. Contact: \email{liam.revell@umb.edu}
 }

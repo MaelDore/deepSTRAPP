@@ -22,7 +22,7 @@ element with \verb{$perm_data_df} obtained when setting both \code{return_STRAPP
 or plot the histograms for all the pairwise post hoc Dunn's tests across pairs of states (\code{plot_posthoc_tests = TRUE}).
 Time-steps at which the data does not yield more than two states/ranges will show a warning and generate no plot. Default is \code{FALSE}.}
 
-\item{PDF_file_path}{Character string. If provided, the plots will be saved in a unique PDF file following the path provided here. The path must end with '.pdf'.
+\item{PDF_file_path}{Character string. If provided, the plots will be saved in a unique PDF file following the path provided here. The path must end with ".pdf".
 Each page of the PDF corresponds to a focal time in \verb{$time_steps}.}
 }
 \value{

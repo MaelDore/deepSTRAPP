@@ -26,7 +26,7 @@ run the whole deepSTRAPP workflow and store results inside \verb{$STRAPP_results
 \item{plot_posthoc_tests}{Logical. For multinominal data only. Whether to plot the histogram for the overall Kruskal-Wallis test across all states (\code{plot_posthoc_tests = FALSE}),
 or plot the histograms for all the pairwise post hoc Dunn's test across pairs of states (\code{plot_posthoc_tests = TRUE}). Default is \code{FALSE}.}
 
-\item{PDF_file_path}{Character string. If provided, the plot will be saved in a PDF file following the path provided here. The path must end with '.pdf'.}
+\item{PDF_file_path}{Character string. If provided, the plot will be saved in a PDF file following the path provided here. The path must end with ".pdf".}
 }
 \value{
 By default, the function returns a list of classes \code{gg} and \code{ggplot}.

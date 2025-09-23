@@ -2,7 +2,7 @@
 % Please edit documentation in R/cut_phylo_for_focal_time.R
 \name{cut_phylo_for_focal_time}
 \alias{cut_phylo_for_focal_time}
-\title{Cuts the phylogeny for a given time in the past}
+\title{Cut the phylogeny for a given time in the past}
 \usage{
 cut_phylo_for_focal_time(tree, focal_time, keep_tip_labels = TRUE)
 }

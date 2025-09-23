@@ -140,6 +140,7 @@ version 1.1.1, published on GitHub on November 6, 2018. DOI: \url{http://dx.doi.
 \code{BioGeoBEARS::count_ana_clado_events()} \code{BioGeoBEARS::hist_event_counts()}
 }
 \author{
-Nicholas J. Matzke \email{matzke@berkeley.edu}
-Changes by Maël Doré (see details)
+Nicholas J. Matzke. Contact: \email{matzke@berkeley.edu}
+
+Changes by Maël Doré (see Details)
 }

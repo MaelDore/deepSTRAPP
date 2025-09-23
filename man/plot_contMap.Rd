@@ -24,7 +24,7 @@ showing the evolution of a continuous trait. From lowest values to highest value
 
 \item{display_plot}{Logical. Whether to display the plot generated in the R console. Default is \code{TRUE}.}
 
-\item{PDF_file_path}{Character string. If provided, the plot will be saved in a PDF file following the path provided here. The path must end with '.pdf'.}
+\item{PDF_file_path}{Character string. If provided, the plot will be saved in a PDF file following the path provided here. The path must end with ".pdf".}
 }
 \value{
 If \code{display_plot = TRUE}, the function plots the time-calibrated phylogeny displaying the evolution of a continuous trait.
@@ -85,5 +85,6 @@ plot_contMap(contMap = Ponerinae_contMap,
 }
 \author{
 Maël Doré
-Original functions by Liam Revell in R package \link{phytools} \email{liam.revell@umb.edu}
+
+Original functions by Liam Revell in R package \link{phytools}. Contact: \email{liam.revell@umb.edu}
 }

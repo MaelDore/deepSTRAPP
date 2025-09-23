@@ -64,7 +64,7 @@ This proportion is defined with \code{CI_quantiles}.
 
 \item{display_plot}{Logical. Whether to display the plot generated in the R console. Default is \code{TRUE}.}
 
-\item{PDF_file_path}{Character string. If provided, the plot will be saved in a PDF file following the path provided here. The path must end with '.pdf'.}
+\item{PDF_file_path}{Character string. If provided, the plot will be saved in a PDF file following the path provided here. The path must end with ".pdf".}
 
 \item{return_mean_data_per_samples_df}{Logical. Whether to include in the output the data.frame of mean rates per trait values computed for
 each posterior sample at each time-step (aggregated across groups of branches based on trait data). This is used to draw the confidence interval. Default is \code{FALSE}.}
@@ -129,7 +129,7 @@ plotTT_continuous <- plot_rates_through_time(
    return_median_data_across_samples_df = TRUE)
 
 # Explore output
-str(plotTT_continuous, max.level = 1)
+# str(plotTT_continuous, max.level = 1)
 
 # Plot again
 print(plotTT_continuous$rates_TT_ggplot)
@@ -163,7 +163,7 @@ plotTT_categorical <- plot_rates_through_time(
     return_median_data_across_samples_df = TRUE)
 
 # Explore output
-str(plotTT_categorical, max.level = 1)
+# str(plotTT_categorical, max.level = 1)
 # Plot again
 print(plotTT_categorical$rates_TT_ggplot)
 
@@ -192,7 +192,7 @@ plotTT_biogeographic <- plot_rates_through_time(
     return_median_data_across_samples_df = TRUE)
 
 # Explore output
-str(plotTT_biogeographic, max.level = 1)
+# str(plotTT_biogeographic, max.level = 1)
 # Plot again
 print(plotTT_biogeographic$rates_TT_ggplot)
 
