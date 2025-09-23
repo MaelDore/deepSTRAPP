@@ -1,14 +1,19 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# deepSTRAPP <img src="man/figures/logo.png" align="right" height="140" />
+# deepSTRAPP <img src="man/figures/logo.png" align="right" height="200" />
 
 <!-- badges: start -->
 <!-- 
 usethis::use_cran_badge() reports the current version of your package on CRAN.
 usethis::use_coverage() reports test coverage.
 use_github_actions()  reports the R CMD check status of your development package. 
--->
+&#10;# Examples to adjust
+&#10;[![R-CMD-check](https://github.com/deepSTRAPP/workflows/R-CMD-check/badge.svg)](https://github.com/deepSTRAPP/actions)
+[![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/deepSTRAPP)](https://cran.r-project.org/package=deepSTRAPP) 
+[![rstudio mirror downloads](https://cranlogs.r-pkg.org/badges/deepSTRAPP)](https://r-pkg.org:443/pkg/deepSTRAPP)
+[![DOI](https://zenodo.org/badge/TBA.svg)](https://zenodo.org/doi/TBA)
+&#10;-->
 <!-- badges: end -->
 
 The **R package deepSTRAPP** employs time-calibrated phylogenies and
@@ -17,7 +22,9 @@ traits over evolutionary time**. It works with continuous, categorical,
 and biogeographic trait data and extends the STRAPP test from
 `[BAMMtools::traitDependentBAMM()]` to any time step along phylogenies.
 
-deepSTRAPP provides a powerful analytic framework to investigate the
+## :dart: Summary
+
+**deepSTRAPP** provides a powerful analytic framework to investigate the
 **Rate Diversification Hypothesis (RDH)** in the context of Historical
 Biogeography. RDH posits that current heterogeneity in diversity
 patterns such as the Latitudinal Diversity Gradient are mostly due to
@@ -84,39 +91,30 @@ green. Final outputs in pink.
 > timing of dispersal events shapes modern biodiversity. Nature
 > Communications, 16, 8297. <https://doi.org/10.1038/s41467-025-63709-3>
 
-## How to Cite deepSTRAPP
-
-> Doré, M., & Blaimer, B. B., deepSTRAPP: Testing for differences in
-> diversification rates over deep evolutionary time. (DOI TBA)
-
-**May include a chunk of R script with a bibtex citation**
-
-## Installation
+## :envelope_with_arrow: Installation
 
 deepSTRAPP works on R version 4.4 or more. Be sure to have an R version
-that is compatible. See <https://cloud.r-project.org/>.
+that is compatible. <br> See <https://cloud.r-project.org/>.
 
-From CRAN, for the latest release
+From **CRAN**, for the latest release:
 
 ``` r
-# TBA
+install.packages("deepSTRAPP")
 ```
 
-From GitHub, for the current development version:
+From **GitHub**, for the current development version:
 
 ``` r
 library(devtools)
-remotes::install_github(repo = "MaelDore/deepSTRAPP",
-                        # Time-consuming, but needed if you want to have access to the vignettes/tutorials
-                        build_vignettes = TRUE) 
+remotes::install_github(repo = "MaelDore/deepSTRAPP")
 ```
 
 You may need additional tools for package compilation such as Rtools
-(Windows) and Xcode (Mac OS). See [this
+(Windows) and Xcode (Mac OS). <br> See [this
 page](https://support.posit.co/hc/en-us/articles/200486498-Package-Development-Prerequisites)
 for details.
 
-## Dependencies
+## :link: Dependencies
 
 deepSTRAPP relies on other software and R packages to perform some of
 its core tasks. R package dependencies will automatically be downloaded
@@ -138,10 +136,12 @@ devtools::install_github(repo="nmatzke/BioGeoBEARS")
 For more information, please refer to the [official BioGeoBEARS
 Wiki](http://phylo.wikidot.com/biogeobears).
 
-Reference: Matzke, Nicholas J. (2018). BioGeoBEARS: BioGeography with
-Bayesian (and likelihood) Evolutionary Analysis with R Scripts. version
-1.1.1, published on GitHub on November 6, 2018. DOI:
-<http://dx.doi.org/10.5281/zenodo.1478250>
+**Reference:**
+
+> Matzke, Nicholas J. (2018). BioGeoBEARS: BioGeography with Bayesian
+> (and likelihood) Evolutionary Analysis with R Scripts. version 1.1.1,
+> published on GitHub on November 6, 2018. DOI:
+> <http://dx.doi.org/10.5281/zenodo.1478250>
 
 - The C++ software **BAMM** is used to model diversification dynamics on
   time-calibrated phylogenies. It is needed by deepSTRAPP to obtain
@@ -152,77 +152,130 @@ Bayesian (and likelihood) Evolutionary Analysis with R Scripts. version
   the dedicated function \[prepare_diversification_data()\], so it can
   call BAMM within R to perform its tasks.
 
-Reference: Rabosky, DL. Automatic detection of key innovations, rate
-shifts, and diversity-dependence on phylogenetic trees. PLoS One 9,
-e89543 (2014). DOI: <https://doi.org/10.1371/journal.pone.0089543>
+**Reference:**
 
-## Website
+> Rabosky, DL. Automatic detection of key innovations, rate shifts, and
+> diversity-dependence on phylogenetic trees. PLoS One 9, e89543 (2014).
+> DOI: <https://doi.org/10.1371/journal.pone.0089543>
+
+## :desktop_computer: Website
 
 A companion website is available to browse interactively the different
 tutorials and functions of **deepSTRAPP** at this URL:
-<https://maeldore.github.io/deepSTRAPP/>
+<https://maeldore.github.io/deepSTRAPP/>.
 
-## Quick-to-run example
+An overview of all functions and datasets is available
+[here](https://maeldore.github.io/deepSTRAPP/reference/index.html).
+
+## :joystick: Quick-to-run example
 
 A **simple use-case** that shows how deepSTRAPP can be used to **test
 for differences in diversification rates between two trait states along
-evolutionary times** is available here: `vignette("main_tutorial")`.
+evolutionary times** is available
+[here](https://maeldore.github.io/deepSTRAPP/articles/main_tutorial.html)
+and within R: `vignette("main_tutorial")`.
 
 This tutorial presents the main functions in a typical **deepSTRAPP
-workflow**. For more advanced used, please refer to the
+workflow**. <br> For more advanced used, please refer to the
 vignettes/tutorials below.
 
-## Advanced uses / tutorials
+## :scroll: Advanced uses / tutorials
 
-More tutorials are available to explore more **advanced usages** of
+Tutorials are available to explore more **advanced usages** of
 deepSTRAPP. They provide explanations on available arguments and
 interpretations of results of deepSTRAPP across multiple type of data.
-They are listed below, and in this vignette: `vignette("deepSTRAPP")`.
+They are listed below, in the [companion
+website](https://maeldore.github.io/deepSTRAPP/articles/deepSTRAPP.html),
+and in this vignette: `vignette("deepSTRAPP")`.
+
+**1/ Full deepSTRAPP workflows on different types of data**
+
+- [1.1/ Full deepSTRAPP workflow for **continuous** trait
+  data](https://maeldore.github.io/deepSTRAPP/articles/deepSTRAPP_continuous_data.html):
+  `vignette("deepSTRAPP_continuous_data")`.
+- [1.2/ Full deepSTRAPP workflow for **categorical** trait data with
+  3-levels](https://maeldore.github.io/deepSTRAPP/articles/deepSTRAPP_categorical_3lvl_data.html):
+  `vignette("deepSTRAPP_categorical_3lvl_data")`.
+- [1.3/ Full deepSTRAPP workflow for **biogeographic** range
+  data](https://maeldore.github.io/deepSTRAPP/articles/deepSTRAPP_biogeographic_data.html):
+  `vignette("deepSTRAPP_biogeographic_data")`.
+
+**2/ Explore options for trait evolution**
+
+- [2.1/ Model evolution of **continuous** trait
+  data](https://maeldore.github.io/deepSTRAPP/articles/model_continuous_trait_evolution.html):
+  `vignette("model_continuous_trait_evolution")`.
+- [2.2/ Model evolution of **categorical** trait
+  data](https://maeldore.github.io/deepSTRAPP/articles/model_categorical_trait_evolution.html):
+  `vignette("model_categorical_trait_evolution")`.
+- [2.3/ Model evolution of **biogeographic** range
+  data](https://maeldore.github.io/deepSTRAPP/articles/model_biogeographic_range_evolution.html):
+  `vignette("model_biogeographic_range_evolution")`.
+
+**3/ Explore options for BAMM**
+
+- [Model **diversification dynamics** with BAMM within
+  deepSTRAPP](https://maeldore.github.io/deepSTRAPP/articles/model_diversification_dynamics.html):
+  `vignette("model_diversification_dynamics")`.
+
+**4/ Explore the STRAPP test options**
+
+- [Test difference
+  hypotheses](https://maeldore.github.io/deepSTRAPP/articles/explore_STRAPP_test_types.html):
+  `vignette("explore_STRAPP_test_types")`.
+
+  - Type of STRAPP tests: **two-tailed** vs. **one-tailed**.
+  - Continuous: “negative” or “positive” correlation.
+  - Binary with hypothesis: (A \> B) vs. (B \> A).
+  - Multinominal: Hypotheses for all post hoc tests.
+
+**5/ Plot rates through time (RTT)**
+
+- [Explore options for plotting diversification **rates through time**
+  in relation to trait
+  data](https://maeldore.github.io/deepSTRAPP/articles/plot_rates_through_time.html):
+  `vignette("plot_rates_through_time")`.
+
+**6/ Cut phylogenies**
+
+- [Cut different types of **(mapped) phylogenies** for a given
+  focal-time](https://maeldore.github.io/deepSTRAPP/articles/cut_phylogenies.html):
+  `vignette("cut_phylogenies")`.
+
+  - time-calibrated phylogenies.
+  - contMap for continuous traits.
+  - densityMap for categorical and biogeogrpahic traits.
+  - BAMM_object for diversification dynamics.
+
+<br> Alternatively, if you prefer to view the vignettes in R, you can
+install the package with `build_vignettes = TRUE`. But be aware that
+some vignettes can be slow to generate.
 
 ``` r
-# You can also use this to open access to all vignettes in an HTML Brower
+
+remotes::install_github(repo = "MaelDore/deepSTRAPP",
+                        dependencies = TRUE, 
+                        upgrade = "ask",
+                        # Time-consuming, but needed if you want to have access to the vignettes/tutorials
+                        build_vignettes = TRUE) 
+
+# Access vignettes within R
+vignette("deepSTRAPP")
+
+# You can also use this to open access to all local vignettes in an HTML Brower
 utils::browseVignettes(package = "deepSTRAPP")
 ```
 
-**Full deepSTRAPP workflows on different types of data**
+## :bug: Find a bug?
 
-- Full deepSTRAPP workflow for **continuous** trait data:
-  `vignette("deepSTRAPP_continuous_data")`.
-- Full deepSTRAPP workflow for **categorical** trait data with 3-levels:
-  `vignette("deepSTRAPP_categorical_3lvl_data")`.
-- Full deepSTRAPP workflow for **biogeographic** range data:
-  `vignette("deepSTRAPP_biogeographic_data")`.
+Thank you for finding it! Head over to the [GitHub Issues
+tab](https://github.com/MaelDore/deepSTRAPP/issues) and let me know
+about it. <br> You can also [send me an
+e-mail](mailto:mael.dore@gmail.com).
 
-**Explore options for trait evolution**
+## :black_nib: How to Cite deepSTRAPP
 
-- Model evolution of **continuous** trait data on time-calibrated
-  phylogeny: `vignette("model_continuous_trait_evolution")`.
-- Model evolution of **categorical** trait data on time-calibrated
-  phylogeny: `vignette("model_categorical_trait_evolution")`.
-- Model evolution of **biogeographic** range data on time-calibrated
-  phylogeny: `vignette("model_biogeographic_range_evolution")`.
+> Doré, M., & Blaimer, B. B., deepSTRAPP: Testing for differences in
+> diversification rates over deep evolutionary time. (DOI TBA)
 
-**Explore options for BAMM**
-
-- Model **diversification dynamics** with BAMM within deepSTRAPP:
-  `vignette("model_diversification_dynamics")`.
-
-**Explore the STRAPP test options**
-
-Type of STRAPP tests: **two-tailed** vs. **one-tailed**:
-`vignette("explore_STRAPP_test_types")`.
-
-- Continuous: “negative” or “positive” correlation.
-- Binary with hypothesis: (A \> B) vs. (B \> A).
-- Multinominal: Hypotheses for all post hoc tests.
-
-**Plot rates through time (RTT)**
-
-Explore options for plotting diversification **rates through time** in
-relation to trait data: `vignette("plot_rates_through_time")`.
-
-**Cut phylogenies**
-
-Cut different types of **(mapped) phylogenies** for a given focal-time:
-phylogeny, contMap, densityMap, BAMM_object:
-`vignette("cut_phylogenies")`.
+**May include a chunk of R script with a bibtex citation**
