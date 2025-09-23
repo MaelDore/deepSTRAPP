@@ -4,6 +4,9 @@ template:
   bootstrap: 5
   assets:
     - pkgdown/extra.css
+home:
+  sidebar:
+    structure: [links, license, citation, authors, dev]
 navbar:
   components:
     intro:
