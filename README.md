@@ -24,14 +24,14 @@ and biogeographic trait data and extends the STRAPP test from
 
 ## :dart: Summary
 
-**deepSTRAPP** provides a powerful analytic framework to investigate the
-**Rate Diversification Hypothesis (RDH)** in the context of Historical
-Biogeography. RDH posits that current heterogeneity in diversity
-patterns such as the Latitudinal Diversity Gradient are mostly due to
-differences in diversification rates across bioregions. This hypothesis
-is typically assessed by comparing diversification rates across tips
-between the different bioregions with for example a STRAPP test
-(*Rabosky & Huang, 2016*). However, such tests only compare current
+<br> **deepSTRAPP** provides a powerful analytic framework to
+investigate the **Rate Diversification Hypothesis (RDH)** in the context
+of Historical Biogeography. RDH posits that current heterogeneity in
+diversity patterns such as the Latitudinal Diversity Gradient are mostly
+due to differences in diversification rates across bioregions. This
+hypothesis is typically assessed by comparing diversification rates
+across tips between the different bioregions with for example a STRAPP
+test (*Rabosky & Huang, 2016*). However, such tests only compare current
 rates of diversification that mat not be informative about the
 **long-term past dynamics shaping present-day biodiversity**. deepSTRAPP
 overcomes this methodological gap: it enables to test the RDH by
