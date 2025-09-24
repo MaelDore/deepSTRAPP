@@ -21,7 +21,7 @@ knitr::opts_chunk$set(
 
 ```
 
-# deepSTRAPP <img src="man/figures/logo.png" align="right" height="200" />
+# deepSTRAPP <img src="man/figures/logo.png" align="right" alt="deepSTRAPP logo" width="200" />
 
 <!-- badges: start -->
 

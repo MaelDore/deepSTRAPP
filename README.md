@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# deepSTRAPP <img src="man/figures/logo.png" align="right" height="200" />
+# deepSTRAPP <img src="man/figures/logo.png" align="right" alt="deepSTRAPP logo" width="200" />
 
 <!-- badges: start -->
 <!-- 
