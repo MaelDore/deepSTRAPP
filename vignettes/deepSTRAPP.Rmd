@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-## :joystick: Main tutorial
+## Main tutorial
 
 ### Quick-to-run example
 
@@ -26,7 +26,7 @@ This tutorial presents the main functions in a typical **deepSTRAPP workflow**. 
 For more advanced used, please refer to the vignettes/tutorials below.
 
 
-## :scroll: Advanced uses / tutorials
+## Advanced uses / tutorials
 
 This vignette points to **tutorials** detailing how to use the [deepSTRAPP] package beyond the **simple use-case** presented in the README file and also available here: `vignette("main_tutorial")`.
 
