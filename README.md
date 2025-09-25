@@ -32,7 +32,7 @@ due to differences in diversification rates across bioregions. This
 hypothesis is typically assessed by comparing diversification rates
 across tips between the different bioregions with for example a STRAPP
 test (*Rabosky & Huang, 2016*). However, such tests only compare current
-rates of diversification that mat not be informative about the
+rates of diversification that may not be informative about the
 **long-term past dynamics shaping present-day biodiversity**. deepSTRAPP
 overcomes this methodological gap: it enables to test the RDH by
 comparing diversification rates **at any time step along evolutionary
