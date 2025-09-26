@@ -37,6 +37,10 @@
 #'   * For continuous trait data: Named numerical vector of trait values.
 #'   * For categorical trait or biogeographic data: Character string vector of states/ranges
 #'   Names are nodes_ID of the internal nodes. Needed to provide accurate tip values.
+#'   * For biogeographic data, ranges should follow the coding scheme of BioGeoBEARS with a unique CAPITAL letter per unique areas
+#'   (ex: A, B), combined to form multi-area ranges (Ex: AB). Alternatively, you can provide tip_data as a matrix or data.frame of
+#'   binary presence/absence in each area (coded as unique CAPITAL letter). In this case, columns are unique areas, rows are taxa,
+#'   and values are integer (0/1) signaling absence or presence of the taxa in the area.
 #' @param trait_data_type Character string. Specify the type of trait data. Must be one of "continuous", "categorical", "biogeographic".
 #' @param BAMM_object Object of class `"bammdata"`, typically generated with [deepSTRAPP::prepare_diversification_data()],
 #'   that contains a phylogenetic tree and associated diversification rate mapping across selected posterior samples.
@@ -455,7 +459,47 @@ run_deepSTRAPP_for_focal_time <- function (contMap = NULL,
 {
   ### Check input validity
   {
-    # Should all already be included in the wrapped functions
+    ## Checks should all already be included in the wrapped functions
+
+    ## Convert tip_data into vector of character strings if needed
+    if (any(c(is.matrix(tip_data), is.data.frame(tip_data))) & trait_data_type == "biogeographic")
+    {
+      # Check initial format
+      PA_test <- apply(X = tip_data, MARGIN = 2, FUN = function (x) { all(x %in% c(0, 1)) })
+      if (!all(PA_test))
+      {
+        stop("You provided 'tip_data' for 'biogeographic' data as a matrix/data.frame.\n",
+             "Please ensure presences/absences are recorded as numerical 0/1 values.\n")
+      }
+      unique_letters_test <- all(nchar(colnames(tip_data)) == 1)
+      if (!all(unique_letters_test))
+      {
+        stop("You provided 'tip_data' for 'biogeographic' data as a matrix/data.frame.\n",
+             "Please ensure colnames(tip_data) are unique areas symbolized by a unique UPPERCASE letter each.\n")
+      }
+      uppercase_test <- colnames(tip_data) == toupper(colnames(tip_data))
+      if (!all(uppercase_test))
+      {
+        stop("You provided 'tip_data' for 'biogeographic' data as a matrix/data.frame.\n",
+             "Please ensure colnames(tip_data) are unique areas symbolized by a unique UPPERCASE letter each.\n")
+      }
+      # Convert to vector of character strings
+      tip_data_df <- as.data.frame(tip_data)
+      tip_data <- setNames(object = rep(NA, times = nrow(tip_data_df)), nm = row.names(tip_data_df))
+      for (i in 1:nrow(tip_data_df))
+      {
+        # i <- 1
+
+        # Extract unique areas
+        unique_areas_i <- names(tip_data_df)[tip_data_df[i, ] == 1]
+        unique_areas_i <- unique_areas_i[order(unique_areas_i)]
+
+        # Collapse into range
+        range_i <- paste(unique_areas_i, collapse = "")
+        # Store range
+        tip_data[i] <- range_i
+      }
+    }
   }
 
   # ------ Extract trait data ------ #

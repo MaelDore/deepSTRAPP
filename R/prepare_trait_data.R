@@ -19,7 +19,9 @@
 #' @param tip_data Named numerical or character string vector of trait values/states/ranges at tips.
 #'   Names should be ordered as the tip labels in the phylogeny found in `phylo$tip.label`.
 #'   For biogeographic data, ranges should follow the coding scheme of BioGeoBEARS with a unique CAPITAL letter per unique areas
-#'   (ex: A, B), combined to form multi-area ranges (Ex: AB).
+#'   (ex: A, B), combined to form multi-area ranges (Ex: AB). Alternatively, you can provide tip_data as a matrix or data.frame of
+#'   binary presence/absence in each area (coded as unique CAPITAL letter). In this case, columns are unique areas, rows are taxa,
+#'   and values are integer (0/1) signaling absence or presence of the taxa in the area.
 #' @param trait_data_type Character string. Type of trait data. Either: "continuous", "categorical" or "biogeographic".
 #' @param phylo Time-calibrated phylogeny. Object of class `"phylo"` as defined in [ape].
 #'   Tip labels (`phylo$tip.label`) should match names in `tip_data`.
