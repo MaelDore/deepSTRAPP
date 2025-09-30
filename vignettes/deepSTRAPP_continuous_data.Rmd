@@ -407,15 +407,18 @@ plot_rates_vs_trait_data_for_focal_time(
 # Plot rates vs. ranges for all time-steps
 plot_rates_vs_trait_data_over_time(
    deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_old_calib_0_40,
-   colors_per_levels = colors_per_ranges)
+   color_scale = color_scale)
 
 ```
 ```{r plot_rates_vs_traits_cont_eval, fig.height = 7, fig.width = 8.5, out.width = "100%", eval = TRUE, echo = FALSE}
+# Select a color scheme from lowest to highest values
+color_scale = c("darkgreen", "limegreen", "orange", "red")
+
 # Generate ggplot for time = 15 My
 plot_rates_vs_trait_data_for_focal_time(
    deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_old_calib_0_40,
    focal_time = 15,
-   colors_per_levels = colors_per_ranges)
+   color_scale = color_scale)
 ```
 
 
