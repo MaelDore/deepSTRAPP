@@ -2659,6 +2659,13 @@ select_best_trait_model_from_geiger <- function (list_model_fits)
   }
 
   # Homemade function to extract AICc from geiger model outputs
+  extract_AIC <- function (x)
+  {
+    AIC <- x$opt$aic
+    return(AIC)
+  }
+
+  # Homemade function to extract AICc from geiger model outputs
   extract_AICc <- function (x)
   {
     AICc <- x$opt$aicc
@@ -2669,7 +2676,12 @@ select_best_trait_model_from_geiger <- function (list_model_fits)
   models_comparison_df <- data.frame(model = names(list_model_fits),
                                      logL = sapply(X = list_model_fits, FUN = stats::logLik),
                                      k = sapply(X = list_model_fits, FUN = extract_k),
+                                     AIC = sapply(X = list_model_fits, FUN = extract_AIC)
                                      AICc = sapply(X = list_model_fits, FUN = extract_AICc))
+
+  # Compute Delta AICc
+  best_AICc <- min(models_comparison_df$AICc)
+  models_comparison_df$delta_AICc <- models_comparison_df$AICc - best_AICc
 
   # Compute Akaike's weights based on AICc
   models_comparison_df$Akaike_weights <- round(phytools::aic.w(models_comparison_df$AICc), 3) * 100
