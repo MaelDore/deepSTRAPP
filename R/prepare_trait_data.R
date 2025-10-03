@@ -2676,7 +2676,7 @@ select_best_trait_model_from_geiger <- function (list_model_fits)
   models_comparison_df <- data.frame(model = names(list_model_fits),
                                      logL = sapply(X = list_model_fits, FUN = stats::logLik),
                                      k = sapply(X = list_model_fits, FUN = extract_k),
-                                     AIC = sapply(X = list_model_fits, FUN = extract_AIC)
+                                     AIC = sapply(X = list_model_fits, FUN = extract_AIC),
                                      AICc = sapply(X = list_model_fits, FUN = extract_AICc))
 
   # Compute Delta AICc
