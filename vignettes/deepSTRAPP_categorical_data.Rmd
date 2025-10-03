@@ -458,7 +458,7 @@ plot_histogram_STRAPP_test_for_focal_time(
 # The histogram shows the distribution of the test statistics as observed across 
 # the 1000 posterior samples from BAMM.
 # The red line represents the significance threshold for which 90% of the observed data
-# exhibited a higher value that expected.
+# exhibited a higher value than expected.
 # Since this red line is below the null expectation (quantile 10% = 6.942), 
 # the test is significant for a value of alpha = 0.10.
 # However, this significance must be discussed in regards to the relatively generous
@@ -480,7 +480,7 @@ plot_histogram_STRAPP_test_for_focal_time(
 # In each facet, the black line represents the expected value under the null hypothesis H0
 #  => Δ Dunn's Z-stat = 0.
 # The red line represents the significance threshold for which 90% of the observed data 
-# exhibited a higher value that expected.
+# exhibited a higher value than expected.
 # This red line is below the null expectation for the "arboreal != subterranean" and 
 # "subterranean != terricolous" pairs. This means the test is not significant for these pairs of habitats.
 # The red line is above the null expectation for the "arboreal != terricolous" pair

@@ -447,7 +447,7 @@ plot_histogram_STRAPP_test_for_focal_time(
 # The histogram shows the distribution of the test statistics as observed
 # across the 1000 posterior samples from BAMM.
 # The red line represents the significance threshold for which 90% of the observed data
-# exhibited a higher value that expected.
+# exhibited a higher value than expected.
 # Since this red line is above the null expectation (quantile 10% = 380.4),
 # the test is significant for a value of alpha = 0.10.
 
