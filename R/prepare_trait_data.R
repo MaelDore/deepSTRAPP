@@ -2577,8 +2577,8 @@ prepare_trait_data_for_biogeographic_data <- function (
 #'
 #' @return The function returns a list with three elements.
 #' * `$model_comparison_df` Data.frame summarizing information to compare model fits. It includes the model name (`$model`),
-#'   the log-likelihood (`$logLik`), the number of free-parameters (`$k`), the corrected AIC (`$AICc`),
-#'   the Akaike weights (`$Akaike_weights`), and their rank based on AICc (`$rank`).
+#'   the log-likelihood (`$logLik`), the number of free-parameters (`$k`), the AIC (`$AICc`), the corrected AIC (`$AICc`),
+#'   the delta to the best/lowest AICc (`$delta_AICc`), the Akaike weights (`$Akaike_weights`), and their rank based on AICc (`$rank`).
 #' * `$best_model_name` Character string. Name of the best model.
 #' * `$best_model_fit` List containing the output of [geiger::fitContinuous()] or [geiger::fitDiscrete()] for the model with the best fit.
 #'
@@ -2718,8 +2718,8 @@ select_best_trait_model_from_geiger <- function (list_model_fits)
 #'
 #' @return The function returns a list with three elements.
 #' * `$model_comparison_df` Data.frame summarizing information to compare model fits. It includes the model name (`$model`),
-#'   the log-likelihood (`$logLik`), the number of free-parameters (`$k`), the corrected AIC (`$AICc`),
-#'   the Akaike weights (`$Akaike_weights`), and their rank based on AICc (`$rank`).
+#'   the log-likelihood (`$logLik`), the number of free-parameters (`$k`), the AIC (`$AIC`), the corrected AIC (`$AICc`),
+#'   the delta to the best/lowest AICc (`$delta_AICc`), the Akaike weights (`$Akaike_weights`), and their rank based on AICc (`$rank`).
 #' * `$best_model_name` Character string. Name of the best model.
 #' * `$best_model_fit` List containing the output of `BioGeoBEARS::bear_optim_run()` for the model with the best fit.
 #'
