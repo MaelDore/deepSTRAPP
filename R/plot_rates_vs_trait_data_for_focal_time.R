@@ -460,6 +460,38 @@ plot_rates_vs_trait_data_for_focal_time <- function (deepSTRAPP_outputs,
       }
     }
 
+    ## Extract STRAPP_results
+    if (!inputs_over_time)
+    {
+      # For outputs from run_deepSTRAPP_for_focal_time
+      STRAPP_results <- deepSTRAPP_outputs$STRAPP_results
+    } else {
+      # For outputs from run_deepSTRAPP_over_time
+      focal_time_ID <- which(deepSTRAPP_outputs$time_steps == focal_time)
+      STRAPP_results <- deepSTRAPP_outputs$STRAPP_results_over_time[[focal_time_ID]]
+    }
+
+    ## STRAPP_results
+
+    # STRAPP_results must have recorded a STRAPP test to display its results.
+    STRAPP_results_available <- TRUE
+    if (STRAPP_results$trait_data_type_for_stats == "none")
+    {
+      if (!inputs_over_time)
+      {
+        warning(paste0("STRAPP test results are missing from 'deepSTRAPP_outputs$STRAPP_results'.\n",
+                       "A unique ML state/range was inferred across branches for 'focal_time' = ",STRAPP_results$focal_time,".\n",
+                       "No STRAPP test for differences in rates between states/ranges can be computed with a unique state/range.\n",
+                       "Therefore, no STRAPP results can be associoted to the plot for this 'focal_time'."))
+      } else {
+        warning(paste0("STRAPP test results are missing from 'deepSTRAPP_outputs$STRAPP_results_over_time' for the given 'focal_time'.\n",
+                       "A unique ML state/range was inferred across branches for 'focal_time' = ",STRAPP_results$focal_time,".\n",
+                       "No STRAPP test for differences in rates between states/ranges can be computed with a unique state/range.\n",
+                       "Therefore, no STRAPP results can be associoted to the plot for this 'focal_time'."))
+      }
+      STRAPP_results_available <- FALSE
+    }
+
     ## PDF_file_path
     # If provided, PDF_file_path must end with ".pdf"
     if (!is.null(PDF_file_path))
@@ -483,6 +515,115 @@ plot_rates_vs_trait_data_for_focal_time <- function (deepSTRAPP_outputs,
   ## Merge rates and traits in a unique data.frame
   data_melted_df <- dplyr::left_join(x = diversification_data_df, y = trait_data_df,
                                      by = dplyr::join_by(tip_ID))
+
+  ## Extract test summary
+  if (STRAPP_results_available)
+  {
+    # Extract quantile of the critical threshold
+    estimate_quantile <- names(STRAPP_results$estimate)
+    # Extract value at the critical threshold
+    quantile_value <- round(STRAPP_results$estimate, digits = 3)
+    # Extract p-value
+    p_value <- round(STRAPP_results$p_value, digits = 3)
+  }
+
+  ## Compute observed stat across mean values (not used directly for the STRAPP test)
+  if (STRAPP_results_available)
+  {
+    if (STRAPP_results$trait_data_type_for_stats == "continuous")
+    {
+      stat_name <- "\u03C1" # Rho (unicode)
+
+      ## Wrapped-up function to extract rho stats from Spearman's correlation test
+      spearman_test <- function(rates, trait_data)
+      {
+        if (stats::sd(rates, na.rm = TRUE) == 0)
+        { # Case with no variance in rates. Rho = 0.
+          return(0)
+        } else { # Default case
+          test_output <- stats::cor.test(rates, trait_data, method = "spearman", exact = FALSE)
+          return(test_output$estimate)
+        }
+      }
+
+      # Compute observed stat across mean data
+      stat_estimate <- spearman_test(rates = data_melted_df$mean_rates, trait_data = data_melted_df$trait_value)
+    }
+
+    if (STRAPP_results$trait_data_type_for_stats == "binary")
+    {
+      stat_name <- "U-stat"
+
+      # Check the type of test
+      two_tailed <- STRAPP_results$two_tailed # Type of test: two-tailed or not
+      one_tailed_hypothesis <- STRAPP_results$one_tailed_hypothesis # Type of hypothesis if one-tailed test
+
+      # Parse one_tailed_hypothesis
+      if (!is.null(one_tailed_hypothesis))
+      {
+        one_tailed_hypothesis_parsed <- gsub(pattern = " ", replacement = "", x = one_tailed_hypothesis)
+        trait_states <- as.character(unlist(strsplit(x = one_tailed_hypothesis_parsed, split = ">")))
+      } else {
+        trait_states <- NULL
+      }
+
+      ## Wrapped-up function to extract U-stats from Mann-Whitney-Wilcoxon's rank-sum test
+      mann_whitney_wilcoxon_test <- function(rates, trait_data, two_tailed, trait_states)
+      {
+        if (two_tailed)
+        { # Case for two-tailed test
+          test_output <- stats::wilcox.test(formula = rates ~ trait_data, exact = FALSE)
+        } else { # Case for one-tailed test
+          test_output <- stats::wilcox.test(x = rates[which(trait_data == trait_states[1])], # State with the higher ranked rates in Ha
+                                            y = rates[which(trait_data == trait_states[2])], # State with the lower ranked rates in Ha
+                                            exact = FALSE)
+        }
+        return(test_output$statistic)
+      }
+
+      # Compute observed stat across mean data
+      stat_estimate <- mann_whitney_wilcoxon_test(rates = data_melted_df$mean_rates,
+                                                  trait_data = data_melted_df$trait_value,
+                                                  two_tailed = two_tailed,
+                                                  trait_states = trait_states)
+      # Center stats around location shift of the null hypothesis (mu)
+      # Null hypothesis is that ranks of the values of the two groups are random
+      # Compute location shift (mu) from state frequencies as average of the products of frequencies
+      trait_data_counts <- table(data_melted_df$trait_value)
+      trait_data_counts <- trait_data_counts[!is.na(names(trait_data_counts))] # Remove NA
+      stat_mu <- prod(trait_data_counts)/2
+      # Center U-stats to get an estimate of how greater/lower (far away) than the null hypothesis (mu) is the observed U-stats
+      stat_estimate <- stat_estimate - stat_mu
+      # In two-tailed tests, the absolute deviation to the null-expectation is used.
+      # But for coherency with the correlation tests, better to provide a negative stat when 'state 1' has lower rates than 'state 2', and respectively.
+      # if (two_tailed) { stat_estimate <- abs(stat_estimate) }
+    }
+
+    if (STRAPP_results$trait_data_type_for_stats == "multinominal")
+    {
+      stat_name <- "H-stat"
+
+      ## Wrapped-up function to extract H-stats from Kruskal-Wallis's one-way ANOVA on ranks test
+      kruskal_wallis_test <- function(rates, trait_data)
+      {
+        # Compute the Kruskal-Wallis test
+        test_output <- stats::kruskal.test(rates ~ trait_data)
+
+        # If the test failed to provide a statistic because the value is reaching the ceiling for computation,
+        # use the Khi-squared approximation by setting an extremely high p-value
+        if (is.na(test_output$statistic))
+        {
+          H_approximation <- stats::qchisq(p = 1 - 10^-9, df = test_output$parameter)
+          return(H_approximation)
+        } else { # Otherwise, provide the computed H-stats
+          return(test_output$statistic)
+        }
+      }
+
+      # Compute observed stat across mean data
+      stat_estimate <- kruskal_wallis_test(rates = data_melted_df$mean_rates, trait_data = data_melted_df$trait_value)
+    }
+  }
 
   ## Set label for y-lab
   y_label <- stringr::str_to_sentence(paste0(sub(x = rate_type, pattern = "_", replacement = " "), " rates"))
@@ -537,6 +678,18 @@ plot_rates_vs_trait_data_for_focal_time <- function (deepSTRAPP_outputs,
          axis.text = ggplot2::element_text(size = 18, color = "black"),
          axis.text.x = ggplot2::element_text(margin = ggplot2::margin(t = 5)),
          axis.text.y = ggplot2::element_text(margin = ggplot2::margin(r = 5)))
+
+    # Add test summary if available
+    if (STRAPP_results_available)
+    {
+      ggplot_rates_vs_traits <- ggplot_rates_vs_traits +
+
+      # Observed stats, Q%: Estimate,  p-value
+      annotate_npc(x = 0.05, y = 0.95, hjust = 0, vjust = 1, gp = grid::gpar(fontsize = 18),
+                   label = paste0(stat_name," obs = ", round(stat_estimate, digits = 3), "\n",
+                                  "Q", estimate_quantile, " = ", quantile_value, "\n",
+                                  "P-value = ", p_value))
+    }
 
   } else {
     ## Case for categorical/biogeographic trait data
@@ -598,6 +751,18 @@ plot_rates_vs_trait_data_for_focal_time <- function (deepSTRAPP_outputs,
           axis.text.x = ggplot2::element_text(margin = ggplot2::margin(t = 5)),
           axis.text.y = ggplot2::element_text(margin = ggplot2::margin(r = 5)))
 
+      # Add test summary if available
+      if (STRAPP_results_available)
+      {
+        ggplot_rates_vs_traits <- ggplot_rates_vs_traits +
+
+          # Observed stats, Q%: Estimate,  p-value
+          annotate_npc(x = 0.05, y = 0.95, hjust = 0, vjust = 1, gp = grid::gpar(fontsize = 18),
+                       label = paste0(stat_name," obs = ", round(stat_estimate, digits = 3), "\n",
+                                      "Q", estimate_quantile, " = ", quantile_value, "\n",
+                                      "P-value = ", p_value))
+      }
+
     } else {
 
       ## Case for biogeographic data
@@ -641,6 +806,18 @@ plot_rates_vs_trait_data_for_focal_time <- function (deepSTRAPP_outputs,
           axis.text = ggplot2::element_text(size = 18, color = "black"),
           axis.text.x = ggplot2::element_text(margin = ggplot2::margin(t = 5)),
           axis.text.y = ggplot2::element_text(margin = ggplot2::margin(r = 5)))
+
+      # Add test summary if available
+      if (STRAPP_results_available)
+      {
+        ggplot_rates_vs_traits <- ggplot_rates_vs_traits +
+
+          # Observed stats, Q%: Estimate,  p-value
+          annotate_npc(x = 0.05, y = 0.95, hjust = 0, vjust = 1, gp = grid::gpar(fontsize = 18),
+                       label = paste0(stat_name," obs = ", round(stat_estimate, digits = 3), "\n",
+                                      "Q", estimate_quantile, " = ", quantile_value, "\n",
+                                      "P-value = ", p_value))
+      }
     }
   }
 
@@ -673,5 +850,18 @@ plot_rates_vs_trait_data_for_focal_time <- function (deepSTRAPP_outputs,
   ## Return output
   return(invisible(output))
 
+}
+
+
+### Helper function to enable the use of "npc" units in ggplot2::annotate()
+
+#' @noRd
+
+annotate_npc <- function(label, x, y, ...)
+{
+  ggplot2::annotation_custom(
+    grob = grid::textGrob(x = ggplot2::unit(x, "npc"),
+                          y = ggplot2::unit(y, "npc"),
+                          label = label, ...))
 }
 

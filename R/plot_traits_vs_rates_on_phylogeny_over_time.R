@@ -340,7 +340,7 @@ plot_traits_vs_rates_on_phylogeny_over_time <- function (
       PDF_file_path_i <- NULL
     }
 
-    ## Plot mapped phylogenies
+    ## Plot traits vs rates for the given focal time
     plot_traits_vs_rates_on_phylogeny_for_focal_time(
       deepSTRAPP_outputs = deepSTRAPP_outputs,
       focal_time = focal_time_i,
