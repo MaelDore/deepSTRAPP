@@ -555,12 +555,20 @@ plot_STRAPP_pvalues_over_time <-  function (
       significance_area_poly_df <- significance_area_poly_df |>
         filter(!(p_value > alpha))
     } else {
-      significance_area_poly_df <- data.frame(time = numeric(), y_axis = numeric(), pvalue = numeric())
+      significance_area_poly_df <- data.frame(time = numeric(), y_axis = numeric(), pvalue = numeric(), poly_ID = numeric())
     }
 
     # Build ggplot
     pvalues_plot <- ggplot2::ggplot(data = pvalues_summary_df,
                                     mapping = ggplot2::aes(y = p_value, x = focal_time, color = pair)) +
+
+      # Plot significance area
+      geom_polygon(data = significance_area_poly_df,
+                   mapping = aes(y = y_axis, x = time,
+                                 group = poly_ID),
+                   fill = "limegreen", col = NA,
+                   alpha = 0.7,
+                   linewidth = 1.0, show.legend = FALSE) +
 
       # Plot p_values line
       ggplot2::geom_line(alpha = 1.0,
