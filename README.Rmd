@@ -30,6 +30,8 @@ usethis::use_cran_badge() reports the current version of your package on CRAN.
 usethis::use_coverage() reports test coverage.
 use_github_actions()  reports the R CMD check status of your development package. 
 
+# Check badges in mFD package
+
 # Examples to adjust
 
 [![R-CMD-check](https://github.com/deepSTRAPP/workflows/R-CMD-check/badge.svg)](https://github.com/deepSTRAPP/actions)
