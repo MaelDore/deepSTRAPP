@@ -57,6 +57,13 @@
 #'   If the trait data are 'continuous', the plots are scatter plots showing how diversification rates varies with trait values.
 #'   If the trait data are 'categorical' or 'biogeographic', the plots are boxplots showing diversification rates per states/ranges.
 #'
+#'   Each plot also displays summary statistics for the STRAPP test associated with the data displayed:
+#'   * An observed statistic computed across the mean traits/ranges and rates values shown on the plot. This is not the statistic of the STRAPP test itself,
+#'     which is conducted across all BAMM posterior samples.
+#'   * The quantile of null statistic distribution at the significant threshold used to define test significance. The test will be considered significant
+#'     (i.e., the null hypothesis is rejected) if this value is higher than zero.
+#'   * The p-value of the associated STRAPP test.
+#'
 #'   Optional summary data.frame:
 #'   * `mean_rates_vs_trait_data_df` A data.frame with three columns providing the `$mean_rates` and `$trait_value`
 #'     observed along branches at the different `focal_time`. Rates are averaged across all BAMM posterior samples.
@@ -371,7 +378,7 @@ plot_rates_vs_trait_data_over_time <- function (deepSTRAPP_outputs,
       PDF_file_path_i <- NULL
     }
 
-    ## Run plot on focal-time i
+    ## Run plot on focal time i
     rates_vs_trait_output_i <- plot_rates_vs_trait_data_for_focal_time(
        deepSTRAPP_outputs = deepSTRAPP_outputs,
        focal_time = focal_time_i,

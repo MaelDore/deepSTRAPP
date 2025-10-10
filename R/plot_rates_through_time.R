@@ -234,7 +234,7 @@ plot_rates_through_time <- function (
       }
       # Ensure that time_range are properly ordered in increasing values
       time_range <- range(time_range)
-      # Check that time_range encompass multiple focal-time to be able to draw a line
+      # Check that time_range encompass multiple focal times to be able to draw a line
       focal_times_in_trait_df <- unique(deepSTRAPP_outputs$trait_data_df_over_time$focal_time)
       focal_times_in_diversification_df <- unique(deepSTRAPP_outputs$diversification_data_df_over_time$focal_time)
       shared_focal_times <- intersect(focal_times_in_trait_df, focal_times_in_diversification_df)

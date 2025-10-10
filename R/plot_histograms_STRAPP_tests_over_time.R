@@ -45,14 +45,20 @@
 #'   Time-steps for which the data do not yield more than two states/ranges will show a warning and generate no plot.
 #'
 #' @return By default, the function returns a list of sub-lists of classes `gg` and `ggplot` ordered as in `$time_steps`.
-#'   Each sub-list corresponds to a ggplot for a given `focal_time` i that can be displayed on the console with `print(output[[i]])`.
+#'   Each sub-list corresponds to a ggplot for a given `focal_time` `i` that can be displayed on the console with `print(output[[i]])`.
 #'   If `display_plots = TRUE`, the histograms are being displayed on the console one by one while generated.
 #'
 #'   If using multinominal data and set `plot_posthoc_tests = TRUE`, the function will return a list of sub-lists of objects ordered as in `$time_steps`.
 #'   Each sub-list is a list of the ggplots associated with pairwise post hoc tests carried out for this a given `focal_time`.
 #'   For a given `focal_time` i, to plot each histogram j individually, use `print(output_list[[i]][[j]])`.
-#'   To plot all histograms of a given `focal_time` i at once in a multifaceted plot, as displayed sequentially on the console if `display_plots = TRUE`,
+#'   To plot all histograms of a given `focal_time` `i` at once in a multifaceted plot, as displayed sequentially on the console if `display_plots = TRUE`,
 #'   use `cowplot::plot_grid(plotlist = output_list[[i]])`.
+#'
+#'   Each plot also displays summary statistics for the STRAPP test associated with the data displayed.
+#'   * The quantile of null statistic distribution at the significant threshold used to define test significance. This is the value found on the red dashed line.
+#'     The test will be considered significant (i.e., the null hypothesis is rejected) if this value is higher than zero (the black dashed line).
+#'   * The p-value of the STRAPP test which correspond the proportion of cases in which the statistics was lower than expected under the null hypothesis
+#'     (i.e., the proportion of the histogram found below / on the left-side of the black dashed line).
 #'
 #'   If a `PDF_file_path` is provided, the function will also generate a PDF file of the plots with one page per `$time_steps`.
 #'   For post hoc tests, this will save the multifaceted plots.
@@ -428,7 +434,7 @@ plot_histograms_STRAPP_tests_over_time <- function (
 
         # Add title
         ggplot2::ggtitle(paste0("STRAPP based on ",STRAPP_results_i$method," test\n",
-                                "Focal-time = ", STRAPP_results_i$focal_time)) +
+                                "Focal time = ", STRAPP_results_i$focal_time)) +
 
         # Adjust aesthetics
         ggplot2::theme(panel.grid.major = ggplot2::element_line(color = "grey70", linetype = "dashed", linewidth = 0.3),
@@ -557,7 +563,7 @@ plot_histograms_STRAPP_tests_over_time <- function (
 
           # Add title
           ggplot2::ggtitle(paste0("STRAPP based on ",STRAPP_results_i$posthoc_pairwise_tests$method," test\n",
-                                  "Focal-time = ", STRAPP_results_i$focal_time, "\n",
+                                  "Focal time = ", STRAPP_results_i$focal_time, "\n",
                                   "Hypothesis = ",pair_j, "\n")) +
 
           # Adjust aesthetics

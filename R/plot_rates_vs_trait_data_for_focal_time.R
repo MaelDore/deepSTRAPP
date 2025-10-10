@@ -33,7 +33,7 @@
 #' @param display_plot Logical. Whether to display the plot generated in the R console. Default is `TRUE`.
 #' @param PDF_file_path Character string. If provided, the plot will be saved in a PDF file following the path provided here. The path must end with ".pdf".
 #' @param return_mean_rates_vs_trait_data_df Logical. Whether to include in the output the data.frame of mean rates per trait values/states/ranges computed for
-#'   each posterior sample at the focal-time. Default is `FALSE`.
+#'   each posterior sample at the focal time. Default is `FALSE`.
 #'
 #' @export
 #' @importFrom ggplot2 ggplot geom_jitter aes geom_point geom_boxplot scale_color_gradientn scale_color_manual ylab xlab guides ggtitle theme element_line element_rect element_text margin
@@ -66,6 +66,13 @@
 #'
 #'   If the trait data are 'continuous', the plot is a scatter plot showing how diversification rates varies with trait values.
 #'   If the trait data are 'categorical' or 'biogeographic', the plot is a boxplot showing diversification rates per states/ranges.
+#'
+#'   Each plot also displays summary statistics for the STRAPP test associated with the data displayed:
+#'   * An observed statistic computed across the mean traits/ranges and rates values shown on the plot. This is not the statistic of the STRAPP test itself,
+#'     which is conducted across all BAMM posterior samples.
+#'   * The quantile of null statistic distribution at the significant threshold used to define test significance. The test will be considered significant
+#'     (i.e., the null hypothesis is rejected) if this value is higher than zero.
+#'   * The p-value of the associated STRAPP test.
 #'
 #'   Optional summary data.frame:
 #'   * `mean_rates_vs_trait_data_df` A data.frame with three columns providing the `$mean_rates` and `$trait_value`
@@ -662,7 +669,7 @@ plot_rates_vs_trait_data_for_focal_time <- function (deepSTRAPP_outputs,
 
       # Add title
       ggplot2::ggtitle(paste0("Mean rates vs. trait values\n",
-                              "Focal-time = ", focal_time)) +
+                              "Focal time = ", focal_time)) +
 
       # Adjust aesthetics
       ggplot2::theme(
@@ -734,7 +741,7 @@ plot_rates_vs_trait_data_for_focal_time <- function (deepSTRAPP_outputs,
 
         # Add title
         ggplot2::ggtitle(paste0("Mean rates vs. states\n",
-                                "Focal-time = ", focal_time)) +
+                                "Focal time = ", focal_time)) +
 
         # Adjust aesthetics
         ggplot2::theme(
@@ -790,7 +797,7 @@ plot_rates_vs_trait_data_for_focal_time <- function (deepSTRAPP_outputs,
 
         # Add title
         ggplot2::ggtitle(paste0("Mean rates vs. ranges\n",
-                                "Focal-time = ", focal_time)) +
+                                "Focal time = ", focal_time)) +
 
         # Adjust aesthetics
         ggplot2::theme(

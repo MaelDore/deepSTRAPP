@@ -59,8 +59,14 @@
 #'
 #'   If using multinominal data and set `plot_posthoc_tests = TRUE`, the function will return a list of objects.
 #'   Each object is the ggplot associated with a pairwise post hoc test.
-#'   To plot each histogram i individually, use `print(output_list[[i]])`.
+#'   To plot each histogram `i` individually, use `print(output_list[[i]])`.
 #'   To plot all histograms at once in a multifaceted plot, as displayed on the console if `display_plot = TRUE`, use `cowplot::plot_grid(plotlist = output_list)`.
+#'
+#'   Each plot also displays summary statistics for the STRAPP test associated with the data displayed.
+#'   * The quantile of null statistic distribution at the significant threshold used to define test significance. This is the value found on the red dashed line.
+#'     The test will be considered significant (i.e., the null hypothesis is rejected) if this value is higher than zero (the black dashed line).
+#'   * The p-value of the STRAPP test which correspond the proportion of cases in which the statistics was lower than expected under the null hypothesis
+#'     (i.e., the proportion of the histogram found below / on the left-side of the black dashed line).
 #'
 #'   If a `PDF_file_path` is provided, the function will also generate a PDF file of the plot. For post hoc tests, this will save the multifaceted plot.
 #'
@@ -470,7 +476,7 @@ plot_histogram_STRAPP_test_for_focal_time <- function (deepSTRAPP_outputs,
 
       # Add title
       ggplot2::ggtitle(paste0("STRAPP based on ",STRAPP_results$method," test\n",
-                              "Focal-time = ", STRAPP_results$focal_time)) +
+                              "Focal time = ", STRAPP_results$focal_time)) +
 
       # Adjust aesthetics
       ggplot2::theme(panel.grid.major = ggplot2::element_line(color = "grey70", linetype = "dashed", linewidth = 0.3),
@@ -574,7 +580,7 @@ plot_histogram_STRAPP_test_for_focal_time <- function (deepSTRAPP_outputs,
 
         # Add title
         ggplot2::ggtitle(paste0("STRAPP based on ",STRAPP_results$posthoc_pairwise_tests$method," test\n",
-                                "Focal-time = ", STRAPP_results$focal_time, "\n",
+                                "Focal time = ", STRAPP_results$focal_time, "\n",
                                 "Hypothesis = ",pair_i, "\n")) +
 
         # Adjust aesthetics
