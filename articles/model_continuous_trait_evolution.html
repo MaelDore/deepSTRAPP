@@ -96,7 +96,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Model continuous trait evolution</h1>
                         <h4 data-toc-skip class="author">Maël Doré</h4>
             
-            <h4 data-toc-skip class="date">2025-09-30</h4>
+            <h4 data-toc-skip class="date">2025-10-10</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/MaelDore/deepSTRAPP/blob/master/vignettes/model_continuous_trait_evolution.Rmd" class="external-link"><code>vignettes/model_continuous_trait_evolution.Rmd</code></a></small>
       <div class="d-none name"><code>model_continuous_trait_evolution.Rmd</code></div>
@@ -269,14 +269,22 @@ vignette:
 <span><span class="co">## Inputs needed to run deepSTRAPP are the contMap (eel_contMap), and optionally,</span></span>
 <span><span class="co">## the tip_data (eel_tip_data), and the ACE (eel_ACE)</span></span></code></pre></div>
 <p><img src="model_continuous_trait_evolution_files/figure-html/model_trait_evolution_cont_eval-1.png" width="672"><img src="model_continuous_trait_evolution_files/figure-html/model_trait_evolution_cont_eval-2.png" width="672"></p>
-<pre><code><span><span class="co">#&gt;                 model      logL k     AICc Akaike_weights rank</span></span>
-<span><span class="co">#&gt; BM                 BM -338.9352 2 682.0773            0.0    6</span></span>
-<span><span class="co">#&gt; OU                 OU -329.2538 3 664.9287           28.0    3</span></span>
-<span><span class="co">#&gt; EB                 EB -338.9355 3 684.2921            0.0    7</span></span>
-<span><span class="co">#&gt; rate_trend rate_trend -335.1346 3 676.6902            0.1    5</span></span>
-<span><span class="co">#&gt; lambda         lambda -328.9440 3 664.3090           38.2    1</span></span>
-<span><span class="co">#&gt; kappa           kappa -329.0984 3 664.6179           32.7    2</span></span>
-<span><span class="co">#&gt; delta           delta -332.6586 3 671.7383            0.9    4</span></span></code></pre>
+<pre><code><span><span class="co">#&gt;                 model      logL k      AIC     AICc delta_AICc Akaike_weights</span></span>
+<span><span class="co">#&gt; BM                 BM -338.9352 2 681.8704 682.0773 17.7682886            0.0</span></span>
+<span><span class="co">#&gt; OU                 OU -329.2538 3 664.5076 664.9287  0.6196536           28.0</span></span>
+<span><span class="co">#&gt; EB                 EB -338.9355 3 683.8710 684.2921 19.9830415            0.0</span></span>
+<span><span class="co">#&gt; rate_trend rate_trend -335.1346 3 676.2692 676.6902 12.3811866            0.1</span></span>
+<span><span class="co">#&gt; lambda         lambda -328.9440 3 663.8880 664.3090  0.0000000           38.2</span></span>
+<span><span class="co">#&gt; kappa           kappa -329.0984 3 664.1969 664.6179  0.3088913           32.7</span></span>
+<span><span class="co">#&gt; delta           delta -332.6586 3 671.3173 671.7383  7.4293004            0.9</span></span>
+<span><span class="co">#&gt;            rank</span></span>
+<span><span class="co">#&gt; BM            6</span></span>
+<span><span class="co">#&gt; OU            3</span></span>
+<span><span class="co">#&gt; EB            7</span></span>
+<span><span class="co">#&gt; rate_trend    5</span></span>
+<span><span class="co">#&gt; lambda        1</span></span>
+<span><span class="co">#&gt; kappa         2</span></span>
+<span><span class="co">#&gt; delta         4</span></span></code></pre>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
 </div>
