@@ -124,6 +124,9 @@ the Akaike weights (<code>$Akaike_weights</code>), and their rank based on AICc 
 <span class="r-in"><span><span class="va">BM_fit</span> <span class="op">&lt;-</span> <span class="fu">geiger</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/geiger/man/fitContinuous.html" class="external-link">fitContinuous</a></span><span class="op">(</span>phy <span class="op">=</span> <span class="va">eel.tree</span>, dat <span class="op">=</span> <span class="va">eel_data</span>, model <span class="op">=</span> <span class="st">"BM"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># Fit EB model</span></span></span>
 <span class="r-in"><span><span class="va">EB_fit</span> <span class="op">&lt;-</span> <span class="fu">geiger</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/geiger/man/fitContinuous.html" class="external-link">fitContinuous</a></span><span class="op">(</span>phy <span class="op">=</span> <span class="va">eel.tree</span>, dat <span class="op">=</span> <span class="va">eel_data</span>, model <span class="op">=</span> <span class="st">"EB"</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> Parameter estimates appear at bounds:</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> 	a</span>
 <span class="r-in"><span><span class="co"># Fit OU model</span></span></span>
 <span class="r-in"><span><span class="va">OU_fit</span> <span class="op">&lt;-</span> <span class="fu">geiger</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/geiger/man/fitContinuous.html" class="external-link">fitContinuous</a></span><span class="op">(</span>phy <span class="op">=</span> <span class="va">eel.tree</span>, dat <span class="op">=</span> <span class="va">eel_data</span>, model <span class="op">=</span> <span class="st">"OU"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
@@ -153,7 +156,7 @@ the Akaike weights (<code>$Akaike_weights</code>), and their rank based on AICc 
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..- attr(*, "class")= chr [1:2] "bm" "function"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..- attr(*, "model")= chr "OU"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ bnd:'data.frame':	2 obs. of  2 variables:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ res: num [1:100, 1:4] 7.12e-218 4.34e-02 4.34e-02 4.34e-02 7.12e-218 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ res: num [1:100, 1:4] 4.77e-81 3.70e-54 3.76e-194 7.12e-218 4.34e-02 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..- attr(*, "dimnames")=List of 2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ opt:List of 8</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..- attr(*, "class")= chr [1:2] "gfit" "list"</span>
@@ -167,9 +170,9 @@ the Akaike weights (<code>$Akaike_weights</code>), and their rank based on AICc 
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">model_comparison_output</span><span class="op">$</span><span class="va">best_model_fit</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> GEIGER-fitted comparative model of continuous data</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  fitted ‘OU’ model parameters:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 	alpha = 0.043394</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 	sigsq = 278.053266</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 	z0 = 92.068712</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 	alpha = 0.043393</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 	sigsq = 278.039659</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 	z0 = 92.068484</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  model summary:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 	log-likelihood = -329.253814</span>
@@ -180,8 +183,8 @@ the Akaike weights (<code>$Akaike_weights</code>), and their rank based on AICc 
 <span class="r-out co"><span class="r-pr">#&gt;</span> Convergence diagnostics:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 	optimization iterations = 100</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 	failed iterations = 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 	number of iterations with same best fit = 7</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 	frequency of best fit = 0.070</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 	number of iterations with same best fit = 4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 	frequency of best fit = 0.040</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  object summary:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 	'lik' -- likelihood function</span>
