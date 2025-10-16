@@ -2,9 +2,9 @@ Package: deepSTRAPP
 Title: Test for Differences in Diversification Rates over Time
 Version: 0.0.0.9000
 Authors@R: 
-    person("Maël", "Doré", , "mael.dore@gmail.com", role = c("aut", "cre"),
+    person("Maël", "Doré", , "mael.dore@gmail.com", role = c("aut", "cre", "cph"),
            comment = c(ORCID = "0000-0003-3242-9242"))
-Description: Employ time-calibrated phylogenies and trait data to test for
+Description: Employ time-calibrated phylogenies and trait/range data to test for
     differences in diversification rates over evolutionary time.  Extend
     the STRAPP test from 'BAMMtools::traitDependentBAMM' to any time step
     along phylogenies.
