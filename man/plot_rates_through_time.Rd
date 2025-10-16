@@ -214,7 +214,7 @@ plotTT_biogeographic_adj <- plotTT_biogeographic$rates_TT_ggplot +
        plot.title = ggplot2::element_text(size = 15),
        axis.title = ggplot2::element_text(size = 14),
        axis.text = ggplot2::element_text(size = 12))
-print(plotTT_biogeographic_adj))
+print(plotTT_biogeographic_adj)
 
 }
 \seealso{
