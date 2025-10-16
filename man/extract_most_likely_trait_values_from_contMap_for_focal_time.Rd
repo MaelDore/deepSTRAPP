@@ -146,7 +146,7 @@ eel_test <- extract_most_likely_trait_values_from_contMap_for_focal_time(
 eel_test$trait_data
 
 # Plot node labels on initial stochastic map with cut-off
-plot(eel_contMap)
+plot(eel_contMap, fsize = c(0.5, 1))
 ape::nodelabels()
 abline(v = max(phytools::nodeHeights(eel_contMap$tree)[,2]) - focal_time,
        col = "red", lty = 2, lwd = 2)
@@ -202,13 +202,13 @@ mammals_test <- extract_most_likely_trait_values_from_contMap_for_focal_time(
 mammals_test$trait_data
 
 # Plot node labels on initial stochastic map with cut-off
-phytools::plot.contMap(mammals_contMap)
+phytools::plot.contMap(mammals_contMap, fsize = c(0.5, 1))
 ape::nodelabels()
 abline(v = max(phytools::nodeHeights(mammals_contMap$tree)[,2]) - focal_time,
        col = "red", lty = 2, lwd = 2)
 
 # Plot updated contMap with initial node labels
-phytools::plot.contMap(mammals_test$contMap)
+phytools::plot.contMap(mammals_test$contMap, fsize = c(0.8, 1))
 ape::nodelabels(text = mammals_test$contMap$tree$initial_nodes_ID)
 
 }

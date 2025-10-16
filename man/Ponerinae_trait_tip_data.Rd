@@ -12,7 +12,7 @@ data(Ponerinae_trait_tip_data)
 }
 \description{
 A data.frame of fake trait data covering the 1534 extant ponerine ant taxa (Ponerinae subfamily).
-THIS IS NOT real biological/ecological data. They were designed for illustrative purposes only.
+This is NOT real biological/ecological data. They were designed for illustrative purposes only.
 }
 \details{
 A data.frame of fake trait data covering the 1534 extant ponerine ant taxa (Ponerinae subfamily).

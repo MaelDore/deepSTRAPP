@@ -125,12 +125,12 @@ eel_cat_3lvl_data_10My$trait_data
 ## Plot density maps as overlay of all state posterior probabilities
 
 # Plot initial density maps with ACE pies
-plot_densityMaps_overlay(densityMaps = eel_cat_3lvl_data$densityMaps)
+plot_densityMaps_overlay(densityMaps = eel_cat_3lvl_data$densityMaps, fsize = 0.5)
 abline(v = max(phytools::nodeHeights(eel_cat_3lvl_data$densityMaps[[1]]$tree)[,2]) - focal_time,
        col = "red", lty = 2, lwd = 2)
 
 # Plot updated densityMaps with ACE pies
-plot_densityMaps_overlay(eel_cat_3lvl_data_10My$densityMaps)
+plot_densityMaps_overlay(eel_cat_3lvl_data_10My$densityMaps, fsize = 0.7)
 
 
 # ----- Example 2: Include fossils (Non-ultrametric tree) ----- #
@@ -157,7 +157,8 @@ table(mammals_data)
 mammals_cat_data <- prepare_trait_data(tip_data = mammals_data, phylo = mammals_tree,
                                        trait_data_type = "categorical",
                                        evolutionary_models = "ER",
-                                       nb_simulations = 100)
+                                       nb_simulations = 100,
+                                       plot_map = FALSE)
 
 # Set focal time
 focal_time <- 80
@@ -177,12 +178,12 @@ mammals_cat_data_80My$trait_data
 ## Plot density maps as overlay of all state posterior probabilities
 
 # Plot initial density maps with ACE pies
-plot_densityMaps_overlay(densityMaps = mammals_cat_data$densityMaps)
+plot_densityMaps_overlay(densityMaps = mammals_cat_data$densityMaps, fsize = 0.7)
 abline(v = max(phytools::nodeHeights(mammals_cat_data$densityMaps[[1]]$tree)[,2]) - focal_time,
        col = "red", lty = 2, lwd = 2)
 
 # Plot updated densityMaps with ACE pies
-plot_densityMaps_overlay(mammals_cat_data_80My$densityMaps)
+plot_densityMaps_overlay(mammals_cat_data_80My$densityMaps, fsize = 0.8)
 
 }
 \seealso{

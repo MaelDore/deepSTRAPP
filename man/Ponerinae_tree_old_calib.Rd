@@ -12,7 +12,7 @@ data(Ponerinae_tree_old_calib)
 }
 \description{
 A \code{phylo} object describing the time-calibrated phylogeny of the 1534 extant ponerine ants (Ponerinae subfamily).
-THIS IS NOT a properly time-calibrated phylogeny. It uses an ill-designed old calibration for illustrative purposes.
+This is NOT a properly time-calibrated phylogeny. It uses an ill-designed old calibration for illustrative purposes.
 For a proper time-calibrated phylogeny of ponerine ants, see the \code{Ponerinae_tree} object in deepSTRAPP.
 
 Source: Doré, M., Borowiec, M. L., Branstetter, M. G., Camacho, G. P., Fisher, B. L., Longino, J. T., Ward, P. S., Blaimer, B. B. (2025).

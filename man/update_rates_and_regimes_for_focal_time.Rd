@@ -198,14 +198,14 @@ class(whale_BAMM_object) <- setdiff(class(whale_BAMM_object), "phylo")
 
 ## Plot initial BAMM_object for t = 0 My
 plot_BAMM_rates(whale_BAMM_object, add_regime_shifts = TRUE,
-                labels = TRUE, legend = TRUE,
+                labels = TRUE, legend = TRUE, cex = 0.5,
                 par.reset = FALSE) # Keep plotting parameters in memory to use abline().
 abline(v = root_age - focal_time,
       col = "red", lty = 2, lwd = 2)
 
 ## Plot updated BAMM_object for t = 5 My
 plot_BAMM_rates(whale_BAMM_object_5My, add_regime_shifts = TRUE,
-                labels = TRUE, legend = TRUE)
+                labels = TRUE, legend = TRUE, cex = 0.8)
 
 # ----- Example 2: Extant Ponerinae (1,534 taxa) ----- #
 

@@ -127,12 +127,12 @@ eel_biogeo_data_10My$trait_data
 ## Plot density maps as overlay of all range posterior probabilities
 
 # Plot initial density maps with ACE pies
-plot_densityMaps_overlay(densityMaps = eel_biogeo_data$densityMaps)
+plot_densityMaps_overlay(densityMaps = eel_biogeo_data$densityMaps, fsize = 0.7)
 abline(v = max(phytools::nodeHeights(eel_biogeo_data$densityMaps[[1]]$tree)[,2]) - focal_time,
        col = "red", lty = 2, lwd = 2)
 
 # Plot updated densityMaps with ACE pies
-plot_densityMaps_overlay(eel_biogeo_data_10My$densityMaps)
+plot_densityMaps_overlay(eel_biogeo_data_10My$densityMaps, fsize = 0.7)
 
 # ----- Example 2: Using all ranges ----- #
 
@@ -153,12 +153,12 @@ eel_biogeo_data_10My$trait_data
 
 # Plot initial density maps with ACE pies
 root_age <- max(phytools::nodeHeights(eel_biogeo_data$densityMaps_all_ranges[[1]]$tree)[,2])
-plot_densityMaps_overlay(densityMaps = eel_biogeo_data$densityMaps_all_ranges)
+plot_densityMaps_overlay(densityMaps = eel_biogeo_data$densityMaps_all_ranges, fsize = 0.7)
 abline(v =  root_age - focal_time,
        col = "red", lty = 2, lwd = 2)
 
 # Plot updated densityMaps with ACE pies
-plot_densityMaps_overlay(eel_biogeo_data_10My$densityMaps)
+plot_densityMaps_overlay(eel_biogeo_data_10My$densityMaps, fsize = 0.7)
 
 }
 \seealso{

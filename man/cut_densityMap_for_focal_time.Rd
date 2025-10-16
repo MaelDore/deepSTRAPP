@@ -79,7 +79,8 @@ table(mammals_data)
 mammals_cat_data <- prepare_trait_data(tip_data = mammals_data, phylo = mammals_tree,
                                        trait_data_type = "categorical",
                                        evolutionary_models = "ER",
-                                       nb_simulations = 100)
+                                       nb_simulations = 100,
+                                       plot_map = FALSE)
 
 # Set focal time
 focal_time <- 80
@@ -97,14 +98,14 @@ updated_mammals_densityMap_small <- cut_densityMap_for_focal_time(
      keep_tip_labels = TRUE)
 
 # Plot node labels on initial stochastic map with cut-off
-phytools::plot.densityMap(mammals_densityMap_small, lwd = 2)
-ape::nodelabels()
+phytools::plot.densityMap(mammals_densityMap_small, fsize = 0.7, lwd = 2)
+ape::nodelabels(cex = 0.7)
 abline(v = max(phytools::nodeHeights(mammals_densityMap_small$tree)[,2]) - focal_time,
        col = "red", lty = 2, lwd = 2)
 
 # Plot initial node labels on cut stochastic map
-phytools::plot.densityMap(updated_mammals_densityMap_small)
-ape::nodelabels(text = updated_mammals_densityMap_small$tree$initial_nodes_ID)
+phytools::plot.densityMap(updated_mammals_densityMap_small, fsize = 0.8)
+ape::nodelabels(cex = 0.8, text = updated_mammals_densityMap_small$tree$initial_nodes_ID)
 
 # ----- Example 2: keep_tip_labels = FALSE ----- #
 
@@ -115,14 +116,14 @@ updated_mammals_densityMap_small <- cut_densityMap_for_focal_time(
      keep_tip_labels = FALSE)
 
 # Plot node labels on initial stochastic map with cut-off
-phytools::plot.densityMap(mammals_densityMap_small, lwd = 2)
-ape::nodelabels()
+phytools::plot.densityMap(mammals_densityMap_small, fsize = 0.7, lwd = 2)
+ape::nodelabels(cex = 0.7)
 abline(v = max(phytools::nodeHeights(mammals_densityMap_small$tree)[,2]) - focal_time,
        col = "red", lty = 2, lwd = 2)
 
 # Plot initial node labels on cut stochastic map
-phytools::plot.densityMap(updated_mammals_densityMap_small)
-ape::nodelabels(text = updated_mammals_densityMap_small$tree$initial_nodes_ID)
+phytools::plot.densityMap(updated_mammals_densityMap_small, fsize = 0.8)
+ape::nodelabels(cex = 0.8, text = updated_mammals_densityMap_small$tree$initial_nodes_ID)
 
 }
 \seealso{

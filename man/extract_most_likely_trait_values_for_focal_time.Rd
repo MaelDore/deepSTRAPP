@@ -200,7 +200,7 @@ eel_cont_50 <- extract_most_likely_trait_values_for_focal_time(
 eel_cont_50$trait_data
 
 # Plot node labels on initial stochastic map with cut-off
-plot(eel_contMap)
+plot(eel_contMap, fsize = c(0.5, 1))
 ape::nodelabels()
 abline(v = max(phytools::nodeHeights(eel_contMap$tree)[,2]) - focal_time,
        col = "red", lty = 2, lwd = 2)

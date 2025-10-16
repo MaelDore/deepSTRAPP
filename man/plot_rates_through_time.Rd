@@ -113,7 +113,8 @@ Rates are averaged across branches at each time step (i.e., \code{focal_time}).
 data(Ponerinae_deepSTRAPP_cont_old_calib_0_40, package = "deepSTRAPP")
 
 # Visualize trait data
-hist(Ponerinae_deepSTRAPP_cont_old_calib_0_40$trait_data_df_over_time$trait_value)
+hist(Ponerinae_deepSTRAPP_cont_old_calib_0_40$trait_data_df_over_time$trait_value,
+   xlab = "Trait values", main = NULL)
 
 # Generate plot
 plotTT_continuous <- plot_rates_through_time(
@@ -124,6 +125,7 @@ plotTT_continuous <- plot_rates_through_time(
    plot_CI = TRUE,
    CI_type = "quantiles_rect",
    CI_quantiles = 0.9,
+   display_plot = FALSE,
    # PDF_file_path = "./plotTT_continuous.pdf",
    return_mean_data_per_samples_df = TRUE,
    return_median_data_across_samples_df = TRUE)
@@ -131,11 +133,15 @@ plotTT_continuous <- plot_rates_through_time(
 # Explore output
 # str(plotTT_continuous, max.level = 1)
 
-# Plot again
+# Plot
 print(plotTT_continuous$rates_TT_ggplot)
 # Adjust aesthetics of plot a posteriori
 plotTT_continuous_adj <- plotTT_continuous$rates_TT_ggplot +
-    ggplot2::theme(plot.title = ggplot2::element_text(color = "red", size = 15))
+    ggplot2::theme(
+       plot.title = ggplot2::element_text(color = "red", size = 15),
+       axis.title = ggplot2::element_text(size = 14),
+       axis.text = ggplot2::element_text(size = 12))
+# Plot again
 print(plotTT_continuous_adj)
 
 # ------ Example 2: Plot rates through time for categorical data ------ #
@@ -158,14 +164,21 @@ plotTT_categorical <- plot_rates_through_time(
     plot_CI = TRUE,
     CI_type = "quantiles_rect",
     CI_quantiles = 0.9,
+    display_plot = FALSE,
     # PDF_file_path = "./plotTT_categorical.pdf",
     return_mean_data_per_samples_df = TRUE,
     return_median_data_across_samples_df = TRUE)
 
 # Explore output
 # str(plotTT_categorical, max.level = 1)
-# Plot again
-print(plotTT_categorical$rates_TT_ggplot)
+
+# Adjust aesthetics of plot a posteriori
+plotTT_categorical_adj <- plotTT_categorical$rates_TT_ggplot +
+    ggplot2::theme(
+       plot.title = ggplot2::element_text(size = 15),
+       axis.title = ggplot2::element_text(size = 14),
+       axis.text = ggplot2::element_text(size = 12))
+print(plotTT_categorical_adj)
 
 # ------ Example 3: Plot rates through time for biogeographic data ------ #
 
@@ -187,14 +200,21 @@ plotTT_biogeographic <- plot_rates_through_time(
     plot_CI = TRUE,
     CI_type = "quantiles_rect",
     CI_quantiles = 0.9,
+    display_plot = FALSE,
     # PDF_file_path = "./plotTT_biogeographic.pdf",
     return_mean_data_per_samples_df = TRUE,
     return_median_data_across_samples_df = TRUE)
 
 # Explore output
 # str(plotTT_biogeographic, max.level = 1)
-# Plot again
-print(plotTT_biogeographic$rates_TT_ggplot)
+
+# Adjust aesthetics of plot a posteriori
+plotTT_biogeographic_adj <- plotTT_biogeographic$rates_TT_ggplot +
+    ggplot2::theme(
+       plot.title = ggplot2::element_text(size = 15),
+       axis.title = ggplot2::element_text(size = 14),
+       axis.text = ggplot2::element_text(size = 12))
+print(plotTT_biogeographic_adj))
 
 }
 \seealso{

@@ -52,8 +52,10 @@ model_comparison_output <- select_best_trait_model_from_geiger(list_model_fits =
 
 # Explore output
 str(model_comparison_output, max.level = 2)
+
 # Print comparison
 print(model_comparison_output$models_comparison_df)
+
 # Print best model fit
 print(model_comparison_output$best_model_fit)
 
@@ -81,8 +83,10 @@ model_comparison_output <- select_best_trait_model_from_geiger(list_model_fits =
 
 # Explore output
 str(model_comparison_output, max.level = 2)
+
 # Print comparison
 print(model_comparison_output$models_comparison_df)
+
 # Print best model fit
 print(model_comparison_output$best_model_fit)
 

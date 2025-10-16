@@ -82,7 +82,8 @@ table(mammals_data)
 mammals_cat_data <- prepare_trait_data(tip_data = mammals_data, phylo = mammals_tree,
                                        trait_data_type = "categorical",
                                        evolutionary_models = "ER",
-                                       nb_simulations = 100)
+                                       nb_simulations = 100,
+                                       plot_map = FALSE)
 
 # Set focal time
 focal_time <- 80
@@ -103,12 +104,12 @@ updated_mammals_densityMaps <- cut_densityMaps_for_focal_time(
 # ?plot_densityMaps_overlay
 
 # Plot initial density maps
-plot_densityMaps_overlay(densityMaps = mammals_densityMaps)
+plot_densityMaps_overlay(densityMaps = mammals_densityMaps, fsize = 0.5)
 abline(v = max(phytools::nodeHeights(mammals_densityMaps[[1]]$tree)[,2]) - focal_time,
        col = "red", lty = 2, lwd = 2)
 
 # Plot updated/cut density maps
-plot_densityMaps_overlay(densityMaps = updated_mammals_densityMaps)
+plot_densityMaps_overlay(densityMaps = updated_mammals_densityMaps, fsize = 0.8)
 
 # ----- Example 2: keep_tip_labels = FALSE ----- #
 
@@ -119,12 +120,12 @@ updated_mammals_densityMaps <- cut_densityMaps_for_focal_time(
     keep_tip_labels = FALSE)
 
 # Plot initial density maps
-plot_densityMaps_overlay(densityMaps = mammals_densityMaps)
+plot_densityMaps_overlay(densityMaps = mammals_densityMaps, fsize = 0.5)
 abline(v = max(phytools::nodeHeights(mammals_densityMaps[[1]]$tree)[,2]) - focal_time,
        col = "red", lty = 2, lwd = 2)
 
 # Plot updated/cut density maps
-plot_densityMaps_overlay(densityMaps = updated_mammals_densityMaps)
+plot_densityMaps_overlay(densityMaps = updated_mammals_densityMaps, fsize = 0.8)
 
 }
 \seealso{
