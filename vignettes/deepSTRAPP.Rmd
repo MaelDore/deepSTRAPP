@@ -37,7 +37,7 @@ They provide explanations on available arguments and interpretations of results 
 
 &nbsp;&nbsp;&nbsp;&nbsp;&#x25CF;&nbsp;&nbsp; [1.1/ Full deepSTRAPP workflow for __continuous__ trait data](https://maeldore.github.io/deepSTRAPP/articles/deepSTRAPP_continuous_data.html): `vignette("deepSTRAPP_continuous_data")`.
 
-&nbsp;&nbsp;&nbsp;&nbsp;&#x25CF;&nbsp;&nbsp; [1.2/ Full deepSTRAPP workflow for __categorical__ trait data with 3-levels](https://maeldore.github.io/deepSTRAPP/articles/deepSTRAPP_categorical_3lvl_data.html): `vignette("deepSTRAPP_categorical_3lvl_data")`.
+&nbsp;&nbsp;&nbsp;&nbsp;&#x25CF;&nbsp;&nbsp; [1.2/ Full deepSTRAPP workflow for __categorical__ trait data with 3-levels](https://maeldore.github.io/deepSTRAPP/articles/deepSTRAPP_categorical_data.html): `vignette("deepSTRAPP_categorical_data")`.
 
 &nbsp;&nbsp;&nbsp;&nbsp;&#x25CF;&nbsp;&nbsp; [1.3/ Full deepSTRAPP workflow for __biogeographic__ range data](https://maeldore.github.io/deepSTRAPP/articles/deepSTRAPP_biogeographic_data.html): `vignette("deepSTRAPP_biogeographic_data")`.
 
@@ -55,7 +55,7 @@ They provide explanations on available arguments and interpretations of results 
 
 ### **4/ Explore the STRAPP test options**
 
-&nbsp;&nbsp;&nbsp;&nbsp;&#x25CF;&nbsp;&nbsp; [Test difference hypotheses](https://maeldore.github.io/deepSTRAPP/articles/explore_STRAPP_test_types.html): `vignette("explore_STRAPP_test_types")`.
+&nbsp;&nbsp;&nbsp;&nbsp;&#x25CF;&nbsp;&nbsp; [Test different hypotheses](https://maeldore.github.io/deepSTRAPP/articles/explore_STRAPP_test_types.html): `vignette("explore_STRAPP_test_types")`.
 
   - Type of STRAPP tests: __two-tailed__ vs. __one-tailed__.
   - Continuous: "negative" or "positive" correlation.
