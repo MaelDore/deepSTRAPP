@@ -10,9 +10,10 @@ usethis::use_coverage() reports test coverage.
 use_github_actions()  reports the R CMD check status of your development package. 
 &#10;# Check badges in mFD package
 &#10;# Examples to adjust
-&#10;[![R-CMD-check](https://github.com/deepSTRAPP/workflows/R-CMD-check/badge.svg)](https://github.com/deepSTRAPP/actions)
-[![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/deepSTRAPP)](https://cran.r-project.org/package=deepSTRAPP) 
-[![rstudio mirror downloads](https://cranlogs.r-pkg.org/badges/deepSTRAPP)](https://r-pkg.org:443/pkg/deepSTRAPP)
+&#10;[![CRAN status](https://www.r-pkg.org/badges/version/deepSTRAPP)](https://cran.r-project.org/package=deepSTRAPP) 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Downloads - Total](http://cranlogs.r-pkg.org/badges/grand-total/deepSTRAPP?color=blue)](https://cran.r-project.org/package=deepSTRAPP) # Total (looks better)
+[![Downloads - Per month](https://cranlogs.r-pkg.org/badges/deepSTRAPP)](https://r-pkg.org:443/pkg/deepSTRAPP) # Per month
 [![DOI](https://zenodo.org/badge/TBA.svg)](https://zenodo.org/doi/TBA)
 &#10;-->
 <!-- badges: end -->
