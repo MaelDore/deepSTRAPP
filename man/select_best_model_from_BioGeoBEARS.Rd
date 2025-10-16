@@ -13,8 +13,8 @@ select_best_model_from_BioGeoBEARS(list_model_fits)
 The function returns a list with three elements.
 \itemize{
 \item \verb{$model_comparison_df} Data.frame summarizing information to compare model fits. It includes the model name (\verb{$model}),
-the log-likelihood (\verb{$logLik}), the number of free-parameters (\verb{$k}), the corrected AIC (\verb{$AICc}),
-the Akaike weights (\verb{$Akaike_weights}), and their rank based on AICc (\verb{$rank}).
+the log-likelihood (\verb{$logLik}), the number of free-parameters (\verb{$k}), the AIC (\verb{$AIC}), the corrected AIC (\verb{$AICc}),
+the delta to the best/lowest AICc (\verb{$delta_AICc}), the Akaike weights (\verb{$Akaike_weights}), and their rank based on AICc (\verb{$rank}).
 \item \verb{$best_model_name} Character string. Name of the best model.
 \item \verb{$best_model_fit} List containing the output of \code{BioGeoBEARS::bear_optim_run()} for the model with the best fit.
 }

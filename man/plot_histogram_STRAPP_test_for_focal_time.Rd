@@ -36,8 +36,16 @@ modify for aesthetics using the ggplot2 grammar.
 
 If using multinominal data and set \code{plot_posthoc_tests = TRUE}, the function will return a list of objects.
 Each object is the ggplot associated with a pairwise post hoc test.
-To plot each histogram i individually, use \code{print(output_list[[i]])}.
+To plot each histogram \code{i} individually, use \code{print(output_list[[i]])}.
 To plot all histograms at once in a multifaceted plot, as displayed on the console if \code{display_plot = TRUE}, use \code{cowplot::plot_grid(plotlist = output_list)}.
+
+Each plot also displays summary statistics for the STRAPP test associated with the data displayed.
+\itemize{
+\item The quantile of null statistic distribution at the significant threshold used to define test significance. This is the value found on the red dashed line.
+The test will be considered significant (i.e., the null hypothesis is rejected) if this value is higher than zero (the black dashed line).
+\item The p-value of the STRAPP test which correspond the proportion of cases in which the statistics was lower than expected under the null hypothesis
+(i.e., the proportion of the histogram found below / on the left-side of the black dashed line).
+}
 
 If a \code{PDF_file_path} is provided, the function will also generate a PDF file of the plot. For post hoc tests, this will save the multifaceted plot.
 }

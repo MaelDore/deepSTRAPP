@@ -54,6 +54,15 @@ and can be further modify for aesthetics using the ggplot2 grammar.
 If the trait data are 'continuous', the plots are scatter plots showing how diversification rates varies with trait values.
 If the trait data are 'categorical' or 'biogeographic', the plots are boxplots showing diversification rates per states/ranges.
 
+Each plot also displays summary statistics for the STRAPP test associated with the data displayed:
+\itemize{
+\item An observed statistic computed across the mean traits/ranges and rates values shown on the plot. This is not the statistic of the STRAPP test itself,
+which is conducted across all BAMM posterior samples.
+\item The quantile of null statistic distribution at the significant threshold used to define test significance. The test will be considered significant
+(i.e., the null hypothesis is rejected) if this value is higher than zero.
+\item The p-value of the associated STRAPP test.
+}
+
 Optional summary data.frame:
 \itemize{
 \item \code{mean_rates_vs_trait_data_df} A data.frame with three columns providing the \verb{$mean_rates} and \verb{$trait_value}

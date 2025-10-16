@@ -38,7 +38,9 @@ prepare_trait_data(
 \item{tip_data}{Named numerical or character string vector of trait values/states/ranges at tips.
 Names should be ordered as the tip labels in the phylogeny found in \code{phylo$tip.label}.
 For biogeographic data, ranges should follow the coding scheme of BioGeoBEARS with a unique CAPITAL letter per unique areas
-(ex: A, B), combined to form multi-area ranges (Ex: AB).}
+(ex: A, B), combined to form multi-area ranges (Ex: AB). Alternatively, you can provide tip_data as a matrix or data.frame of
+binary presence/absence in each area (coded as unique CAPITAL letter). In this case, columns are unique areas, rows are taxa,
+and values are integer (0/1) signaling absence or presence of the taxa in the area.}
 
 \item{trait_data_type}{Character string. Type of trait data. Either: "continuous", "categorical" or "biogeographic".}
 
@@ -219,8 +221,8 @@ to produce a \code{densityMap} for each state/range that reflects the changes al
 This function provides an easy solution to map trait evolution on a time-calibrated phylogeny
 and obtain the \code{contMap}/\code{densityMaps} objects needed to run the deepSTRAPP workflow (\link{run_deepSTRAPP_for_focal_time}, \link{run_deepSTRAPP_over_time}).
 However, it does not explore the most complex options for trait evolution. You may need to explore more complex models to capture the dynamics of trait evolution.
-such as trait-dependent multi-rate models (\code{\link[phytools:brownie.lite]{phytools::brownie.lite()}}, \link[OUwie:OUwie]{OUwie::OUwie}), Bayesian reversible jump MCMC implementations allowing a thorough exploration
-of location and number of regime shifts (Ex: BayesTraits, BAMM), or RRphylo for a penalized phylogenetic ridge regression approach that allows regime shifts across all branches.
+such as trait-dependent multi-rate models (\code{\link[phytools:brownie.lite]{phytools::brownie.lite()}}, \link[OUwie:OUwie]{OUwie::OUwie}), Bayesian MCMC implementations allowing a thorough exploration
+of location and number of regime shifts (Ex: BayesTraits, RevBayes), or RRphylo for a penalized phylogenetic ridge regression approach that allows regime shifts across all branches.
 }
 
 \section{Note on macroevolutionary models of biogeographic history}{

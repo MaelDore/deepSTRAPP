@@ -65,6 +65,10 @@ Needed in all cases to provide accurate estimates of trait values.
 \item For continuous trait data: Named numerical vector of trait values.
 \item For categorical trait or biogeographic data: Character string vector of states/ranges
 Names are nodes_ID of the internal nodes. Needed to provide accurate tip values.
+\item For biogeographic data, ranges should follow the coding scheme of BioGeoBEARS with a unique CAPITAL letter per unique areas
+(ex: A, B), combined to form multi-area ranges (Ex: AB). Alternatively, you can provide tip_data as a matrix or data.frame of
+binary presence/absence in each area (coded as unique CAPITAL letter). In this case, columns are unique areas, rows are taxa,
+and values are integer (0/1) signaling absence or presence of the taxa in the area.
 }}
 
 \item{trait_data_type}{Character string. Specify the type of trait data. Must be one of "continuous", "categorical", "biogeographic".}

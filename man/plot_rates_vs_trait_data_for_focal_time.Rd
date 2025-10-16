@@ -46,7 +46,7 @@ If \code{NULL} (default), the default ggplot2 color palette (\code{\link[scales:
 \item{PDF_file_path}{Character string. If provided, the plot will be saved in a PDF file following the path provided here. The path must end with ".pdf".}
 
 \item{return_mean_rates_vs_trait_data_df}{Logical. Whether to include in the output the data.frame of mean rates per trait values/states/ranges computed for
-each posterior sample at the focal-time. Default is \code{FALSE}.}
+each posterior sample at the focal time. Default is \code{FALSE}.}
 }
 \value{
 The function returns a list with at least one element.
@@ -58,6 +58,15 @@ when the function is run, if \code{display_plot = TRUE}, and can be further modi
 
 If the trait data are 'continuous', the plot is a scatter plot showing how diversification rates varies with trait values.
 If the trait data are 'categorical' or 'biogeographic', the plot is a boxplot showing diversification rates per states/ranges.
+
+Each plot also displays summary statistics for the STRAPP test associated with the data displayed:
+\itemize{
+\item An observed statistic computed across the mean traits/ranges and rates values shown on the plot. This is not the statistic of the STRAPP test itself,
+which is conducted across all BAMM posterior samples.
+\item The quantile of null statistic distribution at the significant threshold used to define test significance. The test will be considered significant
+(i.e., the null hypothesis is rejected) if this value is higher than zero.
+\item The p-value of the associated STRAPP test.
+}
 
 Optional summary data.frame:
 \itemize{
