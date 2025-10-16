@@ -89,8 +89,8 @@ Generate a data.frame summarizing information. Identify the best model and extra
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>The function returns a list with three elements.</p><ul><li><p><code>$model_comparison_df</code> Data.frame summarizing information to compare model fits. It includes the model name (<code>$model</code>),
-the log-likelihood (<code>$logLik</code>), the number of free-parameters (<code>$k</code>), the corrected AIC (<code>$AICc</code>),
-the Akaike weights (<code>$Akaike_weights</code>), and their rank based on AICc (<code>$rank</code>).</p></li>
+the log-likelihood (<code>$logLik</code>), the number of free-parameters (<code>$k</code>), the AIC (<code>$AIC</code>), the corrected AIC (<code>$AICc</code>),
+the delta to the best/lowest AICc (<code>$delta_AICc</code>), the Akaike weights (<code>$Akaike_weights</code>), and their rank based on AICc (<code>$rank</code>).</p></li>
 <li><p><code>$best_model_name</code> Character string. Name of the best model.</p></li>
 <li><p><code>$best_model_fit</code> List containing the output of <code>BioGeoBEARS::bear_optim_run()</code> for the model with the best fit.</p></li>
 </ul></div>

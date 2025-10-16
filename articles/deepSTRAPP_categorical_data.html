@@ -96,7 +96,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>deepSTRAPP: Categorical trait data</h1>
                         <h4 data-toc-skip class="author">Maël Doré</h4>
             
-            <h4 data-toc-skip class="date">2025-10-15</h4>
+            <h4 data-toc-skip class="date">2025-10-16</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/MaelDore/deepSTRAPP/blob/master/vignettes/deepSTRAPP_categorical_data.Rmd" class="external-link"><code>vignettes/deepSTRAPP_categorical_data.Rmd</code></a></small>
       <div class="d-none name"><code>deepSTRAPP_categorical_data.Rmd</code></div>
@@ -131,9 +131,10 @@ deepSTRAPP.</p>
 <span><span class="co"># Extract categorical data with 3-levels</span></span>
 <span><span class="va">Ponerinae_cat_3lvl_tip_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/setNames.html" class="external-link">setNames</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">Ponerinae_trait_tip_data</span><span class="op">$</span><span class="va">fake_cat_3lvl_tip_data</span>,</span>
 <span>                                    nm <span class="op">=</span> <span class="va">Ponerinae_trait_tip_data</span><span class="op">$</span><span class="va">Taxa</span><span class="op">)</span></span>
+<span><span class="co"># Here, data represent three types of habitats</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">Ponerinae_cat_3lvl_tip_data</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co">## Select color scheme for states</span></span>
+<span><span class="co">## Select color scheme for states (i.e., habitats)</span></span>
 <span><span class="va">colors_per_states</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"forestgreen"</span>, <span class="st">"sienna"</span>, <span class="st">"goldenrod"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">colors_per_states</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"arboreal"</span>, <span class="st">"subterranean"</span>, <span class="st">"terricolous"</span><span class="op">)</span></span>
 <span></span>
@@ -569,6 +570,15 @@ deepSTRAPP.</p>
 <span><span class="co"># who tends to have higher rates than "arboreal" ants, at this time-step.</span></span>
 <span><span class="co"># This plot, alongside other results of deepSTRAPP, supports the Diversification Rate Hypothesis in showing </span></span>
 <span><span class="co"># how "terricolous" ant lineages may have accumulated faster, especially between 5 to 15 My.</span></span>
+<span><span class="co"># Additionally, the plot displays summary statistics for the STRAPP test associated with the data shown:</span></span>
+<span><span class="co">#   * An observed statistic computed across the mean rates and trait states (i.e., habitats) shown on the plot.</span></span>
+<span><span class="co">#     Here, H-stat obs = 374.82. Please note that this is not the statistic of the STRAPP test itself,</span></span>
+<span><span class="co">#     which is conducted across all BAMM posterior samples.</span></span>
+<span><span class="co">#   * The quantile of null statistic distribution at the significant threshold used to define test significance. </span></span>
+<span><span class="co">#     The test will be considered significant (i.e., the null hypothesis is rejected)</span></span>
+<span><span class="co">#     if this value is higher than zero, as shown on the histogram in Section 4.2.</span></span>
+<span><span class="co">#     Here, Q10% = 6.942, so the test is significant (according to this significance threshold).</span></span>
+<span><span class="co">#   * The p-value of the associated STRAPP test. Here, p = 0.071.</span></span>
 <span></span>
 <span><span class="co"># Plot rates vs. trait data for all time-steps</span></span>
 <span><span class="fu"><a href="../reference/plot_rates_vs_trait_data_over_time.html">plot_rates_vs_trait_data_over_time</a></span><span class="op">(</span></span>

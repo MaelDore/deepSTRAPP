@@ -92,8 +92,8 @@ Identify the best model and extract its results.</p>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>The function returns a list with three elements.</p><ul><li><p><code>$model_comparison_df</code> Data.frame summarizing information to compare model fits. It includes the model name (<code>$model</code>),
-the log-likelihood (<code>$logLik</code>), the number of free-parameters (<code>$k</code>), the corrected AIC (<code>$AICc</code>),
-the Akaike weights (<code>$Akaike_weights</code>), and their rank based on AICc (<code>$rank</code>).</p></li>
+the log-likelihood (<code>$logLik</code>), the number of free-parameters (<code>$k</code>), the AIC (<code>$AICc</code>), the corrected AIC (<code>$AICc</code>),
+the delta to the best/lowest AICc (<code>$delta_AICc</code>), the Akaike weights (<code>$Akaike_weights</code>), and their rank based on AICc (<code>$rank</code>).</p></li>
 <li><p><code>$best_model_name</code> Character string. Name of the best model.</p></li>
 <li><p><code>$best_model_fit</code> List containing the output of <code><a href="https://rdrr.io/pkg/geiger/man/fitContinuous.html" class="external-link">geiger::fitContinuous()</a></code> or <code><a href="https://rdrr.io/pkg/geiger/man/fitDiscrete.html" class="external-link">geiger::fitDiscrete()</a></code> for the model with the best fit.</p></li>
 </ul></div>
@@ -156,7 +156,7 @@ the Akaike weights (<code>$Akaike_weights</code>), and their rank based on AICc 
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..- attr(*, "class")= chr [1:2] "bm" "function"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..- attr(*, "model")= chr "OU"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ bnd:'data.frame':	2 obs. of  2 variables:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ res: num [1:100, 1:4] 4.77e-81 3.70e-54 3.76e-194 7.12e-218 4.34e-02 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ res: num [1:100, 1:4] 7.12e-218 7.12e-218 1.72e-134 4.64e-216 4.34e-02 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..- attr(*, "dimnames")=List of 2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ opt:List of 8</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..- attr(*, "class")= chr [1:2] "gfit" "list"</span>
@@ -170,9 +170,9 @@ the Akaike weights (<code>$Akaike_weights</code>), and their rank based on AICc 
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">model_comparison_output</span><span class="op">$</span><span class="va">best_model_fit</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> GEIGER-fitted comparative model of continuous data</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  fitted ‘OU’ model parameters:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 	alpha = 0.043393</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 	sigsq = 278.039659</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 	z0 = 92.068484</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 	alpha = 0.043392</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 	sigsq = 278.048675</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 	z0 = 92.068457</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  model summary:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 	log-likelihood = -329.253814</span>
@@ -183,8 +183,8 @@ the Akaike weights (<code>$Akaike_weights</code>), and their rank based on AICc 
 <span class="r-out co"><span class="r-pr">#&gt;</span> Convergence diagnostics:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 	optimization iterations = 100</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 	failed iterations = 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 	number of iterations with same best fit = 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 	frequency of best fit = 0.040</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 	number of iterations with same best fit = 7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 	frequency of best fit = 0.070</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  object summary:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 	'lik' -- likelihood function</span>

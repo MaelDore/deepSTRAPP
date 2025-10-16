@@ -17,8 +17,8 @@
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><link href="extra.css" rel="stylesheet">
 <meta property="og:title" content="Test for Differences in Diversification Rates over Time">
-<meta name="description" content="Employ time-calibrated phylogenies and trait data to test for differences in diversification rates over evolutionary time. Extend the STRAPP test from BAMMtools::traitDependentBAMM to any time step along phylogenies.">
-<meta property="og:description" content="Employ time-calibrated phylogenies and trait data to test for differences in diversification rates over evolutionary time. Extend the STRAPP test from BAMMtools::traitDependentBAMM to any time step along phylogenies.">
+<meta name="description" content="Employ time-calibrated phylogenies and trait/range data to test for differences in diversification rates over evolutionary time. Extend the STRAPP test from BAMMtools::traitDependentBAMM to any time step along phylogenies.">
+<meta property="og:description" content="Employ time-calibrated phylogenies and trait/range data to test for differences in diversification rates over evolutionary time. Extend the STRAPP test from BAMMtools::traitDependentBAMM to any time step along phylogenies.">
 <meta property="og:image" content="https://maeldore.github.io/deepSTRAPP/logo.png">
 </head>
 <body>
@@ -114,7 +114,7 @@ use_github_actions()  reports the R CMD check status of your development package
 <h2 id="dart-summary">
 <span class="emoji" data-emoji="dart">🎯</span> Summary<a class="anchor" aria-label="anchor" href="#dart-summary"></a>
 </h2>
-<p><br><strong>deepSTRAPP</strong> provides a powerful analytic framework to investigate the <strong>Rate Diversification Hypothesis (RDH)</strong> in the context of Historical Biogeography. RDH posits that current heterogeneity in diversity patterns such as the Latitudinal Diversity Gradient are mostly due to differences in diversification rates across bioregions. This hypothesis is typically assessed by comparing diversification rates across tips between the different bioregions with for example a STRAPP test (<em>Rabosky &amp; Huang, 2016</em>). However, such tests only compare current rates of diversification that may not be informative about the <strong>long-term past dynamics shaping present-day biodiversity</strong>. deepSTRAPP overcomes this methodological gap: it enables to test the RDH by comparing diversification rates <strong>at any time step along evolutionary time</strong>. As a typical outcome, it allows researchers to <strong>identify time-frame of significance</strong> during which diversification rates were different across trait values, providing a quantitative testing framework to <strong>disentangle effects of past and current dynamics</strong> in explaining current patterns of biodiversity.</p>
+<p><br><strong>deepSTRAPP</strong> provides a powerful analytic framework to investigate the <strong>Diversification Rate Hypothesis (DRH)</strong> in the context of Historical Biogeography. DRH posits that current heterogeneity in diversity patterns such as the Latitudinal Diversity Gradient are mostly due to differences in diversification rates across bioregions. This hypothesis is typically assessed by comparing diversification rates across tips between the different bioregions with for example a STRAPP test (<em>Rabosky &amp; Huang, 2016</em>). However, such tests only compare current rates of diversification that may not be informative about the <strong>long-term past dynamics shaping present-day biodiversity</strong>. deepSTRAPP overcomes this methodological gap: it enables to test the DRH by comparing diversification rates <strong>at any time step along evolutionary time</strong>. As a typical outcome, it allows researchers to <strong>identify time-frame of significance</strong> during which diversification rates were different across trait values, providing a quantitative testing framework to <strong>disentangle effects of past and current dynamics</strong> in explaining current patterns of biodiversity.</p>
 <p>Beyond the biogeographic context, deepSTRAPP can be used to test for an evolutionary relationship between phenotypic evolution and diversification dynamics for <strong>any type of traits</strong>. It provides an alternative approach to state-dependent speciation and extinction (SSE) models that intend to model altogether trait evolution and diversification dynamics, but are often time-consuming and hard to parametrize, especially on large time-calibrated phylogenies. Conversely, deepSTRAPP offers a flexible solution that <strong>can be applied to phylogenies encompassing thousands of lineages</strong> (<em>Doré al., 2025</em>).</p>
 <p>deepSTRAPP is especially suited for large phylogenies as the power of the statistical tests is limited by the number of diversification regime shifts detected on the phylogeny and used to perform permutation tests. Each macroevolutionary regime acts as an independent event used to test for differences, therefore the sample size of the tests is conditioned by the number of macroevolutionary regimes identified. It is unlikely to detect any significant differences with few regime shifts.</p>
 <p>A <strong>full deepSTRAPP workflow</strong> runs as follows:</p>
@@ -281,7 +281,6 @@ use_github_actions()  reports the R CMD check status of your development package
 <blockquote>
 <p>Doré, M., &amp; Blaimer, B. B., deepSTRAPP: Testing for differences in diversification rates over deep evolutionary time. (DOI TBA)</p>
 </blockquote>
-<p><strong>May include a chunk of R script with a bibtex citation</strong></p>
 <p>As <strong>deepSTRAPP</strong> relies strongly on functions designed for the <a href="https://blog.phytools.org/" class="external-link">phytools R package</a>, it is good practice to also cite this package:</p>
 <blockquote>
 <p>Revell, L. J. (2024) phytools 2.0: an updated R ecosystem for phylogenetic comparative methods (and other things). PeerJ, 12, e16505. <a href="https://doi.org/10.7717/peerj.16505" class="external-link uri">https://doi.org/10.7717/peerj.16505</a>.</p>
@@ -322,7 +321,7 @@ use_github_actions()  reports the R CMD check status of your development package
 <div class="developers">
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
-<li>Maël Doré <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0003-3242-9242" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a>  </li>
+<li>Maël Doré <br><small class="roles"> Author, maintainer, copyright holder </small> <a href="https://orcid.org/0000-0003-3242-9242" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a>  </li>
 </ul>
 </div>
 

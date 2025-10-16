@@ -141,6 +141,9 @@ deepSTRAPP.</p>
 <span><span class="co"># Extract continuous trait data as a named vector</span></span>
 <span><span class="va">Ponerinae_cont_tip_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/setNames.html" class="external-link">setNames</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">Ponerinae_trait_tip_data</span><span class="op">$</span><span class="va">fake_cont_tip_data</span>,</span>
 <span>                                    nm <span class="op">=</span> <span class="va">Ponerinae_trait_tip_data</span><span class="op">$</span><span class="va">Taxa</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># This not valid biological data. For the sake of example, we will assume this is size data.</span></span>
+<span></span>
 <span><span class="co"># Reorder tip data as in phylogeny</span></span>
 <span><span class="va">Ponerinae_cont_tip_data</span> <span class="op">&lt;-</span> <span class="va">Ponerinae_cont_tip_data</span><span class="op">[</span><span class="va">Ponerinae_tree_old_calib</span><span class="op">$</span><span class="va">tip.label</span><span class="op">]</span></span>
 <span></span>
@@ -208,45 +211,31 @@ deepSTRAPP.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Plot rates vs. trait values</span></span>
 <span></span>
-<span><span class="co"># Extract mean diversification data, only for net diversification rates</span></span>
-<span><span class="va">diversification_data_df</span> <span class="op">&lt;-</span> <span class="va">deepSTRAPP_output_two_tailed</span><span class="op">$</span><span class="va">diversification_data_df</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">rate_type</span> <span class="op">==</span> <span class="st">"net_diversification"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">tip_ID</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span>mean_rates <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">rates</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co"># We can plot the mean rates vs. trait values inferred by deepSTRAPP for T = 10Mya</span></span>
+<span><span class="co"># to unravel the direction of the correlation detected.</span></span>
 <span></span>
-<span><span class="co"># Extract trait data</span></span>
-<span><span class="va">trait_data_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">deepSTRAPP_output_two_tailed</span><span class="op">$</span><span class="va">updated_trait_data_with_Map</span><span class="op">$</span><span class="va">trait_data</span><span class="op">)</span></span>
-<span><span class="va">trait_data_df</span><span class="op">$</span><span class="va">tip_ID</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">deepSTRAPP_output_two_tailed</span><span class="op">$</span><span class="va">updated_trait_data_with_Map</span><span class="op">$</span><span class="va">trait_data</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">trait_data_df</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"trait_values"</span>, <span class="st">"tip_ID"</span><span class="op">)</span></span>
+<span><span class="op">?</span><span class="fu"><a href="../reference/plot_rates_vs_trait_data_for_focal_time.html">plot_rates_vs_trait_data_for_focal_time</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Merge rates and traits in a unique data.frame</span></span>
-<span><span class="va">data_melted_df</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">diversification_data_df</span>, y <span class="op">=</span> <span class="va">trait_data_df</span>,</span>
-<span>                                   by <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/join_by.html" class="external-link">join_by</a></span><span class="op">(</span><span class="va">tip_ID</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co"># Select a color scheme from lowest to highest values (i.e., small ants to large ants)</span></span>
+<span><span class="va">color_scale</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"darkgreen"</span>, <span class="st">"limegreen"</span>, <span class="st">"orange"</span>, <span class="st">"red"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Plot rates vs. trait values across all BAMM samples</span></span>
-<span><span class="va">ggplot_rates_vs_traits</span> <span class="op">&lt;-</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">data_melted_df</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="co"># Plot points for all samples</span></span>
-<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>mapping <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">mean_rates</span>, x <span class="op">=</span> <span class="va">trait_values</span><span class="op">)</span>,</span>
-<span>                      alpha <span class="op">=</span> <span class="fl">0.80</span>, size <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="co"># Adjust axis titles</span></span>
-<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ylab</a></span><span class="op">(</span><span class="st">"Net diversification rates"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">xlab</a></span><span class="op">(</span><span class="st">"Trait values"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  </span>
-<span>  <span class="co"># Adjust aesthetics</span></span>
-<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span></span>
-<span>     plot.margin <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">margin</a></span><span class="op">(</span><span class="fl">0.3</span>, <span class="fl">0.5</span>, <span class="fl">0.5</span>, <span class="fl">0.5</span>, <span class="st">"inches"</span><span class="op">)</span>, <span class="co"># trbl</span></span>
-<span>     panel.grid.major <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_line</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"grey70"</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span>, linewidth <span class="op">=</span> <span class="fl">0.3</span><span class="op">)</span>,</span>
-<span>     panel.background <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_rect</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="cn">NA</span>, color <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span>,</span>
-<span>     axis.title <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">20</span>, color <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span>,</span>
-<span>     axis.title.x <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>margin <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">margin</a></span><span class="op">(</span>t <span class="op">=</span> <span class="fl">10</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>     axis.title.y <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>margin <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">margin</a></span><span class="op">(</span>r <span class="op">=</span> <span class="fl">12</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>     axis.line <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_line</a></span><span class="op">(</span>linewidth <span class="op">=</span> <span class="fl">1.0</span><span class="op">)</span>,</span>
-<span>     axis.text <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">18</span>, color <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span><span class="op">)</span></span>
-<span>  </span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">ggplot_rates_vs_traits</span><span class="op">)</span></span>
+<span><span class="co"># Plot mean rates vs. traits aggregated across all BAMM posterior samples</span></span>
+<span><span class="fu"><a href="../reference/plot_rates_vs_trait_data_for_focal_time.html">plot_rates_vs_trait_data_for_focal_time</a></span><span class="op">(</span>deepSTRAPP_outputs <span class="op">=</span> <span class="va">deepSTRAPP_output_two_tailed</span>,</span>
+<span>                                        color_scale <span class="op">=</span> <span class="va">color_scale</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># The plot indicates that rates are globally negatively correlated with trait values. </span></span>
-<span><span class="co"># We could also have directly tested for hypothesis with a one-tailed test (See Step 3 below).</span></span></code></pre></div>
+<span><span class="co"># The plot indicates that rates are globally negatively correlated with trait values as </span></span>
+<span><span class="co"># "small" ants exhibit higher rates than "large" ants for T = 10 Mya.</span></span>
+<span><span class="co"># The plot also displays summary statistics for the STRAPP test associated with the data shown:</span></span>
+<span><span class="co">#   * An observed statistic computed across the mean rates and trait values shown on the plot.</span></span>
+<span><span class="co">#     Here, rho obs = -0.743, indicating a negative correlation.</span></span>
+<span><span class="co">#     This is not the statistic of the STRAPP test itself, which is conducted across all BAMM posterior samples.</span></span>
+<span><span class="co">#   * The quantile of null statistic distribution at the significant threshold used to define test significance. </span></span>
+<span><span class="co">#     The test will be considered significant (i.e., the null hypothesis is rejected)</span></span>
+<span><span class="co">#     if this value is higher than zero, as shown on the histogram above.</span></span>
+<span><span class="co">#     Here, Q5% = 0.063, so the test is significant (according to this significance threshold).</span></span>
+<span><span class="co">#   * The p-value of the associated STRAPP test. Here, p = 0.016.</span></span>
+<span></span>
+<span><span class="co"># We could have directly tested for hypothesis with a one-tailed test (See Step 3 below).</span></span></code></pre></div>
 <p><img src="explore_STRAPP_test_types_files/figure-html/STRAPP_tests_cont_two_tailed_eval_2-1.png" width="100%"></p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#### Step 3: Run a one-tailed test ####</span></span>
@@ -335,7 +324,7 @@ deepSTRAPP.</p>
 <span></span>
 <span><span class="co">#### Step 2: Run a two-tailed test ####</span></span>
 <span></span>
-<span><span class="co"># No assumption is made ab out which states exhibit the highest rates.</span></span>
+<span><span class="co"># No assumption is made about which states exhibit the highest rates.</span></span>
 <span><span class="co"># The null hypothesis is that there is no difference in rates between the two states.</span></span>
 <span><span class="co"># The alternative hypothesis is that there is a difference in rates between the two states,</span></span>
 <span><span class="co"># in any direction (i.e., "small &gt; large" or "large &gt; small").</span></span>
@@ -387,56 +376,27 @@ deepSTRAPP.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Plot rates vs. trait values</span></span>
 <span></span>
-<span><span class="co"># Extract mean diversification data, only for net diversification rates</span></span>
-<span><span class="va">diversification_data_df</span> <span class="op">&lt;-</span> <span class="va">deepSTRAPP_output_two_tailed</span><span class="op">$</span><span class="va">diversification_data_df</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">rate_type</span> <span class="op">==</span> <span class="st">"net_diversification"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">tip_ID</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span>mean_rates <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">rates</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co"># We can plot the mean rates vs. states inferred by deepSTRAPP for T = 10Mya</span></span>
+<span><span class="co"># to unravel the direction of the difference detected.</span></span>
 <span></span>
-<span><span class="co"># Extract trait data</span></span>
-<span><span class="va">trait_data_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">deepSTRAPP_output_two_tailed</span><span class="op">$</span><span class="va">updated_trait_data_with_Map</span><span class="op">$</span><span class="va">trait_data</span><span class="op">)</span></span>
-<span><span class="va">trait_data_df</span><span class="op">$</span><span class="va">tip_ID</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">deepSTRAPP_output_two_tailed</span><span class="op">$</span><span class="va">updated_trait_data_with_Map</span><span class="op">$</span><span class="va">trait_data</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">trait_data_df</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"trait_values"</span>, <span class="st">"tip_ID"</span><span class="op">)</span></span>
+<span><span class="op">?</span><span class="fu"><a href="../reference/plot_rates_vs_trait_data_for_focal_time.html">plot_rates_vs_trait_data_for_focal_time</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Merge rates and traits in a unique data.frame</span></span>
-<span><span class="va">data_melted_df</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">diversification_data_df</span>, y <span class="op">=</span> <span class="va">trait_data_df</span>,</span>
-<span>                                   by <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/join_by.html" class="external-link">join_by</a></span><span class="op">(</span><span class="va">tip_ID</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co"># Plot mean rates vs. trait states aggregated across all BAMM posterior samples</span></span>
+<span><span class="fu"><a href="../reference/plot_rates_vs_trait_data_for_focal_time.html">plot_rates_vs_trait_data_for_focal_time</a></span><span class="op">(</span>deepSTRAPP_outputs <span class="op">=</span> <span class="va">deepSTRAPP_output_two_tailed</span>,</span>
+<span>                                        colors_per_levels <span class="op">=</span> <span class="va">colors_per_states</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Plot rates vs. trait values across all BAMM samples</span></span>
-<span><span class="va">ggplot_rates_vs_traits</span> <span class="op">&lt;-</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">data_melted_df</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  </span>
-<span>  <span class="co"># Plot boxplot per states</span></span>
-<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html" class="external-link">geom_boxplot</a></span><span class="op">(</span>mapping <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">mean_rates</span>, x <span class="op">=</span> <span class="va">trait_values</span>,</span>
-<span>                                               fill <span class="op">=</span> <span class="va">trait_values</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="co"># Plot points for all samples</span></span>
-<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_jitter.html" class="external-link">geom_jitter</a></span><span class="op">(</span>mapping <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">mean_rates</span>, x <span class="op">=</span> <span class="va">trait_values</span>,</span>
-<span>                                              fill <span class="op">=</span> <span class="va">trait_values</span><span class="op">)</span>,</span>
-<span>                      alpha <span class="op">=</span> <span class="fl">0.50</span>, size <span class="op">=</span> <span class="fl">3</span>, width <span class="op">=</span> <span class="fl">0.25</span>, shape <span class="op">=</span> <span class="fl">21</span>, color <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="co"># Adjust axis titles</span></span>
-<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ylab</a></span><span class="op">(</span><span class="st">"Net diversification rates"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">xlab</a></span><span class="op">(</span><span class="st">"States"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  </span>
-<span>  <span class="co"># Adjust legend</span></span>
-<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_fill_manual</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"States"</span>,</span>
-<span>                             breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">colors_per_states</span><span class="op">)</span>,</span>
-<span>                             values <span class="op">=</span> <span class="va">colors_per_states</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  </span>
-<span>  <span class="co"># Adjust aesthetics</span></span>
-<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span></span>
-<span>     plot.margin <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">margin</a></span><span class="op">(</span><span class="fl">0.3</span>, <span class="fl">0.5</span>, <span class="fl">0.5</span>, <span class="fl">0.5</span>, <span class="st">"inches"</span><span class="op">)</span>, <span class="co"># trbl</span></span>
-<span>     panel.grid.major <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_line</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"grey70"</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span>, linewidth <span class="op">=</span> <span class="fl">0.3</span><span class="op">)</span>,</span>
-<span>     panel.background <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_rect</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="cn">NA</span>, color <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span>,</span>
-<span>     axis.title <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">20</span>, color <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span>,</span>
-<span>     axis.title.x <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>margin <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">margin</a></span><span class="op">(</span>t <span class="op">=</span> <span class="fl">10</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>     axis.title.y <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>margin <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">margin</a></span><span class="op">(</span>r <span class="op">=</span> <span class="fl">12</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>     axis.line <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_line</a></span><span class="op">(</span>linewidth <span class="op">=</span> <span class="fl">1.0</span><span class="op">)</span>,</span>
-<span>     axis.text <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">18</span>, color <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span><span class="op">)</span></span>
-<span>  </span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">ggplot_rates_vs_traits</span><span class="op">)</span></span>
+<span><span class="co"># The plot highlights that "small" ants exhibited higher rates than "large" ants for T = 10 Mya.</span></span>
+<span><span class="co"># The plot also displays summary statistics for the STRAPP test associated with the data shown:</span></span>
+<span><span class="co">#   * An observed statistic computed across the mean rates and trait states shown on the plot.</span></span>
+<span><span class="co">#     Here, U-stats obs = -23048, indicating the first group "large" ants have lower rates than "small" ants.</span></span>
+<span><span class="co">#     This is not the statistic of the STRAPP test itself, which is conducted across all BAMM posterior samples.</span></span>
+<span><span class="co">#   * The quantile of null statistic distribution at the significant threshold used to define test significance. </span></span>
+<span><span class="co">#     The test will be considered significant (i.e., the null hypothesis is rejected)</span></span>
+<span><span class="co">#     if this value is higher than zero, as shown on the histogram above.</span></span>
+<span><span class="co">#     Here, Q5% = 463.6, so the test is significant (according to this significance threshold).</span></span>
+<span><span class="co">#   * The p-value of the associated STRAPP test. Here, p = 0.037.</span></span>
 <span></span>
-<span><span class="co"># The plot indicates that net diversification rates are higher in "small" ants than in "large" ants. </span></span>
-<span><span class="co"># We could also have directly tested for hypothesis with a one-tailed test (See Step 3 below).</span></span>
-<span> </span></code></pre></div>
+<span><span class="co"># We could have directly tested for this hypothesis (i.e., "small" &gt; "large") with a one-tailed test (See Step 3 below).</span></span></code></pre></div>
 <p><img src="explore_STRAPP_test_types_files/figure-html/STRAPP_tests_cat_2lvl_two_tailed_eval2-1.png" width="100%"></p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#### Step 3: Run a one-tailed test ####</span></span>
@@ -504,7 +464,7 @@ deepSTRAPP.</p>
 <span><span class="co"># Reorder tip data as in phylogeny</span></span>
 <span><span class="va">Ponerinae_cat_3lvl_tip_data</span> <span class="op">&lt;-</span> <span class="va">Ponerinae_cat_3lvl_tip_data</span><span class="op">[</span><span class="va">Ponerinae_tree_old_calib</span><span class="op">$</span><span class="va">tip.label</span><span class="op">]</span></span>
 <span></span>
-<span><span class="co">## Select color scheme for states</span></span>
+<span><span class="co">## Select color scheme for states (i.e., habitats)</span></span>
 <span><span class="va">colors_per_states</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"forestgreen"</span>, <span class="st">"sienna"</span>, <span class="st">"goldenrod"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">colors_per_states</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"arboreal"</span>, <span class="st">"subterranean"</span>, <span class="st">"terricolous"</span><span class="op">)</span></span>
 <span></span>
@@ -582,56 +542,30 @@ deepSTRAPP.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Plot rates vs. trait values</span></span>
 <span></span>
-<span><span class="co"># Extract mean diversification data, only for net diversification rates</span></span>
-<span><span class="va">diversification_data_df</span> <span class="op">&lt;-</span> <span class="va">deepSTRAPP_output_overall</span><span class="op">$</span><span class="va">diversification_data_df</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">rate_type</span> <span class="op">==</span> <span class="st">"net_diversification"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">tip_ID</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span>mean_rates <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">rates</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co"># We can plot the mean rates vs. states inferred by deepSTRAPP for T = 10Mya</span></span>
+<span><span class="co"># to unravel the direction of the differences detected.</span></span>
 <span></span>
-<span><span class="co"># Extract trait data</span></span>
-<span><span class="va">trait_data_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">deepSTRAPP_output_overall</span><span class="op">$</span><span class="va">updated_trait_data_with_Map</span><span class="op">$</span><span class="va">trait_data</span><span class="op">)</span></span>
-<span><span class="va">trait_data_df</span><span class="op">$</span><span class="va">tip_ID</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">deepSTRAPP_output_overall</span><span class="op">$</span><span class="va">updated_trait_data_with_Map</span><span class="op">$</span><span class="va">trait_data</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">trait_data_df</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"trait_values"</span>, <span class="st">"tip_ID"</span><span class="op">)</span></span>
+<span><span class="op">?</span><span class="fu"><a href="../reference/plot_rates_vs_trait_data_for_focal_time.html">plot_rates_vs_trait_data_for_focal_time</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Merge rates and traits in a unique data.frame</span></span>
-<span><span class="va">data_melted_df</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">diversification_data_df</span>, y <span class="op">=</span> <span class="va">trait_data_df</span>,</span>
-<span>                                   by <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/join_by.html" class="external-link">join_by</a></span><span class="op">(</span><span class="va">tip_ID</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Plot rates vs. trait values across all BAMM samples</span></span>
-<span><span class="va">ggplot_rates_vs_traits</span> <span class="op">&lt;-</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">data_melted_df</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  </span>
-<span>  <span class="co"># Plot boxplot per states</span></span>
-<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html" class="external-link">geom_boxplot</a></span><span class="op">(</span>mapping <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">mean_rates</span>, x <span class="op">=</span> <span class="va">trait_values</span>,</span>
-<span>                                               fill <span class="op">=</span> <span class="va">trait_values</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="co"># Plot points for all samples</span></span>
-<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_jitter.html" class="external-link">geom_jitter</a></span><span class="op">(</span>mapping <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">mean_rates</span>, x <span class="op">=</span> <span class="va">trait_values</span>,</span>
-<span>                                              fill <span class="op">=</span> <span class="va">trait_values</span><span class="op">)</span>,</span>
-<span>                      alpha <span class="op">=</span> <span class="fl">0.50</span>, size <span class="op">=</span> <span class="fl">3</span>, width <span class="op">=</span> <span class="fl">0.25</span>, shape <span class="op">=</span> <span class="fl">21</span>, color <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="co"># Adjust axis titles</span></span>
-<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ylab</a></span><span class="op">(</span><span class="st">"Net diversification rates"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">xlab</a></span><span class="op">(</span><span class="st">"States"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  </span>
-<span>  <span class="co"># Adjust legend</span></span>
-<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_fill_manual</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"States"</span>, breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">colors_per_states</span><span class="op">)</span>, values <span class="op">=</span> <span class="va">colors_per_states</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  </span>
-<span>  <span class="co"># Adjust aesthetics</span></span>
-<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span></span>
-<span>     plot.margin <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">margin</a></span><span class="op">(</span><span class="fl">0.3</span>, <span class="fl">0.5</span>, <span class="fl">0.5</span>, <span class="fl">0.5</span>, <span class="st">"inches"</span><span class="op">)</span>, <span class="co"># trbl</span></span>
-<span>     panel.grid.major <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_line</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"grey70"</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span>, linewidth <span class="op">=</span> <span class="fl">0.3</span><span class="op">)</span>,</span>
-<span>     panel.background <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_rect</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="cn">NA</span>, color <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span>,</span>
-<span>     axis.title <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">20</span>, color <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span>,</span>
-<span>     axis.title.x <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>margin <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">margin</a></span><span class="op">(</span>t <span class="op">=</span> <span class="fl">10</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>     axis.title.y <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>margin <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">margin</a></span><span class="op">(</span>r <span class="op">=</span> <span class="fl">12</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>     axis.line <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_line</a></span><span class="op">(</span>linewidth <span class="op">=</span> <span class="fl">1.0</span><span class="op">)</span>,</span>
-<span>     axis.text <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">18</span>, color <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span><span class="op">)</span></span>
-<span>  </span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">ggplot_rates_vs_traits</span><span class="op">)</span></span>
+<span><span class="co"># Plot mean rates vs. trait states aggregated across all BAMM posterior samples</span></span>
+<span><span class="fu"><a href="../reference/plot_rates_vs_trait_data_for_focal_time.html">plot_rates_vs_trait_data_for_focal_time</a></span><span class="op">(</span>deepSTRAPP_outputs <span class="op">=</span> <span class="va">deepSTRAPP_output_overall</span>,</span>
+<span>                                        colors_per_levels <span class="op">=</span> <span class="va">colors_per_states</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># The plot indicates that net diversification rates are higher in "terricolous" ants, </span></span>
-<span><span class="co"># then "subterranean" ants, and lower in "arboreal" ants. </span></span>
+<span><span class="co"># than "subterranean" ants, and lower in "arboreal" ants, for T = 10 Mya.</span></span>
+<span><span class="co"># The plot also displays summary statistics for the STRAPP test associated with the data shown:</span></span>
+<span><span class="co">#   * An observed statistic computed across the mean rates and trait states (i.e., habitats) shown on the plot.</span></span>
+<span><span class="co">#     Here, H-stat obs = 374.82. Please note that this is not the statistic of the STRAPP test itself,</span></span>
+<span><span class="co">#     which is conducted across all BAMM posterior samples.</span></span>
+<span><span class="co">#   * The quantile of null statistic distribution at the significant threshold used to define test significance. </span></span>
+<span><span class="co">#     The test will be considered significant (i.e., the null hypothesis is rejected)</span></span>
+<span><span class="co">#     if this value is higher than zero, as shown on the histogram above.</span></span>
+<span><span class="co">#     Here, Q10% = 6.942, so the test is significant (according to this significance threshold),</span></span>
+<span><span class="co">#     meaning we detected differences between habitats overall.</span></span>
+<span><span class="co">#   * The p-value of the associated STRAPP test. Here, p = 0.071.</span></span>
+<span></span>
 <span><span class="co"># We can explore those potential differences with post hoc pairwise tests,</span></span>
-<span><span class="co"># with both one-tailed hypothesis tests or two-tailed tests (See Steps 3 &amp; 4 below).</span></span>
-<span> </span></code></pre></div>
+<span><span class="co"># with both one-tailed hypothesis tests or two-tailed tests (See Steps 3 &amp; 4 below).</span></span></code></pre></div>
 <p><img src="explore_STRAPP_test_types_files/figure-html/STRAPP_tests_cat_3lvl_overall_eval2-1.png" width="100%"></p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#### Step 3: Run all post hoc Dunn's two-tailed tests ####</span></span>

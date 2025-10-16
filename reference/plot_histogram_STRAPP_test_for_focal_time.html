@@ -136,9 +136,13 @@ It corresponds to the histogram being displayed on the console when the function
 modify for aesthetics using the ggplot2 grammar.</p>
 <p>If using multinominal data and set <code>plot_posthoc_tests = TRUE</code>, the function will return a list of objects.
 Each object is the ggplot associated with a pairwise post hoc test.
-To plot each histogram i individually, use <code>print(output_list[[i]])</code>.
+To plot each histogram <code>i</code> individually, use <code>print(output_list[[i]])</code>.
 To plot all histograms at once in a multifaceted plot, as displayed on the console if <code>display_plot = TRUE</code>, use <code>cowplot::plot_grid(plotlist = output_list)</code>.</p>
-<p>If a <code>PDF_file_path</code> is provided, the function will also generate a PDF file of the plot. For post hoc tests, this will save the multifaceted plot.</p>
+<p>Each plot also displays summary statistics for the STRAPP test associated with the data displayed.</p><ul><li><p>The quantile of null statistic distribution at the significant threshold used to define test significance. This is the value found on the red dashed line.
+The test will be considered significant (i.e., the null hypothesis is rejected) if this value is higher than zero (the black dashed line).</p></li>
+<li><p>The p-value of the STRAPP test which correspond the proportion of cases in which the statistics was lower than expected under the null hypothesis
+(i.e., the proportion of the histogram found below / on the left-side of the black dashed line).</p></li>
+</ul><p>If a <code>PDF_file_path</code> is provided, the function will also generate a PDF file of the plot. For post hoc tests, this will save the multifaceted plot.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>

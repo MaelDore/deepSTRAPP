@@ -96,7 +96,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Main tutorial</h1>
                         <h4 data-toc-skip class="author">Maël Doré</h4>
             
-            <h4 data-toc-skip class="date">2025-10-15</h4>
+            <h4 data-toc-skip class="date">2025-10-16</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/MaelDore/deepSTRAPP/blob/master/vignettes/main_tutorial.Rmd" class="external-link"><code>vignettes/main_tutorial.Rmd</code></a></small>
       <div class="d-none name"><code>main_tutorial.Rmd</code></div>
@@ -484,6 +484,15 @@ deepSTRAPP.</p>
 <span><span class="co"># You can see that "small" ants tend to have higher rates than "large" ants at this time-step.</span></span>
 <span><span class="co"># This plot, alongside other results of deepSTRAPP, supports the Diversification Rate Hypothesis in showing </span></span>
 <span><span class="co"># how "small" ant lineages may have accumulated faster, especially between 5 to 15 My.</span></span>
+<span><span class="co"># Additionally, the plot displays summary statistics for the STRAPP test associated with the data shown:</span></span>
+<span><span class="co">#   * An observed statistic computed across the mean rates and trait states shown on the plot.</span></span>
+<span><span class="co">#     Here, U-stats obs = -23048, indicating the first group "large" ants have lower rates than "small" ants.</span></span>
+<span><span class="co">#     This is not the statistic of the STRAPP test itself, which is conducted across all BAMM posterior samples.</span></span>
+<span><span class="co">#   * The quantile of null statistic distribution at the significant threshold used to define test significance. </span></span>
+<span><span class="co">#     The test will be considered significant (i.e., the null hypothesis is rejected)</span></span>
+<span><span class="co">#     if this value is higher than zero, as shown on the histogram in Section 4.2.</span></span>
+<span><span class="co">#     Here, Q5% = 463.6, so the test is significant (according to this significance threshold).</span></span>
+<span><span class="co">#   * The p-value of the associated STRAPP test. Here, p = 0.037.</span></span>
 <span></span>
 <span><span class="co"># Plot rates vs. trait data for all time-steps</span></span>
 <span><span class="fu"><a href="../reference/plot_rates_vs_trait_data_over_time.html">plot_rates_vs_trait_data_over_time</a></span><span class="op">(</span></span>

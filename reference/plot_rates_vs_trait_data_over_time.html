@@ -159,7 +159,12 @@ They correspond to the plots being displayed on the console one by one when the 
 and can be further modify for aesthetics using the ggplot2 grammar.</p></li>
 </ul><p>If the trait data are 'continuous', the plots are scatter plots showing how diversification rates varies with trait values.
 If the trait data are 'categorical' or 'biogeographic', the plots are boxplots showing diversification rates per states/ranges.</p>
-<p>Optional summary data.frame:</p><ul><li><p><code>mean_rates_vs_trait_data_df</code> A data.frame with three columns providing the <code>$mean_rates</code> and <code>$trait_value</code>
+<p>Each plot also displays summary statistics for the STRAPP test associated with the data displayed:</p><ul><li><p>An observed statistic computed across the mean traits/ranges and rates values shown on the plot. This is not the statistic of the STRAPP test itself,
+which is conducted across all BAMM posterior samples.</p></li>
+<li><p>The quantile of null statistic distribution at the significant threshold used to define test significance. The test will be considered significant
+(i.e., the null hypothesis is rejected) if this value is higher than zero.</p></li>
+<li><p>The p-value of the associated STRAPP test.</p></li>
+</ul><p>Optional summary data.frame:</p><ul><li><p><code>mean_rates_vs_trait_data_df</code> A data.frame with three columns providing the <code>$mean_rates</code> and <code>$trait_value</code>
 observed along branches at the different <code>focal_time</code>. Rates are averaged across all BAMM posterior samples.
 This is the raw data used to draw each plot for each <code>focal_time</code>. Included if <code>return_mean_rates_vs_trait_data_df = TRUE</code>.</p></li>
 </ul><p>If a <code>PDF_file_path</code> is provided, the function will also generate a unique PDF file with one plot/page per <code>$time_steps</code>.</p>

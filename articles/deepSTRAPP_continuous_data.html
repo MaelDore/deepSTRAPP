@@ -96,7 +96,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>deepSTRAPP: Continuous trait data</h1>
                         <h4 data-toc-skip class="author">Maël Doré</h4>
             
-            <h4 data-toc-skip class="date">2025-10-15</h4>
+            <h4 data-toc-skip class="date">2025-10-16</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/MaelDore/deepSTRAPP/blob/master/vignettes/deepSTRAPP_continuous_data.Rmd" class="external-link"><code>vignettes/deepSTRAPP_continuous_data.Rmd</code></a></small>
       <div class="d-none name"><code>deepSTRAPP_continuous_data.Rmd</code></div>
@@ -132,7 +132,9 @@ deepSTRAPP.</p>
 <span><span class="va">Ponerinae_cont_tip_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/setNames.html" class="external-link">setNames</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">Ponerinae_trait_tip_data</span><span class="op">$</span><span class="va">fake_cont_tip_data</span>,</span>
 <span>                                    nm <span class="op">=</span> <span class="va">Ponerinae_trait_tip_data</span><span class="op">$</span><span class="va">Taxa</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Select a color scheme from lowest to highest values</span></span>
+<span><span class="co"># This not valid biological data. For the sake of example, we will assume this is size data.</span></span>
+<span></span>
+<span><span class="co"># Select a color scheme from lowest to highest values (i.e., smallest to largest ants)</span></span>
 <span><span class="va">color_scale</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"darkgreen"</span>, <span class="st">"limegreen"</span>, <span class="st">"orange"</span>, <span class="st">"red"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## Load phylogeny with old time-calibration</span></span>
@@ -368,18 +370,20 @@ deepSTRAPP.</p>
 <span><span class="co"># Display the time-steps</span></span>
 <span><span class="va">Ponerinae_deepSTRAPP_cont_old_calib_0_40</span><span class="op">$</span><span class="va">time_steps</span></span>
 <span></span>
-<span><span class="co"># Plot the histogram of test stats for time-step n°3 = 10 My</span></span>
+<span><span class="co"># Plot the histogram of test stats for time-step n°5 = 20 My</span></span>
 <span><span class="fu"><a href="../reference/plot_histogram_STRAPP_test_for_focal_time.html">plot_histogram_STRAPP_test_for_focal_time</a></span><span class="op">(</span></span>
 <span>   deepSTRAPP_outputs <span class="op">=</span> <span class="va">Ponerinae_deepSTRAPP_cont_old_calib_0_40</span>,</span>
-<span>   focal_time <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span>
+<span>   focal_time <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># The black line represents the expected value under the null hypothesis H0 =&gt; Δ abs(Spearman rho stat) = 0.</span></span>
 <span><span class="co"># The histogram shows the distribution of the test statistics as observed</span></span>
 <span><span class="co"># across the 1000 posterior samples from BAMM.</span></span>
 <span><span class="co"># The red line represents the significance threshold for which 95% of the observed data</span></span>
 <span><span class="co"># exhibited a higher value than expected.</span></span>
-<span><span class="co"># Since this red line is above the null expectation (quantile 5% = 0.091), </span></span>
+<span><span class="co"># Since this red line is above the null expectation (quantile 5% = 0.036), </span></span>
 <span><span class="co"># the test is significant for a value of alpha = 0.05.</span></span>
+<span><span class="co"># Therefore, ant size was significantly correlated with net diversification rates 20 Mya.</span></span>
+<span><span class="co"># Since we performed a two-tailed test (default), we do not know the direction of this correlation (yet).</span></span>
 <span></span>
 <span><span class="co"># Plot the histograms of test stats for all time-steps</span></span>
 <span><span class="fu"><a href="../reference/plot_histograms_STRAPP_tests_over_time.html">plot_histograms_STRAPP_tests_over_time</a></span><span class="op">(</span></span>
@@ -395,7 +399,7 @@ deepSTRAPP.</p>
 <span>                        plot_CI <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># This plot helps to visualize how correlations between trait values and rates evolved over time.</span></span>
-<span><span class="co"># Here, their is "negative" correlation as ants in the lowest quartile of trait values (in blue)</span></span>
+<span><span class="co"># Here, we observe a "negative" correlation as ants in the lowest quartile of trait values (in blue)</span></span>
 <span><span class="co"># display the highest net diversification rates over time, while ants in the highest quartile</span></span>
 <span><span class="co"># of trait values (in red) display the lowest net diversification rates over time.</span></span>
 <span><span class="co"># However, in the present, we recorded an increase in diversification rates that blurred </span></span>
@@ -420,17 +424,26 @@ deepSTRAPP.</p>
 <span><span class="co"># This plot help to visualize differences in rates vs. ranges across all branches</span></span>
 <span><span class="co"># found at specific time-steps (i.e., 'focal_time').</span></span>
 <span></span>
-<span><span class="co"># Generate ggplot for time = 15 My</span></span>
+<span><span class="co"># Generate ggplot for time = 20 My</span></span>
 <span><span class="fu"><a href="../reference/plot_rates_vs_trait_data_for_focal_time.html">plot_rates_vs_trait_data_for_focal_time</a></span><span class="op">(</span></span>
 <span>   deepSTRAPP_outputs <span class="op">=</span> <span class="va">Ponerinae_deepSTRAPP_cont_old_calib_0_40</span>,</span>
-<span>   focal_time <span class="op">=</span> <span class="fl">15</span>,</span>
+<span>   focal_time <span class="op">=</span> <span class="fl">20</span>,</span>
 <span>   color_scale <span class="op">=</span> <span class="va">color_scale</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Here we focus on T = 15 My to highlight the correlation detected in the previous steps.</span></span>
+<span><span class="co"># Here we focus on T = 20 My to highlight the correlation detected in the previous steps.</span></span>
 <span><span class="co"># You can see that ants in the highest trait values (in red) exhibits the lowest rates, at this time-step.</span></span>
 <span><span class="co"># This plot, alongside other results of deepSTRAPP, supports the Diversification Rate Hypothesis in showing </span></span>
 <span><span class="co"># how ant lineages with low trait values (e.g., small size) may have accumulated faster</span></span>
 <span><span class="co"># than ant lineages with high trait value (e.g., large size), especially between 5 to 25 My.</span></span>
+<span><span class="co"># Additionally, the plot displays summary statistics for the STRAPP test associated with the data shown:</span></span>
+<span><span class="co">#   * An observed statistic computed across the mean rates and trait values shown on the plot.</span></span>
+<span><span class="co">#     Here, rho obs = -0.743, indicating a negative correlation between size and diversification in ponerine ants.</span></span>
+<span><span class="co">#     This is not the statistic of the STRAPP test itself, which is conducted across all BAMM posterior samples.</span></span>
+<span><span class="co">#   * The quantile of null statistic distribution at the significant threshold used to define test significance. </span></span>
+<span><span class="co">#     The test will be considered significant (i.e., the null hypothesis is rejected)</span></span>
+<span><span class="co">#     if this value is higher than zero, as shown on the histogram in Section 4.2.</span></span>
+<span><span class="co">#     Here, Q5% = 0.036, so the test is significant (according to this significance threshold).</span></span>
+<span><span class="co">#   * The p-value of the associated STRAPP test. Here, p = 0.022.</span></span>
 <span></span>
 <span><span class="co"># Plot rates vs. ranges for all time-steps</span></span>
 <span><span class="fu"><a href="../reference/plot_rates_vs_trait_data_over_time.html">plot_rates_vs_trait_data_over_time</a></span><span class="op">(</span></span>
@@ -458,6 +471,7 @@ deepSTRAPP.</p>
 <span><span class="va">contMap_0My</span> <span class="op">&lt;-</span> <span class="va">Ponerinae_deepSTRAPP_cont_old_calib_0_40</span><span class="op">$</span><span class="va">updated_trait_data_with_Map_over_time</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
 <span><span class="fu"><a href="../reference/plot_contMap.html">plot_contMap</a></span><span class="op">(</span><span class="va">contMap_0My</span><span class="op">$</span><span class="va">contMap</span>,</span>
 <span>             color_scale <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"darkgreen"</span>, <span class="st">"limegreen"</span>, <span class="st">"orange"</span>, <span class="st">"red"</span><span class="op">)</span>,</span>
+<span>             lwd <span class="op">=</span> <span class="fl">0.7</span>, <span class="co"># Adjust width of branches</span></span>
 <span>             fsize <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="co"># Reduce tip label size</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>v <span class="op">=</span> <span class="va">root_age</span> <span class="op">-</span> <span class="fl">20</span>, col <span class="op">=</span> <span class="st">"red"</span>, lty <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="co"># Show where the phylogeny will be cut</span></span></code></pre></div>
 <p><img src="deepSTRAPP_continuous_data_files/figure-html/plot_updated_contMap_cont-1.png" width="672"></p>
@@ -469,6 +483,7 @@ deepSTRAPP.</p>
 <span><span class="va">contMap_20My</span> <span class="op">&lt;-</span> <span class="va">Ponerinae_deepSTRAPP_cont_old_calib_0_40</span><span class="op">$</span><span class="va">updated_trait_data_with_Map_over_time</span><span class="op">[[</span><span class="fl">5</span><span class="op">]</span><span class="op">]</span></span>
 <span><span class="fu"><a href="../reference/plot_contMap.html">plot_contMap</a></span><span class="op">(</span><span class="va">contMap_20My</span><span class="op">$</span><span class="va">contMap</span>,</span>
 <span>             color_scale <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"darkgreen"</span>, <span class="st">"limegreen"</span>, <span class="st">"orange"</span>, <span class="st">"red"</span><span class="op">)</span>,</span>
+<span>             lwd <span class="op">=</span> <span class="fl">0.9</span>, <span class="co"># Adjust width of branches</span></span>
 <span>             fsize <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.2</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="co"># Reduce tip label size</span></span></code></pre></div>
 <p><img src="deepSTRAPP_continuous_data_files/figure-html/plot_updated_contMap_cont-2.png" width="672"></p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">

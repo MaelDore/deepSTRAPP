@@ -129,14 +129,18 @@ Each page of the PDF corresponds to a focal time in <code>$time_steps</code>.</p
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>By default, the function returns a list of sub-lists of classes <code>gg</code> and <code>ggplot</code> ordered as in <code>$time_steps</code>.
-Each sub-list corresponds to a ggplot for a given <code>focal_time</code> i that can be displayed on the console with <code>print(output[[i]])</code>.
+Each sub-list corresponds to a ggplot for a given <code>focal_time</code> <code>i</code> that can be displayed on the console with <code>print(output[[i]])</code>.
 If <code>display_plots = TRUE</code>, the histograms are being displayed on the console one by one while generated.</p>
 <p>If using multinominal data and set <code>plot_posthoc_tests = TRUE</code>, the function will return a list of sub-lists of objects ordered as in <code>$time_steps</code>.
 Each sub-list is a list of the ggplots associated with pairwise post hoc tests carried out for this a given <code>focal_time</code>.
 For a given <code>focal_time</code> i, to plot each histogram j individually, use <code>print(output_list[[i]][[j]])</code>.
-To plot all histograms of a given <code>focal_time</code> i at once in a multifaceted plot, as displayed sequentially on the console if <code>display_plots = TRUE</code>,
+To plot all histograms of a given <code>focal_time</code> <code>i</code> at once in a multifaceted plot, as displayed sequentially on the console if <code>display_plots = TRUE</code>,
 use <code>cowplot::plot_grid(plotlist = output_list[[i]])</code>.</p>
-<p>If a <code>PDF_file_path</code> is provided, the function will also generate a PDF file of the plots with one page per <code>$time_steps</code>.
+<p>Each plot also displays summary statistics for the STRAPP test associated with the data displayed.</p><ul><li><p>The quantile of null statistic distribution at the significant threshold used to define test significance. This is the value found on the red dashed line.
+The test will be considered significant (i.e., the null hypothesis is rejected) if this value is higher than zero (the black dashed line).</p></li>
+<li><p>The p-value of the STRAPP test which correspond the proportion of cases in which the statistics was lower than expected under the null hypothesis
+(i.e., the proportion of the histogram found below / on the left-side of the black dashed line).</p></li>
+</ul><p>If a <code>PDF_file_path</code> is provided, the function will also generate a PDF file of the plots with one page per <code>$time_steps</code>.
 For post hoc tests, this will save the multifaceted plots.</p>
     </div>
     <div class="section level2">
