@@ -1,5 +1,5 @@
-# deepSTRAPP (development version)
+# deepSTRAPP 1.0.0
 
-* Initial CRAN submission.
+* First release on CRAN
 
-# See how to get the Release / NEWS stucture on the pkgdown website
+
