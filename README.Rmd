@@ -79,7 +79,7 @@ https://doi.org/10.1038/s41467-025-63709-3
 ## :envelope_with_arrow: Installation
 
 deepSTRAPP works on R version 4.4 or more. Be sure to have an R version that is compatible. <br> 
-See [https://cloud.r-project.org/](https://cloud.r-project.org/).
+See [https://CRAN.R-project.org/](https://CRAN.R-project.org/).
 
 From __CRAN__, for the latest release:
 
@@ -150,7 +150,7 @@ They are listed below, in the [companion website](https://maeldore.github.io/dee
 **1/ Full deepSTRAPP workflows on different types of data**
 
 - [1.1/ Full deepSTRAPP workflow for __continuous__ trait data](https://maeldore.github.io/deepSTRAPP/articles/deepSTRAPP_continuous_data.html): `vignette("deepSTRAPP_continuous_data")`.
-- [1.2/ Full deepSTRAPP workflow for __categorical__ trait data with 3-levels](https://maeldore.github.io/deepSTRAPP/articles/deepSTRAPP_categorical_3lvl_data.html): `vignette("deepSTRAPP_categorical_3lvl_data")`.
+- [1.2/ Full deepSTRAPP workflow for __categorical__ trait data with 3-levels](https://maeldore.github.io/deepSTRAPP/articles/deepSTRAPP_categorical_data.html): `vignette("deepSTRAPP_categorical_data")`.
 - [1.3/ Full deepSTRAPP workflow for __biogeographic__ range data](https://maeldore.github.io/deepSTRAPP/articles/deepSTRAPP_biogeographic_data.html): `vignette("deepSTRAPP_biogeographic_data")`.
 
 **2/ Explore options for trait evolution**

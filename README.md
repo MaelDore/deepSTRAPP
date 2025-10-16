@@ -96,7 +96,7 @@ green. Final outputs in pink.
 ## :envelope_with_arrow: Installation
 
 deepSTRAPP works on R version 4.4 or more. Be sure to have an R version
-that is compatible. <br> See <https://cloud.r-project.org/>.
+that is compatible. <br> See <https://CRAN.R-project.org/>.
 
 From **CRAN**, for the latest release:
 
@@ -196,8 +196,8 @@ and in this vignette: `vignette("deepSTRAPP")`.
   data](https://maeldore.github.io/deepSTRAPP/articles/deepSTRAPP_continuous_data.html):
   `vignette("deepSTRAPP_continuous_data")`.
 - [1.2/ Full deepSTRAPP workflow for **categorical** trait data with
-  3-levels](https://maeldore.github.io/deepSTRAPP/articles/deepSTRAPP_categorical_3lvl_data.html):
-  `vignette("deepSTRAPP_categorical_3lvl_data")`.
+  3-levels](https://maeldore.github.io/deepSTRAPP/articles/deepSTRAPP_categorical_data.html):
+  `vignette("deepSTRAPP_categorical_data")`.
 - [1.3/ Full deepSTRAPP workflow for **biogeographic** range
   data](https://maeldore.github.io/deepSTRAPP/articles/deepSTRAPP_biogeographic_data.html):
   `vignette("deepSTRAPP_biogeographic_data")`.
