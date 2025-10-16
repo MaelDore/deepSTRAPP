@@ -216,7 +216,7 @@
 #' str(whale_BAMM_object, 1)
 #'
 #' # Plot mean net diversification rates and regime shifts on the phylogeny
-#' plot_BAMM_rates(whale_BAMM_object,
+#' plot_BAMM_rates(whale_BAMM_object, cex = 0.5,
 #'                 labels = TRUE, legend = TRUE)
 #'
 #' # ----- Example 2: Ponerinae phylogeny ----- #

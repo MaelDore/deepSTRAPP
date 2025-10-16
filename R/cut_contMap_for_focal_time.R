@@ -77,14 +77,14 @@
 #'                                               keep_tip_labels = TRUE)
 #'
 #' # Plot node labels on initial stochastic map with cut-off
-#' plot_contMap(mammals_contMap, lwd = 2)
-#' ape::nodelabels()
+#' plot_contMap(mammals_contMap, lwd = 2, fsize = c(0.5, 1))
+#' ape::nodelabels(cex = 0.5)
 #' abline(v = max(phytools::nodeHeights(mammals_contMap$tree)[,2]) - focal_time,
 #'        col = "red", lty = 2, lwd = 2)
 #'
 #' # Plot initial node labels on cut stochastic map
-#' plot_contMap(updated_contMap)
-#' ape::nodelabels(text = updated_contMap$tree$initial_nodes_ID)
+#' plot_contMap(updated_contMap, fsize = c(0.8, 1))
+#' ape::nodelabels(cex = 0.8, text = updated_contMap$tree$initial_nodes_ID)
 #'
 #' # ----- Example 2: keep_tip_labels = FALSE ----- #
 #'
@@ -94,14 +94,14 @@
 #'                                               keep_tip_labels = FALSE)
 #'
 #' # Plot node labels on initial stochastic map with cut-off
-#' plot_contMap(mammals_contMap)
-#' ape::nodelabels()
+#' plot_contMap(mammals_contMap, fsize = c(0.5, 1))
+#' ape::nodelabels(cex = 0.5)
 #' abline(v = max(phytools::nodeHeights(mammals_contMap$tree)[,2]) - focal_time,
 #'        col = "red", lty = 2, lwd = 2)
 #'
 #' # Plot initial node labels on cut stochastic map
-#' plot_contMap(updated_contMap)
-#' ape::nodelabels(text = updated_contMap$tree$initial_nodes_ID)
+#' plot_contMap(updated_contMap, fsize = c(0.8, 1))
+#' ape::nodelabels(cex = 0.8, text = updated_contMap$tree$initial_nodes_ID)
 #'
 
 ### Possible update: Make it work with non-dichotomous trees!!!

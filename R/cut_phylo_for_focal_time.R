@@ -48,7 +48,7 @@
 #' cut_eel.tree <- cut_phylo_for_focal_time(tree = eel.tree, focal_time = 30, keep_tip_labels = TRUE)
 #'
 #' # Plot internal node labels on initial tree with cut-off
-#' plot(eel.tree)
+#' plot(eel.tree, cex = 0.5)
 #' abline(v = max(phytools::nodeHeights(eel.tree)[,2]) - 30, col = "red", lty = 2, lwd = 2)
 #' nb_tips <- length(eel.tree$tip.label)
 #' nodelabels_in_cut_tree <- (nb_tips + 1):(nb_tips + eel.tree$Nnode)
@@ -56,18 +56,18 @@
 #' ape::nodelabels(text = nodelabels_in_cut_tree)
 #'
 #' # Plot initial internal node labels on cut tree
-#' plot(cut_eel.tree)
+#' plot(cut_eel.tree, cex = 0.8)
 #' ape::nodelabels(text = cut_eel.tree$initial_nodes_ID)
 #'
 #' # Plot edge labels on initial tree with cut-off
-#' plot(eel.tree)
+#' plot(eel.tree, cex = 0.5)
 #' abline(v = max(phytools::nodeHeights(eel.tree)[,2]) - 30, col = "red", lty = 2, lwd = 2)
 #' edgelabels_in_cut_tree <- 1:nrow(eel.tree$edge)
 #' edgelabels_in_cut_tree[!(1:nrow(eel.tree$edge) %in% cut_eel.tree$initial_edges_ID)] <- NA
 #' ape::edgelabels(text = edgelabels_in_cut_tree)
 #'
 #' # Plot initial edge labels on cut tree
-#' plot(cut_eel.tree)
+#' plot(cut_eel.tree, cex = 0.8)
 #' ape::edgelabels(text = cut_eel.tree$initial_edges_ID)
 #'
 #' # ----- Example 2: keep_tip_labels = FALSE ----- #
@@ -75,7 +75,7 @@
 #' # Cut tree to 30 Mya without keeping tip.label on terminal branches with a unique descending tip.
 #' # All tip.labels are converted to their descending/tipward node ID
 #' cut_eel.tree <- cut_phylo_for_focal_time(tree = eel.tree, focal_time = 30, keep_tip_labels = FALSE)
-#' plot(cut_eel.tree)
+#' plot(cut_eel.tree, cex = 0.8)
 #'
 
 

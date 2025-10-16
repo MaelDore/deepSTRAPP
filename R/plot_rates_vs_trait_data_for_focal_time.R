@@ -539,7 +539,8 @@ plot_rates_vs_trait_data_for_focal_time <- function (deepSTRAPP_outputs,
   {
     if (STRAPP_results$trait_data_type_for_stats == "continuous")
     {
-      stat_name <- "\u03C1" # Rho (unicode)
+      # stat_name <- "\u03C1" # Rho (unicode)
+      stat_name <- "Rho" # Rho (unicode)
 
       ## Wrapped-up function to extract rho stats from Spearman's correlation test
       spearman_test <- function(rates, trait_data)

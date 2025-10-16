@@ -2614,8 +2614,10 @@ prepare_trait_data_for_biogeographic_data <- function (
 #'
 #' # Explore output
 #' str(model_comparison_output, max.level = 2)
+#'
 #' # Print comparison
 #' print(model_comparison_output$models_comparison_df)
+#'
 #' # Print best model fit
 #' print(model_comparison_output$best_model_fit)
 #'
@@ -2643,8 +2645,10 @@ prepare_trait_data_for_biogeographic_data <- function (
 #'
 #' # Explore output
 #' str(model_comparison_output, max.level = 2)
+#'
 #' # Print comparison
 #' print(model_comparison_output$models_comparison_df)
+#'
 #' # Print best model fit
 #' print(model_comparison_output$best_model_fit)
 #'

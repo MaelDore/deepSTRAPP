@@ -178,7 +178,7 @@
 #' eel_cont_50$trait_data
 #'
 #' # Plot node labels on initial stochastic map with cut-off
-#' plot(eel_contMap)
+#' plot(eel_contMap, fsize = c(0.5, 1))
 #' ape::nodelabels()
 #' abline(v = max(phytools::nodeHeights(eel_contMap$tree)[,2]) - focal_time,
 #'        col = "red", lty = 2, lwd = 2)
@@ -480,7 +480,7 @@ extract_most_likely_trait_values_for_focal_time <- function (contMap = NULL,
 #' eel_test$trait_data
 #'
 #' # Plot node labels on initial stochastic map with cut-off
-#' plot(eel_contMap)
+#' plot(eel_contMap, fsize = c(0.5, 1))
 #' ape::nodelabels()
 #' abline(v = max(phytools::nodeHeights(eel_contMap$tree)[,2]) - focal_time,
 #'        col = "red", lty = 2, lwd = 2)
@@ -536,13 +536,13 @@ extract_most_likely_trait_values_for_focal_time <- function (contMap = NULL,
 #' mammals_test$trait_data
 #'
 #' # Plot node labels on initial stochastic map with cut-off
-#' phytools::plot.contMap(mammals_contMap)
+#' phytools::plot.contMap(mammals_contMap, fsize = c(0.5, 1))
 #' ape::nodelabels()
 #' abline(v = max(phytools::nodeHeights(mammals_contMap$tree)[,2]) - focal_time,
 #'        col = "red", lty = 2, lwd = 2)
 #'
 #' # Plot updated contMap with initial node labels
-#' phytools::plot.contMap(mammals_test$contMap)
+#' phytools::plot.contMap(mammals_test$contMap, fsize = c(0.8, 1))
 #' ape::nodelabels(text = mammals_test$contMap$tree$initial_nodes_ID)
 #'
 
@@ -970,12 +970,12 @@ extract_most_likely_trait_values_from_contMap_for_focal_time <- function (
 #' ## Plot density maps as overlay of all state posterior probabilities
 #'
 #' # Plot initial density maps with ACE pies
-#' plot_densityMaps_overlay(densityMaps = eel_cat_3lvl_data$densityMaps)
+#' plot_densityMaps_overlay(densityMaps = eel_cat_3lvl_data$densityMaps, fsize = 0.5)
 #' abline(v = max(phytools::nodeHeights(eel_cat_3lvl_data$densityMaps[[1]]$tree)[,2]) - focal_time,
 #'        col = "red", lty = 2, lwd = 2)
 #'
 #' # Plot updated densityMaps with ACE pies
-#' plot_densityMaps_overlay(eel_cat_3lvl_data_10My$densityMaps)
+#' plot_densityMaps_overlay(eel_cat_3lvl_data_10My$densityMaps, fsize = 0.7)
 #'
 #'
 #' # ----- Example 2: Include fossils (Non-ultrametric tree) ----- #
@@ -1002,7 +1002,8 @@ extract_most_likely_trait_values_from_contMap_for_focal_time <- function (
 #' mammals_cat_data <- prepare_trait_data(tip_data = mammals_data, phylo = mammals_tree,
 #'                                        trait_data_type = "categorical",
 #'                                        evolutionary_models = "ER",
-#'                                        nb_simulations = 100)
+#'                                        nb_simulations = 100,
+#'                                        plot_map = FALSE)
 #'
 #' # Set focal time
 #' focal_time <- 80
@@ -1022,12 +1023,12 @@ extract_most_likely_trait_values_from_contMap_for_focal_time <- function (
 #' ## Plot density maps as overlay of all state posterior probabilities
 #'
 #' # Plot initial density maps with ACE pies
-#' plot_densityMaps_overlay(densityMaps = mammals_cat_data$densityMaps)
+#' plot_densityMaps_overlay(densityMaps = mammals_cat_data$densityMaps, fsize = 0.7)
 #' abline(v = max(phytools::nodeHeights(mammals_cat_data$densityMaps[[1]]$tree)[,2]) - focal_time,
 #'        col = "red", lty = 2, lwd = 2)
 #'
 #' # Plot updated densityMaps with ACE pies
-#' plot_densityMaps_overlay(mammals_cat_data_80My$densityMaps)
+#' plot_densityMaps_overlay(mammals_cat_data_80My$densityMaps, fsize = 0.8)
 #'
 
 
@@ -1520,12 +1521,12 @@ extract_most_likely_states_from_densityMaps_for_focal_time <- function (
 #' ## Plot density maps as overlay of all range posterior probabilities
 #'
 #' # Plot initial density maps with ACE pies
-#' plot_densityMaps_overlay(densityMaps = eel_biogeo_data$densityMaps)
+#' plot_densityMaps_overlay(densityMaps = eel_biogeo_data$densityMaps, fsize = 0.7)
 #' abline(v = max(phytools::nodeHeights(eel_biogeo_data$densityMaps[[1]]$tree)[,2]) - focal_time,
 #'        col = "red", lty = 2, lwd = 2)
 #'
 #' # Plot updated densityMaps with ACE pies
-#' plot_densityMaps_overlay(eel_biogeo_data_10My$densityMaps)
+#' plot_densityMaps_overlay(eel_biogeo_data_10My$densityMaps, fsize = 0.7)
 #'
 #' # ----- Example 2: Using all ranges ----- #
 #'
@@ -1546,12 +1547,12 @@ extract_most_likely_states_from_densityMaps_for_focal_time <- function (
 #'
 #' # Plot initial density maps with ACE pies
 #' root_age <- max(phytools::nodeHeights(eel_biogeo_data$densityMaps_all_ranges[[1]]$tree)[,2])
-#' plot_densityMaps_overlay(densityMaps = eel_biogeo_data$densityMaps_all_ranges)
+#' plot_densityMaps_overlay(densityMaps = eel_biogeo_data$densityMaps_all_ranges, fsize = 0.7)
 #' abline(v =  root_age - focal_time,
 #'        col = "red", lty = 2, lwd = 2)
 #'
 #' # Plot updated densityMaps with ACE pies
-#' plot_densityMaps_overlay(eel_biogeo_data_10My$densityMaps)
+#' plot_densityMaps_overlay(eel_biogeo_data_10My$densityMaps, fsize = 0.7)
 #'
 
 extract_most_likely_ranges_from_densityMaps_for_focal_time <- function (

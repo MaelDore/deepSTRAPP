@@ -36,7 +36,7 @@
 #' @title Dataset providing the extensive time-calibrated phylogeny of extant ponerine ants using an old calibration for illustrative purposes
 #'
 #' @description A `phylo` object describing the time-calibrated phylogeny of the 1534 extant ponerine ants (Ponerinae subfamily).
-#'  THIS IS NOT a properly time-calibrated phylogeny. It uses an ill-designed old calibration for illustrative purposes.
+#'  This is NOT a properly time-calibrated phylogeny. It uses an ill-designed old calibration for illustrative purposes.
 #'  For a proper time-calibrated phylogeny of ponerine ants, see the `Ponerinae_tree` object in deepSTRAPP.
 #'
 #'  Source: Doré, M., Borowiec, M. L., Branstetter, M. G., Camacho, G. P., Fisher, B. L., Longino, J. T., Ward, P. S., Blaimer, B. B. (2025).
@@ -96,7 +96,7 @@
 #' @title Dataset providing fake trait data for extant ponerine ants for illustrative purposes
 #'
 #' @description A data.frame of fake trait data covering the 1534 extant ponerine ant taxa (Ponerinae subfamily).
-#'  THIS IS NOT real biological/ecological data. They were designed for illustrative purposes only.
+#'  This is NOT real biological/ecological data. They were designed for illustrative purposes only.
 #'
 #' @usage data(Ponerinae_trait_tip_data)
 #' @format A data.frame with 1534 rows and 4 columns.
@@ -227,7 +227,7 @@
 #'
 #' @description A list containing fake size data of Ponerinae ants mapped on the phylogeny,
 #'  modeled with [geiger::fitDiscrete]. This object was obtained with [deepSTRAPP::prepare_trait_data()].
-#'  THIS IS NOT real biological/ecological data. They were designed for illustrative purposes only.
+#'  This is NOT real biological/ecological data. They were designed for illustrative purposes only.
 #'  The phylogeny used is also NOT a properly time-calibrated phylogeny. It uses an ill-designed old calibration for illustrative purposes.
 #'
 #' @usage data(Ponerinae_cat_2lvl_data_old_calib)
@@ -259,7 +259,7 @@
 #'
 #' @description A list containing fake habitat data of Ponerinae ants mapped on the phylogeny,
 #'  modeled with [geiger::fitDiscrete]. This object was obtained with [deepSTRAPP::prepare_trait_data()].
-#'  THIS IS NOT real biological/ecological data. They were designed for illustrative purposes only.
+#'  This is NOT real biological/ecological data. They were designed for illustrative purposes only.
 #'  The phylogeny used is also NOT a properly time-calibrated phylogeny. It uses an ill-designed old calibration for illustrative purposes.
 #'
 #' @usage data(Ponerinae_cat_3lvl_data_old_calib)

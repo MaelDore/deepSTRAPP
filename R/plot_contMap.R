@@ -58,10 +58,10 @@
 #'                                        plot = FALSE)
 #'
 #' # Plot contMap with the phytools method
-#' plot(x = Ponerinae_contMap)
+#' plot(x = Ponerinae_contMap, fsize = c(0.5, 1))
 #'
 #' # Plot contMap with an updated color scale
-#' plot_contMap(contMap = Ponerinae_contMap,
+#' plot_contMap(contMap = Ponerinae_contMap, fsize = c(0.5, 1),
 #'              color_scale = c("darkgreen", "limegreen", "orange", "red"))
 #'              # PDF_file_path = "Ponerinae_contMap.pdf")
 #'
