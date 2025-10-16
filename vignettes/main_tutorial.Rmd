@@ -453,6 +453,15 @@ plot_rates_vs_trait_data_for_focal_time(
 # You can see that "small" ants tend to have higher rates than "large" ants at this time-step.
 # This plot, alongside other results of deepSTRAPP, supports the Diversification Rate Hypothesis in showing 
 # how "small" ant lineages may have accumulated faster, especially between 5 to 15 My.
+# Additionally, the plot displays summary statistics for the STRAPP test associated with the data shown:
+#   * An observed statistic computed across the mean rates and trait states shown on the plot.
+#     Here, U-stats obs = -23048, indicating the first group "large" ants have lower rates than "small" ants.
+#     This is not the statistic of the STRAPP test itself, which is conducted across all BAMM posterior samples.
+#   * The quantile of null statistic distribution at the significant threshold used to define test significance. 
+#     The test will be considered significant (i.e., the null hypothesis is rejected)
+#     if this value is higher than zero, as shown on the histogram in Section 4.2.
+#     Here, Q5% = 463.6, so the test is significant (according to this significance threshold).
+#   * The p-value of the associated STRAPP test. Here, p = 0.037.
 
 # Plot rates vs. trait data for all time-steps
 plot_rates_vs_trait_data_over_time(

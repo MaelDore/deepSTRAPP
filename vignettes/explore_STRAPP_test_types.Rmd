@@ -51,6 +51,9 @@ data("Ponerinae_trait_tip_data", package = "deepSTRAPP")
 # Extract continuous trait data as a named vector
 Ponerinae_cont_tip_data <- setNames(object = Ponerinae_trait_tip_data$fake_cont_tip_data,
                                     nm = Ponerinae_trait_tip_data$Taxa)
+
+# This not valid biological data. For the sake of example, we will assume this is size data.
+
 # Reorder tip data as in phylogeny
 Ponerinae_cont_tip_data <- Ponerinae_cont_tip_data[Ponerinae_tree_old_calib$tip.label]
 
@@ -154,86 +157,43 @@ plot_histogram_STRAPP_test_for_focal_time(
 ```{r STRAPP_tests_cont_two_tailed_2}
 ## Plot rates vs. trait values
 
-# Extract mean diversification data, only for net diversification rates
-diversification_data_df <- deepSTRAPP_output_two_tailed$diversification_data_df |>
-  dplyr::filter(rate_type == "net_diversification") |>
-  dplyr::group_by(tip_ID) |>
-  dplyr::summarize(mean_rates = mean(rates))
+# We can plot the mean rates vs. trait values inferred by deepSTRAPP for T = 10Mya
+# to unravel the direction of the correlation detected.
 
-# Extract trait data
-trait_data_df <- as.data.frame(deepSTRAPP_output_two_tailed$updated_trait_data_with_Map$trait_data)
-trait_data_df$tip_ID <- names(deepSTRAPP_output_two_tailed$updated_trait_data_with_Map$trait_data)
-names(trait_data_df) <- c("trait_values", "tip_ID")
+?plot_rates_vs_trait_data_for_focal_time()
 
-# Merge rates and traits in a unique data.frame
-data_melted_df <- dplyr::left_join(x = diversification_data_df, y = trait_data_df,
-                                   by = dplyr::join_by(tip_ID))
+# Select a color scheme from lowest to highest values (i.e., small ants to large ants)
+color_scale = c("darkgreen", "limegreen", "orange", "red")
 
-# Plot rates vs. trait values across all BAMM samples
-ggplot_rates_vs_traits <- ggplot2::ggplot(data = data_melted_df) +
-  # Plot points for all samples
-  ggplot2::geom_point(mapping = ggplot2::aes(y = mean_rates, x = trait_values),
-                      alpha = 0.80, size = 3) +
-  # Adjust axis titles
-  ggplot2::ylab("Net diversification rates") +
-  ggplot2::xlab("Trait values") +
-  
-  # Adjust aesthetics
-  ggplot2::theme(
-     plot.margin = ggplot2::margin(0.3, 0.5, 0.5, 0.5, "inches"), # trbl
-     panel.grid.major = ggplot2::element_line(color = "grey70", linetype = "dashed", linewidth = 0.3),
-     panel.background = ggplot2::element_rect(fill = NA, color = NA),
-     axis.title = ggplot2::element_text(size = 20, color = "black"),
-     axis.title.x = ggplot2::element_text(margin = ggplot2::margin(t = 10)),
-     axis.title.y = ggplot2::element_text(margin = ggplot2::margin(r = 12)),
-     axis.line = ggplot2::element_line(linewidth = 1.0),
-     axis.text = ggplot2::element_text(size = 18, color = "black"))
-  
-print(ggplot_rates_vs_traits)
+# Plot mean rates vs. traits aggregated across all BAMM posterior samples
+plot_rates_vs_trait_data_for_focal_time(deepSTRAPP_outputs = deepSTRAPP_output_two_tailed,
+                                        color_scale = color_scale)
 
-# The plot indicates that rates are globally negatively correlated with trait values. 
-# We could also have directly tested for hypothesis with a one-tailed test (See Step 3 below).
+# The plot indicates that rates are globally negatively correlated with trait values as 
+# "small" ants exhibit higher rates than "large" ants for T = 10 Mya.
+# The plot also displays summary statistics for the STRAPP test associated with the data shown:
+#   * An observed statistic computed across the mean rates and trait values shown on the plot.
+#     Here, rho obs = -0.743, indicating a negative correlation.
+#     This is not the statistic of the STRAPP test itself, which is conducted across all BAMM posterior samples.
+#   * The quantile of null statistic distribution at the significant threshold used to define test significance. 
+#     The test will be considered significant (i.e., the null hypothesis is rejected)
+#     if this value is higher than zero, as shown on the histogram above.
+#     Here, Q5% = 0.063, so the test is significant (according to this significance threshold).
+#   * The p-value of the associated STRAPP test. Here, p = 0.016.
+
+# We could have directly tested for hypothesis with a one-tailed test (See Step 3 below).
 
 ```
 ```{r STRAPP_tests_cont_two_tailed_eval_2, fig.width = 8.5, fig.height = 6, out.width = "100%", eval = TRUE, echo = FALSE}
 
 ## Plot rates vs. trait values
 
-# Extract mean diversification data, only for net diversification rates
-diversification_data_df <- deepSTRAPP_output_two_tailed$diversification_data_df |>
-  dplyr::filter(rate_type == "net_diversification") |>
-  dplyr::group_by(tip_ID) |>
-  dplyr::summarize(mean_rates = mean(rates))
+# Select a color scheme from lowest to highest values (i.e., small ants to large ants)
+color_scale = c("darkgreen", "limegreen", "orange", "red")
 
-# Extract trait data
-trait_data_df <- as.data.frame(deepSTRAPP_output_two_tailed$updated_trait_data_with_Map$trait_data)
-trait_data_df$tip_ID <- names(deepSTRAPP_output_two_tailed$updated_trait_data_with_Map$trait_data)
-names(trait_data_df) <- c("trait_values", "tip_ID")
-
-# Merge rates and traits in a unique data.frame
-data_melted_df <- dplyr::left_join(x = diversification_data_df, y = trait_data_df, by = dplyr::join_by(tip_ID))
-
-# Plot rates vs. trait values across all BAMM samples
-ggplot_rates_vs_traits <- ggplot2::ggplot(data = data_melted_df) +
-  # Plot points for all samples
-  ggplot2::geom_point(mapping = ggplot2::aes(y = mean_rates, x = trait_values),
-                      alpha = 0.80, size = 3) +
-  # Adjust axis titles
-  ggplot2::ylab("Net diversification rates") +
-  ggplot2::xlab("Trait values") +
-  
-  # Adjust aesthetics
-  ggplot2::theme(
-     plot.margin = ggplot2::margin(0.3, 0.5, 0.5, 0.5, "inches"), # trbl
-     panel.grid.major = ggplot2::element_line(color = "grey70", linetype = "dashed", linewidth = 0.3),
-     panel.background = ggplot2::element_rect(fill = NA, color = NA),
-     axis.title = ggplot2::element_text(size = 20, color = "black"),
-     axis.title.x = ggplot2::element_text(margin = ggplot2::margin(t = 10)),
-     axis.title.y = ggplot2::element_text(margin = ggplot2::margin(r = 12)),
-     axis.line = ggplot2::element_line(linewidth = 1.0),
-     axis.text = ggplot2::element_text(size = 18, color = "black"))
-  
-print(ggplot_rates_vs_traits)
+# Plot mean rates vs. traits aggregated across all BAMM posterior samples
+plot_rates_vs_trait_data_for_focal_time(deepSTRAPP_outputs = deepSTRAPP_output_two_tailed,
+                                        color_scale = color_scale)
 
 ```
 
@@ -338,7 +298,7 @@ Ponerinae_trait_object <- Ponerinae_cat_2lvl_data_old_calib
 
 #### Step 2: Run a two-tailed test ####
 
-# No assumption is made ab out which states exhibit the highest rates.
+# No assumption is made about which states exhibit the highest rates.
 # The null hypothesis is that there is no difference in rates between the two states.
 # The alternative hypothesis is that there is a difference in rates between the two states,
 # in any direction (i.e., "small > large" or "large > small").
@@ -425,103 +385,35 @@ plot_histogram_STRAPP_test_for_focal_time(
 ```{r STRAPP_tests_cat_2lvl_two_tailed_2}
 ## Plot rates vs. trait values
 
-# Extract mean diversification data, only for net diversification rates
-diversification_data_df <- deepSTRAPP_output_two_tailed$diversification_data_df |>
-  dplyr::filter(rate_type == "net_diversification") |>
-  dplyr::group_by(tip_ID) |>
-  dplyr::summarize(mean_rates = mean(rates))
+# We can plot the mean rates vs. states inferred by deepSTRAPP for T = 10Mya
+# to unravel the direction of the difference detected.
 
-# Extract trait data
-trait_data_df <- as.data.frame(deepSTRAPP_output_two_tailed$updated_trait_data_with_Map$trait_data)
-trait_data_df$tip_ID <- names(deepSTRAPP_output_two_tailed$updated_trait_data_with_Map$trait_data)
-names(trait_data_df) <- c("trait_values", "tip_ID")
+?plot_rates_vs_trait_data_for_focal_time()
 
-# Merge rates and traits in a unique data.frame
-data_melted_df <- dplyr::left_join(x = diversification_data_df, y = trait_data_df,
-                                   by = dplyr::join_by(tip_ID))
+# Plot mean rates vs. trait states aggregated across all BAMM posterior samples
+plot_rates_vs_trait_data_for_focal_time(deepSTRAPP_outputs = deepSTRAPP_output_two_tailed,
+                                        colors_per_levels = colors_per_states)
 
-# Plot rates vs. trait values across all BAMM samples
-ggplot_rates_vs_traits <- ggplot2::ggplot(data = data_melted_df) +
-  
-  # Plot boxplot per states
-  ggplot2::geom_boxplot(mapping = ggplot2::aes(y = mean_rates, x = trait_values,
-                                               fill = trait_values)) +
-  # Plot points for all samples
-  ggplot2::geom_jitter(mapping = ggplot2::aes(y = mean_rates, x = trait_values,
-                                              fill = trait_values),
-                      alpha = 0.50, size = 3, width = 0.25, shape = 21, color = "black") +
-  # Adjust axis titles
-  ggplot2::ylab("Net diversification rates") +
-  ggplot2::xlab("States") +
-  
-  # Adjust legend
-  ggplot2::scale_fill_manual(name = "States",
-                             breaks = names(colors_per_states),
-                             values = colors_per_states) +
-  
-  # Adjust aesthetics
-  ggplot2::theme(
-     plot.margin = ggplot2::margin(0.3, 0.5, 0.5, 0.5, "inches"), # trbl
-     panel.grid.major = ggplot2::element_line(color = "grey70", linetype = "dashed", linewidth = 0.3),
-     panel.background = ggplot2::element_rect(fill = NA, color = NA),
-     axis.title = ggplot2::element_text(size = 20, color = "black"),
-     axis.title.x = ggplot2::element_text(margin = ggplot2::margin(t = 10)),
-     axis.title.y = ggplot2::element_text(margin = ggplot2::margin(r = 12)),
-     axis.line = ggplot2::element_line(linewidth = 1.0),
-     axis.text = ggplot2::element_text(size = 18, color = "black"))
-  
-print(ggplot_rates_vs_traits)
+# The plot highlights that "small" ants exhibited higher rates than "large" ants for T = 10 Mya.
+# The plot also displays summary statistics for the STRAPP test associated with the data shown:
+#   * An observed statistic computed across the mean rates and trait states shown on the plot.
+#     Here, U-stats obs = -23048, indicating the first group "large" ants have lower rates than "small" ants.
+#     This is not the statistic of the STRAPP test itself, which is conducted across all BAMM posterior samples.
+#   * The quantile of null statistic distribution at the significant threshold used to define test significance. 
+#     The test will be considered significant (i.e., the null hypothesis is rejected)
+#     if this value is higher than zero, as shown on the histogram above.
+#     Here, Q5% = 463.6, so the test is significant (according to this significance threshold).
+#   * The p-value of the associated STRAPP test. Here, p = 0.037.
 
-# The plot indicates that net diversification rates are higher in "small" ants than in "large" ants. 
-# We could also have directly tested for hypothesis with a one-tailed test (See Step 3 below).
- 
+# We could have directly tested for this hypothesis (i.e., "small" > "large") with a one-tailed test (See Step 3 below).
+
 ```
 ```{r STRAPP_tests_cat_2lvl_two_tailed_eval2, fig.width = 8.5, fig.height = 6, out.width = "100%", eval = TRUE, echo = FALSE}
 ## Plot rates vs. trait values
 
-# Extract mean diversification data, only for net diversification rates
-diversification_data_df <- deepSTRAPP_output_two_tailed$diversification_data_df |>
-  dplyr::filter(rate_type == "net_diversification") |>
-  dplyr::group_by(tip_ID) |>
-  dplyr::summarize(mean_rates = mean(rates))
-
-# Extract trait data
-trait_data_df <- as.data.frame(deepSTRAPP_output_two_tailed$updated_trait_data_with_Map$trait_data)
-trait_data_df$tip_ID <- names(deepSTRAPP_output_two_tailed$updated_trait_data_with_Map$trait_data)
-names(trait_data_df) <- c("trait_values", "tip_ID")
-
-# Merge rates and traits in a unique data.frame
-data_melted_df <- dplyr::left_join(x = diversification_data_df, y = trait_data_df, by = dplyr::join_by(tip_ID))
-
-# Plot rates vs. trait values across all BAMM samples
-ggplot_rates_vs_traits <- ggplot2::ggplot(data = data_melted_df) +
-  
-  # Plot boxplot per states
-  ggplot2::geom_boxplot(mapping = ggplot2::aes(y = mean_rates, x = trait_values,
-                                               fill = trait_values)) +
-  # Plot points for all samples
-  ggplot2::geom_jitter(mapping = ggplot2::aes(y = mean_rates, x = trait_values,
-                                              fill = trait_values),
-                      alpha = 0.50, size = 3, width = 0.25, shape = 21, color = "black") +
-  # Adjust axis titles
-  ggplot2::ylab("Net diversification rates") +
-  ggplot2::xlab("States") +
-  
-  # Adjust legend
-  ggplot2::scale_fill_manual(name = "States", breaks = names(colors_per_states), values = colors_per_states) +
-  
-  # Adjust aesthetics
-  ggplot2::theme(
-     plot.margin = ggplot2::margin(0.3, 0.5, 0.5, 0.5, "inches"), # trbl
-     panel.grid.major = ggplot2::element_line(color = "grey70", linetype = "dashed", linewidth = 0.3),
-     panel.background = ggplot2::element_rect(fill = NA, color = NA),
-     axis.title = ggplot2::element_text(size = 20, color = "black"),
-     axis.title.x = ggplot2::element_text(margin = ggplot2::margin(t = 10)),
-     axis.title.y = ggplot2::element_text(margin = ggplot2::margin(r = 12)),
-     axis.line = ggplot2::element_line(linewidth = 1.0),
-     axis.text = ggplot2::element_text(size = 18, color = "black"))
-  
-print(ggplot_rates_vs_traits)
+# Plot mean rates vs. trait states aggregated across all BAMM posterior samples
+plot_rates_vs_trait_data_for_focal_time(deepSTRAPP_outputs = deepSTRAPP_output_two_tailed,
+                                        colors_per_levels = colors_per_states)
 
 ```
 
@@ -608,7 +500,7 @@ Ponerinae_cat_3lvl_tip_data <- setNames(object = Ponerinae_trait_tip_data$fake_c
 # Reorder tip data as in phylogeny
 Ponerinae_cat_3lvl_tip_data <- Ponerinae_cat_3lvl_tip_data[Ponerinae_tree_old_calib$tip.label]
 
-## Select color scheme for states
+## Select color scheme for states (i.e., habitats)
 colors_per_states <- c("forestgreen", "sienna", "goldenrod")
 names(colors_per_states) <- c("arboreal", "subterranean", "terricolous")
 
@@ -722,103 +614,38 @@ plot_histogram_STRAPP_test_for_focal_time(
 ```{r STRAPP_tests_cat_3lvl_overall_2}
 ## Plot rates vs. trait values
 
-# Extract mean diversification data, only for net diversification rates
-diversification_data_df <- deepSTRAPP_output_overall$diversification_data_df |>
-  dplyr::filter(rate_type == "net_diversification") |>
-  dplyr::group_by(tip_ID) |>
-  dplyr::summarize(mean_rates = mean(rates))
+# We can plot the mean rates vs. states inferred by deepSTRAPP for T = 10Mya
+# to unravel the direction of the differences detected.
 
-# Extract trait data
-trait_data_df <- as.data.frame(deepSTRAPP_output_overall$updated_trait_data_with_Map$trait_data)
-trait_data_df$tip_ID <- names(deepSTRAPP_output_overall$updated_trait_data_with_Map$trait_data)
-names(trait_data_df) <- c("trait_values", "tip_ID")
+?plot_rates_vs_trait_data_for_focal_time()
 
-# Merge rates and traits in a unique data.frame
-data_melted_df <- dplyr::left_join(x = diversification_data_df, y = trait_data_df,
-                                   by = dplyr::join_by(tip_ID))
-
-# Plot rates vs. trait values across all BAMM samples
-ggplot_rates_vs_traits <- ggplot2::ggplot(data = data_melted_df) +
-  
-  # Plot boxplot per states
-  ggplot2::geom_boxplot(mapping = ggplot2::aes(y = mean_rates, x = trait_values,
-                                               fill = trait_values)) +
-  # Plot points for all samples
-  ggplot2::geom_jitter(mapping = ggplot2::aes(y = mean_rates, x = trait_values,
-                                              fill = trait_values),
-                      alpha = 0.50, size = 3, width = 0.25, shape = 21, color = "black") +
-  # Adjust axis titles
-  ggplot2::ylab("Net diversification rates") +
-  ggplot2::xlab("States") +
-  
-  # Adjust legend
-  ggplot2::scale_fill_manual(name = "States", breaks = names(colors_per_states), values = colors_per_states) +
-  
-  # Adjust aesthetics
-  ggplot2::theme(
-     plot.margin = ggplot2::margin(0.3, 0.5, 0.5, 0.5, "inches"), # trbl
-     panel.grid.major = ggplot2::element_line(color = "grey70", linetype = "dashed", linewidth = 0.3),
-     panel.background = ggplot2::element_rect(fill = NA, color = NA),
-     axis.title = ggplot2::element_text(size = 20, color = "black"),
-     axis.title.x = ggplot2::element_text(margin = ggplot2::margin(t = 10)),
-     axis.title.y = ggplot2::element_text(margin = ggplot2::margin(r = 12)),
-     axis.line = ggplot2::element_line(linewidth = 1.0),
-     axis.text = ggplot2::element_text(size = 18, color = "black"))
-  
-print(ggplot_rates_vs_traits)
+# Plot mean rates vs. trait states aggregated across all BAMM posterior samples
+plot_rates_vs_trait_data_for_focal_time(deepSTRAPP_outputs = deepSTRAPP_output_overall,
+                                        colors_per_levels = colors_per_states)
 
 # The plot indicates that net diversification rates are higher in "terricolous" ants, 
-# then "subterranean" ants, and lower in "arboreal" ants. 
+# than "subterranean" ants, and lower in "arboreal" ants, for T = 10 Mya.
+# The plot also displays summary statistics for the STRAPP test associated with the data shown:
+#   * An observed statistic computed across the mean rates and trait states (i.e., habitats) shown on the plot.
+#     Here, H-stat obs = 374.82. Please note that this is not the statistic of the STRAPP test itself,
+#     which is conducted across all BAMM posterior samples.
+#   * The quantile of null statistic distribution at the significant threshold used to define test significance. 
+#     The test will be considered significant (i.e., the null hypothesis is rejected)
+#     if this value is higher than zero, as shown on the histogram above.
+#     Here, Q10% = 6.942, so the test is significant (according to this significance threshold),
+#     meaning we detected differences between habitats overall.
+#   * The p-value of the associated STRAPP test. Here, p = 0.071.
+
 # We can explore those potential differences with post hoc pairwise tests,
 # with both one-tailed hypothesis tests or two-tailed tests (See Steps 3 & 4 below).
- 
+
 ```
 ```{r STRAPP_tests_cat_3lvl_overall_eval2, fig.width = 8.5, fig.height = 6, out.width = "100%", eval = TRUE, echo = FALSE}
 ## Plot rates vs. trait values
 
-# Extract mean diversification data, only for net diversification rates
-diversification_data_df <- deepSTRAPP_output_overall$diversification_data_df |>
-  dplyr::filter(rate_type == "net_diversification") |>
-  dplyr::group_by(tip_ID) |>
-  dplyr::summarize(mean_rates = mean(rates))
-
-# Extract trait data
-trait_data_df <- as.data.frame(deepSTRAPP_output_overall$updated_trait_data_with_Map$trait_data)
-trait_data_df$tip_ID <- names(deepSTRAPP_output_overall$updated_trait_data_with_Map$trait_data)
-names(trait_data_df) <- c("trait_values", "tip_ID")
-
-# Merge rates and traits in a unique data.frame
-data_melted_df <- dplyr::left_join(x = diversification_data_df, y = trait_data_df, by = dplyr::join_by(tip_ID))
-
-# Plot rates vs. trait values across all BAMM samples
-ggplot_rates_vs_traits <- ggplot2::ggplot(data = data_melted_df) +
-  
-  # Plot boxplot per states
-  ggplot2::geom_boxplot(mapping = ggplot2::aes(y = mean_rates, x = trait_values,
-                                               fill = trait_values)) +
-  # Plot points for all samples
-  ggplot2::geom_jitter(mapping = ggplot2::aes(y = mean_rates, x = trait_values,
-                                              fill = trait_values),
-                      alpha = 0.50, size = 3, width = 0.25, shape = 21, color = "black") +
-  # Adjust axis titles
-  ggplot2::ylab("Net diversification rates") +
-  ggplot2::xlab("States") +
-  
-  # Adjust legend
-  ggplot2::scale_fill_manual(name = "States", breaks = names(colors_per_states), values = colors_per_states) +
-  
-  # Adjust aesthetics
-  ggplot2::theme(
-     plot.margin = ggplot2::margin(0.3, 0.5, 0.5, 0.5, "inches"), # trbl
-     panel.grid.major = ggplot2::element_line(color = "grey70", linetype = "dashed", linewidth = 0.3),
-     panel.background = ggplot2::element_rect(fill = NA, color = NA),
-     axis.title = ggplot2::element_text(size = 20, color = "black"),
-     axis.title.x = ggplot2::element_text(margin = ggplot2::margin(t = 10)),
-     axis.title.y = ggplot2::element_text(margin = ggplot2::margin(r = 12)),
-     axis.line = ggplot2::element_line(linewidth = 1.0),
-     axis.text = ggplot2::element_text(size = 18, color = "black"))
-  
-print(ggplot_rates_vs_traits)
+# Plot mean rates vs. trait states aggregated across all BAMM posterior samples
+plot_rates_vs_trait_data_for_focal_time(deepSTRAPP_outputs = deepSTRAPP_output_overall,
+                                        colors_per_levels = colors_per_states)
 
 ```
 

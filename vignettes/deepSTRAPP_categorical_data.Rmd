@@ -50,9 +50,10 @@ View(Ponerinae_trait_tip_data)
 # Extract categorical data with 3-levels
 Ponerinae_cat_3lvl_tip_data <- setNames(object = Ponerinae_trait_tip_data$fake_cat_3lvl_tip_data,
                                     nm = Ponerinae_trait_tip_data$Taxa)
+# Here, data represent three types of habitats
 table(Ponerinae_cat_3lvl_tip_data)
 
-## Select color scheme for states
+## Select color scheme for states (i.e., habitats)
 colors_per_states <- c("forestgreen", "sienna", "goldenrod")
 names(colors_per_states) <- c("arboreal", "subterranean", "terricolous")
 
@@ -423,8 +424,8 @@ ggplot_STRAPP_pvalues_posthoc <- ggplot_STRAPP_pvalues_posthoc +
   ggplot2::theme(
     plot.title = ggplot2::element_text(size = 18),
     legend.title = ggplot2::element_text(size  = 12),
-    legend.position.inside = c(0.25, 0.35),
-    legend.text = ggplot2::element_text(size = 10))
+    legend.position.inside = c(0.30, 0.40),
+    legend.text = ggplot2::element_text(size = 9))
 # Print plot
 print(ggplot_STRAPP_pvalues_posthoc)
 ```
@@ -569,6 +570,15 @@ plot_rates_vs_trait_data_for_focal_time(
 # who tends to have higher rates than "arboreal" ants, at this time-step.
 # This plot, alongside other results of deepSTRAPP, supports the Diversification Rate Hypothesis in showing 
 # how "terricolous" ant lineages may have accumulated faster, especially between 5 to 15 My.
+# Additionally, the plot displays summary statistics for the STRAPP test associated with the data shown:
+#   * An observed statistic computed across the mean rates and trait states (i.e., habitats) shown on the plot.
+#     Here, H-stat obs = 374.82. Please note that this is not the statistic of the STRAPP test itself,
+#     which is conducted across all BAMM posterior samples.
+#   * The quantile of null statistic distribution at the significant threshold used to define test significance. 
+#     The test will be considered significant (i.e., the null hypothesis is rejected)
+#     if this value is higher than zero, as shown on the histogram in Section 4.2.
+#     Here, Q10% = 6.942, so the test is significant (according to this significance threshold).
+#   * The p-value of the associated STRAPP test. Here, p = 0.071.
 
 # Plot rates vs. trait data for all time-steps
 plot_rates_vs_trait_data_over_time(

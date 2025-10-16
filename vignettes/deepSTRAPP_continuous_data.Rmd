@@ -50,7 +50,9 @@ View(Ponerinae_trait_tip_data)
 Ponerinae_cont_tip_data <- setNames(object = Ponerinae_trait_tip_data$fake_cont_tip_data,
                                     nm = Ponerinae_trait_tip_data$Taxa)
 
-# Select a color scheme from lowest to highest values
+# This not valid biological data. For the sake of example, we will assume this is size data.
+
+# Select a color scheme from lowest to highest values (i.e., smallest to largest ants)
 color_scale = c("darkgreen", "limegreen", "orange", "red")
 
 ## Load phylogeny with old time-calibration
@@ -318,18 +320,20 @@ print(ggplot_STRAPP_pvalues)
 # Display the time-steps
 Ponerinae_deepSTRAPP_cont_old_calib_0_40$time_steps
 
-# Plot the histogram of test stats for time-step n°3 = 10 My
+# Plot the histogram of test stats for time-step n°5 = 20 My
 plot_histogram_STRAPP_test_for_focal_time(
    deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_old_calib_0_40,
-   focal_time = 10)
+   focal_time = 20)
 
 # The black line represents the expected value under the null hypothesis H0 => Δ abs(Spearman rho stat) = 0.
 # The histogram shows the distribution of the test statistics as observed
 # across the 1000 posterior samples from BAMM.
 # The red line represents the significance threshold for which 95% of the observed data
 # exhibited a higher value than expected.
-# Since this red line is above the null expectation (quantile 5% = 0.091), 
+# Since this red line is above the null expectation (quantile 5% = 0.036), 
 # the test is significant for a value of alpha = 0.05.
+# Therefore, ant size was significantly correlated with net diversification rates 20 Mya.
+# Since we performed a two-tailed test (default), we do not know the direction of this correlation (yet).
 
 # Plot the histograms of test stats for all time-steps
 plot_histograms_STRAPP_tests_over_time(
@@ -337,10 +341,10 @@ plot_histograms_STRAPP_tests_over_time(
 
 ```
 ```{r plot_histogram_STRAPP_tests_cont_eval, fig.width = 8.5, fig.height = 6, out.width = "100%", eval = TRUE, echo = FALSE}
-# Plot the histogram of test stats for time-step n°3 = 10 My
+# Plot the histogram of test stats for time-step n°5 = 20 My
 plot_histogram_STRAPP_test_for_focal_time(
    deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_old_calib_0_40,
-   focal_time = 10)
+   focal_time = 20)
 ```
 
 ```{r plot_rates_through_time_cont}
@@ -353,7 +357,7 @@ plot_rates_through_time(deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_old_calib
                         plot_CI = TRUE)
 
 # This plot helps to visualize how correlations between trait values and rates evolved over time.
-# Here, their is "negative" correlation as ants in the lowest quartile of trait values (in blue)
+# Here, we observe a "negative" correlation as ants in the lowest quartile of trait values (in blue)
 # display the highest net diversification rates over time, while ants in the highest quartile
 # of trait values (in red) display the lowest net diversification rates over time.
 # However, in the present, we recorded an increase in diversification rates that blurred 
@@ -392,17 +396,26 @@ print(ggplot_RTT)
 # This plot help to visualize differences in rates vs. ranges across all branches
 # found at specific time-steps (i.e., 'focal_time').
 
-# Generate ggplot for time = 15 My
+# Generate ggplot for time = 20 My
 plot_rates_vs_trait_data_for_focal_time(
    deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_old_calib_0_40,
-   focal_time = 15,
+   focal_time = 20,
    color_scale = color_scale)
 
-# Here we focus on T = 15 My to highlight the correlation detected in the previous steps.
+# Here we focus on T = 20 My to highlight the correlation detected in the previous steps.
 # You can see that ants in the highest trait values (in red) exhibits the lowest rates, at this time-step.
 # This plot, alongside other results of deepSTRAPP, supports the Diversification Rate Hypothesis in showing 
 # how ant lineages with low trait values (e.g., small size) may have accumulated faster
 # than ant lineages with high trait value (e.g., large size), especially between 5 to 25 My.
+# Additionally, the plot displays summary statistics for the STRAPP test associated with the data shown:
+#   * An observed statistic computed across the mean rates and trait values shown on the plot.
+#     Here, rho obs = -0.743, indicating a negative correlation between size and diversification in ponerine ants.
+#     This is not the statistic of the STRAPP test itself, which is conducted across all BAMM posterior samples.
+#   * The quantile of null statistic distribution at the significant threshold used to define test significance. 
+#     The test will be considered significant (i.e., the null hypothesis is rejected)
+#     if this value is higher than zero, as shown on the histogram in Section 4.2.
+#     Here, Q5% = 0.036, so the test is significant (according to this significance threshold).
+#   * The p-value of the associated STRAPP test. Here, p = 0.022.
 
 # Plot rates vs. ranges for all time-steps
 plot_rates_vs_trait_data_over_time(
@@ -414,10 +427,10 @@ plot_rates_vs_trait_data_over_time(
 # Select a color scheme from lowest to highest values
 color_scale = c("darkgreen", "limegreen", "orange", "red")
 
-# Generate ggplot for time = 15 My
+# Generate ggplot for time = 20 My
 plot_rates_vs_trait_data_for_focal_time(
    deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_old_calib_0_40,
-   focal_time = 15,
+   focal_time = 20,
    color_scale = color_scale)
 ```
 
@@ -442,6 +455,7 @@ root_age <- max(phytools::nodeHeights(Ponerinae_tree_old_calib)[,2])
 contMap_0My <- Ponerinae_deepSTRAPP_cont_old_calib_0_40$updated_trait_data_with_Map_over_time[[1]]
 plot_contMap(contMap_0My$contMap,
              color_scale = c("darkgreen", "limegreen", "orange", "red"),
+             lwd = 0.7, # Adjust width of branches
              fsize = c(0.1, 1)) # Reduce tip label size
 abline(v = root_age - 20, col = "red", lty = 2) # Show where the phylogeny will be cut
 
@@ -451,6 +465,7 @@ abline(v = root_age - 20, col = "red", lty = 2) # Show where the phylogeny will 
 contMap_20My <- Ponerinae_deepSTRAPP_cont_old_calib_0_40$updated_trait_data_with_Map_over_time[[5]]
 plot_contMap(contMap_20My$contMap,
              color_scale = c("darkgreen", "limegreen", "orange", "red"),
+             lwd = 0.9, # Adjust width of branches
              fsize = c(0.2, 1)) # Reduce tip label size
 ```
 
