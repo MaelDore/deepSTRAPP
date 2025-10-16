@@ -254,16 +254,16 @@ the fraction of each segment length compared to the full depth of the initial tr
 <span class="r-in"><span>   update_all_elements <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
 <span class="r-in"><span>   keep_tip_labels <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
 <span class="r-in"><span>   verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-10-16 14:55:53.409374 - Tip states/rates updated for BAMM posterior sample n°100/1000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-10-16 14:55:53.630015 - Tip states/rates updated for BAMM posterior sample n°200/1000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-10-16 14:55:53.809136 - Tip states/rates updated for BAMM posterior sample n°300/1000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-10-16 14:55:53.98441 - Tip states/rates updated for BAMM posterior sample n°400/1000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-10-16 14:55:54.175369 - Tip states/rates updated for BAMM posterior sample n°500/1000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-10-16 14:55:54.360946 - Tip states/rates updated for BAMM posterior sample n°600/1000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-10-16 14:55:54.53669 - Tip states/rates updated for BAMM posterior sample n°700/1000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-10-16 14:55:54.734909 - Tip states/rates updated for BAMM posterior sample n°800/1000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-10-16 14:55:54.911216 - Tip states/rates updated for BAMM posterior sample n°900/1000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-10-16 14:55:55.088105 - Tip states/rates updated for BAMM posterior sample n°1000/1000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-10-16 16:21:19.156384 - Tip states/rates updated for BAMM posterior sample n°100/1000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-10-16 16:21:19.432482 - Tip states/rates updated for BAMM posterior sample n°200/1000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-10-16 16:21:19.636396 - Tip states/rates updated for BAMM posterior sample n°300/1000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-10-16 16:21:19.823653 - Tip states/rates updated for BAMM posterior sample n°400/1000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-10-16 16:21:20.08297 - Tip states/rates updated for BAMM posterior sample n°500/1000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-10-16 16:21:20.300134 - Tip states/rates updated for BAMM posterior sample n°600/1000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-10-16 16:21:20.531122 - Tip states/rates updated for BAMM posterior sample n°700/1000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-10-16 16:21:20.763506 - Tip states/rates updated for BAMM posterior sample n°800/1000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-10-16 16:21:20.959368 - Tip states/rates updated for BAMM posterior sample n°900/1000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-10-16 16:21:21.220765 - Tip states/rates updated for BAMM posterior sample n°1000/1000</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Add "phylo" class to be compatible with phytools::nodeHeights()</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">whale_BAMM_object</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">whale_BAMM_object</span><span class="op">)</span>, <span class="st">"phylo"</span><span class="op">)</span><span class="op">)</span></span></span>
@@ -273,7 +273,7 @@ the fraction of each segment length compared to the full depth of the initial tr
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Plot initial BAMM_object for t = 0 My</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="plot_BAMM_rates.html">plot_BAMM_rates</a></span><span class="op">(</span><span class="va">whale_BAMM_object</span>, add_regime_shifts <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
-<span class="r-in"><span>                labels <span class="op">=</span> <span class="cn">TRUE</span>, legend <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
+<span class="r-in"><span>                labels <span class="op">=</span> <span class="cn">TRUE</span>, legend <span class="op">=</span> <span class="cn">TRUE</span>, cex <span class="op">=</span> <span class="fl">0.5</span>,</span></span>
 <span class="r-in"><span>                par.reset <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="co"># Keep plotting parameters in memory to use abline().</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>v <span class="op">=</span> <span class="va">root_age</span> <span class="op">-</span> <span class="va">focal_time</span>,</span></span>
 <span class="r-in"><span>      col <span class="op">=</span> <span class="st">"red"</span>, lty <span class="op">=</span> <span class="fl">2</span>, lwd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
@@ -281,7 +281,7 @@ the fraction of each segment length compared to the full depth of the initial tr
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Plot updated BAMM_object for t = 5 My</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="plot_BAMM_rates.html">plot_BAMM_rates</a></span><span class="op">(</span><span class="va">whale_BAMM_object_5My</span>, add_regime_shifts <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
-<span class="r-in"><span>                labels <span class="op">=</span> <span class="cn">TRUE</span>, legend <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span>                labels <span class="op">=</span> <span class="cn">TRUE</span>, legend <span class="op">=</span> <span class="cn">TRUE</span>, cex <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="update_rates_and_regimes_for_focal_time-2.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># ----- Example 2: Extant Ponerinae (1,534 taxa) ----- #</span></span></span>

@@ -310,13 +310,13 @@ the leaf left is labeled with the node ID of the MRCA of the cut-off clade.</p><
 <span class="r-in"><span><span class="co">## Plot density maps as overlay of all state posterior probabilities</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Plot initial density maps with ACE pies</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="plot_densityMaps_overlay.html">plot_densityMaps_overlay</a></span><span class="op">(</span>densityMaps <span class="op">=</span> <span class="va">eel_cat_3lvl_data</span><span class="op">$</span><span class="va">densityMaps</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="plot_densityMaps_overlay.html">plot_densityMaps_overlay</a></span><span class="op">(</span>densityMaps <span class="op">=</span> <span class="va">eel_cat_3lvl_data</span><span class="op">$</span><span class="va">densityMaps</span>, fsize <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>v <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="fu">phytools</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/phytools/man/nodeHeights.html" class="external-link">nodeHeights</a></span><span class="op">(</span><span class="va">eel_cat_3lvl_data</span><span class="op">$</span><span class="va">densityMaps</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">tree</span><span class="op">)</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span><span class="op">)</span> <span class="op">-</span> <span class="va">focal_time</span>,</span></span>
 <span class="r-in"><span>       col <span class="op">=</span> <span class="st">"red"</span>, lty <span class="op">=</span> <span class="fl">2</span>, lwd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="extract_most_likely_states_from_densityMaps_for_focal_time-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Plot updated densityMaps with ACE pies</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="plot_densityMaps_overlay.html">plot_densityMaps_overlay</a></span><span class="op">(</span><span class="va">eel_cat_3lvl_data_10My</span><span class="op">$</span><span class="va">densityMaps</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="plot_densityMaps_overlay.html">plot_densityMaps_overlay</a></span><span class="op">(</span><span class="va">eel_cat_3lvl_data_10My</span><span class="op">$</span><span class="va">densityMaps</span>, fsize <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="extract_most_likely_states_from_densityMaps_for_focal_time-2.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
@@ -347,9 +347,10 @@ the leaf left is labeled with the node ID of the MRCA of the cut-off clade.</p><
 <span class="r-in"><span><span class="va">mammals_cat_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="prepare_trait_data.html">prepare_trait_data</a></span><span class="op">(</span>tip_data <span class="op">=</span> <span class="va">mammals_data</span>, phylo <span class="op">=</span> <span class="va">mammals_tree</span>,</span></span>
 <span class="r-in"><span>                                       trait_data_type <span class="op">=</span> <span class="st">"categorical"</span>,</span></span>
 <span class="r-in"><span>                                       evolutionary_models <span class="op">=</span> <span class="st">"ER"</span>,</span></span>
-<span class="r-in"><span>                                       nb_simulations <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span></span>
+<span class="r-in"><span>                                       nb_simulations <span class="op">=</span> <span class="fl">100</span>,</span></span>
+<span class="r-in"><span>                                       plot_map <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-10-16 14:53:48.495348 - Fit 1 evolutionary model(s): ER.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-10-16 16:19:41.075118 - Fit 1 evolutionary model(s): ER.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ------ ER model ------ </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -378,11 +379,11 @@ the leaf left is labeled with the node ID of the MRCA of the cut-off clade.</p><
 <span class="r-out co"><span class="r-pr">#&gt;</span> 	'res' -- optimization iteration summary</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 	'opt' -- maximum likelihood parameter estimates</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-10-16 14:53:50.445768 - Compare model fits.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-10-16 16:19:43.094942 - Compare model fits.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    model     logL k      AIC     AICc delta_AICc Akaike_weights rank</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ER    ER -152.749 1 307.4981 307.5172          0            100    1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-10-16 14:53:50.447491 - Run simulations for stochastic mapping.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-10-16 16:19:43.100279 - Run simulations for stochastic mapping.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> make.simmap is sampling character histories conditioned on</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> the transition matrix</span>
@@ -398,27 +399,24 @@ the leaf left is labeled with the node ID of the MRCA of the cut-off clade.</p><
 <span class="r-out co"><span class="r-pr">#&gt;</span>     large    medium     small </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 0.3333333 0.3333333 0.3333333 </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Done.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-10-16 14:54:06.314224 - Extract ACE as posterior sampling from stochastic mapping.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-10-16 14:54:06.793836 - Create densityMaps by summarizing simulations of evolutionary history (simmaps).</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-10-16 16:20:00.048548 - Extract ACE as posterior sampling from stochastic mapping.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-10-16 16:20:00.573319 - Create densityMaps by summarizing simulations of evolutionary history (simmaps).</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-10-16 14:54:08.10779 - Posterior probability computed for edge n°100/420</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-10-16 14:54:08.985123 - Posterior probability computed for edge n°200/420</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-10-16 14:54:10.069202 - Posterior probability computed for edge n°300/420</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-10-16 14:54:11.270964 - Posterior probability computed for edge n°400/420</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-10-16 14:54:11.598329 - Posterior probabilities computed for State = large - n°1/3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-10-16 14:54:12.941261 - Posterior probability computed for edge n°100/420</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-10-16 14:54:13.829485 - Posterior probability computed for edge n°200/420</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-10-16 14:54:14.919562 - Posterior probability computed for edge n°300/420</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-10-16 14:54:16.083571 - Posterior probability computed for edge n°400/420</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-10-16 14:54:16.444045 - Posterior probabilities computed for State = medium - n°2/3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-10-16 14:54:17.812485 - Posterior probability computed for edge n°100/420</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-10-16 14:54:18.704707 - Posterior probability computed for edge n°200/420</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-10-16 14:54:19.815997 - Posterior probability computed for edge n°300/420</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-10-16 14:54:20.99061 - Posterior probability computed for edge n°400/420</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-10-16 14:54:21.34717 - Posterior probabilities computed for State = small - n°3/3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-10-16 14:54:21.347409 - Plot a unique densityMap with for all states overlaid.</span>
-<span class="r-plt img"><img src="extract_most_likely_states_from_densityMaps_for_focal_time-3.png" alt="" width="700" height="433"></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-10-16 16:20:01.927799 - Posterior probability computed for edge n°100/420</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-10-16 16:20:02.863568 - Posterior probability computed for edge n°200/420</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-10-16 16:20:04.001568 - Posterior probability computed for edge n°300/420</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-10-16 16:20:05.162151 - Posterior probability computed for edge n°400/420</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-10-16 16:20:05.510692 - Posterior probabilities computed for State = large - n°1/3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-10-16 16:20:06.940934 - Posterior probability computed for edge n°100/420</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-10-16 16:20:07.850597 - Posterior probability computed for edge n°200/420</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-10-16 16:20:08.971287 - Posterior probability computed for edge n°300/420</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-10-16 16:20:10.156345 - Posterior probability computed for edge n°400/420</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-10-16 16:20:10.559167 - Posterior probabilities computed for State = medium - n°2/3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-10-16 16:20:11.990406 - Posterior probability computed for edge n°100/420</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-10-16 16:20:12.916671 - Posterior probability computed for edge n°200/420</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-10-16 16:20:14.09061 - Posterior probability computed for edge n°300/420</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-10-16 16:20:15.318496 - Posterior probability computed for edge n°400/420</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2025-10-16 16:20:15.698741 - Posterior probabilities computed for State = small - n°3/3</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Set focal time</span></span></span>
 <span class="r-in"><span><span class="va">focal_time</span> <span class="op">&lt;-</span> <span class="fl">80</span></span></span>
@@ -456,14 +454,14 @@ the leaf left is labeled with the node ID of the MRCA of the cut-off clade.</p><
 <span class="r-in"><span><span class="co">## Plot density maps as overlay of all state posterior probabilities</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Plot initial density maps with ACE pies</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="plot_densityMaps_overlay.html">plot_densityMaps_overlay</a></span><span class="op">(</span>densityMaps <span class="op">=</span> <span class="va">mammals_cat_data</span><span class="op">$</span><span class="va">densityMaps</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="plot_densityMaps_overlay.html">plot_densityMaps_overlay</a></span><span class="op">(</span>densityMaps <span class="op">=</span> <span class="va">mammals_cat_data</span><span class="op">$</span><span class="va">densityMaps</span>, fsize <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>v <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="fu">phytools</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/phytools/man/nodeHeights.html" class="external-link">nodeHeights</a></span><span class="op">(</span><span class="va">mammals_cat_data</span><span class="op">$</span><span class="va">densityMaps</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">tree</span><span class="op">)</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span><span class="op">)</span> <span class="op">-</span> <span class="va">focal_time</span>,</span></span>
 <span class="r-in"><span>       col <span class="op">=</span> <span class="st">"red"</span>, lty <span class="op">=</span> <span class="fl">2</span>, lwd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="extract_most_likely_states_from_densityMaps_for_focal_time-4.png" alt="" width="700" height="433"></span>
+<span class="r-plt img"><img src="extract_most_likely_states_from_densityMaps_for_focal_time-3.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Plot updated densityMaps with ACE pies</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="plot_densityMaps_overlay.html">plot_densityMaps_overlay</a></span><span class="op">(</span><span class="va">mammals_cat_data_80My</span><span class="op">$</span><span class="va">densityMaps</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="extract_most_likely_states_from_densityMaps_for_focal_time-5.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span><span class="fu"><a href="plot_densityMaps_overlay.html">plot_densityMaps_overlay</a></span><span class="op">(</span><span class="va">mammals_cat_data_80My</span><span class="op">$</span><span class="va">densityMaps</span>, fsize <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="extract_most_likely_states_from_densityMaps_for_focal_time-4.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
