@@ -33,7 +33,7 @@ DOI: [10.1371/journal.pone.0089543](https://doi.org/10.1371/journal.pone.0089543
 BAMM website: [http://bamm-project.org/](http://bamm-project.org/)
 
 <br>
-deepSTRAPP builds upon __BAMM__ and functions from R package `[BAMMtools]` to offer a simplify framework to model and visualize __diversification dynamics__ on a __time-calibrated phylogeny__.
+deepSTRAPP builds upon __BAMM__ and functions from R package `[BAMMtools]` to offer a simplified framework to model and visualize __diversification dynamics__ on a __time-calibrated phylogeny__.
 <br>
 
 ```{r model_diversity_dynamics}
