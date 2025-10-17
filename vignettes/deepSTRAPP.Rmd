@@ -72,7 +72,7 @@ They provide explanations on available arguments and interpretations of results 
 
   - time-calibrated phylogenies.
   - contMap for continuous traits.
-  - densityMap for categorical and biogeogrpahic traits.
+  - densityMap for categorical and biogeographic traits.
   - BAMM_object for diversification dynamics.
 <br>
  
