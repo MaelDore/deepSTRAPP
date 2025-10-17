@@ -50,7 +50,7 @@ View(Ponerinae_trait_tip_data)
 Ponerinae_cont_tip_data <- setNames(object = Ponerinae_trait_tip_data$fake_cont_tip_data,
                                     nm = Ponerinae_trait_tip_data$Taxa)
 
-# This not valid biological data. For the sake of example, we will assume this is size data.
+# This not valid biological data. For the sake of this example, we will assume this is size data.
 
 # Select a color scheme from lowest to highest values (i.e., smallest to largest ants)
 color_scale = c("darkgreen", "limegreen", "orange", "red")
