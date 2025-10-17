@@ -96,7 +96,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>deepSTRAPP: Categorical trait data</h1>
                         <h4 data-toc-skip class="author">Maël Doré</h4>
             
-            <h4 data-toc-skip class="date">2025-10-16</h4>
+            <h4 data-toc-skip class="date">2025-10-17</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/MaelDore/deepSTRAPP/blob/master/vignettes/deepSTRAPP_categorical_data.Rmd" class="external-link"><code>vignettes/deepSTRAPP_categorical_data.Rmd</code></a></small>
       <div class="d-none name"><code>deepSTRAPP_categorical_data.Rmd</code></div>
@@ -402,14 +402,14 @@ deepSTRAPP.</p>
 <span></span>
 <span><span class="co"># 4.1/ Plot evolution of STRAPP tests p-values through time</span></span>
 <span><span class="co"># 4.2/ Plot histogram of STRAPP test stats</span></span>
-<span><span class="co"># 4.3/ Plot evolution of rates though time in relation to trait values</span></span>
+<span><span class="co"># 4.3/ Plot evolution of rates through time in relation to trait values</span></span>
 <span><span class="co"># 4.4/ Plot rates vs. states across branches for a given 'focal_time'</span></span>
 <span><span class="co"># 4.5/ Plot updated densityMaps mapping trait evolution for a given 'focal_time'</span></span>
 <span><span class="co"># 4.6/ Plot updated diversification rates and regimes for a given 'focal_time'</span></span>
 <span><span class="co"># 4.7/ Combine 4.5 and 4.6 to plot both mapped phylogenies with trait evolution (4.5)</span></span>
 <span><span class="co">#      and diversification rates and regimes (4.6).</span></span>
 <span></span>
-<span><span class="co"># Each plot is achieve through a dedicated function</span></span>
+<span><span class="co"># Each plot is achieved through a dedicated function</span></span>
 <span></span>
 <span><span class="co"># Load the deepSTRAPP output summarizing results for 0 to 40 My</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40</span>, package <span class="op">=</span> <span class="st">"deepSTRAPP"</span><span class="op">)</span></span>
@@ -435,7 +435,7 @@ deepSTRAPP.</p>
 <span><span class="co"># Meanwhile, rates are significantly different in the past between 5 My to 15 My (the green area).</span></span>
 <span><span class="co"># This result supports the idea that differences in biodiversity across habitats </span></span>
 <span><span class="co"># (i.e., "arboreal" vs. , "subterranean" vs. "terricolous" ants) can be explained </span></span>
-<span><span class="co"># by differences of diversification rates that was detected in the past. Without deepSTRAPP, </span></span>
+<span><span class="co"># by differences of diversification rates that was detected in the past. Without use of deepSTRAPP, </span></span>
 <span><span class="co"># this conclusion would not have been supported by current diversification rates alone.</span></span>
 <span></span>
 <span><span class="co"># Note: This is NOT true ecological data. It is not a valid scientific result,</span></span>
@@ -545,7 +545,7 @@ deepSTRAPP.</p>
 <span><span class="co"># It hints that "terricolous" ant lineages are fairly recent as no lineage in this state/habitat</span></span>
 <span><span class="co"># is inferred to have existed before 25 Mya.</span></span>
 <span><span class="co"># The larger uncertainty across estimates of diversification rates for "terricolous" ant lineages</span></span>
-<span><span class="co"># also hints to their relatively lower number due to their recent emergence.</span></span>
+<span><span class="co"># also hints at their relatively lower number due to their recent emergence.</span></span>
 <span></span>
 <span><span class="co"># Note: This is NOT true ecological data. It is not a valid scientific result,</span></span>
 <span><span class="co"># but an illustration of the use of deepSTRAPP.</span></span></code></pre></div>
@@ -626,7 +626,7 @@ deepSTRAPP.</p>
 <span>                         fsize <span class="op">=</span> <span class="fl">0.2</span><span class="op">)</span> <span class="co"># Reduce tip label size</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/title.html" class="external-link">title</a></span><span class="op">(</span>main <span class="op">=</span> <span class="st">"Trait evolution for 100-40 My"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># In this fake illustrative dataset, no ant lineages are inferred in "terricolous" habitats 40 Mya.</span></span></code></pre></div>
+<span><span class="co"># In this simulated illustrative dataset, no ant lineages are inferred in "terricolous" habitats 40 Mya.</span></span></code></pre></div>
 <p><img src="deepSTRAPP_categorical_data_files/figure-html/plot_updated_densityMaps_cat_3lvl_eval-1.png" width="672" style="display: block; margin: auto;"><img src="deepSTRAPP_categorical_data_files/figure-html/plot_updated_densityMaps_cat_3lvl_eval-2.png" width="672" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">### 4.6/ Plot updated diversification rates and regimes for a given 'focal_time' ####</span></span>
