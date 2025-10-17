@@ -25,7 +25,7 @@ library(deepSTRAPP)
 <br>
 This vignette presents the different options available to model __continuous trait evolution__ within deepSTRAPP.
 
-It builds mainly upon functions from R packages `[geiger]` and `[phytools]` to offer a simplify framework to model and visualize __continuous trait evolution__ on a __time-calibrated phylogeny__. <br>
+It builds mainly upon functions from R packages `[geiger]` and `[phytools]` to offer a simplified framework to model and visualize __continuous trait evolution__ on a __time-calibrated phylogeny__. <br>
 Please, cite also the initial R packages if you are using deepSTRAPP for this purpose.
 
 <br>
