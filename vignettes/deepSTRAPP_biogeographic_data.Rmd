@@ -368,14 +368,14 @@ str(Ponerinae_deepSTRAPP_biogeo_old_calib_0_40$updated_BAMM_objects_over_time, m
 
 # 4.1/ Plot evolution of STRAPP tests p-values through time
 # 4.2/ Plot histogram of STRAPP test stats
-# 4.3/ Plot evolution of rates though time in relation to ranges
+# 4.3/ Plot evolution of rates through time in relation to ranges
 # 4.4/ Plot rates vs. ranges across branches for a given 'focal_time'
 # 4.5/ Plot updated densityMaps mapping range evolution for a given 'focal_time'
 # 4.6/ Plot updated diversification rates and regimes for a given 'focal_time'
 # 4.7/ Combine 4.5 and 4.6 to plot both mapped phylogenies with range evolution (4.5)
 #      and diversification rates and regimes (4.6).
 
-# Each plot is achieve through a dedicated function
+# Each plot is achieved through a dedicated function
 
 # Load the deepSTRAPP output summarizing results for 0 to 40 My
 data(Ponerinae_deepSTRAPP_biogeo_old_calib_0_40, package = "deepSTRAPP")
@@ -399,7 +399,7 @@ deepSTRAPP::plot_STRAPP_pvalues_over_time(
 # This result supports the idea that differences in biodiversity across bioregions
 # (i.e., "Old World" vs. "New World" ants) can be explained by differences of diversification rates
 # that was detected in the past.
-# Without deepSTRAPP, this conclusion would not have been supported by current diversification rates
+# Without use of deepSTRAPP, this conclusion would not have been supported by current diversification rates
 # alone (although here, results should be discussed is regards to their weak degree of significance).
 
 ```
