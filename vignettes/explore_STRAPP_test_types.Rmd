@@ -21,17 +21,17 @@ library(deepSTRAPP)
 ```
 
 <br>
-This vignette presents the different __types of STRAPP tests__ that can be carried on with deepSTRAPP across the different types of data (i.e., continuous, binary, and multinominal).
+This vignette presents the different __types of STRAPP tests__ that can be carried out with deepSTRAPP across the different types of data (i.e., continuous, binary, and multinominal).
 
 <br>
 Two-tailed tests make no assumption on the direction of the effect tested. 
 
-One-tailed tests make an hypothesis on the direction of the effect tested.
+One-tailed tests make a hypothesis on the direction of the effect tested.
 
 * For continuous data, the direction of the correlation is either __"positive"__ or __"negative"__.
 * For binary data, the rate difference between state A and state B can be either __"A > B"__ or __"B > A"__.
 * For multinominal data, overall Kruskal-Wallis tests are one-tailed by definition. They test for a rate difference across all states/ranges at once.
-* Post hoc pairwise Dunn's tests carried out between pairs of states/ranges can be one-tailed or two-tailed, with all configuration tested by default.
+* Post hoc pairwise Dunn's tests carried out between pairs of states/ranges can be one-tailed or two-tailed, with all configurations tested by default.
 
 <br>
 Please note that the trait data and phylogeny calibration used in these examples are __NOT valid biological data__. They were modified in order to provide results illustrating the usefulness of deepSTRAPP.
