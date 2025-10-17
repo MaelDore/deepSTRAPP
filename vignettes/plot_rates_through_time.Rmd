@@ -25,7 +25,7 @@ This vignette presents the different options available to __plot rates through t
 
 It is a nice and efficient way to provide illustrations and support the conclusions of the deepSTRAPP tests.
 
-The plot can be performed on the different types of data (i.e., continuous, binary, and multinominal). <br>
+The plot can be performed on different types of data (i.e., continuous, binary, and multinominal). <br>
 Below are examples with __continuous data__ (Example 1) and __categorical multinominal data__ (Example 2).
 
 <br>
@@ -114,8 +114,8 @@ plot_rates_through_time(
 ## Plot different types of rates
 
 # deepSTRAPP also let you plot different types of rates.
-# Even if you carried the analysis on "net_diversification" rates (as the default)
-# You can still plot the evolution of "speciation" and "extinction" rates
+# Even if you carried out the analysis on "net_diversification" rates (as the default)
+# you can still plot the evolution of "speciation" and "extinction" rates
 
 # Plot "speciation" rates
 plot_rates_through_time(
