@@ -342,14 +342,14 @@ str(Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40$updated_BAMM_objects_over_time,
 
 # 4.1/ Plot evolution of STRAPP tests p-values through time
 # 4.2/ Plot histogram of STRAPP test stats
-# 4.3/ Plot evolution of rates though time in relation to trait values
+# 4.3/ Plot evolution of rates through time in relation to trait values
 # 4.4/ Plot rates vs. states across branches for a given 'focal_time'
 # 4.5/ Plot updated densityMaps mapping trait evolution for a given 'focal_time'
 # 4.6/ Plot updated diversification rates and regimes for a given 'focal_time'
 # 4.7/ Combine 4.5 and 4.6 to plot both mapped phylogenies with trait evolution (4.5)
 #      and diversification rates and regimes (4.6).
 
-# Each plot is achieve through a dedicated function
+# Each plot is achieved through a dedicated function
 
 # Load the deepSTRAPP output summarizing results for 0 to 40 My
 data(Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40, package = "deepSTRAPP")
@@ -375,7 +375,7 @@ deepSTRAPP::plot_STRAPP_pvalues_over_time(
 # Meanwhile, rates are significantly different in the past between 5 My to 15 My (the green area).
 # This result supports the idea that differences in biodiversity across habitats 
 # (i.e., "arboreal" vs. , "subterranean" vs. "terricolous" ants) can be explained 
-# by differences of diversification rates that was detected in the past. Without deepSTRAPP, 
+# by differences of diversification rates that was detected in the past. Without use of deepSTRAPP, 
 # this conclusion would not have been supported by current diversification rates alone.
 
 # Note: This is NOT true ecological data. It is not a valid scientific result,
@@ -530,7 +530,7 @@ plot_rates_through_time(deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cat_3lvl_old_c
 # It hints that "terricolous" ant lineages are fairly recent as no lineage in this state/habitat
 # is inferred to have existed before 25 Mya.
 # The larger uncertainty across estimates of diversification rates for "terricolous" ant lineages
-# also hints to their relatively lower number due to their recent emergence.
+# also hints at their relatively lower number due to their recent emergence.
 
 # Note: This is NOT true ecological data. It is not a valid scientific result,
 # but an illustration of the use of deepSTRAPP.
@@ -635,7 +635,7 @@ plot_densityMaps_overlay(densityMaps = densityMaps_40My$densityMaps,
                          fsize = 0.2) # Reduce tip label size
 title(main = "Trait evolution for 100-40 My")
 
-# In this fake illustrative dataset, no ant lineages are inferred in "terricolous" habitats 40 Mya.
+# In this simulated illustrative dataset, no ant lineages are inferred in "terricolous" habitats 40 Mya.
 
 ```
 ```{r plot_updated_densityMaps_cat_3lvl_eval, fig.height = 7, eval = TRUE, echo = FALSE}
