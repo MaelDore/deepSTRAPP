@@ -8,7 +8,7 @@
 usethis::use_cran_badge() reports the current version of your package on CRAN.
 usethis::use_coverage() reports test coverage.
 use_github_actions()  reports the R CMD check status of your development package. 
-&#10;# Check badges in mFD package
+&#10;# Check badges in mFD package.
 &#10;# Examples to adjust
 &#10;[![CRAN status](https://www.r-pkg.org/badges/version/deepSTRAPP)](https://cran.r-project.org/package=deepSTRAPP) 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -50,9 +50,9 @@ diversification dynamics for **any type of traits**. It provides an
 alternative approach to state-dependent speciation and extinction (SSE)
 models that intend to model altogether trait evolution and
 diversification dynamics, but are often time-consuming and hard to
-parametrize, especially on large time-calibrated phylogenies.
-Conversely, deepSTRAPP offers a flexible solution that **can be applied
-to phylogenies encompassing thousands of lineages** (*Doré al., 2025*).
+parametrize, especially on large time-calibrated phylogenies. Thus,
+deepSTRAPP offers a flexible solution that **can be applied to
+phylogenies encompassing thousands of lineages** (*Doré al., 2025*).
 
 deepSTRAPP is especially suited for large phylogenies as the power of
 the statistical tests is limited by the number of diversification regime
@@ -129,7 +129,7 @@ installed independently.
   time-calibrated phylogenies. It is needed by deepSTRAPP to perform the
   tests based on biogeographic ranges. You can install the latest
   version of BioGeoBEARS from its [author’s repository on
-  GitHub](https://github.com/nmatzke/BioGeoBEARS) like so:
+  GitHub](https://github.com/nmatzke/BioGeoBEARS):
 
 ``` r
 library(devtools)
@@ -149,7 +149,7 @@ Wiki](http://phylo.wikidot.com/biogeobears).
 - The C++ software **BAMM** is used to model diversification dynamics on
   time-calibrated phylogenies. It is needed by deepSTRAPP to obtain
   estimates of diversification rates along branches. You can install the
-  latest version of BioGeoBEARS from its [official
+  latest version of BAMM from its [official
   website](http://bamm-project.org/). You will later need to provide to
   deepSTRAPP the path to your BAMM installation folder as an argument to
   the dedicated function \[prepare_diversification_data()\], so it can
@@ -186,7 +186,7 @@ vignettes/tutorials below. <br>
 
 Tutorials are available to explore more **advanced usages** of
 deepSTRAPP. They provide explanations on available arguments and
-interpretations of results of deepSTRAPP across multiple type of data.
+interpretations of results of deepSTRAPP across multiple types of data.
 They are listed below, in the [companion
 website](https://maeldore.github.io/deepSTRAPP/articles/deepSTRAPP.html),
 and in this vignette: `vignette("deepSTRAPP")`.
@@ -247,7 +247,7 @@ and in this vignette: `vignette("deepSTRAPP")`.
 
   - time-calibrated phylogenies.
   - contMap for continuous traits.
-  - densityMap for categorical and biogeogrpahic traits.
+  - densityMap for categorical and biogeographic traits.
   - BAMM_object for diversification dynamics.
 
 <br> Alternatively, if you prefer to view the vignettes in R, you can
@@ -269,7 +269,7 @@ vignette("deepSTRAPP")
 utils::browseVignettes(package = "deepSTRAPP")
 ```
 
-## :bug: Find a bug?
+## :bug: Found a bug?
 
 Thank you for finding it! Head over to the [GitHub Issues
 tab](https://github.com/MaelDore/deepSTRAPP/issues) and let me know
