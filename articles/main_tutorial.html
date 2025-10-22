@@ -96,7 +96,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Main tutorial</h1>
                         <h4 data-toc-skip class="author">Maël Doré</h4>
             
-            <h4 data-toc-skip class="date">2025-10-17</h4>
+            <h4 data-toc-skip class="date">2025-10-22</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/MaelDore/deepSTRAPP/blob/master/vignettes/main_tutorial.Rmd" class="external-link"><code>vignettes/main_tutorial.Rmd</code></a></small>
       <div class="d-none name"><code>main_tutorial.Rmd</code></div>
@@ -128,7 +128,7 @@ deepSTRAPP.</p>
 <span></span>
 <span><span class="co"># Extract categorical data with 2-levels</span></span>
 <span><span class="va">Ponerinae_cat_2lvl_tip_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/setNames.html" class="external-link">setNames</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">Ponerinae_trait_tip_data</span><span class="op">$</span><span class="va">fake_cat_2lvl_data</span>,</span>
-<span>                                    nm <span class="op">=</span> <span class="va">Ponerinae_trait_tip_data</span><span class="op">$</span><span class="va">Taxa</span><span class="op">)</span></span>
+<span>                                        nm <span class="op">=</span> <span class="va">Ponerinae_trait_tip_data</span><span class="op">$</span><span class="va">Taxa</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">Ponerinae_cat_2lvl_tip_data</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Select color scheme for states</span></span>
@@ -304,7 +304,7 @@ deepSTRAPP.</p>
 <span><span class="va">Ponerinae_deepSTRAPP_cat_2lvl_old_calib_0_40</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_deepSTRAPP_over_time.html">run_deepSTRAPP_over_time</a></span><span class="op">(</span></span>
 <span>    densityMaps <span class="op">=</span> <span class="va">Ponerinae_densityMaps</span>,</span>
 <span>    ace <span class="op">=</span> <span class="va">Ponerinae_ACE</span>,</span>
-<span>    tip_data <span class="op">=</span> <span class="va">Ponerinae_cat_2lvl_data</span>,</span>
+<span>    tip_data <span class="op">=</span> <span class="va">Ponerinae_cat_2lvl_tip_data</span>,</span>
 <span>    trait_data_type <span class="op">=</span> <span class="st">"categorical"</span>,</span>
 <span>    BAMM_object <span class="op">=</span> <span class="va">Ponerinae_BAMM_object_old_calib</span>,</span>
 <span>    time_range <span class="op">=</span> <span class="va">time_range</span>,</span>
