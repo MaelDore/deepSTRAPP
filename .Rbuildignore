@@ -19,3 +19,5 @@
 ^pkgdown$
 ^\.github$
 ^cran-comments\.md$
+
+^for_CRAN/*
