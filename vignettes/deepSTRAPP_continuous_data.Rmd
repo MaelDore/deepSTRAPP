@@ -20,6 +20,21 @@ knitr::opts_chunk$set(
 
 ```{r setup, eval = TRUE, include = FALSE}
 library(deepSTRAPP)
+
+is_dev_version <- function (pkg = "deepSTRAPP")
+{
+  # # Check if ran on CRAN
+  # not_cran <- identical(Sys.getenv("NOT_CRAN"), "true") # || interactive()
+
+  # Version number check
+  version <- tryCatch(as.character(utils::packageVersion(pkg)), error = function(e) "")
+  dev_version <- grepl("\\.9000", version)
+
+  # not_cran || dev_version
+  
+  return(dev_version)
+}
+
 ```
 
 <br>
@@ -210,6 +225,9 @@ Ponerinae_deepSTRAPP_cont_old_calib_0_40 <- run_deepSTRAPP_over_time(
 
 # Load the deepSTRAPP output summarizing results for 0 to 40 My
 data(Ponerinae_deepSTRAPP_cont_old_calib_0_40, package = "deepSTRAPP")
+# This dataset is only available in development versions installed from GitHub.
+# It is not available in CRAN versions.
+# Use remotes::install_github(repo = "MaelDore/deepSTRAPP") to get the latest development version.
 
 ## Explore output
 str(Ponerinae_deepSTRAPP_cont_old_calib_0_40, max.level = 1)
@@ -247,7 +265,7 @@ str(Ponerinae_deepSTRAPP_cont_old_calib_0_40$updated_BAMM_objects_over_time, max
 ```
 
 
-```{r plot_results_cont}
+```{r plot_pvalues_cont}
 # ------ Step 4: Plot results ------ #
 
 ## Goal: Summarize the outputs in meaningful plots
@@ -265,6 +283,9 @@ str(Ponerinae_deepSTRAPP_cont_old_calib_0_40$updated_BAMM_objects_over_time, max
 
 # Load the deepSTRAPP output summarizing results for 0 to 40 My
 data(Ponerinae_deepSTRAPP_cont_old_calib_0_40, package = "deepSTRAPP")
+# This dataset is only available in development versions installed from GitHub.
+# It is not available in CRAN versions.
+# Use remotes::install_github(repo = "MaelDore/deepSTRAPP") to get the latest development version.
 
 ### 4.1/ Plot evolution of STRAPP tests p-values through time ####
 
@@ -288,7 +309,8 @@ deepSTRAPP::plot_STRAPP_pvalues_over_time(
 
 
 ```
-```{r plot_results_cont_eval, eval = TRUE, echo = FALSE}
+```{r plot_pvalues_cont_eval_dev, eval = is_dev_version(), echo = FALSE}
+
 # Load the deepSTRAPP output summarizing results for 0 to 40 My
 data(Ponerinae_deepSTRAPP_cont_old_calib_0_40, package = "deepSTRAPP")
 
@@ -301,6 +323,13 @@ ggplot_STRAPP_pvalues <- ggplot_STRAPP_pvalues +
   ggplot2::theme(plot.title = ggplot2::element_text(size = 18))
 # Print plot
 print(ggplot_STRAPP_pvalues)
+
+```
+```{r plot_pvalues_cont_eval_CRAN, eval = !is_dev_version(), echo = FALSE, out.width = "100%"}
+
+# Plot pre-rendered graph
+knitr::include_graphics("figures/1.1_deepSTRAPP_continuous_data_4.1_plot_pvalues.png")
+
 ```
 
 ```{r plot_histogram_STRAPP_tests_cont}
@@ -340,11 +369,19 @@ plot_histograms_STRAPP_tests_over_time(
    deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_old_calib_0_40)
 
 ```
-```{r plot_histogram_STRAPP_tests_cont_eval, fig.width = 8.5, fig.height = 6, out.width = "100%", eval = TRUE, echo = FALSE}
+```{r plot_histogram_STRAPP_tests_cont_eval_dev, fig.width = 8.5, fig.height = 6, out.width = "100%", eval = is_dev_version(), echo = FALSE}
+
 # Plot the histogram of test stats for time-step n°5 = 20 My
 plot_histogram_STRAPP_test_for_focal_time(
    deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_old_calib_0_40,
    focal_time = 20)
+
+```
+```{r plot_histogram_STRAPP_tests_cont_eval_CRAN, eval = !is_dev_version(), echo = FALSE, out.width = "100%"}
+
+# Plot pre-rendered graph
+knitr::include_graphics("figures/1.1_deepSTRAPP_continuous_data_4.2_plot_STRAPP_tests.png")
+
 ```
 
 ```{r plot_rates_through_time_cont}
@@ -375,7 +412,8 @@ plot_rates_through_time(deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_old_calib
 
 
 ```
-```{r plot_rates_through_time_cont_eval, fig.width = 8.5, out.width = "100%", eval = TRUE, echo = FALSE}
+```{r plot_rates_through_time_cont_eval_dev, fig.width = 8.5, out.width = "100%", eval = is_dev_version(), echo = FALSE}
+
 # Produce RTT plot
 ggplot_RTT_list <- plot_rates_through_time(deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_old_calib_0_40,
                         plot_CI = TRUE, display_plot = FALSE)
@@ -385,6 +423,13 @@ ggplot_RTT <- ggplot_RTT_list$rates_TT_ggplot +
                  axis.title = ggplot2::element_text(size = 16))
 # Print plot
 print(ggplot_RTT)
+
+```
+```{r plot_rates_through_time_cont_eval_CRAN, eval = !is_dev_version(), echo = FALSE, out.width = "100%"}
+
+# Plot pre-rendered graph
+knitr::include_graphics("figures/1.1_deepSTRAPP_continuous_data_4.3_plot_rates_through_time.png")
+
 ```
 
 ```{r plot_rates_vs_traits_cont}
@@ -423,7 +468,7 @@ plot_rates_vs_trait_data_over_time(
    color_scale = color_scale)
 
 ```
-```{r plot_rates_vs_traits_cont_eval, fig.height = 7, fig.width = 8.5, out.width = "100%", eval = TRUE, echo = FALSE}
+```{r plot_rates_vs_traits_cont_eval_dev, fig.height = 7, fig.width = 8.5, out.width = "100%", eval = is_dev_version(), echo = FALSE}
 # Select a color scheme from lowest to highest values
 color_scale = c("darkgreen", "limegreen", "orange", "red")
 
@@ -433,9 +478,15 @@ plot_rates_vs_trait_data_for_focal_time(
    focal_time = 20,
    color_scale = color_scale)
 ```
+```{r plot_rates_vs_traits_cont_eval_CRAN, eval = !is_dev_version(), echo = FALSE, out.width = "100%"}
+
+# Plot pre-rendered graph
+knitr::include_graphics("figures/1.1_deepSTRAPP_continuous_data_4.4_plot_rates_vs_traits.png")
+
+```
 
 
-```{r plot_updated_contMap_cont, eval = TRUE, echo = TRUE}
+```{r plot_updated_contMap_cont, eval = FALSE, echo = TRUE}
 ### 4.5/ Plot updated contMap mapping trait evolution for a given 'focal_time' ####
 
 # ?deepSTRAPP::plot_contMap()
@@ -467,6 +518,37 @@ plot_contMap(contMap_20My$contMap,
              color_scale = c("darkgreen", "limegreen", "orange", "red"),
              lwd = 0.9, # Adjust width of branches
              fsize = c(0.2, 1)) # Reduce tip label size
+```
+```{r plot_updated_contMap_cont_eval_dev, eval = is_dev_version(), echo = TRUE}
+
+# Extract root age
+root_age <- max(phytools::nodeHeights(Ponerinae_tree_old_calib)[,2])
+
+## The next plot shows the evolution of trait values across the whole phylogeny (100-0 My).
+
+# Plot initial contMap (t = 0)
+contMap_0My <- Ponerinae_deepSTRAPP_cont_old_calib_0_40$updated_trait_data_with_Map_over_time[[1]]
+plot_contMap(contMap_0My$contMap,
+             color_scale = c("darkgreen", "limegreen", "orange", "red"),
+             lwd = 0.7, # Adjust width of branches
+             fsize = c(0.1, 1)) # Reduce tip label size
+abline(v = root_age - 20, col = "red", lty = 2) # Show where the phylogeny will be cut
+
+## The next plot shows the evolution of trait values from root to 20Mya (100-20 My).
+
+# Plot updated contMap for time-step n°5 = 20 My
+contMap_20My <- Ponerinae_deepSTRAPP_cont_old_calib_0_40$updated_trait_data_with_Map_over_time[[5]]
+plot_contMap(contMap_20My$contMap,
+             color_scale = c("darkgreen", "limegreen", "orange", "red"),
+             lwd = 0.9, # Adjust width of branches
+             fsize = c(0.2, 1)) # Reduce tip label size
+```
+```{r plot_updated_contMap_cont_eval_CRAN, eval = !is_dev_version(), echo = FALSE, out.width = "100%"}
+
+# Plot pre-rendered graph
+knitr::include_graphics("figures/1.1_deepSTRAPP_continuous_data_4.5_plot_updated_contMap_1.png")
+knitr::include_graphics("figures/1.1_deepSTRAPP_continuous_data_4.5_plot_updated_contMap_2.png")
+
 ```
 
 ```{r plot_BAMM_rates_cont}
@@ -500,7 +582,7 @@ plot_BAMM_rates(BAMM_map_20My, labels = FALSE,
 title(main = "BAMM rates for 100-20 My")
 
 ```
-```{r plot_BAMM_rates_cont_eval, eval = TRUE, echo = FALSE}
+```{r plot_BAMM_rates_cont_eval_dev, eval = is_dev_version(), echo = FALSE}
 par(mfrow = c(1, 2))
 
 # Plot diversification rates on initial phylogeny (t = 0)
@@ -516,6 +598,12 @@ plot_BAMM_rates(BAMM_map_20My, labels = FALSE, legend = TRUE,
 title(main = "BAMM rates for 100-20 My")
 
 par(mfrow = c(1, 1))
+```
+```{r plot_BAMM_rates_cont_eval_CRAN, eval = !is_dev_version(), echo = FALSE, out.width = "100%"}
+
+# Plot pre-rendered graph
+knitr::include_graphics("figures/1.1_deepSTRAPP_continuous_data_4.6_plot_BAMM_rates.png")
+
 ```
 
 
@@ -553,7 +641,7 @@ plot_traits_vs_rates_on_phylogeny_for_focal_time(
   par.reset = FALSE)
 
 ```
-```{r plot_traits_vs_rate_maps_cont_eval, fig.height = 7, eval = TRUE, echo = FALSE}
+```{r plot_traits_vs_rate_maps_cont_eval_dev, fig.height = 7, eval = is_dev_version(), echo = FALSE}
 # Plot diversification rates on initial phylogeny (t = 0)
 plot_traits_vs_rates_on_phylogeny_for_focal_time(
   deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_old_calib_0_40,
@@ -571,4 +659,11 @@ plot_traits_vs_rates_on_phylogeny_for_focal_time(
   color_scale = c("darkgreen", "limegreen", "orange", "red"),
   labels = FALSE, legend = FALSE,
   par.reset = FALSE)
+```
+```{r plot_traits_vs_rate_maps_cont_eval_CRAN, eval = !is_dev_version(), echo = FALSE, out.width = "100%"}
+
+# Plot pre-rendered graph
+knitr::include_graphics("figures/1.1_deepSTRAPP_continuous_data_4.7_plot_traits_vs_rate_maps_1.png")
+knitr::include_graphics("figures/1.1_deepSTRAPP_continuous_data_4.7_plot_traits_vs_rate_maps_2.png")
+
 ```
