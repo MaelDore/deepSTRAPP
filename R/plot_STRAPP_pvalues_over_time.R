@@ -57,41 +57,48 @@
 #' @seealso [deepSTRAPP::run_deepSTRAPP_over_time()]
 #'
 #' @examples
-#' ## Load results of run_deepSTRAPP_over_time() for categorical data with 3-levels
-#' data(Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40, package = "deepSTRAPP")
 #'
-#' ## Plot results of overall Kruskal-Wallis / Mann-Whitney-Wilcoxon tests across all time-steps
-#' plot_overall <- plot_STRAPP_pvalues_over_time(
-#'    deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40,
-#'    alpha = 0.10,
-#'    time_range = c(0, 30), # Adjust time range if needed
-#'    display_plot = FALSE)
+#' if (deepSTRAPP:::is_dev_version())
+#' {
+#'   ## Load results of run_deepSTRAPP_over_time() for categorical data with 3-levels
+#'   data(Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40, package = "deepSTRAPP")
+#'   # This dataset is only available in development versions installed from GitHub.
+#'   # It is not available in CRAN versions.
+#'   # Use remotes::install_github(repo = "MaelDore/deepSTRAPP") to get the latest development version.
 #'
-#' # Adjust aesthetics a posteriori
-#' plot_overall <- plot_overall +
-#'    ggplot2::theme(
-#'       plot.title = ggplot2::element_text(size = 16))
+#'   ## Plot results of overall Kruskal-Wallis / Mann-Whitney-Wilcoxon tests across all time-steps
+#'   plot_overall <- plot_STRAPP_pvalues_over_time(
+#'      deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40,
+#'      alpha = 0.10,
+#'      time_range = c(0, 30), # Adjust time range if needed
+#'      display_plot = FALSE)
 #'
-#' print(plot_overall)
+#'   # Adjust aesthetics a posteriori
+#'   plot_overall <- plot_overall +
+#'      ggplot2::theme(
+#'         plot.title = ggplot2::element_text(size = 16))
 #'
-#' ## Plot results of post hoc pairwise Dunn's tests between selected pairs of states
-#' plot_posthoc <- plot_STRAPP_pvalues_over_time(
-#'    deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40,
-#'    alpha = 0.10,
-#'    plot_posthoc_tests = TRUE,
-#'    # PDF_file_path = "./pvalues_over_time.pdf",
-#'    select_posthoc_pairs = c("arboreal != subterranean",
-#'                             "arboreal != terricolous"),
-#'    display_plot = FALSE)
+#'   print(plot_overall)
 #'
-#' # Adjust aesthetics a posteriori
-#' plot_posthoc <- plot_posthoc +
-#'    ggplot2::theme(
-#'       plot.title = ggplot2::element_text(size = 16),
-#'       legend.title = ggplot2::element_text(size  = 14),
-#'       legend.position.inside = c(0.25, 0.25))
+#'   ## Plot results of post hoc pairwise Dunn's tests between selected pairs of states
+#'   plot_posthoc <- plot_STRAPP_pvalues_over_time(
+#'      deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40,
+#'      alpha = 0.10,
+#'      plot_posthoc_tests = TRUE,
+#'      # PDF_file_path = "./pvalues_over_time.pdf",
+#'      select_posthoc_pairs = c("arboreal != subterranean",
+#'                               "arboreal != terricolous"),
+#'      display_plot = FALSE)
 #'
-#' print(plot_posthoc)
+#'   # Adjust aesthetics a posteriori
+#'   plot_posthoc <- plot_posthoc +
+#'      ggplot2::theme(
+#'         plot.title = ggplot2::element_text(size = 16),
+#'         legend.title = ggplot2::element_text(size  = 14),
+#'         legend.position.inside = c(0.25, 0.25))
+#'
+#'   print(plot_posthoc)
+#' }
 #'
 
 

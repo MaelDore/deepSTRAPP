@@ -134,25 +134,31 @@
 #'    verbose = TRUE,
 #'    verbose_extended = TRUE) }
 #'
-#' ## Load directly trait data output
-#' data(Ponerinae_deepSTRAPP_cont_old_calib_0_40, package = "deepSTRAPP")
+#' if (deepSTRAPP:::is_dev_version())
+#' {
+#'   ## Load directly trait data output
+#'   data(Ponerinae_deepSTRAPP_cont_old_calib_0_40, package = "deepSTRAPP")
+#'   # This dataset is only available in development versions installed from GitHub.
+#'   # It is not available in CRAN versions.
+#'   # Use remotes::install_github(repo = "MaelDore/deepSTRAPP") to get the latest development version.
 #'
-#' # Explore output
-#' str(Ponerinae_deepSTRAPP_cont_old_calib_0_40, max.level = 1)
+#'   # Explore output
+#'   str(Ponerinae_deepSTRAPP_cont_old_calib_0_40, max.level = 1)
 #'
-#' ## Plot for all time-steps
-#' rates_vs_trait_outputs <- plot_rates_vs_trait_data_over_time(
-#'    deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_old_calib_0_40,
-#'    color_scale = c("grey80", "purple"), # Adjust color scale
-#'    display_plot = TRUE,
-#'    # PDF_file_path = "./plot_rates_vs_trait_0_40My.pdf",
-#'    return_mean_rates_vs_trait_data_df = TRUE)
+#'   ## Plot for all time-steps
+#'   rates_vs_trait_outputs <- plot_rates_vs_trait_data_over_time(
+#'      deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_old_calib_0_40,
+#'      color_scale = c("grey80", "purple"), # Adjust color scale
+#'      display_plot = TRUE,
+#'      # PDF_file_path = "./plot_rates_vs_trait_0_40My.pdf",
+#'      return_mean_rates_vs_trait_data_df = TRUE)
 #'
-#' ## Print plot for time step 3 = 10 My
-#' print(rates_vs_trait_outputs$rates_vs_trait_ggplots[[3]])
+#'   ## Print plot for time step 3 = 10 My
+#'   print(rates_vs_trait_outputs$rates_vs_trait_ggplots[[3]])
 #'
-#' ## Explore melted data.frame of rates and trait data
-#' head(rates_vs_trait_outputs$mean_rates_vs_trait_data_df)
+#'   ## Explore melted data.frame of rates and trait data
+#'   head(rates_vs_trait_outputs$mean_rates_vs_trait_data_df)
+#' }
 #'
 #' # ----- Example 2: Categorical data ----- #
 #'
@@ -223,29 +229,35 @@
 #'    verbose = TRUE,
 #'    verbose_extended = TRUE) }
 #'
-#' ## Load directly deepSTRAPP output
-#' data(Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40, package = "deepSTRAPP")
+#' if (deepSTRAPP:::is_dev_version())
+#' {
+#'   ## Load directly deepSTRAPP output
+#'   data(Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40, package = "deepSTRAPP")
+#'   # This dataset is only available in development versions installed from GitHub.
+#'   # It is not available in CRAN versions.
+#'   # Use remotes::install_github(repo = "MaelDore/deepSTRAPP") to get the latest development version.
 #'
-#' # Explore output
-#' str(Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40, max.level = 1)
+#'   # Explore output
+#'   str(Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40, max.level = 1)
 #'
-#' # Adjust color scheme
-#' colors_per_states <- c("orange", "dodgerblue", "red")
-#' names(colors_per_states) <- c("arboreal", "subterranean", "terricolous")
+#'   # Adjust color scheme
+#'   colors_per_states <- c("orange", "dodgerblue", "red")
+#'   names(colors_per_states) <- c("arboreal", "subterranean", "terricolous")
 #'
-#' ## Plot for all time-steps
-#' rates_vs_trait_outputs <- plot_rates_vs_trait_data_over_time(
-#'    deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40,
-#'    colors_per_levels = colors_per_states, # Adjust color scheme
-#'    display_plot = TRUE,
-#'    # PDF_file_path = "./plot_rates_vs_trait_0_40My.pdf",
-#'    return_mean_rates_vs_trait_data_df = TRUE)
+#'   ## Plot for all time-steps
+#'   rates_vs_trait_outputs <- plot_rates_vs_trait_data_over_time(
+#'      deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40,
+#'      colors_per_levels = colors_per_states, # Adjust color scheme
+#'      display_plot = TRUE,
+#'      # PDF_file_path = "./plot_rates_vs_trait_0_40My.pdf",
+#'      return_mean_rates_vs_trait_data_df = TRUE)
 #'
-#' ## Print plot for time step 3 = 10 My
-#' print(rates_vs_trait_outputs$rates_vs_trait_ggplots[[3]])
+#'   ## Print plot for time step 3 = 10 My
+#'   print(rates_vs_trait_outputs$rates_vs_trait_ggplots[[3]])
 #'
-#' ## Explore melted data.frame of rates and states
-#' head(rates_vs_trait_outputs$mean_rates_vs_trait_data_df)
+#'   ## Explore melted data.frame of rates and states
+#'   head(rates_vs_trait_outputs$mean_rates_vs_trait_data_df)
+#' }
 #'
 
 

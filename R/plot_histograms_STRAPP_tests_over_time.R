@@ -124,25 +124,31 @@
 #'    verbose = TRUE,
 #'    verbose_extended = TRUE) }
 #'
-#' # Load directly trait data output
-#' data(Ponerinae_deepSTRAPP_cont_old_calib_0_40, package = "deepSTRAPP")
+#' if (deepSTRAPP:::is_dev_version())
+#' {
+#'   ## Load directly trait data output
+#'   data(Ponerinae_deepSTRAPP_cont_old_calib_0_40, package = "deepSTRAPP")
+#'   # This dataset is only available in development versions installed from GitHub.
+#'   # It is not available in CRAN versions.
+#'   # Use remotes::install_github(repo = "MaelDore/deepSTRAPP") to get the latest development version.
 #'
-#' ## Plot histograms of STRAPP overall test results
-#' # Tests are Spearman's rank correlation tests
+#'   ## Plot histograms of STRAPP overall test results
+#'   # Tests are Spearman's rank correlation tests
 #'
-#' # Plot all histograms
-#' histogram_ggplots <- plot_histograms_STRAPP_tests_over_time(
-#'    deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_old_calib_0_40,
-#'    display_plot = TRUE,
-#'    # PDF_file_path = "./plot_STRAPP_histogram_overall_test.pdf",
-#'    plot_posthoc_tests = FALSE)
+#'   # Plot all histograms
+#'   histogram_ggplots <- plot_histograms_STRAPP_tests_over_time(
+#'      deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_old_calib_0_40,
+#'      display_plot = TRUE,
+#'      # PDF_file_path = "./plot_STRAPP_histogram_overall_test.pdf",
+#'      plot_posthoc_tests = FALSE)
 #'
-#' # Print histogram for time step 1 = 0 My
-#' print(histogram_ggplots[[1]])
-#' # Adjust aesthetics of plot for time step 1 a posteriori
-#' histogram_ggplot_adj <- histogram_ggplots[[1]] +
-#'    ggplot2::theme(plot.title = ggplot2::element_text(color = "red", size = 15))
-#' print(histogram_ggplot_adj)
+#'   # Print histogram for time step 1 = 0 My
+#'   print(histogram_ggplots[[1]])
+#'   # Adjust aesthetics of plot for time step 1 a posteriori
+#'   histogram_ggplot_adj <- histogram_ggplots[[1]] +
+#'      ggplot2::theme(plot.title = ggplot2::element_text(color = "red", size = 15))
+#'   print(histogram_ggplot_adj)
+#' }
 #'
 #'
 #' # ----- Example 2: Categorical data ----- #
@@ -212,41 +218,47 @@
 #'    verbose = TRUE,
 #'    verbose_extended = TRUE) }
 #'
-#' # Load directly deepSTRAPP output
-#' data(Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40, package = "deepSTRAPP")
+#' if (deepSTRAPP:::is_dev_version())
+#' {
+#'   ## Load directly deepSTRAPP output
+#'   data(Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40, package = "deepSTRAPP")
+#'   # This dataset is only available in development versions installed from GitHub.
+#'   # It is not available in CRAN versions.
+#'   # Use remotes::install_github(repo = "MaelDore/deepSTRAPP") to get the latest development version.
 #'
-#' ## Explore output
-#' str(Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40, max.level = 1)
+#'   ## Explore output
+#'   str(Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40, max.level = 1)
 #'
-#' ## Plot histograms of STRAPP overall test results #
-#' # Tests are Kruskall-Wallis H tests when more than two states/ranges are present.
-#' # Tests are Mann–Whitney–Wilcoxon rank-sum tests when only two states/ranges are present.
+#'   ## Plot histograms of STRAPP overall test results #
+#'   # Tests are Kruskall-Wallis H tests when more than two states/ranges are present.
+#'   # Tests are Mann–Whitney–Wilcoxon rank-sum tests when only two states/ranges are present.
 #'
-#' histogram_ggplots <- plot_histograms_STRAPP_tests_over_time(
-#'    deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40,
-#'    display_plot = TRUE,
-#'    # PDF_file_path = "./plot_STRAPP_histograms_overall_tests.pdf",
-#'    plot_posthoc_tests = FALSE)
-#' # Print histogram for time step 1 = 0 My
-#' print(histogram_ggplots[[1]])
-#' # Adjust aesthetics of plot for time step 1 a posteriori
-#' histogram_ggplot_adj <- histogram_ggplots[[1]] +
-#'     ggplot2::theme(plot.title = ggplot2::element_text(color = "red", size = 15))
-#' print(histogram_ggplot_adj)
+#'   histogram_ggplots <- plot_histograms_STRAPP_tests_over_time(
+#'      deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40,
+#'      display_plot = TRUE,
+#'      # PDF_file_path = "./plot_STRAPP_histograms_overall_tests.pdf",
+#'      plot_posthoc_tests = FALSE)
+#'   # Print histogram for time step 1 = 0 My
+#'   print(histogram_ggplots[[1]])
+#'   # Adjust aesthetics of plot for time step 1 a posteriori
+#'   histogram_ggplot_adj <- histogram_ggplots[[1]] +
+#'       ggplot2::theme(plot.title = ggplot2::element_text(color = "red", size = 15))
+#'   print(histogram_ggplot_adj)
 #'
-#' ## Plot histograms of STRAPP post hoc test results ------ #
-#' # Tests are Dunn's multiple comparison pairwise post hoc tests possible
-#' # only when more than two states/ranges are present.
+#'   ## Plot histograms of STRAPP post hoc test results ------ #
+#'   # Tests are Dunn's multiple comparison pairwise post hoc tests possible
+#'   # only when more than two states/ranges are present.
 #'
-#' histograms_ggplots_list <- plot_histograms_STRAPP_tests_over_time(
-#'     deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40,
-#'     display_plot = TRUE,
-#'     # PDF_file_path = "./plot_STRAPP_histograms_posthoc_tests.pdf",
-#'     plot_posthoc_tests = TRUE)
-#' # Print all histograms for time step 1 (= 0 My) one by one
-#' print(histograms_ggplots_list[[1]])
-#' # Plot all histograms for time step 1 (= 0 My) on one faceted plot
-#' cowplot::plot_grid(plotlist = histograms_ggplots_list[[1]])
+#'   histograms_ggplots_list <- plot_histograms_STRAPP_tests_over_time(
+#'       deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40,
+#'       display_plot = TRUE,
+#'       # PDF_file_path = "./plot_STRAPP_histograms_posthoc_tests.pdf",
+#'       plot_posthoc_tests = TRUE)
+#'   # Print all histograms for time step 1 (= 0 My) one by one
+#'   print(histograms_ggplots_list[[1]])
+#'   # Plot all histograms for time step 1 (= 0 My) on one faceted plot
+#'   cowplot::plot_grid(plotlist = histograms_ggplots_list[[1]])
+#' }
 #'
 
 

@@ -163,24 +163,31 @@
 #'
 #' # ------ Plot histogram of STRAPP overall test results from run_deepSTRAPP_over_time() ------ #
 #'
-#' ## Load directly outputs from run_deepSTRAPP_over_time()
-#' data(Ponerinae_deepSTRAPP_cont_old_calib_0_40, package = "deepSTRAPP")
+#' if (deepSTRAPP:::is_dev_version())
+#' {
+#'   ## Load directly outputs from run_deepSTRAPP_over_time()
+#'   data(Ponerinae_deepSTRAPP_cont_old_calib_0_40, package = "deepSTRAPP")
+#'   # This dataset is only available in development versions installed from GitHub.
+#'   # It is not available in CRAN versions.
+#'   # Use remotes::install_github(repo = "MaelDore/deepSTRAPP") to get the latest development version.
 #'
-#' # Select focal_time = 10My
-#' focal_time <- 10
+#'  # Select focal_time = 10My
+#'  focal_time <- 10
 #'
-#' # Get plot
-#' rates_vs_trait_output <- plot_rates_vs_trait_data_for_focal_time(
-#'    deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_old_calib_0_40,
-#'    focal_time = focal_time,
-#'    color_scale = c("grey80", "purple"),
-#'    display_plot = TRUE)
-#'    # PDF_file_path = "./plot_rates_vs_trait_10My.pdf"
+#'   # Get plot
+#'   rates_vs_trait_output <- plot_rates_vs_trait_data_for_focal_time(
+#'      deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_old_calib_0_40,
+#'      focal_time = focal_time,
+#'      color_scale = c("grey80", "purple"),
+#'     display_plot = TRUE)
+#'      # PDF_file_path = "./plot_rates_vs_trait_10My.pdf"
 #'
-#' # Adjust aesthetics a posteriori
-#' rates_vs_trait_ggplot_adj <- rates_vs_trait_output$rates_vs_trait_ggplot +
-#'    ggplot2::theme(plot.title = ggplot2::element_text(color = "red", size = 15))
-#' print(rates_vs_trait_ggplot_adj)
+#'   # Adjust aesthetics a posteriori
+#'   rates_vs_trait_ggplot_adj <- rates_vs_trait_output$rates_vs_trait_ggplot +
+#'      ggplot2::theme(plot.title = ggplot2::element_text(color = "red", size = 15))
+#'   print(rates_vs_trait_ggplot_adj)
+#' }
+#'
 #'
 #' # ----- Example 2: Categorical trait ----- #
 #'

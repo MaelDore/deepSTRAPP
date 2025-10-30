@@ -160,17 +160,24 @@
 #'    verbose = TRUE,
 #'    verbose_extended = TRUE) }
 #'
-#' # Load directly trait data output
-#' data(Ponerinae_deepSTRAPP_cont_old_calib_0_40, package = "deepSTRAPP")
+#' if (deepSTRAPP:::is_dev_version())
+#' {
+#'   ## Load directly trait data output
+#'   data(Ponerinae_deepSTRAPP_cont_old_calib_0_40, package = "deepSTRAPP")
+#'   # This dataset is only available in development versions installed from GitHub.
+#'   # It is not available in CRAN versions.
+#'   # Use remotes::install_github(repo = "MaelDore/deepSTRAPP") to get the latest development version.
 #'
-#' ## Plot updated contMap vs. updated diversification rates
-#' plot_traits_vs_rates_on_phylogeny_over_time(
-#'    deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_old_calib_0_40,
-#'    keep_initial_colorbreaks = TRUE, # To use the same color breaks as for t = 0 My in all BAMM plots
-#'    color_scale = c("limegreen", "orange", "red"), # Adjust color scale on contMap
-#'    legend = TRUE, labels = TRUE, # Show legend and label on BAMM plot
-#'    cex = 0.7) # Adjust label size on contMap
-#'   # PDF_file_path = "Updated_maps_cont_old_calib_0_40My.pdf")
+#'   ## Plot updated contMap vs. updated diversification rates
+#'   plot_traits_vs_rates_on_phylogeny_over_time(
+#'      deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_old_calib_0_40,
+#'      # To use the same color breaks as for t = 0 My in all BAMM plots
+#'      keep_initial_colorbreaks = TRUE,
+#'      color_scale = c("limegreen", "orange", "red"), # Adjust color scale on contMap
+#'      legend = TRUE, labels = TRUE, # Show legend and label on BAMM plot
+#'      cex = 0.7) # Adjust label size on contMap
+#'     # PDF_file_path = "Updated_maps_cont_old_calib_0_40My.pdf")
+#' }
 #'
 #'
 #' # ----- Example 2: Biogeographic data ----- #
@@ -244,21 +251,27 @@
 #'    verbose = TRUE,
 #'    verbose_extended = TRUE) }
 #'
-#' # Load directly output
-#' data(Ponerinae_deepSTRAPP_biogeo_old_calib_0_40, package = "deepSTRAPP")
+#' if (deepSTRAPP:::is_dev_version())
+#' {
+#'   ## Load directly output
+#'   data(Ponerinae_deepSTRAPP_biogeo_old_calib_0_40, package = "deepSTRAPP")
+#'   # This dataset is only available in development versions installed from GitHub.
+#'   # It is not available in CRAN versions.
+#'   # Use remotes::install_github(repo = "MaelDore/deepSTRAPP") to get the latest development version.
 #'
-#' ## Explore output
-#' str(Ponerinae_deepSTRAPP_biogeo_old_calib_0_40, max.level =  1)
+#'   ## Explore output
+#'   str(Ponerinae_deepSTRAPP_biogeo_old_calib_0_40, max.level =  1)
 #'
-#' ## Plot updated contMap vs. updated diversification rates
-#' plot_traits_vs_rates_on_phylogeny_over_time(
-#'    deepSTRAPP_outputs = Ponerinae_deepSTRAPP_biogeo_old_calib_0_40,
-#'    # Adjust colors on densityMaps
-#'    colors_per_levels = c("N" = "dodgerblue2", "O" = "orange"),
-#'    legend = TRUE, labels = TRUE, # Show legend and label on BAMM plot
-#'    cex_pies = 0.2, # Adjust size of ACE pies on densityMaps
-#'     cex = 0.7) # Adjust label size on contMap
-#'    # PDF_file_path = "Updated_maps_biogeo_old_calib_0_40My.pdf")
+#'   ## Plot updated contMap vs. updated diversification rates
+#'   plot_traits_vs_rates_on_phylogeny_over_time(
+#'      deepSTRAPP_outputs = Ponerinae_deepSTRAPP_biogeo_old_calib_0_40,
+#'      # Adjust colors on densityMaps
+#'      colors_per_levels = c("N" = "dodgerblue2", "O" = "orange"),
+#'      legend = TRUE, labels = TRUE, # Show legend and label on BAMM plot
+#'      cex_pies = 0.2, # Adjust size of ACE pies on densityMaps
+#'      cex = 0.7) # Adjust label size on contMap
+#'      # PDF_file_path = "Updated_maps_biogeo_old_calib_0_40My.pdf")
+#' }
 #'
 
 
