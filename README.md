@@ -105,7 +105,8 @@ From **CRAN**, for the latest release:
 install.packages("deepSTRAPP")
 ```
 
-From **GitHub**, for the current development version:
+From **GitHub**, for the current development version, including all
+**example datasets**:
 
 ``` r
 library(devtools)

@@ -89,7 +89,7 @@ install.packages("deepSTRAPP")
 
 ```
 
-From __GitHub__, for the current development version:
+From __GitHub__, for the current development version, including all __example datasets__:
 
 ``` r
 library(devtools)
