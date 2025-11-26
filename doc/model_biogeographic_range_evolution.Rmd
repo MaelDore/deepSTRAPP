@@ -33,6 +33,11 @@ For an example with __categorical data__, see this vignette: `vignette("model_ca
 
 <br>
 
+The R package `BioGeoBEARS` is needed for this workflow to process biogeographic data. <br>
+Please install it manually from: https://github.com/nmatzke/BioGeoBEARS.
+
+<br>
+
 ```{r model_trait_evolution_biogeo}
 
 # ------ Step 0: Load data ------ #
