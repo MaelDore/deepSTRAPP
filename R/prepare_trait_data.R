@@ -128,6 +128,9 @@
 #'  distance-based dispersal probabilities (+X), or other features.
 #'  See for instance, \href{http://phylo.wikidot.com/biogeobears}{http://phylo.wikidot.com/biogeobears}).
 #'
+#'  The R package `BioGeoBEARS` is needed for this function to work with biogeographic data.
+#'  Please install it manually from: \href{https://github.com/nmatzke/BioGeoBEARS}{https://github.com/nmatzke/BioGeoBEARS}.
+#'
 #' @return The function returns a list with at least two elements.
 #'
 #'   * `$contMap` (For "continuous" data) Object of class `"contMap"`, typically generated with [phytools::contMap()],
@@ -266,6 +269,9 @@
 #'
 #'
 #' # ----- Example 3: Biogeographic data ----- #
+#'
+#' ## The R package `BioGeoBEARS` is needed for this function to work with biogeographic data.
+#' Please install it manually from: \href{https://github.com/nmatzke/BioGeoBEARS}{https://github.com/nmatzke/BioGeoBEARS}.
 #'
 #' ## Load phylogeny and tip data
 #' library(phytools)
@@ -1332,6 +1338,13 @@ prepare_trait_data_for_biogeographic_data <- function (
     return_model_selection_df = FALSE,
     verbose = TRUE)
 {
+  ## Control for BioGeoBEARS install
+  if (!requireNamespace("BioGeoBEARS", quietly = TRUE))
+  {
+    stop("Package 'BioGeoBEARS' is needed for this function to work.
+       Please install it manually from: https://github.com/nmatzke/BioGeoBEARS")
+  }
+
   ## Convert tip_data into vector of character strings if needed
   if (any(c(is.matrix(tip_data), is.data.frame(tip_data))))
   {
@@ -2752,6 +2765,9 @@ select_best_trait_model_from_geiger <- function (list_model_fits)
 #'
 #' ### Uncomment to run ###
 #'
+#' # ## The R package `BioGeoBEARS` is needed for this function to work with biogeographic data.
+#' # Please install it manually from: \href{https://github.com/nmatzke/BioGeoBEARS}{https://github.com/nmatzke/BioGeoBEARS}.
+#' #
 #' # ## Prepare phylo
 #' #
 #' # # Set path to BioGeoBEARS directory
@@ -2869,6 +2885,13 @@ select_best_trait_model_from_geiger <- function (list_model_fits)
 
 select_best_model_from_BioGeoBEARS <- function (list_model_fits)
 {
+  ## Control for BioGeoBEARS install
+  if (!requireNamespace("BioGeoBEARS", quietly = TRUE))
+  {
+    stop("Package 'BioGeoBEARS' is needed for this function to work.
+       Please install it manually from: https://github.com/nmatzke/BioGeoBEARS")
+  }
+
   # Homemade function to extract the number of observations from BioGeoBEARS model outputs
   extract_nobs_from_BioGeoBEARS_output <- function (x)
   {
@@ -3225,6 +3248,11 @@ densityMap_custom <- function (trees, res = 100, fsize = NULL, ftype = NULL, lwd
 #'  * `BioGeoBEARS::BSM_to_phytools_SM()`
 #'  * `BioGeoBEARS::BSMs_to_phytools_SMs()`
 #'
+#' # Notes on BioGeoBEARS
+#'
+#'  The R package `BioGeoBEARS` is needed for this function to work with biogeographic data.
+#'  Please install it manually from: \href{https://github.com/nmatzke/BioGeoBEARS}{https://github.com/nmatzke/BioGeoBEARS}.
+#'
 #' # Notes on using the resulting simmap object in phytools (adapted from Nicholas J. Matzke)
 #'
 #'  The phytools functions, like [phytools::countSimmap()], will only count the anagenetic events
@@ -3330,6 +3358,12 @@ densityMap_custom <- function (trees, res = 100, fsize = NULL, ftype = NULL, lwd
 
 BSM_to_phytools_simmap <- function(model_fit, phylo, BSM_output, sim_index)
 {
+  if (!requireNamespace("BioGeoBEARS", quietly = TRUE))
+  {
+    stop("Package 'BioGeoBEARS' is needed for this function to work.
+       Please install it manually from: https://github.com/nmatzke/BioGeoBEARS")
+  }
+
   # Extract the tables of cladogenetic and anagenetic events
   clado_events_table <- BSM_output$RES_clado_events_tables[[sim_index]]
   ana_events_table <- BSM_output$RES_ana_events_tables[[sim_index]]
