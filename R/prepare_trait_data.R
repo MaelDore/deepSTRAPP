@@ -81,9 +81,6 @@
 #' @importFrom methods hasArg
 #' @importFrom stats setNames
 #'
-#' # importFrom BioGeoBEARS np define_tipranges_object fix_BioGeoBEARS_params_minmax check_BioGeoBEARS_run bears_optim_run get_colors_for_states_list_0based
-#' # importFrom BioGeoBEARS get_inputs_for_stochastic_mapping get_LnL_from_BioGeoBEARS_results_object get_Qmat_COOmat_from_BioGeoBEARS_run_object get_sum_statetime_on_branch prt
-#'
 #' @details Map trait evolution on a time-calibrated phylogeny in several steps:
 #'
 #'  Step 1: Models are fit using Maximum Likelihood approach:
@@ -333,6 +330,10 @@
 #' # densityMaps with all ranges (including multi-area ranges) overlaid
 #' plot_densityMaps_overlay(eel_biogeo_data$densityMaps_all_ranges)
 #'
+
+## importFrom for BioGeoBEARS
+# importFrom BioGeoBEARS np define_tipranges_object fix_BioGeoBEARS_params_minmax check_BioGeoBEARS_run bears_optim_run get_colors_for_states_list_0based
+# importFrom BioGeoBEARS get_inputs_for_stochastic_mapping get_LnL_from_BioGeoBEARS_results_object get_Qmat_COOmat_from_BioGeoBEARS_run_object get_sum_statetime_on_branch prt
 
 
 ### Master function to prepare data and select the proper test function according to data type ####
@@ -3288,8 +3289,6 @@ densityMap_custom <- function (trees, res = 100, fsize = NULL, ftype = NULL, lwd
 #' @export
 #' @importFrom plyr ldply
 #'
-#' # importFrom BioGeoBEARS get_Qmat_COOmat_from_BioGeoBEARS_run_object get_sum_statetime_on_branch prt
-#'
 #' @details These functions are slight adaptations of original functions from the R Package `BioGeoBEARS` by N. Matzke.
 #'  Initial functions: `BioGeoBEARS::BSM_to_phytools_SM()` `BioGeoBEARS::BSMs_to_phytools_SMs()`
 #'  Changes:
@@ -3356,6 +3355,9 @@ densityMap_custom <- function (trees, res = 100, fsize = NULL, ftype = NULL, lwd
 #' # Plot simmap n°1
 #' plot(all_simmaps[[1]]) }
 #'
+
+## importFrom for BioGeoBEARS
+# importFrom BioGeoBEARS get_Qmat_COOmat_from_BioGeoBEARS_run_object get_sum_statetime_on_branch prt
 
 
 BSM_to_phytools_simmap <- function(model_fit, phylo, BSM_output, sim_index)
