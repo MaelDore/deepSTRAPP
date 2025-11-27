@@ -39,8 +39,7 @@
 #' @examples
 #' # Load eel phylogeny from the R package phytools
 #' # Source: Collar et al., 2014; DOI: 10.1038/ncomms6505
-#' library(phytools)
-#' data(eel.tree)
+#' data("eel.tree", package = "phytools")
 #'
 #' # ----- Example 1: keep_tip_labels = TRUE ----- #
 #'
