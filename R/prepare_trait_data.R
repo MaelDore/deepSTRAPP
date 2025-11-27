@@ -271,7 +271,7 @@
 #'
 #' # ----- Example 3: Biogeographic data ----- #
 #'
-#' ## The R package `BioGeoBEARS` is needed for this function to work with biogeographic data.
+#' ## The R package 'BioGeoBEARS' is needed for this function to work with biogeographic data.
 #' Please install it manually from: \href{https://github.com/nmatzke/BioGeoBEARS}{https://github.com/nmatzke/BioGeoBEARS}.
 #'
 #' ## Load phylogeny and tip data
@@ -2766,7 +2766,7 @@ select_best_trait_model_from_geiger <- function (list_model_fits)
 #'
 #' ### Uncomment to run ###
 #'
-#' # ## The R package `BioGeoBEARS` is needed for this function to work with biogeographic data.
+#' # ## The R package 'BioGeoBEARS' is needed for this function to work with biogeographic data.
 #' # Please install it manually from: \href{https://github.com/nmatzke/BioGeoBEARS}{https://github.com/nmatzke/BioGeoBEARS}.
 #' #
 #' # ## Prepare phylo
