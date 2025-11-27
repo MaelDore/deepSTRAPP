@@ -80,8 +80,9 @@
 #' @importFrom grDevices pdf dev.off rainbow colorRampPalette col2rgb rgb rgb2hsv hsv
 #' @importFrom methods hasArg
 #' @importFrom stats setNames
-#' @importFrom BioGeoBEARS np define_tipranges_object fix_BioGeoBEARS_params_minmax check_BioGeoBEARS_run bears_optim_run get_colors_for_states_list_0based
-#' @importFrom BioGeoBEARS get_inputs_for_stochastic_mapping get_LnL_from_BioGeoBEARS_results_object get_Qmat_COOmat_from_BioGeoBEARS_run_object get_sum_statetime_on_branch prt
+#'
+#' # importFrom BioGeoBEARS np define_tipranges_object fix_BioGeoBEARS_params_minmax check_BioGeoBEARS_run bears_optim_run get_colors_for_states_list_0based
+#' # importFrom BioGeoBEARS get_inputs_for_stochastic_mapping get_LnL_from_BioGeoBEARS_results_object get_Qmat_COOmat_from_BioGeoBEARS_run_object get_sum_statetime_on_branch prt
 #'
 #' @details Map trait evolution on a time-calibrated phylogeny in several steps:
 #'
@@ -3285,8 +3286,9 @@ densityMap_custom <- function (trees, res = 100, fsize = NULL, ftype = NULL, lwd
 #' @param sim_index Integer. Index of the biogeographic simulation targeted to produce the `simmap` with [BSM_to_phytools_simmap()].
 #'
 #' @export
-#' @importFrom BioGeoBEARS get_Qmat_COOmat_from_BioGeoBEARS_run_object get_sum_statetime_on_branch prt
 #' @importFrom plyr ldply
+#'
+#' # importFrom BioGeoBEARS get_Qmat_COOmat_from_BioGeoBEARS_run_object get_sum_statetime_on_branch prt
 #'
 #' @details These functions are slight adaptations of original functions from the R Package `BioGeoBEARS` by N. Matzke.
 #'  Initial functions: `BioGeoBEARS::BSM_to_phytools_SM()` `BioGeoBEARS::BSMs_to_phytools_SMs()`
