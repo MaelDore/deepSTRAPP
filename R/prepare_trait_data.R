@@ -1400,7 +1400,7 @@ prepare_trait_data_for_biogeographic_data <- function (
     if (!identical(toupper(tip_data), tip_data))
     {
       stop(paste0("For 'trait_data_type = biogeographic', 'tip_data' must be only in CAPITALS following BioGeoBEARS scheme.\n",
-                  "See details in documentation from R package `BioGeoBEARS`."))
+                  "See details in documentation from R package 'BioGeoBEARS'."))
     }
     # Check that all multi-area ranges are covered by unique areas
     unique_areas_in_multi_area_ranges <- unique(unlist(strsplit(x = multi_area_ranges, split = "")))
@@ -1420,7 +1420,7 @@ prepare_trait_data_for_biogeographic_data <- function (
       if (!all(evolutionary_models %in% c("BAYAREALIKE", "DIVALIKE", "DEC", "BAYAREALIKE+J", "DIVALIKE+J", "DEC+J")))
       {
         stop(paste0("For 'trait_data_type = biogeographic', 'evolutionary_models' must be selected among: 'BAYAREALIKE', 'DIVALIKE', 'DEC', 'BAYAREALIKE+J', 'DIVALIKE+J', 'DEC+J'.\n",
-                    "See details in documentation from R package `BioGeoBEARS`."))
+                    "See details in documentation from R package 'BioGeoBEARS'."))
       }
     }
 
@@ -1455,7 +1455,7 @@ prepare_trait_data_for_biogeographic_data <- function (
     if (split_multi_area_ranges & max_range_size == 1)
     {
       stop(paste0("You requested to split multi-area ranges, but no r 'trait_data_type = biogeographic', 'evolutionary_models' must be selected among: 'BAYAREALIKE', 'DIVALIKE', 'DEC', 'BAYAREALIKE+J', 'DIVALIKE+J', 'DEC+J'.\n",
-                  "See details in documentation from R package `BioGeoBEARS`."))
+                  "See details in documentation from R package 'BioGeoBEARS'."))
     }
 
     ## res
