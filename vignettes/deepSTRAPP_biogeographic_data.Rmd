@@ -54,6 +54,11 @@ Please note that the trait data and phylogeny calibration used in this example a
 
 <br>
 
+The R package `BioGeoBEARS` is needed for this workflow to process biogeographic data. <br>
+Please install it manually from: https://github.com/nmatzke/BioGeoBEARS.
+
+<br>
+
 
 ```{r load_data_biogeo_2lvl}
 # ------ Step 0: Load data ------ #
