@@ -367,6 +367,13 @@ prepare_trait_data <- function (
     return_model_selection_df = FALSE,
     verbose = TRUE)
 {
+  ### Control for BioGeoBEARS install
+  if ((trait_data_type == "biogeographic") & !requireNamespace("BioGeoBEARS", quietly = TRUE))
+  {
+    stop("Package 'BioGeoBEARS' is needed for this function to work with biogeographic data.
+       Please install it manually from: https://github.com/nmatzke/BioGeoBEARS")
+  }
+
   ### Check input validity
   {
     ## tip_data
