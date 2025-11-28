@@ -187,9 +187,10 @@
 #' # ----- Example 1: Continuous data ----- #
 #'
 #' ## Load phylogeny and tip data
-#' library(phytools)
-#' data(eel.tree)
-#' data(eel.data)
+#' # Load eel phylogeny and tip data from the R package phytools
+#' # Source: Collar et al., 2014; DOI: 10.1038/ncomms6505
+#' data("eel.tree", package = "phytools")
+#' data("eel.data", package = "phytools")
 #'
 #' # Extract body size
 #' eel_data <- stats::setNames(eel.data$Max_TL_cm,
@@ -220,9 +221,10 @@
 #' # ----- Example 2: Categorical data ----- #
 #'
 #' ## Load phylogeny and tip data
-#' library(phytools)
-#' data(eel.tree)
-#' data(eel.data)
+#' # Load eel phylogeny and tip data from the R package phytools
+#' # Source: Collar et al., 2014; DOI: 10.1038/ncomms6505
+#' data("eel.tree", package = "phytools")
+#' data("eel.data", package = "phytools")
 #'
 #' # Transform feeding mode data into a 3-level factor
 #' eel_data <- stats::setNames(eel.data$feed_mode, rownames(eel.data))
@@ -272,9 +274,10 @@
 #' # Please install it manually from: https://github.com/nmatzke/BioGeoBEARS.
 #'
 #' ## Load phylogeny and tip data
-#' library(phytools)
-#' data(eel.tree)
-#' data(eel.data)
+#' # Load eel phylogeny and tip data from the R package phytools
+#' # Source: Collar et al., 2014; DOI: 10.1038/ncomms6505
+#' data("eel.tree", package = "phytools")
+#' data("eel.data", package = "phytools")
 #'
 #' # Transform feeding mode data into biogeographic data with ranges A, B, and AB.
 #' eel_data <- stats::setNames(eel.data$feed_mode, rownames(eel.data))
