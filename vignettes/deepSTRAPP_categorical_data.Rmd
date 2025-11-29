@@ -455,8 +455,8 @@ print(ggplot_STRAPP_pvalues_posthoc)
 ```{r plot_pvalues_cat_3lvl_eval_CRAN, eval = !is_dev_version(), echo = FALSE, out.width = "100%"}
 
 # Plot pre-rendered graph
-knitr::include_graphics("figures/1.2_deepSTRAPP_categorical_3lvl_data_4.1_plot_pvalues_1.png")
-knitr::include_graphics("figures/1.2_deepSTRAPP_categorical_3lvl_data_4.1_plot_pvalues_2.png")
+knitr::include_graphics("figures/1.2_deepSTRAPP_categorical_3lvl_data_4.1_plot_pvalues_1.PNG")
+knitr::include_graphics("figures/1.2_deepSTRAPP_categorical_3lvl_data_4.1_plot_pvalues_2.PNG")
 
 ```
 
@@ -542,8 +542,8 @@ ggplot_STRAPP_pvalues_posthoc <- plot_histogram_STRAPP_test_for_focal_time(
 ```{r plot_histogram_STRAPP_tests_cat_3lvl_eval_CRAN, eval = !is_dev_version(), echo = FALSE, out.width = "100%"}
 
 # Plot pre-rendered graph
-knitr::include_graphics("figures/1.2_deepSTRAPP_categorical_3lvl_data_4.2_plot_histograms_1.png")
-knitr::include_graphics("figures/1.2_deepSTRAPP_categorical_3lvl_data_4.2_plot_histograms_2.png")
+knitr::include_graphics("figures/1.2_deepSTRAPP_categorical_3lvl_data_4.2_plot_histograms_1.PNG")
+knitr::include_graphics("figures/1.2_deepSTRAPP_categorical_3lvl_data_4.2_plot_histograms_2.PNG")
 
 ```
 
@@ -589,7 +589,7 @@ print(ggplot_RTT)
 ```{r plot_rates_through_time_cat_3lvl_eval_CRAN, eval = !is_dev_version(), echo = FALSE, out.width = "100%"}
 
 # Plot pre-rendered graph
-knitr::include_graphics("figures/1.2_deepSTRAPP_categorical_3lvl_data_4.3_plot_rates_through_time.png")
+knitr::include_graphics("figures/1.2_deepSTRAPP_categorical_3lvl_data_4.3_plot_rates_through_time.PNG")
 
 ```
 
@@ -639,7 +639,7 @@ plot_rates_vs_trait_data_for_focal_time(
 ```{r plot_rates_vs_traits_cat_3lvl_eval_CRAN, eval = !is_dev_version(), echo = FALSE, out.width = "100%"}
 
 # Plot pre-rendered graph
-knitr::include_graphics("figures/1.2_deepSTRAPP_categorical_3lvl_data_4.4_plot_rates_vs_traits.png")
+knitr::include_graphics("figures/1.2_deepSTRAPP_categorical_3lvl_data_4.4_plot_rates_vs_traits.PNG")
 
 ```
 
@@ -707,8 +707,8 @@ title(main = "Trait evolution for 100-40 My")
 ```{r plot_updated_densityMaps_cat_3lvl_eval_CRAN, eval = !is_dev_version(), echo = FALSE, out.width = "100%"}
 
 # Plot pre-rendered graph
-knitr::include_graphics("figures/1.2_deepSTRAPP_categorical_3lvl_data_4.5_plot_updated_densityMaps_1.png")
-knitr::include_graphics("figures/1.2_deepSTRAPP_categorical_3lvl_data_4.5_plot_updated_densityMaps_2.png")
+knitr::include_graphics("figures/1.2_deepSTRAPP_categorical_3lvl_data_4.5_plot_updated_densityMaps_1.PNG")
+knitr::include_graphics("figures/1.2_deepSTRAPP_categorical_3lvl_data_4.5_plot_updated_densityMaps_2.PNG")
 
 ```
 
@@ -772,7 +772,7 @@ par(mfrow = c(1, 1))
 ```{r plot_BAMM_rates_cat_3lvl_eval_CRAN, eval = !is_dev_version(), echo = FALSE, out.width = "100%"}
 
 # Plot pre-rendered graph
-knitr::include_graphics("figures/1.2_deepSTRAPP_categorical_3lvl_data_4.6_plot_BAMM_rates.png")
+knitr::include_graphics("figures/1.2_deepSTRAPP_categorical_3lvl_data_4.6_plot_BAMM_rates.PNG")
 
 ```
 
@@ -845,8 +845,8 @@ plot_traits_vs_rates_on_phylogeny_for_focal_time(
 ```{r plot_traits_vs_rates_on_phylogeny_cat_3lvl_eval_CRAN, eval = !is_dev_version(), echo = FALSE, out.width = "100%"}
 
 # Plot pre-rendered graph
-knitr::include_graphics("figures/1.2_deepSTRAPP_categorical_3lvl_data_4.7_plot_traits_vs_rate_maps_1.png")
-knitr::include_graphics("figures/1.2_deepSTRAPP_categorical_3lvl_data_4.7_plot_traits_vs_rate_maps_2.png")
+knitr::include_graphics("figures/1.2_deepSTRAPP_categorical_3lvl_data_4.7_plot_traits_vs_rate_maps_1.PNG")
+knitr::include_graphics("figures/1.2_deepSTRAPP_categorical_3lvl_data_4.7_plot_traits_vs_rate_maps_2.PNG")
 
 ```
 

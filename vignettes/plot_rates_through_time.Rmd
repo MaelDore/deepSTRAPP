@@ -230,7 +230,7 @@ cowplot::plot_grid(plotlist = list(plot_RTT_continuous_1, plot_RTT_continuous_2,
 ```{r plot_RTT_cont_eval_CRAN, eval = !is_dev_version(), echo = FALSE, out.width = "100%"}
 
 # Plot pre-rendered graph
-knitr::include_graphics("figures/5_Explore_plot_RTT_1_Example_continuous.png")
+knitr::include_graphics("figures/5_Explore_plot_RTT_1_Example_continuous.PNG")
 
 ```
 
@@ -345,7 +345,7 @@ cowplot::plot_grid(plotlist = list(plot_RTT_categorical_1, plot_RTT_categorical_
 ```{r plot_RTT_cat_3lvl_eval_CRAN, eval = !is_dev_version(), echo = FALSE, out.width = "100%"}
 
 # Plot pre-rendered graph
-knitr::include_graphics("figures/5_Explore_plot_RTT_2_Example_multinominal.png")
+knitr::include_graphics("figures/5_Explore_plot_RTT_2_Example_multinominal.PNG")
 
 ```
 
