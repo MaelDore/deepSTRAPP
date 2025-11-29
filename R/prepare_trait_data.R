@@ -3334,36 +3334,42 @@ densityMap_custom <- function (trees, res = 100, fsize = NULL, ftype = NULL, lwd
 #'    version 1.1.1, published on GitHub on November 6, 2018. DOI: \url{http://dx.doi.org/10.5281/zenodo.1478250}. Website: \url{http://phylo.wikidot.com/biogeobears}.
 #'
 #' @examples
+#' if (!requireNamespace("BioGeoBEARS", quietly = TRUE))
+#' {
+#'   stop("Package 'BioGeoBEARS' is needed for this function to work.
+#'        Please install it manually from: https://github.com/nmatzke/BioGeoBEARS")
+#' } else {
 #'
-#' # Load phylogeny and tip data
-#' library(phytools)
-#' data(eel.tree)
+#'   # Load phylogeny and tip data
+#'   library(phytools)
+#'   data(eel.tree)
 #'
-#' # Load directly output of prepare_trait_data() run on biogeographic data
-#' data(eel_biogeo_data, package = "deepSTRAPP")
+#'   # Load directly output of prepare_trait_data() run on biogeographic data
+#'  data(eel_biogeo_data, package = "deepSTRAPP")
 #'
-#' ## Convert BSM output into a unique simmap, including residence times
-#' simmap_1 <- BSM_to_phytools_simmap(model_fit = eel_biogeo_data$best_model_fit,
-#'                                    phylo = eel.tree,
-#'                                    BSM_output = eel_biogeo_data$BSM_output,
-#'                                    sim_index = 1)
-#' # Explore output
-#' str(simmap_1, max.level = 1)
-#' # Print residence times in each range
-#' simmap_1$residence_times
-#' # Plot simmap
-#' plot(simmap_1$simmap)
+#'   ## Convert BSM output into a unique simmap, including residence times
+#'   simmap_1 <- BSM_to_phytools_simmap(model_fit = eel_biogeo_data$best_model_fit,
+#'                                      phylo = eel.tree,
+#'                                      BSM_output = eel_biogeo_data$BSM_output,
+#'                                      sim_index = 1)
+#'   # Explore output
+#'   str(simmap_1, max.level = 1)
+#'   # Print residence times in each range
+#'   simmap_1$residence_times
+#'   # Plot simmap
+#'   plot(simmap_1$simmap)
 #'
 #'
-#' \dontrun{  (May take several minutes to run)
-#' ## Convert BSM output into all simmaps in a multiSimmap/multiPhylo object
-#' all_simmaps <- BSMs_to_phytools_simmaps(model_fit = eel_biogeo_data$best_model_fit,
-#'                                         phylo = eel.tree,
-#'                                         BSM_output = eel_biogeo_data$BSM_output)
-#' # Explore output
-#' str(all_simmaps, max.level = 1)
-#' # Plot simmap n°1
-#' plot(all_simmaps[[1]]) }
+#'   \dontrun{  (May take several minutes to run)
+#'   ## Convert BSM output into all simmaps in a multiSimmap/multiPhylo object
+#'   all_simmaps <- BSMs_to_phytools_simmaps(model_fit = eel_biogeo_data$best_model_fit,
+#'                                           phylo = eel.tree,
+#'                                           BSM_output = eel_biogeo_data$BSM_output)
+#'   # Explore output
+#'   str(all_simmaps, max.level = 1)
+#'   # Plot simmap n°1
+#'   plot(all_simmaps[[1]]) }
+#' }
 #'
 
 ## importFrom for BioGeoBEARS
