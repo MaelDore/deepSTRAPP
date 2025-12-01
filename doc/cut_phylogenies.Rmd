@@ -1,5 +1,7 @@
 ---
 title: "Cut phylogenies"
+author: "Maël Doré"
+date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Cut phylogenies}
@@ -23,7 +25,7 @@ library(deepSTRAPP)
 <br>
 This vignette presents the different __utility functions__ used internally by deepSTRAPP to __cut (mapped) phylogenies__ to a given focal-time, and then extract data from freshly cut tips.
 
-These functions can be used to cut any (mapped) phylogenies outside of a deepSTRAPP run including regular phylogeny, contMap, densityMap, and BAMM_object with diversification rates.
+These functions can be used to cut any (mapped) phylogenies outside of a deepSTRAPP run including a regular phylogeny, contMap, densityMap, and BAMM_object with diversification rates.
 
 <br>
 

@@ -1,5 +1,7 @@
 ---
 title: "Model categorical trait evolution"
+author: "Maël Doré"
+date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Model categorical trait evolution}
@@ -23,7 +25,7 @@ library(deepSTRAPP)
 <br>
 This vignette presents the different options available to model __categorical trait evolution__ within deepSTRAPP.
 
-It builds mainly upon functions from R packages `[geiger]` and `[phytools]` to offer a simplify framework to model and visualize __categorical trait evolution__ on a __time-calibrated phylogeny__. <br>
+It builds mainly upon functions from R packages `[geiger]` and `[phytools]` to offer a simplified framework to model and visualize __categorical trait evolution__ on a __time-calibrated phylogeny__. <br>
 Please, cite also the initial R packages if you are using deepSTRAPP for this purpose.
 
 <br>

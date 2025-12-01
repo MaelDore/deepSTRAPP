@@ -177,7 +177,7 @@ library(deepSTRAPP)
 # 
 #  # "...+J": All previous models can add jump-dispersal events with the parameter j.
 #     # Allows jump-dispersal events to occur at speciation: A -> (A),(B)
-#       # Depicts cladogenetic founder events where a small population disperse to a new area .
+#       # Depicts cladogenetic founder events where a small population disperse to a new area.
 #       # Isolation results in speciation of the two populations in distinct lineages
 #       # occurring in two different areas.
 #     # Relative weights of y,v,s are fixed to 1-j ("BAYAREALIKE+J"), 2-j ("DIVALIKE+J"), or 3-j ("DEC+J").

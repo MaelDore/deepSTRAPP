@@ -10,7 +10,9 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 
+<meta name="author" content="Maël Doré" />
 
+<meta name="date" content="2025-11-28" />
 
 <title>Model diversification dynamics</title>
 
@@ -337,23 +339,25 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 
 <h1 class="title toc-ignore">Model diversification dynamics</h1>
+<h4 class="author">Maël Doré</h4>
+<h4 class="date">2025-11-28</h4>
 
 
 
 <p><br> This vignette presents the different options available to model
 <strong>diversification dynamics</strong> with <strong>BAMM</strong>
 within deepSTRAPP.</p>
-<p>BAMM (Bayesian Analysis of Macroevolutionary Mixtures) is a fully
-independent C++ software developed by Daniel L. Rabosky. You need to
-install BAMM first on your machine to be able to run this section of
-deepSTRAPP.</p>
+<p><strong>BAMM (Bayesian Analysis of Macroevolutionary
+Mixtures)</strong> is a fully independent C++ software developed by
+Daniel L. Rabosky. You need to install BAMM first on your machine to be
+able to run this section of deepSTRAPP.</p>
 <p>Source: Rabosky, D. L. (2014). Automatic detection of key
 innovations, rate shifts, and diversity-dependence on phylogenetic
 trees. PloS one, 9(2), e89543. <br></p>
 <p>DOI: <a href="https://doi.org/10.1371/journal.pone.0089543">10.1371/journal.pone.0089543</a>
 <br> BAMM website: <a href="http://bamm-project.org/">http://bamm-project.org/</a></p>
 <p><br> deepSTRAPP builds upon <strong>BAMM</strong> and functions from
-R package <code>[BAMMtools]</code> to offer a simplify framework to
+R package <code>[BAMMtools]</code> to offer a simplified framework to
 model and visualize <strong>diversification dynamics</strong> on a
 <strong>time-calibrated phylogeny</strong>. <br></p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="do">## Goal: Map evolution of diversification rates and regime shifts on the time-calibrated phylogeny</span></span>
@@ -596,7 +600,7 @@ model and visualize <strong>diversification dynamics</strong> on a
 <span id="cb3-129"><a href="#cb3-129" tabindex="-1"></a><span class="co"># to run the deepSTRAPP workflow ([run_deepSTRAPP_for_focal_time], [run_deepSTRAPP_over_time]).</span></span>
 <span id="cb3-130"><a href="#cb3-130" tabindex="-1"></a><span class="co"># However, it is one option among others for modeling diversification on phylogenies.</span></span>
 <span id="cb3-131"><a href="#cb3-131" tabindex="-1"></a><span class="co"># You may wish to explore alternatives models such as LSBDS model in RevBayes (Höhna et al., 2016),</span></span>
-<span id="cb3-132"><a href="#cb3-132" tabindex="-1"></a><span class="co"># the MTBD model (Barido-Sottani et al., 2020), or the ClaDS2 model (Maliet et al., 2019) for our own data.</span></span>
+<span id="cb3-132"><a href="#cb3-132" tabindex="-1"></a><span class="co"># the MTBD model (Barido-Sottani et al., 2020), or the ClaDS2 model (Maliet et al., 2019) for your own data.</span></span>
 <span id="cb3-133"><a href="#cb3-133" tabindex="-1"></a><span class="co"># However, you will need Bayesian models that infer regime shifts</span></span>
 <span id="cb3-134"><a href="#cb3-134" tabindex="-1"></a><span class="co"># to be able to perform STRAPP tests (Rabosky &amp; Huang, 2016).</span></span>
 <span id="cb3-135"><a href="#cb3-135" tabindex="-1"></a><span class="co"># Additionally, you need to format the model output such as in `BAMM_object`,</span></span>

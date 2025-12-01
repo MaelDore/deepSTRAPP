@@ -10,7 +10,9 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 
+<meta name="author" content="Maël Doré" />
 
+<meta name="date" content="2025-11-28" />
 
 <title>Model biogeographic range evolution</title>
 
@@ -337,6 +339,8 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 
 <h1 class="title toc-ignore">Model biogeographic range evolution</h1>
+<h4 class="author">Maël Doré</h4>
+<h4 class="date">2025-11-28</h4>
 
 
 
@@ -344,7 +348,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <strong>biogeographic data</strong> = range evolution = biogeographic
 history within deepSTRAPP.</p>
 <p>It builds mainly upon functions from R package
-<code>[BioGeoBEARS]</code> to offer a simplify framework to model and
+<code>[BioGeoBEARS]</code> to offer a simplified framework to model and
 visualize <strong>biogeographic range evolution</strong> on a
 time-calibrated phylogeny. <br> Please, cite also the initial R package
 if you are using deepSTRAPP for this purpose.</p>
@@ -523,7 +527,7 @@ process biogeographic data. <br> Please install it manually from: <a href="https
 <span id="cb1-165"><a href="#cb1-165" tabindex="-1"></a></span>
 <span id="cb1-166"><a href="#cb1-166" tabindex="-1"></a> <span class="co"># &quot;...+J&quot;: All previous models can add jump-dispersal events with the parameter j.</span></span>
 <span id="cb1-167"><a href="#cb1-167" tabindex="-1"></a>    <span class="co"># Allows jump-dispersal events to occur at speciation: A -&gt; (A),(B)</span></span>
-<span id="cb1-168"><a href="#cb1-168" tabindex="-1"></a>      <span class="co"># Depicts cladogenetic founder events where a small population disperse to a new area .</span></span>
+<span id="cb1-168"><a href="#cb1-168" tabindex="-1"></a>      <span class="co"># Depicts cladogenetic founder events where a small population disperse to a new area.</span></span>
 <span id="cb1-169"><a href="#cb1-169" tabindex="-1"></a>      <span class="co"># Isolation results in speciation of the two populations in distinct lineages</span></span>
 <span id="cb1-170"><a href="#cb1-170" tabindex="-1"></a>      <span class="co"># occurring in two different areas.</span></span>
 <span id="cb1-171"><a href="#cb1-171" tabindex="-1"></a>    <span class="co"># Relative weights of y,v,s are fixed to 1-j (&quot;BAYAREALIKE+J&quot;), 2-j (&quot;DIVALIKE+J&quot;), or 3-j (&quot;DEC+J&quot;).</span></span>

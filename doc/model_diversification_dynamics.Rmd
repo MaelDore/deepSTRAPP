@@ -1,5 +1,7 @@
 ---
 title: "Model diversification dynamics"
+author: "Maël Doré"
+date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Model diversification dynamics}
@@ -23,7 +25,7 @@ library(deepSTRAPP)
 <br>
 This vignette presents the different options available to model __diversification dynamics__ with __BAMM__ within deepSTRAPP.
 
-BAMM (Bayesian Analysis of Macroevolutionary Mixtures) is a fully independent C++ software developed by Daniel L. Rabosky. You need to install BAMM first on your machine to be able to run this section of deepSTRAPP.
+__BAMM (Bayesian Analysis of Macroevolutionary Mixtures)__ is a fully independent C++ software developed by Daniel L. Rabosky. You need to install BAMM first on your machine to be able to run this section of deepSTRAPP.
 
 Source: Rabosky, D. L. (2014). Automatic detection of key innovations, rate shifts, and diversity-dependence on phylogenetic trees. PloS one, 9(2), e89543. <br>
 
@@ -31,7 +33,7 @@ DOI: [10.1371/journal.pone.0089543](https://doi.org/10.1371/journal.pone.0089543
 BAMM website: [http://bamm-project.org/](http://bamm-project.org/)
 
 <br>
-deepSTRAPP builds upon __BAMM__ and functions from R package `[BAMMtools]` to offer a simplify framework to model and visualize __diversification dynamics__ on a __time-calibrated phylogeny__.
+deepSTRAPP builds upon __BAMM__ and functions from R package `[BAMMtools]` to offer a simplified framework to model and visualize __diversification dynamics__ on a __time-calibrated phylogeny__.
 <br>
 
 ```{r model_diversity_dynamics}
@@ -291,7 +293,7 @@ title(main = "Mean rates: Overall - Mean shift locations: MSC")
 # to run the deepSTRAPP workflow ([run_deepSTRAPP_for_focal_time], [run_deepSTRAPP_over_time]).
 # However, it is one option among others for modeling diversification on phylogenies.
 # You may wish to explore alternatives models such as LSBDS model in RevBayes (Höhna et al., 2016),
-# the MTBD model (Barido-Sottani et al., 2020), or the ClaDS2 model (Maliet et al., 2019) for our own data.
+# the MTBD model (Barido-Sottani et al., 2020), or the ClaDS2 model (Maliet et al., 2019) for your own data.
 # However, you will need Bayesian models that infer regime shifts
 # to be able to perform STRAPP tests (Rabosky & Huang, 2016).
 # Additionally, you need to format the model output such as in `BAMM_object`,
