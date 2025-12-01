@@ -303,23 +303,29 @@ plot_traits_vs_rates_on_phylogeny_for_focal_time(
 
 # ----- Example 3: With outputs over_time ----- #
 
-## Load directly outputs from run_deepSTRAPP_over_time()
-data(Ponerinae_deepSTRAPP_biogeo_old_calib_0_40, package = "deepSTRAPP")
+if (deepSTRAPP:::is_dev_version())
+{
+  ## Load directly outputs from run_deepSTRAPP_over_time()
+  data(Ponerinae_deepSTRAPP_biogeo_old_calib_0_40, package = "deepSTRAPP")
+  # This dataset is only available in development versions installed from GitHub.
+  # It is not available in CRAN versions.
+  # Use remotes::install_github(repo = "MaelDore/deepSTRAPP") to get the latest development version.
 
-## Explore output
-str(Ponerinae_deepSTRAPP_biogeo_old_calib_0_40, max.level =  1)
+  ## Explore output
+  str(Ponerinae_deepSTRAPP_biogeo_old_calib_0_40, max.level =  1)
 
-## Plot updated contMap vs. updated diversification rates for focal_time = 40My
-plot_traits_vs_rates_on_phylogeny_for_focal_time(
-   deepSTRAPP_outputs = Ponerinae_deepSTRAPP_biogeo_old_calib_0_40,
-   focal_time = 40, # Select focal_time = 40My
-   # Adjust colors on densityMaps
-   colors_per_levels = c("N" = "dodgerblue2", "O" = "orange"),
-   # Show legend and label on BAMM plot
-   legend = TRUE, labels = TRUE,
-   cex_pies = 0.2, # Adjust size of ACE pies on densityMaps
-   cex = 0.7) # Adjust size of tip labels on BAMM plot
-   # PDF_file_path = "Updated_maps_biogeo_old_calib_40My.pdf")
+  ## Plot updated contMap vs. updated diversification rates for focal_time = 40My
+  plot_traits_vs_rates_on_phylogeny_for_focal_time(
+     deepSTRAPP_outputs = Ponerinae_deepSTRAPP_biogeo_old_calib_0_40,
+     focal_time = 40, # Select focal_time = 40My
+     # Adjust colors on densityMaps
+     colors_per_levels = c("N" = "dodgerblue2", "O" = "orange"),
+     # Show legend and label on BAMM plot
+     legend = TRUE, labels = TRUE,
+     cex_pies = 0.2, # Adjust size of ACE pies on densityMaps
+     cex = 0.7) # Adjust size of tip labels on BAMM plot
+     # PDF_file_path = "Updated_maps_biogeo_old_calib_40My.pdf")
+}
 
 }
 \seealso{

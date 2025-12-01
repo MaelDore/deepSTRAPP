@@ -44,7 +44,7 @@ and values are integer (0/1) signaling absence or presence of the taxa in the ar
 
 \item{trait_data_type}{Character string. Type of trait data. Either: "continuous", "categorical" or "biogeographic".}
 
-\item{phylo}{Time-calibrated phylogeny. Object of class \code{"phylo"} as defined in \link{ape}.
+\item{phylo}{Time-calibrated phylogeny. Object of class \code{"phylo"} as defined in \code{{ape}}.
 Tip labels (\code{phylo$tip.label}) should match names in \code{tip_data}.}
 
 \item{seed}{Integer. Set the seed to ensure reproducibility. Default is \code{NULL} (a random seed is used).}
@@ -233,15 +233,19 @@ However, it does not explore the most complex options for historical biogeograph
 to capture the dynamics of range evolution such as time-stratification with adjacency matrices, dispersal multipliers (+W),
 distance-based dispersal probabilities (+X), or other features.
 See for instance, \href{http://phylo.wikidot.com/biogeobears}{http://phylo.wikidot.com/biogeobears}).
+
+The R package \code{BioGeoBEARS} is needed for this function to work with biogeographic data.
+Please install it manually from: \href{https://github.com/nmatzke/BioGeoBEARS}{https://github.com/nmatzke/BioGeoBEARS}.
 }
 
 \examples{
 # ----- Example 1: Continuous data ----- #
 
 ## Load phylogeny and tip data
-library(phytools)
-data(eel.tree)
-data(eel.data)
+# Load eel phylogeny and tip data from the R package phytools
+# Source: Collar et al., 2014; DOI: 10.1038/ncomms6505
+data("eel.tree", package = "phytools")
+data("eel.data", package = "phytools")
 
 # Extract body size
 eel_data <- stats::setNames(eel.data$Max_TL_cm,
@@ -272,9 +276,10 @@ mapped_cont_traits$ace # Ancestral character estimates at internal nodes
 # ----- Example 2: Categorical data ----- #
 
 ## Load phylogeny and tip data
-library(phytools)
-data(eel.tree)
-data(eel.data)
+# Load eel phylogeny and tip data from the R package phytools
+# Source: Collar et al., 2014; DOI: 10.1038/ncomms6505
+data("eel.tree", package = "phytools")
+data("eel.data", package = "phytools")
 
 # Transform feeding mode data into a 3-level factor
 eel_data <- stats::setNames(eel.data$feed_mode, rownames(eel.data))
@@ -320,10 +325,14 @@ eel_cat_3lvl_data$ace # Posterior probabilities of each state (= ACE) at interna
 
 # ----- Example 3: Biogeographic data ----- #
 
+## The R package 'BioGeoBEARS' is needed for this function to work with biogeographic data.
+# Please install it manually from: https://github.com/nmatzke/BioGeoBEARS.
+
 ## Load phylogeny and tip data
-library(phytools)
-data(eel.tree)
-data(eel.data)
+# Load eel phylogeny and tip data from the R package phytools
+# Source: Collar et al., 2014; DOI: 10.1038/ncomms6505
+data("eel.tree", package = "phytools")
+data("eel.data", package = "phytools")
 
 # Transform feeding mode data into biogeographic data with ranges A, B, and AB.
 eel_data <- stats::setNames(eel.data$feed_mode, rownames(eel.data))

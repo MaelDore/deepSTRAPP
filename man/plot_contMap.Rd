@@ -36,7 +36,7 @@ An object of class \code{"contMap"} with an (optionally) updated color scale (\v
 Plot on a time-calibrated phylogeny the evolution of a continuous trait as
 summarized in a \code{contMap} object typically generated with \code{\link[=prepare_trait_data]{prepare_trait_data()}}.
 
-This function is a wrapper of original functions from the R package \link{phytools}:
+This function is a wrapper of original functions from the R package \code{{phytools}}:
 \itemize{
 \item Step 1: Use \code{\link[phytools:setMap]{phytools::setMap()}} to update the color scale if requested.
 \item Step 2: Use \code{\link[phytools:contMap]{phytools::plot.contMap()}} to plot the mapped phylogeny.
@@ -86,5 +86,5 @@ plot_contMap(contMap = Ponerinae_contMap, fsize = c(0.5, 1),
 \author{
 Maël Doré
 
-Original functions by Liam Revell in R package \link{phytools}. Contact: \email{liam.revell@umb.edu}
+Original functions by Liam Revell in R package \code{{phytools}}. Contact: \email{liam.revell@umb.edu}
 }

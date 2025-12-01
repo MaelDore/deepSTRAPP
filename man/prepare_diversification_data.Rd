@@ -154,7 +154,7 @@ It uses reversible jump Markov chain Monte Carlo (rjMCMC) to automatically explo
 speciation and extinction rates, and different number and location of regime shits.
 
 This function will work only if you have the BAMM C++ program installed in your machine.
-See the BAMM website: \url{http://bamm-project.org/} and the companion R package \link{BAMMtools}.
+See the BAMM website: \url{http://bamm-project.org/} and the companion R package \code{{BAMMtools}}.
 }
 \details{
 This function runs a full BAMM (Bayesian Analysis of Macroevolutionary Mixtures) workflow
@@ -294,7 +294,7 @@ plot_BAMM_rates(Ponerinae_BAMM_object,
 For BAMM: Rabosky, D. L. (2014). Automatic detection of key innovations, rate shifts, and diversity-dependence on phylogenetic trees.
 PloS one, 9(2), e89543. DOI: \url{https://doi.org/10.1371/journal.pone.0089543}. Website: \url{http://bamm-project.org/}.
 
-For BAMMtools: Rabosky, D. L., Grundler, M., Anderson, C., Title, P., Shi, J. J., Brown, J. W., ... & Larson, J. G. (2014).
+For \code{{BAMMtools}}: Rabosky, D. L., Grundler, M., Anderson, C., Title, P., Shi, J. J., Brown, J. W., ... & Larson, J. G. (2014).
 BAMM tools: an R package for the analysis of evolutionary dynamics on phylogenetic trees. Methods in Ecology and Evolution, 5(7), 701-707.
 DOI: \url{https://doi.org/10.1111/2041-210X.12199}
 }

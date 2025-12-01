@@ -156,23 +156,30 @@ print(histogram_ggplot_adj) }
 
 # ------ Plot histogram of STRAPP overall test results from run_deepSTRAPP_over_time() ------ #
 
-## Load directly outputs from run_deepSTRAPP_over_time()
-data(Ponerinae_deepSTRAPP_cont_old_calib_0_40, package = "deepSTRAPP")
+if (deepSTRAPP:::is_dev_version())
+{
+  ## Load directly outputs from run_deepSTRAPP_over_time()
+  data(Ponerinae_deepSTRAPP_cont_old_calib_0_40, package = "deepSTRAPP")
+  # This dataset is only available in development versions installed from GitHub.
+  # It is not available in CRAN versions.
+  # Use remotes::install_github(repo = "MaelDore/deepSTRAPP") to get the latest development version.
 
-# Select focal_time = 10My
-focal_time <- 10
+  # Select focal_time = 10My
+  focal_time <- 10
 
-## Plot histogram for overall test
-histogram_ggplot <- plot_histogram_STRAPP_test_for_focal_time(
-   deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_old_calib_0_40,
-   focal_time = focal_time,
-   display_plot = TRUE,
-   # PDF_file_path = "./plot_STRAPP_histogram_10My.pdf",
-   plot_posthoc_tests = FALSE)
-# Adjust aesthetics a posteriori
-histogram_ggplot_adj <- histogram_ggplot +
-   ggplot2::theme(plot.title = ggplot2::element_text(color = "red", size = 15))
-print(histogram_ggplot_adj)
+  ## Plot histogram for overall test
+  histogram_ggplot <- plot_histogram_STRAPP_test_for_focal_time(
+     deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_old_calib_0_40,
+     focal_time = focal_time,
+     display_plot = TRUE,
+     # PDF_file_path = "./plot_STRAPP_histogram_10My.pdf",
+     plot_posthoc_tests = FALSE)
+  # Adjust aesthetics a posteriori
+  histogram_ggplot_adj <- histogram_ggplot +
+     ggplot2::theme(plot.title = ggplot2::element_text(color = "red", size = 15))
+  print(histogram_ggplot_adj)
+}
+
 
 # ----- Example 2: Categorical trait ----- #
 

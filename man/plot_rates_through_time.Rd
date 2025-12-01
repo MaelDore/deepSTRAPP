@@ -109,112 +109,132 @@ Rates are averaged across branches at each time step (i.e., \code{focal_time}).
 
 # ------ Example 1: Plot rates through time for continuous data ------ #
 
-## Load results of run_deepSTRAPP_over_time()
-data(Ponerinae_deepSTRAPP_cont_old_calib_0_40, package = "deepSTRAPP")
+if (deepSTRAPP:::is_dev_version())
+{
+  ## Load results of run_deepSTRAPP_over_time()
+  data(Ponerinae_deepSTRAPP_cont_old_calib_0_40, package = "deepSTRAPP")
+  # This dataset is only available in development versions installed from GitHub.
+  # It is not available in CRAN versions.
+  # Use remotes::install_github(repo = "MaelDore/deepSTRAPP") to get the latest development version.
 
-# Visualize trait data
-hist(Ponerinae_deepSTRAPP_cont_old_calib_0_40$trait_data_df_over_time$trait_value,
-   xlab = "Trait values", main = NULL)
+  # Visualize trait data
+  hist(Ponerinae_deepSTRAPP_cont_old_calib_0_40$trait_data_df_over_time$trait_value,
+     xlab = "Trait values", main = NULL)
 
-# Generate plot
-plotTT_continuous <- plot_rates_through_time(
-   deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_old_calib_0_40,
-   quantile_ranges = c(0, 0.25, 0.5, 0.75, 1.0),
-   time_range = c(0, 50), # Control range of the X-axis
-   # color_scale = c("limegreen", "red"),
-   plot_CI = TRUE,
-   CI_type = "quantiles_rect",
-   CI_quantiles = 0.9,
-   display_plot = FALSE,
-   # PDF_file_path = "./plotTT_continuous.pdf",
-   return_mean_data_per_samples_df = TRUE,
-   return_median_data_across_samples_df = TRUE)
+  # Generate plot
+  plotTT_continuous <- plot_rates_through_time(
+     deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_old_calib_0_40,
+     quantile_ranges = c(0, 0.25, 0.5, 0.75, 1.0),
+     time_range = c(0, 50), # Control range of the X-axis
+     # color_scale = c("limegreen", "red"),
+     plot_CI = TRUE,
+     CI_type = "quantiles_rect",
+     CI_quantiles = 0.9,
+     display_plot = FALSE,
+     # PDF_file_path = "./plotTT_continuous.pdf",
+     return_mean_data_per_samples_df = TRUE,
+     return_median_data_across_samples_df = TRUE)
 
-# Explore output
-# str(plotTT_continuous, max.level = 1)
+  # Explore output
+  # str(plotTT_continuous, max.level = 1)
 
-# Plot
-print(plotTT_continuous$rates_TT_ggplot)
-# Adjust aesthetics of plot a posteriori
-plotTT_continuous_adj <- plotTT_continuous$rates_TT_ggplot +
-    ggplot2::theme(
-       plot.title = ggplot2::element_text(color = "red", size = 15),
-       axis.title = ggplot2::element_text(size = 14),
-       axis.text = ggplot2::element_text(size = 12))
-# Plot again
-print(plotTT_continuous_adj)
+  # Plot
+  print(plotTT_continuous$rates_TT_ggplot)
+  # Adjust aesthetics of plot a posteriori
+  plotTT_continuous_adj <- plotTT_continuous$rates_TT_ggplot +
+      ggplot2::theme(
+         plot.title = ggplot2::element_text(color = "red", size = 15),
+         axis.title = ggplot2::element_text(size = 14),
+         axis.text = ggplot2::element_text(size = 12))
+  # Plot again
+  print(plotTT_continuous_adj)
+}
+
 
 # ------ Example 2: Plot rates through time for categorical data ------ #
 
-## Load results of run_deepSTRAPP_over_time()
-data(Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40, package = "deepSTRAPP")
+if (deepSTRAPP:::is_dev_version())
+{
+  ## Load results of run_deepSTRAPP_over_time()
+  data(Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40, package = "deepSTRAPP")
+  # This dataset is only available in development versions installed from GitHub.
+  # It is not available in CRAN versions.
+  # Use remotes::install_github(repo = "MaelDore/deepSTRAPP") to get the latest development version.
 
-# Explore trait data
-table(Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40$trait_data_df_over_time$trait_value)
+  # Explore trait data
+  table(Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40$trait_data_df_over_time$trait_value)
 
-# Set colors to use
-colors_per_states <- c("forestgreen", "sienna", "goldenrod")
-names(colors_per_states) <- c("arboreal", "subterranean", "terricolous")
+  # Set colors to use
+  colors_per_states <- c("forestgreen", "sienna", "goldenrod")
+  names(colors_per_states) <- c("arboreal", "subterranean", "terricolous")
 
-plotTT_categorical <- plot_rates_through_time(
-    deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40,
-    select_trait_levels = c("arboreal", "terricolous"),
-    time_range = c(0, 50),
-    colors_per_levels = colors_per_states,
-    plot_CI = TRUE,
-    CI_type = "quantiles_rect",
-    CI_quantiles = 0.9,
-    display_plot = FALSE,
-    # PDF_file_path = "./plotTT_categorical.pdf",
-    return_mean_data_per_samples_df = TRUE,
-    return_median_data_across_samples_df = TRUE)
+  # Generate plot only for "arboreal" and "terricolous"
+  plotTT_categorical <- plot_rates_through_time(
+      deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40,
+      select_trait_levels = c("arboreal", "terricolous"),
+      time_range = c(0, 50),
+      colors_per_levels = colors_per_states,
+      plot_CI = TRUE,
+      CI_type = "quantiles_rect",
+      CI_quantiles = 0.9,
+      display_plot = FALSE,
+      # PDF_file_path = "./plotTT_categorical.pdf",
+      return_mean_data_per_samples_df = TRUE,
+      return_median_data_across_samples_df = TRUE)
 
-# Explore output
-# str(plotTT_categorical, max.level = 1)
+  # Explore output
+  # str(plotTT_categorical, max.level = 1)
 
-# Adjust aesthetics of plot a posteriori
-plotTT_categorical_adj <- plotTT_categorical$rates_TT_ggplot +
-    ggplot2::theme(
-       plot.title = ggplot2::element_text(size = 15),
-       axis.title = ggplot2::element_text(size = 14),
-       axis.text = ggplot2::element_text(size = 12))
-print(plotTT_categorical_adj)
+  # Adjust aesthetics of plot a posteriori
+  plotTT_categorical_adj <- plotTT_categorical$rates_TT_ggplot +
+      ggplot2::theme(
+         plot.title = ggplot2::element_text(size = 15),
+         axis.title = ggplot2::element_text(size = 14),
+         axis.text = ggplot2::element_text(size = 12))
+  print(plotTT_categorical_adj)
+}
 
 # ------ Example 3: Plot rates through time for biogeographic data ------ #
 
-## Load results of run_deepSTRAPP_over_time()
-data(Ponerinae_deepSTRAPP_biogeo_old_calib_0_40, package = "deepSTRAPP")
+if (deepSTRAPP:::is_dev_version())
+{
+  ## Load results of run_deepSTRAPP_over_time()
+  data(Ponerinae_deepSTRAPP_biogeo_old_calib_0_40, package = "deepSTRAPP")
+  # This dataset is only available in development versions installed from GitHub.
+  # It is not available in CRAN versions.
+  # Use remotes::install_github(repo = "MaelDore/deepSTRAPP") to get the latest development version.
 
-# Explore range data
-table(Ponerinae_deepSTRAPP_biogeo_old_calib_0_40$trait_data_df_over_time$trait_value)
+  # Explore range data
+  table(Ponerinae_deepSTRAPP_biogeo_old_calib_0_40$trait_data_df_over_time$trait_value)
 
-# Set colors to use
-colors_per_ranges <- c("mediumpurple2", "peachpuff2")
-names(colors_per_ranges) <- c("N", "O")
+  # Set colors to use
+  colors_per_ranges <- c("mediumpurple2", "peachpuff2")
+  names(colors_per_ranges) <- c("N", "O")
 
-plotTT_biogeographic <- plot_rates_through_time(
-    deepSTRAPP_outputs = Ponerinae_deepSTRAPP_biogeo_old_calib_0_40,
-    select_trait_levels = "all",
-    time_range = c(0, 50),
-    colors_per_levels = colors_per_ranges,
-    plot_CI = TRUE,
-    CI_type = "quantiles_rect",
-    CI_quantiles = 0.9,
-    display_plot = FALSE,
-    # PDF_file_path = "./plotTT_biogeographic.pdf",
-    return_mean_data_per_samples_df = TRUE,
-    return_median_data_across_samples_df = TRUE)
+  plotTT_biogeographic <- plot_rates_through_time(
+      deepSTRAPP_outputs = Ponerinae_deepSTRAPP_biogeo_old_calib_0_40,
+      select_trait_levels = "all",
+      time_range = c(0, 50),
+      colors_per_levels = colors_per_ranges,
+      plot_CI = TRUE,
+      CI_type = "quantiles_rect",
+      CI_quantiles = 0.9,
+      display_plot = FALSE,
+      # PDF_file_path = "./plotTT_biogeographic.pdf",
+      return_mean_data_per_samples_df = TRUE,
+      return_median_data_across_samples_df = TRUE)
 
-# Explore output
-# str(plotTT_biogeographic, max.level = 1)
+  # Explore output
+  # str(plotTT_biogeographic, max.level = 1)
 
-# Adjust aesthetics of plot a posteriori
-plotTT_biogeographic_adj <- plotTT_biogeographic$rates_TT_ggplot +
-    ggplot2::theme(
-       plot.title = ggplot2::element_text(size = 15),
-       axis.title = ggplot2::element_text(size = 14),
-       axis.text = ggplot2::element_text(size = 12))
-print(plotTT_biogeographic_adj)
+  # Adjust aesthetics of plot a posteriori
+  plotTT_biogeographic_adj <- plotTT_biogeographic$rates_TT_ggplot +
+      ggplot2::theme(
+         plot.title = ggplot2::element_text(size = 15),
+         axis.title = ggplot2::element_text(size = 14),
+         axis.text = ggplot2::element_text(size = 12))
+  print(plotTT_biogeographic_adj)
+}
 
 }
 \seealso{

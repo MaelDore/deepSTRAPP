@@ -104,5 +104,5 @@ plot_densityMaps_overlay(densityMaps = eel_cat_3lvl_data$densityMaps)
 \author{
 Maël Doré
 
-Original functions by Liam Revell in R package \link{phytools}. Contact: \email{liam.revell@umb.edu}
+Original functions by Liam Revell in R package \code{{phytools}}. Contact: \email{liam.revell@umb.edu}
 }

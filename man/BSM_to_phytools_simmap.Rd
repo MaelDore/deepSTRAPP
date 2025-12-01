@@ -13,7 +13,7 @@ BSMs_to_phytools_simmaps(model_fit, phylo, BSM_output)
 \item{model_fit}{A BioGeoBEARS results object, produced by ML inference via \code{BioGeoBEARS::bears_optim_run()}.}
 
 \item{phylo}{Time-calibrated phylogeny used in the BioGeoBEARS analyses to produce the historical biogeographic inference
-and run the Biogeographic Stochastic Mapping. Object of class \code{"phylo"} as defined in \link{ape}.}
+and run the Biogeographic Stochastic Mapping. Object of class \code{"phylo"} as defined in \code{{ape}}.}
 
 \item{BSM_output}{A list with two objects, a cladogenetic events table and an anagenetic events table, as the result of
 Biogeographic Stochastic Mapping conducted with \code{BioGeoBEARS::runBSM()}.}
@@ -24,7 +24,7 @@ Biogeographic Stochastic Mapping conducted with \code{BioGeoBEARS::runBSM()}.}
 The \code{\link[=BSM_to_phytools_simmap]{BSM_to_phytools_simmap()}} function returns a list with two elements:
 \itemize{
 \item \verb{$simmap} A unique \code{simmap} for a given biogeographic simulation as an object of classes \code{c("simmap", "phylo")}.
-This is a modified \link{ape} tree with additional elements to report range mapping, model parameters and likelihood.
+This is a modified \code{{ape}} tree with additional elements to report range mapping, model parameters and likelihood.
 \itemize{
 \item \verb{$maps} A list of named numerical vectors. Provides the mapping of ranges along each remaining edge.
 Names are the ranges. Values are residence times in each state across segments
@@ -46,7 +46,7 @@ from all biogeographic simulations in a unique list of classes \code{c("multiSim
 }
 \description{
 These functions converts a Biogeographic Stochastic Map (BSM) output from BioGeoBEARS into
-a \code{simmap} object from R package \link{phytools} (See \code{\link[phytools:make.simmap]{phytools::make.simmap()}}).
+a \code{simmap} object from R package \code{{phytools}} (See \code{\link[phytools:make.simmap]{phytools::make.simmap()}}).
 
 They require a model fit with \code{BioGeoBEARS::bears_optim_run()} and the output of a Biogeographic Stochastic Mapping
 performed with \code{BioGeoBEARS::runBSM()} to produce \code{simmap} objects as phylogenies with the associated
@@ -72,6 +72,11 @@ Changes:
 \item Update the documentation.
 }
 }
+\section{Notes on BioGeoBEARS}{
+The R package \code{BioGeoBEARS} is needed for this function to work with biogeographic data.
+Please install it manually from: \href{https://github.com/nmatzke/BioGeoBEARS}{https://github.com/nmatzke/BioGeoBEARS}.
+}
+
 \section{Notes on using the resulting simmap object in phytools (adapted from Nicholas J. Matzke)}{
 The phytools functions, like \code{\link[phytools:countSimmap]{phytools::countSimmap()}}, will only count the anagenetic events
 (range transitions occurring along branches) as it was written assuming purely anagenetic models.
@@ -98,36 +103,38 @@ at least if \code{BioGeoBEARS::simulate_source_areas_ana_clado()} has been run o
 }
 
 \examples{
-
 # Load phylogeny and tip data
 library(phytools)
 data(eel.tree)
 
-# Load directly output of prepare_trait_data() run on biogeographic data
-data(eel_biogeo_data, package = "deepSTRAPP")
-
-## Convert BSM output into a unique simmap, including residence times
-simmap_1 <- BSM_to_phytools_simmap(model_fit = eel_biogeo_data$best_model_fit,
-                                   phylo = eel.tree,
-                                   BSM_output = eel_biogeo_data$BSM_output,
-                                   sim_index = 1)
-# Explore output
-str(simmap_1, max.level = 1)
-# Print residence times in each range
-simmap_1$residence_times
-# Plot simmap
-plot(simmap_1$simmap)
-
-
-\dontrun{  (May take several minutes to run)
-## Convert BSM output into all simmaps in a multiSimmap/multiPhylo object
-all_simmaps <- BSMs_to_phytools_simmaps(model_fit = eel_biogeo_data$best_model_fit,
-                                        phylo = eel.tree,
-                                        BSM_output = eel_biogeo_data$BSM_output)
-# Explore output
-str(all_simmaps, max.level = 1)
-# Plot simmap n°1
-plot(all_simmaps[[1]]) }
+## Run only if you have R package 'BioGeoBEARS' installed.
+# Please install it manually from: https://github.com/nmatzke/BioGeoBEARS")
+#
+# # Load directly output of prepare_trait_data() run on biogeographic data
+# data(eel_biogeo_data, package = "deepSTRAPP")
+#
+# ## Convert BSM output into a unique simmap, including residence times
+# simmap_1 <- BSM_to_phytools_simmap(model_fit = eel_biogeo_data$best_model_fit,
+#                                    phylo = eel.tree,
+#                                    BSM_output = eel_biogeo_data$BSM_output,
+#                                    sim_index = 1)
+# # Explore output
+# str(simmap_1, max.level = 1)
+# # Print residence times in each range
+# simmap_1$residence_times
+# # Plot simmap
+# plot(simmap_1$simmap)
+#
+# \dontrun{  (May take several minutes to run)
+# ## Convert BSM output into all simmaps in a multiSimmap/multiPhylo object
+# all_simmaps <- BSMs_to_phytools_simmaps(model_fit = eel_biogeo_data$best_model_fit,
+#                                         phylo = eel.tree,
+#                                         BSM_output = eel_biogeo_data$BSM_output)
+# # Explore output
+# str(all_simmaps, max.level = 1)
+# # Plot simmap n°1
+# plot(all_simmaps[[1]]) }
+##
 
 }
 \references{

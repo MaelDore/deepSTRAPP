@@ -315,62 +315,69 @@ Ponerinae_deepSTRAPP_cont_old_calib_0_40 <- run_deepSTRAPP_over_time(
    verbose = TRUE,
    verbose_extended = TRUE) }
 
-# Load directly trait data output
-data(Ponerinae_deepSTRAPP_cont_old_calib_0_40, package = "deepSTRAPP")
+if (deepSTRAPP:::is_dev_version())
+{
+  ## Load directly trait data output
+  data(Ponerinae_deepSTRAPP_cont_old_calib_0_40, package = "deepSTRAPP")
+  # This dataset is only available in development versions installed from GitHub.
+  # It is not available in CRAN versions.
+  # Use remotes::install_github(repo = "MaelDore/deepSTRAPP") to get the latest development version.
 
-## Explore output
-str(Ponerinae_deepSTRAPP_cont_old_calib_0_40, max.level = 1)
+  ## Explore output
+  str(Ponerinae_deepSTRAPP_cont_old_calib_0_40, max.level = 1)
 
-# Display test summary
-# Can be passed down to [deepSTRAPP::plot_STRAPP_pvalues_over_time()] to generate a plot
-# showing the evolution of the test results across time.
-Ponerinae_deepSTRAPP_cont_old_calib_0_40$pvalues_summary_df
+  # Display test summary
+  # Can be passed down to [deepSTRAPP::plot_STRAPP_pvalues_over_time()] to generate a plot
+  # showing the evolution of the test results across time.
+  Ponerinae_deepSTRAPP_cont_old_calib_0_40$pvalues_summary_df
 
-# Access trait data in a melted data.frame
-head(Ponerinae_deepSTRAPP_cont_old_calib_0_40$trait_data_df_over_time)
+  # Access trait data in a melted data.frame
+  head(Ponerinae_deepSTRAPP_cont_old_calib_0_40$trait_data_df_over_time)
 
-# Access the diversification data in a melted data.frame
-head(Ponerinae_deepSTRAPP_cont_old_calib_0_40$diversification_data_df_over_time)
+  # Access the diversification data in a melted data.frame
+  head(Ponerinae_deepSTRAPP_cont_old_calib_0_40$diversification_data_df_over_time)
 
-# Access deepSTRAPP results
-str(Ponerinae_deepSTRAPP_cont_old_calib_0_40$STRAPP_results, max.level = 2)
+  # Access deepSTRAPP results
+  str(Ponerinae_deepSTRAPP_cont_old_calib_0_40$STRAPP_results, max.level = 2)
 
-## Visualize updated phylogenies
+  ## Visualize updated phylogenies
 
-# Plot updated contMap for time step n°2
-contMap_step2 <- Ponerinae_deepSTRAPP_cont_old_calib_0_40$updated_trait_data_with_Map_over_time[[2]]
-plot_contMap(contMap_step2$contMap, ftype = "off")
+  # Plot updated contMap for time step n°2
+  deepSTRAPP_outputs <- Ponerinae_deepSTRAPP_cont_old_calib_0_40
+  contMap_step2 <- deepSTRAPP_outputs$updated_trait_data_with_Map_over_time[[2]]
+  plot_contMap(contMap_step2$contMap, ftype = "off")
 
-# Plot diversification rates on updated phylogeny for time step n°2
-BAMM_object_step2 <- Ponerinae_deepSTRAPP_cont_old_calib_0_40$updated_BAMM_objects_over_time[[2]]
-plot_BAMM_rates(BAMM_object = BAMM_object_step2,
-  legend = TRUE, labels = FALSE,
-  colorbreaks = BAMM_object_step2$initial_colorbreaks$net_diversification)
+  # Plot diversification rates on updated phylogeny for time step n°2
+  BAMM_object_step2 <- deepSTRAPP_outputs$updated_BAMM_objects_over_time[[2]]
+  plot_BAMM_rates(BAMM_object = BAMM_object_step2,
+    legend = TRUE, labels = FALSE,
+    colorbreaks = BAMM_object_step2$initial_colorbreaks$net_diversification)
 
-## Visualize test results
+  ## Visualize test results
 
-# Plot p-values of Spearman tests across all time-steps
-plot_STRAPP_pvalues_over_time(
-  deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_old_calib_0_40,
-  alpha = 0.10)
+  # Plot p-values of Spearman tests across all time-steps
+  plot_STRAPP_pvalues_over_time(
+    deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_old_calib_0_40,
+    alpha = 0.10)
 
-# Plot evolution of mean rates through time
-plot_rates_through_time(deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_old_calib_0_40)
+  # Plot evolution of mean rates through time
+  plot_rates_through_time(deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_old_calib_0_40)
 
-# Plot rates vs. trait values across branches for time step = 10 My
-plot_rates_vs_trait_data_for_focal_time(
-   deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_old_calib_0_40,
-   focal_time = 10)
+  # Plot rates vs. trait values across branches for time step = 10 My
+  plot_rates_vs_trait_data_for_focal_time(
+     deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_old_calib_0_40,
+     focal_time = 10)
 
-# Plot histogram of Spearman test stats for time step = 10 My
-plot_histogram_STRAPP_test_for_focal_time(
-   deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_old_calib_0_40,
-   focal_time = 10)
+  # Plot histogram of Spearman test stats for time step = 10 My
+  plot_histogram_STRAPP_test_for_focal_time(
+     deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_old_calib_0_40,
+     focal_time = 10)
 
-# Plot histograms of Spearman test results (One plot per time-step)
-plot_histograms_STRAPP_tests_over_time(
-   deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_old_calib_0_40,
-   display_plots = TRUE)
+  # Plot histograms of Spearman test results (One plot per time-step)
+  plot_histograms_STRAPP_tests_over_time(
+     deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_old_calib_0_40,
+     display_plots = TRUE)
+}
 
 
 # ----- Example 2: Categorical trait ----- #
@@ -440,80 +447,86 @@ Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40 <- run_deepSTRAPP_over_time(
    verbose = TRUE,
    verbose_extended = TRUE) }
 
-# Load directly deepSTRAPP output
-data(Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40, package = "deepSTRAPP")
-deepSTRAPP_outputs <- Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40
+if (deepSTRAPP:::is_dev_version())
+{
+  ## Load directly deepSTRAPP output
+  data(Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40, package = "deepSTRAPP")
+  deepSTRAPP_outputs <- Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40
+  # This dataset is only available in development versions installed from GitHub.
+  # It is not available in CRAN versions.
+  # Use remotes::install_github(repo = "MaelDore/deepSTRAPP") to get the latest development version.
 
-## Explore output
-str(deepSTRAPP_outputs, max.level = 1)
+  ## Explore output
+  str(deepSTRAPP_outputs, max.level = 1)
 
-# Display test summaries
-# Can be passed down to [deepSTRAPP::plot_STRAPP_pvalues_over_time()] to generate a plot
-# showing the evolution of the test results across time.
-deepSTRAPP_outputs$pvalues_summary_df
-# Results for posthoc pairwise Dunn's tests over time-steps
-deepSTRAPP_outputs$pvalues_summary_df_for_posthoc_pairwise_tests
+  # Display test summaries
+  # Can be passed down to [deepSTRAPP::plot_STRAPP_pvalues_over_time()] to generate a plot
+  # showing the evolution of the test results across time.
+  deepSTRAPP_outputs$pvalues_summary_df
+  # Results for posthoc pairwise Dunn's tests over time-steps
+  deepSTRAPP_outputs$pvalues_summary_df_for_posthoc_pairwise_tests
 
-# Access trait data in a melted data.frame
-head(deepSTRAPP_outputs$trait_data_df_over_time)
+  # Access trait data in a melted data.frame
+  head(deepSTRAPP_outputs$trait_data_df_over_time)
 
-# Access the diversification data in a melted data.frame
-head(deepSTRAPP_outputs$diversification_data_df_over_time)
+  # Access the diversification data in a melted data.frame
+  head(deepSTRAPP_outputs$diversification_data_df_over_time)
 
-# Access details of deepSTRAPP results
-str(deepSTRAPP_outputs$STRAPP_results, max.level = 2)
+  # Access details of deepSTRAPP results
+  str(deepSTRAPP_outputs$STRAPP_results, max.level = 2)
 
-## Visualize updated phylogenies
+  ## Visualize updated phylogenies
 
-# Plot updated densityMaps for time step n°2 = 10My
-densityMaps_10My <- deepSTRAPP_outputs$updated_trait_data_with_Map_over_time[[2]]
-plot_densityMaps_overlay(densityMaps_10My$densityMaps)
+  # Plot updated densityMaps for time step n°2 = 10My
+  densityMaps_10My <- deepSTRAPP_outputs$updated_trait_data_with_Map_over_time[[2]]
+  plot_densityMaps_overlay(densityMaps_10My$densityMaps)
 
-# Plot diversification rates on updated phylogeny for time step n°2
-BAMM_object_10My <- deepSTRAPP_outputs$updated_BAMM_objects_over_time[[2]]
-plot_BAMM_rates(BAMM_object = BAMM_object_10My,
-  legend = TRUE, labels = FALSE,
-  colorbreaks = BAMM_object_10My$initial_colorbreaks$net_diversification)
+  # Plot diversification rates on updated phylogeny for time step n°2
+  BAMM_object_10My <- deepSTRAPP_outputs$updated_BAMM_objects_over_time[[2]]
+  plot_BAMM_rates(BAMM_object = BAMM_object_10My,
+    legend = TRUE, labels = FALSE,
+    colorbreaks = BAMM_object_10My$initial_colorbreaks$net_diversification)
 
-## Visualize test results
+  ## Visualize test results
 
-# Plot p-values of overall Kruskal-Wallis test across all time-steps
-plot_STRAPP_pvalues_over_time(
-   deepSTRAPP_outputs = deepSTRAPP_outputs,
-   alpha = 0.10)
+  # Plot p-values of overall Kruskal-Wallis test across all time-steps
+  plot_STRAPP_pvalues_over_time(
+     deepSTRAPP_outputs = deepSTRAPP_outputs,
+     alpha = 0.10)
 
-# Plot p-values of post hoc pairwise Dunn's tests between pairs of tests across all time-steps
-plot_STRAPP_pvalues_over_time(
-   deepSTRAPP_outputs = deepSTRAPP_outputs,
-   alpha = 0.10,
-   plot_posthoc_tests = TRUE)
+  # Plot p-values of post hoc pairwise Dunn's tests between pairs of tests across all time-steps
+  plot_STRAPP_pvalues_over_time(
+     deepSTRAPP_outputs = deepSTRAPP_outputs,
+     alpha = 0.10,
+     plot_posthoc_tests = TRUE)
 
-# Plot evolution of mean rates through time
-plot_rates_through_time(deepSTRAPP_outputs = deepSTRAPP_outputs,
-   colors_per_levels = colors_per_states)
+  # Plot evolution of mean rates through time
+  plot_rates_through_time(deepSTRAPP_outputs = deepSTRAPP_outputs,
+     colors_per_levels = colors_per_states)
 
-# Plot rates vs. trait values across branches for time step n°2 = 10 My
-plot_rates_vs_trait_data_for_focal_time(
-   deepSTRAPP_outputs = deepSTRAPP_outputs,
-   focal_time = 10,
-   colors_per_levels = colors_per_states)
+  # Plot rates vs. trait values across branches for time step n°2 = 10 My
+  plot_rates_vs_trait_data_for_focal_time(
+     deepSTRAPP_outputs = deepSTRAPP_outputs,
+     focal_time = 10,
+     colors_per_levels = colors_per_states)
 
-# Plot histogram of overall Kruskal-Wallis test for time step n°2 = 10 My
-plot_histogram_STRAPP_test_for_focal_time(
-   deepSTRAPP_outputs = deepSTRAPP_outputs,
-   focal_time = 10)
+  # Plot histogram of overall Kruskal-Wallis test for time step n°2 = 10 My
+  plot_histogram_STRAPP_test_for_focal_time(
+     deepSTRAPP_outputs = deepSTRAPP_outputs,
+     focal_time = 10)
 
-# Plot histograms of overall Kruskal-Wallis test results across all time-steps
-# (One plot per time-step)
-plot_histograms_STRAPP_tests_over_time(
-   deepSTRAPP_outputs = deepSTRAPP_outputs,
-   plot_posthoc_tests = FALSE)
+  # Plot histograms of overall Kruskal-Wallis test results across all time-steps
+  # (One plot per time-step)
+  plot_histograms_STRAPP_tests_over_time(
+     deepSTRAPP_outputs = deepSTRAPP_outputs,
+     plot_posthoc_tests = FALSE)
 
-# Plot histograms of post hoc pairwise Dunn's test results across all time-steps
-# (One multifaceted plot per time-step)
-plot_histograms_STRAPP_tests_over_time(
-   deepSTRAPP_outputs = deepSTRAPP_outputs,
-   plot_posthoc_tests = TRUE)
+  # Plot histograms of post hoc pairwise Dunn's test results across all time-steps
+  # (One multifaceted plot per time-step)
+  plot_histograms_STRAPP_tests_over_time(
+     deepSTRAPP_outputs = deepSTRAPP_outputs,
+     plot_posthoc_tests = TRUE)
+}
 
 
 # ----- Example 3: Biogeographic ranges ----- #
@@ -587,66 +600,72 @@ Ponerinae_deepSTRAPP_biogeo_old_calib_0_40 <- run_deepSTRAPP_over_time(
    verbose = TRUE,
    verbose_extended = TRUE) }
 
-# Load directly output
-data(Ponerinae_deepSTRAPP_biogeo_old_calib_0_40, package = "deepSTRAPP")
-deepSTRAPP_outputs <- Ponerinae_deepSTRAPP_biogeo_old_calib_0_40
+if (deepSTRAPP:::is_dev_version())
+{
+  ## Load directly output
+  data(Ponerinae_deepSTRAPP_biogeo_old_calib_0_40, package = "deepSTRAPP")
+  deepSTRAPP_outputs <- Ponerinae_deepSTRAPP_biogeo_old_calib_0_40
+  # This dataset is only available in development versions installed from GitHub.
+  # It is not available in CRAN versions.
+  # Use remotes::install_github(repo = "MaelDore/deepSTRAPP") to get the latest development version.
 
-## Explore output
-str(deepSTRAPP_outputs, max.level = 1)
+  ## Explore output
+  str(deepSTRAPP_outputs, max.level = 1)
 
-# Display test summaries
-# Can be passed down to [deepSTRAPP::plot_STRAPP_pvalues_over_time()] to generate a plot
-# showing the evolution of the test results across time.
-deepSTRAPP_outputs$pvalues_summary_df
+  # Display test summaries
+  # Can be passed down to [deepSTRAPP::plot_STRAPP_pvalues_over_time()] to generate a plot
+  # showing the evolution of the test results across time.
+  deepSTRAPP_outputs$pvalues_summary_df
 
-# Access bioregeographic range data in a melted data.frame
-head(deepSTRAPP_outputs$trait_data_df_over_time)
+  # Access bioregeographic range data in a melted data.frame
+  head(deepSTRAPP_outputs$trait_data_df_over_time)
 
-# Access the diversification data in a melted data.frame
-head(deepSTRAPP_outputs$diversification_data_df_over_time)
+  # Access the diversification data in a melted data.frame
+  head(deepSTRAPP_outputs$diversification_data_df_over_time)
 
-# Access details of deepSTRAPP results
-str(deepSTRAPP_outputs$STRAPP_results, max.level = 2)
+  # Access details of deepSTRAPP results
+  str(deepSTRAPP_outputs$STRAPP_results, max.level = 2)
 
-## Visualize updated phylogenies
+  ## Visualize updated phylogenies
 
-# Plot updated densityMaps for time step n°2 = 10My
-densityMaps_10My <- deepSTRAPP_outputs$updated_trait_data_with_Map_over_time[[2]]
-plot_densityMaps_overlay(densityMaps_10My$densityMaps)
+  # Plot updated densityMaps for time step n°2 = 10My
+  densityMaps_10My <- deepSTRAPP_outputs$updated_trait_data_with_Map_over_time[[2]]
+  plot_densityMaps_overlay(densityMaps_10My$densityMaps)
 
-# Plot diversification rates on updated phylogeny for time step n°2
-BAMM_object_10My <- deepSTRAPP_outputs$updated_BAMM_objects_over_time[[2]]
-plot_BAMM_rates(BAMM_object = BAMM_object_10My,
-  legend = TRUE, labels = FALSE,
-  colorbreaks = BAMM_object_10My$initial_colorbreaks$net_diversification)
+ # Plot diversification rates on updated phylogeny for time step n°2
+  BAMM_object_10My <- deepSTRAPP_outputs$updated_BAMM_objects_over_time[[2]]
+  plot_BAMM_rates(BAMM_object = BAMM_object_10My,
+    legend = TRUE, labels = FALSE,
+    colorbreaks = BAMM_object_10My$initial_colorbreaks$net_diversification)
 
-## Visualize test results
+  ## Visualize test results
 
-# Plot p-values of Mann-Whitney-Wilcoxon tests across all time-steps
-plot_STRAPP_pvalues_over_time(
-   deepSTRAPP_outputs = deepSTRAPP_outputs,
-   alpha = 0.05)
+  # Plot p-values of Mann-Whitney-Wilcoxon tests across all time-steps
+  plot_STRAPP_pvalues_over_time(
+     deepSTRAPP_outputs = deepSTRAPP_outputs,
+     alpha = 0.05)
 
-# Plot evolution of mean rates through time
-plot_rates_through_time(deepSTRAPP_outputs = deepSTRAPP_outputs,
-   colors_per_levels = colors_per_ranges)
+  # Plot evolution of mean rates through time
+  plot_rates_through_time(deepSTRAPP_outputs = deepSTRAPP_outputs,
+     colors_per_levels = colors_per_ranges)
 
-# Plot rates vs. trait values across branches for time step n°2 = 10 My
-plot_rates_vs_trait_data_for_focal_time(
-   deepSTRAPP_outputs = deepSTRAPP_outputs,
-   focal_time = 10,
-   colors_per_levels = colors_per_ranges)
+  # Plot rates vs. trait values across branches for time step n°2 = 10 My
+  plot_rates_vs_trait_data_for_focal_time(
+     deepSTRAPP_outputs = deepSTRAPP_outputs,
+     focal_time = 10,
+     colors_per_levels = colors_per_ranges)
 
-# Plot histogram of Mann-Whitney-Wilcoxon test stats for time step n°2 = 10My
-plot_histogram_STRAPP_test_for_focal_time(
-   deepSTRAPP_outputs = deepSTRAPP_outputs,
-   focal_time = 10)
+  # Plot histogram of Mann-Whitney-Wilcoxon test stats for time step n°2 = 10My
+  plot_histogram_STRAPP_test_for_focal_time(
+     deepSTRAPP_outputs = deepSTRAPP_outputs,
+     focal_time = 10)
 
-# Plot histograms of Mann-Whitney-Wilcoxon test stats for all time-steps (One plot per time-step)
-plot_histograms_STRAPP_tests_over_time(
-   deepSTRAPP_outputs = deepSTRAPP_outputs,
-   display_plots = TRUE,
-   plot_posthoc_tests = FALSE)
+  # Plot histograms of Mann-Whitney-Wilcoxon test stats for all time-steps (One plot per time-step)
+  plot_histograms_STRAPP_tests_over_time(
+     deepSTRAPP_outputs = deepSTRAPP_outputs,
+     display_plots = TRUE,
+     plot_posthoc_tests = FALSE)
+}
 
 }
 \seealso{
