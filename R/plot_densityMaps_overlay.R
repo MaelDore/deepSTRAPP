@@ -33,7 +33,7 @@
 #' If `PDF_file_path` is provided, the function exports the plot into a PDF file.
 #'
 #' @author Maël Doré
-#' @author Original functions by Liam Revell in R package [phytools]. Contact: \email{liam.revell@umb.edu}
+#' @author Original functions by Liam Revell in R package `{phytools}`. Contact: \email{liam.revell@umb.edu}
 #'
 #' @seealso [phytools::plot.densityMap()] [phytools::plotSimmap()]
 #'

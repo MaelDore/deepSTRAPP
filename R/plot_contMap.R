@@ -4,7 +4,7 @@
 #' @description Plot on a time-calibrated phylogeny the evolution of a continuous trait as
 #'   summarized in a `contMap` object typically generated with [deepSTRAPP::prepare_trait_data()].
 #'
-#'   This function is a wrapper of original functions from the R package [phytools]:
+#'   This function is a wrapper of original functions from the R package `{phytools}`:
 #'   * Step 1: Use [phytools::setMap()] to update the color scale if requested.
 #'   * Step 2: Use [phytools::plot.contMap()] to plot the mapped phylogeny.
 #'
@@ -31,7 +31,7 @@
 #' An object of class `"contMap"` with an (optionally) updated color scale (`$cols`) is returned invisibly.
 #'
 #' @author Maël Doré
-#' @author Original functions by Liam Revell in R package [phytools]. Contact: \email{liam.revell@umb.edu}
+#' @author Original functions by Liam Revell in R package `{phytools}`. Contact: \email{liam.revell@umb.edu}
 #'
 #' @seealso [phytools::plot.contMap()] [deepSTRAPP::plot_densityMaps_overlay()]
 #'

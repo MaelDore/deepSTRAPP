@@ -23,7 +23,7 @@
 #'   binary presence/absence in each area (coded as unique CAPITAL letter). In this case, columns are unique areas, rows are taxa,
 #'   and values are integer (0/1) signaling absence or presence of the taxa in the area.
 #' @param trait_data_type Character string. Type of trait data. Either: "continuous", "categorical" or "biogeographic".
-#' @param phylo Time-calibrated phylogeny. Object of class `"phylo"` as defined in [ape].
+#' @param phylo Time-calibrated phylogeny. Object of class `"phylo"` as defined in `{ape}`.
 #'   Tip labels (`phylo$tip.label`) should match names in `tip_data`.
 #' @param seed Integer. Set the seed to ensure reproducibility. Default is `NULL` (a random seed is used).
 #' @param evolutionary_models (Vector of) character string(s). To provide the set of evolutionary models to fit on the data.
@@ -3247,7 +3247,7 @@ densityMap_custom <- function (trees, res = 100, fsize = NULL, ftype = NULL, lwd
 #' @title Convert Biogeographic Stochastic Map (BSM) to phytools SIMMAP stochastic map (SM) format
 #'
 #' @description These functions converts a Biogeographic Stochastic Map (BSM) output from BioGeoBEARS into
-#'  a `simmap` object from R package [phytools] (See [phytools::make.simmap()]).
+#'  a `simmap` object from R package `{phytools}` (See [phytools::make.simmap()]).
 #'
 #'  They require a model fit with `BioGeoBEARS::bears_optim_run()` and the output of a Biogeographic Stochastic Mapping
 #'  performed with `BioGeoBEARS::runBSM()` to produce `simmap` objects as phylogenies with the associated
@@ -3291,7 +3291,7 @@ densityMap_custom <- function (trees, res = 100, fsize = NULL, ftype = NULL, lwd
 #'
 #' @param model_fit A BioGeoBEARS results object, produced by ML inference via `BioGeoBEARS::bears_optim_run()`.
 #' @param phylo Time-calibrated phylogeny used in the BioGeoBEARS analyses to produce the historical biogeographic inference
-#'  and run the Biogeographic Stochastic Mapping. Object of class `"phylo"` as defined in [ape].
+#'  and run the Biogeographic Stochastic Mapping. Object of class `"phylo"` as defined in `{ape}`.
 #' @param BSM_output A list with two objects, a cladogenetic events table and an anagenetic events table, as the result of
 #'   Biogeographic Stochastic Mapping conducted with `BioGeoBEARS::runBSM()`.
 #' @param sim_index Integer. Index of the biogeographic simulation targeted to produce the `simmap` with [BSM_to_phytools_simmap()].
@@ -3308,7 +3308,7 @@ densityMap_custom <- function (trees, res = 100, fsize = NULL, ftype = NULL, lwd
 #'
 #' @return The [BSM_to_phytools_simmap()] function returns a list with two elements:
 #'   * `$simmap` A unique `simmap` for a given biogeographic simulation as an object of classes `c("simmap", "phylo")`.
-#'     This is a modified [ape] tree with additional elements to report range mapping, model parameters and likelihood.
+#'     This is a modified `{ape}` tree with additional elements to report range mapping, model parameters and likelihood.
 #'     - `$maps` A list of named numerical vectors. Provides the mapping of ranges along each remaining edge.
 #'       Names are the ranges. Values are residence times in each state across segments
 #'     - `$mapped.edge` A numerical matrix. Provides the evolutionary time spent across ranges (columns) along the edges (rows).

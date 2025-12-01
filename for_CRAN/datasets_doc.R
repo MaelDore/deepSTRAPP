@@ -405,7 +405,7 @@
 #' @keywords datasets
 #' @name BAMM_template_diversification
 #'
-#' @references Authors: Daniel Rabosky (BAMM) & Pascal Title ([BAMMtools]). Modified by Maël Doré for deepSTRAPP.
+#' @references Authors: Daniel Rabosky (BAMM) & Pascal Title (`{BAMMtools}`). Modified by Maël Doré for deepSTRAPP.
 #' @seealso BAMM software website: \url{http://bamm-project.org/}
 #'
 "BAMM_template_diversification"
