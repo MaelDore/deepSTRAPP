@@ -91,7 +91,7 @@ the location of regime shifts estimated from a BAMM (Bayesian Analysis of Macroe
 Each branch is colored accroding to the estimated rates of speciation, extinction, or net diversification
 stored in an object of class \code{bammdata}. Rates can vary along time, thus colors evolved along individual branches.
 
-This function is a wrapper of original functions from the R package \link{BAMMtools}:
+This function is a wrapper of original functions from the R package \code{{BAMMtools}}:
 \itemize{
 \item Step 1: Use \code{\link[BAMMtools:plot]{BAMMtools::plot.bammdata()}} to map rates on the phylogeny.
 \item Step 2: Add the location of regime shifts with \code{\link[BAMMtools:addBAMMshifts]{BAMMtools::addBAMMshifts()}} (if \code{add_regime_shifts = TRUE}).
@@ -149,5 +149,5 @@ Associated functions in deepSTRAPP: \code{\link[=prepare_diversification_data]{p
 \author{
 Maël Doré
 
-Original functions by Mike Grundler & Pascal Title in R package \link{BAMMtools}.
+Original functions by Mike Grundler & Pascal Title in R package \code{{BAMMtools}}.
 }

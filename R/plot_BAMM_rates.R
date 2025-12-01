@@ -6,7 +6,7 @@
 #'   Each branch is colored accroding to the estimated rates of speciation, extinction, or net diversification
 #'   stored in an object of class `bammdata`. Rates can vary along time, thus colors evolved along individual branches.
 #'
-#'   This function is a wrapper of original functions from the R package [BAMMtools]:
+#'   This function is a wrapper of original functions from the R package `{BAMMtools}`:
 #'
 #'   * Step 1: Use [BAMMtools::plot.bammdata()] to map rates on the phylogeny.
 #'   * Step 2: Add the location of regime shifts with [BAMMtools::addBAMMshifts()] (if `add_regime_shifts = TRUE`).
@@ -71,7 +71,7 @@
 #'  * `$colordens`: A matrix of the kernel density estimates (column 2) of evolutionary rates (column 1) and the color (column 3) corresponding to each rate value.
 #'
 #' @author Maël Doré
-#' @author Original functions by Mike Grundler & Pascal Title in R package [BAMMtools].
+#' @author Original functions by Mike Grundler & Pascal Title in R package `{BAMMtools}`.
 #'
 #' @seealso Initial functions in BAMMtools: [BAMMtools::plot.bammdata()] [BAMMtools::addBAMMshifts()]
 #'

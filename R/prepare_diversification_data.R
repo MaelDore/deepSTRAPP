@@ -24,7 +24,7 @@
 #'
 #' @param BAMM_install_directory_path Character string. The path to the directory where BAMM is.
 #'   Use '/' to separate directory and sub-directories. The path must end with '/'.
-#' @param phylo Time-calibrated phylogeny. Object of class `"phylo"` as defined in R package [ape]. The phylogeny must be rooted and fully resolved.
+#' @param phylo Time-calibrated phylogeny. Object of class `"phylo"` as defined in R package `{ape}`. The phylogeny must be rooted and fully resolved.
 #'   BAMM does not currently work with fossils, so the tree must also be ultrametric.
 #' @param prefix_for_files Character string. Prefix to add to all BAMM files stored in the `BAMM_output_directory_path` if `keep_BAMM_outputs = TRUE`.
 #'   Files will be exported such as 'prefix_*' with an underscore separating the prefix and the file name. Default is `NULL` (no prefix is added).

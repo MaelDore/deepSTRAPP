@@ -29,7 +29,7 @@ prepare_diversification_data(
 \item{BAMM_install_directory_path}{Character string. The path to the directory where BAMM is.
 Use '/' to separate directory and sub-directories. The path must end with '/'.}
 
-\item{phylo}{Time-calibrated phylogeny. Object of class \code{"phylo"} as defined in R package \link{ape}. The phylogeny must be rooted and fully resolved.
+\item{phylo}{Time-calibrated phylogeny. Object of class \code{"phylo"} as defined in R package \code{{ape}}. The phylogeny must be rooted and fully resolved.
 BAMM does not currently work with fossils, so the tree must also be ultrametric.}
 
 \item{prefix_for_files}{Character string. Prefix to add to all BAMM files stored in the \code{BAMM_output_directory_path} if \code{keep_BAMM_outputs = TRUE}.
