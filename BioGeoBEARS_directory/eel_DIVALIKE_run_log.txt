@@ -1,4 +1,4 @@
-2025-08-11 16:32:38.353445 - Start DIVALIKE model run
+2025-12-01 14:26:22.150819 - Start DIVALIKE model run
 [1] "Note: tipranges_to_tip_condlikes_of_data_on_each_state() is converting a states_list with (0-based) numbers to the equivalent areanames"
 
 Your computer has 24 cores.
@@ -26,6 +26,21 @@ Now starting Maximum Likelihood (ML) parameter optimization with optimx()...
 
 Printing any warnings() that occurred during calc_loglike_for_optim():
 
+Warning messages:
+1: In prepare_trait_data(tip_data = eel_tip_data, trait_data_type = "biogeographic",  ... :
+  Entries in 'tip_data' were reordered to match 'phylo$tip.label.
+2: In (function (npt = min(n + 2L, 2L * n), rhobeg = NA,  ... :
+  unused control arguments ignored
+3: In (function (npt = min(n + 2L, 2L * n), rhobeg = NA,  ... :
+  unused control arguments ignored
+4: In (function (npt = min(n + 2L, 2L * n), rhobeg = NA,  ... :
+  unused control arguments ignored
+5: In (function (npt = min(n + 2L, 2L * n), rhobeg = NA,  ... :
+  unused control arguments ignored
+6: In (function (npt = min(n + 2L, 2L * n), rhobeg = NA,  ... :
+  unused control arguments ignored
+7: In (function (npt = min(n + 2L, 2L * n), rhobeg = NA,  ... :
+  unused control arguments ignored
 
 
 Results of optimx_scalecheck() below. Note: sometimes rescaling parameters may be helpful for ML searches, when the parameters have much different absolute sizes. This can be attempted by setting BioGeoBEARS_run_object$rescale_params = TRUE.
@@ -233,7 +248,7 @@ This is the output from optim, optimx, or GenSA. Check the help on those functio
 interpret this output and check for convergence issues:
 
                p1           p2     value fevals gevals niter convcode  kkt1 kkt2 xtime
-bobyqa 0.01606801 0.0008894642 -63.80815     49     NA    NA        0 FALSE TRUE  0.38
-2025-08-11 16:32:39.870645 - End of DIVALIKE model run
+bobyqa 0.01606801 0.0008894642 -63.80815     49     NA    NA        0 FALSE TRUE  0.42
+2025-12-01 14:26:23.46437 - End of DIVALIKE model run
 Total run time of:
-Time difference of 1.517075 secs
+Time difference of 1.313435 secs
