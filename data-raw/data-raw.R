@@ -619,6 +619,19 @@ plot(eel_biogeo_data$densityMaps[[1]]) # densityMap for range n°1 ("A")
 plot_densityMaps_overlay(eel_biogeo_data$densityMaps) # densityMaps with all unique areas overlaid
 plot_densityMaps_overlay(eel_biogeo_data$densityMaps_all_ranges) # densityMaps with all ranges (including multi-area ranges) overlaid
 
+# Remove problematic BioGeoBEARS classes so the object can be loaded by CRAN even if BioGeoBEARS is not installed
+
+class(eel_biogeo_data$best_model_fit)
+best_model_fit_unclassed <- unclass(eel_biogeo_data$best_model_fit)
+class(best_model_fit_unclassed)
+eel_biogeo_data$best_model_fit <- best_model_fit_unclassed
+
+class(eel_biogeo_data$best_model_fit$outputs)
+outputs_list <- lapply(slotNames(eel_biogeo_data$best_model_fit$outputs), function(s) slot(eel_biogeo_data$best_model_fit$outputs, s))
+names(outputs_list) <- slotNames(eel_biogeo_data$best_model_fit$outputs)
+class(outputs_list)
+eel_biogeo_data$best_model_fit$outputs <- outputs_list
+
 # Export in deepSTRAPP
 usethis::use_data(eel_biogeo_data, overwrite = TRUE)
 
