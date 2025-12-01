@@ -1,16 +1,27 @@
 ## R CMD check results
 
-0 errors | 1 warning | 3 notes
+0 errors | 1 warning | 5 notes
 
 * This is a new release.
 
-* Warning: 
+* Warning 1:
 
-Strong dependencies not in mainstream repositories:  BioGeoBEARS
+checking PDF version of manual ... WARNING
+  LaTeX errors when creating PDF version.
+  This typically indicates Rd problems.
+  LaTeX errors found:
+  
+There is no LaTex error reported. Please ignore.
+
+* Note 1: 
+
+Suggests or Enhances not in mainstream repositories:
+    BioGeoBEARS
   
   A core feature of deepSTRAPP relies on the BioGeoBEARS package, which is not hosted on CRAN 
   but is a well-established and actively maintained R package widely used in macroevolutionary research.
-  This dependency is essential for the package’s main functionality and should not present practical issues.
+  This package is indicated as Suggests and conditions are implemented to check for its presence when running functions that rely on BioGeoBEARS,
+  ensuring the package is functional even if BioGeoBEARS is not installed.
   
 Found the following (possibly) invalid URLs:
   URL: https://support.posit.co/hc/en-us/articles/200486498-Package-Development-Prerequisites
@@ -30,30 +41,40 @@ Found the following URLs which should use \doi (with the DOI name only):
   All listed DOIs are valid. The \doi{} tag was not used because it did not generate valid links in the rendered documentation within RStudio.
   Please ignore this warning.
   
-* Note 1:
+* Note 2:
 
 checking installed package size ... NOTE
-  installed size is 41.0Mb
-      sub-directories of 1Mb or more:
-        data  33.6Mb
-        doc    4.8Mb
-        help   1.2Mb
+  installed size is 21.4Mb
+    sub-directories of 1Mb or more:
+      data  11.1Mb
+      doc    7.8Mb
+      help   1.1Mb
       
 This package implements macroevolutionary modeling on large phylogenies, which inherently generates sizable data objects.
 To provide meaningful and reproducible examples, the package includes a few representative datasets that reflect typical outputs of its workflow.
-These datasets account for the increased overall package size.
+These datasets, which have been reduced to the bare minimum, account for the increased overall package size. 
+Pre-rendered visual outputs for vignettes, which replace even more massive datasets, are also included and contribute to the overall size.
 As the package is designed for downstream analyses of time-calibrated phylogenies and is not intended as a dependency for other packages, its large size should not pose practical issues.
     
-* Note 2:
+* Note 3:
 
-checking examples ... [487s] NOTE
+checking examples ... [178s] NOTE
   Examples with CPU (user + system) or elapsed time > 5s
 
 As with the package size, the examples involve large datasets and objects.
 Most time-consuming steps have been shortened using pre-computed data, which account for the package size,
 but some functions (e.g., plotting) inherently require longer runtimes that cannot be further reduced.
 
-* Note 3:
+* Note 4:
 
 checking for future file timestamps ... NOTE
   unable to verify current time
+
+* Note 5:
+
+checking for non-standard things in the check directory ... NOTE
+  Found the following files/directories:
+    'deepSTRAPP-manual.tex
+    
+This file is not present in the directory. This is a consequence of the failure to produce the Latex manual.
+
