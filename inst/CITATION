@@ -1,11 +1,11 @@
 bibentry(
   bibtype  = "Article",
-  title    = "deepSTRAPP: Testing for differences in diversification rates over deep evolutionary time ",
+  title    = "deepSTRAPP: Testing for differences in diversification rates over deep evolutionary time",
   author   = "Maël Doré, Bonnie B. Blaimer",
   journal  = "TBA",
   year     = 2025,
   volume   = "TBA",
   number   = "TBA",
   pages    = "TBA",
-  doi      = "TBA"
+  doi      = ""
 )
