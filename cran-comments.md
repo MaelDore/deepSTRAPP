@@ -1,23 +1,16 @@
 ## R CMD check results
 
-0 errors | 1 warning | 5 notes
+0 errors | 0 warning | 3 notes
 
 * This is a new release.
-
-* Warning 1:
-
-checking PDF version of manual ... WARNING
-  LaTeX errors when creating PDF version.
-  This typically indicates Rd problems.
-  LaTeX errors found:
-  
-There is no LaTex error reported. Please ignore.
 
 * Note 1: 
 
 Suggests or Enhances not in mainstream repositories:
     BioGeoBEARS
-  
+Availability using Additional_repositories specification:
+  BioGeoBEARS   yes   https://maeldore.github.io/drat
+
   A core feature of deepSTRAPP relies on the BioGeoBEARS package, which is not hosted on CRAN 
   but is a well-established and actively maintained R package widely used in macroevolutionary research.
   This package is indicated as Suggests and conditions are implemented to check for its presence when running functions that rely on BioGeoBEARS,
@@ -29,13 +22,6 @@ Found the following (possibly) invalid URLs:
   This URL is valid, but the server blocks automated requests.
   Please ignore this warning.
   
-Found the following (possibly) invalid DOIs:
-    DOI: TBA
-      From: inst/CITATION
-      Message: Invalid DOI
-      
-  This is the DOI of the future research paper. This will be updated as soon as this research is published.
-
 Found the following URLs which should use \doi (with the DOI name only):
 
   All listed DOIs are valid. The \doi{} tag was not used because it did not generate valid links in the rendered documentation within RStudio.
@@ -65,16 +51,4 @@ As with the package size, the examples involve large datasets and objects.
 Most time-consuming steps have been shortened using pre-computed data, which account for the package size,
 but some functions (e.g., plotting) inherently require longer runtimes that cannot be further reduced.
 
-* Note 4:
-
-checking for future file timestamps ... NOTE
-  unable to verify current time
-
-* Note 5:
-
-checking for non-standard things in the check directory ... NOTE
-  Found the following files/directories:
-    'deepSTRAPP-manual.tex
-    
-This file is not present in the directory. This is a consequence of the failure to produce the Latex manual.
 
