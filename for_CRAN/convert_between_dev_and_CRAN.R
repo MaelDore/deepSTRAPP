@@ -7,6 +7,7 @@
 # Include doc for all datasets
 # Produce vignette visual outputs using code evaluation
 # Run all examples including loading of deepSTRAPP outputs
+# Add BioGeoBEARS as Imports with link through Remotes
 
 ### CRAN Releases ###
 
@@ -16,6 +17,7 @@
 # Do not include doc for deepSTRAPP datasets (only for binary data as used in the Main tutorial)
 # Produce vignette visual outputs based on pre-rendered PNG images
 # Do not run examples including loading of deepSTRAPP outputs
+# Add BioGeoBEARS as Suggests with link through Additional_repositories
 
 ### 1/ From development version to CRAN release ####
 
@@ -36,7 +38,11 @@ file.copy(from = "./for_CRAN/datasets_doc_for_CRAN.R", to = "./R/datasets_doc_fo
 prerendered_vignette_outputs_path <- list.files(path = "./for_CRAN/", pattern = ".PNG")
 file.copy(from = paste0("./for_CRAN/",prerendered_vignette_outputs_path), to = paste0("./vignettes/figures/",prerendered_vignette_outputs_path), overwrite = T)
 
-## 1.5/ Rerun check once done
+## 1.5/ Replace DESCRIPTION with BioGeoBEARS as Suggests with link through Additional_repositories
+unlink(x = "./DESCRIPTION", force = T)
+file.copy(from = "./for_CRAN/DESCRIPTION_for_CRAN", to = "./DESCRIPTION", overwrite = T)
+
+## 1.6/ Rerun check once done
 devtools::check()
 
 
@@ -59,6 +65,10 @@ file.copy(from = "./for_CRAN/datasets_doc.R", to = "./R/datasets_doc.R", overwri
 prerendered_vignette_outputs_path <- list.files(path = "./for_CRAN/", pattern = ".PNG")
 unlink(x = paste0("./vignettes/figures/",prerendered_vignette_outputs_path), force = T)
 
-## 2.5/ Rerun check once done
+## 2.5/ Replace DESCRIPTION with BioGeoBEARS as Imports with link through Remotes
+unlink(x = "./DESCRIPTION", force = T)
+file.copy(from = "./for_CRAN/DESCRIPTION", to = "./DESCRIPTION", overwrite = T)
+
+## 2.6/ Rerun check once done
 devtools::check()
 
