@@ -17,7 +17,7 @@ For a BAMM based on the proper time-calibrated phylogeny of ponerine ants, see t
 
 Source: Doré, M., Borowiec, M. L., Branstetter, M. G., Camacho, G. P., Fisher, B. L., Longino, J. T., Ward, P. S., Blaimer, B. B. (2025).
 Evolutionary history of ponerine ants highlights how the timing of dispersal events shapes modern biodiversity. Nature Communications, 16, 8297.
-\url{https://doi.org/10.1038/s41467-025-63709-3}
+\doi{10.1038/s41467-025-63709-3}
 }
 \details{
 An object of class \code{"bammdata"} containing information of diversification dynamics
@@ -71,7 +71,7 @@ this mean diversification history.
 \references{
 Doré, M., Borowiec, M. L., Branstetter, M. G., Camacho, G. P., Fisher, B. L., Longino, J. T., Ward, P. S., Blaimer, B. B. (2025).
 Evolutionary history of ponerine ants highlights how the timing of dispersal events shapes modern biodiversity. Nature Communications, 16, 8297.
-\url{https://doi.org/10.1038/s41467-025-63709-3}
+\doi{10.1038/s41467-025-63709-3}
 }
 \seealso{
 BAMM software website: \url{http://bamm-project.org/}

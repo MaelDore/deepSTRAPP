@@ -188,11 +188,11 @@
 #' For a guided tutorial, see this vignette: \code{vignette("model_diversification_dynamics", package = "deepSTRAPP")}
 #'
 #' @references For BAMM: Rabosky, D. L. (2014). Automatic detection of key innovations, rate shifts, and diversity-dependence on phylogenetic trees.
-#'  PloS one, 9(2), e89543. DOI: \url{https://doi.org/10.1371/journal.pone.0089543}. Website: \url{http://bamm-project.org/}.
+#'  PloS one, 9(2), e89543. \doi{10.1371/journal.pone.0089543}. Website: \url{http://bamm-project.org/}.
 #'
 #'  For `{BAMMtools}`: Rabosky, D. L., Grundler, M., Anderson, C., Title, P., Shi, J. J., Brown, J. W., ... & Larson, J. G. (2014).
 #'   BAMM tools: an R package for the analysis of evolutionary dynamics on phylogenetic trees. Methods in Ecology and Evolution, 5(7), 701-707.
-#'   DOI: \url{https://doi.org/10.1111/2041-210X.12199}
+#'   \doi{10.1111/2041-210X.12199}
 #'
 #' @examples
 #' # ----- Example 1: Whale phylogeny ----- #

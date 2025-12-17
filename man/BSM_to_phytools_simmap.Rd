@@ -64,7 +64,9 @@ Initial functions in R package BioGeoBEARS by Nicholas J. Matzke:
 }
 \details{
 These functions are slight adaptations of original functions from the R Package \code{BioGeoBEARS} by N. Matzke.
+
 Initial functions: \code{BioGeoBEARS::BSM_to_phytools_SM()} \code{BioGeoBEARS::BSMs_to_phytools_SMs()}
+
 Changes:
 \itemize{
 \item Solves issue with differences in ranges allowed across time-strata.
@@ -139,7 +141,7 @@ data(eel.tree)
 }
 \references{
 For BioGeoBEARS: Matzke, Nicholas J. (2018). BioGeoBEARS: BioGeography with Bayesian (and likelihood) Evolutionary Analysis with R Scripts.
-version 1.1.1, published on GitHub on November 6, 2018. DOI: \url{http://dx.doi.org/10.5281/zenodo.1478250}. Website: \url{http://phylo.wikidot.com/biogeobears}.
+version 1.1.1, published on GitHub on November 6, 2018. \doi{10.5281/zenodo.1478250}. Website: \url{http://phylo.wikidot.com/biogeobears}.
 }
 \seealso{
 \code{\link[phytools:countSimmap]{phytools::countSimmap()}} \code{\link[phytools:make.simmap]{phytools::make.simmap()}}

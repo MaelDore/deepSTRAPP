@@ -11,7 +11,7 @@
 #'
 #'   Such tests are called STructured RAte Permutations on Phylogenies (STRAPP) as described in
 #'   Rabosky, D. L., & Huang, H. (2016). A robust semi-parametric test for detecting trait-dependent diversification.
-#'   Systematic biology, 65(2), 181-193. \url{https://doi.org/10.1093/sysbio/syv066}.
+#'   Systematic biology, 65(2), 181-193. \doi{10.1093/sysbio/syv066}.
 #'
 #'   The function is an extension of the original [BAMMtools::traitDependentBAMM()] function used to
 #'   carry out STRAPP test on extant time-calibrated phylogenies.
@@ -161,11 +161,11 @@
 #'   For a guided tutorial, see this vignette: \code{vignette("explore_STRAPP_test_types", package = "deepSTRAPP")}
 #'
 #' @references For STRAPP: Rabosky, D. L., & Huang, H. (2016). A robust semi-parametric test for detecting trait-dependent diversification.
-#'   Systematic biology, 65(2), 181-193. \url{https://doi.org/10.1093/sysbio/syv066}.
+#'   Systematic biology, 65(2), 181-193. \doi{10.1093/sysbio/syv066}.
 #'
 #'   For STRAPP in deep times: Doré, M., Borowiec, M. L., Branstetter, M. G., Camacho, G. P., Fisher, B. L., Longino, J. T., Ward, P. S., Blaimer, B. B., (2025),
 #'   Evolutionary history of ponerine ants highlights how the timing of dispersal events shapes modern biodiversity, Nature Communications.
-#'   \url{https://doi.org/10.1038/s41467-025-63709-3}
+#'   \doi{10.1038/s41467-025-63709-3}
 #'
 #' @examples
 #' # ------ Prepare data ------ #
@@ -1498,7 +1498,7 @@ compute_STRAPP_test_for_multinominal_data <- function (
 #' @author Maël Doré, Dan Rabosky, Huateng Huang
 #'
 #' @references Rabosky, D. L. and Huang, H., 2015. A Robust Semi-Parametric Test for Detecting Trait-Dependent Diversification.
-#'  Systematic Biology 65: 181-193.  [https://doi.org/10.1093/sysbio/syv066].
+#'  Systematic Biology 65: 181-193. \doi{10.1093/sysbio/syv066}.
 #'
 #' @noRd
 #'

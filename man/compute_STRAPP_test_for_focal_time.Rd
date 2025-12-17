@@ -131,7 +131,7 @@ defined by the diversification regimes identified on each tip (typically from a 
 
 Such tests are called STructured RAte Permutations on Phylogenies (STRAPP) as described in
 Rabosky, D. L., & Huang, H. (2016). A robust semi-parametric test for detecting trait-dependent diversification.
-Systematic biology, 65(2), 181-193. \url{https://doi.org/10.1093/sysbio/syv066}.
+Systematic biology, 65(2), 181-193. \doi{10.1093/sysbio/syv066}.
 
 The function is an extension of the original \code{\link[BAMMtools:traitDependentBAMM]{BAMMtools::traitDependentBAMM()}} function used to
 carry out STRAPP test on extant time-calibrated phylogenies.
@@ -292,11 +292,11 @@ STRAPP_results$posthoc_pairwise_tests$summary_df }
 }
 \references{
 For STRAPP: Rabosky, D. L., & Huang, H. (2016). A robust semi-parametric test for detecting trait-dependent diversification.
-Systematic biology, 65(2), 181-193. \url{https://doi.org/10.1093/sysbio/syv066}.
+Systematic biology, 65(2), 181-193. \doi{10.1093/sysbio/syv066}.
 
 For STRAPP in deep times: Doré, M., Borowiec, M. L., Branstetter, M. G., Camacho, G. P., Fisher, B. L., Longino, J. T., Ward, P. S., Blaimer, B. B., (2025),
 Evolutionary history of ponerine ants highlights how the timing of dispersal events shapes modern biodiversity, Nature Communications.
-\url{https://doi.org/10.1038/s41467-025-63709-3}
+\doi{10.1038/s41467-025-63709-3}
 }
 \seealso{
 Associated functions in deepSTRAPP: \code{\link[=extract_most_likely_trait_values_for_focal_time]{extract_most_likely_trait_values_for_focal_time()}} \code{\link[=update_rates_and_regimes_for_focal_time]{update_rates_and_regimes_for_focal_time()}}

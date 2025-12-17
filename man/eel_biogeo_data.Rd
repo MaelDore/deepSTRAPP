@@ -17,7 +17,7 @@ Initial data based on feeding habits was altered to be transformed into range "A
 This is NOT real biogeographic data. Please refer to the initial article for real data.
 
 Original data source: Collar, D. C., P. C. Wainwright, M. E. Alfaro, L. J. Revell, and R. S. Mehta (2014) Biting disrupts integration to spur skull evolution in eels. Nature Communications, 5, 5505.
-\href{https://doi.org/10.1038/ncomms6505}{https://doi.org/10.1038/ncomms6505}
+\doi{10.1038/ncomms6505}
 }
 \details{
 A list of 9 elements containing information on the evolution of geographic ranges in eels.
@@ -45,7 +45,7 @@ Each simmap object is a phylogeny with one simulated biogeographic history (i.e.
 }
 \references{
 Collar, D. C., P. C. Wainwright, M. E. Alfaro, L. J. Revell, and R. S. Mehta (2014) Biting disrupts integration to spur skull evolution in eels. Nature Communications, 5, 5505.
-\href{https://doi.org/10.1038/ncomms6505}{https://doi.org/10.1038/ncomms6505}
+\doi{10.1038/ncomms6505}
 }
 \seealso{
 \code{\link[=prepare_trait_data]{prepare_trait_data()}}

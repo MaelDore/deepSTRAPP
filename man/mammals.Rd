@@ -22,7 +22,7 @@ A list containing two elements:
 }
 
 Source: Slater, G. J. (2013). Phylogenetic evidence for a shift in the mode of mammalian body size evolution at the Cretaceous-Palaeogene boundary.
-Methods in Ecology and Evolution, 4(8), 734-744. \url{https://doi.org/10.1111/2041-210X.12084}
+Methods in Ecology and Evolution, 4(8), 734-744. \doi{10.1111/2041-210X.12084}
 }
 \details{
 Initial dataset from Slater, G. J. (2013). The R object was imported from R package \code{motmot} to include in deepSTRAPP.

@@ -12,7 +12,7 @@
 #'   defined by the diversification regimes identified on each tip (typically from a BAMM).
 #'   Such tests are called STructured RAte Permutations on Phylogenies (STRAPP) as described in
 #'   Rabosky, D. L., & Huang, H. (2016). A robust semi-parametric test for detecting trait-dependent diversification.
-#'   Systematic biology, 65(2), 181-193. \url{https://doi.org/10.1093/sysbio/syv066}.
+#'   Systematic biology, 65(2), 181-193. \doi{10.1093/sysbio/syv066}.
 #'
 #'   See the original [BAMMtools::traitDependentBAMM()] function used to
 #'   carry out STRAPP test on extant time-calibrated phylogenies.

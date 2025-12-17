@@ -292,11 +292,11 @@ plot_BAMM_rates(Ponerinae_BAMM_object,
 }
 \references{
 For BAMM: Rabosky, D. L. (2014). Automatic detection of key innovations, rate shifts, and diversity-dependence on phylogenetic trees.
-PloS one, 9(2), e89543. DOI: \url{https://doi.org/10.1371/journal.pone.0089543}. Website: \url{http://bamm-project.org/}.
+PloS one, 9(2), e89543. \doi{10.1371/journal.pone.0089543}. Website: \url{http://bamm-project.org/}.
 
 For \code{{BAMMtools}}: Rabosky, D. L., Grundler, M., Anderson, C., Title, P., Shi, J. J., Brown, J. W., ... & Larson, J. G. (2014).
 BAMM tools: an R package for the analysis of evolutionary dynamics on phylogenetic trees. Methods in Ecology and Evolution, 5(7), 701-707.
-DOI: \url{https://doi.org/10.1111/2041-210X.12199}
+\doi{10.1111/2041-210X.12199}
 }
 \seealso{
 \code{\link[=run_deepSTRAPP_for_focal_time]{run_deepSTRAPP_for_focal_time()}} \code{\link[=run_deepSTRAPP_over_time]{run_deepSTRAPP_over_time()}} \code{\link[=update_rates_and_regimes_for_focal_time]{update_rates_and_regimes_for_focal_time()}} \code{\link[=prepare_trait_data]{prepare_trait_data()}} \code{\link[=plot_BAMM_rates]{plot_BAMM_rates()}}
