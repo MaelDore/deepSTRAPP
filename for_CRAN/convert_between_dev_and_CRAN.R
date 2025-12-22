@@ -3,8 +3,9 @@
 
 ### Development versions
 
-# Contain all datasets, including deepSTRAPP outputs for all four types of data, and eel_biogeo_data with BioGeoBEARS classes
+# Contain all datasets, including deepSTRAPP and BAMM outputs for all four types of data, and eel_biogeo_data with BioGeoBEARS classes
 # Include doc for all datasets
+# Display HQ figure for deepSTRAPP workflow in README
 # Produce vignette visual outputs using code evaluation
 # Run all examples including loading of deepSTRAPP outputs
 # Add BioGeoBEARS as Imports with link through Remotes
@@ -12,9 +13,10 @@
 ### CRAN Releases ###
 
 # Needs to reduce size to comply with CRAN policies
-# Do not contain datasets of deepSTRAPP outputs (only for binary data as used in the Main tutorial)
+# Do not contain datasets of deepSTRAPP and BAMM output
 # Contains a modified version of eel_biogeo_data without BioGeoBEARS classes
-# Do not include doc for deepSTRAPP datasets (only for binary data as used in the Main tutorial)
+# Do not include doc for deepSTRAPP datasets
+# Display LQ figure for deepSTRAPP workflow in README
 # Produce vignette visual outputs based on pre-rendered PNG images
 # Do not run examples including loading of deepSTRAPP outputs
 # Add BioGeoBEARS as Suggests with link through Additional_repositories
@@ -42,12 +44,19 @@ file.copy(from = "./for_CRAN/datasets_doc_for_CRAN.R", to = "./R/datasets_doc_fo
 prerendered_vignette_outputs_path <- list.files(path = "./for_CRAN/", pattern = ".PNG")
 file.copy(from = paste0("./for_CRAN/",prerendered_vignette_outputs_path), to = paste0("./vignettes/figures/",prerendered_vignette_outputs_path), overwrite = T)
 
-## 1.5/ Replace DESCRIPTION with BioGeoBEARS as Suggests with link through Additional_repositories
+## 1.5/ Replace deepSTRAPP workflow figure with LQ version
+unlink(x = "./man/figures/deepSTRAPP_workflow.png", force = T)
+file.copy(from = "./for_CRAN/deepSTRAPP_workflow_LQ.png", to = "./man/figures/deepSTRAPP_workflow.png", overwrite = T)
+
+## 1.6/ Replace DESCRIPTION with BioGeoBEARS as Suggests with link through Additional_repositories
 unlink(x = "./DESCRIPTION", force = T)
 file.copy(from = "./for_CRAN/DESCRIPTION_for_CRAN", to = "./DESCRIPTION", overwrite = T)
 
-## 1.6/ Rerun check once done
+## 1.7/ Rerun check once done
+# Devtools check
 devtools::check()
+# Local check as in CRAN check tool
+devtools::check(cran = TRUE)
 
 
 ### 2/ From CRAN release to development version ####
@@ -73,10 +82,14 @@ file.copy(from = "./for_CRAN/datasets_doc.R", to = "./R/datasets_doc.R", overwri
 prerendered_vignette_outputs_path <- list.files(path = "./for_CRAN/", pattern = ".PNG")
 unlink(x = paste0("./vignettes/figures/",prerendered_vignette_outputs_path), force = T)
 
-## 2.5/ Replace DESCRIPTION with BioGeoBEARS as Imports with link through Remotes
+## 2.5/ Replace deepSTRAPP workflow figure with HQ version
+unlink(x = "./man/figures/deepSTRAPP_workflow.png", force = T)
+file.copy(from = "./for_CRAN/deepSTRAPP_workflow_HQ.png", to = "./man/figures/deepSTRAPP_workflow.png", overwrite = T)
+
+## 2.6/ Replace DESCRIPTION with BioGeoBEARS as Imports with link through Remotes
 unlink(x = "./DESCRIPTION", force = T)
 file.copy(from = "./for_CRAN/DESCRIPTION", to = "./DESCRIPTION", overwrite = T)
 
-## 2.6/ Rerun check once done
+## 2.7/ Rerun check once done
 devtools::check()
 
