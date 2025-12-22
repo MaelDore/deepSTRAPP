@@ -26,6 +26,9 @@ unlink(x = "./data/Ponerinae_deepSTRAPP_cont_old_calib_0_40.rda", force = T)
 unlink(x = "./data/Ponerinae_deepSTRAPP_cat_2lvl_old_calib_0_40.rda", force = T)
 unlink(x = "./data/Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40.rda", force = T)
 unlink(x = "./data/Ponerinae_deepSTRAPP_biogeo_old_calib_0_40.rda", force = T)
+unlink(x = "./data/Ponerinae_BAMM_object.rda", force = T)
+unlink(x = "./data/Ponerinae_BAMM_object_old_calib.rda", force = T)
+unlink(x = "./data/Ponerinae_BAMM_object_10My.rda", force = T)
 
 ## 1.2/ Replace eel_biogeo_data
 unlink(x = "./data/eel_biogeo_data.rda", force = T)
@@ -54,6 +57,9 @@ file.copy(from = "./for_CRAN/Ponerinae_deepSTRAPP_cont_old_calib_0_40.rda", to =
 file.copy(from = "./for_CRAN/Ponerinae_deepSTRAPP_cat_2lvl_old_calib_0_40.rda", to = "./data/Ponerinae_deepSTRAPP_cat_2lvl_old_calib_0_40.rda", overwrite = T)
 file.copy(from = "./for_CRAN/Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40.rda", to = "./data/Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40.rda", overwrite = T)
 file.copy(from = "./for_CRAN/Ponerinae_deepSTRAPP_biogeo_old_calib_0_40.rda", to = "./data/Ponerinae_deepSTRAPP_biogeo_old_calib_0_40.rda", overwrite = T)
+file.copy(from = "./for_CRAN/Ponerinae_BAMM_object.rda", to = "./data/Ponerinae_BAMM_object.rda", overwrite = T)
+file.copy(from = "./for_CRAN/Ponerinae_BAMM_object_old_calib.rda", to = "./data/Ponerinae_BAMM_object_old_calib.rda", overwrite = T)
+file.copy(from = "./for_CRAN/Ponerinae_BAMM_object_10My.rda", to = "./data/Ponerinae_BAMM_object_10My.rda", overwrite = T)
 
 ## 2.2/ Replace eel_biogeo_data
 unlink(x = "./data/eel_biogeo_data.rda", force = T)

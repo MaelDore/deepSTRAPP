@@ -57,7 +57,6 @@
 #' @seealso [deepSTRAPP::run_deepSTRAPP_over_time()]
 #'
 #' @examples
-#'
 #' if (deepSTRAPP:::is_dev_version())
 #' {
 #'   ## Load results of run_deepSTRAPP_over_time() for categorical data with 3-levels
