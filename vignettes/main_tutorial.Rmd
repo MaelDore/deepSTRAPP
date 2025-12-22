@@ -196,7 +196,7 @@ head(Ponerinae_ACE)
 
 # Run BAMM workflow with deepSTRAPP
 ## This step is time-consuming. You can skip it and load directly the result if needed
-Ponerinae_BAMM_object <- prepare_diversification_data(
+Ponerinae_BAMM_object_old_calib <- prepare_diversification_data(
    BAMM_install_directory_path = "./software/bamm-2.5.0/", # To adjust to your own path to BAMM
    phylo = Ponerinae_tree_old_calib,
    prefix_for_files = "Ponerinae_old_calib",
@@ -206,6 +206,9 @@ Ponerinae_BAMM_object <- prepare_diversification_data(
 
 # Load directly the result
 data(Ponerinae_BAMM_object_old_calib)
+# This dataset is only available in development versions installed from GitHub.
+# It is not available in CRAN versions.
+# Use remotes::install_github(repo = "MaelDore/deepSTRAPP") to get the latest development version.
 
 # Explore output
 str(Ponerinae_BAMM_object_old_calib, 1)

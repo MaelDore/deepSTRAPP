@@ -155,6 +155,9 @@ Ponerinae_BAMM_object_old_calib <- prepare_diversification_data(
 
 # Load directly the result
 data(Ponerinae_BAMM_object_old_calib)
+# This dataset is only available in development versions installed from GitHub.
+# It is not available in CRAN versions.
+# Use remotes::install_github(repo = "MaelDore/deepSTRAPP") to get the latest development version.
 
 # Explore output
 str(Ponerinae_BAMM_object_old_calib, 1)

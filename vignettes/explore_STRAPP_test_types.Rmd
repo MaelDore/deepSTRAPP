@@ -18,6 +18,21 @@ knitr::opts_chunk$set(
 
 ```{r setup, eval = TRUE, include = FALSE}
 library(deepSTRAPP)
+
+is_dev_version <- function (pkg = "deepSTRAPP")
+{
+  # # Check if ran on CRAN
+  # not_cran <- identical(Sys.getenv("NOT_CRAN"), "true") # || interactive()
+
+  # Version number check
+  version <- tryCatch(as.character(utils::packageVersion(pkg)), error = function(e) "")
+  dev_version <- grepl("\\.9000", version)
+
+  # not_cran || dev_version
+  
+  return(dev_version)
+}
+
 ```
 
 <br>
@@ -47,6 +62,13 @@ Please note that the trait data and phylogeny calibration used in these examples
 data("Ponerinae_tree_old_calib", package = "deepSTRAPP")
 ## Load trait df
 data("Ponerinae_trait_tip_data", package = "deepSTRAPP")
+
+## Load BAMM diversification outputs
+data("Ponerinae_BAMM_object_old_calib", package = "deepSTRAPP")
+# This dataset is only available in development versions installed from GitHub.
+# It is not available in CRAN versions.
+# Use remotes::install_github(repo = "MaelDore/deepSTRAPP") to get the latest development version.
+
 
 # Extract continuous trait data as a named vector
 Ponerinae_cont_tip_data <- setNames(object = Ponerinae_trait_tip_data$fake_cont_tip_data,
@@ -110,11 +132,13 @@ plot_histogram_STRAPP_test_for_focal_time(
 # The test is significant as the red line (quantile 5% = 0.063) is above the null expectation 
 # that Δ abs(Spearman rho-stats) = 0.
 ```
-```{r STRAPP_tests_cont_two_tailed_eval, fig.width = 8.5, fig.height = 6, out.width = "100%", eval = TRUE, echo = FALSE}
+```{r STRAPP_tests_cont_two_tailed_eval_dev, fig.width = 8.5, fig.height = 6, out.width = "100%", eval = is_dev_version(), echo = FALSE}
 ## Load phylogeny with old time-calibration
 data("Ponerinae_tree_old_calib", package = "deepSTRAPP")
 ## Load trait df
 data("Ponerinae_trait_tip_data", package = "deepSTRAPP")
+## Load BAMM diversification outputs
+data("Ponerinae_BAMM_object_old_calib", package = "deepSTRAPP")
 
 # Extract continuous trait data as a named vector
 Ponerinae_cont_tip_data <- setNames(object = Ponerinae_trait_tip_data$fake_cont_tip_data,
@@ -153,6 +177,12 @@ deepSTRAPP_output_two_tailed <- suppressWarnings(run_deepSTRAPP_for_focal_time(
 plot_histogram_STRAPP_test_for_focal_time(
    deepSTRAPP_outputs = deepSTRAPP_output_two_tailed)
 ```
+```{r STRAPP_tests_cont_two_tailed_eval_CRAN, fig.width = 8.5, fig.height = 6, out.width = "100%", eval = !is_dev_version(), echo = FALSE}
+
+# Plot pre-rendered graph
+knitr::include_graphics("figures/4_Explore_STRAPP_hypotheses_1.2_Example_continuous_two_tailed_1.PNG")
+
+```
 
 ```{r STRAPP_tests_cont_two_tailed_2}
 ## Plot rates vs. trait values
@@ -184,7 +214,7 @@ plot_rates_vs_trait_data_for_focal_time(deepSTRAPP_outputs = deepSTRAPP_output_t
 # We could have directly tested for hypothesis with a one-tailed test (See Step 3 below).
 
 ```
-```{r STRAPP_tests_cont_two_tailed_eval_2, fig.width = 8.5, fig.height = 6, out.width = "100%", eval = TRUE, echo = FALSE}
+```{r STRAPP_tests_cont_two_tailed_eval_2_dev, fig.width = 8.5, fig.height = 6, out.width = "100%", eval = is_dev_version(), echo = FALSE}
 
 ## Plot rates vs. trait values
 
@@ -194,6 +224,12 @@ color_scale = c("darkgreen", "limegreen", "orange", "red")
 # Plot mean rates vs. traits aggregated across all BAMM posterior samples
 plot_rates_vs_trait_data_for_focal_time(deepSTRAPP_outputs = deepSTRAPP_output_two_tailed,
                                         color_scale = color_scale)
+
+```
+```{r STRAPP_tests_cont_two_tailed_eval_2_CRAN, fig.width = 8.5, fig.height = 6, out.width = "100%", eval = !is_dev_version(), echo = FALSE}
+
+# Plot pre-rendered graph
+knitr::include_graphics("figures/4_Explore_STRAPP_hypotheses_1.2_Example_continuous_two_tailed_2.PNG")
 
 ```
 
@@ -241,7 +277,7 @@ plot_histogram_STRAPP_test_for_focal_time(
 # that Δ Spearman rho stat = 0.
 
 ```
-```{r STRAPP_tests_cont_one_tailed_eval, fig.width = 8.5, fig.height = 6, out.width = "100%", eval = TRUE, echo = FALSE}
+```{r STRAPP_tests_cont_one_tailed_eval_dev, fig.width = 8.5, fig.height = 6, out.width = "100%", eval = is_dev_version(), echo = FALSE}
 # We run a one-tailed STRAPP test for t = 10 Mya.
 deepSTRAPP_output_one_tailed <- suppressWarnings(run_deepSTRAPP_for_focal_time(
    contMap = Ponerinae_trait_object$contMap,
@@ -261,6 +297,12 @@ deepSTRAPP_output_one_tailed <- suppressWarnings(run_deepSTRAPP_for_focal_time(
 plot_histogram_STRAPP_test_for_focal_time(
   deepSTRAPP_outputs = deepSTRAPP_output_one_tailed)
 ```
+```{r STRAPP_tests_cont_one_tailed_eval_CRAN, fig.width = 8.5, fig.height = 6, out.width = "100%", eval = !is_dev_version(), echo = FALSE}
+
+# Plot pre-rendered graph
+knitr::include_graphics("figures/4_Explore_STRAPP_hypotheses_1.3_Example_continuous_one_tailed.PNG")
+
+```
 
 
 ```{r STRAPP_tests_cat_2lvl_two_tailed}
@@ -272,6 +314,13 @@ plot_histogram_STRAPP_test_for_focal_time(
 data("Ponerinae_tree_old_calib", package = "deepSTRAPP")
 ## Load trait df
 data("Ponerinae_trait_tip_data", package = "deepSTRAPP")
+
+## Load BAMM diversification outputs
+data("Ponerinae_BAMM_object_old_calib", package = "deepSTRAPP")
+# This dataset is only available in development versions installed from GitHub.
+# It is not available in CRAN versions.
+# Use remotes::install_github(repo = "MaelDore/deepSTRAPP") to get the latest development version.
+
 
 # Extract continuous trait data as a named vector
 Ponerinae_cat_2lvl_tip_data <- setNames(object = Ponerinae_trait_tip_data$fake_cat_2lvl_tip_data,
@@ -340,11 +389,13 @@ plot_histogram_STRAPP_test_for_focal_time(
 # The test is significant as the red line (quantile 5% = 463.6) is above the null expectation 
 # that Δ abs(Mann-Whitney-Wilcoxon U-stats) = 0.
 ```
-```{r STRAPP_tests_cat_2lvl_two_tailed_eval, fig.width = 8.5, fig.height = 6, out.width = "100%", eval = TRUE, echo = FALSE}
+```{r STRAPP_tests_cat_2lvl_two_tailed_eval_dev, fig.width = 8.5, fig.height = 6, out.width = "100%", eval = is_dev_version(), echo = FALSE}
 # Load phylogeny with old time-calibration
 data("Ponerinae_tree_old_calib", package = "deepSTRAPP")
 # Load trait df
 data("Ponerinae_trait_tip_data", package = "deepSTRAPP")
+## Load BAMM diversification outputs
+data("Ponerinae_BAMM_object_old_calib", package = "deepSTRAPP")
 
 # Extract continuous trait data as a named vector
 Ponerinae_cat_2lvl_tip_data <- setNames(object = Ponerinae_trait_tip_data$fake_cat_2lvl_tip_data,
@@ -381,6 +432,12 @@ deepSTRAPP_output_two_tailed <- suppressWarnings(run_deepSTRAPP_for_focal_time(
 plot_histogram_STRAPP_test_for_focal_time(
   deepSTRAPP_outputs = deepSTRAPP_output_two_tailed)
 ```
+```{r STRAPP_tests_cat_2lvl_two_tailed_eval_CRAN, fig.width = 8.5, fig.height = 6, out.width = "100%", eval = !is_dev_version(), echo = FALSE}
+
+# Plot pre-rendered graph
+knitr::include_graphics("figures/4_Explore_STRAPP_hypotheses_2.2_Example_cat_2lvl_two_tailed.PNG")
+
+```
 
 ```{r STRAPP_tests_cat_2lvl_two_tailed_2}
 ## Plot rates vs. trait values
@@ -408,12 +465,18 @@ plot_rates_vs_trait_data_for_focal_time(deepSTRAPP_outputs = deepSTRAPP_output_t
 # We could have directly tested for this hypothesis (i.e., "small" > "large") with a one-tailed test (See Step 3 below).
 
 ```
-```{r STRAPP_tests_cat_2lvl_two_tailed_eval2, fig.width = 8.5, fig.height = 6, out.width = "100%", eval = TRUE, echo = FALSE}
+```{r STRAPP_tests_cat_2lvl_two_tailed_eval_2_dev, fig.width = 8.5, fig.height = 6, out.width = "100%", eval = is_dev_version(), echo = FALSE}
 ## Plot rates vs. trait values
 
 # Plot mean rates vs. trait states aggregated across all BAMM posterior samples
 plot_rates_vs_trait_data_for_focal_time(deepSTRAPP_outputs = deepSTRAPP_output_two_tailed,
                                         colors_per_levels = colors_per_states)
+
+```
+```{r STRAPP_tests_cat_2lvl_two_tailed_eval_2_CRAN, fig.width = 8.5, fig.height = 6, out.width = "100%", eval = !is_dev_version(), echo = FALSE}
+
+# Plot pre-rendered graph
+knitr::include_graphics("figures/4_Explore_STRAPP_hypotheses_2.2_Example_cat_2lvl_two_tailed_2.PNG")
 
 ```
 
@@ -462,7 +525,7 @@ plot_histogram_STRAPP_test_for_focal_time(
 # that Δ Mann-Whitney-Wilcoxon U-stats = 0.
 
 ```
-```{r STRAPP_tests_cat_2lvl_one_tailed_eval, fig.width = 8.5, fig.height = 6, out.width = "100%", eval = TRUE, echo = FALSE}
+```{r STRAPP_tests_cat_2lvl_one_tailed_eval_dev, fig.width = 8.5, fig.height = 6, out.width = "100%", eval = is_dev_version(), echo = FALSE}
 # We run a one-tailed STRAPP test for t = 10 Mya.
 deepSTRAPP_output_one_tailed <- suppressWarnings(run_deepSTRAPP_for_focal_time(
    densityMaps = Ponerinae_trait_object$densityMaps,
@@ -482,6 +545,12 @@ deepSTRAPP_output_one_tailed <- suppressWarnings(run_deepSTRAPP_for_focal_time(
 plot_histogram_STRAPP_test_for_focal_time(
   deepSTRAPP_outputs = deepSTRAPP_output_one_tailed)
 ```
+```{r STRAPP_tests_cat_2lvl_one_tailed_eval_CRAN, fig.width = 8.5, fig.height = 6, out.width = "100%", eval = !is_dev_version(), echo = FALSE}
+
+# Plot pre-rendered graph
+knitr::include_graphics("figures/4_Explore_STRAPP_hypotheses_2.3_Example_cat_2lvl_one_tailed.PNG")
+
+```
 
 
 
@@ -489,10 +558,18 @@ plot_histogram_STRAPP_test_for_focal_time(
 # ------ Example 3: Categorical multinominal (3-levels) trait data ------ #
 
 #### Step 1: Prepare data ####
+
 ## Load phylogeny with old time-calibration
 data("Ponerinae_tree_old_calib", package = "deepSTRAPP")
 ## Load trait df
 data("Ponerinae_trait_tip_data", package = "deepSTRAPP")
+
+## Load BAMM diversification outputs
+data("Ponerinae_BAMM_object_old_calib", package = "deepSTRAPP")
+# This dataset is only available in development versions installed from GitHub.
+# It is not available in CRAN versions.
+# Use remotes::install_github(repo = "MaelDore/deepSTRAPP") to get the latest development version.
+
 
 # Extract continuous trait data as a named vector
 Ponerinae_cat_3lvl_tip_data <- setNames(object = Ponerinae_trait_tip_data$fake_cat_3lvl_tip_data,
@@ -568,11 +645,13 @@ plot_histogram_STRAPP_test_for_focal_time(
 # The test is significant as the red line (quantile 10% = 6.942) is above the null expectation 
 # that Δ Kruskal-Wallis H-stats = 0.
 ```
-```{r STRAPP_tests_cat_3lvl_overall_eval, fig.width = 8.5, fig.height = 6, out.width = "100%", eval = TRUE, echo = FALSE}
+```{r STRAPP_tests_cat_3lvl_overall_eval_dev, fig.width = 8.5, fig.height = 6, out.width = "100%", eval = is_dev_version(), echo = FALSE}
 # Load phylogeny with old time-calibration
 data("Ponerinae_tree_old_calib", package = "deepSTRAPP")
 # Load trait df
 data("Ponerinae_trait_tip_data", package = "deepSTRAPP")
+## Load BAMM diversification outputs
+data("Ponerinae_BAMM_object_old_calib", package = "deepSTRAPP")
 
 # Extract continuous trait data as a named vector
 Ponerinae_cat_3lvl_tip_data <- setNames(object = Ponerinae_trait_tip_data$fake_cat_3lvl_tip_data,
@@ -610,6 +689,12 @@ deepSTRAPP_output_overall <- suppressWarnings(run_deepSTRAPP_for_focal_time(
 plot_histogram_STRAPP_test_for_focal_time(
   deepSTRAPP_outputs = deepSTRAPP_output_overall)
 ```
+```{r STRAPP_tests_cat_3lvl_overall_eval_CRAN, fig.width = 8.5, fig.height = 6, out.width = "100%", eval = !is_dev_version(), echo = FALSE}
+
+# Plot pre-rendered graph
+knitr::include_graphics("figures/4_Explore_STRAPP_hypotheses_3.2_Example_cat_3lvl_overall.PNG")
+
+```
 
 ```{r STRAPP_tests_cat_3lvl_overall_2}
 ## Plot rates vs. trait values
@@ -640,12 +725,18 @@ plot_rates_vs_trait_data_for_focal_time(deepSTRAPP_outputs = deepSTRAPP_output_o
 # with both one-tailed hypothesis tests or two-tailed tests (See Steps 3 & 4 below).
 
 ```
-```{r STRAPP_tests_cat_3lvl_overall_eval2, fig.width = 8.5, fig.height = 6, out.width = "100%", eval = TRUE, echo = FALSE}
+```{r STRAPP_tests_cat_3lvl_overall_eval_2_dev, fig.width = 8.5, fig.height = 6, out.width = "100%", eval = is_dev_version(), echo = FALSE}
 ## Plot rates vs. trait values
 
 # Plot mean rates vs. trait states aggregated across all BAMM posterior samples
 plot_rates_vs_trait_data_for_focal_time(deepSTRAPP_outputs = deepSTRAPP_output_overall,
                                         colors_per_levels = colors_per_states)
+
+```
+```{r STRAPP_tests_cat_3lvl_overall_eval_2_CRAN, fig.width = 8.5, fig.height = 6, out.width = "100%", eval = !is_dev_version(), echo = FALSE}
+
+# Plot pre-rendered graph
+knitr::include_graphics("figures/4_Explore_STRAPP_hypotheses_3.2_Example_cat_3lvl_overall_2.PNG")
 
 ```
 
@@ -715,7 +806,7 @@ plot_histogram_STRAPP_test_for_focal_time(
 # or ("terricolous" > "arboreal") using one-tailed tests.
 # See Step 4 below for the one-tailed tests.
 ```
-```{r STRAPP_tests_cat_3lvl_two_tailed_eval, fig.width = 8.5, fig.height = 7, out.width = "100%", eval = TRUE, echo = FALSE}
+```{r STRAPP_tests_cat_3lvl_two_tailed_eval_dev, fig.width = 8.5, fig.height = 7, out.width = "100%", eval = is_dev_version(), echo = FALSE}
 # Load phylogeny with old time-calibration
 data("Ponerinae_tree_old_calib", package = "deepSTRAPP")
 # Load trait df
@@ -754,6 +845,12 @@ deepSTRAPP_output_two_tailed <- suppressWarnings(run_deepSTRAPP_for_focal_time(
 plot_histogram_STRAPP_test_for_focal_time(
   deepSTRAPP_outputs = deepSTRAPP_output_two_tailed,
   plot_posthoc_tests = TRUE)
+```
+```{r STRAPP_tests_cat_3lvl_two_tailed_eval_CRAN, fig.width = 8.5, fig.height = 7, out.width = "100%", eval = !is_dev_version(), echo = FALSE}
+
+# Plot pre-rendered graph
+knitr::include_graphics("figures/4_Explore_STRAPP_hypotheses_3.3_Example_cat_3lvl_two_tailed.PNG")
+
 ```
 
 ```{r STRAPP_tests_cat_3lvl_one_tailed}
@@ -807,7 +904,7 @@ plot_histogram_STRAPP_test_for_focal_time(
 # The conclusion is that it is the higher rates in "terricolous" ants vs. lower rates in "arboreal" ants
 # that drives the differences in rates recorded overall with the Kruskal-Wallis test.
 ```
-```{r STRAPP_tests_cat_3lvl_one_tailed_eval, fig.width = 8.5, fig.height = 6, out.width = "100%", eval = TRUE, echo = FALSE}
+```{r STRAPP_tests_cat_3lvl_one_tailed_eval_dev, fig.width = 8.5, fig.height = 6, out.width = "100%", eval = is_dev_version(), echo = FALSE}
 # We run a one-tailed STRAPP test for t = 10 Mya.
 deepSTRAPP_output_one_tailed <- suppressWarnings(run_deepSTRAPP_for_focal_time(
    densityMaps = Ponerinae_trait_object$densityMaps,
@@ -827,4 +924,10 @@ deepSTRAPP_output_one_tailed <- suppressWarnings(run_deepSTRAPP_for_focal_time(
 plot_histogram_STRAPP_test_for_focal_time(
   deepSTRAPP_outputs = deepSTRAPP_output_one_tailed,
   plot_posthoc_tests = TRUE)
+```
+```{r STRAPP_tests_cat_3lvl_one_tailed_eval_CRAN, fig.width = 8.5, fig.height = 6, out.width = "100%", eval = !is_dev_version(), echo = FALSE}
+
+# Plot pre-rendered graph
+knitr::include_graphics("figures/4_Explore_STRAPP_hypotheses_3.4_Example_cat_3lvl_one_tailed.PNG")
+
 ```
