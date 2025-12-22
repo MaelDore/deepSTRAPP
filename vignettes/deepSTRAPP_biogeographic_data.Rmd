@@ -202,7 +202,7 @@ Ponerinae_biogeo_data_old_calib <- prepare_trait_data(
    colors_per_levels = colors_per_ranges,
    seed = 1234) # Set seed for reproducibility
 
-## Load Result to save time
+## Load Result to save time 
 data(Ponerinae_biogeo_data_old_calib, package = "deepSTRAPP")
 
 # Explore output
