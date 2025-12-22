@@ -251,6 +251,7 @@ data("eel.data", package = "phytools")
 eel_data <- stats::setNames(eel.data$Max_TL_cm,
                             rownames(eel.data))
 
+\dontrun{  (May take several minutes to run)
 ## Map trait evolution on the phylogeny
 mapped_cont_traits <- prepare_trait_data(
    tip_data = eel_data,
@@ -271,7 +272,7 @@ mapped_cont_traits$model_selection_df # Summary of model selection
 # Parameter estimates and optimization summary of the best model
 # (Here, the best model is Pagel's lambda)
 mapped_cont_traits$best_model_fit$opt
-mapped_cont_traits$ace # Ancestral character estimates at internal nodes
+mapped_cont_traits$ace # Ancestral character estimates at internal nodes }
 
 # ----- Example 2: Categorical data ----- #
 

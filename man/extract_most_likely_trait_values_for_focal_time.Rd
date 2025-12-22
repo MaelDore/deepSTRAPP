@@ -213,6 +213,7 @@ ape::nodelabels(text = eel_cont_50$contMap$tree$initial_nodes_ID) }
 
 # ----- Example 2: Categorical trait ----- #
 
+\donttest{ # (May take several minutes to run)
 ## Load categorical trait data mapped on a phylogeny
 data(eel_cat_3lvl_data, package = "deepSTRAPP")
 
@@ -225,7 +226,6 @@ focal_time <- 10
 
 ## Extract trait data and update densityMaps for the given focal_time
 
-\donttest{ # (May take several minutes to run)
 # Extract from the densityMaps
 eel_cat_3lvl_data_10My <- extract_most_likely_trait_values_for_focal_time(
    densityMaps = eel_cat_3lvl_data$densityMaps,
@@ -250,6 +250,7 @@ plot_densityMaps_overlay(eel_cat_3lvl_data_10My$densityMaps) }
 
 # ----- Example 3: Biogeographic ranges ----- #
 
+\donttest{ # (May take several minutes to run)
 ## Load biogeographic range data mapped on a phylogeny
 data(eel_biogeo_data, package = "deepSTRAPP")
 
@@ -263,7 +264,6 @@ focal_time <- 10
 
 ## Extract trait data and update densityMaps for the given focal_time
 
-\donttest{ # (May take several minutes to run)
 # Extract from the densityMaps
 eel_biogeo_data_10My <- extract_most_likely_trait_values_for_focal_time(
    densityMaps = eel_biogeo_data$densityMaps,

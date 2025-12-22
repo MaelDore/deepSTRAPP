@@ -180,6 +180,7 @@ data(whale_BAMM_object, package = "deepSTRAPP")
 ## Set focal-time to 5 My
 focal_time = 5
 
+\donttest{ # (May take several minutes to run)
 ## Update the BAMM object
 whale_BAMM_object_5My <- update_rates_and_regimes_for_focal_time(
    BAMM_object = whale_BAMM_object,
@@ -205,7 +206,7 @@ abline(v = root_age - focal_time,
 
 ## Plot updated BAMM_object for t = 5 My
 plot_BAMM_rates(whale_BAMM_object_5My, add_regime_shifts = TRUE,
-                labels = TRUE, legend = TRUE, cex = 0.8)
+                labels = TRUE, legend = TRUE, cex = 0.8) }
 
 # ----- Example 2: Extant Ponerinae (1,534 taxa) ----- #
 

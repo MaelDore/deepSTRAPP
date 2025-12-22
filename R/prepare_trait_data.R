@@ -196,6 +196,7 @@
 #' eel_data <- stats::setNames(eel.data$Max_TL_cm,
 #'                             rownames(eel.data))
 #'
+#' \dontrun{  (May take several minutes to run)
 #' ## Map trait evolution on the phylogeny
 #' mapped_cont_traits <- prepare_trait_data(
 #'    tip_data = eel_data,
@@ -216,7 +217,7 @@
 #' # Parameter estimates and optimization summary of the best model
 #' # (Here, the best model is Pagel's lambda)
 #' mapped_cont_traits$best_model_fit$opt
-#' mapped_cont_traits$ace # Ancestral character estimates at internal nodes
+#' mapped_cont_traits$ace # Ancestral character estimates at internal nodes }
 #'
 #' # ----- Example 2: Categorical data ----- #
 #'
