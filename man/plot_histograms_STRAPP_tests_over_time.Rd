@@ -77,196 +77,202 @@ and \code{return_perm_data = TRUE} to record distributions of test statistics.
 Time-steps for which the data do not yield more than two states/ranges will show a warning and generate no plot.
 }
 \examples{
-# ----- Example 1: Continuous trait ----- #
-
-# Load fake trait df
-data(Ponerinae_trait_tip_data, package = "deepSTRAPP")
-# Load phylogeny with old calibration
-data(Ponerinae_tree_old_calib, package = "deepSTRAPP")
-# Load the BAMM_object summarizing 1000 posterior samples of BAMM
-data(Ponerinae_BAMM_object_old_calib, package = "deepSTRAPP")
-
-## Prepare trait data
-
-# Extract continuous trait data as a named vector
-Ponerinae_cont_tip_data <- setNames(object = Ponerinae_trait_tip_data$fake_cont_tip_data,
-                                    nm = Ponerinae_trait_tip_data$Taxa)
-
-# Select a color scheme from lowest to highest values
-color_scale = c("darkgreen", "limegreen", "orange", "red")
-
-# Get Ancestral Character Estimates based on a Brownian Motion model
-# To obtain values at internal nodes
-Ponerinae_ACE <- phytools::fastAnc(tree = Ponerinae_tree_old_calib, x = Ponerinae_cont_tip_data)
-
-# Run a Stochastic Mapping based on a Brownian Motion model
-# to interpolate values along branches and obtain a "contMap" object
-Ponerinae_contMap <- phytools::contMap(Ponerinae_tree, x = Ponerinae_cont_tip_data,
-                                       res = 100, # Number of time steps
-                                       plot = FALSE)
-# Plot contMap = stochastic mapping of continuous trait
-plot_contMap(contMap = Ponerinae_contMap,
-             color_scale = color_scale)
-
-## Set for time steps of 5 My. Will generate deepSTRAPP workflows for 0 to 40 Mya.
-# nb_time_steps <- 5
-time_step_duration <- 5
-time_range <- c(0, 40)
-
-\dontrun{  (May take several minutes to run)
-## Run deepSTRAPP on net diversification rates
-Ponerinae_deepSTRAPP_cont_old_calib_0_40 <- run_deepSTRAPP_over_time(
-   contMap = Ponerinae_contMap,
-   ace = Ponerinae_ACE,
-   tip_data = Ponerinae_cont_tip_data,
-   trait_data_type = "continuous",
-   BAMM_object = Ponerinae_BAMM_object_old_calib,
-   # nb_time_steps = nb_time_steps,
-   time_range = time_range,
-   time_step_duration = time_step_duration,
-   return_perm_data = TRUE,
-   extract_trait_data_melted_df = TRUE,
-   extract_diversification_data_melted_df = TRUE,
-   return_STRAPP_results = TRUE,
-   return_updated_trait_data_with_Map = TRUE,
-   return_updated_BAMM_object = TRUE,
-   verbose = TRUE,
-   verbose_extended = TRUE) }
-
 if (deepSTRAPP:::is_dev_version())
 {
-  ## Load directly trait data output
-  data(Ponerinae_deepSTRAPP_cont_old_calib_0_40, package = "deepSTRAPP")
-  # This dataset is only available in development versions installed from GitHub.
-  # It is not available in CRAN versions.
-  # Use remotes::install_github(repo = "MaelDore/deepSTRAPP") to get the latest development version.
+ # ----- Example 1: Continuous trait ----- #
 
-  ## Plot histograms of STRAPP overall test results
-  # Tests are Spearman's rank correlation tests
+ # Load fake trait df
+ data(Ponerinae_trait_tip_data, package = "deepSTRAPP")
+ # Load phylogeny with old calibration
+ data(Ponerinae_tree_old_calib, package = "deepSTRAPP")
 
-  # Plot all histograms
-  histogram_ggplots <- plot_histograms_STRAPP_tests_over_time(
-     deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_old_calib_0_40,
-     display_plot = TRUE,
-     # PDF_file_path = "./plot_STRAPP_histogram_overall_test.pdf",
-     plot_posthoc_tests = FALSE)
+ # Load the BAMM_object summarizing 1000 posterior samples of BAMM
+ data(Ponerinae_BAMM_object_old_calib, package = "deepSTRAPP")
+ # This dataset is only available in development versions installed from GitHub.
+ # It is not available in CRAN versions.
+ # Use remotes::install_github(repo = "MaelDore/deepSTRAPP") to get the latest development version.
 
-  # Print histogram for time step 1 = 0 My
-  print(histogram_ggplots[[1]])
-  # Adjust aesthetics of plot for time step 1 a posteriori
-  histogram_ggplot_adj <- histogram_ggplots[[1]] +
+ ## Prepare trait data
+
+ # Extract continuous trait data as a named vector
+ Ponerinae_cont_tip_data <- setNames(object = Ponerinae_trait_tip_data$fake_cont_tip_data,
+                                     nm = Ponerinae_trait_tip_data$Taxa)
+
+ # Select a color scheme from lowest to highest values
+ color_scale = c("darkgreen", "limegreen", "orange", "red")
+
+ # Get Ancestral Character Estimates based on a Brownian Motion model
+ # To obtain values at internal nodes
+ Ponerinae_ACE <- phytools::fastAnc(tree = Ponerinae_tree_old_calib, x = Ponerinae_cont_tip_data)
+
+ # Run a Stochastic Mapping based on a Brownian Motion model
+ # to interpolate values along branches and obtain a "contMap" object
+ Ponerinae_contMap <- phytools::contMap(Ponerinae_tree, x = Ponerinae_cont_tip_data,
+                                        res = 100, # Number of time steps
+                                        plot = FALSE)
+ # Plot contMap = stochastic mapping of continuous trait
+ plot_contMap(contMap = Ponerinae_contMap,
+              color_scale = color_scale)
+
+ ## Set for time steps of 5 My. Will generate deepSTRAPP workflows for 0 to 40 Mya.
+ # nb_time_steps <- 5
+ time_step_duration <- 5
+ time_range <- c(0, 40)
+
+ \dontrun{  (May take several minutes to run)
+ ## Run deepSTRAPP on net diversification rates
+ Ponerinae_deepSTRAPP_cont_old_calib_0_40 <- run_deepSTRAPP_over_time(
+    contMap = Ponerinae_contMap,
+    ace = Ponerinae_ACE,
+    tip_data = Ponerinae_cont_tip_data,
+    trait_data_type = "continuous",
+    BAMM_object = Ponerinae_BAMM_object_old_calib,
+    # nb_time_steps = nb_time_steps,
+    time_range = time_range,
+    time_step_duration = time_step_duration,
+    return_perm_data = TRUE,
+    extract_trait_data_melted_df = TRUE,
+    extract_diversification_data_melted_df = TRUE,
+    return_STRAPP_results = TRUE,
+    return_updated_trait_data_with_Map = TRUE,
+    return_updated_BAMM_object = TRUE,
+    verbose = TRUE,
+    verbose_extended = TRUE) }
+
+ ## Load directly trait data output
+ data(Ponerinae_deepSTRAPP_cont_old_calib_0_40, package = "deepSTRAPP")
+ # This dataset is only available in development versions installed from GitHub.
+ # It is not available in CRAN versions.
+ # Use remotes::install_github(repo = "MaelDore/deepSTRAPP") to get the latest development version.
+
+ ## Plot histograms of STRAPP overall test results
+ # Tests are Spearman's rank correlation tests
+
+ # Plot all histograms
+ histogram_ggplots <- plot_histograms_STRAPP_tests_over_time(
+    deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_old_calib_0_40,
+    display_plot = TRUE,
+    # PDF_file_path = "./plot_STRAPP_histogram_overall_test.pdf",
+    plot_posthoc_tests = FALSE)
+
+ # Print histogram for time step 1 = 0 My
+ print(histogram_ggplots[[1]])
+ # Adjust aesthetics of plot for time step 1 a posteriori
+ histogram_ggplot_adj <- histogram_ggplots[[1]] +
+    ggplot2::theme(plot.title = ggplot2::element_text(color = "red", size = 15))
+ print(histogram_ggplot_adj)
+
+ # ----- Example 2: Categorical data ----- #
+
+ ## Load data
+
+ # Load trait df
+ data(Ponerinae_trait_tip_data, package = "deepSTRAPP")
+ # Load phylogeny
+ data(Ponerinae_tree_old_calib, package = "deepSTRAPP")
+
+ # Load the BAMM_object summarizing 1000 posterior samples of BAMM
+ data(Ponerinae_BAMM_object_old_calib, package = "deepSTRAPP")
+ # This dataset is only available in development versions installed from GitHub.
+ # It is not available in CRAN versions.
+ # Use remotes::install_github(repo = "MaelDore/deepSTRAPP") to get the latest development version.
+
+ ## Prepare trait data
+
+ # Extract categorical data with 3-levels
+ Ponerinae_cat_3lvl_tip_data <- setNames(object = Ponerinae_trait_tip_data$fake_cat_3lvl_tip_data,
+                                         nm = Ponerinae_trait_tip_data$Taxa)
+ table(Ponerinae_cat_3lvl_tip_data)
+
+ # Select color scheme for states
+ colors_per_states <- c("forestgreen", "sienna", "goldenrod")
+ names(colors_per_states) <- c("arboreal", "subterranean", "terricolous")
+
+ \dontrun{  (May take several minutes to run)
+ ## Produce densityMaps using stochastic character mapping based on an ARD Mk model
+ Ponerinae_cat_3lvl_data_old_calib <- prepare_trait_data(
+    tip_data = Ponerinae_cat_3lvl_tip_data,
+    phylo = Ponerinae_tree_old_calib,
+    trait_data_type = "categorical",
+    colors_per_levels = colors_per_states,
+    evolutionary_models = "ARD",
+    nb_simulations = 100,
+    return_best_model_fit = TRUE,
+    return_model_selection_df = TRUE,
+    plot_map = FALSE) }
+
+ # Load directly trait data output
+ data(Ponerinae_cat_3lvl_data_old_calib, package = "deepSTRAPP")
+
+ ## Set for time steps of 5 My. Will generate deepSTRAPP workflows for 0 to 40 Mya.
+ # nb_time_steps <- 5
+ time_step_duration <- 5
+ time_range <- c(0, 40)
+
+ \dontrun{  (May take several minutes to run)
+ ## Run deepSTRAPP on net diversification rates across time-steps.
+ Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40 <- run_deepSTRAPP_over_time(
+    densityMaps = Ponerinae_cat_3lvl_data_old_calib$densityMaps,
+    ace = Ponerinae_cat_3lvl_data_old_calib$ace,
+    tip_data = Ponerinae_cat_3lvl_tip_data,
+    trait_data_type = "categorical",
+    BAMM_object = Ponerinae_BAMM_object_old_calib,
+    # nb_time_steps = nb_time_steps,
+    time_range = time_range,
+    time_step_duration = time_step_duration,
+    rate_type = "net_diversification",
+    seed = 1234, # Set for reproducibility
+    alpha = 0.10, # Select a generous level of significance for the sake of the example
+    posthoc_pairwise_tests = TRUE,
+    return_perm_data = TRUE,
+    extract_trait_data_melted_df = TRUE,
+    extract_diversification_data_melted_df = TRUE,
+    return_STRAPP_results = TRUE,
+    return_updated_trait_data_with_Map = TRUE,
+    return_updated_BAMM_object = TRUE,
+    verbose = TRUE,
+    verbose_extended = TRUE) }
+
+ ## Load directly deepSTRAPP output
+ data(Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40, package = "deepSTRAPP")
+ # This dataset is only available in development versions installed from GitHub.
+ # It is not available in CRAN versions.
+ # Use remotes::install_github(repo = "MaelDore/deepSTRAPP") to get the latest development version.
+
+ ## Explore output
+ str(Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40, max.level = 1)
+
+ ## Plot histograms of STRAPP overall test results #
+ # Tests are Kruskall-Wallis H tests when more than two states/ranges are present.
+ # Tests are Mann–Whitney–Wilcoxon rank-sum tests when only two states/ranges are present.
+
+ histogram_ggplots <- plot_histograms_STRAPP_tests_over_time(
+    deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40,
+    display_plot = TRUE,
+    # PDF_file_path = "./plot_STRAPP_histograms_overall_tests.pdf",
+    plot_posthoc_tests = FALSE)
+
+ # Print histogram for time step 1 = 0 My
+ print(histogram_ggplots[[1]])
+ # Adjust aesthetics of plot for time step 1 a posteriori
+ histogram_ggplot_adj <- histogram_ggplots[[1]] +
      ggplot2::theme(plot.title = ggplot2::element_text(color = "red", size = 15))
-  print(histogram_ggplot_adj)
-}
+ print(histogram_ggplot_adj)
 
+ ## Plot histograms of STRAPP post hoc test results ------ #
+ # Tests are Dunn's multiple comparison pairwise post hoc tests possible
+ # only when more than two states/ranges are present.
 
-# ----- Example 2: Categorical data ----- #
-
-## Load data
-
-# Load trait df
-data(Ponerinae_trait_tip_data, package = "deepSTRAPP")
-# Load phylogeny
-data(Ponerinae_tree_old_calib, package = "deepSTRAPP")
-# Load the BAMM_object summarizing 1000 posterior samples of BAMM
-data(Ponerinae_BAMM_object_old_calib, package = "deepSTRAPP")
-
-## Prepare trait data
-
-# Extract categorical data with 3-levels
-Ponerinae_cat_3lvl_tip_data <- setNames(object = Ponerinae_trait_tip_data$fake_cat_3lvl_tip_data,
-                                        nm = Ponerinae_trait_tip_data$Taxa)
-table(Ponerinae_cat_3lvl_tip_data)
-
-# Select color scheme for states
-colors_per_states <- c("forestgreen", "sienna", "goldenrod")
-names(colors_per_states) <- c("arboreal", "subterranean", "terricolous")
-
-\dontrun{  (May take several minutes to run)
-## Produce densityMaps using stochastic character mapping based on an ARD Mk model
-Ponerinae_cat_3lvl_data_old_calib <- prepare_trait_data(
-   tip_data = Ponerinae_cat_3lvl_tip_data,
-   phylo = Ponerinae_tree_old_calib,
-   trait_data_type = "categorical",
-   colors_per_levels = colors_per_states,
-   evolutionary_models = "ARD",
-   nb_simulations = 100,
-   return_best_model_fit = TRUE,
-   return_model_selection_df = TRUE,
-   plot_map = FALSE) }
-
-# Load directly trait data output
-data(Ponerinae_cat_3lvl_data_old_calib, package = "deepSTRAPP")
-
-## Set for time steps of 5 My. Will generate deepSTRAPP workflows for 0 to 40 Mya.
-# nb_time_steps <- 5
-time_step_duration <- 5
-time_range <- c(0, 40)
-
-\dontrun{  (May take several minutes to run)
-## Run deepSTRAPP on net diversification rates across time-steps.
-Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40 <- run_deepSTRAPP_over_time(
-   densityMaps = Ponerinae_cat_3lvl_data_old_calib$densityMaps,
-   ace = Ponerinae_cat_3lvl_data_old_calib$ace,
-   tip_data = Ponerinae_cat_3lvl_tip_data,
-   trait_data_type = "categorical",
-   BAMM_object = Ponerinae_BAMM_object_old_calib,
-   # nb_time_steps = nb_time_steps,
-   time_range = time_range,
-   time_step_duration = time_step_duration,
-   rate_type = "net_diversification",
-   seed = 1234, # Set for reproducibility
-   alpha = 0.10, # Select a generous level of significance for the sake of the example
-   posthoc_pairwise_tests = TRUE,
-   return_perm_data = TRUE,
-   extract_trait_data_melted_df = TRUE,
-   extract_diversification_data_melted_df = TRUE,
-   return_STRAPP_results = TRUE,
-   return_updated_trait_data_with_Map = TRUE,
-   return_updated_BAMM_object = TRUE,
-   verbose = TRUE,
-   verbose_extended = TRUE) }
-
-if (deepSTRAPP:::is_dev_version())
-{
-  ## Load directly deepSTRAPP output
-  data(Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40, package = "deepSTRAPP")
-  # This dataset is only available in development versions installed from GitHub.
-  # It is not available in CRAN versions.
-  # Use remotes::install_github(repo = "MaelDore/deepSTRAPP") to get the latest development version.
-
-  ## Explore output
-  str(Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40, max.level = 1)
-
-  ## Plot histograms of STRAPP overall test results #
-  # Tests are Kruskall-Wallis H tests when more than two states/ranges are present.
-  # Tests are Mann–Whitney–Wilcoxon rank-sum tests when only two states/ranges are present.
-
-  histogram_ggplots <- plot_histograms_STRAPP_tests_over_time(
+ histograms_ggplots_list <- plot_histograms_STRAPP_tests_over_time(
      deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40,
      display_plot = TRUE,
-     # PDF_file_path = "./plot_STRAPP_histograms_overall_tests.pdf",
-     plot_posthoc_tests = FALSE)
-  # Print histogram for time step 1 = 0 My
-  print(histogram_ggplots[[1]])
-  # Adjust aesthetics of plot for time step 1 a posteriori
-  histogram_ggplot_adj <- histogram_ggplots[[1]] +
-      ggplot2::theme(plot.title = ggplot2::element_text(color = "red", size = 15))
-  print(histogram_ggplot_adj)
+     # PDF_file_path = "./plot_STRAPP_histograms_posthoc_tests.pdf",
+     plot_posthoc_tests = TRUE)
 
-  ## Plot histograms of STRAPP post hoc test results ------ #
-  # Tests are Dunn's multiple comparison pairwise post hoc tests possible
-  # only when more than two states/ranges are present.
-
-  histograms_ggplots_list <- plot_histograms_STRAPP_tests_over_time(
-      deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40,
-      display_plot = TRUE,
-      # PDF_file_path = "./plot_STRAPP_histograms_posthoc_tests.pdf",
-      plot_posthoc_tests = TRUE)
-  # Print all histograms for time step 1 (= 0 My) one by one
-  print(histograms_ggplots_list[[1]])
-  # Plot all histograms for time step 1 (= 0 My) on one faceted plot
-  cowplot::plot_grid(plotlist = histograms_ggplots_list[[1]])
+ # Print all histograms for time step 1 (= 0 My) one by one
+ print(histograms_ggplots_list[[1]])
+ # Plot all histograms for time step 1 (= 0 My) on one faceted plot
+ cowplot::plot_grid(plotlist = histograms_ggplots_list[[1]])
 }
 
 }

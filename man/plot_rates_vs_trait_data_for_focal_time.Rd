@@ -112,154 +112,159 @@ among the outputs under \verb{$diversification_data_df_over_time}.
 For plotting all time-steps at once, see \code{\link[=plot_rates_vs_trait_data_over_time]{plot_rates_vs_trait_data_over_time()}}.
 }
 \examples{
-
-
-# ----- Example 1: Continuous trait ----- #
-
-# Load fake trait df
-data(Ponerinae_trait_tip_data, package = "deepSTRAPP")
-# Load phylogeny with old calibration
-data(Ponerinae_tree_old_calib, package = "deepSTRAPP")
-# Load the BAMM_object summarizing 1000 posterior samples of BAMM
-data(Ponerinae_BAMM_object_old_calib, package = "deepSTRAPP")
-
-## Prepare trait data
-
-# Extract continuous trait data as a named vector
-Ponerinae_cont_tip_data <- setNames(object = Ponerinae_trait_tip_data$fake_cont_tip_data,
-                                    nm = Ponerinae_trait_tip_data$Taxa)
-
-# Select a color scheme from lowest to highest values
-color_scale = c("darkgreen", "limegreen", "orange", "red")
-
-# Get Ancestral Character Estimates based on a Brownian Motion model
-# To obtain values at internal nodes
-Ponerinae_ACE <- phytools::fastAnc(tree = Ponerinae_tree_old_calib, x = Ponerinae_cont_tip_data)
-
-# Run a Stochastic Mapping based on a Brownian Motion model
-# to interpolate values along branches and obtain a "contMap" object
-Ponerinae_contMap <- phytools::contMap(Ponerinae_tree_old_calib, x = Ponerinae_cont_tip_data,
-                                       res = 100, # Number of time steps
-                                       plot = FALSE)
-# Plot contMap = stochastic mapping of continuous trait
-plot_contMap(contMap = Ponerinae_contMap,
-             color_scale = color_scale)
-
-## Set focal time to 10 Mya
-focal_time <- 10
-
-\dontrun{  (May take several minutes to run)
-## Run deepSTRAPP on net diversification rates for focal time = 10 Mya.
-
-Ponerinae_deepSTRAPP_cont_old_calib_10My <- run_deepSTRAPP_for_focal_time(
-   contMap = Ponerinae_contMap,
-   ace = Ponerinae_ACE,
-   tip_data = Ponerinae_cont_tip_data,
-   trait_data_type = "continuous",
-   BAMM_object = Ponerinae_BAMM_object_old_calib,
-   focal_time = focal_time,
-   rate_type = "net_diversification",
-   return_perm_data = TRUE,
-   # Need to be set to TRUE to save diversification data
-   extract_diversification_data_melted_df = TRUE,
-   # Need to be set to TRUE to save trait data
-   return_updated_trait_data_with_Map = TRUE,
-   return_updated_BAMM_object = TRUE)
-
-## Explore output
-str(Ponerinae_deepSTRAPP_cont_old_calib_10My, max.level = 1)
-
-# ------ Plot histogram of STRAPP overall test results from run_deepSTRAPP_for_focal_time() ------ #
-
-# Get plot
-rates_vs_trait_output <- plot_rates_vs_trait_data_for_focal_time(
-   deepSTRAPP_outputs = deepPonerinae_deepSTRAPP_cont_old_calib_10My,
-   color_scale = c("grey80", "orange"),
-   display_plot = TRUE,
-   # PDF_file_path = "./plot_rates_vs_trait_10My.pdf"
-   return_mean_rates_vs_trait_data_df = TRUE)
-# Adjust aesthetics a posteriori
-rates_vs_trait_ggplot_adj <- rates_vs_trait_output$rates_vs_trait_ggplot +
-   ggplot2::theme(plot.title = ggplot2::element_text(color = "red", size = 15))
-print(rates_vs_trait_ggplot_adj)
-
-# Explore melted data.frame of mean rates and trait values extracted for the given focal time.
-head(rates_vs_trait_output$mean_rates_vs_trait_data_df) }
-
-
-# ------ Plot histogram of STRAPP overall test results from run_deepSTRAPP_over_time() ------ #
-
 if (deepSTRAPP:::is_dev_version())
 {
-  ## Load directly outputs from run_deepSTRAPP_over_time()
-  data(Ponerinae_deepSTRAPP_cont_old_calib_0_40, package = "deepSTRAPP")
-  # This dataset is only available in development versions installed from GitHub.
-  # It is not available in CRAN versions.
-  # Use remotes::install_github(repo = "MaelDore/deepSTRAPP") to get the latest development version.
+ # ----- Example 1: Continuous trait ----- #
+
+ # Load fake trait df
+ data(Ponerinae_trait_tip_data, package = "deepSTRAPP")
+ # Load phylogeny with old calibration
+ data(Ponerinae_tree_old_calib, package = "deepSTRAPP")
+
+ # Load the BAMM_object summarizing 1000 posterior samples of BAMM
+ data(Ponerinae_BAMM_object_old_calib, package = "deepSTRAPP")
+ # This dataset is only available in development versions installed from GitHub.
+ # It is not available in CRAN versions.
+ # Use remotes::install_github(repo = "MaelDore/deepSTRAPP") to get the latest development version.
+
+ ## Prepare trait data
+
+ # Extract continuous trait data as a named vector
+  Ponerinae_cont_tip_data <- setNames(object = Ponerinae_trait_tip_data$fake_cont_tip_data,
+                                     nm = Ponerinae_trait_tip_data$Taxa)
+
+ # Select a color scheme from lowest to highest values
+ color_scale = c("darkgreen", "limegreen", "orange", "red")
+
+ # Get Ancestral Character Estimates based on a Brownian Motion model
+ # To obtain values at internal nodes
+ Ponerinae_ACE <- phytools::fastAnc(tree = Ponerinae_tree_old_calib, x = Ponerinae_cont_tip_data)
+
+ # Run a Stochastic Mapping based on a Brownian Motion model
+ # to interpolate values along branches and obtain a "contMap" object
+ Ponerinae_contMap <- phytools::contMap(Ponerinae_tree_old_calib, x = Ponerinae_cont_tip_data,
+                                        res = 100, # Number of time steps
+                                        plot = FALSE)
+ # Plot contMap = stochastic mapping of continuous trait
+ plot_contMap(contMap = Ponerinae_contMap,
+              color_scale = color_scale)
+
+ ## Set focal time to 10 Mya
+ focal_time <- 10
+
+ \dontrun{  (May take several minutes to run)
+ ## Run deepSTRAPP on net diversification rates for focal time = 10 Mya.
+
+ Ponerinae_deepSTRAPP_cont_old_calib_10My <- run_deepSTRAPP_for_focal_time(
+    contMap = Ponerinae_contMap,
+    ace = Ponerinae_ACE,
+    tip_data = Ponerinae_cont_tip_data,
+    trait_data_type = "continuous",
+    BAMM_object = Ponerinae_BAMM_object_old_calib,
+    focal_time = focal_time,
+    rate_type = "net_diversification",
+    return_perm_data = TRUE,
+    # Need to be set to TRUE to save diversification data
+    extract_diversification_data_melted_df = TRUE,
+    # Need to be set to TRUE to save trait data
+    return_updated_trait_data_with_Map = TRUE,
+    return_updated_BAMM_object = TRUE)
+
+ ## Explore output
+ str(Ponerinae_deepSTRAPP_cont_old_calib_10My, max.level = 1)
+
+ # ----- Plot histogram of STRAPP overall test results from run_deepSTRAPP_for_focal_time() ----- #
+
+ # Get plot
+ rates_vs_trait_output <- plot_rates_vs_trait_data_for_focal_time(
+    deepSTRAPP_outputs = deepPonerinae_deepSTRAPP_cont_old_calib_10My,
+    color_scale = c("grey80", "orange"),
+    display_plot = TRUE,
+    # PDF_file_path = "./plot_rates_vs_trait_10My.pdf"
+    return_mean_rates_vs_trait_data_df = TRUE)
+ # Adjust aesthetics a posteriori
+ rates_vs_trait_ggplot_adj <- rates_vs_trait_output$rates_vs_trait_ggplot +
+    ggplot2::theme(plot.title = ggplot2::element_text(color = "red", size = 15))
+ print(rates_vs_trait_ggplot_adj)
+
+ # Explore melted data.frame of mean rates and trait values extracted for the given focal time.
+ head(rates_vs_trait_output$mean_rates_vs_trait_data_df) }
+
+ # ----- Plot histogram of STRAPP overall test results from run_deepSTRAPP_over_time() ----- #
+
+ ## Load directly outputs from run_deepSTRAPP_over_time()
+ data(Ponerinae_deepSTRAPP_cont_old_calib_0_40, package = "deepSTRAPP")
+ # This dataset is only available in development versions installed from GitHub.
+ # It is not available in CRAN versions.
+ # Use remotes::install_github(repo = "MaelDore/deepSTRAPP") to get the latest development version.
 
  # Select focal_time = 10My
  focal_time <- 10
 
-  # Get plot
-  rates_vs_trait_output <- plot_rates_vs_trait_data_for_focal_time(
-     deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_old_calib_0_40,
-     focal_time = focal_time,
-     color_scale = c("grey80", "purple"),
+ # Get plot
+ rates_vs_trait_output <- plot_rates_vs_trait_data_for_focal_time(
+    deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_old_calib_0_40,
+    focal_time = focal_time,
+    color_scale = c("grey80", "purple"),
     display_plot = TRUE)
-     # PDF_file_path = "./plot_rates_vs_trait_10My.pdf"
+    # PDF_file_path = "./plot_rates_vs_trait_10My.pdf"
 
-  # Adjust aesthetics a posteriori
-  rates_vs_trait_ggplot_adj <- rates_vs_trait_output$rates_vs_trait_ggplot +
+ # Adjust aesthetics a posteriori
+ rates_vs_trait_ggplot_adj <- rates_vs_trait_output$rates_vs_trait_ggplot +
      ggplot2::theme(plot.title = ggplot2::element_text(color = "red", size = 15))
-  print(rates_vs_trait_ggplot_adj)
-}
+ print(rates_vs_trait_ggplot_adj)
 
 
-# ----- Example 2: Categorical trait ----- #
+ # ----- Example 2: Categorical trait ----- #
 
-## Load data
+ ## Load data
 
-# Load phylogeny
-data(Ponerinae_tree, package = "deepSTRAPP")
-# Load trait df
-data(Ponerinae_trait_tip_data, package = "deepSTRAPP")
-# Load the BAMM_object summarizing 1000 posterior samples of BAMM
-data(Ponerinae_BAMM_object_old_calib, package = "deepSTRAPP")
+ # Load phylogeny
+ data(Ponerinae_tree, package = "deepSTRAPP")
+ # Load trait df
+ data(Ponerinae_trait_tip_data, package = "deepSTRAPP")
 
-## Prepare trait data
+ # Load the BAMM_object summarizing 1000 posterior samples of BAMM
+ data(Ponerinae_BAMM_object_old_calib, package = "deepSTRAPP")
+ # This dataset is only available in development versions installed from GitHub.
+ # It is not available in CRAN versions.
+ # Use remotes::install_github(repo = "MaelDore/deepSTRAPP") to get the latest development version.
 
-# Extract categorical data with 3-levels
-Ponerinae_cat_3lvl_tip_data <- setNames(object = Ponerinae_trait_tip_data$fake_cat_3lvl_tip_data,
-                                        nm = Ponerinae_trait_tip_data$Taxa)
-table(Ponerinae_cat_3lvl_tip_data)
+ ## Prepare trait data
 
-colors_per_states <- c("forestgreen", "sienna", "goldenrod")
-names(colors_per_states) <- c("arboreal", "subterranean", "terricolous")
+ # Extract categorical data with 3-levels
+ Ponerinae_cat_3lvl_tip_data <- setNames(object = Ponerinae_trait_tip_data$fake_cat_3lvl_tip_data,
+                                         nm = Ponerinae_trait_tip_data$Taxa)
+ table(Ponerinae_cat_3lvl_tip_data)
 
-\dontrun{  (May take several minutes to run)
-## Produce densityMaps using stochastic character mapping based on an ARD Mk model
-Ponerinae_cat_3lvl_data_old_calib <- prepare_trait_data(
-   tip_data = Ponerinae_cat_3lvl_tip_data,
-   phylo = Ponerinae_tree_old_calib,
-   trait_data_type = "categorical",
-   colors_per_states = colors_per_states,
-   evolutionary_models = "ARD", # Use default ARD model
-   nb_simulations = 100, # Reduce number of simulations to save time
-   seed = 1234, # Seet seed for reproducibility
-   return_best_model_fit = TRUE,
-   return_model_selection_df = TRUE,
-   plot_map = FALSE) }
+ # Select color scheme for states
+ colors_per_states <- c("forestgreen", "sienna", "goldenrod")
+ names(colors_per_states) <- c("arboreal", "subterranean", "terricolous")
 
-# Load directly output
-data(Ponerinae_cat_3lvl_data_old_calib, package = "deepSTRAPP")
+ \dontrun{  (May take several minutes to run)
+ ## Produce densityMaps using stochastic character mapping based on an ARD Mk model
+ Ponerinae_cat_3lvl_data_old_calib <- prepare_trait_data(
+    tip_data = Ponerinae_cat_3lvl_tip_data,
+    phylo = Ponerinae_tree_old_calib,
+    trait_data_type = "categorical",
+    colors_per_states = colors_per_states,
+    evolutionary_models = "ARD", # Use default ARD model
+    nb_simulations = 100, # Reduce number of simulations to save time
+    seed = 1234, # Seet seed for reproducibility
+    return_best_model_fit = TRUE,
+    return_model_selection_df = TRUE,
+    plot_map = FALSE) }
 
-## Set focal time to 10 Mya
-focal_time <- 10
+ # Load directly output
+ data(Ponerinae_cat_3lvl_data_old_calib, package = "deepSTRAPP")
 
-\dontrun{  (May take several minutes to run)
-## Run deepSTRAPP on net diversification rates for focal time = 10 Mya.
+ ## Set focal time to 10 Mya
+ focal_time <- 10
 
-Ponerinae_deepSTRAPP_cat_3lvl_old_calib_10My <- run_deepSTRAPP_for_focal_time(
+ \dontrun{  (May take several minutes to run)
+ ## Run deepSTRAPP on net diversification rates for focal time = 10 Mya.
+
+ Ponerinae_deepSTRAPP_cat_3lvl_old_calib_10My <- run_deepSTRAPP_for_focal_time(
     densityMaps = Ponerinae_cat_3lvl_data_old_calib$densityMaps,
     ace = Ponerinae_cat_3lvl_data_old_calib$ace,
     tip_data = Ponerinae_cat_3lvl_tip_data,
@@ -275,26 +280,27 @@ Ponerinae_deepSTRAPP_cat_3lvl_old_calib_10My <- run_deepSTRAPP_for_focal_time(
     return_updated_trait_data_with_Map = TRUE,
     return_updated_BAMM_object = TRUE)
 
-## Explore output
-str(Ponerinae_deepSTRAPP_cat_3lvl_old_calib_10My, max.level = 1)
+ ## Explore output
+ str(Ponerinae_deepSTRAPP_cat_3lvl_old_calib_10My, max.level = 1)
 
-## Plot rates vs. states
-rates_vs_trait_output <- plot_rates_vs_trait_data_for_focal_time(
-   deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cat_3lvl_old_calib_10My,
-   focal_time = 10,
-   select_trait_levels = c("arboreal", "terricolous"), # Select only two levels
-   colors_per_levels = colors_per_states[c("arboreal", "terricolous")], # Adjust colors
-   display_plot = TRUE,
-   # PDF_file_path = "./plot_rates_vs_trait_10My.pdf",
-   return_mean_rates_vs_trait_data_df = TRUE)
+ ## Plot rates vs. states
+ rates_vs_trait_output <- plot_rates_vs_trait_data_for_focal_time(
+    deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cat_3lvl_old_calib_10My,
+    focal_time = 10,
+    select_trait_levels = c("arboreal", "terricolous"), # Select only two levels
+    colors_per_levels = colors_per_states[c("arboreal", "terricolous")], # Adjust colors
+    display_plot = TRUE,
+    # PDF_file_path = "./plot_rates_vs_trait_10My.pdf",
+    return_mean_rates_vs_trait_data_df = TRUE)
 
-# Adjust aesthetics a posteriori
-rates_vs_trait_ggplot_adj <- rates_vs_trait_output$rates_vs_trait_ggplot +
-   ggplot2::theme(plot.title = ggplot2::element_text(color = "red", size = 15))
-print(rates_vs_trait_ggplot_adj)
+ # Adjust aesthetics a posteriori
+ rates_vs_trait_ggplot_adj <- rates_vs_trait_output$rates_vs_trait_ggplot +
+    ggplot2::theme(plot.title = ggplot2::element_text(color = "red", size = 15))
+ print(rates_vs_trait_ggplot_adj)
 
-# Explore melted data.frame of mean rates and states extracted for the given focal time.
-head(rates_vs_trait_output$mean_rates_vs_trait_data_df) }
+ # Explore melted data.frame of mean rates and states extracted for the given focal time.
+ head(rates_vs_trait_output$mean_rates_vs_trait_data_df)}
+ }
 
 }
 \seealso{

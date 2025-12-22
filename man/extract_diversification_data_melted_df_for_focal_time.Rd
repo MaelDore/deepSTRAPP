@@ -46,16 +46,23 @@ Use \code{\link[=update_rates_and_regimes_for_focal_time]{update_rates_and_regim
 a \code{BAMM_object} updated for a given \code{focal_time}.
 }
 \examples{
-# Load the BAMM_object summarizing 1000 posterior samples of BAMM updated for a focal_time of 10 My
-data(Ponerinae_BAMM_object_10My)
 
-\dontrun{  (May take several minutes to run)
-# Extract diversification data
-diversification_data_df <- extract_diversification_data_melted_df_for_focal_time(
-   BAMM_object = Ponerinae_BAMM_object_10My,
-   verbose = TRUE)
-# Print output
-head(diversification_data_df)}
+if (deepSTRAPP:::is_dev_version())
+{
+ # Load the BAMM_object summarizing 1000 posterior samples of BAMM updated for a focal_time of 10 My
+ data(Ponerinae_BAMM_object_10My)
+ # This dataset is only available in development versions installed from GitHub.
+ # It is not available in CRAN versions.
+ # Use remotes::install_github(repo = "MaelDore/deepSTRAPP") to get the latest development version.
+
+ \dontrun{  (May take several minutes to run)
+ # Extract diversification data
+ diversification_data_df <- extract_diversification_data_melted_df_for_focal_time(
+     BAMM_object = Ponerinae_BAMM_object_10My,
+     verbose = TRUE)
+ # Print output
+ head(diversification_data_df)}
+}
 
 }
 \author{

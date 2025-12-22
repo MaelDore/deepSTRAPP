@@ -150,113 +150,119 @@ cut-off at the specified time-steps are returned among the outputs under \verb{$
 For plotting a single time-step (i.e., \verb{$focal_time}) at once, see \code{\link[=plot_traits_vs_rates_on_phylogeny_for_focal_time]{plot_traits_vs_rates_on_phylogeny_for_focal_time()}}.
 }
 \examples{
-# ----- Example 1: Continuous trait ----- #
-## Load data
-
-# Load trait df
-data(Ponerinae_trait_tip_data, package = "deepSTRAPP")
-# Load phylogeny with old calibration
-data(Ponerinae_tree_old_calib, package = "deepSTRAPP")
-# Load the BAMM_object summarizing 1000 posterior samples of BAMM
-data(Ponerinae_BAMM_object_old_calib, package = "deepSTRAPP")
-
-## Prepare trait data
-
-# Extract continuous trait data as a named vector
-Ponerinae_cont_tip_data <- setNames(object = Ponerinae_trait_tip_data$fake_cont_tip_data,
-                                    nm = Ponerinae_trait_tip_data$Taxa)
-
-# Select a color scheme from lowest to highest values
-color_scale = c("darkgreen", "limegreen", "orange", "red")
-
-# Get Ancestral Character Estimates based on a Brownian Motion model
-# To obtain values at internal nodes
-Ponerinae_ACE <- phytools::fastAnc(tree = Ponerinae_tree_old_calib, x = Ponerinae_cont_tip_data)
-
-# Run a Stochastic Mapping based on a Brownian Motion model
-# to interpolate values along branches and obtain a "contMap" object
-Ponerinae_contMap <- phytools::contMap(Ponerinae_tree, x = Ponerinae_cont_tip_data,
-                                       res = 100, # Number of time steps
-                                       plot = FALSE)
-# Plot contMap = stochastic mapping of continuous trait
-plot_contMap(contMap = Ponerinae_contMap,
-             color_scale = color_scale)
-
-## Set for time steps of 5 My. Will generate deepSTRAPP workflows for 0 to 40 Mya.
-# nb_time_steps <- 5
-time_step_duration <- 5
-time_range <- c(0, 40)
-
-\dontrun{  (May take several minutes to run)
-## Run deepSTRAPP on net diversification rates
-Ponerinae_deepSTRAPP_cont_old_calib_0_40 <- run_deepSTRAPP_over_time(
-   contMap = Ponerinae_contMap,
-   ace = Ponerinae_ACE,
-   tip_data = Ponerinae_cont_tip_data,
-   trait_data_type = "continuous",
-   BAMM_object = Ponerinae_BAMM_object_old_calib,
-   # nb_time_steps = nb_time_steps,
-   time_range = time_range,
-   time_step_duration = time_step_duration,
-   return_perm_data = TRUE,
-   extract_trait_data_melted_df = TRUE,
-   extract_diversification_data_melted_df = TRUE,
-   return_STRAPP_results = TRUE,
-   return_updated_trait_data_with_Map = TRUE,
-   return_updated_BAMM_object = TRUE,
-   verbose = TRUE,
-   verbose_extended = TRUE) }
-
 if (deepSTRAPP:::is_dev_version())
 {
-  ## Load directly trait data output
-  data(Ponerinae_deepSTRAPP_cont_old_calib_0_40, package = "deepSTRAPP")
-  # This dataset is only available in development versions installed from GitHub.
-  # It is not available in CRAN versions.
-  # Use remotes::install_github(repo = "MaelDore/deepSTRAPP") to get the latest development version.
+ # ----- Example 1: Continuous trait ----- #
+ ## Load data
 
-  ## Plot updated contMap vs. updated diversification rates
-  plot_traits_vs_rates_on_phylogeny_over_time(
-     deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_old_calib_0_40,
-     # To use the same color breaks as for t = 0 My in all BAMM plots
-     keep_initial_colorbreaks = TRUE,
-     color_scale = c("limegreen", "orange", "red"), # Adjust color scale on contMap
-     legend = TRUE, labels = TRUE, # Show legend and label on BAMM plot
-     cex = 0.7) # Adjust label size on contMap
+ # Load trait df
+ data(Ponerinae_trait_tip_data, package = "deepSTRAPP")
+ # Load phylogeny with old calibration
+ data(Ponerinae_tree_old_calib, package = "deepSTRAPP")
+
+ # Load the BAMM_object summarizing 1000 posterior samples of BAMM
+ data(Ponerinae_BAMM_object_old_calib, package = "deepSTRAPP")
+ # This dataset is only available in development versions installed from GitHub.
+ # It is not available in CRAN versions.
+ # Use remotes::install_github(repo = "MaelDore/deepSTRAPP") to get the latest development version.
+
+  ## Prepare trait data
+
+ # Extract continuous trait data as a named vector
+ Ponerinae_cont_tip_data <- setNames(object = Ponerinae_trait_tip_data$fake_cont_tip_data,
+                                     nm = Ponerinae_trait_tip_data$Taxa)
+
+ # Select a color scheme from lowest to highest values
+ color_scale = c("darkgreen", "limegreen", "orange", "red")
+
+  # Get Ancestral Character Estimates based on a Brownian Motion model
+ # To obtain values at internal nodes
+ Ponerinae_ACE <- phytools::fastAnc(tree = Ponerinae_tree_old_calib, x = Ponerinae_cont_tip_data)
+
+ # Run a Stochastic Mapping based on a Brownian Motion model
+ # to interpolate values along branches and obtain a "contMap" object
+ Ponerinae_contMap <- phytools::contMap(Ponerinae_tree, x = Ponerinae_cont_tip_data,
+                                        res = 100, # Number of time steps
+                                        plot = FALSE)
+ # Plot contMap = stochastic mapping of continuous trait
+ plot_contMap(contMap = Ponerinae_contMap,
+              color_scale = color_scale)
+
+ ## Set for time steps of 5 My. Will generate deepSTRAPP workflows for 0 to 40 Mya.
+ # nb_time_steps <- 5
+ time_step_duration <- 5
+ time_range <- c(0, 40)
+
+ \dontrun{  (May take several minutes to run)
+ ## Run deepSTRAPP on net diversification rates
+ Ponerinae_deepSTRAPP_cont_old_calib_0_40 <- run_deepSTRAPP_over_time(
+    contMap = Ponerinae_contMap,
+    ace = Ponerinae_ACE,
+    tip_data = Ponerinae_cont_tip_data,
+    trait_data_type = "continuous",
+    BAMM_object = Ponerinae_BAMM_object_old_calib,
+    # nb_time_steps = nb_time_steps,
+    time_range = time_range,
+    time_step_duration = time_step_duration,
+    return_perm_data = TRUE,
+    extract_trait_data_melted_df = TRUE,
+    extract_diversification_data_melted_df = TRUE,
+    return_STRAPP_results = TRUE,
+    return_updated_trait_data_with_Map = TRUE,
+    return_updated_BAMM_object = TRUE,
+    verbose = TRUE,
+    verbose_extended = TRUE) }
+
+ ## Load directly trait data output
+ data(Ponerinae_deepSTRAPP_cont_old_calib_0_40, package = "deepSTRAPP")
+ # This dataset is only available in development versions installed from GitHub.
+ # It is not available in CRAN versions.
+ # Use remotes::install_github(repo = "MaelDore/deepSTRAPP") to get the latest development version.
+
+ ## Plot updated contMap vs. updated diversification rates
+ plot_traits_vs_rates_on_phylogeny_over_time(
+    deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_old_calib_0_40,
+    # To use the same color breaks as for t = 0 My in all BAMM plots
+    keep_initial_colorbreaks = TRUE,
+    color_scale = c("limegreen", "orange", "red"), # Adjust color scale on contMap
+    legend = TRUE, labels = TRUE, # Show legend and label on BAMM plot
+    cex = 0.7) # Adjust label size on contMap
     # PDF_file_path = "Updated_maps_cont_old_calib_0_40My.pdf")
-}
 
+ # ----- Example 2: Biogeographic data ----- #
 
-# ----- Example 2: Biogeographic data ----- #
+ ## Load data
 
-## Load data
+ # Load phylogeny
+ data(Ponerinae_tree_old_calib, package = "deepSTRAPP")
+ # Load trait df
+ data(Ponerinae_binary_range_table, package = "deepSTRAPP")
 
-# Load phylogeny
-data(Ponerinae_tree_old_calib, package = "deepSTRAPP")
-# Load trait df
-data(Ponerinae_binary_range_table, package = "deepSTRAPP")
-# Load the BAMM_object summarizing 1000 posterior samples of BAMM
-data(Ponerinae_BAMM_object_old_calib, package = "deepSTRAPP")
+ # Load the BAMM_object summarizing 1000 posterior samples of BAMM
+ data(Ponerinae_BAMM_object_old_calib, package = "deepSTRAPP")
+ # This dataset is only available in development versions installed from GitHub.
+ # It is not available in CRAN versions.
+ # Use remotes::install_github(repo = "MaelDore/deepSTRAPP") to get the latest development version.
 
-## Prepare range data for Old World vs. New World
+ ## Prepare range data for Old World vs. New World
 
-# No overlap in ranges
-table(Ponerinae_binary_range_table$Old_World, Ponerinae_binary_range_table$New_World)
+ # No overlap in ranges
+ table(Ponerinae_binary_range_table$Old_World, Ponerinae_binary_range_table$New_World)
 
-Ponerinae_NO_data <- stats::setNames(object = Ponerinae_binary_range_table$Old_World,
-                                     nm = Ponerinae_binary_range_table$Taxa)
-Ponerinae_NO_data <- as.character(Ponerinae_NO_data)
-Ponerinae_NO_data[Ponerinae_NO_data == "TRUE"] <- "O" # O = Old World
-Ponerinae_NO_data[Ponerinae_NO_data == "FALSE"] <- "N" # N = New World
-names(Ponerinae_NO_data) <- Ponerinae_binary_range_table$Taxa
-table(Ponerinae_NO_data)
+ Ponerinae_NO_data <- stats::setNames(object = Ponerinae_binary_range_table$Old_World,
+                                      nm = Ponerinae_binary_range_table$Taxa)
+ Ponerinae_NO_data <- as.character(Ponerinae_NO_data)
+ Ponerinae_NO_data[Ponerinae_NO_data == "TRUE"] <- "O" # O = Old World
+ Ponerinae_NO_data[Ponerinae_NO_data == "FALSE"] <- "N" # N = New World
+ names(Ponerinae_NO_data) <- Ponerinae_binary_range_table$Taxa
+ table(Ponerinae_NO_data)
 
-colors_per_levels <- c("mediumpurple2", "peachpuff2")
-names(colors_per_levels) <- c("N", "O")
+ colors_per_levels <- c("mediumpurple2", "peachpuff2")
+ names(colors_per_levels) <- c("N", "O")
 
-\dontrun{  (May take several minutes to run)
-## Run evolutionary models
-Ponerinae_biogeo_data <- prepare_trait_data(
+ \dontrun{  (May take several minutes to run)
+ ## Run evolutionary models
+ Ponerinae_biogeo_data <- prepare_trait_data(
     tip_data = Ponerinae_NO_data,
     trait_data_type = "biogeographic",
     phylo = Ponerinae_tree_old_calib,
@@ -269,55 +275,53 @@ Ponerinae_biogeo_data <- prepare_trait_data(
     return_model_selection_df = TRUE,
     verbose = TRUE) }
 
-# Load directly output
-data(Ponerinae_biogeo_data_old_calib, package = "deepSTRAPP")
+ # Load directly output
+ data(Ponerinae_biogeo_data_old_calib, package = "deepSTRAPP")
 
-## Set for time steps of 5 My. Will generate deepSTRAPP workflows from 0 to 40 Mya.
-time_range <- c(0, 40)
-time_step_duration <- 5
+ ## Set for time steps of 5 My. Will generate deepSTRAPP workflows from 0 to 40 Mya.
+ time_range <- c(0, 40)
+ time_step_duration <- 5
 
-\dontrun{  (May take several minutes to run)
-## Run deepSTRAPP on net diversification rates for time-steps = 0 to 40 Mya.
-Ponerinae_deepSTRAPP_biogeo_old_calib_0_40 <- run_deepSTRAPP_over_time(
-   densityMaps = Ponerinae_biogeo_data_old_calib$densityMaps,
-   ace = Ponerinae_biogeo_data_old_calib$ace,
-   tip_data = Ponerinae_ON_tip_data,
-   trait_data_type = "biogeographic",
-   BAMM_object = Ponerinae_BAMM_object_old_calib,
-   time_range = time_range,
-   time_step_duration = time_step_duration,
-   seed = 1234, # Set seed for reproducibility
-   alpha = 0.10, # Select a generous level of significance for the sake of the example
-   rate_type = "net_diversification",
-   return_perm_data = TRUE,
-   extract_trait_data_melted_df = TRUE,
-   extract_diversification_data_melted_df = TRUE,
-   return_STRAPP_results = TRUE,
-   return_updated_trait_data_with_Map = TRUE,
-   return_updated_BAMM_object = TRUE,
-   verbose = TRUE,
-   verbose_extended = TRUE) }
+ \dontrun{  (May take several minutes to run)
+ ## Run deepSTRAPP on net diversification rates for time-steps = 0 to 40 Mya.
+ Ponerinae_deepSTRAPP_biogeo_old_calib_0_40 <- run_deepSTRAPP_over_time(
+    densityMaps = Ponerinae_biogeo_data_old_calib$densityMaps,
+    ace = Ponerinae_biogeo_data_old_calib$ace,
+    tip_data = Ponerinae_ON_tip_data,
+    trait_data_type = "biogeographic",
+    BAMM_object = Ponerinae_BAMM_object_old_calib,
+    time_range = time_range,
+    time_step_duration = time_step_duration,
+    seed = 1234, # Set seed for reproducibility
+    alpha = 0.10, # Select a generous level of significance for the sake of the example
+    rate_type = "net_diversification",
+    return_perm_data = TRUE,
+    extract_trait_data_melted_df = TRUE,
+    extract_diversification_data_melted_df = TRUE,
+    return_STRAPP_results = TRUE,
+    return_updated_trait_data_with_Map = TRUE,
+    return_updated_BAMM_object = TRUE,
+    verbose = TRUE,
+    verbose_extended = TRUE) }
 
-if (deepSTRAPP:::is_dev_version())
-{
-  ## Load directly output
-  data(Ponerinae_deepSTRAPP_biogeo_old_calib_0_40, package = "deepSTRAPP")
-  # This dataset is only available in development versions installed from GitHub.
-  # It is not available in CRAN versions.
-  # Use remotes::install_github(repo = "MaelDore/deepSTRAPP") to get the latest development version.
+ ## Load directly output
+ data(Ponerinae_deepSTRAPP_biogeo_old_calib_0_40, package = "deepSTRAPP")
+ # This dataset is only available in development versions installed from GitHub.
+ # It is not available in CRAN versions.
+ # Use remotes::install_github(repo = "MaelDore/deepSTRAPP") to get the latest development version.
 
-  ## Explore output
-  str(Ponerinae_deepSTRAPP_biogeo_old_calib_0_40, max.level =  1)
+ ## Explore output
+ str(Ponerinae_deepSTRAPP_biogeo_old_calib_0_40, max.level =  1)
 
-  ## Plot updated contMap vs. updated diversification rates
-  plot_traits_vs_rates_on_phylogeny_over_time(
-     deepSTRAPP_outputs = Ponerinae_deepSTRAPP_biogeo_old_calib_0_40,
-     # Adjust colors on densityMaps
-     colors_per_levels = c("N" = "dodgerblue2", "O" = "orange"),
-     legend = TRUE, labels = TRUE, # Show legend and label on BAMM plot
-     cex_pies = 0.2, # Adjust size of ACE pies on densityMaps
-     cex = 0.7) # Adjust label size on contMap
-     # PDF_file_path = "Updated_maps_biogeo_old_calib_0_40My.pdf")
+ ## Plot updated contMap vs. updated diversification rates
+ plot_traits_vs_rates_on_phylogeny_over_time(
+    deepSTRAPP_outputs = Ponerinae_deepSTRAPP_biogeo_old_calib_0_40,
+    # Adjust colors on densityMaps
+    colors_per_levels = c("N" = "dodgerblue2", "O" = "orange"),
+    legend = TRUE, labels = TRUE, # Show legend and label on BAMM plot
+    cex_pies = 0.2, # Adjust size of ACE pies on densityMaps
+    cex = 0.7) # Adjust label size on contMap
+    # PDF_file_path = "Updated_maps_biogeo_old_calib_0_40My.pdf")
 }
 
 }

@@ -209,46 +209,55 @@ plot_BAMM_rates(whale_BAMM_object_5My, add_regime_shifts = TRUE,
 
 # ----- Example 2: Extant Ponerinae (1,534 taxa) ----- #
 
-## Load the BAMM_object summarizing 1000 posterior samples of BAMM
-data(Ponerinae_BAMM_object, package = "deepSTRAPP")
+if (deepSTRAPP:::is_dev_version())
+{
+ ## Load the BAMM_object summarizing 1000 posterior samples of BAMM
+ data(Ponerinae_BAMM_object, package = "deepSTRAPP")
+ # This dataset is only available in development versions installed from GitHub.
+ # It is not available in CRAN versions.
+ # Use remotes::install_github(repo = "MaelDore/deepSTRAPP") to get the latest development version.
 
-## Set focal-time to 10 My
-focal_time = 10
+ ## Set focal-time to 10 My
+ focal_time = 10
 
-\dontrun{
-## Update the BAMM object (May take several minutes to run)
-Ponerinae_BAMM_object_10My <- update_rates_and_regimes_for_focal_time(
-  BAMM_object = Ponerinae_BAMM_object,
-  focal_time = focal_time,
-  update_rates = TRUE, update_regimes = TRUE,
-  update_tree = TRUE, update_plot = TRUE,
-  update_all_elements = TRUE,
-  keep_tip_labels = TRUE,
-  verbose = TRUE) }
+ \dontrun{
+ ## Update the BAMM object (May take several minutes to run)
+ Ponerinae_BAMM_object_10My <- update_rates_and_regimes_for_focal_time(
+    BAMM_object = Ponerinae_BAMM_object,
+    focal_time = focal_time,
+    update_rates = TRUE, update_regimes = TRUE,
+    update_tree = TRUE, update_plot = TRUE,
+    update_all_elements = TRUE,
+    keep_tip_labels = TRUE,
+    verbose = TRUE) }
 
-## Load results to save time
-data(Ponerinae_BAMM_object_10My, package = "deepSTRAPP")
+ ## Load results to save time
+ data(Ponerinae_BAMM_object_10My, package = "deepSTRAPP")
+ # This dataset is only available in development versions installed from GitHub.
+ # It is not available in CRAN versions.
+ # Use remotes::install_github(repo = "MaelDore/deepSTRAPP") to get the latest development version.
 
-## Extract root age
-# Add temporarily the "phylo" class to be compatible with phytools::nodeHeights()
-class(Ponerinae_BAMM_object) <- unique(c(class(Ponerinae_BAMM_object), "phylo"))
-root_age <- max(phytools::nodeHeights(Ponerinae_BAMM_object)[,2])
-# Remove temporary "phylo" class
-class(Ponerinae_BAMM_object) <- setdiff(class(Ponerinae_BAMM_object), "phylo")
+ ## Extract root age
+ # Add temporarily the "phylo" class to be compatible with phytools::nodeHeights()
+ class(Ponerinae_BAMM_object) <- unique(c(class(Ponerinae_BAMM_object), "phylo"))
+ root_age <- max(phytools::nodeHeights(Ponerinae_BAMM_object)[,2])
+ # Remove temporary "phylo" class
+ class(Ponerinae_BAMM_object) <- setdiff(class(Ponerinae_BAMM_object), "phylo")
 
-## Plot diversification rates on the initial tree
-plot_BAMM_rates(Ponerinae_BAMM_object,
-                legend = TRUE, labels = FALSE)
-abline(v = root_age - focal_time,
-       col = "red", lty = 2, lwd = 2)
+ ## Plot diversification rates on the initial tree
+ plot_BAMM_rates(Ponerinae_BAMM_object,
+                 legend = TRUE, labels = FALSE)
+ abline(v = root_age - focal_time,
+        col = "red", lty = 2, lwd = 2)
 
-## Plot diversification rates and regime shifts on the updated tree (cut-off for 10 My)
-# Keep the initial color scheme
-plot_BAMM_rates(Ponerinae_BAMM_object_10My, legend = TRUE, labels = FALSE,
-                colorbreaks = Ponerinae_BAMM_object_10My$initial_colorbreaks$net_diversification)
+ ## Plot diversification rates and regime shifts on the updated tree (cut-off for 10 My)
+ # Keep the initial color scheme
+ plot_BAMM_rates(Ponerinae_BAMM_object_10My, legend = TRUE, labels = FALSE,
+                 colorbreaks = Ponerinae_BAMM_object_10My$initial_colorbreaks$net_diversification)
 
-# Use a new color scheme mapped on the new distribution of rates
-plot_BAMM_rates(Ponerinae_BAMM_object_10My, legend = TRUE, labels = FALSE)
+ # Use a new color scheme mapped on the new distribution of rates
+ plot_BAMM_rates(Ponerinae_BAMM_object_10My, legend = TRUE, labels = FALSE)
+}
 
 }
 \seealso{

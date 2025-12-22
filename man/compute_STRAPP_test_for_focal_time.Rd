@@ -197,97 +197,103 @@ Thus, a Spearman's rank correlation test is favored.
 }
 }
 \examples{
-# ------ Prepare data ------ #
+if (deepSTRAPP:::is_dev_version())
+{
+ # ------ Prepare data ------ #
 
-## Load the BAMM_object summarizing 1000 posterior samples of BAMM with diversification rates
-# for ponerine ants extracted for 10My ago.
-data(Ponerinae_BAMM_object_10My, package = "deepSTRAPP")
+ ## Load the BAMM_object summarizing 1000 posterior samples of BAMM with diversification rates
+ # for ponerine ants extracted for 10My ago.
+ data(Ponerinae_BAMM_object_10My, package = "deepSTRAPP")
+ # This dataset is only available in development versions installed from GitHub.
+ # It is not available in CRAN versions.
+ # Use remotes::install_github(repo = "MaelDore/deepSTRAPP") to get the latest development version.
 
-# Plot the associated phylogeny with mapped rates
-plot_BAMM_rates(Ponerinae_BAMM_object_10My)
+ # Plot the associated phylogeny with mapped rates
+ plot_BAMM_rates(Ponerinae_BAMM_object_10My)
 
-## Load the object containing head width trait data for ponerine ants extracted for 10My ago.
-data(Ponerinae_trait_cont_tip_data_10My, package = "deepSTRAPP")
+ ## Load the object containing head width trait data for ponerine ants extracted for 10My ago.
+ data(Ponerinae_trait_cont_tip_data_10My, package = "deepSTRAPP")
 
-# Plot the associated contMap (continuous trait stochastic map)
-plot_contMap(Ponerinae_trait_cont_tip_data_10My$contMap)
+ # Plot the associated contMap (continuous trait stochastic map)
+ plot_contMap(Ponerinae_trait_cont_tip_data_10My$contMap)
 
-# Check that objects are ordered in the same fashion
-identical(names(Ponerinae_BAMM_object_10My$tipStates[[1]]),
-          names(Ponerinae_trait_cont_tip_data_10My$trait_data))
+ # Check that objects are ordered in the same fashion
+ identical(names(Ponerinae_BAMM_object_10My$tipStates[[1]]),
+           names(Ponerinae_trait_cont_tip_data_10My$trait_data))
 
-# Save continuous data
-trait_data_continuous <- Ponerinae_trait_cont_tip_data_10My
+ # Save continuous data
+ trait_data_continuous <- Ponerinae_trait_cont_tip_data_10My
 
-## Transform trait data into binary and multinominal data
+ ## Transform trait data into binary and multinominal data
 
-# Binarize data into two states
-trait_data_binary <- trait_data_continuous
-trait_data_binary$trait_data[trait_data_continuous$trait_data < 0] <- "state_A"
-trait_data_binary$trait_data[trait_data_continuous$trait_data >= 0] <- "state_B"
-trait_data_binary$trait_data_type <- "categorical"
+ # Binarize data into two states
+ trait_data_binary <- trait_data_continuous
+ trait_data_binary$trait_data[trait_data_continuous$trait_data < 0] <- "state_A"
+ trait_data_binary$trait_data[trait_data_continuous$trait_data >= 0] <- "state_B"
+ trait_data_binary$trait_data_type <- "categorical"
 
-table(trait_data_binary$trait_data)
+ table(trait_data_binary$trait_data)
 
-# Categorize data into three states
-trait_data_multinominal <- trait_data_continuous
-trait_data_multinominal$trait_data[trait_data_continuous$trait_data < 0] <- "state_B"
-trait_data_multinominal$trait_data[trait_data_continuous$trait_data < -1] <- "state_A"
-trait_data_multinominal$trait_data[trait_data_continuous$trait_data >= 0] <- "state_C"
-trait_data_multinominal$trait_data_type <- "categorical"
+ # Categorize data into three states
+ trait_data_multinominal <- trait_data_continuous
+ trait_data_multinominal$trait_data[trait_data_continuous$trait_data < 0] <- "state_B"
+ trait_data_multinominal$trait_data[trait_data_continuous$trait_data < -1] <- "state_A"
+ trait_data_multinominal$trait_data[trait_data_continuous$trait_data >= 0] <- "state_C"
+ trait_data_multinominal$trait_data_type <- "categorical"
 
-table(trait_data_multinominal$trait_data)
+ table(trait_data_multinominal$trait_data)
 
-\dontrun{  (May take a minute to run)
-# ------ Compute STRAPP test for continuous data ------ #
+ \dontrun{  (May take a minute to run)
+ # ------ Compute STRAPP test for continuous data ------ #
 
-plot(x = trait_data_continuous$trait_data, y = Ponerinae_BAMM_object_10My$tipLambda[[1]])
+ plot(x = trait_data_continuous$trait_data, y = Ponerinae_BAMM_object_10My$tipLambda[[1]])
 
-# Compute STRAPP test under the alternative hypothesis of a "negative" correlation
-# between "net_diversification" rates and trait data
-STRAPP_results <- compute_STRAPP_test_for_focal_time(
-   BAMM_object = Ponerinae_BAMM_object_10My,
-   trait_data_list = trait_data_continuous,
-   two_tailed = FALSE,
-   one_tailed_hypothesis = "negative",
-   return_perm_data = TRUE)
-str(STRAPP_results, max.level = 2)
-# Data from the posterior samples is available in STRAPP_results$perm_data_df
-head(STRAPP_results$perm_data_df)
+ # Compute STRAPP test under the alternative hypothesis of a "negative" correlation
+ # between "net_diversification" rates and trait data
+ STRAPP_results <- compute_STRAPP_test_for_focal_time(
+    BAMM_object = Ponerinae_BAMM_object_10My,
+    trait_data_list = trait_data_continuous,
+    two_tailed = FALSE,
+    one_tailed_hypothesis = "negative",
+    return_perm_data = TRUE)
+ str(STRAPP_results, max.level = 2)
+ # Data from the posterior samples is available in STRAPP_results$perm_data_df
+ head(STRAPP_results$perm_data_df)
 
-# ------ Compute STRAPP test for binary data ------ #
+ # ------ Compute STRAPP test for binary data ------ #
 
-# Compute STRAPP test under the alternative hypothesis that "state_A" is associated
-# with higher "net_diversification" that "state_B"
-STRAPP_results <- compute_STRAPP_test_for_focal_time(
-   BAMM_object = Ponerinae_BAMM_object_10My,
-   trait_data_list = trait_data_binary,
-   two_tailed = FALSE,
-   one_tailed_hypothesis = c("state_A > state_B"))
-str(STRAPP_results, max.level = 1)
+ # Compute STRAPP test under the alternative hypothesis that "state_A" is associated
+ # with higher "net_diversification" that "state_B"
+ STRAPP_results <- compute_STRAPP_test_for_focal_time(
+    BAMM_object = Ponerinae_BAMM_object_10My,
+    trait_data_list = trait_data_binary,
+    two_tailed = FALSE,
+    one_tailed_hypothesis = c("state_A > state_B"))
+ str(STRAPP_results, max.level = 1)
 
-# Compute STRAPP test under the alternative hypothesis that "state_B" is associated
-# with higher "net_diversification" that "state_A"
-STRAPP_results <- compute_STRAPP_test_for_focal_time(BAMM_object = Ponerinae_BAMM_object_10My,
-   trait_data_list = trait_data_binary,
-   two_tailed = FALSE,
-   one_tailed_hypothesis = c("state_B > state_A"))
-str(STRAPP_results, max.level = 1)
+ # Compute STRAPP test under the alternative hypothesis that "state_B" is associated
+ # with higher "net_diversification" that "state_A"
+ STRAPP_results <- compute_STRAPP_test_for_focal_time(BAMM_object = Ponerinae_BAMM_object_10My,
+    trait_data_list = trait_data_binary,
+    two_tailed = FALSE,
+    one_tailed_hypothesis = c("state_B > state_A"))
+ str(STRAPP_results, max.level = 1)
 
-# ------ Compute STRAPP test for multinominal data ------ #
+ # ------ Compute STRAPP test for multinominal data ------ #
 
-# Compute STRAPP test between all three states, and compute post hoc tests
-# for differences in rates between all possible pairs of states
-# with a p-value adjusted for multiple comparison using Bonferroni's correction
-STRAPP_results <- compute_STRAPP_test_for_focal_time(
-   BAMM_object = Ponerinae_BAMM_object_10My,
-   trait_data_list = trait_data_multinominal,
-   posthoc_pairwise_tests = TRUE,
-   two_tailed = TRUE,
-   p.adjust_method = "bonferroni")
-str(STRAPP_results, max.level = 3)
-# All post hoc pairwise test summaries are available in $summary_df
-STRAPP_results$posthoc_pairwise_tests$summary_df }
+ # Compute STRAPP test between all three states, and compute post hoc tests
+ # for differences in rates between all possible pairs of states
+ # with a p-value adjusted for multiple comparison using Bonferroni's correction
+ STRAPP_results <- compute_STRAPP_test_for_focal_time(
+    BAMM_object = Ponerinae_BAMM_object_10My,
+    trait_data_list = trait_data_multinominal,
+    posthoc_pairwise_tests = TRUE,
+    two_tailed = TRUE,
+    p.adjust_method = "bonferroni")
+ str(STRAPP_results, max.level = 3)
+ # All post hoc pairwise test summaries are available in $summary_df
+ STRAPP_results$posthoc_pairwise_tests$summary_df }
+}
 
 }
 \references{

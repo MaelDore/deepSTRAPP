@@ -266,28 +266,34 @@ plot_BAMM_rates(whale_BAMM_object, cex = 0.5,
 
 # ----- Example 2: Ponerinae phylogeny ----- #
 
-# Load phylogeny
-data("Ponerinae_tree", package = "deepSTRAPP")
-plot(Ponerinae_tree, show.tip.label = FALSE)
+if (deepSTRAPP:::is_dev_version())
+{
+ #   Load phylogeny
+ data("Ponerinae_tree", package = "deepSTRAPP")
+ plot(Ponerinae_tree, show.tip.label = FALSE)
 
-\dontrun{
-# Run BAMM workflow with deepSTRAPP
-Ponerinae_BAMM_object <- prepare_diversification_data(
-   BAMM_install_directory_path = "./software/bamm-2.5.0/",
-   phylo = Ponerinae_tree,
-   prefix_for_files = "Ponerinae",
-   numberOfGenerations = 10^7 # Set high for optimal run, but will take ages
-)}
+ \dontrun{ # This step may be time-consuming
+ # Run BAMM workflow with deepSTRAPP
+ Ponerinae_BAMM_object <- prepare_diversification_data(
+    BAMM_install_directory_path = "./software/bamm-2.5.0/",
+    phylo = Ponerinae_tree,
+    prefix_for_files = "Ponerinae",
+    numberOfGenerations = 10^7 # Set high for optimal run, but will take ages
+ )}
 
-# Load directly the result
-data(Ponerinae_BAMM_object)
+ # Load directly the result
+ data(Ponerinae_BAMM_object)
+ # This dataset is only available in development versions installed from GitHub.
+ # It is not available in CRAN versions.
+ # Use remotes::install_github(repo = "MaelDore/deepSTRAPP") to get the latest development version.
 
-# Explore output
-str(Ponerinae_BAMM_object, 1)
+ # Explore output
+ str(Ponerinae_BAMM_object, 1)
 
-# Plot mean net diversification rates and regime shifts on the phylogeny
-plot_BAMM_rates(Ponerinae_BAMM_object,
-                labels = FALSE, legend = TRUE)
+ # Plot mean net diversification rates and regime shifts on the phylogeny
+ plot_BAMM_rates(Ponerinae_BAMM_object,
+                 labels = FALSE, legend = TRUE)
+}
 
 }
 \references{

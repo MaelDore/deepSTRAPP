@@ -37,6 +37,7 @@ data(eel.data)
 eel_data <- stats::setNames(eel.data$Max_TL_cm,
                             rownames(eel.data))
 
+\donttest{  (May take several minutes to run)
 # Fit BM model
 BM_fit <- geiger::fitContinuous(phy = eel.tree, dat = eel_data, model = "BM")
 # Fit EB model
@@ -57,7 +58,7 @@ str(model_comparison_output, max.level = 2)
 print(model_comparison_output$models_comparison_df)
 
 # Print best model fit
-print(model_comparison_output$best_model_fit)
+print(model_comparison_output$best_model_fit) }
 
 # ----- Example 2: Categorical data ----- #
 
@@ -70,6 +71,7 @@ data(eel.data)
 eel_data <- stats::setNames(eel.data$feed_mode, rownames(eel.data))
 table(eel_data)
 
+\donttest{  (May take several minutes to run)
 # Fit ER model
 ER_fit <- geiger::fitDiscrete(phy = eel.tree, dat = eel_data, model = "ER")
 # Fit ARD model
@@ -88,7 +90,7 @@ str(model_comparison_output, max.level = 2)
 print(model_comparison_output$models_comparison_df)
 
 # Print best model fit
-print(model_comparison_output$best_model_fit)
+print(model_comparison_output$best_model_fit) }
 
 }
 \seealso{
