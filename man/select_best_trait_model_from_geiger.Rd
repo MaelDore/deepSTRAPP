@@ -37,7 +37,7 @@ data(eel.data)
 eel_data <- stats::setNames(eel.data$Max_TL_cm,
                             rownames(eel.data))
 
-\donttest{  (May take several minutes to run)
+\donttest{ # (May take several minutes to run)
 # Fit BM model
 BM_fit <- geiger::fitContinuous(phy = eel.tree, dat = eel_data, model = "BM")
 # Fit EB model
@@ -71,7 +71,7 @@ data(eel.data)
 eel_data <- stats::setNames(eel.data$feed_mode, rownames(eel.data))
 table(eel_data)
 
-\donttest{  (May take several minutes to run)
+\donttest{ # (May take several minutes to run)
 # Fit ER model
 ER_fit <- geiger::fitDiscrete(phy = eel.tree, dat = eel_data, model = "ER")
 # Fit ARD model

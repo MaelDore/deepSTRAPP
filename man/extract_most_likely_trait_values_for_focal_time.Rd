@@ -165,11 +165,12 @@ data(eel.data)
 eel_data <- setNames(eel.data$Max_TL_cm,
                      rownames(eel.data))
 
-# Get Ancestral Character Estimates based on a Brownian Motion model
+\donttest{ # (May take several minutes to run)
+## Get Ancestral Character Estimates based on a Brownian Motion model
 # To obtain values at internal nodes
 eel_ACE <- phytools::fastAnc(tree = eel.tree, x = eel_data)
 
-# Run a Stochastic Mapping based on a Brownian Motion model
+## Run a Stochastic Mapping based on a Brownian Motion model
 # to interpolate values along branches and obtain a "contMap" object
 eel_contMap <- phytools::contMap(eel.tree, x = eel_data,
                                  res = 100, # Number of time steps
@@ -207,7 +208,7 @@ abline(v = max(phytools::nodeHeights(eel_contMap$tree)[,2]) - focal_time,
 
 # Plot updated contMap with initial node labels
 plot(eel_cont_50$contMap)
-ape::nodelabels(text = eel_cont_50$contMap$tree$initial_nodes_ID)
+ape::nodelabels(text = eel_cont_50$contMap$tree$initial_nodes_ID) }
 
 
 # ----- Example 2: Categorical trait ----- #
@@ -224,6 +225,7 @@ focal_time <- 10
 
 ## Extract trait data and update densityMaps for the given focal_time
 
+\donttest{ # (May take several minutes to run)
 # Extract from the densityMaps
 eel_cat_3lvl_data_10My <- extract_most_likely_trait_values_for_focal_time(
    densityMaps = eel_cat_3lvl_data$densityMaps,
@@ -243,7 +245,7 @@ abline(v = max(phytools::nodeHeights(eel_cat_3lvl_data$densityMaps[[1]]$tree)[,2
        col = "red", lty = 2, lwd = 2)
 
 # Plot updated densityMaps with ACE pies
-plot_densityMaps_overlay(eel_cat_3lvl_data_10My$densityMaps)
+plot_densityMaps_overlay(eel_cat_3lvl_data_10My$densityMaps) }
 
 
 # ----- Example 3: Biogeographic ranges ----- #
@@ -261,6 +263,7 @@ focal_time <- 10
 
 ## Extract trait data and update densityMaps for the given focal_time
 
+\donttest{ # (May take several minutes to run)
 # Extract from the densityMaps
 eel_biogeo_data_10My <- extract_most_likely_trait_values_for_focal_time(
    densityMaps = eel_biogeo_data$densityMaps,
@@ -281,7 +284,7 @@ abline(v = max(phytools::nodeHeights(eel_biogeo_data$densityMaps[[1]]$tree)[,2])
        col = "red", lty = 2, lwd = 2)
 
 # Plot updated densityMaps with ACE pies
-plot_densityMaps_overlay(eel_biogeo_data_10My$densityMaps)
+plot_densityMaps_overlay(eel_biogeo_data_10My$densityMaps) }
 
 }
 \seealso{

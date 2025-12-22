@@ -43,6 +43,7 @@
 #'
 #' ## Prepare trait data
 #'
+#' \donttest{ # (May take several minutes to run)
 #' # Extract continuous trait data as a named vector
 #' Ponerinae_cont_tip_data <- setNames(object = Ponerinae_trait_tip_data$fake_cont_tip_data,
 #'                                     nm = Ponerinae_trait_tip_data$Taxa)
@@ -63,7 +64,7 @@
 #' # Plot contMap with an updated color scale
 #' plot_contMap(contMap = Ponerinae_contMap, fsize = c(0.5, 1),
 #'              color_scale = c("darkgreen", "limegreen", "orange", "red"))
-#'              # PDF_file_path = "Ponerinae_contMap.pdf")
+#'              # PDF_file_path = "Ponerinae_contMap.pdf") }
 #'
 
 plot_contMap <- function (contMap,
