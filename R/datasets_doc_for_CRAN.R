@@ -741,58 +741,58 @@
 # #'
 # "Ponerinae_deepSTRAPP_cont_old_calib_0_40"
 
-### 18/ Output from run_deepSTRAPP_over_time on categorical trait with 2-levels ####
-
-#' @title deepSTRAPP output for fake categorical size data with 2-levels mapped on old time-calibrated ponerine ant phylogeny over 0 to 40 Mya
-#'
-#' @description deepSTRAPP output for fake categorical size data with 2-levels mapped on old time-calibrated ponerine ant phylogeny over 0 to 40 Mya.
-#'   This object is the typical result of a deepSTRAPP run carried out with [deepSTRAPP::run_deepSTRAPP_over_time()].
-#'   It summaries STRAPP test results and can optionally include trait and diversification rate data frames, STRAPP test outputs,
-#'   updated trait data objects, and updated BAMM objects, that are required fro downstream plots and analyses.
-#'
-#' @usage data(Ponerinae_deepSTRAPP_cat_2lvl_old_calib_0_40)
-#' @format A list with 10 elements.
-#'
-#' @details deepSTRAPP output summarizing results of a deepSTRAPP run carried out with [deepSTRAPP::run_deepSTRAPP_over_time()].
-#'
-#'   * `$pvalues_summary_df` Data.frame with three columns providing test stat `$estimate` and `$p_value` obtained for each time step (i.e., `$focal_time`),
-#'     that can be passed down to [deepSTRAPP::plot_STRAPP_pvalues_over_time()] to generate a plot showing the evolution of the test results across time.
-#'   * `$time_steps` Numerical vector. Time steps at which the STRAPP tests were carried out in the same order as the objects returned in the output lists.
-#'   * `$trait_data_type` Character string. Specify the type of trait data. Here: "categorical".
-#'   * `$trait_data_type_for_stats` Character string. The type of trait data used to select statistical method. Here: "binary".
-#'   * `$rate_type` Character string. The type of diversification rates used in the tests. Here: "net_diversification".
-#'
-#'   Optional summary df for multinominal data, if `posthoc_pairwise_tests = TRUE`:
-#'   * `$pvalues_summary_df_for_posthoc_pairwise_tests` Data.frame with four or five columns providing test stat `$estimate`, `$p_value`, and `$p_value_adjusted`
-#'     (if `p.adjust_method` used is not "none") for each `$pair` of states involved in post hoc Dunn's tests obtained for each time step (i.e., `$focal_time`).
-#'      This data.frame can be passed down to [deepSTRAPP::plot_STRAPP_pvalues_over_time()] to generate a plot showing the evolution of the post hoc test results across time.
-#'
-#'   Optional melted data.frames:
-#'   * `$trait_data_df_over_time` Data.frame with three columns providing `$trait_value` associated with each `$tip_ID` found along each time step (i.e., `$focal_time`).
-#'     Set `extract_trait_data_melted_df = TRUE` to include it in the output.
-#'   * `$diversification_data_df_over_time` Data.frame with six columns providing diversification regimes (`$regime_ID`) and `$rates` sorted by `$rate_type` along tips (`$tip_ID`)
-#'     found across all posterior samples (`$BAMM_sample_ID`) over each time step (i.e., `$focal_time`).
-#'     Set `extract_diversification_data_melted_df = TRUE` to include it in the output.
-#'   * Those data.frames can be passed down to [deepSTRAPP::plot_rates_through_time()] to generate a plot showing
-#'     the evolution diversification rates across trait values over time.
-#'
-#'   Optional objects generated for each time step (i.e., `focal_time`) and ordered as in `$time_steps`:
-#'   * `$STRAPP_results_over_time` List of objects summarizing the results of the STRAPP tests
-#'     See [compute_STRAPP_test_for_focal_time()] for a detailed description of the elements in each object.
-#'     Combined with `return_perm_data = TRUE`, it allows to plot the histograms of the null distributions
-#'     used to assess significance of the tests with [deepSTRAPP::plot_histogram_STRAPP_test_for_focal_time()].
-#'     (for a single `focal_time`) and [deepSTRAPP::plot_histograms_STRAPP_tests_over_time()] (for multiple `time_steps`).
-#'   * `$updated_trait_data_with_Map_over_time` List of objects containing trait data and updated `contMap`/`densityMaps`.
-#'     Updated `densityMaps` can be plotted with [deepSTRAPP::plot_densityMaps_overlay()] to display a phylogeny mapped with inferred states with branches cut at each `focal_time`.
-#'   * `$updated_BAMM_objects_over_time` List of objects containing rates and regimes ID mapped on phylogeny.
-#'     Updated `BAMM_object` can be plotted with [deepSTRAPP::plot_BAMM_rates()] to display a phylogeny mapped with
-#'     diversification rates with branches cut at each `focal_time`.
-#'
-#' @docType data
-#' @keywords datasets
-#' @name Ponerinae_deepSTRAPP_cat_2lvl_old_calib_0_40
-#'
-"Ponerinae_deepSTRAPP_cat_2lvl_old_calib_0_40"
+# ### 18/ Output from run_deepSTRAPP_over_time on categorical trait with 2-levels ####
+#
+# #' @title deepSTRAPP output for fake categorical size data with 2-levels mapped on old time-calibrated ponerine ant phylogeny over 0 to 40 Mya
+# #'
+# #' @description deepSTRAPP output for fake categorical size data with 2-levels mapped on old time-calibrated ponerine ant phylogeny over 0 to 40 Mya.
+# #'   This object is the typical result of a deepSTRAPP run carried out with [deepSTRAPP::run_deepSTRAPP_over_time()].
+# #'   It summaries STRAPP test results and can optionally include trait and diversification rate data frames, STRAPP test outputs,
+# #'   updated trait data objects, and updated BAMM objects, that are required fro downstream plots and analyses.
+# #'
+# #' @usage data(Ponerinae_deepSTRAPP_cat_2lvl_old_calib_0_40)
+# #' @format A list with 10 elements.
+# #'
+# #' @details deepSTRAPP output summarizing results of a deepSTRAPP run carried out with [deepSTRAPP::run_deepSTRAPP_over_time()].
+# #'
+# #'   * `$pvalues_summary_df` Data.frame with three columns providing test stat `$estimate` and `$p_value` obtained for each time step (i.e., `$focal_time`),
+# #'     that can be passed down to [deepSTRAPP::plot_STRAPP_pvalues_over_time()] to generate a plot showing the evolution of the test results across time.
+# #'   * `$time_steps` Numerical vector. Time steps at which the STRAPP tests were carried out in the same order as the objects returned in the output lists.
+# #'   * `$trait_data_type` Character string. Specify the type of trait data. Here: "categorical".
+# #'   * `$trait_data_type_for_stats` Character string. The type of trait data used to select statistical method. Here: "binary".
+# #'   * `$rate_type` Character string. The type of diversification rates used in the tests. Here: "net_diversification".
+# #'
+# #'   Optional summary df for multinominal data, if `posthoc_pairwise_tests = TRUE`:
+# #'   * `$pvalues_summary_df_for_posthoc_pairwise_tests` Data.frame with four or five columns providing test stat `$estimate`, `$p_value`, and `$p_value_adjusted`
+# #'     (if `p.adjust_method` used is not "none") for each `$pair` of states involved in post hoc Dunn's tests obtained for each time step (i.e., `$focal_time`).
+# #'      This data.frame can be passed down to [deepSTRAPP::plot_STRAPP_pvalues_over_time()] to generate a plot showing the evolution of the post hoc test results across time.
+# #'
+# #'   Optional melted data.frames:
+# #'   * `$trait_data_df_over_time` Data.frame with three columns providing `$trait_value` associated with each `$tip_ID` found along each time step (i.e., `$focal_time`).
+# #'     Set `extract_trait_data_melted_df = TRUE` to include it in the output.
+# #'   * `$diversification_data_df_over_time` Data.frame with six columns providing diversification regimes (`$regime_ID`) and `$rates` sorted by `$rate_type` along tips (`$tip_ID`)
+# #'     found across all posterior samples (`$BAMM_sample_ID`) over each time step (i.e., `$focal_time`).
+# #'     Set `extract_diversification_data_melted_df = TRUE` to include it in the output.
+# #'   * Those data.frames can be passed down to [deepSTRAPP::plot_rates_through_time()] to generate a plot showing
+# #'     the evolution diversification rates across trait values over time.
+# #'
+# #'   Optional objects generated for each time step (i.e., `focal_time`) and ordered as in `$time_steps`:
+# #'   * `$STRAPP_results_over_time` List of objects summarizing the results of the STRAPP tests
+# #'     See [compute_STRAPP_test_for_focal_time()] for a detailed description of the elements in each object.
+# #'     Combined with `return_perm_data = TRUE`, it allows to plot the histograms of the null distributions
+# #'     used to assess significance of the tests with [deepSTRAPP::plot_histogram_STRAPP_test_for_focal_time()].
+# #'     (for a single `focal_time`) and [deepSTRAPP::plot_histograms_STRAPP_tests_over_time()] (for multiple `time_steps`).
+# #'   * `$updated_trait_data_with_Map_over_time` List of objects containing trait data and updated `contMap`/`densityMaps`.
+# #'     Updated `densityMaps` can be plotted with [deepSTRAPP::plot_densityMaps_overlay()] to display a phylogeny mapped with inferred states with branches cut at each `focal_time`.
+# #'   * `$updated_BAMM_objects_over_time` List of objects containing rates and regimes ID mapped on phylogeny.
+# #'     Updated `BAMM_object` can be plotted with [deepSTRAPP::plot_BAMM_rates()] to display a phylogeny mapped with
+# #'     diversification rates with branches cut at each `focal_time`.
+# #'
+# #' @docType data
+# #' @keywords datasets
+# #' @name Ponerinae_deepSTRAPP_cat_2lvl_old_calib_0_40
+# #'
+# "Ponerinae_deepSTRAPP_cat_2lvl_old_calib_0_40"
 
 # ### 19/ Output from run_deepSTRAPP_over_time on categorical trait with 3-levels ####
 #

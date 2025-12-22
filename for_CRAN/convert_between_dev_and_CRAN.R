@@ -23,6 +23,7 @@
 
 ## 1.1/ Remove deepSTRAPP datasets from data
 unlink(x = "./data/Ponerinae_deepSTRAPP_cont_old_calib_0_40.rda", force = T)
+unlink(x = "./data/Ponerinae_deepSTRAPP_cat_2lvl_old_calib_0_40.rda", force = T)
 unlink(x = "./data/Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40.rda", force = T)
 unlink(x = "./data/Ponerinae_deepSTRAPP_biogeo_old_calib_0_40.rda", force = T)
 
@@ -50,6 +51,7 @@ devtools::check()
 
 ## 2.1/ Add deepSTRAPP datasets to data
 file.copy(from = "./for_CRAN/Ponerinae_deepSTRAPP_cont_old_calib_0_40.rda", to = "./data/Ponerinae_deepSTRAPP_cont_old_calib_0_40.rda", overwrite = T)
+file.copy(from = "./for_CRAN/Ponerinae_deepSTRAPP_cat_2lvl_old_calib_0_40.rda", to = "./data/Ponerinae_deepSTRAPP_cat_2lvl_old_calib_0_40.rda", overwrite = T)
 file.copy(from = "./for_CRAN/Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40.rda", to = "./data/Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40.rda", overwrite = T)
 file.copy(from = "./for_CRAN/Ponerinae_deepSTRAPP_biogeo_old_calib_0_40.rda", to = "./data/Ponerinae_deepSTRAPP_biogeo_old_calib_0_40.rda", overwrite = T)
 
