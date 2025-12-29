@@ -16,6 +16,12 @@ Availability using Additional_repositories specification:
   This package is indicated as Suggests and conditions are implemented to check for its presence when running functions that rely on BioGeoBEARS,
   ensuring the package is functional even if BioGeoBEARS is not installed.
   
+> Possibly misspelled words in DESCRIPTION:
+    STRAPP (9:9)
+    phylogenies (7:37, 10:11)
+    
+These words are not misspelled.
+  
 > Found the following (possibly) invalid URLs:
   URL: https://support.posit.co/hc/en-us/articles/200486498-Package-Development-Prerequisites
   
