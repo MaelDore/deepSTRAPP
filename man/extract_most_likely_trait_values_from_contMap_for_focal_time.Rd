@@ -126,6 +126,7 @@ eel_contMap <- phytools::contMap(eel.tree, x = eel_data,
 # Set focal time to 50 Mya
 focal_time <- 50
 
+\donttest{ # (May take several minutes to run)
 ## Extract trait data and update contMap for the given focal_time
 
 # Extract from the contMap (values are not exact ML estimates)
@@ -153,7 +154,7 @@ abline(v = max(phytools::nodeHeights(eel_contMap$tree)[,2]) - focal_time,
 
 # Plot updated contMap with initial node labels
 plot(eel_test$contMap)
-ape::nodelabels(text = eel_test$contMap$tree$initial_nodes_ID)
+ape::nodelabels(text = eel_test$contMap$tree$initial_nodes_ID) }
 
 # ----- Example 2: Include fossils (Non-ultrametric tree) ----- #
 
@@ -182,6 +183,7 @@ mammals_contMap <- phytools::contMap(mammals_tree, x = mammals_data,
 # Set focal time to 80 Mya
 focal_time <- 80
 
+\donttest{ # (May take several minutes to run)
 ## Extract trait data and update contMap for the given focal_time
 
 # Extract from the contMap (values are not exact ML estimates)
@@ -209,7 +211,7 @@ abline(v = max(phytools::nodeHeights(mammals_contMap$tree)[,2]) - focal_time,
 
 # Plot updated contMap with initial node labels
 phytools::plot.contMap(mammals_test$contMap, fsize = c(0.8, 1))
-ape::nodelabels(text = mammals_test$contMap$tree$initial_nodes_ID)
+ape::nodelabels(text = mammals_test$contMap$tree$initial_nodes_ID) }
 
 }
 \seealso{

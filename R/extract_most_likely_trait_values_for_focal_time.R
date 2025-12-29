@@ -463,6 +463,7 @@ extract_most_likely_trait_values_for_focal_time <- function (contMap = NULL,
 #' # Set focal time to 50 Mya
 #' focal_time <- 50
 #'
+#' \donttest{ # (May take several minutes to run)
 #' ## Extract trait data and update contMap for the given focal_time
 #'
 #' # Extract from the contMap (values are not exact ML estimates)
@@ -490,7 +491,7 @@ extract_most_likely_trait_values_for_focal_time <- function (contMap = NULL,
 #'
 #' # Plot updated contMap with initial node labels
 #' plot(eel_test$contMap)
-#' ape::nodelabels(text = eel_test$contMap$tree$initial_nodes_ID)
+#' ape::nodelabels(text = eel_test$contMap$tree$initial_nodes_ID) }
 #'
 #' # ----- Example 2: Include fossils (Non-ultrametric tree) ----- #
 #'
@@ -519,6 +520,7 @@ extract_most_likely_trait_values_for_focal_time <- function (contMap = NULL,
 #' # Set focal time to 80 Mya
 #' focal_time <- 80
 #'
+#' \donttest{ # (May take several minutes to run)
 #' ## Extract trait data and update contMap for the given focal_time
 #'
 #' # Extract from the contMap (values are not exact ML estimates)
@@ -546,7 +548,7 @@ extract_most_likely_trait_values_for_focal_time <- function (contMap = NULL,
 #'
 #' # Plot updated contMap with initial node labels
 #' phytools::plot.contMap(mammals_test$contMap, fsize = c(0.8, 1))
-#' ape::nodelabels(text = mammals_test$contMap$tree$initial_nodes_ID)
+#' ape::nodelabels(text = mammals_test$contMap$tree$initial_nodes_ID) }
 #'
 
 
@@ -957,6 +959,7 @@ extract_most_likely_trait_values_from_contMap_for_focal_time <- function (
 #' # Set focal time to 10 Mya
 #' focal_time <- 10
 #'
+#' \donttest{ # (May take several minutes to run)
 #' ## Extract trait data and update densityMaps for the given focal_time
 #'
 #' # Extract from the densityMaps
@@ -978,7 +981,7 @@ extract_most_likely_trait_values_from_contMap_for_focal_time <- function (
 #'        col = "red", lty = 2, lwd = 2)
 #'
 #' # Plot updated densityMaps with ACE pies
-#' plot_densityMaps_overlay(eel_cat_3lvl_data_10My$densityMaps, fsize = 0.7)
+#' plot_densityMaps_overlay(eel_cat_3lvl_data_10My$densityMaps, fsize = 0.7) }
 #'
 #'
 #' # ----- Example 2: Include fossils (Non-ultrametric tree) ----- #
@@ -1001,6 +1004,7 @@ extract_most_likely_trait_values_from_contMap_for_focal_time <- function (
 #' mammals_data[mammals_mass > 10] <- "large"
 #' table(mammals_data)
 #'
+#' \donttest{ # (May take several minutes to run)
 #' ## Produce densityMaps using stochastic character mapping based on an equal-rates (ER) Mk model
 #' mammals_cat_data <- prepare_trait_data(tip_data = mammals_data, phylo = mammals_tree,
 #'                                        trait_data_type = "categorical",
@@ -1031,7 +1035,7 @@ extract_most_likely_trait_values_from_contMap_for_focal_time <- function (
 #'        col = "red", lty = 2, lwd = 2)
 #'
 #' # Plot updated densityMaps with ACE pies
-#' plot_densityMaps_overlay(mammals_cat_data_80My$densityMaps, fsize = 0.8)
+#' plot_densityMaps_overlay(mammals_cat_data_80My$densityMaps, fsize = 0.8) }
 #'
 
 
@@ -1508,6 +1512,7 @@ extract_most_likely_states_from_densityMaps_for_focal_time <- function (
 #'
 #' # ----- Example 1: Using only unique areas ----- #
 #'
+#' \donttest{ # (May take several minutes to run)
 #' ## Extract trait data and update densityMaps for the given focal_time
 #'
 #' # Extract from the densityMaps
@@ -1529,10 +1534,11 @@ extract_most_likely_states_from_densityMaps_for_focal_time <- function (
 #'        col = "red", lty = 2, lwd = 2)
 #'
 #' # Plot updated densityMaps with ACE pies
-#' plot_densityMaps_overlay(eel_biogeo_data_10My$densityMaps, fsize = 0.7)
+#' plot_densityMaps_overlay(eel_biogeo_data_10My$densityMaps, fsize = 0.7) }
 #'
 #' # ----- Example 2: Using all ranges ----- #
 #'
+#' \donttest{ # (May take several minutes to run)
 #' ## Extract trait data and update densityMaps_all_ranges for the given focal_time
 #'
 #' # Extract from the densityMaps
@@ -1555,7 +1561,7 @@ extract_most_likely_states_from_densityMaps_for_focal_time <- function (
 #'        col = "red", lty = 2, lwd = 2)
 #'
 #' # Plot updated densityMaps with ACE pies
-#' plot_densityMaps_overlay(eel_biogeo_data_10My$densityMaps, fsize = 0.7)
+#' plot_densityMaps_overlay(eel_biogeo_data_10My$densityMaps, fsize = 0.7) }
 #'
 
 extract_most_likely_ranges_from_densityMaps_for_focal_time <- function (

@@ -111,6 +111,7 @@ focal_time <- 10
 
 # ----- Example 1: Using only unique areas ----- #
 
+\donttest{ # (May take several minutes to run)
 ## Extract trait data and update densityMaps for the given focal_time
 
 # Extract from the densityMaps
@@ -132,10 +133,11 @@ abline(v = max(phytools::nodeHeights(eel_biogeo_data$densityMaps[[1]]$tree)[,2])
        col = "red", lty = 2, lwd = 2)
 
 # Plot updated densityMaps with ACE pies
-plot_densityMaps_overlay(eel_biogeo_data_10My$densityMaps, fsize = 0.7)
+plot_densityMaps_overlay(eel_biogeo_data_10My$densityMaps, fsize = 0.7) }
 
 # ----- Example 2: Using all ranges ----- #
 
+\donttest{ # (May take several minutes to run)
 ## Extract trait data and update densityMaps_all_ranges for the given focal_time
 
 # Extract from the densityMaps
@@ -158,7 +160,7 @@ abline(v =  root_age - focal_time,
        col = "red", lty = 2, lwd = 2)
 
 # Plot updated densityMaps with ACE pies
-plot_densityMaps_overlay(eel_biogeo_data_10My$densityMaps, fsize = 0.7)
+plot_densityMaps_overlay(eel_biogeo_data_10My$densityMaps, fsize = 0.7) }
 
 }
 \seealso{

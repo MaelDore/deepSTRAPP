@@ -109,6 +109,7 @@ eel_cat_3lvl_data$densityMaps # Three density maps: one per state
 # Set focal time to 10 Mya
 focal_time <- 10
 
+\donttest{ # (May take several minutes to run)
 ## Extract trait data and update densityMaps for the given focal_time
 
 # Extract from the densityMaps
@@ -130,7 +131,7 @@ abline(v = max(phytools::nodeHeights(eel_cat_3lvl_data$densityMaps[[1]]$tree)[,2
        col = "red", lty = 2, lwd = 2)
 
 # Plot updated densityMaps with ACE pies
-plot_densityMaps_overlay(eel_cat_3lvl_data_10My$densityMaps, fsize = 0.7)
+plot_densityMaps_overlay(eel_cat_3lvl_data_10My$densityMaps, fsize = 0.7) }
 
 
 # ----- Example 2: Include fossils (Non-ultrametric tree) ----- #
@@ -153,6 +154,7 @@ mammals_data[mammals_mass > 5] <- "medium"
 mammals_data[mammals_mass > 10] <- "large"
 table(mammals_data)
 
+\donttest{ # (May take several minutes to run)
 ## Produce densityMaps using stochastic character mapping based on an equal-rates (ER) Mk model
 mammals_cat_data <- prepare_trait_data(tip_data = mammals_data, phylo = mammals_tree,
                                        trait_data_type = "categorical",
@@ -183,7 +185,7 @@ abline(v = max(phytools::nodeHeights(mammals_cat_data$densityMaps[[1]]$tree)[,2]
        col = "red", lty = 2, lwd = 2)
 
 # Plot updated densityMaps with ACE pies
-plot_densityMaps_overlay(mammals_cat_data_80My$densityMaps, fsize = 0.8)
+plot_densityMaps_overlay(mammals_cat_data_80My$densityMaps, fsize = 0.8) }
 
 }
 \seealso{
