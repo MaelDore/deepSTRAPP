@@ -20,6 +20,32 @@ knitr::opts_chunk$set(
 
 ```{r setup, eval = TRUE, include = FALSE}
 library(deepSTRAPP)
+
+is_dev_version <- function (pkg = "deepSTRAPP")
+{
+  # # Check if ran on CRAN
+  # not_cran <- identical(Sys.getenv("NOT_CRAN"), "true") # || interactive()
+
+  # Version number check
+  version <- tryCatch(as.character(utils::packageVersion(pkg)), error = function(e) "")
+  dev_version <- grepl("\\.9000", version)
+
+  # not_cran || dev_version
+  
+  return(dev_version)
+}
+
+```
+
+```{r adjust_dpi_CRAN, include = FALSE, eval = !is_dev_version()}
+knitr::opts_chunk$set(
+  dpi = 50   # Lower DPI to save space
+)
+```
+```{r adjust_dpi_dev, include = FALSE, eval = is_dev_version()}
+knitr::opts_chunk$set(
+  dpi = 72   # Default DPI for the dev version
+)
 ```
 
 <br>

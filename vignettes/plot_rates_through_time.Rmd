@@ -35,6 +35,17 @@ is_dev_version <- function (pkg = "deepSTRAPP")
 
 ```
 
+```{r adjust_dpi_CRAN, include = FALSE, eval = !is_dev_version()}
+knitr::opts_chunk$set(
+  dpi = 50   # Lower DPI to save space
+)
+```
+```{r adjust_dpi_dev, include = FALSE, eval = is_dev_version()}
+knitr::opts_chunk$set(
+  dpi = 72   # Default DPI for the dev version
+)
+```
+
 <br>
 This vignette presents the different options available to __plot rates through time__ following a deepSTRAPP workflow.
 

@@ -37,6 +37,17 @@ is_dev_version <- function (pkg = "deepSTRAPP")
 
 ```
 
+```{r adjust_dpi_CRAN, include = FALSE, eval = !is_dev_version()}
+knitr::opts_chunk$set(
+  dpi = 50   # Lower DPI to save space
+)
+```
+```{r adjust_dpi_dev, include = FALSE, eval = is_dev_version()}
+knitr::opts_chunk$set(
+  dpi = 72   # Default DPI for the dev version
+)
+```
+
 <br>
 This is a simple example that shows how deepSTRAPP can be used to test for __correlations__ between a __continuous trait__ and __diversification rates__ along evolutionary times.
 It presents the main functions in a typical __deepSTRAPP workflow__.
