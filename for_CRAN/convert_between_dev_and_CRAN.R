@@ -42,7 +42,7 @@ file.copy(from = "./for_CRAN/datasets_doc_for_CRAN.R", to = "./R/datasets_doc_fo
 
 ## 1.4/ Add pre-rendered visual outputs to the vignette folder
 prerendered_vignette_outputs_path <- list.files(path = "./for_CRAN/", pattern = ".PNG")
-file.copy(from = paste0("./for_CRAN/",prerendered_vignette_outputs_path), to = paste0("./vignettes/figures/",prerendered_vignette_outputs_path), overwrite = T)
+file.copy(from = paste0("./for_CRAN/Figures_for_vignettes_Low_resolution/",prerendered_vignette_outputs_path), to = paste0("./vignettes/figures/",prerendered_vignette_outputs_path), overwrite = T)
 
 ## 1.5/ Replace deepSTRAPP workflow figure with LQ version
 unlink(x = "./man/figures/deepSTRAPP_workflow.png", force = T)
