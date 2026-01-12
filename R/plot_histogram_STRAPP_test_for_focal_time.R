@@ -75,7 +75,7 @@
 #' @seealso Associated functions in deepSTRAPP: [deepSTRAPP::run_deepSTRAPP_for_focal_time()] [deepSTRAPP::plot_histograms_STRAPP_tests_over_time()]
 #'
 #' @examples
-#' if (deepSTRAPP:::is_dev_version())
+#' if (deepSTRAPP::is_dev_version())
 #' {
 #'  # ----- Example 1: Continuous trait ----- #
 #'

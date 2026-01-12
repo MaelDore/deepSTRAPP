@@ -221,7 +221,7 @@
 #'
 #' # ----- Example 2: Ponerinae phylogeny ----- #
 #'
-#' if (deepSTRAPP:::is_dev_version())
+#' if (deepSTRAPP::is_dev_version())
 #' {
 #'  #   Load phylogeny
 #'  data("Ponerinae_tree", package = "deepSTRAPP")

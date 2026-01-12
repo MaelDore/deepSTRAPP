@@ -103,7 +103,7 @@
 #' Function in deepSTRAPP to a single time-step at once: [deepSTRAPP::plot_traits_vs_rates_on_phylogeny_for_focal_time()]
 #'
 #' @examples
-#' if (deepSTRAPP:::is_dev_version())
+#' if (deepSTRAPP::is_dev_version())
 #' {
 #'  # ----- Example 1: Continuous trait ----- #
 #'  ## Load data

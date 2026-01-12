@@ -105,7 +105,7 @@
 #' Function in deepSTRAPP to plot all time-steps at once: [deepSTRAPP::plot_traits_vs_rates_on_phylogeny_over_time()]
 #'
 #' @examples
-#' if (deepSTRAPP:::is_dev_version())
+#' if (deepSTRAPP::is_dev_version())
 #' {
 #'  # ----- Example 1: Continuous trait ----- #
 #'  ## Load data

@@ -1,19 +1,19 @@
-#' @title Check if package is in development version or not
+
+#' @title Check whether deepSTRAPP is a development version
 #'
-#' @description Detect if the deepSTRAPP package is in development or released version.
-#'   The development versions include deepSTRAPP outputs as datasets to help
-#'   produces examples and vignettes outputs.
+#' @description Detect whether the current deepSTRAPP installation corresponds to
+#'   a development version (e.g., version sourced from GitHub), as opposed to a CRAN release.
 #'
-#'   These datasets are removed from the CRAN release because their size is not compatible
-#'   with CRAN policies.
+#'   The development versions include deepSTRAPP outputs as additional internal datasets to help
+#'   produces examples and vignettes outputs. These additional datasets are removed from the CRAN releases
+#'   because their size is not compatible with CRAN policies.
 #'
-#'   This function is used to check if an example must be ran or a vignette chunk evaluated
+#'   This function is only used to check if an example must be ran or a vignette chunk evaluated
 #'   to produce output from data.
 #'
-#' @return Logical. TRUE if development version or local check.
+#' @return Logical. TRUE if running a development version.
 #'
-#' @keywords internal
-#' @noRd
+#' @export
 #'
 
 is_dev_version <- function (pkg = "deepSTRAPP")

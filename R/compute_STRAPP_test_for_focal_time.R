@@ -168,7 +168,7 @@
 #'   \doi{10.1038/s41467-025-63709-3}
 #'
 #' @examples
-#' if (deepSTRAPP:::is_dev_version())
+#' if (deepSTRAPP::is_dev_version())
 #' {
 #'  # ------ Prepare data ------ #
 #'

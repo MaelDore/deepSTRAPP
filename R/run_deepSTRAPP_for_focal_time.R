@@ -158,7 +158,7 @@
 #' * For biogeographic range data: \code{vignette("deepSTRAPP_biogeographic_data", package = "deepSTRAPP")}
 #'
 #' @examples
-#' if (deepSTRAPP:::is_dev_version())
+#' if (deepSTRAPP::is_dev_version())
 #' {
 #'  # ----- Example 1: Continuous trait ----- #
 #'  ## Load data
