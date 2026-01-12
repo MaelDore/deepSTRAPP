@@ -109,7 +109,7 @@ Rates are averaged across branches at each time step (i.e., \code{focal_time}).
 
 # ------ Example 1: Plot rates through time for continuous data ------ #
 
-if (deepSTRAPP:::is_dev_version())
+if (deepSTRAPP::is_dev_version())
 {
   ## Load results of run_deepSTRAPP_over_time()
   data(Ponerinae_deepSTRAPP_cont_old_calib_0_40, package = "deepSTRAPP")
@@ -153,7 +153,7 @@ if (deepSTRAPP:::is_dev_version())
 
 # ------ Example 2: Plot rates through time for categorical data ------ #
 
-if (deepSTRAPP:::is_dev_version())
+if (deepSTRAPP::is_dev_version())
 {
   ## Load results of run_deepSTRAPP_over_time()
   data(Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40, package = "deepSTRAPP")
@@ -196,7 +196,7 @@ if (deepSTRAPP:::is_dev_version())
 
 # ------ Example 3: Plot rates through time for biogeographic data ------ #
 
-if (deepSTRAPP:::is_dev_version())
+if (deepSTRAPP::is_dev_version())
 {
   ## Load results of run_deepSTRAPP_over_time()
   data(Ponerinae_deepSTRAPP_biogeo_old_calib_0_40, package = "deepSTRAPP")

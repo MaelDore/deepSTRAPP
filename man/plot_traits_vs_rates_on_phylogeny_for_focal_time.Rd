@@ -156,7 +156,7 @@ cut-off at the specified time-steps are returned among the outputs under \verb{$
 For plotting all time-steps at once, see \code{\link[=plot_traits_vs_rates_on_phylogeny_over_time]{plot_traits_vs_rates_on_phylogeny_over_time()}}.
 }
 \examples{
-if (deepSTRAPP:::is_dev_version())
+if (deepSTRAPP::is_dev_version())
 {
  # ----- Example 1: Continuous trait ----- #
  ## Load data

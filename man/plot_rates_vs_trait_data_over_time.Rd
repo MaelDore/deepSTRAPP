@@ -101,7 +101,7 @@ among the outputs under \verb{$diversification_data_df_over_time}.
 For plotting a single \code{focal_time}, see \code{\link[=plot_rates_vs_trait_data_for_focal_time]{plot_rates_vs_trait_data_for_focal_time()}}.
 }
 \examples{
-if (deepSTRAPP:::is_dev_version())
+if (deepSTRAPP::is_dev_version())
 {
  # ----- Example 1: Continuous trait ----- #
 

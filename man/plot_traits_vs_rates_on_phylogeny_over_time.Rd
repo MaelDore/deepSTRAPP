@@ -150,7 +150,7 @@ cut-off at the specified time-steps are returned among the outputs under \verb{$
 For plotting a single time-step (i.e., \verb{$focal_time}) at once, see \code{\link[=plot_traits_vs_rates_on_phylogeny_for_focal_time]{plot_traits_vs_rates_on_phylogeny_for_focal_time()}}.
 }
 \examples{
-if (deepSTRAPP:::is_dev_version())
+if (deepSTRAPP::is_dev_version())
 {
  # ----- Example 1: Continuous trait ----- #
  ## Load data

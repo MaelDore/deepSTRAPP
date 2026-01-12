@@ -89,7 +89,7 @@ returned among the outputs under \verb{$STRAPP_results_over_time[[i]]$posthoc_pa
 For plotting all time-steps at once, see \code{\link[=plot_histograms_STRAPP_tests_over_time]{plot_histograms_STRAPP_tests_over_time()}}.
 }
 \examples{
-if (deepSTRAPP:::is_dev_version())
+if (deepSTRAPP::is_dev_version())
 {
  # ----- Example 1: Continuous trait ----- #
 

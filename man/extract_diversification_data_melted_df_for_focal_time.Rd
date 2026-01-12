@@ -47,7 +47,7 @@ a \code{BAMM_object} updated for a given \code{focal_time}.
 }
 \examples{
 
-if (deepSTRAPP:::is_dev_version())
+if (deepSTRAPP::is_dev_version())
 {
  # Load the BAMM_object summarizing 1000 posterior samples of BAMM updated for a focal_time of 10 My
  data(Ponerinae_BAMM_object_10My)

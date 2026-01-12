@@ -258,7 +258,7 @@ a phylogeny mapped with diversification rates with branches cut at each \code{fo
 }
 }
 \examples{
-if (deepSTRAPP:::is_dev_version())
+if (deepSTRAPP::is_dev_version())
 {
  # ----- Example 1: Continuous trait ----- #
  ## Load data

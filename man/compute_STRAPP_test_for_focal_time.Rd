@@ -197,7 +197,7 @@ Thus, a Spearman's rank correlation test is favored.
 }
 }
 \examples{
-if (deepSTRAPP:::is_dev_version())
+if (deepSTRAPP::is_dev_version())
 {
  # ------ Prepare data ------ #
 

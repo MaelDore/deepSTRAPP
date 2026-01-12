@@ -219,7 +219,7 @@ If \code{posthoc_pairwise_tests = TRUE}, Dunn's post hoc pairwise rank-sum tests
 }
 }
 \examples{
-if (deepSTRAPP:::is_dev_version())
+if (deepSTRAPP::is_dev_version())
 {
  # ----- Example 1: Continuous trait ----- #
  ## Load data

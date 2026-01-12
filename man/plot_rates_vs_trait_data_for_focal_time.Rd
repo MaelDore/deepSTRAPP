@@ -112,7 +112,7 @@ among the outputs under \verb{$diversification_data_df_over_time}.
 For plotting all time-steps at once, see \code{\link[=plot_rates_vs_trait_data_over_time]{plot_rates_vs_trait_data_over_time()}}.
 }
 \examples{
-if (deepSTRAPP:::is_dev_version())
+if (deepSTRAPP::is_dev_version())
 {
  # ----- Example 1: Continuous trait ----- #
 

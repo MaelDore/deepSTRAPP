@@ -77,7 +77,7 @@ and \code{return_perm_data = TRUE} to record distributions of test statistics.
 Time-steps for which the data do not yield more than two states/ranges will show a warning and generate no plot.
 }
 \examples{
-if (deepSTRAPP:::is_dev_version())
+if (deepSTRAPP::is_dev_version())
 {
  # ----- Example 1: Continuous trait ----- #
 

@@ -210,7 +210,7 @@ plot_BAMM_rates(whale_BAMM_object_5My, add_regime_shifts = TRUE,
 
 # ----- Example 2: Extant Ponerinae (1,534 taxa) ----- #
 
-if (deepSTRAPP:::is_dev_version())
+if (deepSTRAPP::is_dev_version())
 {
  ## Load the BAMM_object summarizing 1000 posterior samples of BAMM
  data(Ponerinae_BAMM_object, package = "deepSTRAPP")
