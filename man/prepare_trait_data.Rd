@@ -251,7 +251,7 @@ data("eel.data", package = "phytools")
 eel_data <- stats::setNames(eel.data$Max_TL_cm,
                             rownames(eel.data))
 
-\dontrun{  (May take several minutes to run)
+\dontrun{ # (May take several minutes to run)
 ## Map trait evolution on the phylogeny
 mapped_cont_traits <- prepare_trait_data(
    tip_data = eel_data,
@@ -299,7 +299,7 @@ Q_matrix = rbind(c(NA, 0, 0), c(1, NA, 2), c(0, 2, NA))
 colors_per_states <- c("limegreen", "orange", "dodgerblue")
 names(colors_per_states) <- c("bite", "kiss", "suction")
 
-\dontrun{  (May take several minutes to run)
+\dontrun{ # (May take several minutes to run)
 ## Run evolutionary models
 eel_cat_3lvl_data <- prepare_trait_data(tip_data = eel_data, phylo = eel.tree,
     trait_data_type = "categorical",
@@ -347,7 +347,7 @@ table(eel_data)
 colors_per_ranges <- c("dodgerblue3", "gold")
 names(colors_per_ranges) <- c("A", "B")
 
-\dontrun{  (May take several minutes to run)
+\dontrun{ # (May take several minutes to run)
 ## Run evolutionary models
 eel_biogeo_data <- prepare_trait_data(
     tip_data = eel_data,

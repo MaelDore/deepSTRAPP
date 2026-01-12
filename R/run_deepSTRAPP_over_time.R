@@ -230,7 +230,7 @@
 #'  time_step_duration <- 5
 #'  time_range <- c(0, 40)
 #'
-#'  \dontrun{  (May take several minutes to run)
+#'  \dontrun{ # (May take several minutes to run)
 #'  ## Run deepSTRAPP on net diversification rates
 #'  Ponerinae_deepSTRAPP_cont_old_calib_0_40 <- run_deepSTRAPP_over_time(
 #'     contMap = Ponerinae_contMap,
@@ -337,7 +337,7 @@
 #'  colors_per_states <- c("forestgreen", "sienna", "goldenrod")
 #'  names(colors_per_states) <- c("arboreal", "subterranean", "terricolous")
 #'
-#'  \dontrun{  (May take several minutes to run)
+#'  \dontrun{ # (May take several minutes to run)
 #'  ## Produce densityMaps using stochastic character mapping based on an ARD Mk model
 #'  Ponerinae_cat_3lvl_data_old_calib <- prepare_trait_data(
 #'     tip_data = Ponerinae_cat_3lvl_tip_data,
@@ -358,7 +358,7 @@
 #'  time_step_duration <- 5
 #'  time_range <- c(0, 40)
 #'
-#'  \dontrun{  (May take several minutes to run)
+#'  \dontrun{ # (May take several minutes to run)
 #'  ## Run deepSTRAPP on net diversification rates across time-steps.
 #'  Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40 <- run_deepSTRAPP_over_time(
 #'     densityMaps = Ponerinae_cat_3lvl_data_old_calib$densityMaps,
@@ -491,7 +491,7 @@
 #'  colors_per_ranges <- c("mediumpurple2", "peachpuff2")
 #'  names(colors_per_ranges) <- c("N", "O")
 #'
-#'  \dontrun{  (May take several minutes to run)
+#'  \dontrun{ # (May take several minutes to run)
 #'  ## Run evolutionary models
 #'  Ponerinae_biogeo_data <- prepare_trait_data(
 #'     tip_data = Ponerinae_NO_data,
@@ -513,7 +513,7 @@
 #'  time_range <- c(0, 40)
 #'  time_step_duration <- 10
 #'
-#'  \dontrun{  (May take several minutes to run)
+#'  \dontrun{ # (May take several minutes to run)
 #'  ## Run deepSTRAPP on net diversification rates for time-steps = 0 to 40 Mya.
 #'  Ponerinae_deepSTRAPP_biogeo_old_calib_0_40 <- run_deepSTRAPP_over_time(
 #'     densityMaps = Ponerinae_biogeo_data_old_calib$densityMaps,

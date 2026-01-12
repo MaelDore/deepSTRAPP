@@ -55,7 +55,7 @@ if (deepSTRAPP:::is_dev_version())
  # It is not available in CRAN versions.
  # Use remotes::install_github(repo = "MaelDore/deepSTRAPP") to get the latest development version.
 
- \dontrun{  (May take several minutes to run)
+ \dontrun{ # (May take several minutes to run)
  # Extract diversification data
  diversification_data_df <- extract_diversification_data_melted_df_for_focal_time(
      BAMM_object = Ponerinae_BAMM_object_10My,

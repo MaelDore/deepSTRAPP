@@ -61,7 +61,7 @@
 #' colors_per_levels <- c("limegreen", "orange", "dodgerblue")
 #' names(colors_per_levels) <- c("bite", "kiss", "suction")
 #'
-#' \dontrun{  (May take several minutes to run)
+#' \dontrun{ # (May take several minutes to run)
 #' # Run evolutionary models to prepare trait data
 #' eel_cat_3lvl_data <- prepare_trait_data(tip_data = eel_data, phylo = eel.tree,
 #'     trait_data_type = "categorical",

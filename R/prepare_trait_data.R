@@ -196,7 +196,7 @@
 #' eel_data <- stats::setNames(eel.data$Max_TL_cm,
 #'                             rownames(eel.data))
 #'
-#' \dontrun{  (May take several minutes to run)
+#' \dontrun{ # (May take several minutes to run)
 #' ## Map trait evolution on the phylogeny
 #' mapped_cont_traits <- prepare_trait_data(
 #'    tip_data = eel_data,
@@ -244,7 +244,7 @@
 #' colors_per_states <- c("limegreen", "orange", "dodgerblue")
 #' names(colors_per_states) <- c("bite", "kiss", "suction")
 #'
-#' \dontrun{  (May take several minutes to run)
+#' \dontrun{ # (May take several minutes to run)
 #' ## Run evolutionary models
 #' eel_cat_3lvl_data <- prepare_trait_data(tip_data = eel_data, phylo = eel.tree,
 #'     trait_data_type = "categorical",
@@ -292,7 +292,7 @@
 #' colors_per_ranges <- c("dodgerblue3", "gold")
 #' names(colors_per_ranges) <- c("A", "B")
 #'
-#' \dontrun{  (May take several minutes to run)
+#' \dontrun{ # (May take several minutes to run)
 #' ## Run evolutionary models
 #' eel_biogeo_data <- prepare_trait_data(
 #'     tip_data = eel_data,
@@ -2781,7 +2781,7 @@ select_best_trait_model_from_geiger <- function (list_model_fits)
 #' ## The R package 'BioGeoBEARS' is needed for this function to work with biogeographic data.
 #' # Please install it manually from: https://github.com/nmatzke/BioGeoBEARS.
 #'
-#' \dontrun{  (May take several minutes to run)
+#' \dontrun{ # (May take several minutes to run)
 #' ## Prepare phylo
 #'
 #' # Set path to BioGeoBEARS directory
@@ -3001,41 +3001,41 @@ generate_list_ranges <- function (areas_list, max_range_size, include_null_range
 # Original function written by Liam Revell, 2012
 # Input = simmaps
 
-#' @title Plot posterior density of stochastic mapping on a tree
-#'
-#' @description Visualize posterior probability density from stochastic mapping using a color gradient on the tree.
-#'   Original function written by Liam Revell, 2012 in the [phytools] package: [phytools::densityMap()].
-#'
-#' @inheritParams phytools::densityMap
-#' @param tol Positive numerical. To set the tolerance used to match node ages and time steps (i.e., onsider them equal). Default = 1e-5.
-#' @param verbose Logical. To display or progress every 100 edges. Default = `TRUE`.
-#' @param col_scale Character string vector. To set the color scale manually. Need to provide 1001 colors for the scale.
-#'   If `NULL` (the default), the `rainbow()` color scale will be used.
-#'
-#' @return The function plots a tree with mapped trait probability densities and returns an object of class `densityMap` invisibly.
-#'   A `densityMap` is a list with three elements.
-#'     * `$tree` List of at least 8 elements. Includes the phylogeny, the trait evolution model data from the simmaps, and the newly mapped trait posterior densities.
-#'       * `$maps` List of N elements, one per edge. Each list comprises a named numerical vector that represent changes in posterior probability density of the focal state along segments of equal time.
-#'         Named are posterior probabilities scaled from 0 to 1000. Values are length of the segments. Segments are ordered from root to tips.
-#'       * `$mapped.edge` Matrix of edge per posterior probability summarizing the overall length of each edge attributed to a specific posterior probabiliy value.
-#'       * `$Q` Numerical square matrix summarizing instantaneous transition rates between states as estimated from the evolutionary model.
-#'       Rows = initial states. Cols = final states.
-#'       * `$logL` Numerical. Log-likelihood of the data as optimized when estimated model parameters.
-#'     * `$col` Named character string vector. Color scale used to map posterior probabilities. Names are the posterior probabilities scaled from 0 to 1000. Values are the colors.
-#'     * `$states` Character string. The name of the states.
-#'
-#' @details Wrapped function of [phytools::densityMap()].
-#'   Additions to the initial function:
-#'   * Can modify manually the tolerance to handle issue with mismatch between node ages and time steps used.
-#'   * Can print progress across egdes
-#'   * Can provide a manual color scale to replace the default rainbow scale. The color scale must have 1001 colors.
-#'
-#' @author Maël Doré. Initial function by Liam Revell, 2012 in the [phytools] package.
-#'
-#' @seealso [phytools::densityMap()]
-#'
-#' @noRd
-#'
+# #' @title Plot posterior density of stochastic mapping on a tree
+# #'
+# #' @description Visualize posterior probability density from stochastic mapping using a color gradient on the tree.
+# #'   Original function written by Liam Revell, 2012 in the [phytools] package: [phytools::densityMap()].
+# #'
+# #' @inheritParams phytools::densityMap
+# #' @param tol Positive numerical. To set the tolerance used to match node ages and time steps (i.e., onsider them equal). Default = 1e-5.
+# #' @param verbose Logical. To display or progress every 100 edges. Default = `TRUE`.
+# #' @param col_scale Character string vector. To set the color scale manually. Need to provide 1001 colors for the scale.
+# #'   If `NULL` (the default), the `rainbow()` color scale will be used.
+# #'
+# #' @return The function plots a tree with mapped trait probability densities and returns an object of class `densityMap` invisibly.
+# #'   A `densityMap` is a list with three elements.
+# #'     * `$tree` List of at least 8 elements. Includes the phylogeny, the trait evolution model data from the simmaps, and the newly mapped trait posterior densities.
+# #'       * `$maps` List of N elements, one per edge. Each list comprises a named numerical vector that represent changes in posterior probability density of the focal state along segments of equal time.
+# #'         Named are posterior probabilities scaled from 0 to 1000. Values are length of the segments. Segments are ordered from root to tips.
+# #'       * `$mapped.edge` Matrix of edge per posterior probability summarizing the overall length of each edge attributed to a specific posterior probabiliy value.
+# #'       * `$Q` Numerical square matrix summarizing instantaneous transition rates between states as estimated from the evolutionary model.
+# #'       Rows = initial states. Cols = final states.
+# #'       * `$logL` Numerical. Log-likelihood of the data as optimized when estimated model parameters.
+# #'     * `$col` Named character string vector. Color scale used to map posterior probabilities. Names are the posterior probabilities scaled from 0 to 1000. Values are the colors.
+# #'     * `$states` Character string. The name of the states.
+# #'
+# #' @details Wrapped function of [phytools::densityMap()].
+# #'   Additions to the initial function:
+# #'   * Can modify manually the tolerance to handle issue with mismatch between node ages and time steps used.
+# #'   * Can print progress across egdes
+# #'   * Can provide a manual color scale to replace the default rainbow scale. The color scale must have 1001 colors.
+# #'
+# #' @author Maël Doré. Initial function by Liam Revell, 2012 in the [phytools] package.
+# #'
+# #' @seealso [phytools::densityMap()]
+# #'
+# #' @noRd
+# #'
 
 densityMap_custom <- function (trees, res = 100, fsize = NULL, ftype = NULL, lwd = 3,
                                tol = 1e-5, verbose = T, col_scale = NULL,
@@ -3344,32 +3344,33 @@ densityMap_custom <- function (trees, res = 100, fsize = NULL, ftype = NULL, lwd
 #'
 #' ## Run only if you have R package 'BioGeoBEARS' installed.
 #' # Please install it manually from: https://github.com/nmatzke/BioGeoBEARS")
-#' #
-#' # # Load directly output of prepare_trait_data() run on biogeographic data
-#' # data(eel_biogeo_data, package = "deepSTRAPP")
-#' #
-#' # ## Convert BSM output into a unique simmap, including residence times
-#' # simmap_1 <- BSM_to_phytools_simmap(model_fit = eel_biogeo_data$best_model_fit,
-#' #                                    phylo = eel.tree,
-#' #                                    BSM_output = eel_biogeo_data$BSM_output,
-#' #                                    sim_index = 1)
-#' # # Explore output
-#' # str(simmap_1, max.level = 1)
-#' # # Print residence times in each range
-#' # simmap_1$residence_times
-#' # # Plot simmap
-#' # plot(simmap_1$simmap)
-#' #
-#' # \dontrun{  (May take several minutes to run)
-#' # ## Convert BSM output into all simmaps in a multiSimmap/multiPhylo object
-#' # all_simmaps <- BSMs_to_phytools_simmaps(model_fit = eel_biogeo_data$best_model_fit,
-#' #                                         phylo = eel.tree,
-#' #                                         BSM_output = eel_biogeo_data$BSM_output)
-#' # # Explore output
-#' # str(all_simmaps, max.level = 1)
-#' # # Plot simmap n°1
-#' # plot(all_simmaps[[1]]) }
-#' ##
+#'
+#' \dontrun{ # (May take several minutes to run)
+#'  # Load directly output of prepare_trait_data() run on biogeographic data
+#'  data(eel_biogeo_data, package = "deepSTRAPP")
+#'
+#'  ## Convert BSM output into a unique simmap, including residence times
+#'  simmap_1 <- BSM_to_phytools_simmap(model_fit = eel_biogeo_data$best_model_fit,
+#'                                     phylo = eel.tree,
+#'                                     BSM_output = eel_biogeo_data$BSM_output,
+#'                                     sim_index = 1)
+#'  # Explore output
+#'  str(simmap_1, max.level = 1)
+#'  # Print residence times in each range
+#'  simmap_1$residence_times
+#'  # Plot simmap
+#'  plot(simmap_1$simmap)
+#'
+#'
+#'  ## Convert BSM output into all simmaps in a multiSimmap/multiPhylo object
+#'  all_simmaps <- BSMs_to_phytools_simmaps(model_fit = eel_biogeo_data$best_model_fit,
+#'                                          phylo = eel.tree,
+#'                                          BSM_output = eel_biogeo_data$BSM_output)
+#'  # Explore output
+#'  str(all_simmaps, max.level = 1)
+#'  # Plot simmap n°1
+#'  plot(all_simmaps[[1]]) }
+#'
 #'
 
 ## importFrom for BioGeoBEARS

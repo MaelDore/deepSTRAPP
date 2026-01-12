@@ -111,32 +111,33 @@ data(eel.tree)
 
 ## Run only if you have R package 'BioGeoBEARS' installed.
 # Please install it manually from: https://github.com/nmatzke/BioGeoBEARS")
-#
-# # Load directly output of prepare_trait_data() run on biogeographic data
-# data(eel_biogeo_data, package = "deepSTRAPP")
-#
-# ## Convert BSM output into a unique simmap, including residence times
-# simmap_1 <- BSM_to_phytools_simmap(model_fit = eel_biogeo_data$best_model_fit,
-#                                    phylo = eel.tree,
-#                                    BSM_output = eel_biogeo_data$BSM_output,
-#                                    sim_index = 1)
-# # Explore output
-# str(simmap_1, max.level = 1)
-# # Print residence times in each range
-# simmap_1$residence_times
-# # Plot simmap
-# plot(simmap_1$simmap)
-#
-# \dontrun{  (May take several minutes to run)
-# ## Convert BSM output into all simmaps in a multiSimmap/multiPhylo object
-# all_simmaps <- BSMs_to_phytools_simmaps(model_fit = eel_biogeo_data$best_model_fit,
-#                                         phylo = eel.tree,
-#                                         BSM_output = eel_biogeo_data$BSM_output)
-# # Explore output
-# str(all_simmaps, max.level = 1)
-# # Plot simmap n°1
-# plot(all_simmaps[[1]]) }
-##
+
+\dontrun{ # (May take several minutes to run)
+ # Load directly output of prepare_trait_data() run on biogeographic data
+ data(eel_biogeo_data, package = "deepSTRAPP")
+
+ ## Convert BSM output into a unique simmap, including residence times
+ simmap_1 <- BSM_to_phytools_simmap(model_fit = eel_biogeo_data$best_model_fit,
+                                    phylo = eel.tree,
+                                    BSM_output = eel_biogeo_data$BSM_output,
+                                    sim_index = 1)
+ # Explore output
+ str(simmap_1, max.level = 1)
+ # Print residence times in each range
+ simmap_1$residence_times
+ # Plot simmap
+ plot(simmap_1$simmap)
+
+
+ ## Convert BSM output into all simmaps in a multiSimmap/multiPhylo object
+ all_simmaps <- BSMs_to_phytools_simmaps(model_fit = eel_biogeo_data$best_model_fit,
+                                         phylo = eel.tree,
+                                         BSM_output = eel_biogeo_data$BSM_output)
+ # Explore output
+ str(all_simmaps, max.level = 1)
+ # Plot simmap n°1
+ plot(all_simmaps[[1]]) }
+
 
 }
 \references{

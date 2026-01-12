@@ -243,7 +243,7 @@ if (deepSTRAPP:::is_dev_version())
 
  table(trait_data_multinominal$trait_data)
 
- \dontrun{  (May take a minute to run)
+ \dontrun{ # (May take a minute to run)
  # ------ Compute STRAPP test for continuous data ------ #
 
  plot(x = trait_data_continuous$trait_data, y = Ponerinae_BAMM_object_10My$tipLambda[[1]])

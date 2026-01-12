@@ -45,7 +45,7 @@ names(colors_per_levels) <- c("A", "B")
 ## The R package 'BioGeoBEARS' is needed for this function to work with biogeographic data.
 # Please install it manually from: https://github.com/nmatzke/BioGeoBEARS.
 
-\dontrun{  (May take several minutes to run)
+\dontrun{ # (May take several minutes to run)
 ## Prepare phylo
 
 # Set path to BioGeoBEARS directory

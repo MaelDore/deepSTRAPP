@@ -193,7 +193,7 @@ if (deepSTRAPP:::is_dev_version())
  time_step_duration <- 5
  time_range <- c(0, 40)
 
- \dontrun{  (May take several minutes to run)
+ \dontrun{ # (May take several minutes to run)
  ## Run deepSTRAPP on net diversification rates
  Ponerinae_deepSTRAPP_cont_old_calib_0_40 <- run_deepSTRAPP_over_time(
     contMap = Ponerinae_contMap,
@@ -260,7 +260,7 @@ if (deepSTRAPP:::is_dev_version())
  colors_per_levels <- c("mediumpurple2", "peachpuff2")
  names(colors_per_levels) <- c("N", "O")
 
- \dontrun{  (May take several minutes to run)
+ \dontrun{ # (May take several minutes to run)
  ## Run evolutionary models
  Ponerinae_biogeo_data <- prepare_trait_data(
     tip_data = Ponerinae_NO_data,
@@ -282,7 +282,7 @@ if (deepSTRAPP:::is_dev_version())
  time_range <- c(0, 40)
  time_step_duration <- 5
 
- \dontrun{  (May take several minutes to run)
+ \dontrun{ # (May take several minutes to run)
  ## Run deepSTRAPP on net diversification rates for time-steps = 0 to 40 Mya.
  Ponerinae_deepSTRAPP_biogeo_old_calib_0_40 <- run_deepSTRAPP_over_time(
     densityMaps = Ponerinae_biogeo_data_old_calib$densityMaps,

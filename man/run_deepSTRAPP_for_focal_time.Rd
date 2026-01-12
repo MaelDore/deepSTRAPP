@@ -260,7 +260,7 @@ if (deepSTRAPP:::is_dev_version())
  ## Set focal time to 10 Mya
  focal_time <- 10
 
- \dontrun{  (May take several minutes to run)
+ \dontrun{ # (May take several minutes to run)
  ## Run deepSTRAPP on net diversification rates for focal time = 10 Mya.
 
  deepSTRAPP_output <- run_deepSTRAPP_for_focal_time(
@@ -329,7 +329,7 @@ if (deepSTRAPP:::is_dev_version())
  colors_per_states <- c("forestgreen", "sienna", "goldenrod")
  names(colors_per_states) <- c("arboreal", "subterranean", "terricolous")
 
- \dontrun{  (May take several minutes to run)
+ \dontrun{ # (May take several minutes to run)
  ## Produce densityMaps using stochastic character mapping based on an equal-rates (ER) Mk model
  Ponerinae_cat_3lvl_data_old_calib <- prepare_trait_data(
     tip_data = Ponerinae_cat_3lvl_tip_data,
@@ -349,7 +349,7 @@ if (deepSTRAPP:::is_dev_version())
  ## Set focal time to 10 Mya
  focal_time <- 10
 
- \dontrun{  (May take several minutes to run)
+ \dontrun{ # (May take several minutes to run)
  ## Run deepSTRAPP on net diversification rates for focal time = 10 Mya.
 
  deepSTRAPP_output <- run_deepSTRAPP_for_focal_time(
@@ -435,7 +435,7 @@ if (deepSTRAPP:::is_dev_version())
  colors_per_ranges <- c("mediumpurple2", "peachpuff2")
  names(colors_per_ranges) <- c("N", "O")
 
- \dontrun{  (May take several minutes to run)
+ \dontrun{ # (May take several minutes to run)
  ## Run evolutionary models
  Ponerinae_biogeo_data <- prepare_trait_data(
      tip_data = Ponerinae_NO_data,
@@ -459,7 +459,7 @@ if (deepSTRAPP:::is_dev_version())
  ## Set focal time to 10 Mya
  focal_time <- 10
 
- \dontrun{  (May take several minutes to run)
+ \dontrun{ # (May take several minutes to run)
  ## Run deepSTRAPP on net diversification rates for focal time = 10 Mya.
 
  deepSTRAPP_output <- run_deepSTRAPP_for_focal_time(

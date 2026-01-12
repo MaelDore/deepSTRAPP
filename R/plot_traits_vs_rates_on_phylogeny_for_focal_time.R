@@ -146,7 +146,7 @@
 #'  ## Set focal time to 10 Mya
 #'  focal_time <- 10
 #'
-#'  \dontrun{  (May take several minutes to run)
+#'  \dontrun{ # (May take several minutes to run)
 #'  ## Run deepSTRAPP on net diversification rates for focal time = 10 Mya.
 #'
 #'  Ponerinae_deepSTRAPP_cont_old_calib_10My <- run_deepSTRAPP_for_focal_time(
@@ -205,7 +205,7 @@
 #'  colors_per_levels <- c("mediumpurple2", "peachpuff2")
 #'  names(colors_per_levels) <- c("N", "O")
 #'
-#'  \dontrun{  (May take several minutes to run)
+#'  \dontrun{ # (May take several minutes to run)
 #'  ## Run evolutionary models
 #'  Ponerinae_biogeo_data <- prepare_trait_data(
 #'      tip_data = Ponerinae_NO_data,
@@ -229,7 +229,7 @@
 #'  ## Set focal time to 10 Mya
 #'  focal_time <- 10
 #'
-#'  \dontrun{  (May take several minutes to run)
+#'  \dontrun{ # (May take several minutes to run)
 #'  ## Run deepSTRAPP on net diversification rates for focal time = 10 Mya.
 #'
 #'  Ponerinae_deepSTRAPP_biogeo_old_calib_10My <- run_deepSTRAPP_for_focal_time(
