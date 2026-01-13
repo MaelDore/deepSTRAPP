@@ -342,7 +342,6 @@
 #'     deepSTRAPP_outputs = deepSTRAPP_output,
 #'     plot_posthoc_tests = TRUE) }
 #'
-#'
 #'  # ----- Example 3: Biogeographic ranges ----- #
 #'
 #'  ## Load data

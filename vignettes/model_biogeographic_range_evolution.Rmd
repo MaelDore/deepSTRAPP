@@ -173,7 +173,9 @@ library(deepSTRAPP)
 # Plotting of all densityMaps as a unique phylogeny is carried out
 # with deepSTRAPP::plot_densityMaps_overlay()
 ?deepSTRAPP::plot_densityMaps_overlay()
-  
+
+## The R package `BioGeoBEARS` is needed for this workflow to process biogeographic data.
+## Please install it manually from: https://github.com/nmatzke/BioGeoBEARS.  
 
 ## Macroevolutionary models for biogeographic data
 

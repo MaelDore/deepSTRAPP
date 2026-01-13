@@ -93,7 +93,6 @@ Ponerinae_NO_tip_data[Ponerinae_NO_tip_data == "FALSE"] <- "N" # N = New World
 names(Ponerinae_NO_tip_data) <- Ponerinae_binary_range_table$Taxa
 table(Ponerinae_NO_tip_data)
 
-
 # Select color scheme for ranges
 colors_per_ranges <- c("mediumpurple2", "peachpuff2")
 names(colors_per_ranges) <- c("N", "O")
@@ -110,7 +109,6 @@ all(names(Ponerinae_NO_tip_data) == Ponerinae_tree_old_calib$tip.label)
 ## Reorder trait data as in phylogeny
 Ponerinae_NO_tip_data <- Ponerinae_NO_tip_data[match(x = Ponerinae_tree_old_calib$tip.label,
                                                      table = names(Ponerinae_NO_tip_data))]
-
 
 ## Plot data on tips for visualization
 pdf(file = "./Ponerinae_biogeo_data_old_calib_on_phylo.pdf", width = 20, height = 150)
@@ -196,9 +194,12 @@ library(deepSTRAPP)
 # All these actions are performed by a single function: deepSTRAPP::prepare_trait_data()
 ?deepSTRAPP::prepare_trait_data()
 
-## In this example, to simplify the analyses, we set 'split_multi_area_ranges' = TRUE such as
-## multi-range areas ('NO' in this case) are split between unique areas ('N' and 'O')
-## to keep only two areas for downstream analyses
+## The R package `BioGeoBEARS` is needed for this workflow to process biogeographic data.
+## Please install it manually from: https://github.com/nmatzke/BioGeoBEARS.
+
+# In this example, to simplify the analyses, we set 'split_multi_area_ranges' = TRUE such as
+# multi-range areas ('NO' in this case) are split between unique areas ('N' and 'O')
+# to keep only two areas for downstream analyses
 
 # Run prepare_trait_data with default options
 # For biogeographic data, a DEC model is assumed by default.
@@ -261,8 +262,8 @@ Ponerinae_biogeo_data_old_calib$ace_all_ranges # Including multi-area ranges too
 
 # Run a BAMM (Bayesian Analysis of Macroevolutionary Mixtures)
 
-# You need the BAMM C++ program installed in your machine to run this step.
-# See the BAMM website: http://bamm-project.org/ and the companion R package [BAMMtools].
+## You need the BAMM C++ program installed in your machine to run this step.
+## See the BAMM website: http://bamm-project.org/ and the companion R package [BAMMtools].
 
 # 2.1/ Set BAMM - Record BAMM settings and generate all input files needed for BAMM.
 # 2.2/ Run BAMM - Run BAMM and move output files in dedicated directory.
