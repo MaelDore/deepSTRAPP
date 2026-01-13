@@ -451,6 +451,10 @@ plot_histogram_STRAPP_test_for_focal_time <- function (deepSTRAPP_outputs,
     }
   }
 
+  ## Save initial par() and reassign them on exit
+  oldpar <- par(no.readonly = TRUE)
+  on.exit(par(oldpar))
+
   if (!plot_posthoc_tests)
   {
     ## Case for overall test plot

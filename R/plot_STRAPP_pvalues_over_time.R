@@ -248,6 +248,9 @@ plot_STRAPP_pvalues_over_time <-  function (
     }
   }
 
+  ## Save initial par() and reassign them on exit
+  oldpar <- par(no.readonly = TRUE)
+  on.exit(par(oldpar))
 
   ## Remove "_" from $rate_type
   rate_type <- gsub(pattern = "_", replacement = " ", x = deepSTRAPP_outputs$rate_type)

@@ -316,6 +316,9 @@ plot_rates_through_time <- function (
     ## Other checks are carried in dedicated sub-functions
   }
 
+  ## Save initial par() and reassign them on exit
+  oldpar <- par(no.readonly = TRUE)
+  on.exit(par(oldpar))
 
   ## Detect the type of trait data
   trait_data_type <- deepSTRAPP_outputs$trait_data_type

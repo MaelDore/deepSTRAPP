@@ -339,6 +339,10 @@ plot_traits_vs_rates_on_phylogeny_over_time <- function (
     }
   }
 
+  ## Save initial par() and reassign them on exit
+  oldpar <- par(no.readonly = TRUE)
+  on.exit(par(oldpar))
+
   ## Extract time-steps
   time_steps <- deepSTRAPP_outputs$time_steps
 

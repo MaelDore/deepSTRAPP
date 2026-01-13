@@ -497,6 +497,10 @@ prepare_trait_data <- function (
     ## Other checks are carried in dedicated sub-functions
   }
 
+  ## Save initial par() and reassign them on exit
+  oldpar <- par(no.readonly = TRUE)
+  on.exit(par(oldpar))
+
   ## Filter list of additional arguments to avoid warnings from functions
   add_args <- list(...)
   args_names_for_fitContinuous <- c("SE", "bounds", "control", "ncores")

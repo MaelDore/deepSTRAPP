@@ -193,6 +193,10 @@ plot_BAMM_rates <- function (BAMM_object,
     }
   }
 
+  ## Save initial par() and reassign them on exit
+  oldpar <- par(no.readonly = TRUE)
+  on.exit(par(oldpar))
+
   ## Convert 'rate_type' into 'spex'
   if (rate_type == "net_diversification") { spex <- "netdiv" }
   if (rate_type == "speciation") { spex <- "s" }

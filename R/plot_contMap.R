@@ -98,6 +98,10 @@ plot_contMap <- function (contMap,
     }
   }
 
+  ## Save initial par() and reassign them on exit
+  oldpar <- par(no.readonly = TRUE)
+  on.exit(par(oldpar))
+
   ## Update color scale if requested
   if (!is.null(color_scale))
   {

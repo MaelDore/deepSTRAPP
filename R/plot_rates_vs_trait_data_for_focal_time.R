@@ -409,6 +409,10 @@ plot_rates_vs_trait_data_for_focal_time <- function (deepSTRAPP_outputs,
       }
     }
 
+    ## Save initial par() and reassign them on exit
+    oldpar <- par(no.readonly = TRUE)
+    on.exit(par(oldpar))
+
     ## Extract type of trait
     if (!inputs_over_time)
     {

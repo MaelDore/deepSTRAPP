@@ -420,6 +420,10 @@ plot_traits_vs_rates_on_phylogeny_for_focal_time <- function (
     }
   }
 
+  ## Save initial par() and reassign them on exit
+  oldpar <- par(no.readonly = TRUE)
+  on.exit(par(oldpar))
+
   ## Extract focal time and nb_tips
   focal_time <- updated_trait_data_with_Map$focal_time
   nb_tips <- length(updated_BAMM_object$tip.label)

@@ -161,6 +161,10 @@ plot_densityMaps_overlay <- function (
     }
   }
 
+  ## Save initial par() and reassign them on exit
+  oldpar <- par(no.readonly = TRUE)
+  on.exit(par(oldpar))
+
   ## Filter list of additional arguments to ensure default values are used if not provided
   add_args <- list(...)
   # Extract additional args for phytools::plotSimmap()

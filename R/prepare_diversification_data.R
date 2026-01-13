@@ -482,6 +482,10 @@ prepare_diversification_data <- function (BAMM_install_directory_path,
     }
   }
 
+  ## Save initial par() and reassign them on exit
+  oldpar <- par(no.readonly = TRUE)
+  on.exit(par(oldpar))
+
   #### ----------- Step 1: Set BAMM ----------- ####
 
   cat(paste0("# ----------- Step 1: Set BAMM ----------- #\n\n"))
