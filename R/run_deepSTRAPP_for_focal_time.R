@@ -277,7 +277,7 @@
 #'     colors_per_levels = colors_per_states,
 #'     evolutionary_models = "ARD", # Use default ARD model
 #'     nb_simulations = 100, # Reduce number of simulations to save time
-#'     seed = 1234, Seet seed for reproducibility
+#'     seed = 1234, # Seet seed for reproducibility
 #'     return_best_model_fit = TRUE,
 #'     return_model_selection_df = TRUE,
 #'     plot_map = FALSE) }
