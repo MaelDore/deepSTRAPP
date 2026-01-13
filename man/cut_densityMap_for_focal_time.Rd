@@ -75,7 +75,7 @@ mammals_data[mammals_mass > 5] <- "medium"
 mammals_data[mammals_mass > 10] <- "large"
 table(mammals_data)
 
-\donttest{  (May take several minutes to run)
+\donttest{ # (May take several minutes to run)
 # Produce densityMaps using stochastic character mapping based on an equal-rates (ER) Mk model
 mammals_cat_data <- prepare_trait_data(tip_data = mammals_data, phylo = mammals_tree,
                                        trait_data_type = "categorical",
