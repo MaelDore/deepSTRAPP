@@ -117,7 +117,7 @@
 #'
 #'  # Load the BAMM_object summarizing 1000 posterior samples of BAMM
 #'  data(Ponerinae_BAMM_object_old_calib, package = "deepSTRAPP")
-#'  # This dataset is only available in development versions installed from GitHub.
+#'  ## This dataset is only available in development versions installed from GitHub.
 #'  # It is not available in CRAN versions.
 #'  # Use remotes::install_github(repo = "MaelDore/deepSTRAPP") to get the latest development version.
 #'
@@ -134,6 +134,7 @@
 #'  # To obtain values at internal nodes
 #'  Ponerinae_ACE <- phytools::fastAnc(tree = Ponerinae_tree_old_calib, x = Ponerinae_cont_tip_data)
 #'
+#'  \donttest{ # (May take several minutes to run)
 #'  # Run a Stochastic Mapping based on a Brownian Motion model
 #'  # to interpolate values along branches and obtain a "contMap" object
 #'  Ponerinae_contMap <- phytools::contMap(Ponerinae_tree, x = Ponerinae_cont_tip_data,
@@ -146,7 +147,6 @@
 #'  ## Set focal time to 10 Mya
 #'  focal_time <- 10
 #'
-#'  \dontrun{ # (May take several minutes to run)
 #'  ## Run deepSTRAPP on net diversification rates for focal time = 10 Mya.
 #'
 #'  Ponerinae_deepSTRAPP_cont_old_calib_10My <- run_deepSTRAPP_for_focal_time(
@@ -185,14 +185,14 @@
 #'
 #'  # Load the BAMM_object summarizing 1000 posterior samples of BAMM
 #'  data(Ponerinae_BAMM_object_old_calib, package = "deepSTRAPP")
-#'  # This dataset is only available in development versions installed from GitHub.
+#'  ## This dataset is only available in development versions installed from GitHub.
 #'  # It is not available in CRAN versions.
 #'  # Use remotes::install_github(repo = "MaelDore/deepSTRAPP") to get the latest development version.
 #'
-#'   ## Prepare range data for Old World vs. New World
+#'  ## Prepare range data for Old World vs. New World
 #'
-#'   # No overlap in ranges
-#'   table(Ponerinae_binary_range_table$Old_World, Ponerinae_binary_range_table$New_World)
+#'  # No overlap in ranges
+#'  table(Ponerinae_binary_range_table$Old_World, Ponerinae_binary_range_table$New_World)
 #'
 #'  Ponerinae_NO_data <- stats::setNames(object = Ponerinae_binary_range_table$Old_World,
 #'                                       nm = Ponerinae_binary_range_table$Taxa)
@@ -205,7 +205,7 @@
 #'  colors_per_levels <- c("mediumpurple2", "peachpuff2")
 #'  names(colors_per_levels) <- c("N", "O")
 #'
-#'  \dontrun{ # (May take several minutes to run)
+#'  \donttest{ # (May take several minutes to run)
 #'  ## Run evolutionary models
 #'  Ponerinae_biogeo_data <- prepare_trait_data(
 #'      tip_data = Ponerinae_NO_data,
@@ -229,7 +229,7 @@
 #'  ## Set focal time to 10 Mya
 #'  focal_time <- 10
 #'
-#'  \dontrun{ # (May take several minutes to run)
+#'  \donttest{ # (May take several minutes to run)
 #'  ## Run deepSTRAPP on net diversification rates for focal time = 10 Mya.
 #'
 #'  Ponerinae_deepSTRAPP_biogeo_old_calib_10My <- run_deepSTRAPP_for_focal_time(
@@ -263,7 +263,7 @@
 #'
 #'  ## Load directly outputs from run_deepSTRAPP_over_time()
 #'  data(Ponerinae_deepSTRAPP_biogeo_old_calib_0_40, package = "deepSTRAPP")
-#'  # This dataset is only available in development versions installed from GitHub.
+#'  ## This dataset is only available in development versions installed from GitHub.
 #'  # It is not available in CRAN versions.
 #'  # Use remotes::install_github(repo = "MaelDore/deepSTRAPP") to get the latest development version.
 #'

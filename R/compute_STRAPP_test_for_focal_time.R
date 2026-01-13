@@ -175,7 +175,7 @@
 #'  ## Load the BAMM_object summarizing 1000 posterior samples of BAMM with diversification rates
 #'  # for ponerine ants extracted for 10My ago.
 #'  data(Ponerinae_BAMM_object_10My, package = "deepSTRAPP")
-#'  # This dataset is only available in development versions installed from GitHub.
+#'  ## This dataset is only available in development versions installed from GitHub.
 #'  # It is not available in CRAN versions.
 #'  # Use remotes::install_github(repo = "MaelDore/deepSTRAPP") to get the latest development version.
 #'
@@ -214,7 +214,7 @@
 #'
 #'  table(trait_data_multinominal$trait_data)
 #'
-#'  \dontrun{ # (May take a minute to run)
+#'  \donttest{ # (May take several minutes to run)
 #'  # ------ Compute STRAPP test for continuous data ------ #
 #'
 #'  plot(x = trait_data_continuous$trait_data, y = Ponerinae_BAMM_object_10My$tipLambda[[1]])

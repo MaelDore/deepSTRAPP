@@ -201,6 +201,9 @@
 #' data(whale.tree)
 #'
 #' \dontrun{
+#' ## You need to install the BAMM C++ software locally prior to run this function
+#' # Visit the official BAMM website (\url{http://bamm-project.org/}) for information.
+#'
 #' # Run BAMM workflow with deepSTRAPP
 #' whale_BAMM_object <- prepare_diversification_data(
 #'    BAMM_install_directory_path = "./software/bamm-2.5.0/",
@@ -221,24 +224,27 @@
 #'
 #' # ----- Example 2: Ponerinae phylogeny ----- #
 #'
+#' #   Load phylogeny
+#' data("Ponerinae_tree", package = "deepSTRAPP")
+#' plot(Ponerinae_tree, show.tip.label = FALSE)
+#'
+#' \dontrun{
+#' ## You need to install the BAMM C++ software locally prior to run this function
+#' # Visit the official BAMM website (http://bamm-project.org/) for information.
+#'
+#' # Run BAMM workflow with deepSTRAPP
+#' Ponerinae_BAMM_object <- prepare_diversification_data(
+#'    BAMM_install_directory_path = "./software/bamm-2.5.0/",
+#'    phylo = Ponerinae_tree,
+#'    prefix_for_files = "Ponerinae",
+#'    numberOfGenerations = 10^7 # Set high for optimal run, but will take ages
+#' )}
+#'
 #' if (deepSTRAPP::is_dev_version())
 #' {
-#'  #   Load phylogeny
-#'  data("Ponerinae_tree", package = "deepSTRAPP")
-#'  plot(Ponerinae_tree, show.tip.label = FALSE)
-#'
-#'  \dontrun{ # This step may be time-consuming
-#'  # Run BAMM workflow with deepSTRAPP
-#'  Ponerinae_BAMM_object <- prepare_diversification_data(
-#'     BAMM_install_directory_path = "./software/bamm-2.5.0/",
-#'     phylo = Ponerinae_tree,
-#'     prefix_for_files = "Ponerinae",
-#'     numberOfGenerations = 10^7 # Set high for optimal run, but will take ages
-#'  )}
-#'
 #'  # Load directly the result
 #'  data(Ponerinae_BAMM_object)
-#'  # This dataset is only available in development versions installed from GitHub.
+#'  ## This dataset is only available in development versions installed from GitHub.
 #'  # It is not available in CRAN versions.
 #'  # Use remotes::install_github(repo = "MaelDore/deepSTRAPP") to get the latest development version.
 #'
