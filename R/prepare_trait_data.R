@@ -38,7 +38,7 @@
 #'   Provide `"matrix"` among the model listed in 'evolutionary_models' to use the custom Q-matrix for modeling. Only for categorical data.
 #' @param BioGeoBEARS_directory_path Character string. The path to the directory used to store input/output files generated
 #'   for/by BioGeoBEARS during biogeographic historical inferences. Use '/' to separate directory and sub-directories. It must end with '/'.
-#'   Default is `"./BioGeoBEARS_directory/"`. Only for biogeographic data.
+#'   Only for biogeographic data.
 #' @param keep_BioGeoBEARS_files Logical. Whether the `BioGeoBEARS_directory` and its content should be kept after the run. Default = `TRUE`. Only for biogeographic data.
 #' @param prefix_for_files Character string. Prefix to add to all BioGeoBEARS files stored in the `BioGeoBEARS_directory_path` if `keep_BioGeoBEARS_files = TRUE`.
 #'   Files will be exported such as 'prefix_*' with an underscore separating the prefix and the file name.
@@ -303,6 +303,8 @@
 #'     # Default = "DEC" for biogeographic
 #'     evolutionary_models = c("BAYAREALIKE", "DIVALIKE", "DEC",
 #'                             "BAYAREALIKE+J", "DIVALIKE+J", "DEC+J"),
+#'     BioGeoBEARS_directory_path = tempdir(), # Ex: "./BioGeoBEARS_directory/"
+#'     keep_BioGeoBEARS_files = FALSE,
 #'     prefix_for_files = "eel",
 #'     max_range_size = 2,
 #'     split_multi_area_ranges = TRUE, # Set to TRUE to display the two outputs
@@ -352,7 +354,7 @@ prepare_trait_data <- function (
     seed = NULL,
     evolutionary_models = NULL, # Default = "BM" for continuous data; "ARD" for categorical; "DEC" for biogeographic
     Q_matrix = NULL, # Custom Q-matrix for categorical data
-    BioGeoBEARS_directory_path = "./BioGeoBEARS_directory/",
+    BioGeoBEARS_directory_path = NULL, # Ex: "./BioGeoBEARS_directory/"
     keep_BioGeoBEARS_files = TRUE,
     prefix_for_files = NULL,
     nb_cores = 1,
@@ -1332,7 +1334,7 @@ prepare_trait_data_for_biogeographic_data <- function (
     tip_data,
     phylo,
     evolutionary_models = "DEC", # Default = "DEC" for biogeographic
-    BioGeoBEARS_directory_path = "./BioGeoBEARS_directory/",
+    BioGeoBEARS_directory_path = NULL, # Ex: "./BioGeoBEARS_directory/"
     keep_BioGeoBEARS_files = TRUE,
     prefix_for_files = NULL,
     nb_cores = 1,

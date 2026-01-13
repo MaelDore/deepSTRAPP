@@ -11,7 +11,7 @@ prepare_trait_data(
   seed = NULL,
   evolutionary_models = NULL,
   Q_matrix = NULL,
-  BioGeoBEARS_directory_path = "./BioGeoBEARS_directory/",
+  BioGeoBEARS_directory_path = NULL,
   keep_BioGeoBEARS_files = TRUE,
   prefix_for_files = NULL,
   nb_cores = 1,
@@ -65,7 +65,7 @@ Provide \code{"matrix"} among the model listed in 'evolutionary_models' to use t
 
 \item{BioGeoBEARS_directory_path}{Character string. The path to the directory used to store input/output files generated
 for/by BioGeoBEARS during biogeographic historical inferences. Use '/' to separate directory and sub-directories. It must end with '/'.
-Default is \code{"./BioGeoBEARS_directory/"}. Only for biogeographic data.}
+Only for biogeographic data.}
 
 \item{keep_BioGeoBEARS_files}{Logical. Whether the \code{BioGeoBEARS_directory} and its content should be kept after the run. Default = \code{TRUE}. Only for biogeographic data.}
 
@@ -358,6 +358,8 @@ if (deepSTRAPP::is_dev_version())
     # Default = "DEC" for biogeographic
     evolutionary_models = c("BAYAREALIKE", "DIVALIKE", "DEC",
                             "BAYAREALIKE+J", "DIVALIKE+J", "DEC+J"),
+    BioGeoBEARS_directory_path = tempdir(), # Ex: "./BioGeoBEARS_directory/"
+    keep_BioGeoBEARS_files = FALSE,
     prefix_for_files = "eel",
     max_range_size = 2,
     split_multi_area_ranges = TRUE, # Set to TRUE to display the two outputs

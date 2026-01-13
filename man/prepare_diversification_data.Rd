@@ -17,7 +17,7 @@ prepare_diversification_data(
   burn_in = 0.25,
   nb_posterior_samples = 1000,
   additional_BAMM_settings = list(),
-  BAMM_output_directory_path = "./BAMM_outputs/",
+  BAMM_output_directory_path = NULL,
   keep_BAMM_outputs = TRUE,
   MAP_odd_ratio_threshold = 5,
   skip_evaluations = FALSE,
@@ -68,7 +68,7 @@ Ex: \code{list(lambdaInit0 = 0.5, muInit0 = 0)}. See available settings in the t
 The template can also be loaded directly in R with \code{utils::data(BAMM_template_diversification)} and displayed with \code{print(BAMM_template_diversification)}.}
 
 \item{BAMM_output_directory_path}{Character string. The path to the directory used to store input/output files generated.
-Use '/' to separate directory and subdirectories. It must end with '/'. Default is \verb{./BAMM_outputs/}}
+Use '/' to separate directory and subdirectories. It must end with '/'.}
 
 \item{keep_BAMM_outputs}{Logical. Whether the \code{BAMM_output_directory} should be kept after the run. Default = \code{TRUE}.}
 
@@ -254,7 +254,9 @@ whale_BAMM_object <- prepare_diversification_data(
    BAMM_install_directory_path = "./software/bamm-2.5.0/",
    phylo = whale.tree,
    prefix_for_files = "whale",
-   numberOfGenerations = 100000 # Set low for the example
+   numberOfGenerations = 100000, # Set low for the example
+   BAMM_output_directory_path = tempdir(), # Can be adjusted such as "./BAMM_outputs/"
+   keep_BAMM_outputs = FALSE, # Adjust if needed
 )}
 
 # Load directly the result
@@ -282,7 +284,9 @@ Ponerinae_BAMM_object <- prepare_diversification_data(
    BAMM_install_directory_path = "./software/bamm-2.5.0/",
    phylo = Ponerinae_tree,
    prefix_for_files = "Ponerinae",
-   numberOfGenerations = 10^7 # Set high for optimal run, but will take ages
+   numberOfGenerations = 10^7, # Set high for optimal run, but will take ages
+   BAMM_output_directory_path = tempdir(), # Can be adjusted such as "./BAMM_outputs/"
+   keep_BAMM_outputs = FALSE, # Adjust if needed
 )}
 
 if (deepSTRAPP::is_dev_version())

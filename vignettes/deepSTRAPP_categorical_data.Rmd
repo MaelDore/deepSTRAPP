@@ -232,8 +232,8 @@ Ponerinae_BAMM_object_old_calib <- prepare_diversification_data(
    phylo = Ponerinae_tree_old_calib,
    prefix_for_files = "Ponerinae_old_calib",
    seed = 1234, # Set seed for reproducibility
-   numberOfGenerations = 10^7 # Set high for optimal run, but will take a long time
-)
+   numberOfGenerations = 10^7, # Set high for optimal run, but will take a long time
+   BAMM_output_directory_path =  "./BAMM_outputs/")
 
 # Load directly the result
 data(Ponerinae_BAMM_object_old_calib)

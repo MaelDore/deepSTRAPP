@@ -502,6 +502,8 @@
 #'     trait_data_type = "biogeographic",
 #'     phylo = Ponerinae_tree_old_calib,
 #'     evolutionary_models = "DEC+J", # Default = "DEC" for biogeographic
+#'     BioGeoBEARS_directory_path = tempdir(), # Ex: "./BioGeoBEARS_directory/"
+#'     keep_BioGeoBEARS_files = FALSE,
 #'     prefix_for_files = "Ponerinae_old_calib",
 #'     max_range_size = 2,
 #'     split_multi_area_ranges = TRUE, # Set to TRUE to use only unique areas "A" and "B"

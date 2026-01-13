@@ -52,7 +52,7 @@
 #'  Ex: `list(lambdaInit0 = 0.5, muInit0 = 0)`. See available settings in the template file provided within the deepSTRAPP package files as 'BAMM_template_diversification.txt'.
 #'  The template can also be loaded directly in R with `utils::data(BAMM_template_diversification)` and displayed with `print(BAMM_template_diversification)`.
 #' @param BAMM_output_directory_path Character string. The path to the directory used to store input/output files generated.
-#' Use '/' to separate directory and subdirectories. It must end with '/'. Default is `./BAMM_outputs/`
+#'  Use '/' to separate directory and subdirectories. It must end with '/'.
 #' @param keep_BAMM_outputs Logical. Whether the `BAMM_output_directory` should be kept after the run. Default = `TRUE`.
 #' @param MAP_odd_ratio_threshold Numerical. Controls the definition of 'core-shifts' used to distinguish across configurations when fetching the MAP samples.
 #'   Shifts that have an odd-ratio of marginal posterior probability / prior lower than `MAP_odd_ratio_threshold` are ignored. See [BAMMtools::getBestShiftConfiguration()]. Default = `5`.
@@ -209,7 +209,9 @@
 #'    BAMM_install_directory_path = "./software/bamm-2.5.0/",
 #'    phylo = whale.tree,
 #'    prefix_for_files = "whale",
-#'    numberOfGenerations = 100000 # Set low for the example
+#'    numberOfGenerations = 100000, # Set low for the example
+#'    BAMM_output_directory_path = tempdir(), # Can be adjusted such as "./BAMM_outputs/"
+#'    keep_BAMM_outputs = FALSE, # Adjust if needed
 #' )}
 #'
 #' # Load directly the result
@@ -237,7 +239,9 @@
 #'    BAMM_install_directory_path = "./software/bamm-2.5.0/",
 #'    phylo = Ponerinae_tree,
 #'    prefix_for_files = "Ponerinae",
-#'    numberOfGenerations = 10^7 # Set high for optimal run, but will take ages
+#'    numberOfGenerations = 10^7, # Set high for optimal run, but will take ages
+#'    BAMM_output_directory_path = tempdir(), # Can be adjusted such as "./BAMM_outputs/"
+#'    keep_BAMM_outputs = FALSE, # Adjust if needed
 #' )}
 #'
 #' if (deepSTRAPP::is_dev_version())
@@ -270,7 +274,7 @@ prepare_diversification_data <- function (BAMM_install_directory_path,
                                           burn_in = 0.25,
                                           nb_posterior_samples = 1000,
                                           additional_BAMM_settings = list(),
-                                          BAMM_output_directory_path = "./BAMM_outputs/",
+                                          BAMM_output_directory_path = NULL, # "./BAMM_outputs/"
                                           keep_BAMM_outputs = TRUE,
                                           MAP_odd_ratio_threshold = 5,
                                           skip_evaluations = FALSE,

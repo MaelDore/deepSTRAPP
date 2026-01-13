@@ -818,7 +818,8 @@ whale_BAMM_object <- prepare_diversification_data(
   BAMM_install_directory_path = "./software/bamm-2.5.0/",
   phylo = whale.tree,
   prefix_for_files = "whale",
-  numberOfGenerations = 100000) # Set low for the example
+  numberOfGenerations = 100000, # Set low for the example
+  BAMM_output_directory_path =  "./BAMM_outputs/")
 
 # Load directly the result
 data(whale_BAMM_object)
@@ -876,8 +877,8 @@ Ponerinae_BAMM_object_old_calib <- prepare_diversification_data(
   BAMM_install_directory_path = "./software/bamm-2.5.0/",
   phylo = Ponerinae_tree_old_calib,
   prefix_for_files = "Ponerinae_old_calib",
-  numberOfGenerations = 10^7 # Set high for optimal run, but will take ages
-)
+  numberOfGenerations = 10^7, # Set high for optimal run, but will take ages
+  BAMM_output_directory_path =  "./BAMM_outputs/")
 
 # Explore output
 str(Ponerinae_BAMM_object_old_calib, 1)
