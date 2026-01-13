@@ -94,7 +94,9 @@ Ponerinae_cat_2lvl_tip_data <- Ponerinae_cat_2lvl_tip_data[match(x = Ponerinae_t
 pdf(file = "./Ponerinae_cat_2lvl_data_old_calib_on_phylo.pdf", width = 20, height = 150)
 
 # Set plotting parameters
+old_par <- par(no.readonly = TRUE)
 par(mar = c(0.1,0.1,0.1,0.1), oma = c(0,0,0,0)) # bltr
+
 # Graph presence/absence using plotTree.datamatrix
 range_map <- phytools::plotTree.datamatrix(
   tree = Ponerinae_tree_old_calib,
@@ -130,6 +132,8 @@ legend(x = plot_info$x.lim[2] - 10,
 
 dev.off()
 
+# Reset plotting parameters
+par(old_par)
 
 ```
 ```{r load_data_main_tutorial_eval, eval = TRUE, echo = FALSE}
@@ -643,6 +647,7 @@ title(main = "BAMM rates for 100-40 My")
 
 ```
 ```{r plot_BAMM_rates_main_tutorial_eval_dev, eval = is_dev_version(), echo = FALSE}
+old_par <- par(no.readonly = TRUE)
 par(mfrow = c(1, 2))
 
 # Plot diversification rates on initial phylogeny (t = 0)
@@ -657,7 +662,7 @@ plot_BAMM_rates(BAMM_map_10My, labels = FALSE, legend = TRUE,
                 colorbreaks = BAMM_map_10My$initial_colorbreaks$net_diversification)
 title(main = "BAMM rates for 100-10 My")
 
-par(mfrow = c(1, 1))
+par(old_par)
 ```
 ```{r plot_BAMM_rates_main_tutorial_eval_CRAN, eval = !is_dev_version(), echo = FALSE, out.width = "100%"}
 
