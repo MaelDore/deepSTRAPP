@@ -3001,41 +3001,41 @@ generate_list_ranges <- function (areas_list, max_range_size, include_null_range
 # Original function written by Liam Revell, 2012
 # Input = simmaps
 
-# #' @title Plot posterior density of stochastic mapping on a tree
-# #'
-# #' @description Visualize posterior probability density from stochastic mapping using a color gradient on the tree.
-# #'   Original function written by Liam Revell, 2012 in the [phytools] package: [phytools::densityMap()].
-# #'
-# #' @inheritParams phytools::densityMap
-# #' @param tol Positive numerical. To set the tolerance used to match node ages and time steps (i.e., onsider them equal). Default = 1e-5.
-# #' @param verbose Logical. To display or progress every 100 edges. Default = `TRUE`.
-# #' @param col_scale Character string vector. To set the color scale manually. Need to provide 1001 colors for the scale.
-# #'   If `NULL` (the default), the `rainbow()` color scale will be used.
-# #'
-# #' @return The function plots a tree with mapped trait probability densities and returns an object of class `densityMap` invisibly.
-# #'   A `densityMap` is a list with three elements.
-# #'     * `$tree` List of at least 8 elements. Includes the phylogeny, the trait evolution model data from the simmaps, and the newly mapped trait posterior densities.
-# #'       * `$maps` List of N elements, one per edge. Each list comprises a named numerical vector that represent changes in posterior probability density of the focal state along segments of equal time.
-# #'         Named are posterior probabilities scaled from 0 to 1000. Values are length of the segments. Segments are ordered from root to tips.
-# #'       * `$mapped.edge` Matrix of edge per posterior probability summarizing the overall length of each edge attributed to a specific posterior probabiliy value.
-# #'       * `$Q` Numerical square matrix summarizing instantaneous transition rates between states as estimated from the evolutionary model.
-# #'       Rows = initial states. Cols = final states.
-# #'       * `$logL` Numerical. Log-likelihood of the data as optimized when estimated model parameters.
-# #'     * `$col` Named character string vector. Color scale used to map posterior probabilities. Names are the posterior probabilities scaled from 0 to 1000. Values are the colors.
-# #'     * `$states` Character string. The name of the states.
-# #'
-# #' @details Wrapped function of [phytools::densityMap()].
-# #'   Additions to the initial function:
-# #'   * Can modify manually the tolerance to handle issue with mismatch between node ages and time steps used.
-# #'   * Can print progress across egdes
-# #'   * Can provide a manual color scale to replace the default rainbow scale. The color scale must have 1001 colors.
-# #'
-# #' @author Maël Doré. Initial function by Liam Revell, 2012 in the [phytools] package.
-# #'
-# #' @seealso [phytools::densityMap()]
-# #'
-# #' @noRd
-# #'
+#' @title Plot posterior density of stochastic mapping on a tree
+#'
+#' @description Visualize posterior probability density from stochastic mapping using a color gradient on the tree.
+#'   Original function written by Liam Revell, 2012 in the [phytools] package: [phytools::densityMap()].
+#'
+#' @inheritParams phytools::densityMap
+#' @param tol Positive numerical. To set the tolerance used to match node ages and time steps (i.e., onsider them equal). Default = 1e-5.
+#' @param verbose Logical. To display or progress every 100 edges. Default = `TRUE`.
+#' @param col_scale Character string vector. To set the color scale manually. Need to provide 1001 colors for the scale.
+#'   If `NULL` (the default), the `rainbow()` color scale will be used.
+#'
+#' @return The function plots a tree with mapped trait probability densities and returns an object of class `densityMap` invisibly.
+#'   A `densityMap` is a list with three elements.
+#'     * `$tree` List of at least 8 elements. Includes the phylogeny, the trait evolution model data from the simmaps, and the newly mapped trait posterior densities.
+#'       * `$maps` List of N elements, one per edge. Each list comprises a named numerical vector that represent changes in posterior probability density of the focal state along segments of equal time.
+#'         Named are posterior probabilities scaled from 0 to 1000. Values are length of the segments. Segments are ordered from root to tips.
+#'       * `$mapped.edge` Matrix of edge per posterior probability summarizing the overall length of each edge attributed to a specific posterior probabiliy value.
+#'       * `$Q` Numerical square matrix summarizing instantaneous transition rates between states as estimated from the evolutionary model.
+#'       Rows = initial states. Cols = final states.
+#'       * `$logL` Numerical. Log-likelihood of the data as optimized when estimated model parameters.
+#'     * `$col` Named character string vector. Color scale used to map posterior probabilities. Names are the posterior probabilities scaled from 0 to 1000. Values are the colors.
+#'     * `$states` Character string. The name of the states.
+#'
+#' @details Wrapped function of [phytools::densityMap()].
+#'   Additions to the initial function:
+#'   * Can modify manually the tolerance to handle issue with mismatch between node ages and time steps used.
+#'   * Can print progress across egdes
+#'   * Can provide a manual color scale to replace the default rainbow scale. The color scale must have 1001 colors.
+#'
+#' @author Maël Doré. Initial function by Liam Revell, 2012 in the [phytools] package.
+#'
+#' @seealso [phytools::densityMap()]
+#'
+#' @noRd
+#'
 
 densityMap_custom <- function (trees, res = 100, fsize = NULL, ftype = NULL, lwd = 3,
                                tol = 1e-5, verbose = T, col_scale = NULL,
