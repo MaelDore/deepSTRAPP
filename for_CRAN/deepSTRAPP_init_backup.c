@@ -10,12 +10,16 @@
 /* .C calls */
 extern void setrecursivesequence(void *, void *, void *, void *, void *, void *);
 
+/* .Call calls */
+extern SEXP cache_descendants(SEXP);
+
 static const R_CMethodDef CEntries[] = {
     {"setrecursivesequence", (DL_FUNC) &setrecursivesequence, 6},
     {NULL, NULL, 0}
 };
 
 static const R_CallMethodDef CallEntries[] = {
+    {"cache_descendants",   (DL_FUNC) &cache_descendants,   1},
     {NULL, NULL, 0}
 };
 
