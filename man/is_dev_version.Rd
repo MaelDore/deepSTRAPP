@@ -6,6 +6,10 @@
 \usage{
 is_dev_version(pkg = "deepSTRAPP")
 }
+\arguments{
+\item{pkg}{Character string. Name of the R package for which the version type is inspected.
+Default is "deepSTRAPP".}
+}
 \value{
 Logical. TRUE if running a development version.
 }
@@ -19,4 +23,12 @@ because their size is not compatible with CRAN policies.
 
 This function is only used to check if an example must be ran or a vignette chunk evaluated
 to produce output from data.
+}
+\examples{
+# Check the current deepSTRAPP installation is a development version
+is_dev_version(pkg = "deepSTRAPP")
+
+}
+\author{
+Maël Doré
 }

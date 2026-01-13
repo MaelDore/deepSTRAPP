@@ -11,9 +11,19 @@
 #'   This function is only used to check if an example must be ran or a vignette chunk evaluated
 #'   to produce output from data.
 #'
+#' @param pkg Character string. Name of the R package for which the version type is inspected.
+#'   Default is "deepSTRAPP".
+#'
 #' @return Logical. TRUE if running a development version.
 #'
 #' @export
+#' @importFrom utils packageVersion
+#'
+#' @author Maël Doré
+#'
+#' @examples
+#' # Check the current deepSTRAPP installation is a development version
+#' is_dev_version(pkg = "deepSTRAPP")
 #'
 
 is_dev_version <- function (pkg = "deepSTRAPP")
