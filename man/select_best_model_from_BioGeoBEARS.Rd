@@ -24,141 +24,146 @@ Compare models fit with \code{BioGeoBEARS::bear_optim_run()} using AICc and Akai
 Generate a data.frame summarizing information. Identify the best model and extract its results.
 }
 \examples{
-
-# Load phylogeny and tip data
-library(phytools)
-data(eel.tree)
-data(eel.data)
-
-# Transform feeding mode data into biogeographic data with ranges A, B, and AB.
-eel_data <- stats::setNames(eel.data$feed_mode, rownames(eel.data))
-eel_data <- as.character(eel_data)
-eel_data[eel_data == "bite"] <- "A"
-eel_data[eel_data == "suction"] <- "B"
-eel_data[c(5, 6, 7, 15, 25, 32, 33, 34, 50, 52, 57, 58, 59)] <- "AB"
-eel_data <- stats::setNames(eel_data, rownames(eel.data))
-table(eel_data)
-
-colors_per_levels <- c("dodgerblue3", "gold")
-names(colors_per_levels) <- c("A", "B")
-
-## The R package 'BioGeoBEARS' is needed for this function to work with biogeographic data.
-# Please install it manually from: https://github.com/nmatzke/BioGeoBEARS.
-
-\dontrun{ # (May take several minutes to run)
-## Prepare phylo
-
-# Set path to BioGeoBEARS directory
-BioGeoBEARS_directory_path = "./BioGeoBEARS_directory/"
-
-# Export phylo
-path_to_phylo <- BioGeoBEARS::np(paste0(BioGeoBEARS_directory_path, "phylo.tree"))
-write.tree(phy = eel.tree, file = path_to_phylo)
-
-## Prepare range data
-
-tip_data <- eel_data
-# Convert tip_data to df
-ranges_df <- as.data.frame(tip_data)
-# Get list of all unique areas
-unique_areas_in_ranges_list <- strsplit(x = tip_data, split = "")
-unique_areas <- unique(unlist(unique_areas_in_ranges_list))
-unique_areas <- unique_areas[order(unique_areas)]
-
-# Loop per unique areas
-for (i in seq_along(unique_areas))
+if (deepSTRAPP::is_dev_version())
 {
-  # i <- 1
+ ## The R package 'BioGeoBEARS' is needed for this function to work with biogeographic data.
+ # Please install it manually from: https://github.com/nmatzke/BioGeoBEARS.
 
-  # Extract unique area
-  unique_area_i <- unique_areas[i]
-  # Detect presence in ranges
-  binary_match_i <- unlist(lapply(X = unique_areas_in_ranges_list,
-     FUN = function (x) { unique_area_i \%in\% x } ))
+ # Load phylogeny and tip data
+ library(phytools)
+ data(eel.tree)
+ data(eel.data)
 
-  # Add to ranges_df
-  ranges_df <- cbind(ranges_df, binary_match_i)
-}
-# Extract binary df of presence/absence
-binary_df <- ranges_df[, -1]
-Convert character strings into numerical factors
-binary_df_num <- as.data.frame(apply(X = binary_df, MARGIN = 2, FUN = as.numeric))
-row.names(binary_df_num) <- names(tip_data)
-names(binary_df_num) <- unique_areas
+ # Transform feeding mode data into biogeographic data with ranges A, B, and AB.
+ eel_data <- stats::setNames(eel.data$feed_mode, rownames(eel.data))
+ eel_data <- as.character(eel_data)
+ eel_data[eel_data == "bite"] <- "A"
+ eel_data[eel_data == "suction"] <- "B"
+ eel_data[c(5, 6, 7, 15, 25, 32, 33, 34, 50, 52, 57, 58, 59)] <- "AB"
+ eel_data <- stats::setNames(eel_data, rownames(eel.data))
+ table(eel_data)
 
-# Produce tipranges object from numeric df
-Taxa_bioregions_tipranges_obj <- BioGeoBEARS::define_tipranges_object(tmpdf = binary_df_num)
+ colors_per_levels <- c("dodgerblue3", "gold")
+ names(colors_per_levels) <- c("A", "B")
 
-# Set path to tip ranges object
-path_to_tip_ranges <- BioGeoBEARS::np(paste0(BioGeoBEARS_directory_path,"tip_ranges.data"))
+ \donttest{ # (May take several minutes to run)
+ ## Prepare phylo
 
-# Export tip ranges in Lagrange/PHYLIP format
-BioGeoBEARS::save_tipranges_to_LagrangePHYLIP(
-  tipranges_object = Taxa_bioregions_tipranges_obj,
-  lgdata_fn = path_to_tip_ranges,
-  areanames = colnames(Taxa_bioregions_tipranges_obj@df))
+ # Set path to BioGeoBEARS directory
+ BioGeoBEARS_directory_path = "./BioGeoBEARS_directory/"
 
-## Prepare models
+ # Export phylo
+ path_to_phylo <- BioGeoBEARS::np(paste0(BioGeoBEARS_directory_path, "phylo.tree"))
+ write.tree(phy = eel.tree, file = path_to_phylo)
 
-# Prepare DEC model run
-DEC_run <- BioGeoBEARS::define_BioGeoBEARS_run(
-   num_cores_to_use = 1,
-   max_range_size = 2, # To set the maximum number of bioregion encompassed
-     # by a lineage range at any time
-   trfn = path_to_phylo, # To provide path to the input tree file
-   geogfn = path_to_tip_ranges, # To provide path to the LagrangePHYLIP file with binary ranges
-   return_condlikes_table = TRUE, # To ask to obtain all marginal likelihoods
+ ## Prepare range data
+
+ tip_data <- eel_data
+ # Convert tip_data to df
+ ranges_df <- as.data.frame(tip_data)
+ # Get list of all unique areas
+ unique_areas_in_ranges_list <- strsplit(x = tip_data, split = "")
+ unique_areas <- unique(unlist(unique_areas_in_ranges_list))
+ unique_areas <- unique_areas[order(unique_areas)]
+
+ # Loop per unique areas
+ for (i in seq_along(unique_areas))
+ {
+   # i <- 1
+
+   # Extract unique area
+   unique_area_i <- unique_areas[i]
+   # Detect presence in ranges
+   binary_match_i <- unlist(lapply(X = unique_areas_in_ranges_list,
+      FUN = function (x) { unique_area_i \%in\% x } ))
+
+   # Add to ranges_df
+   ranges_df <- cbind(ranges_df, binary_match_i)
+ }
+ # Extract binary df of presence/absence
+ binary_df <- ranges_df[, -1]
+ Convert character strings into numerical factors
+ binary_df_num <- as.data.frame(apply(X = binary_df, MARGIN = 2, FUN = as.numeric))
+ row.names(binary_df_num) <- names(tip_data)
+ names(binary_df_num) <- unique_areas
+
+ # Produce tipranges object from numeric df
+ Taxa_bioregions_tipranges_obj <- BioGeoBEARS::define_tipranges_object(tmpdf = binary_df_num)
+
+ # Set path to tip ranges object
+ path_to_tip_ranges <- BioGeoBEARS::np(paste0(BioGeoBEARS_directory_path,"tip_ranges.data"))
+
+ # Export tip ranges in Lagrange/PHYLIP format
+ BioGeoBEARS::save_tipranges_to_LagrangePHYLIP(
+   tipranges_object = Taxa_bioregions_tipranges_obj,
+   lgdata_fn = path_to_tip_ranges,
+   areanames = colnames(Taxa_bioregions_tipranges_obj@df))
+
+ ## Prepare models
+
+ # Prepare DEC model run
+ DEC_run <- BioGeoBEARS::define_BioGeoBEARS_run(
+    num_cores_to_use = 1,
+    max_range_size = 2, # To set the maximum number of bioregion encompassed
+      # by a lineage range at any time
+    trfn = path_to_phylo, # To provide path to the input tree file
+    geogfn = path_to_tip_ranges, # To provide path to the LagrangePHYLIP file with binary ranges
+    return_condlikes_table = TRUE, # To ask to obtain all marginal likelihoods
       # computed by the model and used to display ancestral states
-   print_optim = TRUE)
+    print_optim = TRUE)
 
-# Check that starting parameter values are inside the min/max
-DEC_run <- BioGeoBEARS::fix_BioGeoBEARS_params_minmax(BioGeoBEARS_run_object = DEC_run)
-# Check validity of set-up before run
-BioGeoBEARS::check_BioGeoBEARS_run(DEC_run)
+ # Check that starting parameter values are inside the min/max
+ DEC_run <- BioGeoBEARS::fix_BioGeoBEARS_params_minmax(BioGeoBEARS_run_object = DEC_run)
+ # Check validity of set-up before run
+ BioGeoBEARS::check_BioGeoBEARS_run(DEC_run)
 
-# Use the DEC model as template for DEC+J model
+ # Use the DEC model as template for DEC+J model
  DEC_J_run <- DEC_run
 
-# Update status of jump speciation parameter to be estimated
-DEC_J_run$BioGeoBEARS_model_object@params_table["j","type"] <- "free"
-# Set initial value of J for optimization to an arbitrary low non-null value
-j_start <- 0.0001
-DEC_J_run$BioGeoBEARS_model_object@params_table["j","init"] <- j_start
-DEC_J_run$BioGeoBEARS_model_object@params_table["j","est"] <- j_start
+ # Update status of jump speciation parameter to be estimated
+ DEC_J_run$BioGeoBEARS_model_object@params_table["j","type"] <- "free"
+ # Set initial value of J for optimization to an arbitrary low non-null value
+ j_start <- 0.0001
+ DEC_J_run$BioGeoBEARS_model_object@params_table["j","init"] <- j_start
+ DEC_J_run$BioGeoBEARS_model_object@params_table["j","est"] <- j_start
 
-# Check validity of set-up before run
-DEC_J_run <- BioGeoBEARS::fix_BioGeoBEARS_params_minmax(BioGeoBEARS_run_object = DEC_J_run)
-invisible(BioGeoBEARS::check_BioGeoBEARS_run(DEC_J_run))
+ # Check validity of set-up before run
+ DEC_J_run <- BioGeoBEARS::fix_BioGeoBEARS_params_minmax(BioGeoBEARS_run_object = DEC_J_run)
+ invisible(BioGeoBEARS::check_BioGeoBEARS_run(DEC_J_run))
 
-## Run models
+ ## Run models
 
-# Run DEC model
-DEC_fit <- BioGeoBEARS::bears_optim_run(DEC_run)
+ # Run DEC model
+ DEC_fit <- BioGeoBEARS::bears_optim_run(DEC_run)
 
-# Set starting values for optimization of DEC+J model based on MLE in the DEC model
-d_start <- DEC_fit$outputs@params_table["d","est"]
-e_start <- DEC_fit$outputs@params_table["e","est"]
+ # Set starting values for optimization of DEC+J model based on MLE in the DEC model
+ d_start <- DEC_fit$outputs@params_table["d","est"]
+ e_start <- DEC_fit$outputs@params_table["e","est"]
 
-DEC_J_run$BioGeoBEARS_model_object@params_table["d","init"] <- d_start
-DEC_J_run$BioGeoBEARS_model_object@params_table["d","est"] <- d_start
-DEC_J_run$BioGeoBEARS_model_object@params_table["e","init"] <- e_start
-DEC_J_run$BioGeoBEARS_model_object@params_table["e","est"] <- e_start
+ DEC_J_run$BioGeoBEARS_model_object@params_table["d","init"] <- d_start
+ DEC_J_run$BioGeoBEARS_model_object@params_table["d","est"] <- d_start
+ DEC_J_run$BioGeoBEARS_model_object@params_table["e","init"] <- e_start
+ DEC_J_run$BioGeoBEARS_model_object@params_table["e","est"] <- e_start
 
-# Run DEC+J model
-DEC_J_fit <- BioGeoBEARS::bears_optim_run(DEC_J_run)
+ # Run DEC+J model
+ DEC_J_fit <- BioGeoBEARS::bears_optim_run(DEC_J_run)
 
-## Store model outputs
-list_model_fits <- list(DEC = DEC_fit, DEC_J = DEC_J_fit)
+ ## Store model outputs
+ list_model_fits <- list(DEC = DEC_fit, DEC_J = DEC_J_fit)
 
-## Compare models
-model_comparison_output <- select_best_model_from_BioGeoBEARS(list_model_fits = list_model_fits)
+ ## Compare models
+ model_comparison_output <- select_best_model_from_BioGeoBEARS(list_model_fits = list_model_fits)
 
-# Explore output
-str(model_comparison_output, max.level = 1)
-# Print comparison
-print(model_comparison_output$models_comparison_df)
-# Print best model fit
-print(model_comparison_output$best_model_fit$outputs) }
+ # Explore output
+ str(model_comparison_output, max.level = 1)
+ # Print comparison
+ print(model_comparison_output$models_comparison_df)
+ # Print best model fit
+ print(model_comparison_output$best_model_fit$outputs)
+
+ ## Clean local files
+ unlink(BioGeoBEARS_directory_path, recursive = TRUE, force = TRUE) }
+}
 
 }
 \seealso{

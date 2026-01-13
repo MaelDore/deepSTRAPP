@@ -123,14 +123,14 @@ if (deepSTRAPP::is_dev_version())
 
  # Load the BAMM_object summarizing 1000 posterior samples of BAMM
  data(Ponerinae_BAMM_object_old_calib, package = "deepSTRAPP")
- # This dataset is only available in development versions installed from GitHub.
+ ## This dataset is only available in development versions installed from GitHub.
  # It is not available in CRAN versions.
  # Use remotes::install_github(repo = "MaelDore/deepSTRAPP") to get the latest development version.
 
  ## Prepare trait data
 
  # Extract continuous trait data as a named vector
-  Ponerinae_cont_tip_data <- setNames(object = Ponerinae_trait_tip_data$fake_cont_tip_data,
+ Ponerinae_cont_tip_data <- setNames(object = Ponerinae_trait_tip_data$fake_cont_tip_data,
                                      nm = Ponerinae_trait_tip_data$Taxa)
 
  # Select a color scheme from lowest to highest values
@@ -140,6 +140,7 @@ if (deepSTRAPP::is_dev_version())
  # To obtain values at internal nodes
  Ponerinae_ACE <- phytools::fastAnc(tree = Ponerinae_tree_old_calib, x = Ponerinae_cont_tip_data)
 
+ \donttest{ # (May take several minutes to run)
  # Run a Stochastic Mapping based on a Brownian Motion model
  # to interpolate values along branches and obtain a "contMap" object
  Ponerinae_contMap <- phytools::contMap(Ponerinae_tree_old_calib, x = Ponerinae_cont_tip_data,
@@ -152,7 +153,6 @@ if (deepSTRAPP::is_dev_version())
  ## Set focal time to 10 Mya
  focal_time <- 10
 
- \dontrun{ # (May take several minutes to run)
  ## Run deepSTRAPP on net diversification rates for focal time = 10 Mya.
 
  Ponerinae_deepSTRAPP_cont_old_calib_10My <- run_deepSTRAPP_for_focal_time(
@@ -194,7 +194,7 @@ if (deepSTRAPP::is_dev_version())
 
  ## Load directly outputs from run_deepSTRAPP_over_time()
  data(Ponerinae_deepSTRAPP_cont_old_calib_0_40, package = "deepSTRAPP")
- # This dataset is only available in development versions installed from GitHub.
+ ## This dataset is only available in development versions installed from GitHub.
  # It is not available in CRAN versions.
  # Use remotes::install_github(repo = "MaelDore/deepSTRAPP") to get the latest development version.
 
@@ -226,7 +226,7 @@ if (deepSTRAPP::is_dev_version())
 
  # Load the BAMM_object summarizing 1000 posterior samples of BAMM
  data(Ponerinae_BAMM_object_old_calib, package = "deepSTRAPP")
- # This dataset is only available in development versions installed from GitHub.
+ ## This dataset is only available in development versions installed from GitHub.
  # It is not available in CRAN versions.
  # Use remotes::install_github(repo = "MaelDore/deepSTRAPP") to get the latest development version.
 
@@ -241,7 +241,7 @@ if (deepSTRAPP::is_dev_version())
  colors_per_states <- c("forestgreen", "sienna", "goldenrod")
  names(colors_per_states) <- c("arboreal", "subterranean", "terricolous")
 
- \dontrun{ # (May take several minutes to run)
+ \donttest{ # (May take several minutes to run)
  ## Produce densityMaps using stochastic character mapping based on an ARD Mk model
  Ponerinae_cat_3lvl_data_old_calib <- prepare_trait_data(
     tip_data = Ponerinae_cat_3lvl_tip_data,
@@ -253,7 +253,7 @@ if (deepSTRAPP::is_dev_version())
     seed = 1234, # Seet seed for reproducibility
     return_best_model_fit = TRUE,
     return_model_selection_df = TRUE,
-    plot_map = FALSE) }
+    plot_map = FALSE)
 
  # Load directly output
  data(Ponerinae_cat_3lvl_data_old_calib, package = "deepSTRAPP")
@@ -261,7 +261,6 @@ if (deepSTRAPP::is_dev_version())
  ## Set focal time to 10 Mya
  focal_time <- 10
 
- \dontrun{ # (May take several minutes to run)
  ## Run deepSTRAPP on net diversification rates for focal time = 10 Mya.
 
  Ponerinae_deepSTRAPP_cat_3lvl_old_calib_10My <- run_deepSTRAPP_for_focal_time(
@@ -299,7 +298,7 @@ if (deepSTRAPP::is_dev_version())
  print(rates_vs_trait_ggplot_adj)
 
  # Explore melted data.frame of mean rates and states extracted for the given focal time.
- head(rates_vs_trait_output$mean_rates_vs_trait_data_df)}
+ head(rates_vs_trait_output$mean_rates_vs_trait_data_df) }
  }
 
 }

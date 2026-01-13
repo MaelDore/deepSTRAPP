@@ -231,7 +231,7 @@ if (deepSTRAPP::is_dev_version())
 
  # Load the BAMM_object summarizing 1000 posterior samples of BAMM
  data(Ponerinae_BAMM_object_old_calib, package = "deepSTRAPP")
- # This dataset is only available in development versions installed from GitHub.
+ ## This dataset is only available in development versions installed from GitHub.
  # It is not available in CRAN versions.
  # Use remotes::install_github(repo = "MaelDore/deepSTRAPP") to get the latest development version.
 
@@ -244,6 +244,7 @@ if (deepSTRAPP::is_dev_version())
  # Select a color scheme from lowest to highest values
  color_scale = c("darkgreen", "limegreen", "orange", "red")
 
+ \donttest{ # (May take several minutes to run)
  # Get Ancestral Character Estimates based on a Brownian Motion model
  # To obtain values at internal nodes
  Ponerinae_ACE <- phytools::fastAnc(tree = Ponerinae_tree_old_calib, x = Ponerinae_cont_tip_data)
@@ -260,7 +261,6 @@ if (deepSTRAPP::is_dev_version())
  ## Set focal time to 10 Mya
  focal_time <- 10
 
- \dontrun{ # (May take several minutes to run)
  ## Run deepSTRAPP on net diversification rates for focal time = 10 Mya.
 
  deepSTRAPP_output <- run_deepSTRAPP_for_focal_time(
@@ -314,7 +314,7 @@ if (deepSTRAPP::is_dev_version())
 
  # Load the BAMM_object summarizing 1000 posterior samples of BAMM
  data(Ponerinae_BAMM_object_old_calib, package = "deepSTRAPP")
- # This dataset is only available in development versions installed from GitHub.
+ ## This dataset is only available in development versions installed from GitHub.
  # It is not available in CRAN versions.
  # Use remotes::install_github(repo = "MaelDore/deepSTRAPP") to get the latest development version.
 
@@ -329,7 +329,7 @@ if (deepSTRAPP::is_dev_version())
  colors_per_states <- c("forestgreen", "sienna", "goldenrod")
  names(colors_per_states) <- c("arboreal", "subterranean", "terricolous")
 
- \dontrun{ # (May take several minutes to run)
+ \donttest{ # (May take several minutes to run)
  ## Produce densityMaps using stochastic character mapping based on an equal-rates (ER) Mk model
  Ponerinae_cat_3lvl_data_old_calib <- prepare_trait_data(
     tip_data = Ponerinae_cat_3lvl_tip_data,
@@ -349,7 +349,7 @@ if (deepSTRAPP::is_dev_version())
  ## Set focal time to 10 Mya
  focal_time <- 10
 
- \dontrun{ # (May take several minutes to run)
+ \donttest{ # (May take several minutes to run)
  ## Run deepSTRAPP on net diversification rates for focal time = 10 Mya.
 
  deepSTRAPP_output <- run_deepSTRAPP_for_focal_time(
@@ -415,7 +415,7 @@ if (deepSTRAPP::is_dev_version())
 
  # Load the BAMM_object summarizing 1000 posterior samples of BAMM
  data(Ponerinae_BAMM_object_old_calib, package = "deepSTRAPP")
- # This dataset is only available in development versions installed from GitHub.
+ ## This dataset is only available in development versions installed from GitHub.
  # It is not available in CRAN versions.
  # Use remotes::install_github(repo = "MaelDore/deepSTRAPP") to get the latest development version.
 
@@ -435,7 +435,7 @@ if (deepSTRAPP::is_dev_version())
  colors_per_ranges <- c("mediumpurple2", "peachpuff2")
  names(colors_per_ranges) <- c("N", "O")
 
- \dontrun{ # (May take several minutes to run)
+ \donttest{ # (May take several minutes to run)
  ## Run evolutionary models
  Ponerinae_biogeo_data <- prepare_trait_data(
      tip_data = Ponerinae_NO_data,
@@ -459,7 +459,7 @@ if (deepSTRAPP::is_dev_version())
  ## Set focal time to 10 Mya
  focal_time <- 10
 
- \dontrun{ # (May take several minutes to run)
+ \donttest{ # (May take several minutes to run)
  ## Run deepSTRAPP on net diversification rates for focal time = 10 Mya.
 
  deepSTRAPP_output <- run_deepSTRAPP_for_focal_time(

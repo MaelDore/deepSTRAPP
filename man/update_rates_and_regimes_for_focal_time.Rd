@@ -214,15 +214,15 @@ if (deepSTRAPP::is_dev_version())
 {
  ## Load the BAMM_object summarizing 1000 posterior samples of BAMM
  data(Ponerinae_BAMM_object, package = "deepSTRAPP")
- # This dataset is only available in development versions installed from GitHub.
+ ## This dataset is only available in development versions installed from GitHub.
  # It is not available in CRAN versions.
  # Use remotes::install_github(repo = "MaelDore/deepSTRAPP") to get the latest development version.
 
  ## Set focal-time to 10 My
  focal_time = 10
 
- \dontrun{
- ## Update the BAMM object (May take several minutes to run)
+ \donttest{ # (May take several minutes to run)
+ ## Update the BAMM object
  Ponerinae_BAMM_object_10My <- update_rates_and_regimes_for_focal_time(
     BAMM_object = Ponerinae_BAMM_object,
     focal_time = focal_time,
@@ -234,7 +234,7 @@ if (deepSTRAPP::is_dev_version())
 
  ## Load results to save time
  data(Ponerinae_BAMM_object_10My, package = "deepSTRAPP")
- # This dataset is only available in development versions installed from GitHub.
+ ## This dataset is only available in development versions installed from GitHub.
  # It is not available in CRAN versions.
  # Use remotes::install_github(repo = "MaelDore/deepSTRAPP") to get the latest development version.
 

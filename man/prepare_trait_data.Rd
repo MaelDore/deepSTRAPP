@@ -251,7 +251,7 @@ data("eel.data", package = "phytools")
 eel_data <- stats::setNames(eel.data$Max_TL_cm,
                             rownames(eel.data))
 
-\dontrun{ # (May take several minutes to run)
+\donttest{ # (May take several minutes to run)
 ## Map trait evolution on the phylogeny
 mapped_cont_traits <- prepare_trait_data(
    tip_data = eel_data,
@@ -299,7 +299,7 @@ Q_matrix = rbind(c(NA, 0, 0), c(1, NA, 2), c(0, 2, NA))
 colors_per_states <- c("limegreen", "orange", "dodgerblue")
 names(colors_per_states) <- c("bite", "kiss", "suction")
 
-\dontrun{ # (May take several minutes to run)
+\donttest{ # (May take several minutes to run)
 ## Run evolutionary models
 eel_cat_3lvl_data <- prepare_trait_data(tip_data = eel_data, phylo = eel.tree,
     trait_data_type = "categorical",
@@ -326,30 +326,32 @@ eel_cat_3lvl_data$ace # Posterior probabilities of each state (= ACE) at interna
 
 # ----- Example 3: Biogeographic data ----- #
 
-## The R package 'BioGeoBEARS' is needed for this function to work with biogeographic data.
-# Please install it manually from: https://github.com/nmatzke/BioGeoBEARS.
+if (deepSTRAPP::is_dev_version())
+{
+ ## The R package 'BioGeoBEARS' is needed for this function to work with biogeographic data.
+ # Please install it manually from: https://github.com/nmatzke/BioGeoBEARS.
 
-## Load phylogeny and tip data
-# Load eel phylogeny and tip data from the R package phytools
-# Source: Collar et al., 2014; DOI: 10.1038/ncomms6505
-data("eel.tree", package = "phytools")
-data("eel.data", package = "phytools")
+ ## Load phylogeny and tip data
+ # Load eel phylogeny and tip data from the R package phytools
+ # Source: Collar et al., 2014; DOI: 10.1038/ncomms6505
+ data("eel.tree", package = "phytools")
+ data("eel.data", package = "phytools")
 
-# Transform feeding mode data into biogeographic data with ranges A, B, and AB.
-eel_data <- stats::setNames(eel.data$feed_mode, rownames(eel.data))
-eel_data <- as.character(eel_data)
-eel_data[eel_data == "bite"] <- "A"
-eel_data[eel_data == "suction"] <- "B"
-eel_data[c(5, 6, 7, 15, 25, 32, 33, 34, 50, 52, 57, 58, 59)] <- "AB"
-eel_data <- stats::setNames(eel_data, rownames(eel.data))
-table(eel_data)
+ # Transform feeding mode data into biogeographic data with ranges A, B, and AB.
+ eel_data <- stats::setNames(eel.data$feed_mode, rownames(eel.data))
+ eel_data <- as.character(eel_data)
+ eel_data[eel_data == "bite"] <- "A"
+ eel_data[eel_data == "suction"] <- "B"
+ eel_data[c(5, 6, 7, 15, 25, 32, 33, 34, 50, 52, 57, 58, 59)] <- "AB"
+ eel_data <- stats::setNames(eel_data, rownames(eel.data))
+ table(eel_data)
 
-colors_per_ranges <- c("dodgerblue3", "gold")
-names(colors_per_ranges) <- c("A", "B")
+ colors_per_ranges <- c("dodgerblue3", "gold")
+ names(colors_per_ranges) <- c("A", "B")
 
-\dontrun{ # (May take several minutes to run)
-## Run evolutionary models
-eel_biogeo_data <- prepare_trait_data(
+ \donttest{ # (May take several minutes to run)
+ ## Run evolutionary models
+ eel_biogeo_data <- prepare_trait_data(
     tip_data = eel_data,
     trait_data_type = "biogeographic",
     phylo = eel.tree,
@@ -367,27 +369,28 @@ eel_biogeo_data <- prepare_trait_data(
     return_model_selection_df = TRUE,
     verbose = TRUE) }
 
-# Load directly output
-data(eel_biogeo_data, package = "deepSTRAPP")
+ # Load directly output
+ data(eel_biogeo_data, package = "deepSTRAPP")
 
-## Explore output
-str(eel_biogeo_data, 1)
-eel_biogeo_data$model_selection_df # Summary of model selection
-# Parameter estimates and optimization summary of the best model
-# (Here, the best model is DEC+J)
-eel_biogeo_data$best_model_fit$optim_result
+ ## Explore output
+ str(eel_biogeo_data, 1)
+ eel_biogeo_data$model_selection_df # Summary of model selection
+ # Parameter estimates and optimization summary of the best model
+ # (Here, the best model is DEC+J)
+ eel_biogeo_data$best_model_fit$optim_result
 
-# Posterior probabilities of each state (= ACE) at internal nodes
-eel_biogeo_data$ace # Only with unique areas
-eel_biogeo_data$ace_all_ranges # Including multi-area ranges (Here, AB)
+ # Posterior probabilities of each state (= ACE) at internal nodes
+ eel_biogeo_data$ace # Only with unique areas
+ eel_biogeo_data$ace_all_ranges # Including multi-area ranges (Here, AB)
 
-## Plot densityMaps
-# densityMap for range n°1 ("A")
-plot(eel_biogeo_data$densityMaps[[1]])
-# densityMaps with all unique areas overlaid
-plot_densityMaps_overlay(eel_biogeo_data$densityMaps)
-# densityMaps with all ranges (including multi-area ranges) overlaid
-plot_densityMaps_overlay(eel_biogeo_data$densityMaps_all_ranges)
+ ## Plot densityMaps
+ # densityMap for range n°1 ("A")
+ plot(eel_biogeo_data$densityMaps[[1]])
+ # densityMaps with all unique areas overlaid
+ plot_densityMaps_overlay(eel_biogeo_data$densityMaps)
+ # densityMaps with all ranges (including multi-area ranges) overlaid
+ plot_densityMaps_overlay(eel_biogeo_data$densityMaps_all_ranges)
+}
 
 }
 \references{

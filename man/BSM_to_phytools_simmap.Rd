@@ -105,15 +105,17 @@ at least if \code{BioGeoBEARS::simulate_source_areas_ana_clado()} has been run o
 }
 
 \examples{
-# Load phylogeny and tip data
-library(phytools)
-data(eel.tree)
+if (deepSTRAPP::is_dev_version())
+{
+ ## Run only if you have R package 'BioGeoBEARS' installed.
+ # Please install it manually from: https://github.com/nmatzke/BioGeoBEARS")
 
-## Run only if you have R package 'BioGeoBEARS' installed.
-# Please install it manually from: https://github.com/nmatzke/BioGeoBEARS")
+ ## Load phylogeny and tip data
+ library(phytools)
+ data(eel.tree)
 
-\dontrun{ # (May take several minutes to run)
- # Load directly output of prepare_trait_data() run on biogeographic data
+ \donttest{ # (May take several minutes to run)
+ ## Load directly output of prepare_trait_data() run on biogeographic data
  data(eel_biogeo_data, package = "deepSTRAPP")
 
  ## Convert BSM output into a unique simmap, including residence times
@@ -128,7 +130,6 @@ data(eel.tree)
  # Plot simmap
  plot(simmap_1$simmap)
 
-
  ## Convert BSM output into all simmaps in a multiSimmap/multiPhylo object
  all_simmaps <- BSMs_to_phytools_simmaps(model_fit = eel_biogeo_data$best_model_fit,
                                          phylo = eel.tree,
@@ -137,7 +138,7 @@ data(eel.tree)
  str(all_simmaps, max.level = 1)
  # Plot simmap n°1
  plot(all_simmaps[[1]]) }
-
+}
 
 }
 \references{

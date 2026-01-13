@@ -270,7 +270,7 @@ if (deepSTRAPP::is_dev_version())
 
  # Load the BAMM_object summarizing 1000 posterior samples of BAMM
  data(Ponerinae_BAMM_object_old_calib, package = "deepSTRAPP")
- # This dataset is only available in development versions installed from GitHub.
+ ## This dataset is only available in development versions installed from GitHub.
  # It is not available in CRAN versions.
  # Use remotes::install_github(repo = "MaelDore/deepSTRAPP") to get the latest development version.
 
@@ -287,6 +287,7 @@ if (deepSTRAPP::is_dev_version())
  # To obtain values at internal nodes
  Ponerinae_ACE <- phytools::fastAnc(tree = Ponerinae_tree_old_calib, x = Ponerinae_cont_tip_data)
 
+ \donttest{ # (May take several minutes to run)
  # Run a Stochastic Mapping based on a Brownian Motion model
  # to interpolate values along branches and obtain a "contMap" object
  Ponerinae_contMap <- phytools::contMap(Ponerinae_tree, x = Ponerinae_cont_tip_data,
@@ -301,7 +302,6 @@ if (deepSTRAPP::is_dev_version())
  time_step_duration <- 5
  time_range <- c(0, 40)
 
- \dontrun{ # (May take several minutes to run)
  ## Run deepSTRAPP on net diversification rates
  Ponerinae_deepSTRAPP_cont_old_calib_0_40 <- run_deepSTRAPP_over_time(
     contMap = Ponerinae_contMap,
@@ -323,7 +323,7 @@ if (deepSTRAPP::is_dev_version())
 
  ## Load directly trait data output
  data(Ponerinae_deepSTRAPP_cont_old_calib_0_40, package = "deepSTRAPP")
- # This dataset is only available in development versions installed from GitHub.
+ ## This dataset is only available in development versions installed from GitHub.
  # It is not available in CRAN versions.
  # Use remotes::install_github(repo = "MaelDore/deepSTRAPP") to get the latest development version.
 
@@ -346,6 +346,7 @@ if (deepSTRAPP::is_dev_version())
 
  ## Visualize updated phylogenies
 
+ \donttest{ # (May take time to plot)
  # Plot updated contMap for time step n°2
  deepSTRAPP_outputs <- Ponerinae_deepSTRAPP_cont_old_calib_0_40
  contMap_step2 <- deepSTRAPP_outputs$updated_trait_data_with_Map_over_time[[2]]
@@ -355,10 +356,11 @@ if (deepSTRAPP::is_dev_version())
  BAMM_object_step2 <- deepSTRAPP_outputs$updated_BAMM_objects_over_time[[2]]
  plot_BAMM_rates(BAMM_object = BAMM_object_step2,
     legend = TRUE, labels = FALSE,
-    colorbreaks = BAMM_object_step2$initial_colorbreaks$net_diversification)
+    colorbreaks = BAMM_object_step2$initial_colorbreaks$net_diversification) }
 
  ## Visualize test results
 
+ \donttest{ # (May take time to plot)
  # Plot p-values of Spearman tests across all time-steps
  plot_STRAPP_pvalues_over_time(
     deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_old_calib_0_40,
@@ -380,7 +382,7 @@ if (deepSTRAPP::is_dev_version())
  # Plot histograms of Spearman test results (One plot per time-step)
  plot_histograms_STRAPP_tests_over_time(
     deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_old_calib_0_40,
-    display_plots = TRUE)
+    display_plots = TRUE)  }
 
  # ----- Example 2: Categorical trait ----- #
 
@@ -393,7 +395,7 @@ if (deepSTRAPP::is_dev_version())
 
  # Load the BAMM_object summarizing 1000 posterior samples of BAMM
  data(Ponerinae_BAMM_object_old_calib, package = "deepSTRAPP")
- # This dataset is only available in development versions installed from GitHub.
+ ## This dataset is only available in development versions installed from GitHub.
  # It is not available in CRAN versions.
  # Use remotes::install_github(repo = "MaelDore/deepSTRAPP") to get the latest development version.
 
@@ -408,7 +410,7 @@ if (deepSTRAPP::is_dev_version())
  colors_per_states <- c("forestgreen", "sienna", "goldenrod")
  names(colors_per_states) <- c("arboreal", "subterranean", "terricolous")
 
- \dontrun{ # (May take several minutes to run)
+ \donttest{ # (May take several minutes to run)
  ## Produce densityMaps using stochastic character mapping based on an ARD Mk model
  Ponerinae_cat_3lvl_data_old_calib <- prepare_trait_data(
     tip_data = Ponerinae_cat_3lvl_tip_data,
@@ -429,7 +431,7 @@ if (deepSTRAPP::is_dev_version())
  time_step_duration <- 5
  time_range <- c(0, 40)
 
- \dontrun{ # (May take several minutes to run)
+ \donttest{ # (May take several minutes to run)
  ## Run deepSTRAPP on net diversification rates across time-steps.
  Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40 <- run_deepSTRAPP_over_time(
     densityMaps = Ponerinae_cat_3lvl_data_old_calib$densityMaps,
@@ -456,7 +458,7 @@ if (deepSTRAPP::is_dev_version())
  ## Load directly deepSTRAPP output
  data(Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40, package = "deepSTRAPP")
  deepSTRAPP_outputs <- Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40
- # This dataset is only available in development versions installed from GitHub.
+ ## This dataset is only available in development versions installed from GitHub.
  # It is not available in CRAN versions.
  # Use remotes::install_github(repo = "MaelDore/deepSTRAPP") to get the latest development version.
 
@@ -481,6 +483,7 @@ if (deepSTRAPP::is_dev_version())
 
  ## Visualize updated phylogenies
 
+ \donttest{ # (May take time to plot)
  # Plot updated densityMaps for time step n°2 = 10My
  densityMaps_10My <- deepSTRAPP_outputs$updated_trait_data_with_Map_over_time[[2]]
  plot_densityMaps_overlay(densityMaps_10My$densityMaps)
@@ -489,10 +492,11 @@ if (deepSTRAPP::is_dev_version())
  BAMM_object_10My <- deepSTRAPP_outputs$updated_BAMM_objects_over_time[[2]]
  plot_BAMM_rates(BAMM_object = BAMM_object_10My,
     legend = TRUE, labels = FALSE,
-    colorbreaks = BAMM_object_10My$initial_colorbreaks$net_diversification)
+    colorbreaks = BAMM_object_10My$initial_colorbreaks$net_diversification) }
 
  ## Visualize test results
 
+ \donttest{ # (May take time to plot)
  # Plot p-values of overall Kruskal-Wallis test across all time-steps
  plot_STRAPP_pvalues_over_time(
     deepSTRAPP_outputs = deepSTRAPP_outputs,
@@ -529,7 +533,7 @@ if (deepSTRAPP::is_dev_version())
  # (One multifaceted plot per time-step)
  plot_histograms_STRAPP_tests_over_time(
     deepSTRAPP_outputs = deepSTRAPP_outputs,
-    plot_posthoc_tests = TRUE)
+    plot_posthoc_tests = TRUE) }
 
  # ----- Example 3: Biogeographic ranges ----- #
 
@@ -542,7 +546,7 @@ if (deepSTRAPP::is_dev_version())
 
  # Load the BAMM_object summarizing 1000 posterior samples of BAMM
  data(Ponerinae_BAMM_object_old_calib, package = "deepSTRAPP")
- # This dataset is only available in development versions installed from GitHub.
+ ## This dataset is only available in development versions installed from GitHub.
  # It is not available in CRAN versions.
  # Use remotes::install_github(repo = "MaelDore/deepSTRAPP") to get the latest development version.
 
@@ -562,7 +566,7 @@ if (deepSTRAPP::is_dev_version())
  colors_per_ranges <- c("mediumpurple2", "peachpuff2")
  names(colors_per_ranges) <- c("N", "O")
 
- \dontrun{ # (May take several minutes to run)
+ \donttest{ # (May take several minutes to run)
  ## Run evolutionary models
  Ponerinae_biogeo_data <- prepare_trait_data(
     tip_data = Ponerinae_NO_data,
@@ -584,7 +588,7 @@ if (deepSTRAPP::is_dev_version())
  time_range <- c(0, 40)
  time_step_duration <- 10
 
- \dontrun{ # (May take several minutes to run)
+ \donttest{ # (May take several minutes to run)
  ## Run deepSTRAPP on net diversification rates for time-steps = 0 to 40 Mya.
  Ponerinae_deepSTRAPP_biogeo_old_calib_0_40 <- run_deepSTRAPP_over_time(
     densityMaps = Ponerinae_biogeo_data_old_calib$densityMaps,
@@ -609,7 +613,7 @@ if (deepSTRAPP::is_dev_version())
  ## Load directly output
  data(Ponerinae_deepSTRAPP_biogeo_old_calib_0_40, package = "deepSTRAPP")
  deepSTRAPP_outputs <- Ponerinae_deepSTRAPP_biogeo_old_calib_0_40
- # This dataset is only available in development versions installed from GitHub.
+ ## This dataset is only available in development versions installed from GitHub.
  # It is not available in CRAN versions.
  # Use remotes::install_github(repo = "MaelDore/deepSTRAPP") to get the latest development version.
 
@@ -632,6 +636,7 @@ if (deepSTRAPP::is_dev_version())
 
  ## Visualize updated phylogenies
 
+ \donttest{ # (May take time to plot)
  # Plot updated densityMaps for time step n°2 = 10My
  densityMaps_10My <- deepSTRAPP_outputs$updated_trait_data_with_Map_over_time[[2]]
  plot_densityMaps_overlay(densityMaps_10My$densityMaps)
@@ -640,10 +645,11 @@ if (deepSTRAPP::is_dev_version())
  BAMM_object_10My <- deepSTRAPP_outputs$updated_BAMM_objects_over_time[[2]]
  plot_BAMM_rates(BAMM_object = BAMM_object_10My,
    legend = TRUE, labels = FALSE,
-   colorbreaks = BAMM_object_10My$initial_colorbreaks$net_diversification)
+   colorbreaks = BAMM_object_10My$initial_colorbreaks$net_diversification) }
 
  ## Visualize test results
 
+ \donttest{ # (May take time to plot)
  # Plot p-values of Mann-Whitney-Wilcoxon tests across all time-steps
  plot_STRAPP_pvalues_over_time(
     deepSTRAPP_outputs = deepSTRAPP_outputs,
@@ -668,7 +674,7 @@ if (deepSTRAPP::is_dev_version())
  plot_histograms_STRAPP_tests_over_time(
     deepSTRAPP_outputs = deepSTRAPP_outputs,
     display_plots = TRUE,
-    plot_posthoc_tests = FALSE)
+    plot_posthoc_tests = FALSE) }
 }
 
 }
