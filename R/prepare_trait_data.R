@@ -2827,7 +2827,7 @@ select_best_trait_model_from_geiger <- function (list_model_fits)
 #'  }
 #'  # Extract binary df of presence/absence
 #'  binary_df <- ranges_df[, -1]
-#'  Convert character strings into numerical factors
+#'  # Convert character strings into numerical factors
 #'  binary_df_num <- as.data.frame(apply(X = binary_df, MARGIN = 2, FUN = as.numeric))
 #'  row.names(binary_df_num) <- names(tip_data)
 #'  names(binary_df_num) <- unique_areas
