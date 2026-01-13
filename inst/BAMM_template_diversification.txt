@@ -1,7 +1,7 @@
-# BAMM configuration file for speciation/extinction analysis 
+# BAMM configuration file for speciation/extinction analysis
 # ==========================================================
 #
-# Source: bamm-2.5.0 
+# Source: bamm-2.5.0
 # References: http://bamm-project.org/; https://github.com/macroevolution/bamm
 #
 # Authors: Daniel Rabosky (BAMM) & Pascal Title (BAMMtools)
@@ -62,7 +62,7 @@ sampleProbsFilename = sample_probs.txt
 # File name containing species-specific sampling fractions
 
 # seed = 12345
-# Seed for the random number generator. 
+# Seed for the random number generator.
 # If not specified (or is -1), a seed is obtained from the system clock
 
 overwrite = 0
@@ -70,8 +70,8 @@ overwrite = 0
 # directory (if present)
 
 validateEventConfiguration = 0
-# If 1, rejects proposals that cause a branch and both of its direct descendants to have at least one event. 
-# Such an event configuration may cause the parameters of the parent event to change to unrealistic values. 
+# If 1, rejects proposals that cause a branch and both of its direct descendants to have at least one event.
+# Such an event configuration may cause the parameters of the parent event to change to unrealistic values.
 # If 0, no such proposals are immediately rejected. The default value is 0.
 
 
@@ -81,10 +81,10 @@ validateEventConfiguration = 0
 
 expectedNumberOfShifts = 1.0
 # prior on the number of shifts in diversification
-# Suggested values: 
+# Suggested values:
 #     expectedNumberOfShifts = 1.0 for small trees (< 500 tips)
-#	  expectedNumberOfShifts = 10 or even 50 for large trees (> 5000 tips) 
- 
+#	  expectedNumberOfShifts = 10 or even 50 for large trees (> 5000 tips)
+
 lambdaInitPrior = 1.0
 # Prior (rate parameter of exponential) on the initial lambda value for rate
 # regimes
@@ -95,7 +95,7 @@ lambdaShiftPrior = 0.05
 # equal to a constant rate diversification process)
 
 muInitPrior = 1.0
-# Prior (rate parameter of exponential) on extinction rates  
+# Prior (rate parameter of exponential) on extinction rates
 
 lambdaIsTimeVariablePrior = 1
 # Prior (probability) of the time mode being time-variable (vs. time-constant)
@@ -132,7 +132,7 @@ outputAcceptanceInfo = 0
 # The default value is 0 (i.e., do not output this information).
 
 acceptanceInfoFileName = acceptance_info.txt
-# The path of the file to which to write whether each proposal was accepted. outputAcceptedInfo must be set to 1 for this information to be written. 
+# The path of the file to which to write whether each proposal was accepted. outputAcceptedInfo must be set to 1 for this information to be written.
 # The default value is acceptance_info.txt.
 
 acceptanceResetFreq = 1000
@@ -160,10 +160,10 @@ updateMuInitScale = 2.0
 updateEventLocationScale = 0.05
 # Scale parameter for updating LOCAL moves of events on the tree
 # This defines the width of the sliding window proposal
- 
+
 updateEventRateScale = 4.0
 # Scale parameter (proportional shrinking/expanding) for updating
-# the rate parameter of the Poisson process 
+# the rate parameter of the Poisson process
 
 
 ################################################################################
@@ -178,7 +178,7 @@ updateRateEventPosition = 1
 # tree
 
 updateRateEventRate = 1
-# Relative frequency of MCMC moves that change the rate at which events occur 
+# Relative frequency of MCMC moves that change the rate at which events occur
 
 updateRateLambda0 = 1
 # Relative frequency of MCMC moves that change the initial speciation rate
@@ -197,7 +197,7 @@ updateRateLambdaTimeMode = 0
 # (time-constant <=> time-variable)
 
 localGlobalMoveRatio = 10.0
-# Ratio of local to global moves of events 
+# Ratio of local to global moves of events
 
 
 ################################################################################
@@ -215,7 +215,7 @@ muInit0 = 0.005
 
 initialNumberEvents = 0
 # Initial number of non-root processes
- 
+
 
 ################################################################################
 # METROPOLIS COUPLED MCMC
@@ -246,7 +246,7 @@ chainSwapFileName = chain_swap.txt
 minCladeSizeForShift = 1
 # Allows you to constrain location of possible rate-change events to occur
 # only on branches with at least this many descendant tips. A value of 1
-# allows shifts to occur on all branches. 
+# allows shifts to occur on all branches.
 
 segLength = 0.02
 # Controls the "grain" of the likelihood calculations. Approximates the

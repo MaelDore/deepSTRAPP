@@ -1,6 +1,9 @@
 // Source: R package BAMMtools
+// License: GPL (>= 2)
 // Authors: Dan Rabosky, Mike Grundler
 // References: http://bamm-project.org/
+
+// This file is included unmodified in the deepSTRAPP package
 
 #include <R.h>
 #include <Rinternals.h>

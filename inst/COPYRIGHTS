@@ -1,0 +1,107 @@
+This file documents the copyright and licensing information
+for third-party code included in the deepSTRAPP package.
+
+------------------------------------------------------------
+Original package code
+------------------------------------------------------------
+
+All code and documentation files in this package,
+EXCEPT those listed in the section "Third-party code" below, are:
+
+Copyright (C) 2023–2026 Maël Doré
+
+License: MIT
+
+------------------------------------------------------------
+Third-party code
+------------------------------------------------------------
+
+The following files and functions are derived from external sources and
+are distributed under their original licenses.
+
+File: src/treetraverse.c
+  Original authors: Dan Rabosky, Mike Grundler
+  Derived from: BAMMtools R package
+  Source: https://cran.r-project.org/package=BAMMtools
+  License: GPL (>= 2)
+  This file has been copied without modifications.
+  
+File: inst/BAMM_template_diversification.txt
+  Original authors: Daniel Rabosky, Pascal Title
+  Derived from: bamm-2.5.0
+  Source: http://bamm-project.org/; https://github.com/macroevolution/bamm
+  License: GPL (>= 2)
+  This file has been commented for deepSTRAPP.
+
+Function: getRecursiveSequence
+  Original authors: Dan Rabosky, Mike Grundler
+  Source: BAMMtools R package
+  License: GPL (>= 2)
+  This function has been copied without modifications.
+
+Function: makeMappedEdge
+  Source file in deepSTRAPP: R/prepare_trait_data.R
+  Derived from: makeMappedEdge() in phytools R package
+  Original author: Liam Revell  
+  License: GPL (>=3)
+  Source: https://cran.r-project.org/package=phytools
+  This function has been copied with minimal modifications.
+  
+Function: densityMap_custom
+  Source file in deepSTRAPP: R/prepare_trait_data.R
+  Derived from: densityMap() in phytools R package
+  Original author: Liam Revell
+  License: GPL (>=3)
+  Source: https://cran.r-project.org/package=phytools
+  This function has been modified to enhance functionalities.
+  
+Function: BSM_to_phytools_simmap
+  Source file in deepSTRAPP: R/prepare_trait_data.R
+  Derived from: BSM_to_phytools_SM() in BioGeoBEARS R package
+  Original author: Nicholas J. Matzke
+  License: None 
+  Source: https://github.com/nmatzke/BioGeoBEARS
+  This function has been modified to enhance functionalities.
+
+Function: BSMs_to_phytools_simmaps
+  Source file in deepSTRAPP: R/prepare_trait_data.R
+  Derived from: BSMs_to_phytools_SMs() in BioGeoBEARS R package
+  Original author: Nicholas J. Matzke
+  License: None 
+  Source: https://github.com/nmatzke/BioGeoBEARS
+  This function has been modified to enhance functionalities.
+
+Function: compute_STRAPP_test_for_focal_time
+  Source file in deepSTRAPP: R/compute_STRAPP_test_for_focal_time.R
+  Derived from: traitDependentBAMM() in BAMMtools R package
+  Original authors: Dan Rabosky, Huateng Huang
+  License: GPL (>= 2) 
+  Source: https://cran.r-project.org/package=BAMMtools
+  This function has been largely modified to enhance functionalities for deepSTRAPP.
+
+Function: block_permute_rates_data
+  Source file in deepSTRAPP: R/compute_STRAPP_test_for_focal_time.R
+  Derived from: traitDependentBAMM() in BAMMtools R package
+  Original authors: Dan Rabosky, Huateng Huang
+  License: GPL (>= 2) 
+  Source: https://cran.r-project.org/package=BAMMtools
+  This function has been largely modified to enhance functionalities for deepSTRAPP.
+
+Function: addBAMMshifts_custom
+  Source file in deepSTRAPP: R/plot_BAMM_rates.R
+  Derived from: addBAMMshifts in BAMMtools R package
+  Original author: Mike Grundler
+  License: GPL (>= 2) 
+  Source: https://cran.r-project.org/package=BAMMtools
+  This function has been modified to enhance functionalities.
+
+Function: get_mean_eventData
+  Source file in deepSTRAPP: R/prepare_diversification_data.R
+  Derived from: getBestShiftConfiguration in BAMMtools R package
+  Original author: Dan Rabosky
+  License: GPL (>= 2) 
+  Source: https://cran.r-project.org/package=BAMMtools
+  This function has been copied without modifications.
+
+
+Utility functions in C++
