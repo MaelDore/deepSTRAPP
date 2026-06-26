@@ -4,6 +4,7 @@
 # deepSTRAPP <img src="man/figures/logo.png" align="right" alt="deepSTRAPP logo" width="200" />
 
 <!-- badges: start -->
+
 <!-- 
 usethis::use_cran_badge() reports the current version of your package on CRAN.
 usethis::use_coverage() reports test coverage.
@@ -16,6 +17,7 @@ use_github_actions()  reports the R CMD check status of your development package
 [![Downloads - Per month](https://cranlogs.r-pkg.org/badges/deepSTRAPP)](https://r-pkg.org:443/pkg/deepSTRAPP) # Per month
 [![DOI](https://zenodo.org/badge/TBA.svg)](https://zenodo.org/doi/TBA)
 &#10;-->
+
 <!-- badges: end -->
 
 The **R package deepSTRAPP** employs time-calibrated phylogenies and
@@ -126,6 +128,21 @@ and installed alongside deepSTRAPP. However, R packages that are not
 currently available on CRAN, and external software may need to be
 installed independently.
 
+- The C++ software **BAMM** is used to model diversification dynamics on
+  time-calibrated phylogenies. It is needed by deepSTRAPP to obtain
+  estimates of diversification rates along branches. You can install the
+  latest version of BAMM from its [official
+  website](http://bamm-project.org/). You will later need to provide to
+  deepSTRAPP the path to your BAMM installation folder as an argument to
+  the dedicated function \[prepare_diversification_data()\], so it can
+  call BAMM within R to perform its tasks.
+
+**Reference:**
+
+> Rabosky, DL. Automatic detection of key innovations, rate shifts, and
+> diversity-dependence on phylogenetic trees. PLoS One 9, e89543 (2014).
+> DOI: <https://doi.org/10.1371/journal.pone.0089543> <br>
+
 - The R package **BioGeoBEARS** is used to infer ancestral ranges on
   time-calibrated phylogenies. It is needed by deepSTRAPP to perform the
   tests based on biogeographic ranges. You can install the latest
@@ -147,20 +164,35 @@ Wiki](http://phylo.wikidot.com/biogeobears).
 > published on GitHub on November 6, 2018. DOI:
 > <http://dx.doi.org/10.5281/zenodo.1478250>
 
-- The C++ software **BAMM** is used to model diversification dynamics on
-  time-calibrated phylogenies. It is needed by deepSTRAPP to obtain
-  estimates of diversification rates along branches. You can install the
-  latest version of BAMM from its [official
-  website](http://bamm-project.org/). You will later need to provide to
-  deepSTRAPP the path to your BAMM installation folder as an argument to
-  the dedicated function \[prepare_diversification_data()\], so it can
-  call BAMM within R to perform its tasks.
+- The R package **contsimmap** is used to produce stochastic character
+  maps of continuous trait data on phylogenies (i.e., continuous
+  stochastic maps). It is needed by deepSTRAPP to propagate the
+  uncertainty in ancestral trait inferences within tests based on
+  continuous traits. You can install the latest version of contsimmap
+  from its [author’s repository on
+  GitHub](https://github.com/bstaggmartin/contsimmap):
+
+``` r
+library(devtools)
+devtools::install_github(repo="bstaggmartin/contsimmap")
+```
 
 **Reference:**
 
-> Rabosky, DL. Automatic detection of key innovations, rate shifts, and
-> diversity-dependence on phylogenetic trees. PLoS One 9, e89543 (2014).
-> DOI: <https://doi.org/10.1371/journal.pone.0089543> <br>
+> Martin, B. S., & Weber, M. G. (2026). Stochastic character mapping of
+> continuous traits on phylogenies. Systematic Biology, syag031. DOI:
+> <http://doi.org/10.1093/sysbio/syag031>
+
+- Archived copies of the non-CRAN R package dependencies are also
+  provided through an alternative repository to ensure long-term
+  compatibility and reproducibility, even if the development versions of
+  these packages change over time.
+
+``` r
+install.packages("drat")
+drat::addRepo("maeldore", "https://maeldore.github.io/drat")
+install.packages(c("BioGeoBEARS", "contsimmap"))
+```
 
 ## :desktop_computer: Website
 
