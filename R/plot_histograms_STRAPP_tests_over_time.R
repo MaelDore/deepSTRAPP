@@ -235,7 +235,7 @@
 #'
 #'  ## Plot histograms of STRAPP overall test results #
 #'  # Tests are Kruskall-Wallis H tests when more than two states/ranges are present.
-#'  # Tests are Mann–Whitney–Wilcoxon rank-sum tests when only two states/ranges are present.
+#'  # Tests are Mann-Whitney-Wilcoxon rank-sum tests when only two states/ranges are present.
 #'
 #'  histogram_ggplots <- plot_histograms_STRAPP_tests_over_time(
 #'     deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40,

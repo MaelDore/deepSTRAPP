@@ -18,7 +18,8 @@ that contains a phylogenetic tree and associated posterior probability of being 
 Each object (i.e., \code{densityMap}) corresponds to a state/range. If no color is provided for multi-area ranges, they will be interpolated.}
 
 \item{color_scale}{Vector of character string. List of colors to use to build the color scale with \code{\link[grDevices:colorRamp]{grDevices::colorRampPalette()}}
-showing the evolution of a continuous trait. From lowest values to highest values.}
+showing the evolution of a continuous trait. From lowest values to highest values.
+Default (\code{color_scale = NULL}) is using the color palette recorded in the \code{contMap$cols} item. If none was provided, the \code{rainbow()} palette is used.}
 
 \item{...}{Additional arguments to pass down to \code{\link[phytools:contMap]{phytools::plot.contMap()}} to control plotting.}
 
