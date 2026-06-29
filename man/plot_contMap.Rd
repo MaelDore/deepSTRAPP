@@ -14,8 +14,7 @@ plot_contMap(
 }
 \arguments{
 \item{contMap}{List of class \code{"contMap"}, typically generated with \code{\link[=prepare_trait_data]{prepare_trait_data()}},
-that contains a phylogenetic tree and associated posterior probability of being in a given state/range along branches.
-Each object (i.e., \code{densityMap}) corresponds to a state/range. If no color is provided for multi-area ranges, they will be interpolated.}
+that contains a phylogenetic tree and associated ancestral trait estimates mapped along branches in \code{contMap$tree$maps}.}
 
 \item{color_scale}{Vector of character string. List of colors to use to build the color scale with \code{\link[grDevices:colorRamp]{grDevices::colorRampPalette()}}
 showing the evolution of a continuous trait. From lowest values to highest values.
