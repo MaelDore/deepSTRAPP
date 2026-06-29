@@ -19,7 +19,8 @@ prepare_trait_data(
   split_multi_area_ranges = FALSE,
   ...,
   res = 100,
-  nb_simulations = 1000,
+  run_stochastic_maps = FALSE,
+  nb_simulations = 100,
   color_scale = NULL,
   colors_per_levels = NULL,
   plot_map = TRUE,
@@ -86,7 +87,10 @@ and produce simmaps with \code{\link[phytools:make.simmap]{phytools::make.simmap
 
 \item{res}{Integer. Define the number of time steps used to interpolate/estimate trait value/state/range in \code{contMap}/\code{densityMaps}. Default = \code{100}.}
 
-\item{nb_simulations}{Integer. Define the number of simulations generated for stochastic mapping. Default = \code{1000}. Only for "categorical" and "biogeographic" data.}
+\item{run_stochastic_maps}{Logical. Whether to perform continuous stochastic mapping to account for uncertainty in ancestral trait estimates.
+Only for continuous data (This is always 'TRUE' for categorical and biogeographic data).}
+
+\item{nb_simulations}{Integer. Define the number of simulations generated for stochastic mapping. Default = \code{100}.}
 
 \item{color_scale}{Vector of character string. List of colors to use to build the color scale with \code{\link[grDevices:colorRamp]{grDevices::colorRampPalette()}}
 showing the evolution of a continuous trait on the \code{contMap}. From lowest values to highest values. Only for continuous data. Default = \code{NULL} will use the rainbow() color palette.}
@@ -123,7 +127,10 @@ Default = \code{TRUE}. Only for "categorical" and "biogeographic" data.}
 The function returns a list with at least two elements.
 \itemize{
 \item \verb{$contMap} (For "continuous" data) Object of class \code{"contMap"}, typically generated with \code{\link[phytools:contMap]{phytools::contMap()}},
-that contains a phylogenetic tree and associated continuous trait mapping.
+that contains a phylogenetic tree and a unique continuous trait mapping representing
+the interpolated ML estimates of ancestral trait evolution across the phylogeny.
+\item \verb{$contMaps} (For "continuous" data, with \code{run_stochastic_maps = TRUE}) List of objects of class \verb{"contMap},
+each map representing a simulated ancestral trait evolution conditioned to the observed trait data and model fit.
 \item \verb{$densityMaps} (For "categorical" and "biogeographic" data) List of objects of class \verb{"densityMap},
 typically generated with \code{\link[phytools:densityMap]{phytools::densityMap()}}, that contains a phylogenetic tree and associated mapping of probability
 to harbor a given state/range along branches. The list contains one \verb{"densityMap} per state/range found in the \code{tip_data}.
@@ -203,25 +210,38 @@ with modified branch lengths scaled to reflect the evolutionary rates estimated 
 
 Step 4: Stochastic Mapping.
 
-For categorical and biogeographic data, stochastic mapping simulations are performed to generate evolutionary histories
+For categorical and biogeographic data, stochastic mapping simulations are performed by default to generate evolutionary histories
 compatible with the best model and inferred ACE. Node states/ranges are drawn from the scaled marginal likelihoods of ACE,
 and states/ranges shifts along branches are simulated according to the transition matrix Q estimated from the best fitting model.
 
+For continuous trait data, stochastic mapping simulations are performed only if \code{run_stochastic_maps = TRUE}.
+Evolutionary histories of continuous trait evolution, conditioned to the observed trait data and model fit,
+including estimates of ancestral trait values and variance at nodes, are produced  with \code{\link[contsimmap:make.contsimmap]{contsimmap::make.contsimmap()}}.
+
 Step 5: Infer ancestral states along branches.
 \itemize{
-\item For continuous traits: ancestral trait values along branches are interpolated with \code{\link[phytools:contMap]{phytools::contMap()}}.
-This provides quick estimates of trait value at any point in time, but it does not provide accurate ML estimates in
-case of models that are time or trait-value dependent (such as "EB" or "OU") as the interpolation used to built the contMap is assuming
-a constant rate along each branch. However, ancestral trait values at nodes remain accurate
-\item For categorical and biogeographic data: compute posterior frequencies of each state/range among the simulated evolutionary histories (\code{simmaps})
-to produce a \code{densityMap} for each state/range that reflects the changes along branches in probability of harboring a given state/range.
+\item For continuous traits:
+\itemize{
+\item Ancestral values along branches are interpolated using \code{\link[phytools:contMap]{phytools::contMap()}}.
+This provides quick estimates of trait value at any point in time, but does not account for uncertainty in trait estimates.
+Moreover, it does not provide fully accurate ML estimates in  case of models that are time or trait-value dependent (such as "EB" or "OU")
+as the interpolation used to built the contMap is assuming a constant rate along each branch. However, ancestral trait values at nodes remain accurate.
+It produces a single \verb{$contMap} representing the ML estimates of ancestral trait evolution across the phylogeny.
+\item If \code{run_stochastic_maps = TRUE}, ancestral values along branches are recorded across all simulated evolutionary histories
+(i.e., continuous stochastic maps), thus accounting for uncertainty in trait estimates.
+This is needed to apply the "combined" or "crossed" strategies to account for trait estimate uncertainty in deepSTRAPP tests
+(See the uncertainty_strategy argument in run_deepSTRAPP_* functions).
+It produces a list of \verb{$contMaps}, each map representing a simulated ancestral trait evolution across the phylogeny.
+}
+\item For categorical and biogeographic data: posterior frequencies of each state/range among the simulated evolutionary histories (\code{simmaps})
+are computed to produce a list of \verb{$densityMaps}, one for each state/range, reflecting the changes along branches in probability of harboring a given state/range.
 }
 }
 \section{Note on macroevolutionary models of trait evolution}{
 This function provides an easy solution to map trait evolution on a time-calibrated phylogeny
-and obtain the \code{contMap}/\code{densityMaps} objects needed to run the deepSTRAPP workflow (\link{run_deepSTRAPP_for_focal_time}, \link{run_deepSTRAPP_over_time}).
+and obtain the \code{contMaps}/\code{densityMaps} objects needed to run the deepSTRAPP workflow (\link{run_deepSTRAPP_for_focal_time}, \link{run_deepSTRAPP_over_time}).
 However, it does not explore the most complex options for trait evolution. You may need to explore more complex models to capture the dynamics of trait evolution.
-such as trait-dependent multi-rate models (\code{\link[phytools:brownie.lite]{phytools::brownie.lite()}}, \link[OUwie:OUwie]{OUwie::OUwie}), Bayesian MCMC implementations allowing a thorough exploration
+such as trait-dependent multi-rate models (\code{\link[phytools:brownie.lite]{phytools::brownie.lite()}}, \code{\link[OUwie:OUwie]{OUwie::OUwie()}}), Bayesian MCMC implementations allowing a thorough exploration
 of location and number of regime shifts (Ex: BayesTraits, RevBayes), or RRphylo for a penalized phylogenetic ridge regression approach that allows regime shifts across all branches.
 }
 
@@ -402,6 +422,9 @@ geiger v2. 0: an expanded suite of methods for fitting macroevolutionary models 
 
 For BioGeoBEARS: Matzke, Nicholas J. (2018). BioGeoBEARS: BioGeography with Bayesian (and likelihood) Evolutionary Analysis with R Scripts.
 version 1.1.1, published on GitHub on November 6, 2018. \doi{10.5281/zenodo.1478250}. Website: \url{http://phylo.wikidot.com/biogeobears}.
+
+For continuous stochastic mapping in contsimmap: Martin, B. S., & Weber, M. G. (2026). Stochastic character mapping of continuous traits on phylogenies.
+Systematic Biology, syag031. \doi{10.1093/sysbio/syag031}.
 }
 \seealso{
 \code{\link[geiger:fitContinuous]{geiger::fitContinuous()}} \code{\link[geiger:fitDiscrete]{geiger::fitDiscrete()}} \code{\link[phytools:contMap]{phytools::contMap()}} \code{\link[phytools:densityMap]{phytools::densityMap()}}
