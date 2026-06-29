@@ -9,8 +9,7 @@
 #'   * Step 2: Use [phytools::plot.contMap()] to plot the mapped phylogeny.
 #'
 #' @param contMap List of class `"contMap"`, typically generated with [deepSTRAPP::prepare_trait_data()],
-#'   that contains a phylogenetic tree and associated posterior probability of being in a given state/range along branches.
-#'   Each object (i.e., `densityMap`) corresponds to a state/range. If no color is provided for multi-area ranges, they will be interpolated.
+#'   that contains a phylogenetic tree and associated ancestral trait estimates mapped along branches in `contMap$tree$maps`.
 #' @param color_scale Vector of character string. List of colors to use to build the color scale with [grDevices::colorRampPalette()]
 #'   showing the evolution of a continuous trait. From lowest values to highest values.
 #'   Default (`color_scale = NULL`) is using the color palette recorded in the `contMap$cols` item. If none was provided, the `rainbow()` palette is used.
@@ -99,8 +98,9 @@ plot_contMap <- function (contMap,
     }
   }
 
-  ## Save initial par() and reassign them on exit
-  oldpar <- par(no.readonly = TRUE)
+  # ## Save initial par() and reassign them on exit
+  # oldpar <- par(no.readonly = TRUE)
+  oldpar <- par(c("col", "mar"))
   on.exit(par(oldpar))
 
   ## Update color scale if requested
@@ -134,7 +134,7 @@ plot_contMap <- function (contMap,
                    width = width, height = height)
 
     ## Plot the contMap
-    phytools::plot.contMap(x = contMap,
+    phytools::plot.contMap(x = updated_contMap,
                            plot = TRUE,
                            ...)
     # Close PDF
