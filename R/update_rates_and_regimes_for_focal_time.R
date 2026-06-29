@@ -338,48 +338,19 @@ update_rates_and_regimes_for_focal_time <- function (BAMM_object, focal_time,
   class(updated_BAMM_object) <- unique(c(class(updated_BAMM_object), "phylo"))
 
   ## Identify edges present at focal time
-
-  # Edge, rootward_node, tipward_node, length (once cut)
-
-  # Define level of tolerance used to round ages
-  tol <- root_age * 10^-5
-  closest_power <- round(log10(tol))
-  closest_power <- min(closest_power, 0) # Use 0 as the minimal power
-
-  # Get node ages per branch (no root edge)
-  all_edges_df <- phytools::nodeHeights(updated_BAMM_object)
-  # all_edges_df <- as.data.frame(round(root_age - all_edges_df, 5)) # Used to ensure ultrametricity of extant tips, but may be an issue for trees with very short time span
-  all_edges_df <- as.data.frame(round(root_age - all_edges_df, -1*closest_power))
-  names(all_edges_df) <- c("rootward_node_age", "tipward_node_age")
-  all_edges_df$edge_ID <- row.names(all_edges_df)
-
-  # Get nodes ID per edge
-  all_edges_ID_df <- updated_BAMM_object$edge
-  colnames(all_edges_ID_df) <- c("rootward_node_ID", "tipward_node_ID")
-  all_edges_df <- cbind(all_edges_df, all_edges_ID_df)
-  all_edges_df <- all_edges_df[, c("edge_ID", "rootward_node_ID", "tipward_node_ID", "rootward_node_age", "tipward_node_age")]
+  all_edges_df <- identify_edges_at_focal_time(phylo = updated_BAMM_object, focal_time = focal_time, tolerance = 10^-5)
 
   # # Detect root node ID as the only rootward node that is not also the tipward node of any edge
   # root_node_ID <- updated_BAMM_object$edge[which.min(updated_BAMM_object$edge[, 1] %in% updated_BAMM_object$edge[, 2]), 1]
 
-  # Merge tip.label to the edge df
-
-  # If tipward node is a tip, use tip.label
-  all_edges_df$tip.label <- updated_BAMM_object$tip.label[all_edges_df$tipward_node_ID]
-  # If tipward node is an internal node, use node ID
-  all_edges_df$tip.label[is.na(all_edges_df$tip.label)] <- all_edges_df$tipward_node_ID[is.na(all_edges_df$tip.label)]
-
-  # Identify edges present at focal time
-  all_edges_df$rootward_test <- all_edges_df$rootward_node_age > focal_time
-  all_edges_df$tipward_test <- all_edges_df$tipward_node_age <= focal_time
-  all_edges_df$time_test <- all_edges_df$rootward_test & all_edges_df$tipward_test
+  # Adjust edge length
   all_edges_df$length <- all_edges_df$rootward_node_age - focal_time
 
   # Initiate regime ID
   all_edges_df$regime_ID <- NA
 
   # Extract only edges that are present at the focal time
-  # present_edges_df <- all_edges_df[all_edges_df$time_test, ]
+  # present_edges_df <- all_edges_df[all_edges_df$edge_present, ]
 
   ## Loop per Posterior sample
   for (i in seq_along(updated_BAMM_object$eventData))
@@ -429,14 +400,14 @@ update_rates_and_regimes_for_focal_time <- function (BAMM_object, focal_time,
       }
 
       # Filter regimes for tips that are present at the focal time
-      tipStates_i <- all_edges_df$regime_ID[all_edges_df$time_test]
+      tipStates_i <- all_edges_df$regime_ID[all_edges_df$edge_present]
 
       # Name tip regimes with tip.labels/tipward_edge_ID
       if (keep_tip_labels)
       {
-        names(tipStates_i) <- all_edges_df$tip.label[all_edges_df$time_test]
+        names(tipStates_i) <- all_edges_df$tip.label[all_edges_df$edge_present]
       } else {
-        names(tipStates_i) <- all_edges_df$tipward_node_ID[all_edges_df$time_test]
+        names(tipStates_i) <- all_edges_df$tipward_node_ID[all_edges_df$edge_present]
       }
 
       # Store updated tipStates
@@ -482,17 +453,17 @@ update_rates_and_regimes_for_focal_time <- function (BAMM_object, focal_time,
       all_edges_df$tipMu <- eventData_i$tip_extinction_rates[match(x = all_edges_df$regime_ID, table = eventData_i$index)]
 
       # Filter regimes for tips that are present at the focal time
-      tipLambda_i <- all_edges_df$tipLambda[all_edges_df$time_test]
-      tipMu_i <- all_edges_df$tipMu[all_edges_df$time_test]
+      tipLambda_i <- all_edges_df$tipLambda[all_edges_df$edge_present]
+      tipMu_i <- all_edges_df$tipMu[all_edges_df$edge_present]
 
       # Name tip regimes with tip.labels/tipward_edge_ID
       if (keep_tip_labels)
       {
-        names(tipLambda_i) <- all_edges_df$tip.label[all_edges_df$time_test]
-        names(tipMu_i) <- all_edges_df$tip.label[all_edges_df$time_test]
+        names(tipLambda_i) <- all_edges_df$tip.label[all_edges_df$edge_present]
+        names(tipMu_i) <- all_edges_df$tip.label[all_edges_df$edge_present]
       } else {
-        names(tipLambda_i) <- all_edges_df$tipward_node_ID[all_edges_df$time_test]
-        names(tipMu_i) <- all_edges_df$tipward_node_ID[all_edges_df$time_test]
+        names(tipLambda_i) <- all_edges_df$tipward_node_ID[all_edges_df$edge_present]
+        names(tipMu_i) <- all_edges_df$tipward_node_ID[all_edges_df$edge_present]
       }
 
       # Store updated tipLambda & tipMu
@@ -677,13 +648,13 @@ update_rates_and_regimes_for_focal_time <- function (BAMM_object, focal_time,
         }
       }
       # Filter regimes for tips that are present at the focal time
-      MAP_tipStates <- all_edges_df$regime_ID[all_edges_df$time_test]
+      MAP_tipStates <- all_edges_df$regime_ID[all_edges_df$edge_present]
       # Name tip regimes with tip.labels/tipward_edge_ID
       if (keep_tip_labels)
       {
-        names(MAP_tipStates) <- all_edges_df$tip.label[all_edges_df$time_test]
+        names(MAP_tipStates) <- all_edges_df$tip.label[all_edges_df$edge_present]
       } else {
-        names(MAP_tipStates) <- all_edges_df$tipward_node_ID[all_edges_df$time_test]
+        names(MAP_tipStates) <- all_edges_df$tipward_node_ID[all_edges_df$edge_present]
       }
       # Store updated tipStates
       updated_BAMM_object$MAP_BAMM_object$tipStates[[1]] <- MAP_tipStates
@@ -723,17 +694,17 @@ update_rates_and_regimes_for_focal_time <- function (BAMM_object, focal_time,
       all_edges_df$tipMu <- MAP_eventData$tip_extinction_rates[match(x = all_edges_df$regime_ID, table = MAP_eventData$index)]
 
       # Filter regimes for tips that are present at the focal time
-      MAP_tipLambda <- all_edges_df$tipLambda[all_edges_df$time_test]
-      MAP_tipMu <- all_edges_df$tipMu[all_edges_df$time_test]
+      MAP_tipLambda <- all_edges_df$tipLambda[all_edges_df$edge_present]
+      MAP_tipMu <- all_edges_df$tipMu[all_edges_df$edge_present]
 
       # Name tip regimes with tip.labels/tipward_edge_ID
       if (keep_tip_labels)
       {
-        names(MAP_tipLambda) <- all_edges_df$tip.label[all_edges_df$time_test]
-        names(MAP_tipMu) <- all_edges_df$tip.label[all_edges_df$time_test]
+        names(MAP_tipLambda) <- all_edges_df$tip.label[all_edges_df$edge_present]
+        names(MAP_tipMu) <- all_edges_df$tip.label[all_edges_df$edge_present]
       } else {
-        names(MAP_tipLambda) <- all_edges_df$tipward_node_ID[all_edges_df$time_test]
-        names(MAP_tipMu) <- all_edges_df$tipward_node_ID[all_edges_df$time_test]
+        names(MAP_tipLambda) <- all_edges_df$tipward_node_ID[all_edges_df$edge_present]
+        names(MAP_tipMu) <- all_edges_df$tipward_node_ID[all_edges_df$edge_present]
       }
 
       # Store updated tipLambda & tipMu
@@ -868,13 +839,13 @@ update_rates_and_regimes_for_focal_time <- function (BAMM_object, focal_time,
         }
       }
       # Filter regimes for tips that are present at the focal time
-      MSC_tipStates <- all_edges_df$regime_ID[all_edges_df$time_test]
+      MSC_tipStates <- all_edges_df$regime_ID[all_edges_df$edge_present]
       # Name tip regimes with tip.labels/tipward_edge_ID
       if (keep_tip_labels)
       {
-        names(MSC_tipStates) <- all_edges_df$tip.label[all_edges_df$time_test]
+        names(MSC_tipStates) <- all_edges_df$tip.label[all_edges_df$edge_present]
       } else {
-        names(MSC_tipStates) <- all_edges_df$tipward_node_ID[all_edges_df$time_test]
+        names(MSC_tipStates) <- all_edges_df$tipward_node_ID[all_edges_df$edge_present]
       }
       # Store updated tipStates
       updated_BAMM_object$MSC_BAMM_object$tipStates[[1]] <- MSC_tipStates
@@ -914,17 +885,17 @@ update_rates_and_regimes_for_focal_time <- function (BAMM_object, focal_time,
       all_edges_df$tipMu <- MSC_eventData$tip_extinction_rates[match(x = all_edges_df$regime_ID, table = MSC_eventData$index)]
 
       # Filter regimes for tips that are present at the focal time
-      MSC_tipLambda <- all_edges_df$tipLambda[all_edges_df$time_test]
-      MSC_tipMu <- all_edges_df$tipMu[all_edges_df$time_test]
+      MSC_tipLambda <- all_edges_df$tipLambda[all_edges_df$edge_present]
+      MSC_tipMu <- all_edges_df$tipMu[all_edges_df$edge_present]
 
       # Name tip regimes with tip.labels/tipward_edge_ID
       if (keep_tip_labels)
       {
-        names(MSC_tipLambda) <- all_edges_df$tip.label[all_edges_df$time_test]
-        names(MSC_tipMu) <- all_edges_df$tip.label[all_edges_df$time_test]
+        names(MSC_tipLambda) <- all_edges_df$tip.label[all_edges_df$edge_present]
+        names(MSC_tipMu) <- all_edges_df$tip.label[all_edges_df$edge_present]
       } else {
-        names(MSC_tipLambda) <- all_edges_df$tipward_node_ID[all_edges_df$time_test]
-        names(MSC_tipMu) <- all_edges_df$tipward_node_ID[all_edges_df$time_test]
+        names(MSC_tipLambda) <- all_edges_df$tipward_node_ID[all_edges_df$edge_present]
+        names(MSC_tipMu) <- all_edges_df$tipward_node_ID[all_edges_df$edge_present]
       }
 
       # Store updated tipLambda & tipMu
@@ -1042,9 +1013,9 @@ update_rates_and_regimes_for_focal_time <- function (BAMM_object, focal_time,
     # Provides tip.labels/tipward_node_ID as names. Extract only current tip names (not older fossils !)
     if (keep_tip_labels)
     {
-      names(updated_meanTipLambda) <- updated_BAMM_object$tip.label[all_edges_df$time_test[all_edges_df$tip.label %in% updated_BAMM_object$tip.label]]
+      names(updated_meanTipLambda) <- updated_BAMM_object$tip.label[all_edges_df$edge_present[all_edges_df$tip.label %in% updated_BAMM_object$tip.label]]
     } else {
-      names(updated_meanTipLambda) <- updated_BAMM_object$tip.label[all_edges_df$time_test[all_edges_df$tipward_node_ID %in% updated_BAMM_object$tip.label]]
+      names(updated_meanTipLambda) <- updated_BAMM_object$tip.label[all_edges_df$edge_present[all_edges_df$tipward_node_ID %in% updated_BAMM_object$tip.label]]
     }
     # Store updated tipLambda
     updated_BAMM_object$meanTipLambda <- updated_meanTipLambda
@@ -1056,9 +1027,9 @@ update_rates_and_regimes_for_focal_time <- function (BAMM_object, focal_time,
     # Provides tip.labels/tipward_node_ID as names
     if (keep_tip_labels)
     {
-      names(updated_meanTipMu) <- updated_BAMM_object$tip.label[all_edges_df$time_test[all_edges_df$tip.label %in% updated_BAMM_object$tip.label]]
+      names(updated_meanTipMu) <- updated_BAMM_object$tip.label[all_edges_df$edge_present[all_edges_df$tip.label %in% updated_BAMM_object$tip.label]]
     } else {
-      names(updated_meanTipMu) <- updated_BAMM_object$tip.label[all_edges_df$time_test[all_edges_df$tipward_node_ID %in% updated_BAMM_object$tip.label]]
+      names(updated_meanTipMu) <- updated_BAMM_object$tip.label[all_edges_df$edge_present[all_edges_df$tipward_node_ID %in% updated_BAMM_object$tip.label]]
     }
     # Store updated tipMu
     updated_BAMM_object$meanTipMu <- updated_meanTipMu
