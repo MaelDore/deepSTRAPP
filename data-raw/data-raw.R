@@ -790,7 +790,7 @@ Ponerinae_trait_cont_tip_data_10My <- extract_most_likely_trait_values_for_focal
   tip_data = Ponerinae_cont_tip_data,
   trait_data_type = "continuous",
   focal_time = focal_time,
-  update_map = TRUE,
+  update_Map = TRUE,
   keep_tip_labels = TRUE)
 
 # Export in deepSTRAPP
