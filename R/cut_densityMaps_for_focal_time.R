@@ -1,10 +1,10 @@
 
 
 ### Functions to cut the phylogeny and posterior probability mapping of a categorical trait for a given focal time in the past
-## cut_densityMap_for_focal_time() => cut a single densityMap object
-## cut_densityMaps_for_focal_time() => cut all densityMaps in a list
+## 1/ cut_densityMap_for_focal_time() => cut a single densityMap object
+## 2/ cut_densityMaps_for_focal_time() => cut all densityMaps in a list
 
-## Function to cut a single densityMap object ####
+## 1/ Function to cut a single densityMap object ####
 
 #' @title Cut the phylogeny and posterior probability mapping of a categorical trait for a given focal time in the past
 #'
@@ -202,7 +202,7 @@ cut_densityMap_for_focal_time <- function(densityMap, focal_time, keep_tip_label
   return(updated_densityMap)
 }
 
-## Function to cut a list of densityMap objects ####
+## 2/ Function to cut a list of densityMap objects ####
 
 #' @title Cut phylogenies and posterior probability mapping of each state for a given focal time in the past
 #'
@@ -329,7 +329,6 @@ cut_densityMap_for_focal_time <- function(densityMap, focal_time, keep_tip_label
 #' # Plot updated/cut density maps
 #' plot_densityMaps_overlay(densityMaps = updated_mammals_densityMaps, fsize = 0.8) }
 #'
-
 
 cut_densityMaps_for_focal_time <- function(densityMaps, focal_time, keep_tip_labels = TRUE)
 {

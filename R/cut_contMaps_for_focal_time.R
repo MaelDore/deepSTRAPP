@@ -1,0 +1,353 @@
+
+### Functions to cut the phylogeny and ancestral trait mapping of a continuous trait for a given focal time in the past
+
+## 1/ cut_contMap_for_focal_time() => cut a single contMap object
+## 2/ cut_contMaps_for_focal_time() => cut all contMaps in a list
+
+
+## 1/ Function to cut a single contMap object ####
+
+#' @title Cut the phylogeny and continuous trait mapping for a given focal time in the past
+#'
+#' @description Cuts off all the branches of the phylogeny which are
+#'   younger than a specific time in the past (i.e. the `focal_time`).
+#'   Branches overlapping the `focal_time` are shorten to the `focal_time`.
+#'   Likewise, remove continuous trait mapping for the cut off branches
+#'   by updating the `$tree$maps` and `$tree$mapped.edge` elements.
+#'
+#' @param contMap Object of class `"contMap"`, typically generated with [phytools::contMap()],
+#'   that contains a phylogenetic tree and associated continuous trait mapping.
+#'   The phylogenetic tree must be rooted and fully resolved/dichotomous,
+#'   but it does not need to be ultrametric (it can includes fossils).
+#' @param focal_time Numerical. The time, in terms of time distance from the present,
+#'   for which the tree and mapping must be cut. It must be smaller than the root age of the phylogeny.
+#' @param keep_tip_labels Logical. Specify whether terminal branches with a single descendant tip must retained their initial `tip.label`. Default is `TRUE`.
+#'
+#' @export
+#' @importFrom phytools nodeHeights plot.contMap
+#'
+#' @details The phylogenetic tree is cut for a specific time in the past (i.e. the `focal_time`).
+#'
+#'   When a branch with a single descendant tip is cut and `keep_tip_labels = TRUE`,
+#'   the leaf left is labeled with the tip.label of the unique descendant tip.
+#'
+#'   When a branch with a single descendant tip is cut and `keep_tip_labels = FALSE`,
+#'   the leaf left is labeled with the node ID of the unique descendant tip.
+#'
+#'   In all cases, when a branch with multiple descendant tips (i.e., a clade) is cut,
+#'   the leaf left is labeled with the node ID of the MRCA of the cut-off clade.
+#'
+#'   The continuous trait mapping is updated accordingly by removing mapping associated with the cut off branches.
+#'
+#' @return The function returns the cut contMap as an object of class `"contMap"` as a list of three elements:
+#'   * `$tree`. A list of classes `"simmap"` and `"phylo"`. This function updates and adds multiple useful sub-elements to the `$tree` element.
+#'     * `$maps` An updated list of named numerical vectors. Provides the mapping of trait values along each remaining edge.
+#'     * `$mapped.edge` An updated matrix. Provides the evolutionary time spent across trait values (columns) along the remaining edges (rows).
+#'     * `$root_age` Integer. Stores the age of the root of the tree.
+#'     * `$nodes_ID_df` Data.frame with two columns. Provides the conversion from the `new_node_ID` to the `initial_node_ID`. Each row is a node.
+#'     * `$initial_nodes_ID` Vector of character strings. Provides the initial ID of internal nodes. Used to plot internal node IDs as labels with [ape::nodelabels()].
+#'     * `$edges_ID_df` Data.frame with two columns. Provides the conversion from the `new_edge_ID` to the `initial_edge_ID`. Each row is an edge/branch.
+#'     * `$initial_edges_ID` Vector of character strings. Provides the initial ID of edges/branches. Used to plot edge/branch IDs as labels with [ape::edgelabels()].
+#'  * `$cols` A named vector of character string mapping trait values with colors to display on the plot.
+#'  * `$lims` A numerical vector of 2 storing the initial min and max values of the trait (trait values are scaled between 0 and 1000 in `$tree$maps`)
+#'
+#' @author Maël Doré
+#'
+#' @seealso [deepSTRAPP::cut_phylo_for_focal_time()] [deepSTRAPP::extract_most_likely_trait_values_for_focal_time()]
+#'  [deepSTRAPP::extract_most_likely_trait_values_from_contMap_for_focal_time()]
+#'
+#' For a guided tutorial, see this vignette: \code{vignette("cut_phylogenies", package = "deepSTRAPP")}
+#'
+#' @examples
+#' # ----- Prepare data ----- #
+#'
+#' # Load mammals phylogeny and data from the R package motmot (data included in deepSTRAPP)
+#' # Initial data source: Slater, 2013; DOI: 10.1111/2041-210X.12084
+#'
+#' data(mammals, package = "deepSTRAPP")
+#'
+#' mammals_tree <- mammals$mammal.phy
+#' mammals_data <- setNames(object = mammals$mammal.mass$mean,
+#'                          nm = row.names(mammals$mammal.mass))[mammals_tree$tip.label]
+#'
+#' # Run a stochastic mapping based on a Brownian Motion model
+#' # for Ancestral Trait Estimates to obtain a "contMap" object
+#' mammals_contMap <- phytools::contMap(mammals_tree, x = mammals_data,
+#'                                      res = 100, # Number of time steps
+#'                                      plot = FALSE)
+#'
+#' # Set focal time
+#' focal_time <- 80
+#'
+#' # ----- Example 1: keep_tip_labels = TRUE ----- #
+#'
+#' # Cut contMap to 80 Mya while keeping tip.label
+#' # on terminal branches with a unique descending tip.
+#' updated_contMap <- cut_contMap_for_focal_time(contMap = mammals_contMap,
+#'                                               focal_time = focal_time,
+#'                                               keep_tip_labels = TRUE)
+#'
+#' # Plot node labels on initial stochastic map with cut-off
+#' plot_contMap(mammals_contMap, lwd = 2, fsize = c(0.5, 1))
+#' ape::nodelabels(cex = 0.5)
+#' abline(v = max(phytools::nodeHeights(mammals_contMap$tree)[,2]) - focal_time,
+#'        col = "red", lty = 2, lwd = 2)
+#'
+#' # Plot initial node labels on cut stochastic map
+#' plot_contMap(updated_contMap, fsize = c(0.8, 1))
+#' ape::nodelabels(cex = 0.8, text = updated_contMap$tree$initial_nodes_ID)
+#'
+#' # ----- Example 2: keep_tip_labels = FALSE ----- #
+#'
+#' # Cut contMap to 80 Mya while NOT keeping tip.label.
+#' updated_contMap <- cut_contMap_for_focal_time(contMap = mammals_contMap,
+#'                                               focal_time = focal_time,
+#'                                               keep_tip_labels = FALSE)
+#'
+#' # Plot node labels on initial stochastic map with cut-off
+#' plot_contMap(mammals_contMap, fsize = c(0.5, 1))
+#' ape::nodelabels(cex = 0.5)
+#' abline(v = max(phytools::nodeHeights(mammals_contMap$tree)[,2]) - focal_time,
+#'        col = "red", lty = 2, lwd = 2)
+#'
+#' # Plot initial node labels on cut stochastic map
+#' plot_contMap(updated_contMap, fsize = c(0.8, 1))
+#' ape::nodelabels(cex = 0.8, text = updated_contMap$tree$initial_nodes_ID)
+#'
+
+cut_contMap_for_focal_time <- function(contMap, focal_time, keep_tip_labels = TRUE)
+{
+  ### Check input validity
+  {
+    ## contMap
+    # contMap must be a "contMap" class object
+    if (!("contMap" %in% class(contMap)))
+    {
+      stop("'contMap' must have the 'contMap' class. See ?phytools::contMap() and ?deepSTRAPP::prepare_trait_data() to learn how to generate those objects.")
+    }
+
+    ## contMap$tree
+    # contMap$tree must be an object with the two classes: "simmap" and "phylo"
+    if (!(all(c("simmap", "phylo") %in% class(contMap$tree))))
+    {
+      stop(paste0("'contMap$tree' must have the 'simmap' and 'phylo' classes indicating a trait is mapped on the phylogeny.\n",
+                  "See ?phytools::contMap() and ?deepSTRAPP::prepare_trait_data() to learn how to generate those objects."))
+    }
+    # contMap$tree must be rooted
+    if (!(ape::is.rooted(contMap$tree)))
+    {
+      stop(paste0("'contMap$tree' must be a rooted phylogeny."))
+    }
+    # contMap$tree must be fully resolved/dichotomous
+    if (!(ape::is.binary(contMap$tree)))
+    {
+      stop(paste0("'contMap$tree' must be a fully resolved/dichotomous/binary phylogeny."))
+    }
+
+    ## Extract root age
+    root_age <- max(phytools::nodeHeights(contMap$tree)[,2])
+
+    ## focal_time
+    # focal_time must be positive and smaller to root age
+    if (focal_time < 0)
+    {
+      stop(paste0("'focal_time' must be a positive number. It represents the time as a distance from the present."))
+    }
+    if (focal_time >= root_age)
+    {
+      stop(paste0("'focal_time' must be smaller than the root age of the phylogeny.\n",
+                  "'focal_time' = ",focal_time,"; root age = ",root_age,"."))
+    }
+  }
+
+  ## Cut contMap$tree at focal time
+
+  updated_contMap_tree <- contMap
+  updated_contMap_tree$tree <- cut_phylo_for_focal_time(tree = updated_contMap_tree$tree, focal_time = focal_time, keep_tip_labels = keep_tip_labels)
+
+  ## Update contMap$tree$maps for focal time
+
+  updated_contMap_maps <- contMap
+  updated_contMap_maps$tree <- update_maps_for_focal_time(tree_with_maps = updated_contMap_maps$tree, focal_time = focal_time)
+
+  ## Merge outputs
+  updated_contMap <- updated_contMap_tree
+  updated_contMap$tree$maps <- updated_contMap_maps$tree$maps
+
+  ## Update $mapped.edge
+  updated_contMap$tree$mapped.edge <- makeMappedEdge(edge = updated_contMap$tree$edge, maps = updated_contMap$tree$maps)
+  updated_contMap$tree$mapped.edge <- updated_contMap$tree$mapped.edge[, order(as.numeric(colnames(updated_contMap$tree$mapped.edge)))]
+
+  # Export contMap with updated tree and character mapping ($tree$maps and $tree$mapped.edge)
+  return(updated_contMap)
+}
+
+# Possible update: Make it work with non-dichotomous trees!!!
+
+
+## 2/ Function to cut multiple contMaps stored in a list ####
+
+#' @title Cut the phylogenies and continuous trait mappings of a list of contMaps for a given focal time in the past
+#'
+#' @description Cuts off all the branches of the phylogeny which are
+#'   younger than a specific time in the past (i.e. the `focal_time`).
+#'   Branches overlapping the `focal_time` are shorten to the `focal_time`.
+#'   Likewise, remove continuous trait mapping for the cut off branches
+#'   by updating the `$tree$maps` and `$tree$mapped.edge` elements.
+#'
+#' @param contMaps List of objects of class `"contMap"`, typically generated with [phytools::contMap()],
+#'   that contains a phylogenetic tree and associated continuous trait mapping.
+#'   The phylogenetic tree must be rooted and fully resolved/dichotomous,
+#'   but it does not need to be ultrametric (it can includes fossils).
+#' @param focal_time Numerical. The time, in terms of time distance from the present,
+#'   for which the tree and mapping must be cut. It must be smaller than the root age of the phylogeny.
+#' @param keep_tip_labels Logical. Specify whether terminal branches with a single descendant tip must retained their initial `tip.label`. Default is `TRUE`.
+#'
+#' @export
+#' @importFrom phytools nodeHeights plot.contMap
+#'
+#' @details The phylogenetic trees are cut for a specific time in the past (i.e. the `focal_time`).
+#'
+#'   When a branch with a single descendant tip is cut and `keep_tip_labels = TRUE`,
+#'   the leaf left is labeled with the tip.label of the unique descendant tip.
+#'
+#'   When a branch with a single descendant tip is cut and `keep_tip_labels = FALSE`,
+#'   the leaf left is labeled with the node ID of the unique descendant tip.
+#'
+#'   In all cases, when a branch with multiple descendant tips (i.e., a clade) is cut,
+#'   the leaf left is labeled with the node ID of the MRCA of the cut-off clade.
+#'
+#'   The continuous trait mappings are updated accordingly by removing mapping associated with the cut off branches.
+#'
+#' @return The function returns an updated list of objects as cut contMaps of class `"contMap"`.
+#'
+#'   Each contMap object contains three elements:
+#'   * `$tree`. A list of classes `"simmap"` and `"phylo"`. This function updates and adds multiple useful sub-elements to the `$tree` element.
+#'     * `$maps` An updated list of named numerical vectors. Provides the mapping of trait values along each remaining edge.
+#'     * `$mapped.edge` An updated matrix. Provides the evolutionary time spent across trait values (columns) along the remaining edges (rows).
+#'     * `$root_age` Integer. Stores the age of the root of the tree.
+#'     * `$nodes_ID_df` Data.frame with two columns. Provides the conversion from the `new_node_ID` to the `initial_node_ID`. Each row is a node.
+#'     * `$initial_nodes_ID` Vector of character strings. Provides the initial ID of internal nodes. Used to plot internal node IDs as labels with [ape::nodelabels()].
+#'     * `$edges_ID_df` Data.frame with two columns. Provides the conversion from the `new_edge_ID` to the `initial_edge_ID`. Each row is an edge/branch.
+#'     * `$initial_edges_ID` Vector of character strings. Provides the initial ID of edges/branches. Used to plot edge/branch IDs as labels with [ape::edgelabels()].
+#'  * `$cols` A named vector of character string mapping trait values with colors to display on the plot.
+#'  * `$lims` A numerical vector of 2 storing the initial min and max values of the trait (trait values are scaled between 0 and 1000 in `$tree$maps`)
+#'
+#'
+#' @author Maël Doré
+#'
+#' @seealso [deepSTRAPP::cut_phylo_for_focal_time()] [deepSTRAPP::extract_most_likely_trait_values_for_focal_time()]
+#'  [deepSTRAPP::extract_most_likely_trait_values_from_contMap_for_focal_time()]
+#'
+#' For a guided tutorial, see this vignette: \code{vignette("cut_phylogenies", package = "deepSTRAPP")}
+#'
+#' @examples
+#' if (deepSTRAPP::is_dev_version())
+#' {
+#'  ## The R package 'contsimmap' is needed for this example to work.
+#'  # Please install it manually from: https://github.com/bstaggmartin/contsimmap.
+#'
+#'  # ----- Prepare data ----- #
+#'
+#'  # Load phylogeny and tip data
+#'  # Load eel phylogeny and tip data from the R package phytools
+#'  # Source: Collar et al., 2014; DOI: 10.1038/ncomms6505
+#'  data("eel.tree", package = "phytools")
+#'  data("eel.data", package = "phytools")
+#'
+#'  # Extract body size
+#'  eel_data <- stats::setNames(eel.data$Max_TL_cm,
+#'                              rownames(eel.data))
+#'
+#'  \donttest{ # (May take several seconds to run)
+#'  ## Map multiple trait evolution histories on the phylogeny using continuous stochastic mapping
+#'  eel_mapped_trait_data <- prepare_trait_data(
+#'    tip_data = eel_data,
+#'    trait_data_type = "continuous",
+#'    phylo = eel.tree,
+#'    evolutionary_models = "BM",
+#'    run_stochastic_maps = TRUE,
+#'    nb_simulations = 10,
+#'    plot_map = FALSE,
+#'    verbose = TRUE)
+#'
+#'  # Extract list of stochastic maps
+#'  eel_contMaps <- eel_mapped_trait_data$contMaps
+#'
+#'  # ----- Example 1: keep_tip_labels = TRUE ----- #
+#'
+#'  # Cut contMaps to 20 Mya while keeping tip.label
+#'  # on terminal branches with a unique descending tip.
+#'  updated_contMaps <- cut_contMaps_for_focal_time(contMaps = eel_contMaps,
+#'                                                  focal_time = 20,
+#'                                                  keep_tip_labels = TRUE)
+#'
+#'  # Plot node labels on stochastic map n°1 with cut-off
+#'  plot_contMap(eel_contMaps[[1]], lwd = 2, fsize = c(0.5, 1))
+#'  ape::nodelabels(cex = 0.5)
+#'  abline(v = max(phytools::nodeHeights(eel_contMaps[[1]]$tree)[,2]) - 20,
+#'         col = "red", lty = 2, lwd = 2)
+#'
+#'  # Plot initial node labels on cut stochastic map n°1
+#'  plot_contMap(updated_contMaps[[1]], fsize = c(0.8, 1))
+#'  ape::nodelabels(cex = 0.8, text = updated_contMaps[[1]]$tree$initial_nodes_ID)
+#'
+#'  # ----- Example 2: keep_tip_labels = FALSE ----- #
+#'
+#'  # Cut contMap to 20 Mya while NOT keeping tip.label.
+#'  updated_contMaps <- cut_contMaps_for_focal_time(contMap = eel_contMaps,
+#'                                                  focal_time = 20,
+#'                                                  keep_tip_labels = FALSE)
+#'
+#'  # Plot node labels on stochastic map n°1 with cut-off
+#'  plot_contMap(eel_contMaps[[1]], fsize = c(0.5, 1))
+#'  ape::nodelabels(cex = 0.5)
+#'  abline(v = max(phytools::nodeHeights(eel_contMaps[[1]]$tree)[,2]) - 20,
+#'         col = "red", lty = 2, lwd = 2)
+#'
+#'  # Plot initial node labels on cut stochastic map
+#'  plot_contMap(updated_contMaps[[1]], fsize = c(0.8, 1))
+#'  ape::nodelabels(cex = 0.8, text = updated_contMaps[[1]]$tree$initial_nodes_ID)
+#'  }
+#'}
+#'
+
+cut_contMaps_for_focal_time <- function(contMaps, focal_time, keep_tip_labels = TRUE)
+{
+  ## Loop across contMaps
+  updated_contMaps <- lapply(X = contMaps, FUN = cut_contMap_for_focal_time,
+                             focal_time = focal_time,
+                             keep_tip_labels = keep_tip_labels)
+
+  # Export contMaps with updated trees and character mappings ($tree$maps and $tree$mapped.edge)
+  return(updated_contMaps)
+}
+
+
+## Make unit tests for ultrametric (eel.tree) and non-ultrametric trees (tortoise.tree)
+
+## Make unit tests for edge cases: focal_time > root_age; focal_time = root_age; focal_time = 0
+
+
+## Helper function used to generate $mapped.edge from $edge and $maps
+
+# Internal function copied from the R package phytools
+# Source: phytools:::makeMappedEdge()
+# Author: Liam Revell: liam.revell@umb.edu
+
+makeMappedEdge <- function (edge, maps)
+{
+  st <- sort(unique(unlist(sapply(maps, function(x) names(x)))))
+  mapped.edge <- matrix(0, nrow(edge), length(st))
+  rownames(mapped.edge) <- apply(edge, 1, function(x) paste(x, collapse = ","))
+  colnames(mapped.edge) <- st
+  for (i in 1:length(maps))
+  {
+    for (j in 1:length(maps[[i]]))
+    {
+      mapped.edge[i, names(maps[[i]])[j]] <- mapped.edge[i, names(maps[[i]])[j]] + maps[[i]][j]
+    }
+  }
+
+  return(mapped.edge)
+}

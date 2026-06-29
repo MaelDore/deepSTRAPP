@@ -81,6 +81,7 @@ reference:
   contents:
   - cut_phylo_for_focal_time
   - cut_contMap_for_focal_time
+  - cut_contMaps_for_focal_time
   - cut_densityMap_for_focal_time
   - cut_densityMaps_for_focal_time
 - title: Plot mapped phylogenies
