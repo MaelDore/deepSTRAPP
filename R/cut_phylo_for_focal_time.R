@@ -123,27 +123,7 @@ cut_phylo_for_focal_time <- function(tree, focal_time, keep_tip_labels = TRUE)
   cut_tree <- tree
 
   ## Identify edges present at focal time
-
-  # Define level of tolerance used to round ages
-  tol <- root_age * 10^-5
-  closest_power <- round(log10(tol))
-  closest_power <- min(closest_power, 0) # Use 0 as the minimal power
-
-  # Get node ages per edge (no root edge)
-  all_edges_df <- phytools::nodeHeights(tree)
-  # all_edges_df <- as.data.frame(round(root_age - all_edges_df, 5)) # May be an issue for trees with very short time span
-  all_edges_df <- as.data.frame(round(root_age - all_edges_df, -1*closest_power))
-  names(all_edges_df) <- c("rootward_node_age", "tipward_node_age")
-  all_edges_df$edge_ID <- row.names(all_edges_df)
-
-  # Inform root_age
-  cut_tree$root_age <- root_age
-
-  # Get nodes ID per edge
-  all_edges_ID_df <- tree$edge
-  colnames(all_edges_ID_df) <- c("rootward_node_ID", "tipward_node_ID")
-  all_edges_df <- cbind(all_edges_df, all_edges_ID_df)
-  all_edges_df <- all_edges_df[, c("edge_ID", "rootward_node_ID", "tipward_node_ID", "rootward_node_age", "tipward_node_age")]
+  all_edges_df <- identify_edges_at_focal_time(phylo = cut_tree, focal_time = focal_time, tolerance = 10^-5)
 
   # Detect root node ID as the only rootward node that is not also the tipward node of any edge
   root_node_ID <- tree$edge[which.min(tree$edge[, 1] %in% tree$edge[, 2]), 1]
@@ -250,8 +230,92 @@ cut_phylo_for_focal_time <- function(tree, focal_time, keep_tip_labels = TRUE)
 }
 
 
+## Helper function to identify edges present at a given focal time ####
+
+#' @title Identify edges present at a given focal time
+#'
+#' @description Identify edges of a phylogeny that are present at a given `focal time`.
+#'   A branch/edge is consider present if it overlaps with the given `focal time`, or if its tipward node.
+#'
+#'   For instance, on an ultrametric phylogeny, all terminal tips will be considered present at `focal time = 0`.
+#'   At the crown age of the phylogeny, the two descending branches/edges will be considered present.
+#'
+#' @param phylo Object of class `"phylo"`. The phylogenetic tree must be rooted,
+#'   but it does not need to be ultrametric (it can includes fossils).
+#' @param focal_time Numeric. The time, in terms of time distance from the present,
+#'   at which present edges must be identified.
+#' @param tolerance Numeric. Fraction of the total phylogeny depth used to round ages.
+#'   This helps avoid floating-point precision errors by treating nearly identical node ages as equal.
+#'   Default = `10^-5`.
+#'
+#' @importFrom phytools nodeHeights
+#'
+#' @return Returns a data.frame with nine columns.
+#'
+#'   * `$edge_ID` Integer. ID of the egdes as listed in `phylo$edge`.
+#'   * `$rootward_node_ID` Integer. ID of the node found on the rootward end of the edge.
+#'   * `$tipward_node_ID` Integer. ID of the node found on the tipward end of the edge.
+#'   * `$rootward_node_age` Numeric. Age of the rootward node of the edge, in terms of time distance from the present.
+#'   * `$tipward_node_age` Numeric. Age of the tipward node of the edge, in terms of time distance from the present.
+#'   * `$tip.label` Character string. Label of the tipward node of the edge.
+#'     + For terminal tips, this is the tip label as in `phylo$tip.label`.
+#'     + For internal branches, this is the tipward node label as in `phylo$node.label`, or if absent, the `tipward_node_ID.`
+#'   * `$rootward_test` Logical. Whether the rootward node of the edge existed before `focal time`.
+#'   * `$tipward_test` Logical. Whether the tipward node of the edge existed after or at `focal time`.
+#'   * `$edge_present` Logical. Whether the edge was present at `focal time`.
+#'
+#' @author Maël Doré
+#'
+#' @noRd
+#'
+
+identify_edges_at_focal_time <- function (phylo, focal_time,
+                                          tolerance = 10^-5)
+{
+
+  # Get node ages per edge (no root edge)
+  all_edges_df <- phytools::nodeHeights(phylo)
+  root_age <- max(phytools::nodeHeights(phylo)[,2])
+
+  # Define level of tolerance used to round ages
+  scaled_tol <- root_age * tolerance
+  closest_power <- round(log10(scaled_tol))
+  closest_power <- min(closest_power, 0) # Use 0 as the minimal power
+
+  # Round edge ages and assign names
+  all_edges_df <- as.data.frame(round(root_age - all_edges_df, -1*closest_power))
+  names(all_edges_df) <- c("rootward_node_age", "tipward_node_age")
+  all_edges_df$edge_ID <- row.names(all_edges_df)
+
+  # Get nodes ID per edge
+  all_edges_ID_df <- phylo$edge
+  colnames(all_edges_ID_df) <- c("rootward_node_ID", "tipward_node_ID")
+  all_edges_df <- cbind(all_edges_df, all_edges_ID_df)
+  all_edges_df <- all_edges_df[, c("edge_ID", "rootward_node_ID", "tipward_node_ID", "rootward_node_age", "tipward_node_age")]
+
+  ## Assign labels
+
+  # If tipward node is a tip, use tip.label
+  all_edges_df$tip.label <- phylo$tip.label[match(x = all_edges_df$tipward_node_ID, 1:length(phylo$tip.label))]
+  # If tipward node is an internal node, use node ID
+  all_edges_df$tip.label[is.na(all_edges_df$tip.label)] <- all_edges_df$tipward_node_ID[is.na(all_edges_df$tip.label)]
+
+  # # Detect root node ID as the only rootward node that is not also the tipward node of any edge
+  # root_node_ID <- phylo$edge[which.min(phylo$edge[, 1] %in% phylo$edge[, 2]), 1]
+
+  # Identify edges present at the focal time
+  all_edges_df$rootward_test <- all_edges_df$rootward_node_age > focal_time
+  all_edges_df$tipward_test <- all_edges_df$tipward_node_age <= focal_time
+  all_edges_df$edge_present <- all_edges_df$rootward_test & all_edges_df$tipward_test
+
+  # Export df
+  return(all_edges_df)
+}
+
+
 ## Make unit tests for ultrametric (eel.tree / eel_contMap) and non-ultrametric trees (mammals$mammals.phy / mammals_contMap)
 
 
 ## Make unit tests for edge cases: focal_time > root_age; focal_time = root_age; focal_time = 0
+
 
