@@ -53,7 +53,7 @@ Therefore, a unique \code{"contsimmap"} object is converted in a list of \code{"
 a unique evolutionary history simulation conditioned to the observed trait data and model fit.
 }
 \examples{
-#' if (deepSTRAPP::is_dev_version())
+if (deepSTRAPP::is_dev_version())
 {
  ## The R package 'contsimmap' is needed for this example to work.
  # Please install it manually from: https://github.com/bstaggmartin/contsimmap.

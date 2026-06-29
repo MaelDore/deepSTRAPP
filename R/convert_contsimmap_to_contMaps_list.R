@@ -52,7 +52,7 @@
 #'  Systematic Biology, syag031. \doi{10.1093/sysbio/syag031}.
 #'
 #' @examples
-#' #' if (deepSTRAPP::is_dev_version())
+#' if (deepSTRAPP::is_dev_version())
 #' {
 #'  ## The R package 'contsimmap' is needed for this example to work.
 #'  # Please install it manually from: https://github.com/bstaggmartin/contsimmap.
