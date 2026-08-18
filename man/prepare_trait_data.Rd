@@ -88,7 +88,8 @@ and produce simmaps with \code{\link[phytools:make.simmap]{phytools::make.simmap
 \item{res}{Integer. Define the number of time steps used to interpolate/estimate trait value/state/range in \code{contMap}/\code{densityMaps}. Default = \code{100}.}
 
 \item{run_stochastic_maps}{Logical. Whether to perform continuous stochastic mapping to account for uncertainty in ancestral trait estimates.
-Only for continuous data (This is always 'TRUE' for categorical and biogeographic data).}
+Only for continuous data (This is always 'TRUE' for categorical and biogeographic data).
+This functionality is currently not available for total-evidence phylogenies (i.e., including fossils as tips).}
 
 \item{nb_simulations}{Integer. Define the number of simulations generated for stochastic mapping. Default = \code{100}.}
 
@@ -115,7 +116,8 @@ Only for categorical and biogeographic data.}
 process should be returned in the output. Default = \code{FALSE}.}
 
 \item{return_simmaps}{Logical. Whether the evolutionary histories simulated during stochastic mapping (i.e., \code{simmaps}) should be returned in the output.
-Default = \code{TRUE}. Only for "categorical" and "biogeographic" data.}
+Default = \code{TRUE}. Only for "categorical" and "biogeographic" data. This is needed to be able to track which simulated histories provided which trait data in downstream analyses,
+although it may create voluminous objects.}
 
 \item{return_best_model_fit}{Logical. Whether to include the output of the best fitting model in the function output. Default = \code{FALSE}.}
 
@@ -124,7 +126,7 @@ Default = \code{TRUE}. Only for "categorical" and "biogeographic" data.}
 \item{verbose}{Logical. Should progression be displayed? A message will be printed for every steps in the process. Default is \code{TRUE}.}
 }
 \value{
-The function returns a list with at least two elements.
+The function returns a list with at least three elements.
 \itemize{
 \item \verb{$contMap} (For "continuous" data) Object of class \code{"contMap"}, typically generated with \code{\link[phytools:contMap]{phytools::contMap()}},
 that contains a phylogenetic tree and a unique continuous trait mapping representing
@@ -138,6 +140,7 @@ to harbor a given state/range along branches. The list contains one \verb{"densi
 but for all ranges including the multi-areas ranges (e.g., AB) while \verb{$densityMaps} will display posterior probabilities for
 unique areas only (e.g., A and B), with multi-areas ranges split across the unique areas they encompass.
 \item \verb{$trait_data_type} Character string. Record the type of trait data. Either: "continuous", "categorical" or "biogeographic".
+\item \verb{$nb_simulations} Integer. The number of simulations / stochastic maps produced.
 }
 
 If \code{return_ace = TRUE},
@@ -160,7 +163,8 @@ Each element of the list is a data.frame recording events occurring during one s
 If \code{return_simmaps = TRUE}, (Only for categorical and biogeographic data)
 \itemize{
 \item \verb{$simmaps} List that contains as many objects of class \code{"simmap"} that \code{nb_simulations} were requested.
-Each simmap object is a phylogeny with one simulated geographic history (i.e., transitions in geographic ranges) mapped along branches.
+Each simmap object is a phylogeny with one simulated discrete character/geographic evolutionary history (i.e., transitions in character states/geographic ranges) mapped along branches.
+This is needed to be able to track which simulated history provided which trait data in downstream analyses, although it may create voluminous objects.
 }
 
 If \code{return_best_model_fit = TRUE},
@@ -229,9 +233,10 @@ as the interpolation used to built the contMap is assuming a constant rate along
 It produces a single \verb{$contMap} representing the ML estimates of ancestral trait evolution across the phylogeny.
 \item If \code{run_stochastic_maps = TRUE}, ancestral values along branches are recorded across all simulated evolutionary histories
 (i.e., continuous stochastic maps), thus accounting for uncertainty in trait estimates.
-This is needed to apply the "combined" or "crossed" strategies to account for trait estimate uncertainty in deepSTRAPP tests
+This is needed to apply the "paired" or "full" strategies to account for trait estimate uncertainty in deepSTRAPP tests
 (See the uncertainty_strategy argument in run_deepSTRAPP_* functions).
 It produces a list of \verb{$contMaps}, each map representing a simulated ancestral trait evolution across the phylogeny.
+This functionality is currently not available for total-evidence phylogenies (i.e., including fossils as tips)
 }
 \item For categorical and biogeographic data: posterior frequencies of each state/range among the simulated evolutionary histories (\code{simmaps})
 are computed to produce a list of \verb{$densityMaps}, one for each state/range, reflecting the changes along branches in probability of harboring a given state/range.
