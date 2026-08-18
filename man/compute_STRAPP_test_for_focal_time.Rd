@@ -8,9 +8,10 @@ compute_STRAPP_test_for_focal_time(
   BAMM_object,
   trait_data_list,
   rate_type = "net_diversification",
+  uncertainty_strategy = "paired",
+  trait_maps_vs_BAMM_samples_list = NULL,
   seed = NULL,
   nb_permutations = NULL,
-  replace_samples = FALSE,
   alpha = 0.05,
   two_tailed = TRUE,
   one_tailed_hypothesis = NULL,
@@ -27,19 +28,38 @@ that contains a phylogenetic tree and associated diversification rates
 across selected posterior samples updated to a specific time in the past (i.e. the \code{focal_time}).}
 
 \item{trait_data_list}{List obtained from \code{\link[=extract_most_likely_trait_values_for_focal_time]{extract_most_likely_trait_values_for_focal_time()}}
-that contains at least a \verb{$trait_data} element, a \verb{$focal_time} element, and a \verb{$trait_data_type}.
+or \code{\link[=extract_all_trait_values_for_focal_time]{extract_all_trait_values_for_focal_time()}} that contains at least
+a \verb{$trait_data} element, a \verb{$focal_time} element, and a \verb{$trait_data_type}.
 \verb{$trait_data} is a named vector with the trait data found on the phylogeny at \code{focal_time}.
 \verb{$focal_time} informs on the time in the past at which the trait and rates data will be tested.
-\verb{$trait_data_type} informs on the type of trait data: continuous, categorical, or biogeographic.}
+\verb{$trait_data_type} informs on the type of trait data: 'continuous', 'categorical', or 'biogeographic'.}
 
 \item{rate_type}{A character string specifying the type of diversification rates to use. Must be one of 'speciation', 'extinction' or 'net_diversification' (default).}
+
+\item{uncertainty_strategy}{Character string. To select the strategy used to account for uncertainty in estimates.
+\itemize{
+\item \code{"rates_only"}: Only accounts for diversification-rate uncertainty across BAMM posterior samples. Uses ML estimates for continuous traits
+and the most frequent state/range observed across stochastic maps for categorical and biogeographic data.
+\item \code{"paired"}: Default option. Accounts for both diversification-rate and ancestral trait/range reconstruction uncertainty by pairing BAMM posterior samples with stochastic maps.
+When the number of BAMM samples and stochastic maps differ, random pairing with replacement from the smaller set is used
+so that all posterior samples and stochastic maps contribute to the analysis.
+\item \code{"full"}: Exhaustive option that accounts for trait/range- and rate- uncertainty by crossing all BAMM posterior samples with all stochastic maps.
+Accounts for both diversification-rate and ancestral reconstruction uncertainty by evaluating every combination of BAMM posterior sample and stochastic map.
+WARNING: This exhaustive approach can substantially increase computation time and memory requirements and is therefore recommended only for moderate-sized analyses.
+}}
+
+\item{trait_maps_vs_BAMM_samples_list}{(Optional) Data.frame of two variables manually providing the names to associate stochastic maps (\verb{$trait_map_ID})
+with BAMM samples (\verb{$BAMM_posterior_sample_ID}). This is typically used to ensure the same stochastic maps and BAMM samples are used to test across multiple time-steps.
+Values are the names of the objects such as "Map_X" and "BAMM_X". Default = \code{NULL}.
+* For uncertainty_strategy == 'rates_only', the \verb{$trait_map_ID} must be "Map_ML" as only the ML estimates of trait values/states/ranges are used.
+* For uncertainty_strategy == 'paired', each pair of stochastic map and BAMM sample will be used once.
+* For uncertainty_strategy == 'full', all stochastic maps will be matched with all BAMM samples.
+Those may partly differ from the actual maps and BAMM samples used for the test, as recorded in \verb{$perm_data_df}, because invalid maps with not enough states/ranges are discarded.}
 
 \item{seed}{Integer. Set the seed to ensure reproducibility. Default is \code{NULL} (a random seed is used).}
 
 \item{nb_permutations}{Integer. To select the number of random permutations to perform during the tests.
-If NULL (default), all posterior samples will be used once.}
-
-\item{replace_samples}{Logical. To specify whether to allow 'replacement' (i.e., multiple use) of a posterior sample when drawing samples used to carry out the test. Default is \code{FALSE}.}
+If NULL (default), all BAMM posterior samples will be used once.}
 
 \item{alpha}{Numerical. Significance level to use to compute the \code{estimate} corresponding to the values of the test statistic used to assess significance of the test. This does NOT affect p-values. Default is \code{0.05}.}
 
@@ -70,21 +90,25 @@ Default is \code{FALSE}.}
 \item{nthreads}{Integer. Number of threads to use for paralleled computing of the tests across the permutations. The R package \code{parallel} must be loaded for \code{nthreads > 1}. Default is \code{1}.}
 
 \item{print_hypothesis}{Logical. Whether to print information on what test is carried out, detailing the null and alternative hypotheses,
-and what significant level is used to rejected or not the null hypothesis. Default is \code{TRUE}.}
+what significant level is used to rejected or not the null hypothesis, and how uncertainty in trait estimates is handled. Default is \code{TRUE}.}
 }
 \value{
-The function returns a list with at least eight elements.
+The function returns a list with at least eleven elements.
 
 Summary elements for the main test:
 \itemize{
 \item \verb{$estimate} Named numerical. Value of the test statistic used to assess significance of the test
 according to the significance level provided (\code{alpha}). The test is significant if \verb{$estimate} is higher than zero.
-\item \verb{$stats_median} Numerical. Median value of the distribution of test statistics across all selected posterior samples.
+\item \verb{$stats_median} Numerical. Median value of the distribution of test statistics.
+\item \verb{$nb_test_stats} Integer. Number of test stats in the distribution.
 \item \verb{$p-value} Numerical. P-value of the test. The test is considered significant if \verb{$p-value} is lower than \code{alpha}.
 \item \verb{$method} Character string. The statistical method used to carry out the test.
 \item \verb{$rate_type} Character string. The type of diversification rates tested. One of 'speciation', 'extinction' or 'net_diversification'.
 \item \verb{$trait_data_type} Character string. The type of trait data as found in 'trait_data_list$trait_data_type'. One of 'continuous', 'categorical', or 'biogeographic'.
 \item \verb{$trait_data_type_for_stats} Character string. The type of trait data used to select statistical method. One of 'continuous', 'binary', or 'multinominal'.
+\item \verb{$uncertainty_strategy} Character string. The strategy used to account for uncertainty in estimates.
+\item \verb{$trait_maps_vs_BAMM_samples_list} List of two elements recording the stochastic maps (\verb{$trait_map_ID}) and BAMM samples (\verb{$BAMM_posterior_sample_ID}) chosen for testing.
+Those may partly differ from the actual maps and BAMM samples used for the test as recorded in \verb{$perm_data_df} because invalid maps with not enough states/ranges are discarded.
 \item \verb{$focal_time} The time in the past at which the trait and rates data were tested.
 }
 
@@ -99,7 +123,7 @@ If \code{posthoc_pairwise_tests = TRUE} (only for multinomial trait data):
 \itemize{
 \item \verb{$posthoc_pairwise_tests} List of at least 3 sub-elements:
 \itemize{
-\item \verb{$summary_df} Data.frame of five variables providing the summary results of post hoc pairwise tests
+\item \verb{$summary_df} Data.frame of six variables providing the summary results of post hoc pairwise tests
 \item \verb{$method} Character string. The statistical method used to carry out the test. Here, "Dunn".
 \item \verb{$two-tailed} Logical. Record the type of post hoc pairwise tests used: two-tailed if \code{TRUE}, one-tailed if \code{FALSE}.
 }
@@ -110,7 +134,8 @@ This is needed to plot the histogram of the null distribution used to assess sig
 \itemize{
 \item \verb{$perm_data_df} A data.frame with four variables summarizing the data generated during the STRAPP test:
 \itemize{
-\item \verb{$posterior_samples_random_ID} Integer. ID of the posterior samples randomly drawn and used for the STRAPP test.
+\item \verb{$trait_map_ID} Integer. ID of the stochastic map from which trait data were extracted and used for the STRAPP test.
+\item \verb{$BAMM_posterior_sample_ID} Integer. ID of the posterior samples randomly drawn and used for the STRAPP test.
 \item \verb{$*_obs} Numerical. Test stats computed from the observed data in the posterior samples. Name depends on the test used.
 \item \verb{$*_perm} Numerical. Test stats computed from the permuted data in the posterior samples. Name depends on the test used.
 \item \verb{$delta_*} OR \verb{$abs_delta_*} Numerical. Test stats computed for the STRAPP test comparing observed stats and permuted stats.
@@ -184,7 +209,8 @@ In a one-tailed test, the p-value is the proportion of posterior samples in whic
 
 ----------  Major changes compared to \code{\link[BAMMtools:traitDependentBAMM]{BAMMtools::traitDependentBAMM()}}  ----------
 \itemize{
-\item Allow to choose if random sampling of posterior configurations must be done with replacement or not with \code{replace_samples}.
+\item Allow to account for uncertainty in trait estimates by pairing/mapping multiple trait data extracted from stochastic maps
+across the BAMM samples. See the \code{uncertainty_strategy} argument for details.
 \item Add post hoc pairwise tests (Dunn test) for multinominal data. Use \code{posthoc_pairwise_tests = TRUE}.
 \item Provide outputs tailored for histogram plots \code{\link[=plot_histogram_STRAPP_test_for_focal_time]{plot_histogram_STRAPP_test_for_focal_time()}}
 and p-value time-series plots \code{\link[=plot_STRAPP_pvalues_over_time]{plot_STRAPP_pvalues_over_time()}}.
@@ -206,7 +232,7 @@ if (deepSTRAPP::is_dev_version())
  data(Ponerinae_BAMM_object_10My, package = "deepSTRAPP")
  ## This dataset is only available in development versions installed from GitHub.
  # It is not available in CRAN versions.
- # Use remotes::install_github(repo = "MaelDore/deepSTRAPP") to get the latest development version.
+# Use remotes::install_github(repo = "MaelDore/deepSTRAPP") to get the latest development version.
 
  # Plot the associated phylogeny with mapped rates
  plot_BAMM_rates(Ponerinae_BAMM_object_10My)
@@ -228,20 +254,36 @@ if (deepSTRAPP::is_dev_version())
 
  # Binarize data into two states
  trait_data_binary <- trait_data_continuous
- trait_data_binary$trait_data[trait_data_continuous$trait_data < 0] <- "state_A"
- trait_data_binary$trait_data[trait_data_continuous$trait_data >= 0] <- "state_B"
+ trait_data_binary$trait_data[trait_data_continuous$trait_data < 0.5] <- "state_A"
+ trait_data_binary$trait_data[trait_data_continuous$trait_data >= 0.5] <- "state_B"
  trait_data_binary$trait_data_type <- "categorical"
 
  table(trait_data_binary$trait_data)
 
  # Categorize data into three states
  trait_data_multinominal <- trait_data_continuous
- trait_data_multinominal$trait_data[trait_data_continuous$trait_data < 0] <- "state_B"
- trait_data_multinominal$trait_data[trait_data_continuous$trait_data < -1] <- "state_A"
- trait_data_multinominal$trait_data[trait_data_continuous$trait_data >= 0] <- "state_C"
+ trait_data_multinominal$trait_data[trait_data_continuous$trait_data < 0.6] <- "state_B"
+ trait_data_multinominal$trait_data[trait_data_continuous$trait_data < 0.4] <- "state_A"
+ trait_data_multinominal$trait_data[trait_data_continuous$trait_data >= 0.6] <- "state_C"
  trait_data_multinominal$trait_data_type <- "categorical"
 
  table(trait_data_multinominal$trait_data)
+
+ ## Duplicate trait data as if extracted from multiple stochastic maps
+
+ trait_data_continuous_multimaps <- Ponerinae_trait_cont_tip_data_10My
+ trait_data_initial <- trait_data_continuous_multimaps$trait_data
+
+ trait_data_multimaps <- list()
+ for (i in 1:10)
+ {
+   # Add a bit of randomness across all stochastic maps data
+   trait_data_multimaps[[i]] <- trait_data_initial +
+       rnorm(n = length(trait_data_initial), mean = 0, sd = sd(trait_data_initial) / 10)
+ }
+ names(trait_data_multimaps) <- paste0("Map_", 1:10)
+ trait_data_continuous_multimaps$trait_data <- trait_data_multimaps
+
 
  \donttest{ # (May take several minutes to run)
  # ------ Compute STRAPP test for continuous data ------ #
@@ -253,6 +295,7 @@ if (deepSTRAPP::is_dev_version())
  STRAPP_results <- compute_STRAPP_test_for_focal_time(
     BAMM_object = Ponerinae_BAMM_object_10My,
     trait_data_list = trait_data_continuous,
+    uncertainty_strategy = "rates_only",
     two_tailed = FALSE,
     one_tailed_hypothesis = "negative",
     return_perm_data = TRUE)
@@ -267,6 +310,7 @@ if (deepSTRAPP::is_dev_version())
  STRAPP_results <- compute_STRAPP_test_for_focal_time(
     BAMM_object = Ponerinae_BAMM_object_10My,
     trait_data_list = trait_data_binary,
+    uncertainty_strategy = "rates_only",
     two_tailed = FALSE,
     one_tailed_hypothesis = c("state_A > state_B"))
  str(STRAPP_results, max.level = 1)
@@ -275,6 +319,7 @@ if (deepSTRAPP::is_dev_version())
  # with higher "net_diversification" that "state_A"
  STRAPP_results <- compute_STRAPP_test_for_focal_time(BAMM_object = Ponerinae_BAMM_object_10My,
     trait_data_list = trait_data_binary,
+    uncertainty_strategy = "rates_only",
     two_tailed = FALSE,
     one_tailed_hypothesis = c("state_B > state_A"))
  str(STRAPP_results, max.level = 1)
@@ -287,12 +332,63 @@ if (deepSTRAPP::is_dev_version())
  STRAPP_results <- compute_STRAPP_test_for_focal_time(
     BAMM_object = Ponerinae_BAMM_object_10My,
     trait_data_list = trait_data_multinominal,
+    uncertainty_strategy = "rates_only",
     posthoc_pairwise_tests = TRUE,
     two_tailed = TRUE,
-    p.adjust_method = "bonferroni")
- str(STRAPP_results, max.level = 3)
+    p.adjust_method = "bonferroni",
+    return_perm_data = TRUE)
+ str(STRAPP_results, max.level = 2)
  # All post hoc pairwise test summaries are available in $summary_df
- STRAPP_results$posthoc_pairwise_tests$summary_df }
+ STRAPP_results$posthoc_pairwise_tests$summary_df
+
+ # ------ Compute STRAPP test with the 'paired' strategy ------ #
+
+ # Account for uncertainty in trait estimates
+ # by pairing stochastic maps with BAMM posterior samples
+
+ # Compute STRAPP test under the alternative hypothesis of a "negative" correlation
+ # between "net_diversification" rates and trait data
+ STRAPP_results <- compute_STRAPP_test_for_focal_time(
+   BAMM_object = Ponerinae_BAMM_object_10My,
+   trait_data_list = trait_data_continuous_multimaps,
+   uncertainty_strategy = "paired",
+   two_tailed = FALSE,
+   one_tailed_hypothesis = "negative",
+   return_perm_data = TRUE)
+ str(STRAPP_results, max.level = 2)
+ # Data from the paired stochastic maps and BAMM posterior samples
+ # is available in STRAPP_results$perm_data_df
+ head(STRAPP_results$perm_data_df)
+ # Tests were performed across 1000 iterations since the stochastic maps
+ # have been paired with the 1000 BAMM samples
+ nrow(STRAPP_results$perm_data_df)
+ # Each of the 10 maps was paired ca. 100 times with a unique BAMM sample
+ table(STRAPP_results$perm_data_df$trait_map_ID)
+
+ # ------ Compute STRAPP test with the 'full' strategy ------ #
+
+ # Account for uncertainty in trait estimates
+ # by crossing stochastic maps with BAMM posterior samples
+
+ # Compute STRAPP test under the alternative hypothesis of a "negative" correlation
+ # between "net_diversification" rates and trait data
+ STRAPP_results <- compute_STRAPP_test_for_focal_time(
+   BAMM_object = Ponerinae_BAMM_object_10My,
+   trait_data_list = trait_data_continuous_multimaps,
+   uncertainty_strategy = "full",
+   two_tailed = FALSE,
+   one_tailed_hypothesis = "negative",
+   return_perm_data = TRUE)
+ str(STRAPP_results, max.level = 2)
+ # Data from the combined stochastic maps X BAMM posterior samples
+ # is available in STRAPP_results$perm_data_df
+ head(STRAPP_results$perm_data_df)
+ # Tests were performed across 10000 iterations since the 10 stochastic maps
+ # have been combined with the 1000 BAMM samples
+ nrow(STRAPP_results$perm_data_df)
+ # Each of the 10 maps was paired with all 1000 BAMM samples
+ table(STRAPP_results$perm_data_df$trait_map_ID)
+ }
 }
 
 }
