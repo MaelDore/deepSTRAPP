@@ -51,7 +51,10 @@
 #' @param ... Additional arguments to be passed down to the functions used to fit models (See `evolutionary_models`)
 #'   and produce simmaps with [phytools::make.simmap()] or `BioGeoBEARS::runBSM()`.
 #' @param res Integer. Define the number of time steps used to interpolate/estimate trait value/state/range in `contMap`/`densityMaps`. Default = `100`.
-#' @param nb_simulations Integer. Define the number of simulations generated for stochastic mapping. Default = `1000`. Only for "categorical" and "biogeographic" data.
+#' @param run_stochastic_maps Logical. Whether to perform continuous stochastic mapping to account for uncertainty in ancestral trait estimates.
+#'   Only for continuous data (This is always 'TRUE' for categorical and biogeographic data).
+#'   This functionality is currently not available for total-evidence phylogenies (i.e., including fossils as tips).
+#' @param nb_simulations Integer. Define the number of simulations generated for stochastic mapping. Default = `100`.
 #' @param color_scale Vector of character string. List of colors to use to build the color scale with [grDevices::colorRampPalette()]
 #'   showing the evolution of a continuous trait on the `contMap`. From lowest values to highest values. Only for continuous data. Default = `NULL` will use the rainbow() color palette.
 #' @param colors_per_levels Named character string. To set the colors to use to map each state/range posterior probabilities. Names = states/ranges; values = colors.
@@ -67,7 +70,8 @@
 #' @param return_BSM Logical. (Only for Biogeographic data) Whether the summary tables of anagenetic and cladogenetic events generated during the Biogeographic Stochastic Mapping (BSM)
 #'  process should be returned in the output. Default = `FALSE`.
 #' @param return_simmaps Logical. Whether the evolutionary histories simulated during stochastic mapping (i.e., `simmaps`) should be returned in the output.
-#'  Default = `TRUE`. Only for "categorical" and "biogeographic" data.
+#'  Default = `TRUE`. Only for "categorical" and "biogeographic" data. This is needed to be able to track which simulated histories provided which trait data in downstream analyses,
+#'  although it may create voluminous objects.
 #' @param return_best_model_fit Logical. Whether to include the output of the best fitting model in the function output. Default = `FALSE`.
 #' @param return_model_selection_df Logical. Whether to include the data.frame summarizing model comparisons used to select the best fitting model should be returned in the output. Default = `FALSE`.
 #' @param verbose Logical. Should progression be displayed? A message will be printed for every steps in the process. Default is `TRUE`.
@@ -96,24 +100,36 @@
 #'
 #'  Step 4: Stochastic Mapping.
 #'
-#'    For categorical and biogeographic data, stochastic mapping simulations are performed to generate evolutionary histories
+#'    For categorical and biogeographic data, stochastic mapping simulations are performed by default to generate evolutionary histories
 #'    compatible with the best model and inferred ACE. Node states/ranges are drawn from the scaled marginal likelihoods of ACE,
 #'    and states/ranges shifts along branches are simulated according to the transition matrix Q estimated from the best fitting model.
 #'
+#'    For continuous trait data, stochastic mapping simulations are performed only if `run_stochastic_maps = TRUE`.
+#'    Evolutionary histories of continuous trait evolution, conditioned to the observed trait data and model fit,
+#'    including estimates of ancestral trait values and variance at nodes, are produced  with [contsimmap::make.contsimmap()].
+#'
 #'  Step 5: Infer ancestral states along branches.
-#'    * For continuous traits: ancestral trait values along branches are interpolated with [phytools::contMap()].
-#'      This provides quick estimates of trait value at any point in time, but it does not provide accurate ML estimates in
-#'      case of models that are time or trait-value dependent (such as "EB" or "OU") as the interpolation used to built the contMap is assuming
-#'      a constant rate along each branch. However, ancestral trait values at nodes remain accurate
-#'    * For categorical and biogeographic data: compute posterior frequencies of each state/range among the simulated evolutionary histories (`simmaps`)
-#'      to produce a `densityMap` for each state/range that reflects the changes along branches in probability of harboring a given state/range.
+#'    * For continuous traits:
+#'      * Ancestral values along branches are interpolated using [phytools::contMap()].
+#'        This provides quick estimates of trait value at any point in time, but does not account for uncertainty in trait estimates.
+#'        Moreover, it does not provide fully accurate ML estimates in  case of models that are time or trait-value dependent (such as "EB" or "OU")
+#'        as the interpolation used to built the contMap is assuming a constant rate along each branch. However, ancestral trait values at nodes remain accurate.
+#'        It produces a single `$contMap` representing the ML estimates of ancestral trait evolution across the phylogeny.
+#'      * If `run_stochastic_maps = TRUE`, ancestral values along branches are recorded across all simulated evolutionary histories
+#'        (i.e., continuous stochastic maps), thus accounting for uncertainty in trait estimates.
+#'        This is needed to apply the "paired" or "full" strategies to account for trait estimate uncertainty in deepSTRAPP tests
+#'        (See the uncertainty_strategy argument in run_deepSTRAPP_* functions).
+#'        It produces a list of `$contMaps`, each map representing a simulated ancestral trait evolution across the phylogeny.
+#'        This functionality is currently not available for total-evidence phylogenies (i.e., including fossils as tips)
+#'    * For categorical and biogeographic data: posterior frequencies of each state/range among the simulated evolutionary histories (`simmaps`)
+#'      are computed to produce a list of `$densityMaps`, one for each state/range, reflecting the changes along branches in probability of harboring a given state/range.
 #'
 #'  # Note on macroevolutionary models of trait evolution
 #'
 #'  This function provides an easy solution to map trait evolution on a time-calibrated phylogeny
-#'  and obtain the `contMap`/`densityMaps` objects needed to run the deepSTRAPP workflow ([run_deepSTRAPP_for_focal_time], [run_deepSTRAPP_over_time]).
+#'  and obtain the `contMaps`/`densityMaps` objects needed to run the deepSTRAPP workflow ([run_deepSTRAPP_for_focal_time], [run_deepSTRAPP_over_time]).
 #'  However, it does not explore the most complex options for trait evolution. You may need to explore more complex models to capture the dynamics of trait evolution.
-#'  such as trait-dependent multi-rate models ([phytools::brownie.lite()], [OUwie::OUwie]), Bayesian MCMC implementations allowing a thorough exploration
+#'  such as trait-dependent multi-rate models ([phytools::brownie.lite()], [OUwie::OUwie()]), Bayesian MCMC implementations allowing a thorough exploration
 #'  of location and number of regime shifts (Ex: BayesTraits, RevBayes), or RRphylo for a penalized phylogenetic ridge regression approach that allows regime shifts across all branches.
 #'
 #'  # Note on macroevolutionary models of biogeographic history
@@ -129,17 +145,22 @@
 #'  The R package `BioGeoBEARS` is needed for this function to work with biogeographic data.
 #'  Please install it manually from: \href{https://github.com/nmatzke/BioGeoBEARS}{https://github.com/nmatzke/BioGeoBEARS}.
 #'
-#' @return The function returns a list with at least two elements.
+#' @return The function returns a list with at least three elements.
 #'
 #'   * `$contMap` (For "continuous" data) Object of class `"contMap"`, typically generated with [phytools::contMap()],
-#'     that contains a phylogenetic tree and associated continuous trait mapping.
+#'     that contains a phylogenetic tree and a unique continuous trait mapping representing
+#'     the interpolated ML estimates of ancestral trait evolution across the phylogeny.
+#'   * `$contMaps` (For "continuous" data, with `run_stochastic_maps = TRUE`) List of objects of class `"contMap`,
+#'     each map representing a simulated ancestral trait evolution conditioned to the observed trait data and model fit.
 #'   * `$densityMaps` (For "categorical" and "biogeographic" data) List of objects of class `"densityMap`,
 #'     typically generated with [phytools::densityMap()], that contains a phylogenetic tree and associated mapping of probability
 #'     to harbor a given state/range along branches. The list contains one `"densityMap` per state/range found in the `tip_data`.
 #'   * `$densityMaps_all_ranges` (For "biogeographic" data only, if `split_multi_area_ranges = TRUE`) Same as `$densityMaps`,
 #'     but for all ranges including the multi-areas ranges (e.g., AB) while `$densityMaps` will display posterior probabilities for
 #'     unique areas only (e.g., A and B), with multi-areas ranges split across the unique areas they encompass.
+#'
 #'   * `$trait_data_type` Character string. Record the type of trait data. Either: "continuous", "categorical" or "biogeographic".
+#'   * `$nb_simulations` Integer. The number of simulations / stochastic maps produced.
 #'
 #'   If `return_ace = TRUE`,
 #'   * `$ace` For continuous traits: Named vector that record the ancestral characters estimates (ACE) at internal nodes.
@@ -156,7 +177,8 @@
 #'
 #'   If `return_simmaps = TRUE`, (Only for categorical and biogeographic data)
 #'   * `$simmaps` List that contains as many objects of class `"simmap"` that `nb_simulations` were requested.
-#'     Each simmap object is a phylogeny with one simulated geographic history (i.e., transitions in geographic ranges) mapped along branches.
+#'     Each simmap object is a phylogeny with one simulated discrete character/geographic evolutionary history (i.e., transitions in character states/geographic ranges) mapped along branches.
+#'     This is needed to be able to track which simulated history provided which trait data in downstream analyses, although it may create voluminous objects.
 #'
 #'   If `return_best_model_fit = TRUE`,
 #'   * `$best_model_fit` List that provides the output of the best fitting model.
@@ -182,6 +204,9 @@
 #'
 #'  For BioGeoBEARS: Matzke, Nicholas J. (2018). BioGeoBEARS: BioGeography with Bayesian (and likelihood) Evolutionary Analysis with R Scripts.
 #'    version 1.1.1, published on GitHub on November 6, 2018. \doi{10.5281/zenodo.1478250}. Website: \url{http://phylo.wikidot.com/biogeobears}.
+#'
+#'  For continuous stochastic mapping in contsimmap: Martin, B. S., & Weber, M. G. (2026). Stochastic character mapping of continuous traits on phylogenies.
+#'  Systematic Biology, syag031. \doi{10.1093/sysbio/syag031}.
 #'
 #' @examples
 #' # ----- Example 1: Continuous data ----- #
@@ -361,8 +386,9 @@ prepare_trait_data <- function (
     max_range_size = 2,
     split_multi_area_ranges = FALSE,
     ..., # To allow to pass down arguments in the functions used to fit the models
-    res = 100, # Number of time steps used to interpolate trait value in the contMap
-    nb_simulations = 1000, # Only for categorical and biogeographic data
+    res = 100, # Number of time steps used to interpolate trait value in the contMap(s)
+    run_stochastic_maps = FALSE, # Only for continuous data (always 'TRUE' for categorical and biogeographic data)
+    nb_simulations = 100,
     color_scale = NULL, # Only for continuous data
     colors_per_levels = NULL, # Only for categorical and biogeographic data. To set the colors to use to map each state/range posterior probabilities
     plot_map = TRUE,
@@ -379,8 +405,21 @@ prepare_trait_data <- function (
   ### Control for BioGeoBEARS install
   if ((trait_data_type == "biogeographic") & !requireNamespace("BioGeoBEARS", quietly = TRUE))
   {
-    stop("Package 'BioGeoBEARS' is needed for this function to work with biogeographic data.
-       Please install it manually from: https://github.com/nmatzke/BioGeoBEARS")
+    stop("Package 'BioGeoBEARS' is needed to work with biogeographic data.
+       Please install it manually from: https://github.com/nmatzke/BioGeoBEARS;
+       or from the alterative deepSTRAPP repository (https://maeldore.github.io/drat).
+       For instructions, see the Dependencies section on deepSTRAPP homepage (https://github.com/MaelDore/deepSTRAPP).")
+  }
+
+  ## Control for contsimmap install
+  if ((trait_data_type == "continuous") & (run_stochastic_maps == TRUE) & !requireNamespace("contsimmap", quietly = TRUE))
+  {
+    stop("Package 'contsimmap' is required for perform continuous stochastic mapping.
+       Please install it manually from: https://github.com/bstaggmartin/contsimmap;
+       or from the alterative deepSTRAPP repository (https://maeldore.github.io/drat).
+       For instructions, see the Dependencies section on deepSTRAPP homepage (https://github.com/MaelDore/deepSTRAPP).
+
+       Alternatively, you can set 'run_stochastic_maps == FALSE', and perform deepSTRAPP tests on ML ancestral trait estimates.")
   }
 
   ### Check input validity
@@ -505,6 +544,7 @@ prepare_trait_data <- function (
   add_args <- list(...)
   args_names_for_fitContinuous <- c("SE", "bounds", "control", "ncores")
   args_names_for_fitDiscrete <- c("transform", "bounds", "control", "ncores", "symmetric")
+  args_names_for_make.contsimmap <- c("Xsig2", "Ysig2", "mu")
   args_names_for_make.simmap <- c("pi", "message", "Q", "tol", "vQ", "prior")
   args_names_to_define_BioGeoBEARS_run <- c("abbr", "description", "BioGeoBEARS_model_object", "timesfn", "distsfn",
                                              "dispersal_multipliers_fn", "area_of_areas_fn", "areas_allowed_fn",
@@ -517,6 +557,7 @@ prepare_trait_data <- function (
   ## Extract additional arguments
   args_for_fitContinuous <- add_args[names(add_args) %in% args_names_for_fitContinuous]
   args_for_fitDiscrete <- add_args[names(add_args) %in% args_names_for_fitDiscrete]
+  args_for_make.contsimmap <- add_args[names(add_args) %in% args_names_for_make.contsimmap]
   args_for_make.simmap <- add_args[names(add_args) %in% args_names_for_make.simmap]
   args_to_define_BioGeoBEARS_run <- add_args[names(add_args) %in% args_names_to_define_BioGeoBEARS_run]
   args_to_define_runBSM <- add_args[names(add_args) %in% args_names_to_define_runBSM]
@@ -538,7 +579,10 @@ prepare_trait_data <- function (
              evolutionary_models = evolutionary_models, # Default = "BM" for continuous data
              # ..., # Additional arguments for geiger::fitContinuous()
              args_for_fitContinuous = args_for_fitContinuous,
+             args_for_make.contsimmap = args_for_make.contsimmap,
              res = res,
+             run_stochastic_maps = run_stochastic_maps,
+             nb_simulations = nb_simulations,
              color_scale = color_scale,
              plot_map = plot_map,
              PDF_file_path = PDF_file_path,
@@ -559,7 +603,7 @@ prepare_trait_data <- function (
              args_for_fitDiscrete = args_for_fitDiscrete, # Additional arguments for geiger::fitDiscrete()
              args_for_make.simmap = args_for_make.simmap, # Additional arguments for phytools::make.simmap()
              res = res,
-             nb_simulations = nb_simulations, # Only for categorical and biogeographic data
+             nb_simulations = nb_simulations,
              colors_per_levels = colors_per_levels, # Only for categorical and biogeographic data
              plot_map = plot_map,
              plot_overlay = plot_overlay, # Only for categorical and biogeographic data
@@ -587,7 +631,7 @@ prepare_trait_data <- function (
              # ..., # Additional arguments for BioGeoBEARS functions
              args_to_define_BioGeoBEARS_run = args_to_define_BioGeoBEARS_run, # Additional arguments for BioGeoBEARS::define_BioGeoBEARS_run()
              args_to_define_runBSM, # Additional arguments for BioGeoBEARS::runBSM()
-             nb_simulations = nb_simulations, # Only for categorical and biogeographic data
+             nb_simulations = nb_simulations,
              res = res,
              colors_per_levels = colors_per_levels, # Only for categorical and biogeographic data
              plot_map = plot_map,
@@ -616,7 +660,10 @@ prepare_trait_data_for_continuous_data <- function (
     evolutionary_models = "BM", # Default = "BM" for continuous data
     # ..., # Additional arguments for geiger::fitContinuous()
     args_for_fitContinuous = NULL, # Additional arguments for geiger::fitContinuous()
+    args_for_make.contsimmap = NULL, # Additional arguments for contsimmap::make.contsimmap()
     res = 100,
+    run_stochastic_maps = FALSE,
+    nb_simulations = 100,
     color_scale = NULL,
     plot_map = TRUE,
     PDF_file_path = NULL,
@@ -626,6 +673,17 @@ prepare_trait_data_for_continuous_data <- function (
     verbose = TRUE
     )
 {
+  ## Control for contsimmap install
+  if ((run_stochastic_maps == TRUE) & !requireNamespace("contsimmap", quietly = TRUE))
+  {
+    stop("Package 'contsimmap' is required for perform continuous stochastic mapping.
+       Please install it manually from: https://github.com/bstaggmartin/contsimmap;
+       or from the alterative deepSTRAPP repository (https://maeldore.github.io/drat).
+       For instructions, see the Dependencies section on deepSTRAPP homepage (https://github.com/MaelDore/deepSTRAPP).
+
+       Alternatively, you can set 'run_stochastic_maps == FALSE', and perform deepSTRAPP tests on ML ancestral trait estimates.")
+  }
+
   ### Check input validity
   {
     ## evolutionary_models
@@ -832,6 +890,9 @@ prepare_trait_data_for_continuous_data <- function (
   # Rescale phylogeny using the estimated parameters from the best model
   rescaled_phylo <- do.call(what = rescaled_phylo_fn, args = best_model_args)
 
+  # plot(phylo)
+  # plot(rescaled_phylo)
+
   ## Run ACE inference with BM on transformed tree
   # ?phytools::fastAnc
 
@@ -839,11 +900,55 @@ prepare_trait_data_for_continuous_data <- function (
                                   x = tip_data,
                                   vars = FALSE, # Compute the variance of ancestral state estimates
                                   CI = FALSE) # Compute the 95% CI of ancestral state estimates
-  # ACE_output
+
+  # ACE_output are node ML ancestral estimates. They are required for interpolating ML estimates with phytools::contMap(),
+  # but not to generate continuous stochastic maps with contsimmap::make.contsimmap()
+
+  ### Step 4 - Create continuous stochastic maps (contMaps) using ACE computed with the best fitting model
+
+  if (run_stochastic_maps) # Only if stochastic mapping is requested
+  {
+    if (verbose) { cat(paste0(Sys.time(), " - Create continuous stochastic maps (contMaps) = simulations of trait evolutionary histories conditioned to the observed trait data and model fit.\n\n")) }
+
+    ## Run continuous stochastic mapping on rescaled phylo (to account for best model)
+
+    # contsimmap <- contsimmap::make.contsimmap(tree = rescaled_phylo,
+    #                                           trait.data = tip_data,
+    #                                           nsims = nb_simulations, # Number of stochastic maps
+    #                                           res = res, # Number of time steps
+    #                                           # ..., # Additional arguments for make.contsimmap()
+    #                                           verbose = verbose)
+
+    contsimmap <- do.call(what = contsimmap::make.contsimmap,
+                          args =  c(list(tree = rescaled_phylo,
+                                         trait.data = tip_data,
+                                         nsims = nb_simulations, # Number of stochastic maps
+                                         res = res, # Number of time steps
+                                         verbose = verbose),
+                                    args_for_make.contsimmap)) # Additional arguments for make.contsimmap()
+
+    ## Convert output into list of contMaps
+    contMaps_list <- convert_contsimmap_to_contMaps_list(contsimmap = contsimmap, verbose = verbose)
+    # plot_contMap(contMaps_list[[1]])
+
+    ## Adjust contMaps to initial scale
+    contMaps_list <- lapply(X = contMaps_list, FUN = restore_contMap_branch_lengths, initial_tree = phylo)
+
+    ## Update color scale if requested
+    if (!is.null(color_scale))
+    {
+      # Update color palette in contMaps
+      contMaps_list <- lapply(X = contMaps_list, FUN = phytools::setMap, colors = color_scale)
+      # print(contMaps_list[[1]]$cols)
+      # plot_contMap(contMaps_list[[50]])
+    }
+  }
 
   ### Step 5 - Create contMap using ACE computed with the best fitting model
 
-  if (verbose) { cat(paste0(Sys.time(), " - Create contMap by interpolating values along branches.\n\n")) }
+  if (verbose) { cat(paste0(Sys.time(), " - Create contMap of ML estimates by interpolating values along branches.\n\n")) }
+
+  # Use both tip_data and ACE_output as inputs. Used to interpolate ML estimates along branches with phytools::contMap().
 
   contMap <- phytools::contMap(tree = phylo,
                                method = "user",
@@ -883,14 +988,21 @@ prepare_trait_data_for_continuous_data <- function (
   }
 
   ## Build output
-  output <- list(contMap = contMap,
-                 trait_data_type = "continuous")
+  output <- list(contMap = contMap)
+  # Include stochastic maps if requested
+  if (run_stochastic_maps) { output$contMaps <- contMaps_list }
+
+  # Inform trait_data_type
+  output$trait_data_type <- "continuous"
+  # Inform nb_simulations
+  if (run_stochastic_maps) { output$nb_simulations <- nb_simulations } else { output$nb_simulations <- NA }
+
   # Include ACE if requested
-  if(return_ace) { output$ace <- ACE_output }
+  if (return_ace) { output$ace <- ACE_output }
   # Include output of best model if requested
-  if(return_best_model_fit) { output$best_model_fit <- best_model_fit }
+  if (return_best_model_fit) { output$best_model_fit <- best_model_fit }
   # Include df for model comparison if requested
-  if(return_model_selection_df) { output$model_selection_df <- models_comparison$models_comparison_df }
+  if (return_model_selection_df) { output$model_selection_df <- models_comparison$models_comparison_df }
 
   ## Return output
   return(invisible(output))
@@ -909,7 +1021,7 @@ prepare_trait_data_for_categorical_data <- function (
     args_for_fitDiscrete = NULL, # Additional arguments for geiger::fitDiscrete()
     args_for_make.simmap = NULL, # Additional arguments for phytools::make.simmap()
     res = 100,
-    nb_simulations = 1000, # Only for categorical and biogeographic data
+    nb_simulations = 100, # Only for categorical and biogeographic data
     colors_per_levels = NULL,
     plot_map = TRUE,
     plot_overlay = TRUE, # Only for categorical and biogeographic data
@@ -1317,7 +1429,9 @@ prepare_trait_data_for_categorical_data <- function (
 
   ## Build output
   output <- list(densityMaps = densityMaps_all_states,
-                 trait_data_type = "categorical")
+                 trait_data_type = "categorical",
+                 nb_simulations = nb_simulations)
+
   # Include simmaps if requested
   if(return_simmaps) { output$simmaps <- all_simmaps } # Filter to include only internal nodes (to be consistent with continuous trait)
   # Include ACE if requested
@@ -1349,7 +1463,7 @@ prepare_trait_data_for_biogeographic_data <- function (
     args_to_define_runBSM, # Additional arguments for BioGeoBEARS::runBSM()
     res = 100,
     colors_per_levels = NULL,
-    nb_simulations = 1000, # Only for categorical and biogeographic data
+    nb_simulations = 100, # Only for categorical and biogeographic data
     plot_map = TRUE,
     plot_overlay = TRUE, # Only for categorical and biogeographic data
     PDF_file_path = NULL,
@@ -1363,8 +1477,10 @@ prepare_trait_data_for_biogeographic_data <- function (
   ## Control for BioGeoBEARS install
   if (!requireNamespace("BioGeoBEARS", quietly = TRUE))
   {
-    stop("Package 'BioGeoBEARS' is needed for this function to work.
-       Please install it manually from: https://github.com/nmatzke/BioGeoBEARS")
+    stop("Package 'BioGeoBEARS' is needed to work with biogeographic data.
+       Please install it manually from: https://github.com/nmatzke/BioGeoBEARS;
+       or from the alterative deepSTRAPP repository (https://maeldore.github.io/drat).
+       For instructions, see the Dependencies section on deepSTRAPP homepage (https://github.com/MaelDore/deepSTRAPP).")
   }
 
   ## Convert tip_data into vector of character strings if needed
@@ -1446,11 +1562,11 @@ prepare_trait_data_for_biogeographic_data <- function (
     }
 
     ## BioGeoBEARS_directory_path
-    # BioGeoBEARS_directory_path must be a directory, so it must end with '/'
-    if (!stringr::str_detect(BioGeoBEARS_directory_path, pattern = "/$"))
-    {
-      stop(paste0("'BioGeoBEARS_directory_path' must end with '/'"))
-    }
+    # # BioGeoBEARS_directory_path must be a directory, so it must end with '/'
+    # if (!stringr::str_detect(BioGeoBEARS_directory_path, pattern = "/$"))
+    # {
+    #   stop(paste0("'BioGeoBEARS_directory_path' must end with '/'"))
+    # }
     # Create the directory if it does not exist yet
     if (!dir.exists(BioGeoBEARS_directory_path))
     {
@@ -2559,12 +2675,14 @@ prepare_trait_data_for_biogeographic_data <- function (
   {
     # With all ranges
     output <- list(densityMaps = densityMaps_all_ranges,
-                   trait_data_type = "biogeographic")
+                   trait_data_type = "biogeographic",
+                   nb_simulations = nb_simulations)
   } else {
     # With muti-area ranges split into unique areas + all ranges
     output <- list(densityMaps = densityMaps_unique_areas,
                    densityMaps_all_ranges = densityMaps_all_ranges,
-                   trait_data_type = "biogeographic")
+                   trait_data_type = "biogeographic",
+                   nb_simulations = nb_simulations)
   }
 
   # Include ACE if requested
@@ -2916,8 +3034,10 @@ select_best_model_from_BioGeoBEARS <- function (list_model_fits)
   ## Control for BioGeoBEARS install
   if (!requireNamespace("BioGeoBEARS", quietly = TRUE))
   {
-    stop("Package 'BioGeoBEARS' is needed for this function to work.
-       Please install it manually from: https://github.com/nmatzke/BioGeoBEARS")
+    stop("Package 'BioGeoBEARS' is needed to work with biogeographic data.
+       Please install it manually from: https://github.com/nmatzke/BioGeoBEARS;
+       or from the alterative deepSTRAPP repository (https://maeldore.github.io/drat).
+       For instructions, see the Dependencies section on deepSTRAPP homepage (https://github.com/MaelDore/deepSTRAPP).")
   }
 
   # Homemade function to extract the number of observations from BioGeoBEARS model outputs
@@ -3010,6 +3130,59 @@ generate_list_ranges <- function (areas_list, max_range_size, include_null_range
   }
   return(ranges_list)
 }
+
+## Helper function to restore initial branch length in scaled contMap ####
+
+#' @title Restore initial branch length in scaled contMap
+#'
+#' @description Restore the initial branch length in scaled contMap based on the original tree (before scaling).
+#'
+#' @param contMap List of class `"contMap"`, typically generated with [phytools::contMap()],
+#'   that contains a phylogenetic tree and associated ancestral trait estimates mapped along branches in `contMap$tree$maps`.
+#' @param initial_tree Object of class `"phylo"`. The original phylogenetic tree, before scaling.
+#'
+#' @return The function returns the rescaled contMap as an object of class `"contMap"`.
+#'   It contains a `$tree` element of classes `"simmap"` and `"phylo"`, that itself includes:
+#'   * `$maps` An updated list of named numerical vectors. Provides the mapping of trait values along each rescaled edge.
+#'   * `$mapped.edge` An updated matrix. Provides the evolutionary time spent across trait values (columns) along the rescaled edges (rows).
+#'
+#' @seealso [phytools::contMap()]
+#'
+#' @author Maël Doré
+#'
+#' @noRd
+#'
+
+restore_contMap_branch_lengths <- function(contMap, initial_tree)
+{
+  # Initiate new contMap
+  updated_contMap <- contMap
+
+  # Extract rescaled tree
+  tree_rescaled <- contMap$tree
+
+  # Identify branch-level multiplicative factors applied for scaling
+  recaling_factors <- initial_tree$edge.length / tree_rescaled$edge.length
+
+  # Rescale branch lengths
+  tree_rescaled$edge.length <- initial_tree$edge.length
+
+  # Loop along edges to rescale branch segment lengths
+  for (i in seq_along(tree_rescaled$maps))
+  {
+    tree_rescaled$maps[[i]] <- tree_rescaled$maps[[i]] * recaling_factors[i]
+  }
+
+  # Update $mapped.edge based on
+  tree_rescaled$mapped.edge <- makeMappedEdge(edge = tree_rescaled$edge, maps = tree_rescaled$maps)
+  tree_rescaled$mapped.edge <- tree_rescaled$mapped.edge[, order(as.numeric(colnames(tree_rescaled$mapped.edge)))]
+
+  # Update $tree in contMap
+  updated_contMap$tree <- tree_rescaled
+
+  return(updated_contMap)
+}
+
 
 ### Helper function to produce densityMap from simmaps ####
 # Original function written by Liam Revell, 2012
@@ -3394,10 +3567,13 @@ densityMap_custom <- function (trees, res = 100, fsize = NULL, ftype = NULL, lwd
 
 BSM_to_phytools_simmap <- function(model_fit, phylo, BSM_output, sim_index)
 {
+  ## Control for BioGeoBEARS install
   if (!requireNamespace("BioGeoBEARS", quietly = TRUE))
   {
-    stop("Package 'BioGeoBEARS' is needed for this function to work.
-       Please install it manually from: https://github.com/nmatzke/BioGeoBEARS")
+    stop("Package 'BioGeoBEARS' is needed to work with biogeographic data.
+       Please install it manually from: https://github.com/nmatzke/BioGeoBEARS;
+       or from the alterative deepSTRAPP repository (https://maeldore.github.io/drat).
+       For instructions, see the Dependencies section on deepSTRAPP homepage (https://github.com/MaelDore/deepSTRAPP).")
   }
 
   # Extract the tables of cladogenetic and anagenetic events

@@ -159,7 +159,7 @@ update_maps_for_focal_time <- function(tree_with_maps, focal_time)
     }
   }
 
-  ## Length of maps and updated lenght should be equal
+  ## Length of maps and updated length should be equal
   # cbind(focal_edges_df$updated_length, lapply(X = updated_maps, FUN = sum))
 
   # Store updated maps
