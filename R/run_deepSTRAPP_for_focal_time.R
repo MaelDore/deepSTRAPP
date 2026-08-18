@@ -21,11 +21,24 @@
 #'   that contains a phylogenetic tree and associated continuous trait mapping.
 #'   The phylogenetic tree must be rooted and fully resolved/dichotomous,
 #'   but it does not need to be ultrametric (it can includes fossils).
-#' @param densityMaps For categorical trait or biogeographic data. List of objects of class `"densityMap"`,
+#' @param contMaps For continuous trait data. List of objects of class `"contMap"`,
 #'   typically generated with [deepSTRAPP::prepare_trait_data()],
+#'   that contains multiple continuous stochastic maps that represent possible trait evolutionary histories
+#'   conditioned to the observed trait values and model fit.
+#' @param densityMaps For categorical trait or biogeographic data. List of objects of class `"densityMap"`,
+#'   typically generated with [deepSTRAPP::prepare_trait_data()] or [phytools::densityMap()],
 #'   that contains a phylogenetic tree and associated posterior probability of being in a given state/range along branches.
 #'   Each object (i.e., `densityMap`) corresponds to a state/range. The phylogenetic tree must be rooted and fully resolved/dichotomous,
 #'   but it does not need to be ultrametric (it can includes fossils).
+#' @param simmaps For categorical trait or biogeographic data. List of objects of class `"simmap"`,
+#'   typically generated with [deepSTRAPP::prepare_trait_data()] or [phytools::make.simmap()],
+#'   that represent discrete character/geographic evolutionary history
+#'   (i.e., transitions in character states/geographic ranges) mapped along branches.
+#'   This is needed to be able to track which simulated history provided which trait data in downstream analyses
+#'   employing the "paired" or "full" strategies to account for uncertainty in ancestral trait estimates.
+#' @param nb_simulations For categorical trait or biogeographic data. Integer. The number of stochastic maps used to simulate
+#'   trait evolution. This is needed for the "paired" and "full" strategies to account for trait estimate uncertainty,
+#'   if only densityMaps summarizing posterior state/range density are provided, but not the simmaps representing all evolutionary histories.
 #' @param ace (Optional) Ancestral Character Estimates (ACE) at the internal nodes.
 #'   Obtained with [deepSTRAPP::prepare_trait_data()] as output in the `$ace` slot.
 #'   * For continuous trait data: Named numerical vector typically generated with [phytools::fastAnc()], [phytools::anc.ML()], or [ape::ace()].
@@ -42,20 +55,34 @@
 #'   binary presence/absence in each area (coded as unique CAPITAL letter). In this case, columns are unique areas, rows are taxa,
 #'   and values are integer (0/1) signaling absence or presence of the taxa in the area.
 #' @param trait_data_type Character string. Specify the type of trait data. Must be one of "continuous", "categorical", "biogeographic".
+#' @param keep_tip_labels Logical. Specify whether terminal branches with a single descendant tip
+#'   must retained their initial `tip.label` on the updated phylogeny. Default is `TRUE`.
 #' @param BAMM_object Object of class `"bammdata"`, typically generated with [deepSTRAPP::prepare_diversification_data()],
 #'   that contains a phylogenetic tree and associated diversification rate mapping across selected posterior samples.
 #'   The phylogenetic tree must the same as the one associated with the `contMap`/`densityMaps`, `ace` and `tip_data`.
+#' @param rate_type A character string specifying the type of diversification rates to use. Must be one of 'speciation', 'extinction' or 'net_diversification' (default).
 #' @param focal_time Numerical. The time, in terms of time distance from the present,
 #'   at which data must be extracted and the phylogeny and mappings must be cut.
 #'   It must be smaller than the root age of the phylogeny.
-#' @param keep_tip_labels Logical. Specify whether terminal branches with a single descendant tip
-#'   must retained their initial `tip.label` on the updated phylogeny. Default is `TRUE`.
-#' @param rate_type A character string specifying the type of diversification rates to use. Must be one of 'speciation', 'extinction' or 'net_diversification' (default).
+#' @param uncertainty_strategy Character string. To select the strategy used to account for uncertainty in estimates.
+#'   * `"rates_only"`: Only accounts for diversification-rate uncertainty across BAMM posterior samples. Uses ML estimates for continuous traits
+#'                     and the most frequent state/range observed across stochastic maps for categorical and biogeographic data.
+#'   * `"paired"`: Default option. Accounts for both diversification-rate and ancestral trait/range reconstruction uncertainty by pairing BAMM posterior samples with stochastic maps.
+#'                 When the number of BAMM samples and stochastic maps differ, random pairing with replacement from the smaller set is used
+#'                 so that all posterior samples and stochastic maps contribute to the analysis.
+#'   * `"full"`: Exhaustive option that accounts for trait/range- and rate- uncertainty by crossing all BAMM posterior samples with all stochastic maps.
+#'               Accounts for both diversification-rate and ancestral reconstruction uncertainty by evaluating every combination of BAMM posterior sample and stochastic map.
+#'               WARNING: This exhaustive approach can substantially increase computation time and memory requirements and is therefore recommended only for moderate-sized analyses.
+#' @param trait_maps_vs_BAMM_samples_list (Optional) List of two elements manually providing the names to associate stochastic maps (`$trait_map_ID`)
+#'   with BAMM samples (`$BAMM_posterior_sample_ID`). This is typically used to ensure the same stochastic maps and BAMM samples are used to test across multiple time-steps.
+#'   Values are the names of the objects such as "Map_X" and "BAMM_X". Default = `NULL`.
+#'     * For uncertainty_strategy == 'rates_only', the `$trait_map_ID` must be "Map_ML" as only the ML estimates of trait values/states/ranges are used.
+#'     * For uncertainty_strategy == 'paired', each pair of stochastic map and BAMM sample will be used once.
+#'     * For uncertainty_strategy == 'full', all stochastic maps will be matched with all BAMM samples.
+#'   Those may partly differ from the actual maps and BAMM samples used for the test as recorded in `$STRAPP_results$perm_data_df` because invalid maps with not enough states/ranges are discarded.
 #' @param seed Integer. Set the seed to ensure reproducibility. Default is `NULL` (a random seed is used).
 #' @param nb_permutations Integer. To select the number of random permutations to perform during the tests.
-#'   If NULL (default), all posterior samples will be used once.
-#' @param replace_samples Logical. To specify whether to allow 'replacement' (i.e., multiple use) of a posterior sample
-#'   when drawing samples used to carry out the STRAPP test. Default is `FALSE`.
+#'   If NULL (default), all BAMM posterior samples will be used once.
 #' @param alpha Numerical. Significance level to use to compute the `estimate` corresponding to the values of the test statistic used to assess significance of the test.
 #'   This does NOT affect p-values. Default is `0.05`.
 #' @param two_tailed Logical. To define the type of tests. If `TRUE` (default), tests for correlations/differences in rates will be carried out with a null hypothesis
@@ -73,19 +100,20 @@
 #'   will be computed across all pairs of states. This is a way to detect which pairs of states have significant differences in rates
 #'   if the overall test (Kruskal-Wallis) is significant. Default is `FALSE`.
 #' @param p.adjust_method A character string. Only for multinominal data (with more than two states). It specifies the type of correction to apply to the p-values
-#'  in the post hoc pairwise tests to account for multiple comparisons. See [stats::p.adjust()] for the available methods. Default is `none`.
+#'   in the post hoc pairwise tests to account for multiple comparisons. See [stats::p.adjust()] for the available methods. Default is `none`.
 #' @param return_perm_data Logical. Whether to return the stats data computed from the posterior samples for observed and permuted data in the output.
-#'  This is needed to plot the histogram of the null distribution used to assess significance of the test with [deepSTRAPP::plot_histogram_STRAPP_test_for_focal_time()].
-#'  Default is `FALSE`.
+#'   This is needed to plot the histogram of the null distribution used to assess significance of the test with [deepSTRAPP::plot_histogram_STRAPP_test_for_focal_time()].
+#'   Default is `FALSE`.
 #' @param nthreads Integer. Number of threads to use for paralleled computing of the STRAPP tests across the permutations.
 #'  The R package `parallel` must be loaded for `nthreads > 1`. Default is `1`.
 #' @param print_hypothesis Logical. Whether to print information on what test is carried out, detailing the null and alternative hypotheses,
-#'  and what significant level is used to rejected or not the null hypothesis. Default is `TRUE`.
+#'   what significant level is used to rejected or not the null hypothesis, and how uncertainty in trait estimates is handled.. Default is `TRUE`.
+#' @param extract_trait_data_melted_df Logical. Specify whether trait data (values/states/ranges) must be extracted from the mapped phylogenies
+#'   and returned in a melted data.frame. Default is `FALSE`.
 #' @param extract_diversification_data_melted_df Logical. Specify whether diversification data (regimes ID and tip rates) must be extracted from the `updated_BAMM_object`
 #'   and returned in a melted data.frame. Default is `FALSE`.
-#' @param return_updated_trait_data_with_Map Logical. Specify whether the `trait_data` extracted
-#'   for the given `focal_time` and the updated version of mapped phylogeny (`contMap`/`densityMaps`) provided as input
-#'   should be returned among the outputs. The updated `contMap`/`densityMaps` consists in cutting off branches and mapping
+#' @param return_updated_Maps Logical. Specify whether the  updated version of the mapped phylogenies (`contMap(s)`/`densityMaps`/`simmaps`),
+#'   should be returned among the outputs. The updated `contMap(s)`/`densityMaps`/`simmaps` consists in cutting off branches and mapping
 #'   that are younger than the `focal_time`. Default is `FALSE`.
 #' @param return_updated_BAMM_object Logical. Specify whether the `updated_BAMM_object` with phylogeny and
 #'   mapped diversification rates cut-off at the `focal_time` should be returned among the outputs.
@@ -99,17 +127,33 @@
 #'
 #'   ## Extract trait data
 #'
-#'   [deepSTRAPP::extract_most_likely_trait_values_for_focal_time()] extracts the most likely trait values
-#'   found along branches at the `focal_time`.
-#'   Optionally, the function can update the mapped phylogeny (`contMap`/`densityMaps`) such as
-#'   branches overlapping the `focal_time` are shorten to the `focal_time`, and
-#'   the trait mapping for the cut off branches are removed
+#'   For `uncertainty_strategy = "rates_only"`, [deepSTRAPP::extract_most_likely_trait_values_for_focal_time()] is used
+#'   to extract the most likely trait/range values found along branches at the `focal_time`.
+#'    * For continuous trait, it is the ML estimates mapped in `contMap`
+#'
+#'   For `uncertainty_strategy = "paired"` or `"full"`, [deepSTRAPP::extract_all_trait_values_for_focal_time()] is used
+#'   to extract all trait/range states/values found along branches at the `focal_time` across all stochastic maps.
+#'
+#'   Extracted trait values are stored in `STRAPP_results$trait_data_list` in a list including the extracted `$trait_data`,
+#'   `$focal_time`, `$trait_data_type`, and `$uncertainty_strategy`,
+#'   and used as input to compute STRAPP tests with [deepSTRAPP::compute_STRAPP_test_for_focal_time()].
+#'
+#'   Optionally, if `return_updated_Maps = TRUE`, these functions can update the mapped phylogenies
+#'   (`contMap(s)`/`densityMaps`/`simmaps`) provided as inputs such as
+#'   branches overlapping the `focal_time` are shorten to the `focal_time`,
+#'   and the trait mapping for the cut off branches are removed
 #'   by updating the `$tree$maps` and `$tree$mapped.edge` elements.
+#'
+#'   ## Extract trait data in a melted df
+#'
+#'   If requested (`extract_trait_data_melted_df = TRUE`), [deepSTRAPP::extract_trait_data_melted_df_for_focal_time()]
+#'   is used to format the extracted trait data (values/states/ranges) into a melted data.frame
+#'   summarizing trait data as found on the phylogeny for the `focal_time`.
 #'
 #'   ## Extract diversification data
 #'
 #'   [deepSTRAPP::update_rates_and_regimes_for_focal_time()] updates the `BAMM_object` to obtain
-#'   the diversification rates/regimes found along branches the `focal_time`.
+#'   the diversification rates/regimes found along branches the `focal_time` across all BAMM posterior samples.
 #'   Optionally, the function can update the `BAMM_object` to display a mapped phylogeny
 #'   such as branches overlapping the `focal_time` are shorten to the `focal_time`
 #'
@@ -129,28 +173,38 @@
 #'   * Multinominal trait data (More than two states): Test for differences in rates across all states with the Kruskal-Wallis H test (See [stats::kruskal.test]).
 #'     If `posthoc_pairwise_tests = TRUE`, Dunn's post hoc pairwise rank-sum tests between pairs of states will be carried out too (See [dunn.test::dunn.test]).
 #'
-#' @return The function returns a list with at least two elements.
+#' @return The function returns a list with at least seven elements.
 #'
 #'   * `$STRAPP_results` List with at least eight elements summarizing the results of the STRAPP tests.
 #'     See [deepSTRAPP::compute_STRAPP_test_for_focal_time()] for a detailed description of the output.
 #'   * `$focal_time` Integer. The time, in terms of time distance from the present, at which the data were extracted and the STRAPP test carried out.
+#'   * `$trait_data_type` Character string. Specify the type of trait data. Possible values are: "continuous", "categorical", "biogeographic".
+#'   * `$trait_data_type_for_stats` Character string. The type of trait data used to select statistical method. One of 'continuous', 'binary', or 'multinominal'.
+#'   * `$rate_type` Character string. The type of diversification rates used in the tests: 'speciation', 'extinction' or 'net_diversification'.
+#'   * `$uncertainty_strategy` Character string. The strategy used to account for uncertainty in estimates. One of 'rates_only', 'paired', or 'full'.
+#'   * `$trait_maps_vs_BAMM_samples_list` List of two elements recording the stochastic maps (`$trait_map_ID`) and BAMM samples (`$BAMM_posterior_sample_ID`) chosen for testing across time-steps.
+#'     Those may partly differ from the actual maps and BAMM samples used for the tests as recorded in `$STRAPP_results$perm_data_df` because invalid maps with not enough states/ranges are discarded.
 #'
 #'   Optional formatted output:
+#'   * `$trait_data_df` A data.frame with five columns summarizing the trait data as found on the mapped phylogenies for the `focal_time`.
+#'     See [extract_trait_data_melted_df_for_focal_time()] for a detailed description of the output.
 #'   * `$diversification_data_df` A data.frame with six columns summarizing the diversification data as found on the phylogeny for the `focal_time`.
 #'     See [extract_diversification_data_melted_df_for_focal_time()] for a detailed description of the output.
 #'
 #'   Optional data updated for the `focal_time`:
-#'   * `$updated_trait_data_with_Map` A list with four elements that contains trait data found at the `focal_time` and an updated `contMap` or `densityMaps`
-#'     that can be used as input of [deepSTRAPP::plot_contMap()] or [deepSTRAPP::plot_densityMaps_overlay()] to display a phylogeny mapped with trait values/states/ranges with branches cut at the `focal_time`.
-#'     See [deepSTRAPP::extract_most_likely_trait_values_for_focal_time()] for a detailed description of the output.
+#'   * `$updated_Maps` A list that contains the updated `contMap(s)`/`densityMaps`/`simmaps` provided as inputs,
+#'     with branches and mapping that are younger than the `focal_time` cut off.
+#'     The updated mapped phylogenies can be visualized with [deepSTRAPP::plot_contMap()] or [deepSTRAPP::plot_densityMaps_overlay()].
 #'   * `$updated_BAMM_object` An updated `BAMM_object` of class `"bammdata"` that contains rates and regimes ID found at the `focal_time`.
 #'     Can be used as input of [deepSTRAPP::plot_BAMM_rates()] to display a phylogeny mapped with diversification rates with branches cut at the `focal_time`.
 #'     See [deepSTRAPP::update_rates_and_regimes_for_focal_time()] for a detailed description of the output.
 #'
 #' @author Maël Doré
 #'
-#' @seealso [deepSTRAPP::extract_most_likely_trait_values_for_focal_time()] [deepSTRAPP::update_rates_and_regimes_for_focal_time()]
-#' [deepSTRAPP::extract_diversification_data_melted_df_for_focal_time()] [deepSTRAPP::compute_STRAPP_test_for_focal_time()]
+#' @seealso [deepSTRAPP::extract_most_likely_trait_values_for_focal_time()] [deepSTRAPP::extract_all_trait_values_for_focal_time()]
+#'  [deepSTRAPP::extract_trait_data_melted_df_for_focal_time()]
+#'  [deepSTRAPP::update_rates_and_regimes_for_focal_time()] [deepSTRAPP::extract_diversification_data_melted_df_for_focal_time()]
+#'  [deepSTRAPP::compute_STRAPP_test_for_focal_time()]
 #'
 #' For a guided tutorial on complete deepSTRAPP workflow, see the associated vignettes:
 #' * For continuous trait data: \code{vignette("deepSTRAPP_continuous_data", package = "deepSTRAPP")}
@@ -167,6 +221,7 @@
 #'  data(Ponerinae_trait_tip_data, package = "deepSTRAPP")
 #'  # Load phylogeny with old calibration
 #'  data(Ponerinae_tree_old_calib, package = "deepSTRAPP")
+#'  Ponerinae_tree_old_calib$node.label <- NULL
 #'
 #'  # Load the BAMM_object summarizing 1000 posterior samples of BAMM
 #'  data(Ponerinae_BAMM_object_old_calib, package = "deepSTRAPP")
@@ -184,63 +239,84 @@
 #'  color_scale = c("darkgreen", "limegreen", "orange", "red")
 #'
 #'  \donttest{ # (May take several minutes to run)
-#'  # Get Ancestral Character Estimates based on a Brownian Motion model
-#'  # To obtain values at internal nodes
-#'  Ponerinae_ACE <- phytools::fastAnc(tree = Ponerinae_tree_old_calib, x = Ponerinae_cont_tip_data)
 #'
-#'  # Run a Stochastic Mapping based on a Brownian Motion model
-#'  # to interpolate values along branches and obtain a "contMap" object
-#'  Ponerinae_contMap <- phytools::contMap(Ponerinae_tree_old_calib, x = Ponerinae_cont_tip_data,
-#'                                         res = 100, # Number of time steps
-#'                                         plot = FALSE)
-#'  # Plot contMap = stochastic mapping of continuous trait
-#'  plot_contMap(contMap = Ponerinae_contMap,
-#'              color_scale = color_scale)
+#'  # Map trait evolution across multiple simulations (i.e., continuous stochastic maps)
+#'  Ponerinae_cont_data_old_calib <- prepare_trait_data(
+#'     tip_data = Ponerinae_cont_tip_data,
+#'     trait_data_type = "continuous",
+#'     phylo = Ponerinae_tree_old_calib,
+#'     seed = 1234,
+#'     evolutionary_models = "BM",
+#'     plot_map = FALSE,
+#'     run_stochastic_maps = TRUE,
+#'     nb_simulations = 100, # Run 100 simulations of trait evolution
+#'     verbose = TRUE)
+#'
+#'  ## Load directly trait data output
+#'  data(Ponerinae_cont_data_old_calib, package = "deepSTRAPP")
+#'  ## This dataset is only available in development versions installed from GitHub.
+#'  # It is not available in CRAN versions.
+#'  # Use remotes::install_github(repo = "MaelDore/deepSTRAPP") to get the latest development version.
+#'
+#'  # Plot contMap = ML estimates of continuous trait evolution
+#'  plot_contMap(contMap = Ponerinae_cont_data_old_calib$contMap,
+#'               color_scale = color_scale)
 #'
 #'  ## Set focal time to 10 Mya
 #'  focal_time <- 10
 #'
 #'  ## Run deepSTRAPP on net diversification rates for focal time = 10 Mya.
-#'
 #'  deepSTRAPP_output <- run_deepSTRAPP_for_focal_time(
-#'    contMap = Ponerinae_contMap,
-#'    ace = Ponerinae_ACE,
-#'    tip_data = Ponerinae_cont_tip_data,
-#'    trait_data_type = "continuous",
-#'    BAMM_object = Ponerinae_BAMM_object_old_calib,
-#'    focal_time = focal_time,
-#'    rate_type = "net_diversification",
-#'    return_perm_data = TRUE,
-#'    extract_diversification_data_melted_df = TRUE,
-#'    return_updated_trait_data_with_Map = TRUE,
-#'    return_updated_BAMM_object = TRUE)
+#'     # Include contMap to plot ML estimates
+#'     contMap = Ponerinae_cont_data_old_calib$contMap,
+#'     # Include contMaps to extract trait estimates across all simulations
+#'     contMaps = Ponerinae_cont_data_old_calib$contMaps,
+#'     ace = Ponerinae_cont_data_old_calib$ace,
+#'     tip_data = Ponerinae_cont_tip_data,
+#'     trait_data_type = "continuous",
+#'     BAMM_object = Ponerinae_BAMM_object_old_calib,
+#'     rate_type = "net_diversification",
+#'     focal_time = focal_time,
+#'     uncertainty_strategy = "paired",
+#'     seed = 1234,
+#'     return_perm_data = TRUE,
+#'     extract_trait_data_melted_df = TRUE,
+#'     extract_diversification_data_melted_df = TRUE,
+#'     return_updated_Maps = TRUE,
+#'     return_updated_BAMM_object = TRUE)
 #'
 #'  ## Explore output
-#'  str(deepSTRAPP_output, max.level = 1)
+#'  str(deepSTRAPP_output, max.level = 2)
 #'
 #'  # Access deepSTRAPP results
 #'  str(deepSTRAPP_output$STRAPP_results)
 #'
 #'  # Access trait data
-#'  head(deepSTRAPP_output$updated_trait_data_with_Map$trait_data)
+#'  head(deepSTRAPP_output$trait_data_df)
+#'  # Trait data includes 100 simulations (i.e., stochastic maps)
+#'  table(deepSTRAPP_output$trait_data_df$Map_ID)
 #'
 #'  # Access the diversification data in a melted data.frame
 #'  head(deepSTRAPP_output$diversification_data_df)
+#'  # Diversification data includes 1000 BAMM posteriors
+#'  table(deepSTRAPP_output$diversification_data_df$BAMM_sample_ID)
 #'
-#'  # Plot rates vs. trait values across branches
+#'  # Plot rates vs. trait values across branches for
+#'  # all pairs of stochastic maps and BAMM posterior pairs
 #'  plot_rates_vs_trait_data_for_focal_time(deepSTRAPP_output)
 #'
 #'  # Plot updated contMap
-#'  plot_contMap(deepSTRAPP_output$updated_trait_data_with_Map$contMap)
+#'  plot_contMap(deepSTRAPP_output$updated_Maps$contMap)
 #'  ape::nodelabels(text =
-#'    deepSTRAPP_output$updated_trait_data_with_Map$contMap$tree$initial_nodes_ID)
+#'    deepSTRAPP_output$updated_Maps$contMap$tree$initial_nodes_ID)
 #'
 #'  # Plot diversification rates on updated phylogeny
 #'  plot_BAMM_rates(deepSTRAPP_output$updated_BAMM_object, labels = TRUE)
 #'
 #'  # Plot histogram of test stats
 #'  plot_histogram_STRAPP_test_for_focal_time(
-#'     deepSTRAPP_outputs = deepSTRAPP_output) }
+#'    deepSTRAPP_outputs = deepSTRAPP_output)
+#'  }
 #'
 #'  # ----- Example 2: Categorical trait ----- #
 #'
@@ -275,7 +351,7 @@
 #'     phylo = Ponerinae_tree_old_calib,
 #'     trait_data_type = "categorical",
 #'     colors_per_levels = colors_per_states,
-#'     evolutionary_models = "ARD", # Use default ARD model
+#'     evolutionary_models = "ER", # Use default ER model
 #'     nb_simulations = 100, # Reduce number of simulations to save time
 #'     seed = 1234, # Seet seed for reproducibility
 #'     return_best_model_fit = TRUE,
@@ -292,17 +368,21 @@
 #'  ## Run deepSTRAPP on net diversification rates for focal time = 10 Mya.
 #'
 #'  deepSTRAPP_output <- run_deepSTRAPP_for_focal_time(
-#'      densityMaps = Ponerinae_cat_data_old_calib$densityMaps,
-#'      ace = Ponerinae_cat_data_old_calib$ace,
+#'      densityMaps = Ponerinae_cat_3lvl_data_old_calib$densityMaps,
+#'      # Inform the nb of simulations to reconstruct state distribution across stochastic maps
+#'      nb_simulations = 100,
+#'      ace = Ponerinae_cat_3lvl_data_old_calib$ace,
 #'      tip_data = Ponerinae_cat_3lvl_tip_data,
 #'      trait_data_type = "categorical",
+#'      rate_type = "net_diversification",
 #'      BAMM_object = Ponerinae_BAMM_object_old_calib,
 #'      focal_time = focal_time,
-#'      rate_type = "net_diversification",
+#'      uncertainty_strategy = "paired",
 #'      posthoc_pairwise_tests = TRUE,
 #'      return_perm_data = TRUE,
+#'      extract_trait_data_melted_df = TRUE,
 #'      extract_diversification_data_melted_df = TRUE,
-#'      return_updated_trait_data_with_Map = TRUE,
+#'      return_updated_Maps = TRUE,
 #'      return_updated_BAMM_object = TRUE)
 #'
 #'  ## Explore output
@@ -315,11 +395,17 @@
 #'  # Results for posthoc pairwise Dunn's tests
 #'  deepSTRAPP_output$STRAPP_results$posthoc_pairwise_tests$summary_df
 #'
-#'  # Access trait data
-#'  head(deepSTRAPP_output$updated_trait_data_with_Map$trait_data)
+#'  # Access trait data in a melted data.frame
+#'  # Because trait data was provided as densityMaps and not simmaps,
+#'  # the stochastic maps are dummy maps generated to reproduce
+#'  # the frequency of states as recorded in the densityMaps.
+#'  head(deepSTRAPP_output$trait_data_df)
+#'  table(deepSTRAPP_output$trait_data_df$Map_ID)
 #'
 #'  # Access the diversification data in a melted data.frame
 #'  head(deepSTRAPP_output$diversification_data_df)
+#'  # Diversification data includes 1000 BAMM posteriors
+#'  table(deepSTRAPP_output$diversification_data_df$BAMM_sample_ID)
 #'
 #'  # Plot rates vs. states across branches
 #'  plot_rates_vs_trait_data_for_focal_time(
@@ -327,7 +413,7 @@
 #'      colors_per_levels = colors_per_states)
 #'
 #'  # Plot updated densityMaps cut at focal time
-#'  plot_densityMaps_overlay(deepSTRAPP_output$updated_trait_data_with_Map$densityMaps)
+#'  plot_densityMaps_overlay(deepSTRAPP_output$updated_Maps$densityMaps)
 #'
 #'  # Plot diversification rates on updated phylogeny
 #'  plot_BAMM_rates(BAMM_object = deepSTRAPP_output$updated_BAMM_object, legend = TRUE, labels = FALSE,
@@ -375,91 +461,101 @@
 #'
 #'  \donttest{ # (May take several minutes to run)
 #'  ## Run evolutionary models
-#'  Ponerinae_biogeo_data <- prepare_trait_data(
-#'      tip_data = Ponerinae_NO_data,
-#'      trait_data_type = "biogeographic",
-#'      phylo = Ponerinae_tree_old_calib,
-#'      evolutionary_models = "DEC+J", # Default = "DEC" for biogeographic
-#'      BioGeoBEARS_directory_path = tempdir(), # Ex: "./BioGeoBEARS_directory/"
-#'      keep_BioGeoBEARS_files = FALSE,
-#'      prefix_for_files = "Ponerinae_old_calib",
-#'      max_range_size = 2,
-#'      split_multi_area_ranges = TRUE, # Set to TRUE to display the two outputs
-#'      nb_simulations = 100, # Reduce to save time (Default = '1000')
-#'      colors_per_levels = colors_per_ranges,
-#'      return_model_selection_df = TRUE,
-#'      verbose = TRUE) }
-#'
-#'  # Load directly output
-#'  data(Ponerinae_biogeo_data_old_calib, package = "deepSTRAPP")
-#'
-#'  ## Explore output
-#'  str(Ponerinae_biogeo_data_old_calib, 1)
-#'
-#'  ## Set focal time to 10 Mya
-#'  focal_time <- 10
-#'
-#'  \donttest{ # (May take several minutes to run)
-#'  ## Run deepSTRAPP on net diversification rates for focal time = 10 Mya.
-#'
-#'  deepSTRAPP_output <- run_deepSTRAPP_for_focal_time(
-#'     densityMaps = Ponerinae_biogeo_data_old_calib$densityMaps,
-#'     ace = Ponerinae_biogeo_data_old_calib$ace,
+#' Ponerinae_biogeo_data <- prepare_trait_data(
 #'     tip_data = Ponerinae_NO_data,
 #'     trait_data_type = "biogeographic",
-#'     BAMM_object = Ponerinae_BAMM_object_old_calib,
-#'     focal_time = focal_time,
-#'     rate_type = "net_diversification",
-#'     return_perm_data = TRUE,
-#'     extract_diversification_data_melted_df = TRUE,
-#'     return_updated_trait_data_with_Map = TRUE,
-#'     return_updated_BAMM_object = TRUE)
+#'     phylo = Ponerinae_tree_old_calib,
+#'     evolutionary_models = "DEC+J", # Default = "DEC" for biogeographic
+#'     BioGeoBEARS_directory_path = tempdir(), # Ex: "./BioGeoBEARS_directory/"
+#'     keep_BioGeoBEARS_files = FALSE,
+#'     prefix_for_files = "Ponerinae_old_calib",
+#'     max_range_size = 2,
+#'     split_multi_area_ranges = TRUE, # Set to TRUE to display the two outputs
+#'     nb_simulations = 100, # Reduce to save time (Default = '1000')
+#'     colors_per_levels = colors_per_ranges,
+#'     return_model_selection_df = TRUE,
+#'     verbose = TRUE) }
 #'
-#'  ## Explore output
-#'  str(deepSTRAPP_output, max.level = 1)
+#' # Load directly output
+#' data(Ponerinae_biogeo_data_old_calib, package = "deepSTRAPP")
 #'
-#'  # Access deepSTRAPP results
-#'  str(deepSTRAPP_output$STRAPP_results, max.level = 2)
-#'  # Result for Mann-Whitney-Wilcoxon test
-#'  deepSTRAPP_output$STRAPP_results[1:3]
+#' ## Explore output
+#' str(Ponerinae_biogeo_data_old_calib, 1)
 #'
-#'  # Access trait data
-#'  head(deepSTRAPP_output$updated_trait_data_with_Map$trait_data)
+#' ## Set focal time to 10 Mya
+#' focal_time <- 10
 #'
-#'  # Access the diversification data in a melted data.frame
-#'  head(deepSTRAPP_output$diversification_data_df)
+#' \donttest{ # (May take several minutes to run)
+#' ## Run deepSTRAPP on net diversification rates for focal time = 10 Mya.
 #'
-#'  # Plot rates vs. ranges across branches
-#'  plot_rates_vs_trait_data_for_focal_time(
-#'      deepSTRAPP_outputs = deepSTRAPP_output,
-#'      colors_per_levels = colors_per_ranges)
+#' deepSTRAPP_output <- run_deepSTRAPP_for_focal_time(
+#'    densityMaps = Ponerinae_biogeo_data_old_calib$densityMaps,
+#'    nb_simulations = 100,
+#'    ace = Ponerinae_biogeo_data_old_calib$ace,
+#'    tip_data = Ponerinae_NO_data,
+#'    trait_data_type = "biogeographic",
+#'    rate_type = "net_diversification",
+#'    BAMM_object = Ponerinae_BAMM_object_old_calib,
+#'    focal_time = focal_time,
+#'    uncertainty_strategy = "paired",
+#'    return_perm_data = TRUE,
+#'    extract_trait_data_melted_df = TRUE,
+#'    extract_diversification_data_melted_df = TRUE,
+#'    return_updated_Maps = TRUE,
+#'    return_updated_BAMM_object = TRUE)
 #'
-#'  # Plot updated densityMaps cut at focal time
-#'  plot_densityMaps_overlay(deepSTRAPP_output$updated_trait_data_with_Map$densityMaps)
+#' ## Explore output
+#' str(deepSTRAPP_output, max.level = 1)
 #'
-#'  # Plot diversification rates on updated phylogeny
-#'  plot_BAMM_rates(BAMM_object = deepSTRAPP_output$updated_BAMM_object, legend = TRUE, labels = FALSE,
-#'     colorbreaks = deepSTRAPP_output$updated_BAMM_object$initial_colorbreaks$net_diversification)
+#' # Access deepSTRAPP results
+#' str(deepSTRAPP_output$STRAPP_results, max.level = 2)
+#' # Result for Mann-Whitney-Wilcoxon test
+#' deepSTRAPP_output$STRAPP_results[1:3]
 #'
-#'  # Plot histogram of Mann-Whitney-Wilcoxon test
-#'  plot_histogram_STRAPP_test_for_focal_time(
-#'     STRAPP_results = deepSTRAPP_output$STRAPP_results) }
-#' }
+#' # Access trait data
+#' # Because trait data was provided as densityMaps and not simmaps,
+#' # the stochastic maps are dummy maps generated to reproduce
+#' # the frequency of ranges as recorded in the densityMaps.
+#'  head(deepSTRAPP_output$trait_data_df)
+#'
+#' # Access the diversification data in a melted data.frame
+#' head(deepSTRAPP_output$diversification_data_df)
+#'
+#' # Plot rates vs. ranges across branches
+#' plot_rates_vs_trait_data_for_focal_time(
+#'     deepSTRAPP_outputs = deepSTRAPP_output,
+#'     colors_per_levels = colors_per_ranges)
+#'
+#' # Plot updated densityMaps cut at focal time
+#' plot_densityMaps_overlay(deepSTRAPP_output$updated_Maps$densityMaps)
+#'
+#' # Plot diversification rates on updated phylogeny
+#' plot_BAMM_rates(BAMM_object = deepSTRAPP_output$updated_BAMM_object, legend = TRUE, labels = FALSE,
+#'    colorbreaks = deepSTRAPP_output$updated_BAMM_object$initial_colorbreaks$net_diversification)
+#'
+#' # Plot histogram of Mann-Whitney-Wilcoxon test
+#' plot_histogram_STRAPP_test_for_focal_time(
+#'   deepSTRAPP_outputs = deepSTRAPP_output) }
+#'}
 #'
 
 
 run_deepSTRAPP_for_focal_time <- function (contMap = NULL,
+                                           contMaps = NULL,
                                            densityMaps = NULL,
+                                           simmaps = NULL,
+                                           nb_simulations = NULL,
                                            ace = NULL,
                                            tip_data = NULL,
                                            trait_data_type,
-                                           BAMM_object,
-                                           focal_time,
                                            keep_tip_labels = TRUE,
+                                           BAMM_object,
                                            rate_type = "net_diversification",
+                                           focal_time,
+                                           uncertainty_strategy = "paired",
+                                           trait_maps_vs_BAMM_samples_list = NULL,
                                            seed = NULL,
                                            nb_permutations = NULL,
-                                           replace_samples = FALSE,
                                            alpha = 0.05,
                                            two_tailed = TRUE,
                                            one_tailed_hypothesis = NULL,
@@ -468,14 +564,20 @@ run_deepSTRAPP_for_focal_time <- function (contMap = NULL,
                                            return_perm_data = FALSE,
                                            nthreads = 1,
                                            print_hypothesis = TRUE,
+                                           extract_trait_data_melted_df = FALSE,
                                            extract_diversification_data_melted_df = FALSE,
-                                           return_updated_trait_data_with_Map = FALSE,
+                                           return_updated_Maps = FALSE,
                                            return_updated_BAMM_object = FALSE,
                                            verbose = TRUE)
 {
   ### Check input validity
   {
-    ## Checks should all already be included in the wrapped functions
+    ## uncertainty_strategy
+    # uncertainty_strategy must be either "rates_only", "paired", or "full"
+    if (!uncertainty_strategy %in% c("rates_only", "paired", "full"))
+    {
+      stop(paste0("'uncertainty_strategy' must be either 'rates_only', 'paired', or 'full'."))
+    }
 
     ## Convert tip_data into vector of character strings if needed
     if (any(c(is.matrix(tip_data), is.data.frame(tip_data))) & trait_data_type == "biogeographic")
@@ -516,24 +618,236 @@ run_deepSTRAPP_for_focal_time <- function (contMap = NULL,
         tip_data[i] <- range_i
       }
     }
+
+    ### Other checks should all already be included in the wrapped functions, but perform them here to stop the process early-on
+
+    ## Check that what is provided contMap(s) OR densityMaps/simmaps match the trait_data_type
+    if ((!is.null(contMap) & trait_data_type != "continuous"))
+    {
+      stop(paste0("You provided a 'contMap' but selected '",trait_data_type,"' as 'trait_data_type'. contMaps are used to map continuous traits.\n",
+                  "If you wish to extract trait values for a continuous trait, provide 'trait_data_type = continuous'.\n",
+                  "If you wish to extract trait states/ranges for ",trait_data_type," data, provide 'densityMaps' or 'simmaps' as input instead of a 'contMap'"))
+    }
+    if ((!is.null(contMaps) & trait_data_type != "continuous"))
+    {
+      stop(paste0("You provided 'contMaps' but selected '",trait_data_type,"' as 'trait_data_type'. contMaps are used to map continuous traits.\n",
+                  "If you wish to extract trait values for a continuous trait, provide 'trait_data_type = continuous'.\n",
+                  "If you wish to extract trait states/ranges for ",trait_data_type," data, provide 'densityMaps' or 'simmaps' as input instead of 'contMaps'"))
+    }
+    if (((is.null(contMap) & is.null(contMaps)) & trait_data_type == "continuous"))
+    {
+      stop(paste0("You selected 'trait_data_type = continuous' but did not provide 'contMap' or 'contMaps' as input.\n",
+                  "contMap(s) are needed to extract continuous trait data.\n",
+                  "See ?deepSTRAPP::prepare_trait_data(), ?phytools::contMap(), ?contsimmap::make.contsimmap(), and ?deepSTRAPP::convert_contsimmap_to_contMaps_list() to learn how to generate those objects."))
+    }
+
+    if ((!is.null(densityMaps) & !(trait_data_type %in% c("categorical", "biogeographic"))))
+    {
+      stop(paste0("You provided 'densityMaps' but selected '",trait_data_type,"' as 'trait_data_type'. densityMaps are used to map categorical or biogeographic data.\n",
+                  "If you wish to extract trait states/ranges for categorical or biogeographic data, provide 'trait_data_type = categorical' or 'trait_data_type = biogeographic' accordingly.\n",
+                  "If you wish to extract trait values for a continuous trait, provide 'contMaps' as input instead of 'densityMaps'.\n"))
+    }
+    if ((!is.null(simmaps) & !(trait_data_type %in% c("categorical", "biogeographic"))))
+    {
+      stop(paste0("You provided 'simmaps' but selected '",trait_data_type,"' as 'trait_data_type'. simmaps are used to map categorical or biogeographic data.\n",
+                  "If you wish to extract trait states/ranges for categorical or biogeographic data, provide 'trait_data_type = categorical' or 'trait_data_type = biogeographic' accordingly.\n",
+                  "If you wish to extract trait values for a continuous trait, provide 'contMaps' as input instead of 'simmaps'.\n"))
+    }
+    if ((is.null(densityMaps) & is.null(simmaps)) & (trait_data_type %in% c("categorical", "biogeographic")))
+    {
+      stop(paste0("You selected 'trait_data_type = ",trait_data_type,"' but did not provide 'densityMaps' or 'simmaps' as input.\n",
+                  "'simmaps' are needed to extract state/range data from stochastic maps.\n",
+                  "Alternatively, 'densityMaps' and 'nb_simulations' can be provided to reconstruct states/ranges from posterior probabilities across dummy stochastic maps."))
+    }
+
+    ## BAMM_object
+    # BAMM_object must be a 'bammdata' object
+    if (!("bammdata" %in% class(BAMM_object)))
+    {
+      stop("'BAMM_object' must have the 'bammdata' class. See ?BAMMtools::getEventData() and ?deepSTRAPP::update_rates_and_regimes_for_focal_time() to learn how to generate those objects.")
+    }
+    # Number of posterior sample data must be equal between $tipStates, $tipLambda and $tipMu
+    posterior_samples_length <- c(length(BAMM_object$tipStates), length(BAMM_object$tipLambda), length(BAMM_object$tipMu))
+    if (length(unique(posterior_samples_length)) != 1)
+    {
+      stop("Number of posterior samples in 'BAMM_object' must be equal between $tipStates, $tipLambda and $tipMu.\nPlease check the structure of your 'BAMM_object' with str(BAMM_object, 1)")
+    }
+    # Number of branches in each posterior sample must be equal within $tipStates, $tipLambda and $tipMu
+    tipStates_data_length <- unlist(lapply(X = BAMM_object$tipStates, FUN = length))
+    if (length(unique(tipStates_data_length)) != 1)
+    {
+      stop("Number of branches in each posterior sample of 'BAMM_object$tipStates' must be equal.\nPlease check the structure of your 'BAMM_object' with str(BAMM_object$tipStates, 1)")
+    }
+    tipLambda_data_length <- unlist(lapply(X = BAMM_object$tipLambda, FUN = length))
+    if (length(unique(tipLambda_data_length)) != 1)
+    {
+      stop("Number of branches in each posterior sample of 'BAMM_object$tipLambda' must be equal.\nPlease check the structure of your 'BAMM_object' with str(BAMM_object$tipLambda, 1)")
+    }
+    tipMu_data_length <- unlist(lapply(X = BAMM_object$tipMu, FUN = length))
+    if (length(unique(tipMu_data_length)) != 1)
+    {
+      stop("Number of branches in each posterior sample of 'BAMM_object$tipMu' must be equal.\nPlease check the structure of your 'BAMM_object' with str(BAMM_object$tipMu, 1)")
+    }
+    # Number of branches in each posterior sample must be equal between $tipStates, $tipLambda and $tipMu
+    posterior_samples_data_length <- c(unique(tipStates_data_length), unique(tipLambda_data_length), unique(tipMu_data_length))
+    if (length(unique(posterior_samples_data_length)) != 1)
+    {
+      stop(paste0("Number of branches in posterior samples of 'BAMM_object$tipMu', 'BAMM_object$tipLambda', and 'BAMM_object$tipMu' must be equal.\n",
+                  "There respective number of branches is: ",paste(posterior_samples_data_length, collapse = ", "),".\n",
+                  "Please check the structure of your 'BAMM_object' with str(BAMM_object, 2)"))
+    }
+
+    ## rate_type must be either "speciation", "extinction" or "net_diversification"
+    if (!(rate_type %in% c("speciation", "extinction", "net_diversification")))
+    {
+      stop("'rate_type' can only be 'speciation', 'extinction', or 'net_diversification'.")
+    }
+
+    ## uncertainty_strategy
+    # uncertainty_strategy must be either "rates_only", "paired", or "full"
+    if (!uncertainty_strategy %in% c("rates_only", "paired", "full"))
+    {
+      stop(paste0("'uncertainty_strategy' must be either 'rates_only', 'paired', or 'full'."))
+    }
+    # Ensure the inputs are compatible with the requested 'uncertainty_strategy'
+    if ((uncertainty_strategy %in% c("paired", "full")) & (trait_data_type == "continuous") & is.null(contMaps))
+    {
+      stop(paste0("You requested to compute a STRAPP test with the '",uncertainty_strategy,"' strategy to account for uncertainty in estimates.\n",
+                  "Yet you did not provide a 'contMaps' as input. Multiple stochastic maps provided as 'contMaps' are required to perform the ",uncertainty_strategy," strategy.\n",
+                  "For the 'rates_only' strategy, only ML estimates of trait values/states/ranges must be provided.\n",
+                  "See ?deepSTRAPP::prepare_trait_data() and contsimmap::make.contsimmap() to learn how to obtain such objects."))
+    }
+
+    ## trait_maps_vs_BAMM_samples_list
+    if (!is.null(trait_maps_vs_BAMM_samples_list))
+    {
+      if (!all(names(trait_maps_vs_BAMM_samples_list) == c("trait_map_ID", "BAMM_posterior_sample_ID")))
+      {
+        stop("'trait_maps_vs_BAMM_samples_list' must be a list of two elements named 'trait_map_ID' and 'BAMM_posterior_sample_ID'.")
+      }
+      if (!all(grepl(pattern = "^BAMM_", x = trait_maps_vs_BAMM_samples_list$BAMM_posterior_sample_ID)))
+      {
+        stop("'trait_maps_vs_BAMM_samples_list$BAMM_posterior_sample_ID' must be a character vector with all values starting with 'BAMM_' to assign BAMM samples for testing.")
+      }
+      if (uncertainty_strategy == "rates_only")
+      {
+        if (!all(trait_maps_vs_BAMM_samples_list$trait_map_ID == "Map_ML"))
+        {
+          stop("For uncertainty_strategy = 'rates_only', 'trait_maps_vs_BAMM_samples_list$trait_map_ID' must be a unique character string = 'Map_ML' to reflect the use of the ML trait estimates for all tests.")
+        }
+      } else {
+        if ((!all(grepl(pattern = "^Map_", x = trait_maps_vs_BAMM_samples_list$trait_map_ID))) & (!all(grepl(pattern = "^Dummy_map_", x = trait_maps_vs_BAMM_samples_list$trait_map_ID))))
+        {
+          stop(paste0("For uncertainty_strategy = ",uncertainty_strategy,", 'trait_maps_vs_BAMM_samples_list$trait_map_ID' must be a character vector with all values starting with 'Map_' or 'Dummy_map_' to assign trait stochastic maps for testing."))
+        }
+      }
+      if ((uncertainty_strategy == "paired") & (length(trait_maps_vs_BAMM_samples_list$trait_map_ID) != length(trait_maps_vs_BAMM_samples_list$BAMM_posterior_sample_ID)))
+      {
+        stop(paste0("For uncertainty_strategy = 'paired', 'trait_maps_vs_BAMM_samples_list$trait_map_ID' and 'trait_maps_vs_BAMM_samples_list$BAMM_posterior_sample_ID' must be the same length, so they can be paired."))
+      }
+      if (!is.null(nb_permutations))
+      {
+        warning(paste0("'nb_permutations' is ignored when the pairing between stochastic maps and BAMM samples is provided manually with 'trait_maps_vs_BAMM_samples_list'."))
+      }
+    }
+
+    ## seed
+    if (!is.null(seed))
+    {
+      if (!is.numeric(seed))
+      {
+        stop(paste0("'seed' must be an integer."))
+      }
+    }
+
+    ## alpha
+    # alpha must be set between 0 and 1.
+    if ((alpha < 0) | (alpha > 1))
+    {
+      stop(paste0("'alpha' reflects the quantile used to extract 'estimate' values and assess significance of the test. It must be between 0 and 1.\n",
+                  "Current value of 'alpha' is ",alpha,"."))
+    }
+
+    ## p.adjust_method. Check that it is one of the available option. See [stats::p.adjust()] for the available methods.
+    if (!(p.adjust_method %in% c("none", "holm", "hochberg", "hommel", "bonferroni", "BH", "BY", "fdr")))
+    {
+      stop(paste0("'p.adjust_method' specifies the type of correction to apply to the p-values. See ?stats::p.adjust for the available methods.\n"))
+    }
+
+    ## nthreads
+    if (nthreads > 1) {
+      if (!"package:parallel" %in% search())
+      {
+        stop("Please load package 'parallel' for using the multi-thread option\n")
+      }
+    }
   }
 
   # ------ Extract trait data ------ #
 
   if (verbose)
   {
-    cat(paste0(Sys.time(), " - Extract trait data for focal-time = ", focal_time, "\n\n"))
+    cat(paste0("\n", Sys.time(), " - Extract trait data for focal-time = ", focal_time, "\n"))
   }
 
-  trait_data_list <- extract_most_likely_trait_values_for_focal_time(
-    contMap = contMap,
-    densityMaps = densityMaps,
-    ace = ace,
-    tip_data = tip_data,
-    trait_data_type = trait_data_type,
-    focal_time = focal_time,
-    update_map = return_updated_trait_data_with_Map,
-    keep_tip_labels = keep_tip_labels)
+  if (uncertainty_strategy == "rates_only")
+  {
+    trait_data_list <- extract_most_likely_trait_values_for_focal_time(
+      contMap = contMap,
+      contMaps = contMaps,
+      densityMaps = densityMaps,
+      simmaps = simmaps,
+      ace = ace,
+      tip_data = tip_data,
+      trait_data_type = trait_data_type,
+      focal_time = focal_time,
+      update_Map = return_updated_Maps,
+      keep_tip_labels = keep_tip_labels)
+  } else {
+    trait_data_list <- extract_all_trait_values_for_focal_time(
+      contMaps = contMaps,
+      densityMaps = densityMaps,
+      simmaps = simmaps,
+      nb_simulations = nb_simulations,
+      tip_data = tip_data,
+      trait_data_type = trait_data_type,
+      focal_time = focal_time,
+      update_Map = return_updated_Maps,
+      keep_tip_labels = keep_tip_labels)
+
+    # Special case when contMap is provided and return_updated_Maps = TRUE
+    # Need to update contMap too and add it to the output
+    if (!is.null(contMap) & return_updated_Maps)
+    {
+      ## Cut contMap$tree at focal time and update trait mapping in contMap$tree$maps and contMap$tree$mapped.edge
+      updated_contMap <- cut_contMap_for_focal_time(contMap = contMap, focal_time = focal_time, keep_tip_labels = keep_tip_labels)
+      trait_data_list$contMap <- updated_contMap
+    }
+  }
+
+  # ------ Separate information to compute STRAPP tests from updated Maps ------ #
+
+  # Extract updated maps
+  if (return_updated_Maps)
+  {
+    updated_Maps <- trait_data_list[intersect(y = c("contMap", "contMaps", "densityMaps", "simmaps"), x = names(trait_data_list))]
+  }
+
+  trait_data_list <- trait_data_list[c("trait_data", "focal_time", "trait_data_type")]
+  trait_data_list$uncertainty_strategy <- uncertainty_strategy
+
+  # ------ Format trait data in a melted df ------ #
+
+  if (extract_trait_data_melted_df)
+  {
+    if (verbose)
+    {
+      cat(paste0(Sys.time(), " - Convert trait data in a melted data.frame\n"))
+    }
+
+    trait_data_df <- extract_trait_data_melted_df_for_focal_time(
+      trait_data_list = trait_data_list)
+  }
 
   # ------ Extract diversification data ------ #
 
@@ -577,9 +891,10 @@ run_deepSTRAPP_for_focal_time <- function (contMap = NULL,
     BAMM_object = updated_BAMM_object,
     trait_data_list = trait_data_list,
     rate_type = rate_type,
+    uncertainty_strategy = uncertainty_strategy,
+    trait_maps_vs_BAMM_samples_list = trait_maps_vs_BAMM_samples_list,
     seed = seed,
     nb_permutations = nb_permutations,
-    replace_samples = replace_samples,
     alpha = alpha,
     two_tailed = two_tailed,
     one_tailed_hypothesis = one_tailed_hypothesis,
@@ -593,7 +908,18 @@ run_deepSTRAPP_for_focal_time <- function (contMap = NULL,
 
   deepSTRAPP_output <- list(
     STRAPP_results = STRAPP_results,
-    focal_time = focal_time)
+    focal_time = focal_time,
+    trait_data_type = trait_data_type,
+    trait_data_type_for_stats = STRAPP_results$trait_data_type_for_stats,
+    rate_type = rate_type,
+    uncertainty_strategy = uncertainty_strategy,
+    trait_maps_vs_BAMM_samples_list = STRAPP_results$trait_maps_vs_BAMM_samples_list)
+
+  # Add the melted df of trait data if requested
+  if (extract_trait_data_melted_df)
+  {
+    deepSTRAPP_output$trait_data_df <- trait_data_df
+  }
 
   # Add the melted df of diversification data if requested
   if (extract_diversification_data_melted_df)
@@ -601,10 +927,10 @@ run_deepSTRAPP_for_focal_time <- function (contMap = NULL,
     deepSTRAPP_output$diversification_data_df <- diversification_data_df
   }
 
-  # Add the updated trait data with updated contMap/densityMaps if requested
-  if (return_updated_trait_data_with_Map)
+  # Add the updated mapped phylogenies if requested
+  if (return_updated_Maps)
   {
-    deepSTRAPP_output$updated_trait_data_with_Map <- trait_data_list
+    deepSTRAPP_output$updated_Maps <- updated_Maps
   }
 
   # Add the updated BAMM object if requested
