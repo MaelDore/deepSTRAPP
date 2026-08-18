@@ -55,10 +55,11 @@
 #'   use `cowplot::plot_grid(plotlist = output_list[[i]])`.
 #'
 #'   Each plot also displays summary statistics for the STRAPP test associated with the data displayed.
-#'   * The quantile of null statistic distribution at the significant threshold used to define test significance. This is the value found on the red dashed line.
+#'   * QX% = The quantile of null statistic distribution at the significant threshold used to define test significance. This is the value found on the red dashed line.
 #'     The test will be considered significant (i.e., the null hypothesis is rejected) if this value is higher than zero (the black dashed line).
-#'   * The p-value of the STRAPP test which correspond the proportion of cases in which the statistics was lower than expected under the null hypothesis
+#'   * P-value = The p-value of the STRAPP test which correspond the proportion of cases in which the statistics was lower than expected under the null hypothesis
 #'     (i.e., the proportion of the histogram found below / on the left-side of the black dashed line).
+#'   * N = The number of test statistics in the null distribution.
 #'
 #'   If a `PDF_file_path` is provided, the function will also generate a PDF file of the plots with one page per `$time_steps`.
 #'   For post hoc tests, this will save the multifaceted plots.
@@ -121,6 +122,7 @@
 #'     # nb_time_steps = nb_time_steps,
 #'     time_range = time_range,
 #'     time_step_duration = time_step_duration,
+#'     uncertainty_strategy = "rates_only",
 #'     return_perm_data = TRUE,
 #'     extract_trait_data_melted_df = TRUE,
 #'     extract_diversification_data_melted_df = TRUE,
@@ -212,6 +214,7 @@
 #'     time_range = time_range,
 #'     time_step_duration = time_step_duration,
 #'     rate_type = "net_diversification",
+#'     uncertainty_strategy = "paired",
 #'     seed = 1234, # Set for reproducibility
 #'     alpha = 0.10, # Select a generous level of significance for the sake of the example
 #'     posthoc_pairwise_tests = TRUE,
@@ -421,11 +424,13 @@ plot_histograms_STRAPP_tests_over_time <- function (
       STRAPP_results_i <- deepSTRAPP_outputs$STRAPP_results_over_time[[i]]
 
       # Extract name of the statistic
-      stat_name <- names(STRAPP_results_i$perm_data_df)[4]
+      stat_name <- names(STRAPP_results_i$perm_data_df)[ncol(STRAPP_results_i$perm_data_df)]
       # Extract null distribution of the statistic
       stat_null_distri <- STRAPP_results_i$perm_data_df[,stat_name]
       # Extract quantile of the critical threshold
       estimate_quantile <- names(STRAPP_results_i$estimate)
+      # Extract the number of stats in the null distribution
+      nb_stats <- nrow(STRAPP_results_i$perm_data_df)
 
       # Build ggplot object
       ggplot_histo_i <- ggplot2::ggplot(data = as.data.frame(stat_null_distri)) +
@@ -447,7 +452,8 @@ plot_histograms_STRAPP_tests_over_time <- function (
         # alpha value : Estimate,  p-value
         annotate_npc(x = 0.05, y = 0.95, hjust = 0, vjust = 1, gp = grid::gpar(fontsize = 18),
                      label = paste0("Q", estimate_quantile, " = ", round(STRAPP_results_i$estimate, digits = 3), "\n",
-                                    "P-value = ", round(STRAPP_results_i$p_value, digits = 3))) +
+                                    "P-value = ", round(STRAPP_results_i$p_value, digits = 3), "\n",
+                                    "N = ", nb_stats)) +
 
         # Adjust axis labels
         ggplot2::labs(x = paste0("Distribution of the test statistics"),
@@ -538,15 +544,17 @@ plot_histograms_STRAPP_tests_over_time <- function (
         # pair_j <- gsub(pattern = "!=", replacement = "\u2260", x = pair_j )
 
         # Extract name of the statistic
-        stat_name <- names(perm_data_df_j)[3]
+        stat_name <- names(perm_data_df_j)[ncol(perm_data_df_j)]
         # Extract null distribution of the statistic
-        stat_null_distri <- perm_data_df_j[,stat_name]
+        stat_null_distri <- unlist(perm_data_df_j[,stat_name])
         # Extract quantile of the critical threshold (same the one used for the main test)
         estimate_quantile <- names(STRAPP_results_i$estimate)
         # Extract estimate of the critical threshold
         estimate_value <- STRAPP_results_i$posthoc_pairwise_tests$summary_df$estimates[j]
         # Extract p-value
         p_value <- STRAPP_results_i$posthoc_pairwise_tests$summary_df$p_values[j]
+        # Extract nb of stats in the null distribution
+        nb_stats <- nrow(perm_data_df_j)
 
         # Detect if adjusted p-values differ from p-value
         p_value_adj_to_plot <- any(STRAPP_results_i$posthoc_pairwise_tests$summary_df$p_values != STRAPP_results_i$posthoc_pairwise_tests$summary_df$p_values_adjusted)
@@ -576,7 +584,8 @@ plot_histograms_STRAPP_tests_over_time <- function (
           # alpha value : Estimate,  p-value
           annotate_npc(x = 0.05, y = 0.95, hjust = 0, vjust = 1, gp = grid::gpar(fontsize = 18/size_factor),
                        label = paste0("Q", estimate_quantile, " = ", round(estimate_value, digits = 3), "\n",
-                                      "P-value = ", round(p_value, digits = 3))) +
+                                      "P-value = ", round(p_value, digits = 3), "\n",
+                                      "N = ", nb_stats)) +
 
           # Adjust axis labels
           ggplot2::labs(x = paste0("Distribution of the test statistics"),

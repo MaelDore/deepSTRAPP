@@ -14,6 +14,8 @@
 #'
 #' @param deepSTRAPP_outputs List of elements generated with [deepSTRAPP::run_deepSTRAPP_over_time()]
 #'    that runs the whole deepSTRAPP workflow over multiple time-steps.
+#'    The list needs to include two data.frame: `$trait_data_df_over_time` and `$diversification_data_df_over_time`
+#'    by setting `extract_trait_data_melted_df = TRUE` and `extract_diversification_data_melted_df = TRUE`.
 #' @param rate_type A character string specifying the type of diversification rates to plot.
 #'   Must be one of 'speciation', 'extinction' or 'net_diversification' (default).
 #'   Even if the `deepSTRAPP_outputs` object was generated with [deepSTRAPP::run_deepSTRAPP_over_time()]
@@ -29,7 +31,7 @@
 #' @param display_plot Logical. Whether to display the plot generated in the R console. Default is `TRUE`.
 #' @param PDF_file_path Character string. If provided, the plot will be saved in a PDF file following the path provided here. The path must end with ".pdf".
 #' @param return_mean_rates_vs_trait_data_df Logical. Whether to include in the output the data.frame of mean rates per trait values/states/ranges computed for
-#'   each posterior sample over all time-steps. Default is `FALSE`.
+#'   each stochastic map X posterior sample over all time-steps. Default is `FALSE`.
 #'
 #' @export
 #' @importFrom cowplot save_plot
@@ -39,11 +41,12 @@
 #'
 #'   Plots are built based on both trait data and diversification data as extracted for the time-steps.
 #'   Such data are recorded in the outputs of a deepSTRAPP run carried out with [deepSTRAPP::run_deepSTRAPP_over_time()].
-#'   * `return_updated_trait_data_with_Map` must be set to `TRUE` so that the trait data used to compute the tests are returned among the outputs
-#'     under `$updated_trait_data_with_Map_over_time`. Alternatively, and more efficiently, `extract_trait_data_melted_df` can be set to `TRUE`
-#'     so that trait data are already returned in a melted data.frame among the outputs under `$trait_data_df_over_time`.
+#'   * `extract_trait_data_melted_df` must be set to `TRUE` so that trait data are returned
+#'     in a melted data.frame among the outputs under `$trait_data_df_over_time`.
 #'   * `extract_diversification_data_melted_df` must be set to `TRUE` so that the diversification rates are returned
 #'     among the outputs under `$diversification_data_df_over_time`.
+#'   * `return_STRAPP_results` must be set to `TRUE` so that the STRAPP results objects recording the summary statistics for the STRAPP tests
+#'     are returned among the outputs under `$STRAPP_results_over_time`.
 #'
 #'  For plotting a single `focal_time`, see [deepSTRAPP::plot_rates_vs_trait_data_for_focal_time()].
 #'
@@ -59,14 +62,15 @@
 #'
 #'   Each plot also displays summary statistics for the STRAPP test associated with the data displayed:
 #'   * An observed statistic computed across the mean traits/ranges and rates values shown on the plot. This is not the statistic of the STRAPP test itself,
-#'     which is conducted across all BAMM posterior samples.
+#'     which is conducted across stochastic maps X BAMM posterior samples (i.e., it is a distribution, not a unique value)..
 #'   * The quantile of null statistic distribution at the significant threshold used to define test significance. The test will be considered significant
 #'     (i.e., the null hypothesis is rejected) if this value is higher than zero.
 #'   * The p-value of the associated STRAPP test.
 #'
 #'   Optional summary data.frame:
-#'   * `mean_rates_vs_trait_data_df` A data.frame with three columns providing the `$mean_rates` and `$trait_value`
-#'     observed along branches at the different `focal_time`. Rates are averaged across all BAMM posterior samples.
+#'   * `mean_rates_vs_trait_data_df` A data.frame with four columns providing the `$mean_rates` and `$trait_value`
+#'     observed along branches (`$tip_ID`) at the different `focal_time`. Rates are averaged for each stochastic maps X BAMM posterior samples used for testing,
+#'     in accordance with the `uncertainty_strategy` selected when running deepSTRAPP.
 #'     This is the raw data used to draw each plot for each `focal_time`. Included if `return_mean_rates_vs_trait_data_df = TRUE`.
 #'
 #'   If a `PDF_file_path` is provided, the function will also generate a unique PDF file with one plot/page per `$time_steps`.
@@ -135,7 +139,6 @@
 #'     # Need to be set to TRUE to save diversification data
 #'     extract_diversification_data_melted_df = TRUE,
 #'     return_STRAPP_results = TRUE,
-#'      return_updated_trait_data_with_Map = TRUE,
 #'     return_updated_BAMM_object = TRUE,
 #'     verbose = TRUE,
 #'     verbose_extended = TRUE) }
@@ -231,7 +234,6 @@
 #'     # Need to be set to TRUE to save diversification data
 #'     extract_diversification_data_melted_df = TRUE,
 #'     return_STRAPP_results = TRUE,
-#'     return_updated_trait_data_with_Map = TRUE,
 #'     return_updated_BAMM_object = TRUE,
 #'     verbose = TRUE,
 #'     verbose_extended = TRUE) }
@@ -291,28 +293,7 @@ plot_rates_vs_trait_data_over_time <- function (deepSTRAPP_outputs,
   if (trait_data_type %in% c("categorical", "biogeographic"))
   {
     ## Extract trait data
-
-    # Check presence of $trait_data_df_over_time
-    if (!is.null(deepSTRAPP_outputs$trait_data_df_over_time))
-    {
-      # Extract trait_df
-      trait_data_df <- deepSTRAPP_outputs$trait_data_df_over_time
-
-    } else {
-      # If absent, check presence of $updated_trait_data_with_Map_over_time instead
-      if (!is.null(deepSTRAPP_outputs$updated_trait_data_with_Map_over_time))
-      {
-        stop(paste0("`deepSTRAPP_outputs` must have a `$trait_data_df_over_time` or `$updated_trait_data_with_Map_over_time` element.\n",
-                    "Be sure to set `extract_trait_data_melted_df = TRUE` or at least `return_updated_trait_data_with_Map = TRUE`",
-                    "in [deepSTRAPP::run_deepSTRAPP_over_time].\n",
-                    "One of these elements is needed to plot rates vs. trait data."))
-      } else {
-        # Extract trait_df from $updated_trait_data_with_Map_over_time
-        trait_data_list <- lapply(X = deepSTRAPP_outputs$updated_trait_data_with_Map_over_time,
-               FUN = function (x) { x$trait_data })
-        trait_data_df <- as.data.frame(do.call(what = rbind, trait_data_list))
-      }
-    }
+    trait_data_df <- deepSTRAPP_outputs$trait_data_df_over_time
 
     ## Get list of all states/ranges to plot
 
@@ -440,15 +421,15 @@ plot_rates_vs_trait_data_over_time <- function (deepSTRAPP_outputs,
     # Extract melted data.frame
     mean_rates_vs_trait_data_df_list <- lapply(X = rates_vs_trait_outputs,
         FUN = function (x) { x$mean_rates_vs_trait_data_df })
-    # Add focal_time
-    for (i in seq_along(mean_rates_vs_trait_data_df_list))
-    {
-      # i <- 1
-      focal_time_i <- time_steps[i]
-      mean_rates_vs_trait_data_df_i <- mean_rates_vs_trait_data_df_list[[i]]
-      mean_rates_vs_trait_data_df_i$focal_time <- focal_time_i
-      mean_rates_vs_trait_data_df_list[[i]] <- mean_rates_vs_trait_data_df_i[, c("focal_time", "tip_ID", "mean_rates", "trait_value")]
-    }
+    # # Add focal_time (Already performed in for_focal_time)
+    # for (i in seq_along(mean_rates_vs_trait_data_df_list))
+    # {
+    #   # i <- 1
+    #   focal_time_i <- time_steps[i]
+    #   mean_rates_vs_trait_data_df_i <- mean_rates_vs_trait_data_df_list[[i]]
+    #   mean_rates_vs_trait_data_df_i$focal_time <- focal_time_i
+    #   mean_rates_vs_trait_data_df_list[[i]] <- mean_rates_vs_trait_data_df_i[, c("focal_time", "tip_ID", "mean_rates", "trait_value")]
+    # }
 
     # Bind all data.frames
     mean_rates_vs_trait_data_df <- do.call(what = rbind, mean_rates_vs_trait_data_df_list)

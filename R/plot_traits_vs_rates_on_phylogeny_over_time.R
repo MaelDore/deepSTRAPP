@@ -67,24 +67,17 @@
 #'   It provides information on results of a STRAPP run performed over multiple time-steps, and can also encompass
 #'   updated phylogenies with mapped trait evolution and diversification rates and regimes shifts if appropriate arguments are set.
 #'
-#'   * `return_updated_trait_data_with_Map` must be set to `TRUE` so that the trait data extracted for the given `$time_steps`
-#'     and the list of updated versions of mapped phylogenies (`contMap`/`densityMaps`) is returned among the outputs under `$updated_trait_data_with_Map_over_time`.
-#'     The updated `contMap`/`densityMaps` consist in cutting off branches and mappings that are younger than the successive `$time_steps`.
-#'   * `return_updated_BAMM_object` must be set to `TRUE` so that the list of `updated_BAMM_object` with phylogenies and mapped diversification rates
+#'   * `return_updated_Maps` must be set to `TRUE` so that the updated version of mapped phylogeny (`contMap`/`densityMaps`)
+#'     for the given `$time_steps` are returned among the outputs under `$updated_Maps_over_time`.
+#'     The updated `contMap`/`densityMaps` consists in cutting off branches and mappings that are younger than the successive `$time_steps`.
+#'     `contMap`/`densityMaps` must have been provided among the inputs to [deepSTRAPP::run_deepSTRAPP_over_time()] in the first place.
+#'   * `return_updated_BAMM_objects` must be set to `TRUE` so that the list of `updated_BAMM_object` with phylogenies and mapped diversification rates
 #'     cut-off at the successive `$time_steps` are returned among the outputs under `$updated_BAMM_objects_over_time`.
 #'
 #'   `$MAP_BAMM_object` and `$MSC_BAMM_object` elements are required in the elements of `$updated_BAMM_objects_over_time` to plot regime shift locations
 #'   following the "MAP" or "MSC" `configuration_type` respectively.
 #'   A `$MSP_tree` element is required to scale the size of the symbols showing the location of regime shifts according marginal shift probabilities.
 #'   (If `adjust_size_to_prob = TRUE`).
-#'
-#'   Alternatively, the main input `deepSTRAPP_outputs` can be the output of [deepSTRAPP::run_deepSTRAPP_over_time()],
-#'   providing results of STRAPP tests over multiple time-steps. In this case, you must provide a `focal_time` to select the
-#'   unique time-step used for plotting.
-#'   * `return_updated_trait_data_with_Map` must be set to `TRUE` so that the trait data extracted and
-#'     the updated version of mapped phylogenies (`contMap`/`densityMaps`) are returned among the outputs under `$updated_trait_data_with_Map_over_time`.
-#'   * `return_updated_BAMM_object` must be set to `TRUE` so that the `BAMM_objects` with phylogeny and mapped diversification rates
-#'     cut-off at the specified time-steps are returned among the outputs under `$updated_BAMM_objects_over_time`.
 #'
 #'  For plotting a single time-step (i.e., `$focal_time`) at once, see [deepSTRAPP::plot_traits_vs_rates_on_phylogeny_for_focal_time()].
 #'
@@ -158,12 +151,13 @@
 #'     # nb_time_steps = nb_time_steps,
 #'     time_range = time_range,
 #'     time_step_duration = time_step_duration,
+#'     uncertainty_strategy = "rates_only",
 #'     return_perm_data = TRUE,
 #'     extract_trait_data_melted_df = TRUE,
 #'     extract_diversification_data_melted_df = TRUE,
 #'     return_STRAPP_results = TRUE,
-#'     return_updated_trait_data_with_Map = TRUE,
-#'     return_updated_BAMM_object = TRUE,
+#'     return_updated_Maps = TRUE,
+#'     return_updated_BAMM_objects = TRUE,
 #'     verbose = TRUE,
 #'     verbose_extended = TRUE) }
 #'
@@ -255,8 +249,8 @@
 #'     extract_trait_data_melted_df = TRUE,
 #'     extract_diversification_data_melted_df = TRUE,
 #'     return_STRAPP_results = TRUE,
-#'     return_updated_trait_data_with_Map = TRUE,
-#'     return_updated_BAMM_object = TRUE,
+#'     return_updated_Maps = TRUE,
+#'     return_updated_BAMM_objects = TRUE,
 #'     verbose = TRUE,
 #'     verbose_extended = TRUE) }
 #'
@@ -307,14 +301,14 @@ plot_traits_vs_rates_on_phylogeny_over_time <- function (
   {
     ## deepSTRAPP_outputs
     # Check presence of updated trait map
-    if (is.null(deepSTRAPP_outputs$updated_trait_data_with_Map_over_time))
+    if (is.null(deepSTRAPP_outputs$updated_Maps_over_time))
     {
-      stop(paste0("`deepSTRAPP_outputs` must have a `$updated_trait_data_with_Map_over_time` element.\n",
-                  "Be sure to set `return_updated_trait_data_with_Map = TRUE` in [deepSTRAPP::run_deepSTRAPP_over_time].\n",
-                  "This element is needed to plot the updated `contMaps`/`densityMaps` with mapped trait/range evolution."))
+      stop(paste0("`deepSTRAPP_outputs` must have a `$updated_Maps_over_time` element.\n",
+                  "Be sure to set `return_updated_Maps = TRUE` in [deepSTRAPP::run_deepSTRAPP_over_time].\n",
+                  "This element is needed to plot the updated `contMap`/`densityMaps` with mapped trait/range evolution."))
     }
-    # Check presence of updated trait map
-    if (is.null(deepSTRAPP_outputs$updated_trait_data_with_Map_over_time))
+    # Check presence of updated BAMM objects
+    if (is.null(deepSTRAPP_outputs$updated_BAMM_objects_over_time))
     {
       stop(paste0("'deepSTRAPP_outputs' must have a '$updated_BAMM_objects_over_time' element.\n",
                   "Be sure to set `return_updated_BAMM_object = TRUE` in [deepSTRAPP::run_deepSTRAPP_over_time].\n",

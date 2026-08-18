@@ -63,10 +63,11 @@
 #'   To plot all histograms at once in a multifaceted plot, as displayed on the console if `display_plot = TRUE`, use `cowplot::plot_grid(plotlist = output_list)`.
 #'
 #'   Each plot also displays summary statistics for the STRAPP test associated with the data displayed.
-#'   * The quantile of null statistic distribution at the significant threshold used to define test significance. This is the value found on the red dashed line.
+#'   * QX% = The quantile of null statistic distribution at the significant threshold used to define test significance. This is the value found on the red dashed line.
 #'     The test will be considered significant (i.e., the null hypothesis is rejected) if this value is higher than zero (the black dashed line).
-#'   * The p-value of the STRAPP test which correspond the proportion of cases in which the statistics was lower than expected under the null hypothesis
+#'   * P-value =  The p-value of the STRAPP test which correspond the proportion of cases in which the statistics was lower than expected under the null hypothesis
 #'     (i.e., the proportion of the histogram found below / on the left-side of the black dashed line).
+#'   * N = The number of test statistics in the null distribution.
 #'
 #'   If a `PDF_file_path` is provided, the function will also generate a PDF file of the plot. For post hoc tests, this will save the multifaceted plot.
 #'
@@ -126,10 +127,8 @@
 #'    BAMM_object = Ponerinae_BAMM_object_old_calib,
 #'    focal_time = focal_time,
 #'    rate_type = "net_diversification",
-#'    return_perm_data = TRUE,
-#'    extract_diversification_data_melted_df = TRUE,
-#'    return_updated_trait_data_with_Map = TRUE,
-#'    return_updated_BAMM_object = TRUE)
+#'    uncertainty_strategy = "rates_only",
+#'    return_perm_data = TRUE)
 #'
 #'  ## Explore output
 #'  str(Ponerinae_deepSTRAPP_cont_old_calib_10My, max.level = 1)
@@ -220,16 +219,17 @@
 #'
 #'  Ponerinae_deepSTRAPP_cat_3lvl_old_calib_10My <- run_deepSTRAPP_for_focal_time(
 #'     densityMaps = Ponerinae_cat_3lvl_data_old_calib$densityMaps,
+#'     nb_simulations = 100,
 #'     ace = Ponerinae_cat_3lvl_data_old_calib$ace,
 #'     tip_data = Ponerinae_cat_3lvl_tip_data,
 #'     trait_data_type = "categorical",
 #'     BAMM_object = Ponerinae_BAMM_object_old_calib,
 #'     focal_time = focal_time,
 #'     rate_type = "net_diversification",
+#'     uncertainty_strategy = "paired",
 #'     posthoc_pairwise_tests = TRUE,
 #'     return_perm_data = TRUE,
-#'     extract_diversification_data_melted_df = TRUE,
-#'     return_updated_trait_data_with_Map = TRUE,
+#'     return_updated_Maps = TRUE,
 #'     return_updated_BAMM_object = TRUE)
 #'
 #'  ## Explore output
@@ -460,11 +460,13 @@ plot_histogram_STRAPP_test_for_focal_time <- function (deepSTRAPP_outputs,
     ## Case for overall test plot
 
     # Extract name of the statistic
-    stat_name <- names(STRAPP_results$perm_data_df)[4]
+    stat_name <- names(STRAPP_results$perm_data_df)[ncol(STRAPP_results$perm_data_df)]
     # Extract null distribution of the statistic
     stat_null_distri <- STRAPP_results$perm_data_df[,stat_name]
     # Extract quantile of the critical threshold
     estimate_quantile <- names(STRAPP_results$estimate)
+    # Extract the number of stats in the null distribution
+    nb_stats <- nrow(STRAPP_results$perm_data_df)
 
     # Build ggplot object
     ggplot_histo <- ggplot2::ggplot(data = as.data.frame(stat_null_distri)) +
@@ -486,7 +488,8 @@ plot_histogram_STRAPP_test_for_focal_time <- function (deepSTRAPP_outputs,
       # alpha value : Estimate,  p-value
       annotate_npc(x = 0.05, y = 0.95, hjust = 0, vjust = 1, gp = grid::gpar(fontsize = 18),
                    label = paste0("Q", estimate_quantile, " = ", round(STRAPP_results$estimate, digits = 3), "\n",
-                                  "P-value = ", round(STRAPP_results$p_value, digits = 3))) +
+                                  "P-value = ", round(STRAPP_results$p_value, digits = 3), "\n",
+                                  "N = ", nb_stats)) +
 
       # Adjust axis labels
       ggplot2::labs(x = paste0("Distribution of the test statistics"),
@@ -552,15 +555,17 @@ plot_histogram_STRAPP_test_for_focal_time <- function (deepSTRAPP_outputs,
       # pair_i <- gsub(pattern = "!=", replacement = "\u2260", x = pair_i )
 
       # Extract name of the statistic
-      stat_name <- names(perm_data_df_i)[3]
+      stat_name <- names(perm_data_df_i)[ncol(perm_data_df_i)]
       # Extract null distribution of the statistic
-      stat_null_distri <- perm_data_df_i[,stat_name]
+      stat_null_distri <- unlist(perm_data_df_i[,stat_name])
       # Extract quantile of the critical threshold (same the one used for the main test)
       estimate_quantile <- names(STRAPP_results$estimate)
       # Extract estimate of the critical threshold
       estimate_value <- STRAPP_results$posthoc_pairwise_tests$summary_df$estimates[i]
       # Extract p-value
       p_value <- STRAPP_results$posthoc_pairwise_tests$summary_df$p_values[i]
+      # Extract nb of stats in the null distribution
+      nb_stats <- nrow(perm_data_df_i)
 
       # Detect if adjusted p-values differ from p-value
       p_value_adj_to_plot <- any(STRAPP_results$posthoc_pairwise_tests$summary_df$p_values != STRAPP_results$posthoc_pairwise_tests$summary_df$p_values_adjusted)
@@ -590,7 +595,8 @@ plot_histogram_STRAPP_test_for_focal_time <- function (deepSTRAPP_outputs,
         # alpha value : Estimate,  p-value
         annotate_npc(x = 0.05, y = 0.95, hjust = 0, vjust = 1, gp = grid::gpar(fontsize = 18/size_factor),
                      label = paste0("Q", estimate_quantile, " = ", round(estimate_value, digits = 3), "\n",
-                                    "P-value = ", round(p_value, digits = 3))) +
+                                    "P-value = ", round(p_value, digits = 3), "\n",
+                                    "N = ", nb_stats)) +
 
         # Adjust axis labels
         ggplot2::labs(x = paste0("Distribution of the test statistics"),
