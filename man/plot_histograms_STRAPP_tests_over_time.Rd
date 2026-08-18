@@ -38,10 +38,11 @@ use \code{cowplot::plot_grid(plotlist = output_list[[i]])}.
 
 Each plot also displays summary statistics for the STRAPP test associated with the data displayed.
 \itemize{
-\item The quantile of null statistic distribution at the significant threshold used to define test significance. This is the value found on the red dashed line.
+\item QX\% = The quantile of null statistic distribution at the significant threshold used to define test significance. This is the value found on the red dashed line.
 The test will be considered significant (i.e., the null hypothesis is rejected) if this value is higher than zero (the black dashed line).
-\item The p-value of the STRAPP test which correspond the proportion of cases in which the statistics was lower than expected under the null hypothesis
+\item P-value = The p-value of the STRAPP test which correspond the proportion of cases in which the statistics was lower than expected under the null hypothesis
 (i.e., the proportion of the histogram found below / on the left-side of the black dashed line).
+\item N = The number of test statistics in the null distribution.
 }
 
 If a \code{PDF_file_path} is provided, the function will also generate a PDF file of the plots with one page per \verb{$time_steps}.
@@ -130,6 +131,7 @@ if (deepSTRAPP::is_dev_version())
     # nb_time_steps = nb_time_steps,
     time_range = time_range,
     time_step_duration = time_step_duration,
+    uncertainty_strategy = "rates_only",
     return_perm_data = TRUE,
     extract_trait_data_melted_df = TRUE,
     extract_diversification_data_melted_df = TRUE,
@@ -221,6 +223,7 @@ if (deepSTRAPP::is_dev_version())
     time_range = time_range,
     time_step_duration = time_step_duration,
     rate_type = "net_diversification",
+    uncertainty_strategy = "paired",
     seed = 1234, # Set for reproducibility
     alpha = 0.10, # Select a generous level of significance for the sake of the example
     posthoc_pairwise_tests = TRUE,

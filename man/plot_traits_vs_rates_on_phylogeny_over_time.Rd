@@ -125,10 +125,11 @@ The main input \code{deepSTRAPP_outputs} is the typical output of \code{\link[=r
 It provides information on results of a STRAPP run performed over multiple time-steps, and can also encompass
 updated phylogenies with mapped trait evolution and diversification rates and regimes shifts if appropriate arguments are set.
 \itemize{
-\item \code{return_updated_trait_data_with_Map} must be set to \code{TRUE} so that the trait data extracted for the given \verb{$time_steps}
-and the list of updated versions of mapped phylogenies (\code{contMap}/\code{densityMaps}) is returned among the outputs under \verb{$updated_trait_data_with_Map_over_time}.
-The updated \code{contMap}/\code{densityMaps} consist in cutting off branches and mappings that are younger than the successive \verb{$time_steps}.
-\item \code{return_updated_BAMM_object} must be set to \code{TRUE} so that the list of \code{updated_BAMM_object} with phylogenies and mapped diversification rates
+\item \code{return_updated_Maps} must be set to \code{TRUE} so that the updated version of mapped phylogeny (\code{contMap}/\code{densityMaps})
+for the given \verb{$time_steps} are returned among the outputs under \verb{$updated_Maps_over_time}.
+The updated \code{contMap}/\code{densityMaps} consists in cutting off branches and mappings that are younger than the successive \verb{$time_steps}.
+\code{contMap}/\code{densityMaps} must have been provided among the inputs to \code{\link[=run_deepSTRAPP_over_time]{run_deepSTRAPP_over_time()}} in the first place.
+\item \code{return_updated_BAMM_objects} must be set to \code{TRUE} so that the list of \code{updated_BAMM_object} with phylogenies and mapped diversification rates
 cut-off at the successive \verb{$time_steps} are returned among the outputs under \verb{$updated_BAMM_objects_over_time}.
 }
 
@@ -136,16 +137,6 @@ cut-off at the successive \verb{$time_steps} are returned among the outputs unde
 following the "MAP" or "MSC" \code{configuration_type} respectively.
 A \verb{$MSP_tree} element is required to scale the size of the symbols showing the location of regime shifts according marginal shift probabilities.
 (If \code{adjust_size_to_prob = TRUE}).
-
-Alternatively, the main input \code{deepSTRAPP_outputs} can be the output of \code{\link[=run_deepSTRAPP_over_time]{run_deepSTRAPP_over_time()}},
-providing results of STRAPP tests over multiple time-steps. In this case, you must provide a \code{focal_time} to select the
-unique time-step used for plotting.
-\itemize{
-\item \code{return_updated_trait_data_with_Map} must be set to \code{TRUE} so that the trait data extracted and
-the updated version of mapped phylogenies (\code{contMap}/\code{densityMaps}) are returned among the outputs under \verb{$updated_trait_data_with_Map_over_time}.
-\item \code{return_updated_BAMM_object} must be set to \code{TRUE} so that the \code{BAMM_objects} with phylogeny and mapped diversification rates
-cut-off at the specified time-steps are returned among the outputs under \verb{$updated_BAMM_objects_over_time}.
-}
 
 For plotting a single time-step (i.e., \verb{$focal_time}) at once, see \code{\link[=plot_traits_vs_rates_on_phylogeny_for_focal_time]{plot_traits_vs_rates_on_phylogeny_for_focal_time()}}.
 }
@@ -205,12 +196,13 @@ if (deepSTRAPP::is_dev_version())
     # nb_time_steps = nb_time_steps,
     time_range = time_range,
     time_step_duration = time_step_duration,
+    uncertainty_strategy = "rates_only",
     return_perm_data = TRUE,
     extract_trait_data_melted_df = TRUE,
     extract_diversification_data_melted_df = TRUE,
     return_STRAPP_results = TRUE,
-    return_updated_trait_data_with_Map = TRUE,
-    return_updated_BAMM_object = TRUE,
+    return_updated_Maps = TRUE,
+    return_updated_BAMM_objects = TRUE,
     verbose = TRUE,
     verbose_extended = TRUE) }
 
@@ -302,8 +294,8 @@ if (deepSTRAPP::is_dev_version())
     extract_trait_data_melted_df = TRUE,
     extract_diversification_data_melted_df = TRUE,
     return_STRAPP_results = TRUE,
-    return_updated_trait_data_with_Map = TRUE,
-    return_updated_BAMM_object = TRUE,
+    return_updated_Maps = TRUE,
+    return_updated_BAMM_objects = TRUE,
     verbose = TRUE,
     verbose_extended = TRUE) }
 

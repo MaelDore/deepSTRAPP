@@ -32,7 +32,8 @@ plot_traits_vs_rates_on_phylogeny_for_focal_time(
 \item{deepSTRAPP_outputs}{List of elements generated with \code{\link[=run_deepSTRAPP_for_focal_time]{run_deepSTRAPP_for_focal_time()}},
 that summarize the results of a STRAPP test for a specific time in the past (i.e. the \code{focal_time}).
 \code{deepSTRAPP_outputs} can also be extracted from the output of \code{\link[=run_deepSTRAPP_over_time]{run_deepSTRAPP_over_time()}} that
-run the whole deepSTRAPP workflow over multiple time-steps.}
+run the whole deepSTRAPP workflow over multiple time-steps.
+This must contain an updated \code{contMap}/\code{densityMaps} and updated \code{BAMM_object} (see Details section below).}
 
 \item{focal_time}{Numerical. (Optional) If \code{deepSTRAPP_outputs} comprises results over multiple time-steps
 (i.e., output of \code{\link[=run_deepSTRAPP_over_time]{run_deepSTRAPP_over_time()}}, this is the time of the STRAPP test targeted for plotting.}
@@ -131,9 +132,10 @@ The main input \code{deepSTRAPP_outputs} is the typical output of \code{\link[=r
 It provides information on results of a STRAPP test performed at a given \code{focal_time}, and can also encompass
 updated phylogenies with mapped trait evolution and diversification rates and regimes shifts if appropriate arguments are set.
 \itemize{
-\item \code{return_updated_trait_data_with_Map} must be set to \code{TRUE} so that the trait data extracted for the given \code{focal_time}
-and the updated version of mapped phylogeny (\code{contMap}/\code{densityMaps}) are returned among the outputs under \verb{$updated_trait_data_with_Map}.
+\item \code{return_updated_Maps} must be set to \code{TRUE} so that the updated version of mapped phylogeny (\code{contMap}/\code{densityMaps})
+for the given \code{focal_time} is returned among the outputs under \verb{$updated_Maps}.
 The updated \code{contMap}/\code{densityMaps} consists in cutting off branches and mappings that are younger than the \code{focal_time}.
+\code{contMap}/\code{densityMaps} must have been provided among the inputs to \code{\link[=run_deepSTRAPP_for_focal_time]{run_deepSTRAPP_for_focal_time()}} in the first place.
 \item \code{return_updated_BAMM_object} must be set to \code{TRUE} so that the \code{updated_BAMM_object} with phylogeny and mapped diversification rates
 cut-off at the \code{focal_time} are returned among the outputs under \verb{$updated_BAMM_object}.
 }
@@ -147,8 +149,8 @@ Alternatively, the main input \code{deepSTRAPP_outputs} can be the output of \co
 providing results of STRAPP tests over multiple time-steps. In this case, you must provide a \code{focal_time} to select the
 unique time-step used for plotting.
 \itemize{
-\item \code{return_updated_trait_data_with_Map} must be set to \code{TRUE} so that the trait data extracted and
-the updated version of mapped phylogenies (\code{contMap}/\code{densityMaps}) are returned among the outputs under \verb{$updated_trait_data_with_Map_over_time}.
+\item \code{return_updated_Maps} must be set to \code{TRUE} so that the updated version of mapped phylogenies (\code{contMap}/\code{densityMaps})
+are returned among the outputs under \verb{$updated_Maps_over_time}.
 \item \code{return_updated_BAMM_object} must be set to \code{TRUE} so that the \code{BAMM_objects} with phylogeny and mapped diversification rates
 cut-off at the specified time-steps are returned among the outputs under \verb{$updated_BAMM_objects_over_time}.
 }
@@ -188,7 +190,7 @@ if (deepSTRAPP::is_dev_version())
  \donttest{ # (May take several minutes to run)
  # Run a Stochastic Mapping based on a Brownian Motion model
  # to interpolate values along branches and obtain a "contMap" object
- Ponerinae_contMap <- phytools::contMap(Ponerinae_tree, x = Ponerinae_cont_tip_data,
+ Ponerinae_contMap <- phytools::contMap(Ponerinae_tree_old_calib, x = Ponerinae_cont_tip_data,
                                         res = 100, # Number of time steps
                                         plot = FALSE)
  # Plot contMap = stochastic mapping of continuous trait
@@ -207,10 +209,8 @@ if (deepSTRAPP::is_dev_version())
    trait_data_type = "continuous",
    BAMM_object = Ponerinae_BAMM_object_old_calib,
    focal_time = focal_time,
-   rate_type = "net_diversification",
-   return_perm_data = TRUE,
-   extract_diversification_data_melted_df = TRUE,
-   return_updated_trait_data_with_Map = TRUE,
+   uncertainty_strategy = "rates_only",
+   return_updated_Maps = TRUE,
    return_updated_BAMM_object = TRUE)
 
  ## Explore output
@@ -292,10 +292,8 @@ if (deepSTRAPP::is_dev_version())
     trait_data_type = "biogeographic",
     BAMM_object = Ponerinae_BAMM_object_old_calib,
     focal_time = focal_time,
-    rate_type = "net_diversification",
-    return_perm_data = TRUE,
-    extract_diversification_data_melted_df = TRUE,
-    return_updated_trait_data_with_Map = TRUE,
+    uncertainty_strategy = "rates_only",
+    return_updated_Maps = TRUE,
     return_updated_BAMM_object = TRUE)
 
  ## Explore output

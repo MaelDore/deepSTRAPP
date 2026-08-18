@@ -19,6 +19,8 @@ plot_rates_vs_trait_data_for_focal_time(
 \arguments{
 \item{deepSTRAPP_outputs}{List of elements generated with \code{\link[=run_deepSTRAPP_for_focal_time]{run_deepSTRAPP_for_focal_time()}},
 that summarize the results of a STRAPP test for a specific time in the past (i.e. the \code{focal_time}).
+The list needs to include two data.frame: \verb{$trait_data_df_over_time} and \verb{$diversification_data_df_over_time}
+by setting \code{extract_trait_data_melted_df = TRUE} and \code{extract_diversification_data_melted_df = TRUE}.
 \code{deepSTRAPP_outputs} can also be extracted from the output of \code{\link[=run_deepSTRAPP_over_time]{run_deepSTRAPP_over_time()}} that
 runs the whole deepSTRAPP workflow over multiple time-steps.}
 
@@ -46,7 +48,7 @@ If \code{NULL} (default), the default ggplot2 color palette (\code{\link[scales:
 \item{PDF_file_path}{Character string. If provided, the plot will be saved in a PDF file following the path provided here. The path must end with ".pdf".}
 
 \item{return_mean_rates_vs_trait_data_df}{Logical. Whether to include in the output the data.frame of mean rates per trait values/states/ranges computed for
-each posterior sample at the focal time. Default is \code{FALSE}.}
+each stochastic map X BAMM posterior sample at the focal time. Default is \code{FALSE}.}
 }
 \value{
 The function returns a list with at least one element.
@@ -62,7 +64,7 @@ If the trait data are 'categorical' or 'biogeographic', the plot is a boxplot sh
 Each plot also displays summary statistics for the STRAPP test associated with the data displayed:
 \itemize{
 \item An observed statistic computed across the mean traits/ranges and rates values shown on the plot. This is not the statistic of the STRAPP test itself,
-which is conducted across all BAMM posterior samples.
+which is conducted across stochastic maps X BAMM posterior samples (i.e., it is a distribution, not a unique value).
 \item The quantile of null statistic distribution at the significant threshold used to define test significance. The test will be considered significant
 (i.e., the null hypothesis is rejected) if this value is higher than zero.
 \item The p-value of the associated STRAPP test.
@@ -70,8 +72,9 @@ which is conducted across all BAMM posterior samples.
 
 Optional summary data.frame:
 \itemize{
-\item \code{mean_rates_vs_trait_data_df} A data.frame with three columns providing the \verb{$mean_rates} and \verb{$trait_value}
-observed along branches at \code{focal_time}. Rates are averaged across all BAMM posterior samples.
+\item \code{mean_rates_vs_trait_data_df} A data.frame with four columns providing the \verb{$mean_rates} and \verb{$trait_value}
+observed along branches (\verb{$tip_ID}) at \code{focal_time}. Rates are averaged for each stochastic maps X BAMM posterior samples used for testing,
+in accordance with the \code{uncertainty_strategy} selected when running deepSTRAPP.
 This is the raw data used to draw the plot. Included if \code{return_mean_rates_vs_trait_data_df = TRUE}.
 }
 
@@ -95,18 +98,19 @@ It provides information on results of a STRAPP test performed at a given \code{f
 
 Plots are built based on both trait data and diversification data as extracted for the given \code{focal_time}.
 Such data are recorded in the outputs of a deepSTRAPP run carried out with \code{\link[=run_deepSTRAPP_for_focal_time]{run_deepSTRAPP_for_focal_time()}}
-when \code{return_updated_trait_data_with_Map = TRUE} for trait data, and \code{extract_diversification_data_melted_df = TRUE} for diversification data.
+when \code{extract_trait_data_melted_df = TRUE} for trait data, and \code{extract_diversification_data_melted_df = TRUE} for diversification data.
 Please ensure to select those arguments when running deepSTRAPP.
 
 Alternatively, the main input \code{deepSTRAPP_outputs} can be the output of \code{\link[=run_deepSTRAPP_over_time]{run_deepSTRAPP_over_time()}},
 providing results of STRAPP tests over multiple time-steps. In this case, you must provide a \code{focal_time} to select the
 unique time-step used for plotting.
 \itemize{
-\item \code{return_updated_trait_data_with_Map} must be set to \code{TRUE} so that the trait data used to compute the tests are returned among the outputs
-under \verb{$updated_trait_data_with_Map_over_time}. Alternatively, and more efficiently, \code{extract_trait_data_melted_df} can be set to \code{TRUE}
-so that trait data are already returned in a melted data.frame among the outputs under \verb{$trait_data_df_over_time}.
+\item \code{extract_trait_data_melted_df} must be set to \code{TRUE} so that trait data are returned
+in a melted data.frame among the outputs under \verb{$trait_data_df_over_time}.
 \item \code{extract_diversification_data_melted_df} must be set to \code{TRUE} so that the diversification rates are returned
-among the outputs under \verb{$diversification_data_df_over_time}.
+in a melted data.frame among the outputs under \verb{$diversification_data_df_over_time}.
+\item \code{return_STRAPP_results} must be set to \code{TRUE} so that the STRAPP results objects recording the summary statistics for the STRAPP tests
+are returned among the outputs under \verb{$STRAPP_results_over_time}.
 }
 
 For plotting all time-steps at once, see \code{\link[=plot_rates_vs_trait_data_over_time]{plot_rates_vs_trait_data_over_time()}}.
@@ -163,21 +167,22 @@ if (deepSTRAPP::is_dev_version())
     BAMM_object = Ponerinae_BAMM_object_old_calib,
     focal_time = focal_time,
     rate_type = "net_diversification",
+    uncertainty_strategy = "rates_only",
     return_perm_data = TRUE,
     # Need to be set to TRUE to save diversification data
     extract_diversification_data_melted_df = TRUE,
     # Need to be set to TRUE to save trait data
-    return_updated_trait_data_with_Map = TRUE,
+    extract_trait_data_melted_df = TRUE,
     return_updated_BAMM_object = TRUE)
 
  ## Explore output
  str(Ponerinae_deepSTRAPP_cont_old_calib_10My, max.level = 1)
 
- # ----- Plot histogram of STRAPP overall test results from run_deepSTRAPP_for_focal_time() ----- #
+ # ----- Plot scatterplot of rates vs. trait values from run_deepSTRAPP_for_focal_time() ----- #
 
  # Get plot
  rates_vs_trait_output <- plot_rates_vs_trait_data_for_focal_time(
-    deepSTRAPP_outputs = deepPonerinae_deepSTRAPP_cont_old_calib_10My,
+    deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_old_calib_10My,
     color_scale = c("grey80", "orange"),
     display_plot = TRUE,
     # PDF_file_path = "./plot_rates_vs_trait_10My.pdf"
@@ -190,7 +195,7 @@ if (deepSTRAPP::is_dev_version())
  # Explore melted data.frame of mean rates and trait values extracted for the given focal time.
  head(rates_vs_trait_output$mean_rates_vs_trait_data_df) }
 
- # ----- Plot histogram of STRAPP overall test results from run_deepSTRAPP_over_time() ----- #
+ # ----- Plot scatterplot of rates vs. trait values from run_deepSTRAPP_over_time() ----- #
 
  ## Load directly outputs from run_deepSTRAPP_over_time()
  data(Ponerinae_deepSTRAPP_cont_old_calib_0_40, package = "deepSTRAPP")
@@ -267,6 +272,7 @@ if (deepSTRAPP::is_dev_version())
     densityMaps = Ponerinae_cat_3lvl_data_old_calib$densityMaps,
     ace = Ponerinae_cat_3lvl_data_old_calib$ace,
     tip_data = Ponerinae_cat_3lvl_tip_data,
+    nb_simulations = 100,
     trait_data_type = "categorical",
     BAMM_object = Ponerinae_BAMM_object_old_calib,
     focal_time = focal_time,
@@ -276,7 +282,7 @@ if (deepSTRAPP::is_dev_version())
     # Need to be set to TRUE to save diversification data
     extract_diversification_data_melted_df = TRUE,
     # Need to be set to TRUE to save trait data
-    return_updated_trait_data_with_Map = TRUE,
+    extract_trait_data_melted_df = TRUE,
     return_updated_BAMM_object = TRUE)
 
  ## Explore output

@@ -41,10 +41,11 @@ To plot all histograms at once in a multifaceted plot, as displayed on the conso
 
 Each plot also displays summary statistics for the STRAPP test associated with the data displayed.
 \itemize{
-\item The quantile of null statistic distribution at the significant threshold used to define test significance. This is the value found on the red dashed line.
+\item QX\% = The quantile of null statistic distribution at the significant threshold used to define test significance. This is the value found on the red dashed line.
 The test will be considered significant (i.e., the null hypothesis is rejected) if this value is higher than zero (the black dashed line).
-\item The p-value of the STRAPP test which correspond the proportion of cases in which the statistics was lower than expected under the null hypothesis
+\item P-value =  The p-value of the STRAPP test which correspond the proportion of cases in which the statistics was lower than expected under the null hypothesis
 (i.e., the proportion of the histogram found below / on the left-side of the black dashed line).
+\item N = The number of test statistics in the null distribution.
 }
 
 If a \code{PDF_file_path} is provided, the function will also generate a PDF file of the plot. For post hoc tests, this will save the multifaceted plot.
@@ -140,10 +141,8 @@ if (deepSTRAPP::is_dev_version())
    BAMM_object = Ponerinae_BAMM_object_old_calib,
    focal_time = focal_time,
    rate_type = "net_diversification",
-   return_perm_data = TRUE,
-   extract_diversification_data_melted_df = TRUE,
-   return_updated_trait_data_with_Map = TRUE,
-   return_updated_BAMM_object = TRUE)
+   uncertainty_strategy = "rates_only",
+   return_perm_data = TRUE)
 
  ## Explore output
  str(Ponerinae_deepSTRAPP_cont_old_calib_10My, max.level = 1)
@@ -234,16 +233,17 @@ if (deepSTRAPP::is_dev_version())
 
  Ponerinae_deepSTRAPP_cat_3lvl_old_calib_10My <- run_deepSTRAPP_for_focal_time(
     densityMaps = Ponerinae_cat_3lvl_data_old_calib$densityMaps,
+    nb_simulations = 100,
     ace = Ponerinae_cat_3lvl_data_old_calib$ace,
     tip_data = Ponerinae_cat_3lvl_tip_data,
     trait_data_type = "categorical",
     BAMM_object = Ponerinae_BAMM_object_old_calib,
     focal_time = focal_time,
     rate_type = "net_diversification",
+    uncertainty_strategy = "paired",
     posthoc_pairwise_tests = TRUE,
     return_perm_data = TRUE,
-    extract_diversification_data_melted_df = TRUE,
-    return_updated_trait_data_with_Map = TRUE,
+    return_updated_Maps = TRUE,
     return_updated_BAMM_object = TRUE)
 
  ## Explore output

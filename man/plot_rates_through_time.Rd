@@ -12,13 +12,14 @@ plot_rates_through_time(
   time_range = NULL,
   color_scale = NULL,
   colors_per_levels = NULL,
-  plot_CI = FALSE,
+  plot_CI = TRUE,
   CI_type = "fuzzy",
   CI_quantiles = 0.95,
   display_plot = TRUE,
   PDF_file_path = NULL,
   return_mean_data_per_samples_df = FALSE,
-  return_median_data_across_samples_df = FALSE
+  return_median_data_across_samples_df = FALSE,
+  verbose = TRUE
 )
 }
 \arguments{
@@ -51,7 +52,7 @@ Default = \code{NULL} will use the 'Spectral' color palette in \code{\link[RColo
 \item{colors_per_levels}{Named character string. To set the colors to use to plot rates of each state/range. Names = states/ranges; values = colors.
 If \code{NULL} (default), the default ggplot2 color palette (\code{\link[scales:pal_hue]{scales::hue_pal()}}) will be used. Only for categorical and biogeographic data.}
 
-\item{plot_CI}{Logical. Whether to plot a confidence interval (CI) based on the distribution of rates found in posterior samples. Default is \code{FALSE}.}
+\item{plot_CI}{Logical. Whether to plot a confidence interval (CI) based on the distribution of rates found in posterior samples. Default is \code{TRUE}.}
 
 \item{CI_type}{Character string. To select the type of confidence interval (CI) to plot.
 \itemize{
@@ -67,11 +68,13 @@ This proportion is defined with \code{CI_quantiles}.
 \item{PDF_file_path}{Character string. If provided, the plot will be saved in a PDF file following the path provided here. The path must end with ".pdf".}
 
 \item{return_mean_data_per_samples_df}{Logical. Whether to include in the output the data.frame of mean rates per trait values computed for
-each posterior sample at each time-step (aggregated across groups of branches based on trait data). This is used to draw the confidence interval. Default is \code{FALSE}.}
+each stochastic map X BAMM posterior sample at each time-step (aggregated across groups of branches based on trait data). This is used to draw the confidence interval. Default is \code{FALSE}.}
 
 \item{return_median_data_across_samples_df}{Logical. Whether to include in the output the data.frame of median rates per trait values
-across posterior samples computed for at each time-step (aggregated across groups of branches based on trait data AND posterior samples).
-This is used to draw the lines on the plot. Default is \code{FALSE}.}
+across stochastic maps X BAMM posterior samples computed for at each time-step (aggregated across groups of branches based on trait data AND stochastic maps X BAMM posterior samples).
+This is used to draw the median lines on the plot. Default is \code{FALSE}.}
+
+\item{verbose}{Logical. Should progression be displayed? Default is \code{TRUE}.}
 }
 \value{
 The function returns a list with at least one element.
@@ -83,12 +86,12 @@ when the function is run, if \code{display_plot = TRUE}, and can be further modi
 
 Optional summary data frames:
 \itemize{
-\item \code{mean_data_per_samples_df} A data.frame with four columns providing the \verb{$mean_rates} observed along branches
+\item \code{mean_data_per_samples_df} A data.frame with five columns providing the \verb{$mean_rates} observed along branches
 with a similar \verb{$trait_value} (if categorical or biogeographic) or falling into the same \verb{$quantile_ranges}.
-Data are extracted for each posterior sample (\verb{$BAMM_sample_ID}) at each time-step (i.e., \verb{$focal_time}).
+Data are extracted for each stochastic map (\verb{$Map_ID}) X BAMM posterior sample (\verb{$BAMM_sample_ID}) used for the STRAPP tests at each time-step (i.e., \verb{$focal_time}).
 This is used to draw the confidence interval. Included if \code{return_mean_data_per_samples_df = TRUE}.
 \item \verb{$median_data_across_samples_df} A data.frame with three columns providing the \verb{$median_rates}
-observed across all posterior samples in \verb{$mean_data_per_samples_df}. This is used to draw the lines on the plot.
+observed across all stochastic maps X BAMM posterior samples used for the STRAPP tests in \verb{$mean_data_per_samples_df}. This is used to draw the lines on the plot.
 Included if \code{return_median_data_across_samples_df = TRUE}.
 }
 
