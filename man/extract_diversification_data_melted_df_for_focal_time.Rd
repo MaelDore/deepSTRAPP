@@ -24,7 +24,7 @@ Returns a data.frame with six columns.
 \itemize{
 \item \verb{$focal_time} Integer. The time, in terms of time distance from the present, at which the trait data were extracted. Should be equal for all rows
 as a unique BAMM_object updated for a unique \code{focal_time} is being extracted.
-\item \verb{$BAMM_sample_ID} Integer. ID of the posterior samples from which the diversification data are extracted.
+\item \verb{$BAMM_sample_ID} Character string. ID of the posterior samples from which the diversification data are extracted named as 'BAMM_X' where X is the numerical ID.
 \item \verb{$tip_ID} Character string. Tip labels of the branches cut-off at \code{focal_time}.
 \itemize{
 \item If \code{keep_tip_labels = TRUE} was used in \code{\link[=update_rates_and_regimes_for_focal_time]{update_rates_and_regimes_for_focal_time()}},

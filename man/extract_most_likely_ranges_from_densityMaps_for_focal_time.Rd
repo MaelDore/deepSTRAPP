@@ -37,7 +37,7 @@ The update consists in cutting off branches and mapping that are younger than th
 
 \item{keep_tip_labels}{Logical. Specify whether terminal branches with a single descendant tip
 must retained their initial \code{tip.label} on the updated densityMaps. Default is \code{TRUE}.
-Used only if \code{update_map = TRUE}.}
+Used only if \code{update_Map = TRUE}.}
 }
 \value{
 By default, the function returns a list with three elements.
@@ -64,10 +64,11 @@ The function also adds multiple useful sub-elements to the \verb{$densityMaps$tr
 \description{
 Extracts the most likely ranges found along branches
 at a specific time in the past (i.e. the \code{focal_time}).
-Optionally, the function can update the mapped phylogeny (\code{densityMaps})
+As input, the mapped range data are summarized as posterior probabilities of each range in \code{densityMaps}.
+Optionally, the function can update the\code{densityMaps}
 such as branches overlapping the \code{focal_time} are shorten to the \code{focal_time},
 and the range mapping for the cut off branches are removed
-by updating the \verb{$tree$maps} and \verb{$tree$mapped.edge} elements.
+by updating the \verb{$tree$maps} and \verb{$tree$mapped.edge} elements in each \code{densityMap}..
 }
 \details{
 The mapped phylogeny (\code{densityMaps}) is cut at a specific time in the past
