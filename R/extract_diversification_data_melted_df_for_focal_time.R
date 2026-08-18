@@ -19,7 +19,7 @@
 #'
 #'   * `$focal_time` Integer. The time, in terms of time distance from the present, at which the trait data were extracted. Should be equal for all rows
 #'   as a unique BAMM_object updated for a unique `focal_time` is being extracted.
-#'   * `$BAMM_sample_ID` Integer. ID of the posterior samples from which the diversification data are extracted.
+#'   * `$BAMM_sample_ID` Character string. ID of the posterior samples from which the diversification data are extracted named as 'BAMM_X' where X is the numerical ID.
 #'   * `$tip_ID` Character string. Tip labels of the branches cut-off at `focal_time`.
 #'     + If `keep_tip_labels = TRUE` was used in [deepSTRAPP::update_rates_and_regimes_for_focal_time()],
 #'     cut-off branches with a single descendant tip retain their initial `tip.label`.
@@ -128,7 +128,7 @@ extract_diversification_data_melted_df_for_focal_time <- function (BAMM_object, 
 
     if (verbose & (i %% 100 == 0))
     {
-      cat(paste0(Sys.time(), " - Tip states/rates extracted for BAMM posterior sample n\u00B0", i, "/", length(BAMM_object$tipStates),"\n"))
+      cat(paste0(Sys.time(), " - Tip regimes/rates extracted for BAMM posterior sample n\u00B0", i, "/", length(BAMM_object$tipStates),"\n"))
     }
   }
 
@@ -141,6 +141,9 @@ extract_diversification_data_melted_df_for_focal_time <- function (BAMM_object, 
                         names_to = "rate_type", values_to = "rates")
   # Remove tibble class
   melted_df <- as.data.frame(melted_df)
+
+  # Transform BAMM_sample_ID into names to be compatible with other functions
+  melted_df$BAMM_sample_ID <- paste0("BAMM_", melted_df$BAMM_sample_ID)
 
   ## Return melted df
   return(melted_df)
