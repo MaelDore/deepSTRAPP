@@ -220,8 +220,38 @@
 #'
 "eel_cat_3lvl_data"
 
+# ### 8/ Categorical trait evolution data for Ponerinae ants as continuous trait ####
+#
+# #' @title Data summarizing the evolution of fake size data in Ponerinae ants as continuous trait
+# #'
+# #' @description A list containing fake size data of Ponerinae ants mapped on the phylogeny,
+# #'  modeled with [contsimmap::make.contsimmap()]. This object was obtained with [deepSTRAPP::prepare_trait_data()].
+# #'  This is NOT real biological/ecological data. They were designed for illustrative purposes only.
+# #'  The phylogeny used is also NOT a properly time-calibrated phylogeny. It uses an ill-designed old calibration for illustrative purposes.
+# #'
+# #' @usage data(Ponerinae_cont_data_old_calib)
+# #' @format A list with 5 elements.
+# #'
+# #' @details A list of five objects containing information on the evolution of fake size data in Ponerinae ants.
+# #'  This object was obtained with [deepSTRAPP::prepare_trait_data()].
+# #'
+# #'   * `$contMap` List of class `"contMap"` that contains a phylogenetic tree and associated mapping of ML estimates trait values interpolated along branches.
+# #'   * `$contMaps` List of `"contMap"`objects that represent simulations of trait evolution conditioned to the observed data and evolutionary model fit
+# #'     (i.e., continuous stochastic maps).
+# #'   * `$trait_data_type` Character string. Record the type of trait data. Here: "continuous".
+# #'   * `$nb_simulations` Integer. Record the nb of simulations/stochastic maps. Here: "100".
+# #'   * `$ace` Numerical. Named vector that records the ML ancestral states (characters) estimates (ACE) at internal nodes.
+# #'     Names are internal nodes ID. Values are ML estimates of trait values per node.
+# #'
+# #' @docType data
+# #' @keywords datasets
+# #' @name Ponerinae_cont_data_old_calib
+# #'
+# #' @seealso [deepSTRAPP::prepare_trait_data()]
+# #'
+# "Ponerinae_cont_data_old_calib"
 
-### 8/ Categorical trait evolution data for Ponerinae ants using 2-level factor ####
+### 9/ Categorical trait evolution data for Ponerinae ants using 2-level factor ####
 
 #' @title Data summarizing the evolution of fake size data in Ponerinae ants using a 2-level factor as categorical trait
 #'
@@ -253,7 +283,7 @@
 "Ponerinae_cat_2lvl_data_old_calib"
 
 
-### 9/ Categorical trait evolution data for Ponerinae ants using 3-level factor ####
+### 10/ Categorical trait evolution data for Ponerinae ants using 3-level factor ####
 
 #' @title Data summarizing the evolution of fake habitat data in Ponerinae ants using a 3-level factor as categorical trait
 #'
@@ -285,7 +315,7 @@
 "Ponerinae_cat_3lvl_data_old_calib"
 
 
-### 10/ Biogeographic range evolution data for eel ####
+### 11/ Biogeographic range evolution data for eel ####
 
 #' @title Data summarizing the evolution of geographic ranges in eels
 #'
@@ -333,7 +363,7 @@
 "eel_biogeo_data"
 
 
-### 11/ Biogeographic range evolution for Ponerinae ants between Old World (O) and New World (N) ####
+### 12/ Biogeographic range evolution for Ponerinae ants between Old World (O) and New World (N) ####
 
 #' @title Data summarizing the evolution of geographic ranges in Ponerinae ants using an old ill-calibrated phylogeny for illustrative purposes
 #'
@@ -382,7 +412,7 @@
 
 ##### BAMM data #####
 
-### 12/ Template file for BAMM diversification analyses ####
+### 13/ Template file for BAMM diversification analyses ####
 
 #' @title Template file for BAMM diversification analyses
 #'
@@ -411,7 +441,7 @@
 "BAMM_template_diversification"
 
 
-### 13/ BAMM output for whale phylogeny ####
+### 14/ BAMM output for whale phylogeny ####
 
 #' @title Dataset summarizing 1000 posterior samples of BAMM for extant whales
 #'
@@ -475,7 +505,7 @@
 "whale_BAMM_object"
 
 
-# ### 14/ Ponerinae_BAMM_object ####
+# ### 15/ Ponerinae_BAMM_object ####
 #
 # #' @title Dataset summarizing 1000 posterior samples of BAMM for extant ponerine ants
 # #'
@@ -541,7 +571,7 @@
 # "Ponerinae_BAMM_object"
 
 
-# ### 15/ Ponerinae_BAMM_object_old_calib ####
+# ### 16/ Ponerinae_BAMM_object_old_calib ####
 #
 # #' @title Dataset summarizing 1000 posterior samples of BAMM for extant ponerine ants based on an old time-calibration for illustrative purposes
 # #'
@@ -608,7 +638,7 @@
 # "Ponerinae_BAMM_object_old_calib"
 
 
-# ### 16/ Ponerinae_BAMM_object_10My ####
+# ### 17/ Ponerinae_BAMM_object_10My ####
 #
 # #' @title Dataset summarizing 1000 posterior samples of BAMM for extant ponerine ants updated to 10 My
 # #'
@@ -695,7 +725,7 @@
 
 ##### deepSTRAPP data #####
 
-# ### 17/ Output from run_deepSTRAPP_over_time on continuous trait ####
+# ### 18/ Output from run_deepSTRAPP_over_time on continuous trait ####
 #
 # #' @title deepSTRAPP output for fake continuous trait data for old time-calibrated ponerine ant phylogeny over 0 to 40 Mya
 # #'
@@ -715,11 +745,16 @@
 # #'   * `$trait_data_type` Character string. Specify the type of trait data. Here: "continuous".
 # #'   * `$trait_data_type_for_stats` Character string. The type of trait data used to select statistical method. Here: "continuous"".
 # #'   * `$rate_type` Character string. The type of diversification rates used in the tests. Here: "net_diversification".
+# #'   * `$uncertainty_strategy` Character string. The strategy used to account for uncertainty in estimates. Here: 'rates_only'.
+# #'   * `$trait_maps_vs_BAMM_samples_list` List of two elements recording the stochastic maps (`$trait_map_ID`) and BAMM samples (`$BAMM_posterior_sample_ID`) chosen for testing across time-steps.
 # #'
 # #'   Optional melted data.frames:
-# #'   * `$trait_data_df_over_time` Data.frame with three columns providing `$trait_value` associated with each `$tip_ID` found along each time step (i.e., `$focal_time`).
+# #'   * `$trait_data_df_over_time` Data.frame with five columns providing `$trait_value` associated with each `$tip_ID`
+# #'     found along each time step (i.e., `$focal_time`) across all stochastic maps (`$Map_ID`).
+# #'     Set `extract_trait_data_melted_df = TRUE` to include it in the output.
 # #'   * `$diversification_data_df_over_time` Data.frame with six columns providing diversification regimes (`$regime_ID`) and `$rates` sorted by `$rate_type` along tips (`$tip_ID`)
 # #'     found across all posterior samples (`$BAMM_sample_ID`) over each time step (i.e., `$focal_time`).
+# #'     Set `extract_diversification_data_melted_df = TRUE` to include it in the output.
 # #'   * Those data.frames can be passed down to [deepSTRAPP::plot_rates_through_time()] to generate a plot showing
 # #'     the evolution diversification rates across trait values over time.
 # #'
@@ -729,7 +764,7 @@
 # #'     Combined with `return_perm_data = TRUE`, it allows to plot the histograms of the null distributions
 # #'     used to assess significance of the tests with [deepSTRAPP::plot_histogram_STRAPP_test_for_focal_time()].
 # #'     (for a single `focal_time`) and [deepSTRAPP::plot_histograms_STRAPP_tests_over_time()] (for multiple `time_steps`).
-# #'   * `$updated_trait_data_with_Map_over_time` List of objects containing trait data and updated `contMap`.
+# #'   * `$updated_Maps_over_time` List of objects containing the updated `contMap` with branches and mapping that are younger than the `focal_time` cut off.
 # #'     Updated `contMap` can be plotted with [deepSTRAPP::plot_contMap()] to display a phylogeny mapped with trait values with branches cut at each `focal_time`.
 # #'   * `$updated_BAMM_objects_over_time` List of objects containing rates and regimes ID mapped on phylogeny.
 # #'     Updated `BAMM_object` can be plotted with [deepSTRAPP::plot_BAMM_rates()] to display a phylogeny mapped with
@@ -741,7 +776,7 @@
 # #'
 # "Ponerinae_deepSTRAPP_cont_old_calib_0_40"
 
-# ### 18/ Output from run_deepSTRAPP_over_time on categorical trait with 2-levels ####
+# ### 19/ Output from run_deepSTRAPP_over_time on categorical trait with 2-levels ####
 #
 # #' @title deepSTRAPP output for fake categorical size data with 2-levels mapped on old time-calibrated ponerine ant phylogeny over 0 to 40 Mya
 # #'
@@ -761,6 +796,8 @@
 # #'   * `$trait_data_type` Character string. Specify the type of trait data. Here: "categorical".
 # #'   * `$trait_data_type_for_stats` Character string. The type of trait data used to select statistical method. Here: "binary".
 # #'   * `$rate_type` Character string. The type of diversification rates used in the tests. Here: "net_diversification".
+# #'   * `$uncertainty_strategy` Character string. The strategy used to account for uncertainty in estimates. Here: 'paired'.
+# #'   * `$trait_maps_vs_BAMM_samples_list` List of two elements recording the stochastic maps (`$trait_map_ID`) and BAMM samples (`$BAMM_posterior_sample_ID`) chosen for testing across time-steps.
 # #'
 # #'   Optional summary df for multinominal data, if `posthoc_pairwise_tests = TRUE`:
 # #'   * `$pvalues_summary_df_for_posthoc_pairwise_tests` Data.frame with four or five columns providing test stat `$estimate`, `$p_value`, and `$p_value_adjusted`
@@ -768,7 +805,8 @@
 # #'      This data.frame can be passed down to [deepSTRAPP::plot_STRAPP_pvalues_over_time()] to generate a plot showing the evolution of the post hoc test results across time.
 # #'
 # #'   Optional melted data.frames:
-# #'   * `$trait_data_df_over_time` Data.frame with three columns providing `$trait_value` associated with each `$tip_ID` found along each time step (i.e., `$focal_time`).
+# #'   * `$trait_data_df_over_time` Data.frame with five columns providing `$trait_value` associated with each `$tip_ID`
+# #'     found along each time step (i.e., `$focal_time`) across all stochastic maps (`$Map_ID`).
 # #'     Set `extract_trait_data_melted_df = TRUE` to include it in the output.
 # #'   * `$diversification_data_df_over_time` Data.frame with six columns providing diversification regimes (`$regime_ID`) and `$rates` sorted by `$rate_type` along tips (`$tip_ID`)
 # #'     found across all posterior samples (`$BAMM_sample_ID`) over each time step (i.e., `$focal_time`).
@@ -782,7 +820,7 @@
 # #'     Combined with `return_perm_data = TRUE`, it allows to plot the histograms of the null distributions
 # #'     used to assess significance of the tests with [deepSTRAPP::plot_histogram_STRAPP_test_for_focal_time()].
 # #'     (for a single `focal_time`) and [deepSTRAPP::plot_histograms_STRAPP_tests_over_time()] (for multiple `time_steps`).
-# #'   * `$updated_trait_data_with_Map_over_time` List of objects containing trait data and updated `contMap`/`densityMaps`.
+# #'   * `$updated_Maps_over_time` List of objects containing the updated `densityMaps` for each time-step.
 # #'     Updated `densityMaps` can be plotted with [deepSTRAPP::plot_densityMaps_overlay()] to display a phylogeny mapped with inferred states with branches cut at each `focal_time`.
 # #'   * `$updated_BAMM_objects_over_time` List of objects containing rates and regimes ID mapped on phylogeny.
 # #'     Updated `BAMM_object` can be plotted with [deepSTRAPP::plot_BAMM_rates()] to display a phylogeny mapped with
@@ -794,7 +832,7 @@
 # #'
 # "Ponerinae_deepSTRAPP_cat_2lvl_old_calib_0_40"
 
-# ### 19/ Output from run_deepSTRAPP_over_time on categorical trait with 3-levels ####
+# ### 20/ Output from run_deepSTRAPP_over_time on categorical trait with 3-levels ####
 #
 # #' @title deepSTRAPP output for fake categorical habitat data with 3-levels mapped on old time-calibrated ponerine ant phylogeny over 0 to 40 Mya
 # #'
@@ -814,6 +852,10 @@
 # #'   * `$trait_data_type` Character string. Specify the type of trait data. Here: "categorical".
 # #'   * `$trait_data_type_for_stats` Character string. The type of trait data used to select statistical method. Here: "multinominal".
 # #'   * `$rate_type` Character string. The type of diversification rates used in the tests. Here: "net_diversification".
+# #'   * `$uncertainty_strategy` Character string. The strategy used to account for uncertainty in estimates. Here: 'paired'.
+# #'   * `$trait_maps_vs_BAMM_samples_list` List of two elements recording the stochastic maps (`$trait_map_ID`) and BAMM samples (`$BAMM_posterior_sample_ID`) chosen for testing across time-steps.
+# #'   * `$uncertainty_strategy` Character string. The strategy used to account for uncertainty in estimates. Here: 'paired'.
+# #'   * `$trait_maps_vs_BAMM_samples_list` List of two elements recording the stochastic maps (`$trait_map_ID`) and BAMM samples (`$BAMM_posterior_sample_ID`) chosen for testing across time-steps.
 # #'
 # #'   Optional summary df for multinominal data, if `posthoc_pairwise_tests = TRUE`:
 # #'   * `$pvalues_summary_df_for_posthoc_pairwise_tests` Data.frame with five columns providing test stat `$estimate`, `$p_value`, and `$p_value_adjusted`
@@ -821,9 +863,12 @@
 # #'      This data.frame can be passed down to [deepSTRAPP::plot_STRAPP_pvalues_over_time()] to generate a plot showing the evolution of the post hoc test results across time.
 # #'
 # #'   Optional melted data.frames:
-# #'   * `$trait_data_df_over_time` Data.frame with three columns providing `$trait_value` associated with each `$tip_ID` found along each time step (i.e., `$focal_time`).
+# #'   * `$trait_data_df_over_time` Data.frame with five columns providing `$trait_value` associated with each `$tip_ID`
+# #'     found along each time step (i.e., `$focal_time`) across all stochastic maps (`$Map_ID`).
+# #'     Set `extract_trait_data_melted_df = TRUE` to include it in the output.
 # #'   * `$diversification_data_df_over_time` Data.frame with six columns providing diversification regimes (`$regime_ID`) and `$rates` sorted by `$rate_type` along tips (`$tip_ID`)
 # #'     found across all posterior samples (`$BAMM_sample_ID`) over each time step (i.e., `$focal_time`).
+# #'     Set `extract_diversification_data_melted_df = TRUE` to include it in the output.
 # #'   * Those data.frames can be passed down to [deepSTRAPP::plot_rates_through_time()] to generate a plot showing
 # #'     the evolution diversification rates across trait values over time.
 # #'
@@ -833,7 +878,7 @@
 # #'     Combined with `return_perm_data = TRUE`, it allows to plot the histograms of the null distributions
 # #'     used to assess significance of the tests with [deepSTRAPP::plot_histogram_STRAPP_test_for_focal_time()].
 # #'     (for a single `focal_time`) and [deepSTRAPP::plot_histograms_STRAPP_tests_over_time()] (for multiple `time_steps`).
-# #'   * `$updated_trait_data_with_Map_over_time` List of objects containing trait data and updated `contMap`/`densityMaps`.
+# #'   * `$updated_Maps_over_time` List of objects containing the updated `densityMaps` for each time-step.
 # #'     Updated `densityMaps` can be plotted with [deepSTRAPP::plot_densityMaps_overlay()] to display a phylogeny mapped with inferred states with branches cut at each `focal_time`.
 # #'   * `$updated_BAMM_objects_over_time` List of objects containing rates and regimes ID mapped on phylogeny.
 # #'     Updated `BAMM_object` can be plotted with [deepSTRAPP::plot_BAMM_rates()] to display a phylogeny mapped with
@@ -845,7 +890,7 @@
 # #'
 # "Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40"
 
-# ### 20/ Output from run_deepSTRAPP_over_time on biogeographic ranges ####
+# ### 21/ Output from run_deepSTRAPP_over_time on biogeographic ranges ####
 #
 # #' @title deepSTRAPP output for biogeographic ranges mapped on old time-calibrated ponerine ant phylogeny over 0 to 40 Mya
 # #'
@@ -872,9 +917,12 @@
 # #'      This data.frame can be passed down to [deepSTRAPP::plot_STRAPP_pvalues_over_time()] to generate a plot showing the evolution of the post hoc test results across time.
 # #'
 # #'   Optional melted data.frames:
-# #'   * `$trait_data_df_over_time` Data.frame with three columns providing `$trait_value` associated with each `$tip_ID` found along each time step (i.e., `$focal_time`).
+# #'   * `$trait_data_df_over_time` Data.frame with five columns providing `$trait_value` associated with each `$tip_ID`
+# #'     found along each time step (i.e., `$focal_time`) across all stochastic maps (`$Map_ID`).
+# #'     Set `extract_trait_data_melted_df = TRUE` to include it in the output.
 # #'   * `$diversification_data_df_over_time` Data.frame with six columns providing diversification regimes (`$regime_ID`) and `$rates` sorted by `$rate_type` along tips (`$tip_ID`)
 # #'     found across all posterior samples (`$BAMM_sample_ID`) over each time step (i.e., `$focal_time`).
+# #'     Set `extract_diversification_data_melted_df = TRUE` to include it in the output.
 # #'   * Those data.frames can be passed down to [deepSTRAPP::plot_rates_through_time()] to generate a plot showing
 # #'     the evolution diversification rates across trait values over time.
 # #'
