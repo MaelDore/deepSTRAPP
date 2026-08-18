@@ -128,7 +128,7 @@
 #'
 #' This function relies on BAMM to provide a reliable solution to map diversification rates and regime shifts on a time-calibrated phylogeny
 #' and obtain the `BAMM_object` object needed to run the deepSTRAPP workflow ([run_deepSTRAPP_for_focal_time], [run_deepSTRAPP_over_time]).
-#' However, it is one option among others for modeling diversification on phylogenies.
+#' BAMM is one option among others for modeling diversification on phylogenies.
 #' You may wish to explore alternatives models such as LSBDS model in RevBayes (Höhna et al., 2016), the MTBD model (Barido-Sottani et al., 2020),
 #' or the ClaDS2 model (Maliet et al., 2019) for your own data.
 #' However, you will need Bayesian models that infer regime shifts to be able to perform STRAPP tests (Rabosky & Huang, 2016).
@@ -1574,7 +1574,7 @@ get_mean_eventData <- function (BAMM_object, sample_indices)
     dff$mushift[i] <- mean(tmp2$mu2)
   }
   # Extract under bammdata format
-  mean_BAMM_object <- BAMMtools::getEventData(ape::as.phylo(BAMM_object), eventdata = dff)
+  mean_BAMM_object <- BAMMtools::getEventData(ape::as.phylo(BAMM_object), eventdata = dff, verbose = FALSE)
 
   return(mean_BAMM_object)
 }
