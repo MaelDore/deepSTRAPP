@@ -24,6 +24,7 @@
 ### 1/ From development version to CRAN release ####
 
 ## 1.1/ Remove deepSTRAPP datasets from data
+unlink(x = "./data/Ponerinae_cont_data_old_calib.rda", force = T)
 unlink(x = "./data/Ponerinae_deepSTRAPP_cont_old_calib_0_40.rda", force = T)
 unlink(x = "./data/Ponerinae_deepSTRAPP_cat_2lvl_old_calib_0_40.rda", force = T)
 unlink(x = "./data/Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40.rda", force = T)
@@ -62,6 +63,7 @@ devtools::check(cran = TRUE)
 ### 2/ From CRAN release to development version ####
 
 ## 2.1/ Add deepSTRAPP datasets to data
+file.copy(from = "./for_CRAN/Ponerinae_cont_data_old_calib.rda", to = "./data/Ponerinae_cont_data_old_calib.rda", overwrite = T)
 file.copy(from = "./for_CRAN/Ponerinae_deepSTRAPP_cont_old_calib_0_40.rda", to = "./data/Ponerinae_deepSTRAPP_cont_old_calib_0_40.rda", overwrite = T)
 file.copy(from = "./for_CRAN/Ponerinae_deepSTRAPP_cat_2lvl_old_calib_0_40.rda", to = "./data/Ponerinae_deepSTRAPP_cat_2lvl_old_calib_0_40.rda", overwrite = T)
 file.copy(from = "./for_CRAN/Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40.rda", to = "./data/Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40.rda", overwrite = T)
