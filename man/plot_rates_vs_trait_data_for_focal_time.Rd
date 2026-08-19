@@ -277,6 +277,7 @@ if (deepSTRAPP::is_dev_version())
     BAMM_object = Ponerinae_BAMM_object_old_calib,
     focal_time = focal_time,
     rate_type = "net_diversification",
+    uncertainty_strategy = "paired",
     posthoc_pairwise_tests = TRUE,
     return_perm_data = TRUE,
     # Need to be set to TRUE to save diversification data

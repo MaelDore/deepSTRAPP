@@ -242,6 +242,7 @@
 #'     BAMM_object = Ponerinae_BAMM_object_old_calib,
 #'     time_range = time_range,
 #'     time_step_duration = time_step_duration,
+#'     uncertainty_strategy = "paired",
 #'     seed = 1234, # Set seed for reproducibility
 #'     alpha = 0.10, # Select a generous level of significance for the sake of the example
 #'     rate_type = "net_diversification",

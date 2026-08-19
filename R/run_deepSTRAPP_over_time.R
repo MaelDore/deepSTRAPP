@@ -282,14 +282,14 @@
 #'     time_step_duration = time_step_duration,
 #'     uncertainty_strategy = "rates_only",
 #'     rate_type = "net_diversification",
-#'    return_perm_data = TRUE,
+#'     return_perm_data = TRUE,
 #'     extract_trait_data_melted_df = TRUE,
 #'     extract_diversification_data_melted_df = TRUE,
 #'     return_STRAPP_results = TRUE,
-#'    return_updated_Maps = TRUE,
+#'     return_updated_Maps = TRUE,
 #'     return_updated_BAMM_objects = TRUE,
-#'    verbose = TRUE,
-#'    verbose_extended = TRUE) }
+#'     verbose = TRUE,
+#'     verbose_extended = TRUE) }
 #'
 #'  ## Load directly deepSTRAPP output
 #'  data(Ponerinae_deepSTRAPP_cont_old_calib_0_40, package = "deepSTRAPP")
@@ -430,7 +430,7 @@
 #'     return_updated_Maps = TRUE,
 #'     return_updated_BAMM_objects = TRUE,
 #'     verbose = TRUE,
-#'    verbose_extended = TRUE) }
+#'     verbose_extended = TRUE) }
 #'
 #'  ## Load directly deepSTRAPP output
 #'  data(Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40, package = "deepSTRAPP")
@@ -583,7 +583,7 @@
 #'     trait_data_type = "biogeographic",
 #'     BAMM_object = Ponerinae_BAMM_object_old_calib,
 #'     time_range = time_range,
-#'    time_step_duration = time_step_duration,
+#'     time_step_duration = time_step_duration,
 #'     seed = 1234, # Set seed for reproducibility
 #'     alpha = 0.10, # Select a generous level of significance for the sake of the example
 #'     uncertainty_strategy = "paired",
@@ -593,7 +593,7 @@
 #'     extract_diversification_data_melted_df = TRUE,
 #'     return_STRAPP_results = TRUE,
 #'     return_updated_Maps = TRUE,
-#'    return_updated_BAMM_objects = TRUE,
+#'     return_updated_BAMM_objects = TRUE,
 #'     verbose = TRUE,
 #'     verbose_extended = TRUE) }
 #'
@@ -1139,9 +1139,7 @@ run_deepSTRAPP_over_time <- function (contMap = NULL,
 
 }
 
-
-# Push on Github once the check is passed
-# Check notes on other changes required for the review
+## Adjust all examples/tutorials in run_deepSTRAPP to include the new uncertainty_strategy argument and set it as non-default if needed !!!!! #############
 
 ##### Update all tutorials accordingly to advertise the multiple options!
 # Clarify what inputs are available for what strategy
@@ -1149,10 +1147,13 @@ run_deepSTRAPP_over_time <- function (contMap = NULL,
 # Requires contMaps, densityMaps (but no trackdown of stochastic map ID), simmaps for "paired' and "full" strategies
 # Advertise changes as modularity in the manuscript and response to reviewers
 
-## Add it to the vignette/tutorial to show how one can load directly BAMM results into deepSTRAPP
+## Make a tutorial dedicated to loading external results into deepSTRAPP
+ # contMap / contMaps / densityMaps / simmaps
+ # BAMM object with build_BAMM_object
+ # Add reference to it into the vignettes/tutorials for each trait evolution / BAMM
 
-###### Need to adjust all examples/tutorials in run_deepSTRAPP to include the new uncertainty_strategy argument and set it as non-default if needed !!!!! #############
+## Once tutorials are ready, push the update on GitHub and ask Bonnie for review/testing
 
-
+# Then work the second example to include
 
 

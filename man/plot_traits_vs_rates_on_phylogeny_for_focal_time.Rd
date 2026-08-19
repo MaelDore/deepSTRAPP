@@ -292,7 +292,7 @@ if (deepSTRAPP::is_dev_version())
     trait_data_type = "biogeographic",
     BAMM_object = Ponerinae_BAMM_object_old_calib,
     focal_time = focal_time,
-    uncertainty_strategy = "rates_only",
+    uncertainty_strategy = "paired",
     return_updated_Maps = TRUE,
     return_updated_BAMM_object = TRUE)
 

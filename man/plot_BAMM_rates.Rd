@@ -117,27 +117,30 @@ It may differ from the MAP configuration. (See \code{\link[BAMMtools:maximumShif
 data(whale_BAMM_object, package = "deepSTRAPP")
 
 ## Plot overall mean rates with MAP configuration for regime shifts
-# (rates are averaged only all posterior samples)
-plot_BAMM_rates(whale_BAMM_object, add_regime_shifts = TRUE,
-                configuration_type = "MAP", bg = "black",
-                regimes_size = 3)
+# (rates are averaged across all posterior samples)
+plot_BAMM_rates(whale_BAMM_object, # Use the full object to plot mean overall rates
+                add_regime_shifts = TRUE,
+                configuration_type = "MAP",
+                regimes_size = 3, bg = "black")
 ## Plot overall mean rates with MSC configuration for regime shifts
-# (rates are averaged only all posterior samples)
+# (rates are averaged across all posterior samples)
 plot_BAMM_rates(whale_BAMM_object, add_regime_shifts = TRUE,
-                configuration_type = "MSC", bg = "black",
-                regimes_size = 3)
+                configuration_type = "MSC",
+                regimes_size = 3, bg = "black")
 
 ## Plot mean MAP rates with regime shifts
 # (rates are averaged only across MAP samples)
-plot_BAMM_rates(whale_BAMM_object$MAP_BAMM_object, add_regime_shifts = TRUE,
+plot_BAMM_rates(whale_BAMM_object$MAP_BAMM_object, # Use the MAP object to plot mean MAP rates
+                add_regime_shifts = TRUE,
                 configuration_type = "index",
-                # Set to index to use the regime shift data from the '$MAP_BAMM_object'
+                # Set to index to use the regime shift location from MAP configuration
                 regimes_size = 3, bg = "black")
-## Plot mean MSC rates (rates averaged only across MSC samples) with regime shifts
+## Plot mean MSC rates with regime shifts
 # (rates averaged only across MSC samples)
-plot_BAMM_rates(whale_BAMM_object$MSC_BAMM_object, add_regime_shifts = TRUE,
+plot_BAMM_rates(whale_BAMM_object$MSC_BAMM_object, # Use the MSC object to plot mean MSC rates
+                add_regime_shifts = TRUE,
                 configuration_type = "index",
-                # Set to index to use the regime shift data from the '$MSC_BAMM_object'
+                # Set to index to use the regime shift data from MSC configuration
                 regimes_size = 3, bg = "black")
 
 }

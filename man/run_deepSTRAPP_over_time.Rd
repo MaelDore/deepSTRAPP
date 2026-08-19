@@ -363,14 +363,14 @@ data(Ponerinae_trait_tip_data, package = "deepSTRAPP")
     time_step_duration = time_step_duration,
     uncertainty_strategy = "rates_only",
     rate_type = "net_diversification",
-   return_perm_data = TRUE,
+    return_perm_data = TRUE,
     extract_trait_data_melted_df = TRUE,
     extract_diversification_data_melted_df = TRUE,
     return_STRAPP_results = TRUE,
-   return_updated_Maps = TRUE,
+    return_updated_Maps = TRUE,
     return_updated_BAMM_objects = TRUE,
-   verbose = TRUE,
-   verbose_extended = TRUE) }
+    verbose = TRUE,
+    verbose_extended = TRUE) }
 
  ## Load directly deepSTRAPP output
  data(Ponerinae_deepSTRAPP_cont_old_calib_0_40, package = "deepSTRAPP")
@@ -511,7 +511,7 @@ str(Ponerinae_deepSTRAPP_cont_old_calib_0_40, max.level = 1)
     return_updated_Maps = TRUE,
     return_updated_BAMM_objects = TRUE,
     verbose = TRUE,
-   verbose_extended = TRUE) }
+    verbose_extended = TRUE) }
 
  ## Load directly deepSTRAPP output
  data(Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40, package = "deepSTRAPP")
@@ -664,7 +664,7 @@ str(Ponerinae_deepSTRAPP_cont_old_calib_0_40, max.level = 1)
     trait_data_type = "biogeographic",
     BAMM_object = Ponerinae_BAMM_object_old_calib,
     time_range = time_range,
-   time_step_duration = time_step_duration,
+    time_step_duration = time_step_duration,
     seed = 1234, # Set seed for reproducibility
     alpha = 0.10, # Select a generous level of significance for the sake of the example
     uncertainty_strategy = "paired",
@@ -674,7 +674,7 @@ str(Ponerinae_deepSTRAPP_cont_old_calib_0_40, max.level = 1)
     extract_diversification_data_melted_df = TRUE,
     return_STRAPP_results = TRUE,
     return_updated_Maps = TRUE,
-   return_updated_BAMM_objects = TRUE,
+    return_updated_BAMM_objects = TRUE,
     verbose = TRUE,
     verbose_extended = TRUE) }
 

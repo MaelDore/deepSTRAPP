@@ -133,6 +133,7 @@
 #'     # nb_time_steps = nb_time_steps,
 #'     time_range = time_range,
 #'     time_step_duration = time_step_duration,
+#'     uncertainty_strategy = "rates_only",
 #'     return_perm_data = TRUE,
 #'     # Need to be set to TRUE to save trait data
 #'     extract_trait_data_melted_df = TRUE,
@@ -225,6 +226,7 @@
 #'     time_range = time_range,
 #'     time_step_duration = time_step_duration,
 #'     rate_type = "net_diversification",
+#'     uncertainty_strategy = "paired",
 #'     seed = 1234, # Set for reproducibility
 #'     alpha = 0.10, # Select a generous level of significance for the sake of the example
 #'     posthoc_pairwise_tests = TRUE,
