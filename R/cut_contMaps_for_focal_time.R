@@ -54,7 +54,6 @@
 #' @author Maël Doré
 #'
 #' @seealso [deepSTRAPP::cut_phylo_for_focal_time()] [deepSTRAPP::extract_most_likely_trait_values_for_focal_time()]
-#'  [deepSTRAPP::extract_most_likely_trait_values_from_contMap_for_focal_time()]
 #'
 #' For a guided tutorial, see this vignette: \code{vignette("cut_phylogenies", package = "deepSTRAPP")}
 #'
@@ -236,8 +235,7 @@ cut_contMap_for_focal_time <- function(contMap, focal_time, keep_tip_labels = TR
 #'
 #' @author Maël Doré
 #'
-#' @seealso [deepSTRAPP::cut_phylo_for_focal_time()] [deepSTRAPP::extract_most_likely_trait_values_for_focal_time()]
-#'  [deepSTRAPP::extract_most_likely_trait_values_from_contMap_for_focal_time()]
+#' @seealso [deepSTRAPP::cut_phylo_for_focal_time()] [deepSTRAPP::extract_most_likely_trait_values_for_focal_time()] [deepSTRAPP::extract_all_trait_values_for_focal_time()]
 #'
 #' For a guided tutorial, see this vignette: \code{vignette("cut_phylogenies", package = "deepSTRAPP")}
 #'
