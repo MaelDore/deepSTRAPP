@@ -25,6 +25,16 @@ is_dev_version <- function (pkg = "deepSTRAPP")
 }
 
 
+## ----adjust_dpi_CRAN, include = FALSE, eval = !is_dev_version()---------------
+knitr::opts_chunk$set(
+  dpi = 50   # Lower DPI to save space
+)
+
+## ----adjust_dpi_dev, include = FALSE, eval = is_dev_version()-----------------
+# knitr::opts_chunk$set(
+#   dpi = 72   # Default DPI for the dev version
+# )
+
 ## ----load_data_biogeo_2lvl----------------------------------------------------
 # # ------ Step 0: Load data ------ #
 # 
@@ -47,7 +57,6 @@ is_dev_version <- function (pkg = "deepSTRAPP")
 # names(Ponerinae_NO_tip_data) <- Ponerinae_binary_range_table$Taxa
 # table(Ponerinae_NO_tip_data)
 # 
-# 
 # # Select color scheme for ranges
 # colors_per_ranges <- c("mediumpurple2", "peachpuff2")
 # names(colors_per_ranges) <- c("N", "O")
@@ -65,12 +74,13 @@ is_dev_version <- function (pkg = "deepSTRAPP")
 # Ponerinae_NO_tip_data <- Ponerinae_NO_tip_data[match(x = Ponerinae_tree_old_calib$tip.label,
 #                                                      table = names(Ponerinae_NO_tip_data))]
 # 
-# 
 # ## Plot data on tips for visualization
 # pdf(file = "./Ponerinae_biogeo_data_old_calib_on_phylo.pdf", width = 20, height = 150)
 # 
 # # Set plotting parameters
+# old_par <- par(no.readonly = TRUE)
 # par(mar = c(0.1,0.1,0.1,0.1), oma = c(0,0,0,0)) # bltr
+# 
 # # Graph presence/absence using plotTree.datamatrix
 # range_map <- phytools::plotTree.datamatrix(
 #   tree = Ponerinae_tree_old_calib,
@@ -105,6 +115,9 @@ is_dev_version <- function (pkg = "deepSTRAPP")
 #        cex = 1.5, bty = "n")
 # 
 # dev.off()
+# 
+# # Reset plotting parameters
+# par(old_par)
 # 
 # ## Inputs needed for Step 1 are the tip_data (Ponerinae_NO_tip_data) and the phylogeny
 # ## (Ponerinae_tree_old_calib), and optionally, a color scheme (colors_per_ranges).
@@ -149,9 +162,12 @@ names(colors_per_ranges) <- c("N", "O")
 # # All these actions are performed by a single function: deepSTRAPP::prepare_trait_data()
 # ?deepSTRAPP::prepare_trait_data()
 # 
-# ## In this example, to simplify the analyses, we set 'split_multi_area_ranges' = TRUE such as
-# ## multi-range areas ('NO' in this case) are split between unique areas ('N' and 'O')
-# ## to keep only two areas for downstream analyses
+# ## The R package `BioGeoBEARS` is needed for this workflow to process biogeographic data.
+# ## Please install it manually from: https://github.com/nmatzke/BioGeoBEARS.
+# 
+# # In this example, to simplify the analyses, we set 'split_multi_area_ranges' = TRUE such as
+# # multi-range areas ('NO' in this case) are split between unique areas ('N' and 'O')
+# # to keep only two areas for downstream analyses
 # 
 # # Run prepare_trait_data with default options
 # # For biogeographic data, a DEC model is assumed by default.
@@ -160,9 +176,10 @@ names(colors_per_ranges) <- c("N", "O")
 #    trait_data_type = "biogeographic",
 #    phylo = Ponerinae_tree_old_calib,
 #    evolutionary_models = "DEC+J", # Default = "DEC" for biogeographic
+#    BioGeoBEARS_directory_path = "./BioGeoBEARS_directory/",
 #    prefix_for_files = "Ponerinae_old_calib",
 #    split_multi_area_ranges = TRUE, # Set to TRUE to split multi-range areas NO between N and O
-#    nb_simulations = 100, # Reduce number of simulations to save time
+#    nb_simulations = 100, # Reduce number of simulations to save time (Default = '1000')
 #    colors_per_levels = colors_per_ranges,
 #    seed = 1234) # Set seed for reproducibility
 # 
@@ -213,8 +230,8 @@ names(colors_per_ranges) <- c("N", "O")
 # 
 # # Run a BAMM (Bayesian Analysis of Macroevolutionary Mixtures)
 # 
-# # You need the BAMM C++ program installed in your machine to run this step.
-# # See the BAMM website: http://bamm-project.org/ and the companion R package [BAMMtools].
+# ## You need the BAMM C++ program installed in your machine to run this step.
+# ## See the BAMM website: http://bamm-project.org/ and the companion R package [BAMMtools].
 # 
 # # 2.1/ Set BAMM - Record BAMM settings and generate all input files needed for BAMM.
 # # 2.2/ Run BAMM - Run BAMM and move output files in dedicated directory.
@@ -227,16 +244,19 @@ names(colors_per_ranges) <- c("N", "O")
 # 
 # # Run BAMM workflow with deepSTRAPP
 # ## This step is time-consuming. You can skip it and load directly the result if needed
-# Ponerinae_BAMM_object <- prepare_diversification_data(
+# Ponerinae_BAMM_object_old_calib <- prepare_diversification_data(
 #    BAMM_install_directory_path = "./software/bamm-2.5.0/", # To adjust to your own path to BAMM
 #    phylo = Ponerinae_tree_old_calib,
 #    prefix_for_files = "Ponerinae_old_calib",
 #    seed = 1234, # Set seed for reproducibility
-#    numberOfGenerations = 10^7 # Set high for optimal run, but will take a long time
-# )
+#    numberOfGenerations = 10^7, # Set high for optimal run, but will take a long time
+#    BAMM_output_directory_path =  "./BAMM_outputs/")
 # 
 # # Load directly the result
 # data(Ponerinae_BAMM_object_old_calib)
+# # This dataset is only available in development versions installed from GitHub.
+# # It is not available in CRAN versions.
+# # Use remotes::install_github(repo = "MaelDore/deepSTRAPP") to get the latest development version.
 # 
 # # Explore output
 # str(Ponerinae_BAMM_object_old_calib, 1)
@@ -279,12 +299,18 @@ names(colors_per_ranges) <- c("N", "O")
 # ## This step is time-consuming. You can skip it and load directly the result if needed
 # Ponerinae_deepSTRAPP_biogeo_old_calib_0_40 <- run_deepSTRAPP_over_time(
 #     densityMaps = Ponerinae_biogeo_data_old_calib$densityMaps,
+#     # Inform the number of simulation to be able to reconstruct
+#     # distributions of ranges based on frequencies recorded in the the densityMaps
+#     nb_simulations = 100,
 #     ace = Ponerinae_biogeo_data_old_calib$ace,
 #     tip_data = Ponerinae_NO_tip_data,
 #     trait_data_type = "biogeographic",
 #     BAMM_object = Ponerinae_BAMM_object_old_calib,
 #     time_range = time_range,
 #     time_step_duration = time_step_duration,
+#     # Deal with uncertainty in estimates by pairing trait states
+#     # (reconstructed from densityMaps) with BAMM posterior samples
+#     uncertainty_strategy = "paired",
 #     seed = 1234, # Set seed for reproducibility
 #     alpha = 0.10, # Select a generous level of significance for the sake of the example
 #     # Needed to obtain STRAPP stats and plot evaluation histograms (See 4.2)
@@ -407,7 +433,7 @@ names(colors_per_ranges) <- c("N", "O")
 ## ----plot_pvalues_biogeo_2lvl_eval_CRAN, eval = !is_dev_version(), echo = FALSE, out.width = "100%"----
 
 # Plot pre-rendered graph
-knitr::include_graphics("figures/1.3_deepSTRAPP_biogeographic_data_4.1_plot_pvalues.png")
+knitr::include_graphics("figures/1.3_deepSTRAPP_biogeographic_data_4.1_plot_pvalues.PNG")
 
 
 ## ----plot_histogram_STRAPP_tests_overall_biogeo_2lvl--------------------------
@@ -464,7 +490,7 @@ knitr::include_graphics("figures/1.3_deepSTRAPP_biogeographic_data_4.1_plot_pval
 ## ----plot_histogram_STRAPP_tests_biogeo_2lvl_eval_CRAN, eval = !is_dev_version(), echo = FALSE, out.width = "100%"----
 
 # Plot pre-rendered graph
-knitr::include_graphics("figures/1.3_deepSTRAPP_biogeographic_data_4.2_plot_STRAPP_tests.png")
+knitr::include_graphics("figures/1.3_deepSTRAPP_biogeographic_data_4.2_plot_STRAPP_tests.PNG")
 
 
 ## ----plot_rates_through_time_biogeo_2lvl--------------------------------------
@@ -501,7 +527,7 @@ knitr::include_graphics("figures/1.3_deepSTRAPP_biogeographic_data_4.2_plot_STRA
 ## ----plot_rates_through_time_biogeo_2lvl_eval_CRAN, eval = !is_dev_version(), echo = FALSE, out.width = "100%"----
 
 # Plot pre-rendered graph
-knitr::include_graphics("figures/1.3_deepSTRAPP_biogeographic_data_4.3_plot_rates_through_time.png")
+knitr::include_graphics("figures/1.3_deepSTRAPP_biogeographic_data_4.3_plot_rates_through_time.PNG")
 
 
 ## ----plot_rates_vs_traits_biogeo_2lvl-----------------------------------------
@@ -549,7 +575,7 @@ knitr::include_graphics("figures/1.3_deepSTRAPP_biogeographic_data_4.3_plot_rate
 ## ----plot_rates_vs_traits_biogeo_2lvl_eval_CRAN, eval = !is_dev_version(), echo = FALSE, out.width = "100%"----
 
 # Plot pre-rendered graph
-knitr::include_graphics("figures/1.3_deepSTRAPP_biogeographic_data_4.4_plot_rates_vs_traits.png")
+knitr::include_graphics("figures/1.3_deepSTRAPP_biogeographic_data_4.4_plot_rates_vs_traits.PNG")
 
 
 ## ----plot_updated_densityMaps_biogeo_2lvl-------------------------------------
@@ -612,8 +638,8 @@ knitr::include_graphics("figures/1.3_deepSTRAPP_biogeographic_data_4.4_plot_rate
 ## ----plot_updated_densityMaps_biogeo_2lvl_eval_CRAN, eval = !is_dev_version(), echo = FALSE, out.width = "100%"----
 
 # Plot pre-rendered graph
-knitr::include_graphics("figures/1.3_deepSTRAPP_biogeographic_data_4.5_plot_updated_densityMaps_1.png")
-knitr::include_graphics("figures/1.3_deepSTRAPP_biogeographic_data_4.5_plot_updated_densityMaps_2.png")
+knitr::include_graphics("figures/1.3_deepSTRAPP_biogeographic_data_4.5_plot_updated_densityMaps_1.PNG")
+knitr::include_graphics("figures/1.3_deepSTRAPP_biogeographic_data_4.5_plot_updated_densityMaps_2.PNG")
 
 
 ## ----plot_BAMM_rates_biogeo_2lvl----------------------------------------------
@@ -657,6 +683,7 @@ knitr::include_graphics("figures/1.3_deepSTRAPP_biogeographic_data_4.5_plot_upda
 # 
 
 ## ----plot_BAMM_rates_biogeo_2lvl_eval_dev, eval = is_dev_version(), echo = FALSE----
+# old_par <- par(no.readonly = TRUE)
 # par(mfrow = c(1, 2))
 # 
 # # Plot diversification rates on initial phylogeny (t = 0)
@@ -671,12 +698,12 @@ knitr::include_graphics("figures/1.3_deepSTRAPP_biogeographic_data_4.5_plot_upda
 #                 colorbreaks = BAMM_map_10My$initial_colorbreaks$net_diversification)
 # title(main = "BAMM rates for 100-10 My")
 # 
-# par(mfrow = c(1, 1))
+# par(old_par)
 
 ## ----plot_BAMM_rates_biogeo_2lvl_eval_CRAN, eval = !is_dev_version(), echo = FALSE, out.width = "100%"----
 
 # Plot pre-rendered graph
-knitr::include_graphics("figures/1.3_deepSTRAPP_biogeographic_data_4.6_plot_BAMM_rates.png")
+knitr::include_graphics("figures/1.3_deepSTRAPP_biogeographic_data_4.6_plot_BAMM_rates.PNG")
 
 
 ## ----plot_traits_vs_rates_on_phylogeny_biogeo_2lvl----------------------------
@@ -746,7 +773,7 @@ knitr::include_graphics("figures/1.3_deepSTRAPP_biogeographic_data_4.6_plot_BAMM
 ## ----plot_traits_vs_rates_on_phylogeny_biogeo_2lvl_eval_CRAN, eval = !is_dev_version(), echo = FALSE, out.width = "100%"----
 
 # Plot pre-rendered graph
-knitr::include_graphics("figures/1.3_deepSTRAPP_biogeographic_data_4.7_plot_traits_vs_rate_maps_1.png")
-knitr::include_graphics("figures/1.3_deepSTRAPP_biogeographic_data_4.7_plot_traits_vs_rate_maps_2.png")
+knitr::include_graphics("figures/1.3_deepSTRAPP_biogeographic_data_4.7_plot_traits_vs_rate_maps_1.PNG")
+knitr::include_graphics("figures/1.3_deepSTRAPP_biogeographic_data_4.7_plot_traits_vs_rate_maps_2.PNG")
 
 

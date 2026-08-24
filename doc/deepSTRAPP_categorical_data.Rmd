@@ -38,6 +38,17 @@ is_dev_version <- function (pkg = "deepSTRAPP")
 
 ```
 
+```{r adjust_dpi_CRAN, include = FALSE, eval = !is_dev_version()}
+knitr::opts_chunk$set(
+  dpi = 50   # Lower DPI to save space
+)
+```
+```{r adjust_dpi_dev, include = FALSE, eval = is_dev_version()}
+knitr::opts_chunk$set(
+  dpi = 72   # Default DPI for the dev version
+)
+```
+
 <br>
 This is a simple example that shows how deepSTRAPP can be used to test for __differences__ in diversification rates between multiple (three) __categorical states__ along evolutionary times.
 It presents the main functions in a typical __deepSTRAPP workflow__.
@@ -89,7 +100,9 @@ Ponerinae_cat_3lvl_tip_data <- Ponerinae_cat_3lvl_tip_data[match(x = Ponerinae_t
 pdf(file = "./Ponerinae_cat_3lvl_data_old_calib_on_phylo.pdf", width = 20, height = 150)
 
 # Set plotting parameters
+old_par <- par(no.readonly = TRUE)
 par(mar = c(0.1,0.1,0.1,0.1), oma = c(0,0,0,0)) # bltr
+
 # Graph presence/absence using plotTree.datamatrix
 range_map <- phytools::plotTree.datamatrix(
   tree = Ponerinae_tree_old_calib,
@@ -125,6 +138,8 @@ legend(x = plot_info$x.lim[2] - 10,
 
 dev.off()
 
+# Reset plotting parameters
+par(old_par)
 
 ## Inputs needed for Step 1 are the tip_data (Ponerinae_cat_3lvl_tip_data) and the phylogeny
 ## (Ponerinae_tree_old_calib), and optionally, a color scheme (colors_per_states).
@@ -216,16 +231,19 @@ head(Ponerinae_ACE)
 
 # Run BAMM workflow with deepSTRAPP
 ## This step is time-consuming. You can skip it and load directly the result if needed
-Ponerinae_BAMM_object <- prepare_diversification_data(
+Ponerinae_BAMM_object_old_calib <- prepare_diversification_data(
    BAMM_install_directory_path = "./software/bamm-2.5.0/", # To adjust to your own path to BAMM
    phylo = Ponerinae_tree_old_calib,
    prefix_for_files = "Ponerinae_old_calib",
    seed = 1234, # Set seed for reproducibility
-   numberOfGenerations = 10^7 # Set high for optimal run, but will take a long time
-)
+   numberOfGenerations = 10^7, # Set high for optimal run, but will take a long time
+   BAMM_output_directory_path =  "./BAMM_outputs/")
 
 # Load directly the result
 data(Ponerinae_BAMM_object_old_calib)
+# This dataset is only available in development versions installed from GitHub.
+# It is not available in CRAN versions.
+# Use remotes::install_github(repo = "MaelDore/deepSTRAPP") to get the latest development version.
 
 # Explore output
 str(Ponerinae_BAMM_object_old_calib, 1)
@@ -455,8 +473,8 @@ print(ggplot_STRAPP_pvalues_posthoc)
 ```{r plot_pvalues_cat_3lvl_eval_CRAN, eval = !is_dev_version(), echo = FALSE, out.width = "100%"}
 
 # Plot pre-rendered graph
-knitr::include_graphics("figures/1.2_deepSTRAPP_categorical_3lvl_data_4.1_plot_pvalues_1.png")
-knitr::include_graphics("figures/1.2_deepSTRAPP_categorical_3lvl_data_4.1_plot_pvalues_2.png")
+knitr::include_graphics("figures/1.2_deepSTRAPP_categorical_3lvl_data_4.1_plot_pvalues_1.PNG")
+knitr::include_graphics("figures/1.2_deepSTRAPP_categorical_3lvl_data_4.1_plot_pvalues_2.PNG")
 
 ```
 
@@ -542,8 +560,8 @@ ggplot_STRAPP_pvalues_posthoc <- plot_histogram_STRAPP_test_for_focal_time(
 ```{r plot_histogram_STRAPP_tests_cat_3lvl_eval_CRAN, eval = !is_dev_version(), echo = FALSE, out.width = "100%"}
 
 # Plot pre-rendered graph
-knitr::include_graphics("figures/1.2_deepSTRAPP_categorical_3lvl_data_4.2_plot_histograms_1.png")
-knitr::include_graphics("figures/1.2_deepSTRAPP_categorical_3lvl_data_4.2_plot_histograms_2.png")
+knitr::include_graphics("figures/1.2_deepSTRAPP_categorical_3lvl_data_4.2_plot_histograms_1.PNG")
+knitr::include_graphics("figures/1.2_deepSTRAPP_categorical_3lvl_data_4.2_plot_histograms_2.PNG")
 
 ```
 
@@ -589,7 +607,7 @@ print(ggplot_RTT)
 ```{r plot_rates_through_time_cat_3lvl_eval_CRAN, eval = !is_dev_version(), echo = FALSE, out.width = "100%"}
 
 # Plot pre-rendered graph
-knitr::include_graphics("figures/1.2_deepSTRAPP_categorical_3lvl_data_4.3_plot_rates_through_time.png")
+knitr::include_graphics("figures/1.2_deepSTRAPP_categorical_3lvl_data_4.3_plot_rates_through_time.PNG")
 
 ```
 
@@ -639,7 +657,7 @@ plot_rates_vs_trait_data_for_focal_time(
 ```{r plot_rates_vs_traits_cat_3lvl_eval_CRAN, eval = !is_dev_version(), echo = FALSE, out.width = "100%"}
 
 # Plot pre-rendered graph
-knitr::include_graphics("figures/1.2_deepSTRAPP_categorical_3lvl_data_4.4_plot_rates_vs_traits.png")
+knitr::include_graphics("figures/1.2_deepSTRAPP_categorical_3lvl_data_4.4_plot_rates_vs_traits.PNG")
 
 ```
 
@@ -707,8 +725,8 @@ title(main = "Trait evolution for 100-40 My")
 ```{r plot_updated_densityMaps_cat_3lvl_eval_CRAN, eval = !is_dev_version(), echo = FALSE, out.width = "100%"}
 
 # Plot pre-rendered graph
-knitr::include_graphics("figures/1.2_deepSTRAPP_categorical_3lvl_data_4.5_plot_updated_densityMaps_1.png")
-knitr::include_graphics("figures/1.2_deepSTRAPP_categorical_3lvl_data_4.5_plot_updated_densityMaps_2.png")
+knitr::include_graphics("figures/1.2_deepSTRAPP_categorical_3lvl_data_4.5_plot_updated_densityMaps_1.PNG")
+knitr::include_graphics("figures/1.2_deepSTRAPP_categorical_3lvl_data_4.5_plot_updated_densityMaps_2.PNG")
 
 ```
 
@@ -753,6 +771,7 @@ title(main = "BAMM rates for 100-40 My")
 
 ```
 ```{r plot_BAMM_rates_cat_3lvl_eval_dev, eval = is_dev_version(), echo = FALSE}
+old_par <- par(no.readonly = TRUE)
 par(mfrow = c(1, 2))
 
 # Plot diversification rates on initial phylogeny (t = 0)
@@ -767,12 +786,12 @@ plot_BAMM_rates(BAMM_map_10My, labels = FALSE, legend = TRUE,
                 colorbreaks = BAMM_map_10My$initial_colorbreaks$net_diversification)
 title(main = "BAMM rates for 100-10 My")
 
-par(mfrow = c(1, 1))
+par(old_par)
 ```
 ```{r plot_BAMM_rates_cat_3lvl_eval_CRAN, eval = !is_dev_version(), echo = FALSE, out.width = "100%"}
 
 # Plot pre-rendered graph
-knitr::include_graphics("figures/1.2_deepSTRAPP_categorical_3lvl_data_4.6_plot_BAMM_rates.png")
+knitr::include_graphics("figures/1.2_deepSTRAPP_categorical_3lvl_data_4.6_plot_BAMM_rates.PNG")
 
 ```
 
@@ -845,8 +864,8 @@ plot_traits_vs_rates_on_phylogeny_for_focal_time(
 ```{r plot_traits_vs_rates_on_phylogeny_cat_3lvl_eval_CRAN, eval = !is_dev_version(), echo = FALSE, out.width = "100%"}
 
 # Plot pre-rendered graph
-knitr::include_graphics("figures/1.2_deepSTRAPP_categorical_3lvl_data_4.7_plot_traits_vs_rate_maps_1.png")
-knitr::include_graphics("figures/1.2_deepSTRAPP_categorical_3lvl_data_4.7_plot_traits_vs_rate_maps_2.png")
+knitr::include_graphics("figures/1.2_deepSTRAPP_categorical_3lvl_data_4.7_plot_traits_vs_rate_maps_1.PNG")
+knitr::include_graphics("figures/1.2_deepSTRAPP_categorical_3lvl_data_4.7_plot_traits_vs_rate_maps_2.PNG")
 
 ```
 

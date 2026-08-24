@@ -9,6 +9,31 @@ knitr::opts_chunk$set(
 ## ----setup, eval = TRUE, include = FALSE--------------------------------------
 library(deepSTRAPP)
 
+is_dev_version <- function (pkg = "deepSTRAPP")
+{
+  # # Check if ran on CRAN
+  # not_cran <- identical(Sys.getenv("NOT_CRAN"), "true") # || interactive()
+
+  # Version number check
+  version <- tryCatch(as.character(utils::packageVersion(pkg)), error = function(e) "")
+  dev_version <- grepl("\\.9000", version)
+
+  # not_cran || dev_version
+  
+  return(dev_version)
+}
+
+
+## ----adjust_dpi_CRAN, include = FALSE, eval = !is_dev_version()---------------
+knitr::opts_chunk$set(
+  dpi = 50   # Lower DPI to save space
+)
+
+## ----adjust_dpi_dev, include = FALSE, eval = is_dev_version()-----------------
+# knitr::opts_chunk$set(
+#   dpi = 72   # Default DPI for the dev version
+# )
+
 ## ----cut_phylogeny------------------------------------------------------------
 # # ------ Example 1: Cut a regular phylogeny ------ #
 # 
@@ -72,6 +97,7 @@ cut_tree_with_tip_labels <- cut_phylo_for_focal_time(
   keep_tip_labels = TRUE)
 
 ## Show tip labels
+old_par <- par(no.readonly = TRUE)
 par(mfrow = c(1, 2))
 
 # Plot internal node labels on initial tree with cut-off
@@ -88,7 +114,7 @@ plot(cut_tree_with_tip_labels)
 ape::nodelabels(text = cut_tree_with_tip_labels$initial_nodes_ID)
 title(main = "Past phylogeny - 30 Mya")
 
-par(mfrow = c(1, 1))
+par(old_par)
 
 ## ----cut_phylogeny_2----------------------------------------------------------
 # ## Show edge labels
@@ -108,6 +134,7 @@ par(mfrow = c(1, 1))
 
 ## ----cut_phylogeny_eval_2, fig.width = 15, fig.height = 10, out.width = "100%", eval = TRUE, echo = FALSE----
 ## Show edge labels
+old_par <- par(no.readonly = TRUE)
 par(mfrow = c(1, 2))
 
 # Plot edge labels on initial tree with cut-off
@@ -123,7 +150,7 @@ plot(cut_tree_with_tip_labels)
 ape::edgelabels(text = cut_tree_with_tip_labels$initial_edges_ID)
 title(main = "Past phylogeny - 30 Mya")
 
-par(mfrow = c(1, 1))
+par(old_par)
 
 
 ## ----cut_contMap--------------------------------------------------------------
@@ -222,7 +249,7 @@ updated_contMap <- cut_contMap_for_focal_time(
    keep_tip_labels = TRUE)
 
 ## Plot with tip.labels
-
+old_par <- par(no.readonly = TRUE)
 par(mfrow = c(1, 2))
 
 # Plot node labels on initial stochastic map with cut-off
@@ -237,7 +264,7 @@ plot_contMap(updated_contMap)
 ape::nodelabels(text = updated_contMap$tree$initial_nodes_ID)
 title(main = "\nPast contMap - 80 Mya")
 
-par(mfrow = c(1, 1))
+par(old_par)
 
 ## Cut contMap to 80 Mya while NOT keeping tip.label.
 updated_contMap <- cut_contMap_for_focal_time(
@@ -246,7 +273,7 @@ updated_contMap <- cut_contMap_for_focal_time(
    keep_tip_labels = FALSE)
 
 ## Plot without tip.labels
-
+old_par <- par(no.readonly = TRUE)
 par(mfrow = c(1, 2))
 
 # Plot node labels on initial stochastic map with cut-off
@@ -261,7 +288,7 @@ plot_contMap(updated_contMap)
 ape::nodelabels(text = updated_contMap$tree$initial_nodes_ID)
 title(main = "\nPast contMap - 80 Mya")
 
-par(mfrow = c(1, 1))
+par(old_par)
 
 ## ----cut_densityMap-----------------------------------------------------------
 # # ------ Example 3: Cut densityMaps ------ #
@@ -381,7 +408,7 @@ updated_mammals_densityMap_small <- cut_densityMap_for_focal_time(
      keep_tip_labels = TRUE)
 
 ## Plot with tip.labels
-
+old_par <- par(no.readonly = TRUE)
 par(mfrow = c(1, 2))
 
 # Plot node labels on initial stochastic map with cut-off
@@ -396,7 +423,7 @@ phytools::plot.densityMap(updated_mammals_densityMap_small)
 ape::nodelabels(text = updated_mammals_densityMap_small$tree$initial_nodes_ID)
 title(main = "\nPast densityMap - 80 Mya")
 
-par(mfrow = c(1, 1))
+par(old_par)
 
 
 ## ----cut_densityMaps----------------------------------------------------------
@@ -435,7 +462,7 @@ updated_mammals_densityMaps <- cut_densityMaps_for_focal_time(
      keep_tip_labels = TRUE)
 
 ## Plot with tip.labels
-
+old_par <- par(no.readonly = TRUE)
 par(mfrow = c(1, 2))
 
 # Plot node labels on initial stochastic map with cut-off
@@ -451,7 +478,7 @@ plot_densityMaps_overlay(densityMaps = updated_mammals_densityMaps,
                          colors_per_levels = colors_per_states)
 title(main = "\nPast overlaid densityMaps - 80 Mya")
 
-par(mfrow = c(1, 1))
+par(old_par)
 
 
 ## ----cut_BAMM_object----------------------------------------------------------
@@ -555,6 +582,7 @@ root_age <- max(phytools::nodeHeights(whale_BAMM_object)[,2])
 # Remove temporary "phylo" class
 class(whale_BAMM_object) <- setdiff(class(whale_BAMM_object), "phylo")
 
+old_par <- par(no.readonly = TRUE)
 par(mfrow = c(1, 2))
 
 # Plot initial BAMM_object for t = 0 My
@@ -573,6 +601,6 @@ plot_BAMM_rates(whale_BAMM_object_5My, add_regime_shifts = TRUE,
                 labels = TRUE, legend = TRUE)
 title(main = "\nPast BAMM rates - 5 Mya")
 
-par(mfrow = c(1, 1))
+par(old_par)
 
 
