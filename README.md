@@ -272,7 +272,34 @@ and in this vignette: `vignette("deepSTRAPP")`.
   data](https://maeldore.github.io/deepSTRAPP/articles/plot_rates_through_time.html):
   `vignette("plot_rates_through_time")`.
 
-**6/ Cut phylogenies**
+**6/ Handle uncertainty**
+
+- [Handle **uncertainty** in trait and rate
+  estimates](https://maeldore.github.io/deepSTRAPP/articles/handle_uncertainty.html):
+  `vignette("handle_uncertainty")`.
+
+  Explore the three strategies available:
+
+  - **‘rates_only’**: Only accounts for diversification-rate uncertainty
+    across BAMM posterior samples.
+  - **‘paired’**: Accounts for both diversification-rate and ancestral
+    trait/range reconstruction uncertainty by pairing BAMM posterior
+    samples with stochastic maps.
+  - **‘full’**: Accounts for both diversification-rate and ancestral
+    reconstruction uncertainty by evaluating every combination of BAMM
+    posterior samples and stochastic maps.
+
+**7/ Import external analyses**
+
+- [Import **external
+  analyses**](https://maeldore.github.io/deepSTRAPP/articles/import_external_analyses.html):
+  `vignette("import_external_analyses")`.
+
+  Import and format results of external analyses of trait-evolution
+  histories and diversification dynamics, and make them ready-to-use as
+  inputs for a deepSTRAPP run.
+
+**8/ Cut phylogenies**
 
 - [Cut different types of **(mapped) phylogenies** for a given
   focal-time](https://maeldore.github.io/deepSTRAPP/articles/cut_phylogenies.html):
@@ -281,6 +308,7 @@ and in this vignette: `vignette("deepSTRAPP")`.
   - time-calibrated phylogenies.
   - contMap for continuous traits.
   - densityMap for categorical and biogeographic traits.
+  - simmaps for categorical and biogeographic traits.
   - BAMM_object for diversification dynamics.
 
 <br> Alternatively, if you prefer to view the vignettes in R, you can
@@ -324,15 +352,23 @@ also cite this package:
 > phylogenetic comparative methods (and other things). PeerJ, 12,
 > e16505. <https://doi.org/10.7717/peerj.16505>.
 
-If you use the modeling tools for trait evolution embedded in the
-function *prepare_trait_data()*, you should cite the [R package
-geiger](https://github.com/mwpennell/geiger-v2):
+If you use the modeling tools for continuous and categorical trait
+evolution embedded in the function *prepare_trait_data()*, you should
+cite the [R package geiger](https://github.com/mwpennell/geiger-v2):
 
 > Pennell, M.W., J.M. Eastman, G.J. Slater, J.W. Brown, J.C. Uyeda, R.G.
 > FitzJohn, M.E. Alfaro, and L.J. Harmon. 2014. geiger v2.0: an expanded
 > suite of methods for fitting macroevolutionary models to phylogenetic
 > trees. Bioinformatics 30:2216-2218.
 > <https://doi.org/10.1093/bioinformatics/btu181>.
+
+If you specifically use the function *prepare_trait_data()* to produce
+continuous stochastic maps, you should cite the [R package
+contsimmap](https://github.com/bstaggmartin/contsimmap/):
+
+> Martin, B. S., & Weber, M. G. (2026). Stochastic character mapping of
+> continuous traits on phylogenies. Systematic Biology, syag031.
+> <https://doi.org/10.1093/sysbio/syag031>.
 
 If you use the modeling tools for historical biogeography embedded in
 the function *prepare_trait_data()*, you should cite the [R package
