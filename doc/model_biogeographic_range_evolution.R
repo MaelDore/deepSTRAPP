@@ -9,6 +9,31 @@ knitr::opts_chunk$set(
 ## ----setup, eval = TRUE, include = FALSE--------------------------------------
 library(deepSTRAPP)
 
+is_dev_version <- function (pkg = "deepSTRAPP")
+{
+  # # Check if ran on CRAN
+  # not_cran <- identical(Sys.getenv("NOT_CRAN"), "true") # || interactive()
+
+  # Version number check
+  version <- tryCatch(as.character(utils::packageVersion(pkg)), error = function(e) "")
+  dev_version <- grepl("\\.9000", version)
+
+  # not_cran || dev_version
+  
+  return(dev_version)
+}
+
+
+## ----adjust_dpi_CRAN, include = FALSE, eval = !is_dev_version()---------------
+knitr::opts_chunk$set(
+  dpi = 72   # Lower DPI to save space
+)
+
+## ----adjust_dpi_dev, include = FALSE, eval = is_dev_version()-----------------
+# knitr::opts_chunk$set(
+#   dpi = 72   # Default DPI for the dev version
+# )
+
 ## ----model_trait_evolution_biogeo---------------------------------------------
 # 
 # # ------ Step 0: Load data ------ #
@@ -117,6 +142,8 @@ library(deepSTRAPP)
 # # with deepSTRAPP::plot_densityMaps_overlay()
 # ?deepSTRAPP::plot_densityMaps_overlay()
 # 
+# ## The R package `BioGeoBEARS` is needed for this workflow to process biogeographic data.
+# ## Please install it manually from: https://github.com/nmatzke/BioGeoBEARS.
 # 
 # ## Macroevolutionary models for biogeographic data
 # 
@@ -341,7 +368,7 @@ library(deepSTRAPP)
 # 
 # 
 
-## ----model_trait_evolution_biogeo_eval, fig.height = 7, eval = TRUE, echo = FALSE----
+## ----model_trait_evolution_biogeo_eval, fig.height = 7, eval = TRUE, echo = FALSE, out.width = "100%"----
 # Load directly output
 data(eel_biogeo_data, package = "deepSTRAPP")
 
