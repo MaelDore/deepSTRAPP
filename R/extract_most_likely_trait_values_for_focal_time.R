@@ -480,6 +480,7 @@ extract_most_likely_trait_values_for_focal_time <- function (contMap = NULL,
 #'   must retained their initial `tip.label` on the updated contMap. Default is `TRUE`.
 #'   Used only if `update_contMap = TRUE`.
 #'
+#' @noRd
 #' @importFrom phytools nodeHeights plot.contMap
 #' @importFrom ape nodelabels
 #'
@@ -950,6 +951,7 @@ extract_most_likely_trait_values_from_contMap_for_focal_time <- function (
 #'   must retained their initial `tip.label` on the updated contMap. Default is `TRUE`.
 #'   Used only if `update_contMaps = TRUE`.
 #'
+#' @noRd
 #' @importFrom phytools nodeHeights plot.contMap
 #' @importFrom ape nodelabels
 #'
@@ -1334,6 +1336,7 @@ extract_most_likely_trait_values_from_contMaps_for_focal_time <- function (
 #'   must retained their initial `tip.label` on the updated densityMaps. Default is `TRUE`.
 #'   Used only if `update_Map = TRUE`.
 #'
+#' @noRd
 #' @importFrom phytools nodeHeights plot.densityMap
 #' @importFrom ape nodelabels
 #' @importFrom dplyr left_join join_by
@@ -1846,6 +1849,7 @@ extract_most_likely_states_from_densityMaps_for_focal_time <- function (
 #'   must retained their initial `tip.label` on the updated simmaps. Default is `TRUE`.
 #'   Used only if `update_Map = TRUE`.
 #'
+#' @noRd
 #' @importFrom phytools nodeHeights
 #' @importFrom ape nodelabels
 #' @importFrom dplyr left_join join_by
@@ -2374,6 +2378,7 @@ extract_most_likely_states_from_simmaps_for_focal_time <- function (
 #'   must retained their initial `tip.label` on the updated densityMaps. Default is `TRUE`.
 #'   Used only if `update_Map = TRUE`.
 #'
+#' @noRd
 #' @importFrom phytools nodeHeights plot.densityMap
 #' @importFrom ape nodelabels
 #' @importFrom dplyr left_join join_by
@@ -2866,6 +2871,7 @@ extract_most_likely_ranges_from_densityMaps_for_focal_time <- function (
 #'   must retained their initial `tip.label` on the updated simmaps. Default is `TRUE`.
 #'   Used only if `update_Map = TRUE`.
 #'
+#' @noRd
 #' @importFrom phytools nodeHeights
 #' @importFrom ape nodelabels
 #' @importFrom dplyr left_join join_by
