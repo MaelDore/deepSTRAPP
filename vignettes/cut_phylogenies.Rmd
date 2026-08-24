@@ -51,7 +51,7 @@ knitr::opts_chunk$set(
 <br>
 This vignette presents the different __utility functions__ used internally by deepSTRAPP to __cut (mapped) phylogenies__ to a given focal-time, and then extract data from freshly cut tips.
 
-These functions can be used to cut any (mapped) phylogenies outside of a deepSTRAPP run including a regular phylogeny, contMap, densityMap, and BAMM_object with diversification rates.
+These functions can be used to cut any (mapped) phylogenies outside of a deepSTRAPP run including a regular phylogeny, contMap(s), densityMap(s), simmap(s), and BAMM_object with diversification rates.
 
 <br>
 
@@ -314,19 +314,26 @@ par(old_par)
 ```
 
 ```{r cut_densityMap}
-# ------ Example 3: Cut densityMaps ------ #
+# ------ Example 3: Cut densityMaps and simmaps ------ #
 
-# See help of the dedicated function
+# See help of the dedicated functions
 ?deepSTRAPP::cut_densityMaps_for_focal_time()
+?deepSTRAPP::cut_simmaps_for_focal_time()
 
 # A densityMap is a phylogeny with posterior probabilities of a given state mapped along branches.
 # It is typically obtained with `[phytools::densityMap()]`.
 # Within deepSTRAPP, it is part of the output of `[deepSTRAPP::prepare_trait_data()]`
-# when used on a categorical trait.
-# deepSTRAPP also offers to overlay densityMaps of all states to obtain a single mapping of all states
-# on a unique phylogeny with `[deepSTRAPP::plot_densityMaps_overlay()]`
+# when used on a categorical or biogeographic trait.
+# deepSTRAPP also offers to overlay densityMaps of all states/ranges to obtain a single mapping 
+# of all states/ranges on a unique phylogeny with `[deepSTRAPP::plot_densityMaps_overlay()]`
 
-#### 1/ Prepare data ####
+# A simmap is a phylogeny with states/ranges from a unique simulation of evolutionary history mapped along branches.
+# It is typically obtained with `[phytools::make.simmap()]`.
+# Within deepSTRAPP, it is part of the output of `[deepSTRAPP::prepare_trait_data()]`
+# when 'run_stochastic_maps = TRUE' and 'return_simmaps = TRUE'.
+
+
+#### 3.1/ Prepare data ####
 
 ## Load mammals phylogeny and data from the R package motmot (data included in deepSTRAPP)
 # Initial data source: Slater, 2013; DOI: 10.1111/2041-210X.12084
@@ -350,17 +357,19 @@ table(mammals_data)
 colors_per_states <- c("darkblue", "dodgerblue", "lightblue")
 names(colors_per_states) <- c("small", "medium", "large")
 
-# Produce densityMaps using stochastic character mapping based on an equal-rates (ER) Mk model
+# Produce densityMaps and simmaps using stochastic character mapping based on an equal-rates (ER) Mk model
 mammals_cat_data <- prepare_trait_data(tip_data = mammals_data, phylo = mammals_tree,
                                        trait_data_type = "categorical",
                                        evolutionary_models = "ER",
+                                       run_stochastic_maps = TRUE,
                                        nb_simulations = 100, 
-                                       colors_per_levels = colors_per_states)
+                                       colors_per_levels = colors_per_states,
+                                       return_simmaps = TRUE)
 
 # Set focal time
 focal_time <- 80
 
-#### 2/ Plot a unique cut densityMap ####
+#### 3.2/ Plot a unique cut densityMap ####
 
 # Extract the density map for small mammals (state 3 = "small")
 mammals_densityMap_small <- mammals_cat_data$densityMaps[[3]]
@@ -372,14 +381,14 @@ updated_mammals_densityMap_small <- cut_densityMap_for_focal_time(
      focal_time = focal_time,
      keep_tip_labels = TRUE)
 
-# Plot node labels on initial stochastic map with cut-off
+# Plot node labels on initial densityMap with cut-off
 phytools::plot.densityMap(mammals_densityMap_small)
 ape::nodelabels()
 abline(v = max(phytools::nodeHeights(mammals_densityMap_small$tree)[,2]) - focal_time,
        col = "red", lty = 2, lwd = 2)
 title(main = "Current densityMap - 0 Mya")
 
-# Plot initial node labels on cut stochastic map
+# Plot initial node labels on cut densityMap
 phytools::plot.densityMap(updated_mammals_densityMap_small)
 ape::nodelabels(text = updated_mammals_densityMap_small$tree$initial_nodes_ID)
 title(main = "Past densityMap - 80 Mya")
@@ -408,19 +417,21 @@ table(mammals_data)
 colors_per_states <- c("darkblue", "dodgerblue", "lightblue")
 names(colors_per_states) <- c("small", "medium", "large")
 
-# Produce densityMaps using stochastic character mapping based on an equal-rates (ER) Mk model
+# Produce densityMaps and simmaps using stochastic character mapping based on an equal-rates (ER) Mk model
 mammals_cat_data <- suppressMessages(prepare_trait_data(tip_data = mammals_data, phylo = mammals_tree,
                                        trait_data_type = "categorical",
                                        evolutionary_models = "ER",
-                                       nb_simulations = 100,
+                                       run_stochastic_maps = TRUE,
+                                       nb_simulations = 100, 
                                        colors_per_levels = colors_per_states,
+                                       return_simmaps = TRUE,
                                        plot_map = FALSE,
                                        verbose = FALSE))
 
 # Set focal time
 focal_time <- 80
 
-# Extract the density map for small mammals (state 3 = "small")
+# Extract the densityMap for small mammals (state 3 = "small")
 mammals_densityMap_small <- mammals_cat_data$densityMaps[[3]]
 
 ## Cut densityMap to 80 Mya while keeping tip.label
@@ -434,14 +445,14 @@ updated_mammals_densityMap_small <- cut_densityMap_for_focal_time(
 old_par <- par(no.readonly = TRUE)
 par(mfrow = c(1, 2))
 
-# Plot node labels on initial stochastic map with cut-off
+# Plot node labels on initial densityMap with cut-off
 phytools::plot.densityMap(mammals_densityMap_small, fsize = c(0.5, 1), lwd = 0.7)
 ape::nodelabels(cex = 0.7)
 abline(v = max(phytools::nodeHeights(mammals_densityMap_small$tree)[,2]) - focal_time,
        col = "red", lty = 2, lwd = 2)
 title(main = "\nCurrent densityMap - 0 Mya")
 
-# Plot initial node labels on cut stochastic map
+# Plot initial node labels on cut densityMap
 phytools::plot.densityMap(updated_mammals_densityMap_small)
 ape::nodelabels(text = updated_mammals_densityMap_small$tree$initial_nodes_ID)
 title(main = "\nPast densityMap - 80 Mya")
@@ -452,7 +463,7 @@ par(old_par)
 
 ```{r cut_densityMaps}
 
-#### 3/ Plot set of overlaid densityMaps ####
+#### 3.3/ Plot set of overlaid densityMaps ####
 
 ## Cut all densityMaps to 80 Mya while keeping tip.label
 # on terminal branches with a unique descending tip.
@@ -506,8 +517,67 @@ par(old_par)
 
 ```
 
+```{r cut_simmaps}
+
+#### 3.4/ Plot a unique cut simmap ####
+
+# Extract the simmap n°1 as an example
+mammals_simmap_1 <- mammals_cat_data$simmaps[[1]]
+
+## Cut the extracted simmap to 80 Mya while keeping tip.label
+# on terminal branches with a unique descending tip.
+updated_mammals_simmap_1 <- cut_simmap_for_focal_time(
+     simmap = mammals_simmap_1,
+     focal_time = focal_time,
+     keep_tip_labels = TRUE)
+
+# Plot node labels on initial stochastic map with cut-off
+plot(mammals_simmap_1)
+ape::nodelabels()
+abline(v = max(phytools::nodeHeights(mammals_simmap_1)[,2]) - focal_time,
+       col = "red", lty = 2, lwd = 2)
+title(main = "Current simmap - 0 Mya")
+
+# Plot initial node labels on cut stochastic map
+plot(updated_mammals_simmap_1)
+ape::nodelabels(text = updated_mammals_simmap_1$initial_nodes_ID)
+title(main = "Past simmap - 80 Mya")
+
+```
+```{r cut_simmaps_eval, fig.width = 15, fig.height = 12, out.width = "100%", eval = TRUE, echo = FALSE}
+
+# Extract the simmap n°1 as an example
+mammals_simmap_1 <- mammals_cat_data$simmaps[[1]]
+
+## Cut the extracted simmap to 80 Mya while keeping tip.label
+# on terminal branches with a unique descending tip.
+updated_mammals_simmap_1 <- cut_simmap_for_focal_time(
+     simmap = mammals_simmap_1,
+     focal_time = focal_time,
+     keep_tip_labels = TRUE)
+
+## Plot with tip.labels
+old_par <- par(no.readonly = TRUE)
+par(mfrow = c(1, 2))
+
+# Plot node labels on initial stochastic map with cut-off
+plot(mammals_simmap_1)
+ape::nodelabels()
+abline(v = max(phytools::nodeHeights(mammals_simmap_1)[,2]) - focal_time,
+       col = "red", lty = 2, lwd = 2)
+title(main = "\nCurrent simmap - 0 Mya")
+
+# Plot initial node labels on cut stochastic map
+plot(updated_mammals_simmap_1)
+ape::nodelabels(text = updated_mammals_simmap_1$initial_nodes_ID)
+title(main = "\nPast simmap - 80 Mya")
+
+par(old_par)
+
+```
+
 ```{r cut_BAMM_object}
-# ------ Example 3: Cut a BAMM_object ------ #
+# ------ Example 4: Cut a BAMM_object ------ #
 
 # See help of the dedicated function
 ?deepSTRAPP::update_rates_and_regimes_for_focal_time()
