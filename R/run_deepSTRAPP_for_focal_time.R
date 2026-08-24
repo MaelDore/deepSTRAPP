@@ -71,7 +71,7 @@
 #'                 When the number of BAMM samples and stochastic maps differ, random pairing with replacement from the smaller set is used
 #'                 so that all posterior samples and stochastic maps contribute to the analysis.
 #'   * `"full"`: Exhaustive option that accounts for trait/range- and rate- uncertainty by crossing all BAMM posterior samples with all stochastic maps.
-#'               Accounts for both diversification-rate and ancestral reconstruction uncertainty by evaluating every combination of BAMM posterior sample and stochastic map.
+#'               Accounts for both diversification-rate and ancestral reconstruction uncertainty by evaluating every combination of BAMM posterior samples and stochastic maps.
 #'               WARNING: This exhaustive approach can substantially increase computation time and memory requirements and is therefore recommended only for moderate-sized analyses.
 #' @param trait_maps_vs_BAMM_samples_list (Optional) List of two elements manually providing the names to associate stochastic maps (`$trait_map_ID`)
 #'   with BAMM samples (`$BAMM_posterior_sample_ID`). This is typically used to ensure the same stochastic maps and BAMM samples are used to test across multiple time-steps.
@@ -664,29 +664,37 @@ run_deepSTRAPP_for_focal_time <- function (contMap = NULL,
     # BAMM_object must be a 'bammdata' object
     if (!("bammdata" %in% class(BAMM_object)))
     {
-      stop("'BAMM_object' must have the 'bammdata' class. See ?BAMMtools::getEventData() and ?deepSTRAPP::update_rates_and_regimes_for_focal_time() to learn how to generate those objects.")
+      stop("'BAMM_object' must have the 'bammdata' class. See ?BAMMtools::getEventData() and ?deepSTRAPP::build_BAMM_object() to learn how to generate those objects.")
     }
     # Number of posterior sample data must be equal between $tipStates, $tipLambda and $tipMu
     posterior_samples_length <- c(length(BAMM_object$tipStates), length(BAMM_object$tipLambda), length(BAMM_object$tipMu))
     if (length(unique(posterior_samples_length)) != 1)
     {
-      stop("Number of posterior samples in 'BAMM_object' must be equal between $tipStates, $tipLambda and $tipMu.\nPlease check the structure of your 'BAMM_object' with str(BAMM_object, 1)")
+      stop("Number of posterior samples in 'BAMM_object' must be equal between $tipStates, $tipLambda and $tipMu.\n",
+           "Please check the structure of your 'BAMM_object' with str(BAMM_object, 1).\n",
+           "See ?BAMMtools::getEventData() and ?deepSTRAPP::build_BAMM_object() to learn how to generate those objects.")
     }
     # Number of branches in each posterior sample must be equal within $tipStates, $tipLambda and $tipMu
     tipStates_data_length <- unlist(lapply(X = BAMM_object$tipStates, FUN = length))
     if (length(unique(tipStates_data_length)) != 1)
     {
-      stop("Number of branches in each posterior sample of 'BAMM_object$tipStates' must be equal.\nPlease check the structure of your 'BAMM_object' with str(BAMM_object$tipStates, 1)")
+      stop("Number of branches in each posterior sample of 'BAMM_object$tipStates' must be equal.\n",
+           "Please check the structure of your 'BAMM_object' with str(BAMM_object$tipStates, 1).\n",
+           "See ?BAMMtools::getEventData() and ?deepSTRAPP::build_BAMM_object() to learn how to generate those objects.")
     }
     tipLambda_data_length <- unlist(lapply(X = BAMM_object$tipLambda, FUN = length))
     if (length(unique(tipLambda_data_length)) != 1)
     {
-      stop("Number of branches in each posterior sample of 'BAMM_object$tipLambda' must be equal.\nPlease check the structure of your 'BAMM_object' with str(BAMM_object$tipLambda, 1)")
+      stop("Number of branches in each posterior sample of 'BAMM_object$tipLambda' must be equal.\n",
+           "Please check the structure of your 'BAMM_object' with str(BAMM_object$tipLambda, 1)\n",
+           "See ?BAMMtools::getEventData() and ?deepSTRAPP::build_BAMM_object() to learn how to generate those objects.")
     }
     tipMu_data_length <- unlist(lapply(X = BAMM_object$tipMu, FUN = length))
     if (length(unique(tipMu_data_length)) != 1)
     {
-      stop("Number of branches in each posterior sample of 'BAMM_object$tipMu' must be equal.\nPlease check the structure of your 'BAMM_object' with str(BAMM_object$tipMu, 1)")
+      stop("Number of branches in each posterior sample of 'BAMM_object$tipMu' must be equal.\n",
+           "Please check the structure of your 'BAMM_object' with str(BAMM_object$tipMu, 1)\n",
+           "See ?BAMMtools::getEventData() and ?deepSTRAPP::build_BAMM_object() to learn how to generate those objects.")
     }
     # Number of branches in each posterior sample must be equal between $tipStates, $tipLambda and $tipMu
     posterior_samples_data_length <- c(unique(tipStates_data_length), unique(tipLambda_data_length), unique(tipMu_data_length))
@@ -694,7 +702,8 @@ run_deepSTRAPP_for_focal_time <- function (contMap = NULL,
     {
       stop(paste0("Number of branches in posterior samples of 'BAMM_object$tipMu', 'BAMM_object$tipLambda', and 'BAMM_object$tipMu' must be equal.\n",
                   "There respective number of branches is: ",paste(posterior_samples_data_length, collapse = ", "),".\n",
-                  "Please check the structure of your 'BAMM_object' with str(BAMM_object, 2)"))
+                  "Please check the structure of your 'BAMM_object' with str(BAMM_object, 2)\n",
+                  "See ?BAMMtools::getEventData() and ?deepSTRAPP::build_BAMM_object() to learn how to generate those objects."))
     }
 
     ## rate_type must be either "speciation", "extinction" or "net_diversification"
@@ -842,7 +851,7 @@ run_deepSTRAPP_for_focal_time <- function (contMap = NULL,
   {
     if (verbose)
     {
-      cat(paste0(Sys.time(), " - Convert trait data in a melted data.frame\n"))
+      cat(paste0(Sys.time(), " - Convert trait data into a melted data.frame\n"))
     }
 
     trait_data_df <- extract_trait_data_melted_df_for_focal_time(
@@ -872,7 +881,7 @@ run_deepSTRAPP_for_focal_time <- function (contMap = NULL,
   {
     if (verbose)
     {
-      cat(paste0("\n", Sys.time(), " - Convert diversification data in a melted data.frame\n"))
+      cat(paste0("\n", Sys.time(), " - Convert diversification data into a melted data.frame\n"))
     }
 
     diversification_data_df <- extract_diversification_data_melted_df_for_focal_time(

@@ -78,7 +78,7 @@
 #'                 When the number of BAMM samples and stochastic maps differ, random pairing with replacement from the smaller set is used
 #'                 so that all posterior samples and stochastic maps contribute to the analysis.
 #'   * `"full"`: Exhaustive option that accounts for trait/range- and rate- uncertainty by crossing all BAMM posterior samples with all stochastic maps.
-#'               Accounts for both diversification-rate and ancestral reconstruction uncertainty by evaluating every combination of BAMM posterior sample and stochastic map.
+#'               Accounts for both diversification-rate and ancestral reconstruction uncertainty by evaluating every combination of BAMM posterior samples and stochastic maps.
 #'               WARNING: This exhaustive approach can substantially increase computation time and memory requirements and is therefore recommended only for moderate-sized analyses.
 #' @param trait_maps_vs_BAMM_samples_list (Optional) List of two elements manually providing the names to associate stochastic maps (`$trait_map_ID`)
 #'   with BAMM samples (`$BAMM_posterior_sample_ID`). This is typically used to ensure the same stochastic maps and BAMM samples are used to test across multiple time-steps.
@@ -341,7 +341,8 @@
 #'     alpha = 0.05)
 #'
 #'  # Plot evolution of mean rates through time
-#'  plot_rates_through_time(deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_old_calib_0_40)
+#'  plot_rates_through_time(deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_old_calib_0_40,
+#'     plot_CI = TRUE)
 #'
 #'  # Plot rates vs. trait values across branches for time step = 10 My
 #'  plot_rates_vs_trait_data_for_focal_time(
@@ -450,10 +451,10 @@
 #'  deepSTRAPP_outputs$pvalues_summary_df_for_posthoc_pairwise_tests
 #'
 #'  # Access trait data in a melted data.frame
-#'  # Trait data were extracted from densityMaps recording only frequency of states.
-#'  # Thus, trait states have been distributed accordingly across 'Dummy_maps'
-#'  # to reproduce the recorded frequencies.
 #'  head(deepSTRAPP_outputs$trait_data_df_over_time)
+#'  # Trait data were extracted from densityMaps recording only frequency of states.
+#'  # Thus, trait states have been distributed accordingly across 100 'Dummy_maps'
+#'  # to reproduce the recorded frequencies.
 #'  table(deepSTRAPP_outputs$trait_data_df_over_time$Map_ID)
 #'
 #'  # Access the diversification data in a melted data.frame
@@ -493,7 +494,7 @@
 #'
 #'  # Plot evolution of mean rates through time
 #'  plot_rates_through_time(deepSTRAPP_outputs = deepSTRAPP_outputs,
-#'     colors_per_levels = colors_per_states)
+#'     colors_per_levels = colors_per_states, plot_CI = TRUE)
 #'
 #'  # Plot rates vs. trait values across branches for time step n°2 = 10 My
 #'  plot_rates_vs_trait_data_for_focal_time(
@@ -617,7 +618,7 @@
 #'  # Ranges were extracted from densityMaps recording only frequency of states.
 #'  # Thus, ranges have been distributed accordingly across 'Dummy_maps'
 #'  # to reproduce the recorded frequencies.
-#' table(deepSTRAPP_outputs$trait_data_df_over_time$Map_ID)
+#'  table(deepSTRAPP_outputs$trait_data_df_over_time$Map_ID)
 #'
 #'  # Access the diversification data in a melted data.frame
 #'  head(deepSTRAPP_outputs$diversification_data_df_over_time)
@@ -650,7 +651,7 @@
 #'
 #' # Plot evolution of mean rates through time
 #'  plot_rates_through_time(deepSTRAPP_outputs = deepSTRAPP_outputs,
-#'    colors_per_levels = colors_per_ranges)
+#'    colors_per_levels = colors_per_ranges, plot_CI = TRUE)
 #'
 #'  # Plot rates vs. trait values across branches for time step n°2 = 10 My
 #'  plot_rates_vs_trait_data_for_focal_time(
@@ -1139,21 +1140,20 @@ run_deepSTRAPP_over_time <- function (contMap = NULL,
 
 }
 
-## Adjust all examples/tutorials in run_deepSTRAPP to include the new uncertainty_strategy argument and set it as non-default if needed !!!!! #############
+# Ensure all functions exported in NAMESPACE are listed in the YALM of the website
 
-##### Update all tutorials accordingly to advertise the multiple options!
-# Clarify what inputs are available for what strategy
-# Possible to provide anything (contMap, contMaps; densityMaps, simmaps) for "rates_only"
-# Requires contMaps, densityMaps (but no trackdown of stochastic map ID), simmaps for "paired' and "full" strategies
-# Advertise changes as modularity in the manuscript and response to reviewers
+# Get check() to pass
 
-## Make a tutorial dedicated to loading external results into deepSTRAPP
- # contMap / contMaps / densityMaps / simmaps
- # BAMM object with build_BAMM_object
- # Add reference to it into the vignettes/tutorials for each trait evolution / BAMM
+# Build new vignettes locally
 
-## Once tutorials are ready, push the update on GitHub and ask Bonnie for review/testing
+# Ensure the renv project is synched
 
-# Then work the second example to include
+## Push the update on GitHub
+
+## Check the website integrity, especially the menu for tutorial/functions may have been messed up by names changes (check the YALM file)
+
+# Ask Bonnie and Yichen for review/testing
+
+# Then work on the second analysis example to include in the manuscript
 
 
