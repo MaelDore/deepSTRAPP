@@ -1,4 +1,6 @@
 
+## Function to build a BAMM object from a BAMM output eventdata.txt file ####
+
 #' @title Build a BAMM object for a deepSTRAPP run
 #'
 #' @description Build a BAMM object of class `bammdata` based on the output file of a BAMM run
@@ -7,7 +9,7 @@
 #'   The `BAMM_object` output is typically used as input to run deepSTRAPP with [deepSTRAPP::run_deepSTRAPP_for_focal_time()]
 #'   or [deepSTRAPP::run_deepSTRAPP_over_time()].
 #'
-#'   This is a wrapper of the [BAMMtools::getEventData()] that additionally provides information on:
+#'   This is a wrapper of the original [BAMMtools::getEventData()] function that additionally provides information on:
 #'    * the Marginal Shift Probability (MSP) = the probability of a regime shift to occur along each branch.
 #'    * the Maximum A Posteriori probability (MAP) configurations among the posterior samples = the configurations of regimes shifts
 #'      that was sampled most frequently (See [BAMMtools::getBestShiftConfiguration()]).
@@ -309,3 +311,243 @@ build_BAMM_object <- function (phylo,
   ## Export BAMM object with posterior samples data
   return(invisible(BAMM_posterior_samples_data))
 }
+
+
+## Function to subject a BAMM object while keeping deepSTRAPP info ####
+
+#' @title Subset a BAMM object before a deepSTRAPP run
+#'
+#' @description Subset a BAMM object of class `bammdata` while keeping additional information for deepSTRAPP.
+#'
+#'   The `BAMM_object` is typically generated directly with [deepSTRAPP::prepare_diversification_data()]
+#'   or from external BAMM output files with [deepSTRAPP::build_BAMM_object()].
+#'
+#'   This is a wrapper of the original [BAMMtools::subsetEventData()] function that additionally preserves information on:
+#'    * the Marginal Shift Probability (MSP) = the probability of a regime shift to occur along each branch.
+#'    * the Maximum A Posteriori probability (MAP) configurations among the posterior samples = the configurations of regimes shifts
+#'      that was sampled most frequently (See [BAMMtools::getBestShiftConfiguration()]).
+#'    * the Maximum Shift Credibility (MSC) configurations among the posterior samples = the configurations of regime shift location
+#'      with the highest product of marginal probabilities across branches (See [BAMMtools::maximumShiftCredibility()])
+#'    that are stored in a `BAMM_object` when build with deepSTRAPP functions.
+#'
+#'   Those additional elements are used by [deepSTRAPP::plot_BAMM_rates()] to display regime shift probabilities and locations.
+#'
+#' @param BAMM_object Object of class `"bammdata"`, typically generated with [deepSTRAPP::prepare_diversification_data()]
+#'   or [deepSTRAPP::build_BAMM_object()], that contains a phylogenetic tree and associated diversification rate mapping across selected posterior samples.
+#' @param nb_posterior_samples Integer. Number of posterior samples to extract from `BAMM_object`. Default = `NULL`.
+#' @param sample_indices Integer or vector of integers. Indices of the posterior samples to extract. Default = `NULL`.
+#' @param seed Integer. Set the seed to ensure reproducibility when `sample_indices` is not provided and posterior samples are drawn randomly.
+#'   Default is `NULL` (a random seed is used).
+#'
+#' @export
+#' @importFrom BAMMtools subsetEventData
+#'
+#' @return The function returns a `BAMM_object` of class `"bammdata"` which is a list with at least 23 elements.
+#'
+#'   Phylogeny-related elements used to plot a phylogeny with [ape::plot.phylo()]:
+#'   * `$edge` Matrix of integers. Defines the tree topology by providing rootward and tipward node ID of each edge.
+#'   * `$Nnode` Integer. Number of internal nodes.
+#'   * `$tip.label` Vector of character strings. Labels of all tips.
+#'   * `$edge.length` Vector of numerical. Length of edges/branches.
+#'   * `$node.label` Vector of character strings. Labels of all internal nodes. (Present only if present in the initial `phylo`)
+#'
+#'   BAMM internal elements used for tree exploration:
+#'   * `$begin` Vector of numerical. Absolute time since root of edge/branch start (rootward).
+#'   * `$end` Vector of numerical.  Absolute time since root of edge/branch end (tipward).
+#'   * `$downseq` Vector of integers. Order of node visits when using a pre-order tree traversal.
+#'   * `$lastvisit` ID of the last node visited when starting from the node in the corresponding position in `$downseq`.
+#'
+#'   BAMM elements summarizing diversification data:
+#'   * `$numberEvents` Vector of integer. Number of events/macroevolutionary regimes (k+1) recorded in each posterior configuration. k = number of shifts.
+#'   * `$eventData` List of data.frames. One per posterior sample. Records shift events and macroevolutionary regimes parameters. 1st line = Background root regime.
+#'   * `$eventVectors` List of integer vectors. One per posterior sample. Record regime ID per branches.
+#'   * `$tipStates` List of named integer vectors. One per posterior sample. Record regime ID per tips.
+#'   * `$tipLambda` List of named numerical vectors. One per posterior sample. Record speciation rates per tips.
+#'   * `$tipMu` List of named numerical vectors. One per posterior sample. Record extinction rates per tips.
+#'   * `$eventBranchSegs` List of matrix of numerical. One per posterior sample. Record regime ID per segments of branches.
+#'   * `$meanTipLambda` Vector of named numerical. Mean tip speciation rates across all posterior configurations of tips.
+#'   * `$meanTipMu` Vector of named numerical. Mean tip extinction rates across all posterior configurations of tips.
+#'   * `$type` Character string. Set the type of data modeled with BAMM. Should be "diversification".
+#'
+#'   Additional elements providing key information for downstream analyses:
+#'   * `$expectedNumberOfShifts` Integer. The expected number of regime shifts used to set the prior in BAMM.
+#'   * `$MSP_tree` Object of class `phylo`. List of 4 elements duplicating information from the Phylogeny-related elements above,
+#'      except `$MSP_tree$edge.length` is recording the Marginal Shift Probability of each branch (i.e., the probability of a regime shift to occur along each branch)
+#'   * `$MAP_indices` Vector of integers. The indices of the Maximum A Posteriori probability (MAP) configurations among the posterior samples.
+#'   * `$MAP_BAMM_object`. List of 18 elements of class `"bammdata" recording the mean rates and regime shift locations found across
+#'      the Maximum A Posteriori probability (MAP) configurations. All BAMM elements summarizing diversification data holds a single entry describing
+#'      this mean diversification history.
+#'   * `$MSC_indices` Vector of integers. The indices of the Maximum Shift Credibility (MSC) configurations among the posterior samples.
+#'   * `$MSC_BAMM_object` List of 18 elements of class `"bammdata" recording the mean rates and regime shift locations found across
+#'      the Maximum Shift Credibility (MSC) configurations. All BAMM elements summarizing diversification data holds a single entry describing
+#'      this mean diversification history.
+#'
+#' @author Maël Doré
+#'
+#' @seealso Initial function in BAMMtools: [BAMMtools::subsetEventData()]
+#'
+#' Associated functions in deepSTRAPP: [deepSTRAPP::prepare_diversification_data()] [deepSTRAPP::build_BAMM_object()]
+#'
+#' For a guided tutorial, see this vignette: \code{vignette("model_diversification_dynamics", package = "deepSTRAPP")}
+#'
+#' @references For BAMM: Rabosky, D. L. (2014). Automatic detection of key innovations, rate shifts, and diversity-dependence on phylogenetic trees.
+#'  PloS one, 9(2), e89543. \doi{10.1371/journal.pone.0089543}. Website: \url{http://bamm-project.org/}.
+#'
+#'  For `{BAMMtools}`: Rabosky, D. L., Grundler, M., Anderson, C., Title, P., Shi, J. J., Brown, J. W., ... & Larson, J. G. (2014).
+#'   BAMM tools: an R package for the analysis of evolutionary dynamics on phylogenetic trees. Methods in Ecology and Evolution, 5(7), 701-707.
+#'   \doi{10.1111/2041-210X.12199}
+#'
+#' @examples
+#' if (deepSTRAPP::is_dev_version())
+#' {
+#'  ## Load BAMM object
+#'  # data(Ponerinae_BAMM_object_old_calib)
+#'  # This dataset is only available in development versions installed from GitHub.
+#'  # It is not available in CRAN versions.
+#'  # Use remotes::install_github(repo = "MaelDore/deepSTRAPP") to get the latest development version.
+#'
+#'  # Check structure of BAMM_object
+#'  str(Ponerinae_BAMM_object_old_calib, 1)
+#'  # Check current number of BAMM posterior samples
+#'  length(Ponerinae_BAMM_object_old_calib$eventData)
+#'  # We have initially 1000 posterior samples in the updated BAMM object
+#'
+#'  ## Subset BAMM_object
+#'  BAMM_object_subset <- subset_BAMM_object(
+#'     BAMM_object = Ponerinae_BAMM_object_old_calib,
+#'     nb_posterior_samples = 100,
+#'     seed = 1234)
+#'
+#'  # Check structure of the updated BAMM_object
+#'  str(BAMM_object_subset, 1)
+#'  # Check updated number of BAMM posterior samples
+#'  length(BAMM_object_subset$eventData)
+#'  # We have now 100 posterior samples in the updated BAMM object
+#' }
+#'
+
+subset_BAMM_object <- function (BAMM_object,
+                                nb_posterior_samples = NULL,
+                                sample_indices = NULL,
+                                seed = NULL)
+{
+  ### Check input validity
+  {
+    ## BAMM_object
+    # BAMM_object must be a 'bammdata' object
+    if (!("bammdata" %in% class(BAMM_object)))
+    {
+      stop("'BAMM_object' must have the 'bammdata' class. See ?BAMMtools::getEventData() and ?deepSTRAPP::build_BAMM_object() to learn how to generate those objects.")
+    }
+    # Number of posterior sample data must be equal between $tipStates, $tipLambda and $tipMu
+    posterior_samples_length <- c(length(BAMM_object$tipStates), length(BAMM_object$tipLambda), length(BAMM_object$tipMu))
+    if (length(unique(posterior_samples_length)) != 1)
+    {
+      stop("Number of posterior samples in 'BAMM_object' must be equal between $tipStates, $tipLambda and $tipMu.\n",
+           "Please check the structure of your 'BAMM_object' with str(BAMM_object, 1).\n",
+           "See ?BAMMtools::getEventData() and ?deepSTRAPP::build_BAMM_object() to learn how to generate those objects.")
+    }
+    # Number of branches in each posterior sample must be equal within $tipStates, $tipLambda and $tipMu
+    tipStates_data_length <- unlist(lapply(X = BAMM_object$tipStates, FUN = length))
+    if (length(unique(tipStates_data_length)) != 1)
+    {
+      stop("Number of branches in each posterior sample of 'BAMM_object$tipStates' must be equal.\n",
+           "Please check the structure of your 'BAMM_object' with str(BAMM_object$tipStates, 1).\n",
+           "See ?BAMMtools::getEventData() and ?deepSTRAPP::build_BAMM_object() to learn how to generate those objects.")
+    }
+    tipLambda_data_length <- unlist(lapply(X = BAMM_object$tipLambda, FUN = length))
+    if (length(unique(tipLambda_data_length)) != 1)
+    {
+      stop("Number of branches in each posterior sample of 'BAMM_object$tipLambda' must be equal.\n",
+           "Please check the structure of your 'BAMM_object' with str(BAMM_object$tipLambda, 1)\n",
+           "See ?BAMMtools::getEventData() and ?deepSTRAPP::build_BAMM_object() to learn how to generate those objects.")
+    }
+    tipMu_data_length <- unlist(lapply(X = BAMM_object$tipMu, FUN = length))
+    if (length(unique(tipMu_data_length)) != 1)
+    {
+      stop("Number of branches in each posterior sample of 'BAMM_object$tipMu' must be equal.\n",
+           "Please check the structure of your 'BAMM_object' with str(BAMM_object$tipMu, 1)\n",
+           "See ?BAMMtools::getEventData() and ?deepSTRAPP::build_BAMM_object() to learn how to generate those objects.")
+    }
+    # Number of branches in each posterior sample must be equal between $tipStates, $tipLambda and $tipMu
+    posterior_samples_data_length <- c(unique(tipStates_data_length), unique(tipLambda_data_length), unique(tipMu_data_length))
+    if (length(unique(posterior_samples_data_length)) != 1)
+    {
+      stop(paste0("Number of branches in posterior samples of 'BAMM_object$tipMu', 'BAMM_object$tipLambda', and 'BAMM_object$tipMu' must be equal.\n",
+                  "There respective number of branches is: ",paste(posterior_samples_data_length, collapse = ", "),".\n",
+                  "Please check the structure of your 'BAMM_object' with str(BAMM_object, 2)\n",
+                  "See ?BAMMtools::getEventData() and ?deepSTRAPP::build_BAMM_object() to learn how to generate those objects."))
+    }
+
+    ## nb_posterior_samples & sample_indices
+    # One of the two must be provided, but not the two
+    if (!is.null(nb_posterior_samples) & !is.null(sample_indices))
+    {
+      stop("You must provide one of 'nb_posterior_samples' and 'sample_indices', but not both.")
+    }
+    if (is.null(nb_posterior_samples) & is.null(sample_indices))
+    {
+      stop("You must provide at least one of 'nb_posterior_samples' and 'sample_indices'.")
+    }
+
+    ## nb_posterior_samples
+    if (!is.null(nb_posterior_samples))
+    {
+      # nb_posterior_samples must be an integer
+      if (!(nb_posterior_samples - round(nb_posterior_samples) == 0))
+      {
+        stop("'nb_posterior_samples' must be an integer.")
+      }
+      # nb_posterior_samples must be within the range of available BAMM samples
+      if (!(nb_posterior_samples <= length(BAMM_object$eventData)))
+      {
+        stop("'nb_posterior_samples' must be lower than the number of available BAMM samples.\n",
+             "Your BAMM_object has ",length(BAMM_object$eventData)," posterior samples available.\n",
+             "'nb_posterior_samples' = ", nb_posterior_samples, ".")
+      }
+    }
+
+    ## sample_indices
+    if (!is.null(sample_indices))
+    {
+      # sample_indices must be an integer or vector of integers
+      if (!all((sample_indices - round(sample_indices) == 0)))
+      {
+        stop("'sample_indices' must be an integer or vector of integers.")
+      }
+      # sample_indices must fit within the range of available BAMM samples
+      if (!(all(sample_indices <= length(BAMM_object$eventData))))
+      {
+        stop("'sample_indices' must fit within the range of available BAMM samples.\n",
+             "Your BAMM_object has ",length(BAMM_object$eventData)," posterior samples available.")
+      }
+    }
+
+    ## seed
+    if (!is.null(seed))
+    {
+      if (!(seed - round(seed) == 0))
+      {
+        stop(paste0("'seed' must be an integer."))
+      }
+    }
+  }
+
+  ## Draw random indices if needed
+  if (!is.null(nb_posterior_samples))
+  {
+    sample_indices <- sample(x = 1:length(BAMM_object$eventData), size = nb_posterior_samples, replace = F)
+  }
+
+  ## Subset using BAMMtools::subsetEventData
+  BAMM_object_subset <- BAMMtools::subsetEventData(ephy = BAMM_object, index = sample_indices)
+
+  ## Concatenate the additional deepSTRAPP elements into the BAMM_object
+  BAMM_object_subset[c("expectedNumberOfShifts", "MSP_tree", "MAP_indices", "MAP_BAMM_object", "MSC_indices", "MSC_BAMM_object")] <- BAMM_object[c("expectedNumberOfShifts", "MSP_tree", "MAP_indices", "MAP_BAMM_object", "MSC_indices", "MSC_BAMM_object")]
+
+  ## Export output
+  return(invisible(BAMM_object_subset))
+}
+
+
+
