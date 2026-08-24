@@ -48,7 +48,7 @@ knitr::opts_chunk$set(
 # # Biting disrupts integration to spur skull evolution in eels. Nature Communications, 5, 5505.
 # 
 # # Transform feeding mode data into biogeographic data with ranges A, B, and AB.
-# # This is NOT actual biogeographic data, but data fake generated for the sake of example!
+# # This is NOT actual biogeographic data, but fake data generated for the sake of example!
 # eel_range_tip_data <- stats::setNames(eel.data$feed_mode, rownames(eel.data))
 # eel_range_tip_data <- as.character(eel_range_tip_data)
 # eel_range_tip_data[eel_range_tip_data == "bite"] <- "A"
@@ -244,6 +244,8 @@ knitr::opts_chunk$set(
 #      # To include the lists of cladogenetic and anagenetic events produced with BioGeoBEARS::runBSM()
 #      return_BSM = FALSE,
 #      # To include the Biogeographic Stochastic Mapping simulations (simmaps) in the output
+#      # This is needed if you want to keep track of which simulation produced which ranges
+#      # used to compute the tests in deepSTRAPP
 #      return_simmaps = TRUE,
 #      # To include the best model fit in the output
 #      return_best_model_fit = TRUE,
@@ -284,11 +286,10 @@ knitr::opts_chunk$set(
 # 
 # # Plot densityMaps considering only unique areas
 # plot_densityMaps_overlay(eel_densityMaps)
+# title(main = "\nAncestral Ranges - Unique areas")
 # # Plot densityMaps with all ranges, including multi-area ranges
 # plot_densityMaps_overlay(eel_densityMaps_all_ranges)
-# 
-# # The densityMaps are the main input needed to perform a deepSTRAPP run on categorical trait data.
-# 
+# title(main = "\nAncestral Ranges - All ranges")
 # 
 # ## Extract the Ancestral Character Estimates (ACE) = trait values at nodes
 # 
@@ -343,12 +344,14 @@ knitr::opts_chunk$set(
 # ## Explore simmaps
 # # Since we selected 'return_simmaps = TRUE',
 # # Stochastic Mapping simulations (simmaps) are included in the output
-# # Each simmap represents a simulated evolutionary history with final ranges
-# # compatible with the tip_data and estimated ACE at nodes.
+# # Each simmap represents a simulated biogeographic history with final ranges
+# # compatible with the tip_data and estimated ACE at nodes = conditioned by tip data and model fit.
 # # Each simmap also follows the transition parameters of the best fit model
-# # to simulate transitions along branches.
+# # to simulate cladogenetic and anagenetic transitions between geographic areas .
+# # Therefore, the simmaps encompass all ranges explored by the model, including the multi-area ranges.
+# eel_simmaps <- eel_biogeo_data$simmaps
 # 
-# # Update color_per_ranges to include the color interpolated for range "AB"
+# # Update color_per_ranges to include the color interpolated for multi-area range "AB"
 # AB_color_gradient <- eel_densityMaps_all_ranges$Density_map_AB$cols
 # AB_color <- AB_color_gradient[length(AB_color_gradient)]
 # 
@@ -356,15 +359,21 @@ knitr::opts_chunk$set(
 # names(colors_per_all_ranges) <- c("A", "B", "AB")
 # 
 # # Plot simmap n°1 using the same color scheme as in densityMaps
-# plot(eel_biogeo_data$simmaps[[1]], colors = colors_per_all_ranges, fsize = 0.7)
+# plot(eel_biogeo_data$simmaps[[1]], colors = colors_per_all_ranges, fsize = 0.7)*
+# title(main = "\nStochastic Mapping simulation n°1")
 # # Plot simmap n°10 using the same color scheme as in densityMaps
 # plot(eel_biogeo_data$simmaps[[10]], colors = colors_per_all_ranges, fsize = 0.7)
+# title(main = "\nStochastic Mapping simulation n°10")
 # # Plot simmap n°100 using the same color scheme as in densityMaps
 # plot(eel_biogeo_data$simmaps[[100]], colors = colors_per_all_ranges, fsize = 0.7)
+# title(main = "\nStochastic Mapping simulation n°100")
 # 
-# 
-# ## Inputs needed to run deepSTRAPP are the densityMaps (eel_densityMaps),
-# ## and optionally, the tip_data (eel_tip_data), and the ACE (eel_ACE)
+# ## The minimal inputs needed to run deepSTRAPP are the densityMaps (eel_densityMaps or eel_densityMaps_all_ranges).
+# ## However, densityMaps only records the frequency of ranges across simulations.
+# ## If you want to keep track of which simulation (simmap) produced which ranges,
+# ## you need to provide the full sets of stochastic maps (eel_simmaps) as inputs.
+# ## Optionally, you can provide the tip_data (eel_tip_data) and the ACE (eel_ACE) to force
+# ## the use of the exact ranges recorded at tips and nodes (in practice, the difference is negligible).
 # 
 # 
 
@@ -376,10 +385,11 @@ data(eel_biogeo_data, package = "deepSTRAPP")
 
 # Plot densityMaps considering only unique areas
 plot_densityMaps_overlay(eel_biogeo_data$densityMaps, fsize = 0.6)
-title(main = "Ancestral Ranges - Unique areas")
+title(main = "\nAncestral Ranges - Unique areas")
 # Plot densityMaps with all ranges, including multi-area ranges
 plot_densityMaps_overlay(eel_biogeo_data$densityMaps_all_ranges, fsize = 0.6)
-title(main = "Ancestral Ranges - All ranges")
+title(main = "\nAncestral Ranges - All ranges")
+
 ## Explore summary of model selection
 eel_biogeo_data$model_selection_df # Summary of model selection
 
@@ -393,5 +403,8 @@ title(main = "\nStochastic Mapping simulation n°1")
 
 plot(eel_biogeo_data$simmaps[[10]], colors = colors_per_all_ranges, fsize = 0.7)
 title(main = "\nStochastic Mapping simulation n°10")
+
+plot(eel_biogeo_data$simmaps[[100]], colors = colors_per_all_ranges, fsize = 0.7)
+title(main = "\nStochastic Mapping simulation n°100")
 
 

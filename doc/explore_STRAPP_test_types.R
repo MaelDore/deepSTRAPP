@@ -70,19 +70,23 @@ is_dev_version <- function (pkg = "deepSTRAPP")
 # focal_time <- 10
 # 
 # deepSTRAPP_output_two_tailed <- run_deepSTRAPP_for_focal_time(
+#    # Provide ML trait estimates as a contMap
 #    contMap = Ponerinae_trait_object$contMap,
 #    ace = Ponerinae_trait_object$ace,
 #    tip_data = Ponerinae_cont_tip_data,
 #    trait_data_type = "continuous",
 #    BAMM_object = Ponerinae_BAMM_object_old_calib,
 #    focal_time = focal_time,
+#    # Deal with uncertainty in estimates by combining trait ML estimates
+#    # with all BAMM posterior samples
+#    uncertainty_strategy = "rates_only",
 #    two_tailed = TRUE, # Select a two-tailed test (Default)
 #    rate_type = "net_diversification",
 #    seed = 1234, # Set seed for reproducibility
 #    return_perm_data = TRUE, # Keep permutation data to be able to plot histograms of tests
-#    # Needed to access traits and rates data to evaluate the direction of the correlation
-#    extract_diversification_data_melted_df = TRUE,
-#    return_updated_trait_data_with_Map = TRUE)
+#    # Needed to access trait and rate data to evaluate the direction of the correlation
+#    extract_trait_data_melted_df = TRUE,
+#    extract_diversification_data_melted_df = TRUE)
 # 
 # ## Explore output
 # str(deepSTRAPP_output_two_tailed, max.level = 1)
@@ -90,7 +94,7 @@ is_dev_version <- function (pkg = "deepSTRAPP")
 # # Access deepSTRAPP results
 # deepSTRAPP_output_two_tailed$STRAPP_results[1:5]
 # 
-# # We obtain a p-value = 0.016 leading us to discard the null hypothesis (no correlation).
+# # We obtain a p-value = 0.018 leading us to discard the null hypothesis (no correlation).
 # # The estimate is the quantile 5% of the distribution of differences in
 # # absolute Spearman rho-stats between observed and permuted data.
 # # The test is significant as the estimate is higher than zero.
@@ -100,7 +104,7 @@ is_dev_version <- function (pkg = "deepSTRAPP")
 # plot_histogram_STRAPP_test_for_focal_time(
 #   deepSTRAPP_outputs = deepSTRAPP_output_two_tailed)
 # 
-# # The test is significant as the red line (quantile 5% = 0.063) is above the null expectation
+# # The test is significant as the red line (quantile 5% = 0.066) is above the null expectation
 # # that Δ abs(Spearman rho-stats) = 0.
 
 ## ----STRAPP_tests_cont_two_tailed_eval_dev, fig.width = 8.5, fig.height = 6, out.width = "100%", eval = is_dev_version(), echo = FALSE----
@@ -135,13 +139,14 @@ is_dev_version <- function (pkg = "deepSTRAPP")
 #    trait_data_type = "continuous",
 #    BAMM_object = Ponerinae_BAMM_object_old_calib,
 #    focal_time = 10,
+#    uncertainty_strategy = "rates_only",
 #    two_tailed = TRUE, # Select a two-tailed test (Default)
 #    rate_type = "net_diversification",
 #    seed = 1234, # Set seed for reproducibility
 #    return_perm_data = TRUE, # Keep permutation data to be able to plot histograms of tests
-#    # Needed to access traits and rates data to evaluate the direction of the correlation
+#    # Needed to access trait and rate data to evaluate the direction of the correlation
+#    extract_trait_data_melted_df = TRUE,
 #    extract_diversification_data_melted_df = TRUE,
-#    return_updated_trait_data_with_Map = TRUE,
 #    verbose = FALSE))
 # 
 # # Plot histogram of Spearman sum-rank test stats
@@ -169,17 +174,17 @@ knitr::include_graphics("figures/4_Explore_STRAPP_hypotheses_1.2_Example_continu
 # plot_rates_vs_trait_data_for_focal_time(deepSTRAPP_outputs = deepSTRAPP_output_two_tailed,
 #                                         color_scale = color_scale)
 # 
-# # The plot indicates that rates are globally negatively correlated with trait values as
-# # "small" ants exhibit higher rates than "large" ants for T = 10 Mya.
+# # The plot indicates that mean rates are globally negatively correlated with mean trait values as
+# # "small" ants exhibit higher mean rates than "large" ants for T = 10 Mya.
 # # The plot also displays summary statistics for the STRAPP test associated with the data shown:
 # #   * An observed statistic computed across the mean rates and trait values shown on the plot.
-# #     Here, rho obs = -0.743, indicating a negative correlation.
+# #     Here, rho obs = -0.86, indicates a negative correlation.
 # #     This is not the statistic of the STRAPP test itself, which is conducted across all BAMM posterior samples.
 # #   * The quantile of null statistic distribution at the significant threshold used to define test significance.
 # #     The test will be considered significant (i.e., the null hypothesis is rejected)
 # #     if this value is higher than zero, as shown on the histogram above.
-# #     Here, Q5% = 0.063, so the test is significant (according to this significance threshold).
-# #   * The p-value of the associated STRAPP test. Here, p = 0.016.
+# #     Here, Q5% = 0.066, so the test is significant (according to this significance threshold).
+# #   * The p-value of the associated STRAPP test. Here, p = 0.018.
 # 
 # # We could have directly tested for hypothesis with a one-tailed test (See Step 3 below).
 # 
@@ -219,6 +224,7 @@ knitr::include_graphics("figures/4_Explore_STRAPP_hypotheses_1.2_Example_continu
 #    trait_data_type = "continuous",
 #    BAMM_object = Ponerinae_BAMM_object_old_calib,
 #    focal_time = focal_time,
+#    uncertainty_strategy = "rates_only",
 #    two_tailed = FALSE, # Select a one-tailed test
 #    one_tailed_hypothesis = "negative", # We select a "negative" correlation as the alternative hypothesis
 #    rate_type = "net_diversification",
@@ -231,7 +237,7 @@ knitr::include_graphics("figures/4_Explore_STRAPP_hypotheses_1.2_Example_continu
 # # Access deepSTRAPP results
 # deepSTRAPP_output_one_tailed$STRAPP_results[1:5]
 # 
-# # We obtain a p-value = 0.006 leading us to discard the null hypothesis
+# # We obtain a p-value = 0.009 leading us to discard the null hypothesis
 # # (no correlation or positive correlation).
 # # Thus, the alternative hypothesis (negative correlation) is supported by the test.
 # # The estimate is the quantile 95% of the distribution of differences in Spearman rho-stats
@@ -255,6 +261,7 @@ knitr::include_graphics("figures/4_Explore_STRAPP_hypotheses_1.2_Example_continu
 #    trait_data_type = "continuous",
 #    BAMM_object = Ponerinae_BAMM_object_old_calib,
 #    focal_time = 10,
+#    uncertainty_strategy = "rates_only",
 #    two_tailed = FALSE, # Select a one-tailed test
 #    one_tailed_hypothesis = "negative", # We select a "negative" correlation as the alternative hypothesis
 #    rate_type = "net_diversification",
@@ -303,7 +310,7 @@ knitr::include_graphics("figures/4_Explore_STRAPP_hypotheses_1.3_Example_continu
 # Ponerinae_trait_object <- prepare_trait_data(tip_data = Ponerinae_cat_2lvl_tip_data,
 #                                              trait_data_type = "categorical",
 #                                              phylo = Ponerinae_tree_old_calib,
-#                                              evolutionary_model = "ARD", # Select an Equal-Rates model
+#                                              evolutionary_model = "ARD", # Select an All-Rates-Different model
 #                                              colors_per_states = colors_per_states,
 #                                              nb_simulations = 100,
 #                                              seed = 1234) # Set seed for reproducibility
@@ -331,11 +338,12 @@ knitr::include_graphics("figures/4_Explore_STRAPP_hypotheses_1.3_Example_continu
 #    focal_time = focal_time,
 #    two_tailed = TRUE, # Select a two-tailed test (Default)
 #    rate_type = "net_diversification",
+#    uncertainty_strategy = "rates_only",
 #    seed = 1234, # Set seed for reproducibility
 #    return_perm_data = TRUE, # Keep permutation data to be able to plot histograms of tests
 #    # Needed to access traits and rates data to evaluate the direction of the correlation
-#    extract_diversification_data_melted_df = TRUE,
-#    return_updated_trait_data_with_Map = TRUE)
+#    extract_trait_data_melted_df = TRUE,
+#    extract_diversification_data_melted_df = TRUE)
 # 
 # ## Explore output
 # str(deepSTRAPP_output_two_tailed, max.level = 1)
@@ -343,7 +351,7 @@ knitr::include_graphics("figures/4_Explore_STRAPP_hypotheses_1.3_Example_continu
 # # Access deepSTRAPP results
 # deepSTRAPP_output_two_tailed$STRAPP_results[1:5]
 # 
-# # We obtain a p-value = 0.037 leading us to discard the null hypothesis (no differences).
+# # We obtain a p-value = 0.047 leading us to (barely) discard the null hypothesis (no differences).
 # # The estimate is the quantile 5% of the distribution of differences
 # # in absolute Mann-Whitney-Wilcoxon U-stats between observed and permuted data.
 # # The test is significant as the estimate is higher than zero.
@@ -353,7 +361,7 @@ knitr::include_graphics("figures/4_Explore_STRAPP_hypotheses_1.3_Example_continu
 # plot_histogram_STRAPP_test_for_focal_time(
 #   deepSTRAPP_outputs = deepSTRAPP_output_two_tailed)
 # 
-# # The test is significant as the red line (quantile 5% = 463.6) is above the null expectation
+# # The test is significant as the red line (quantile 5% = 176.45) is above the null expectation
 # # that Δ abs(Mann-Whitney-Wilcoxon U-stats) = 0.
 
 ## ----STRAPP_tests_cat_2lvl_two_tailed_eval_dev, fig.width = 8.5, fig.height = 6, out.width = "100%", eval = is_dev_version(), echo = FALSE----
@@ -386,13 +394,14 @@ knitr::include_graphics("figures/4_Explore_STRAPP_hypotheses_1.3_Example_continu
 #    trait_data_type = "categorical",
 #    BAMM_object = Ponerinae_BAMM_object_old_calib,
 #    focal_time = 10,
+#    uncertainty_strategy = "rates_only",
 #    two_tailed = TRUE, # Select a two-tailed test (Default)
 #    rate_type = "net_diversification",
 #    seed = 1234, # Set seed for reproducibility
 #    return_perm_data = TRUE, # Keep permutation data to be able to plot histograms of tests
 #    # Needed to access traits and rates data to evaluate the direction of the correlation
+#    extract_trait_data_melted_df = TRUE,
 #    extract_diversification_data_melted_df = TRUE,
-#    return_updated_trait_data_with_Map = TRUE,
 #    verbose = FALSE))
 # 
 # # Plot histogram of Mann-Whitney-Wilcoxon test stats
@@ -420,13 +429,13 @@ knitr::include_graphics("figures/4_Explore_STRAPP_hypotheses_2.2_Example_cat_2lv
 # # The plot highlights that "small" ants exhibited higher rates than "large" ants for T = 10 Mya.
 # # The plot also displays summary statistics for the STRAPP test associated with the data shown:
 # #   * An observed statistic computed across the mean rates and trait states shown on the plot.
-# #     Here, U-stats obs = -23048, indicating the first group "large" ants have lower rates than "small" ants.
+# #     Here, the very low U-stats obs = -38713, indicates the first group "large" ants have lower rates than "small" ants.
 # #     This is not the statistic of the STRAPP test itself, which is conducted across all BAMM posterior samples.
 # #   * The quantile of null statistic distribution at the significant threshold used to define test significance.
 # #     The test will be considered significant (i.e., the null hypothesis is rejected)
 # #     if this value is higher than zero, as shown on the histogram above.
-# #     Here, Q5% = 463.6, so the test is significant (according to this significance threshold).
-# #   * The p-value of the associated STRAPP test. Here, p = 0.037.
+# #     Here, Q5% = 176.45, so the test is significant (according to this significance threshold).
+# #   * The p-value of the associated STRAPP test. Here, p = 0.047.
 # 
 # # We could have directly tested for this hypothesis (i.e., "small" > "large") with a one-tailed test (See Step 3 below).
 # 
@@ -464,6 +473,7 @@ knitr::include_graphics("figures/4_Explore_STRAPP_hypotheses_2.2_Example_cat_2lv
 #    trait_data_type = "categorical",
 #    BAMM_object = Ponerinae_BAMM_object_old_calib,
 #    focal_time = focal_time,
+#    uncertainty_strategy = "rates_only",
 #    two_tailed = FALSE, # Select a one-tailed test
 #    one_tailed_hypothesis = "small > large", # We select "small > large" as the alternative hypothesis
 #    rate_type = "net_diversification",
@@ -476,7 +486,7 @@ knitr::include_graphics("figures/4_Explore_STRAPP_hypotheses_2.2_Example_cat_2lv
 # # Access deepSTRAPP results
 # deepSTRAPP_output_one_tailed$STRAPP_results[1:5]
 # 
-# # We obtain a p-value = 0.019 leading us to discard the null hypothesis ("small <= large").
+# # We obtain a p-value = 0.020 leading us to discard the null hypothesis ("small <= large").
 # # Thus, the alternative hypothesis ("small > large") is supported by the test.
 # # The estimate is the quantile 5% of the distribution of differences in Mann-Whitney-Wilcoxon U-stats
 # # between observed and permuted data
@@ -486,7 +496,7 @@ knitr::include_graphics("figures/4_Explore_STRAPP_hypotheses_2.2_Example_cat_2lv
 # plot_histogram_STRAPP_test_for_focal_time(
 #   deepSTRAPP_outputs = deepSTRAPP_output_one_tailed)
 # 
-# # The test is significant as the red line (quantile 5% = 3899.8) is above the null expectation
+# # The test is significant as the red line (quantile 5% = 3335.4) is above the null expectation
 # # that Δ Mann-Whitney-Wilcoxon U-stats = 0.
 # 
 
@@ -499,6 +509,7 @@ knitr::include_graphics("figures/4_Explore_STRAPP_hypotheses_2.2_Example_cat_2lv
 #    trait_data_type = "categorical",
 #    BAMM_object = Ponerinae_BAMM_object_old_calib,
 #    focal_time = 10,
+#    uncertainty_strategy = "rates_only",
 #    two_tailed = FALSE, # Select a one-tailed test
 #    one_tailed_hypothesis = "small > large", # We select "small > large" as the alternative hypothesis
 #    rate_type = "net_diversification",
@@ -547,7 +558,7 @@ knitr::include_graphics("figures/4_Explore_STRAPP_hypotheses_2.3_Example_cat_2lv
 # Ponerinae_trait_object <- prepare_trait_data(tip_data = Ponerinae_cat_3lvl_tip_data,
 #                                              trait_data_type = "categorical",
 #                                              phylo = Ponerinae_tree_old_calib,
-#                                              evolutionary_model = "ARD", # Select an Equal-Rates model
+#                                              evolutionary_model = "ARD", # Select an All-Rates-Different model
 #                                              colors_per_states = colors_per_states,
 #                                              nb_simulations = 100,
 #                                              seed = 1234) # Set seed for reproducibility
@@ -578,14 +589,15 @@ knitr::include_graphics("figures/4_Explore_STRAPP_hypotheses_2.3_Example_cat_2lv
 #    trait_data_type = "categorical",
 #    BAMM_object = Ponerinae_BAMM_object_old_calib,
 #    focal_time = focal_time,
+#    uncertainty_strategy = "rates_only",
 #    alpha = 0.10, # Adjust the significance threshold
 #    posthoc_pairwise_tests = FALSE, # To run the overall
 #    rate_type = "net_diversification",
 #    seed = 1234, # Set seed for reproducibility
 #    return_perm_data = TRUE, # Keep permutation data to be able to plot histograms of tests
 #    # Needed to access traits and rates data to evaluate the direction of the correlation
-#    extract_diversification_data_melted_df = TRUE,
-#    return_updated_trait_data_with_Map = TRUE)
+#    extract_trait_data_melted_df = TRUE,
+#    extract_diversification_data_melted_df = TRUE)
 # 
 # ## Explore output
 # str(deepSTRAPP_output_overall, max.level = 1)
@@ -593,7 +605,7 @@ knitr::include_graphics("figures/4_Explore_STRAPP_hypotheses_2.3_Example_cat_2lv
 # # Access deepSTRAPP results
 # deepSTRAPP_output_overall$STRAPP_results[1:5]
 # 
-# # We obtain a p-value = 0.071 leading us to discard the null hypothesis (no differences).
+# # We obtain a p-value = 0.083 leading us to discard the null hypothesis (no differences).
 # # The estimate is the quantile 10% of the distribution of differences
 # # in Kruskal-Wallis H-stats between observed and permuted data.
 # # The test is significant as the estimate is higher than zero.
@@ -604,7 +616,7 @@ knitr::include_graphics("figures/4_Explore_STRAPP_hypotheses_2.3_Example_cat_2lv
 # plot_histogram_STRAPP_test_for_focal_time(
 #   deepSTRAPP_outputs = deepSTRAPP_output_overall)
 # 
-# # The test is significant as the red line (quantile 10% = 6.942) is above the null expectation
+# # The test is significant as the red line (quantile 10% = 5.606) is above the null expectation
 # # that Δ Kruskal-Wallis H-stats = 0.
 
 ## ----STRAPP_tests_cat_3lvl_overall_eval_dev, fig.width = 8.5, fig.height = 6, out.width = "100%", eval = is_dev_version(), echo = FALSE----
@@ -637,14 +649,15 @@ knitr::include_graphics("figures/4_Explore_STRAPP_hypotheses_2.3_Example_cat_2lv
 #    trait_data_type = "categorical",
 #    BAMM_object = Ponerinae_BAMM_object_old_calib,
 #    focal_time = 10,
+#    uncertainty_strategy = "rates_only",
 #    alpha = 0.10, # Adjust the significance threshold
 #    posthoc_pairwise_tests = FALSE, # To run the overall
 #    rate_type = "net_diversification",
 #    seed = 1234, # Set seed for reproducibility
 #    return_perm_data = TRUE, # Keep permutation data to be able to plot histograms of tests
 #    # Needed to access traits and rates data to evaluate the direction of the correlation
+#    extract_trait_data_melted_df = TRUE,
 #    extract_diversification_data_melted_df = TRUE,
-#    return_updated_trait_data_with_Map = TRUE,
 #    verbose = FALSE))
 # 
 # # Plot histogram of Kruskall-Wallis one-way ANOVA test stats
@@ -673,14 +686,15 @@ knitr::include_graphics("figures/4_Explore_STRAPP_hypotheses_3.2_Example_cat_3lv
 # # than "subterranean" ants, and lower in "arboreal" ants, for T = 10 Mya.
 # # The plot also displays summary statistics for the STRAPP test associated with the data shown:
 # #   * An observed statistic computed across the mean rates and trait states (i.e., habitats) shown on the plot.
-# #     Here, H-stat obs = 374.82. Please note that this is not the statistic of the STRAPP test itself,
+# #     Here, the high H-stat obs = 374.82 indicates there is a difference in rates between states.
+# #     Please note that this is not the statistic of the STRAPP test itself,
 # #     which is conducted across all BAMM posterior samples.
 # #   * The quantile of null statistic distribution at the significant threshold used to define test significance.
 # #     The test will be considered significant (i.e., the null hypothesis is rejected)
 # #     if this value is higher than zero, as shown on the histogram above.
-# #     Here, Q10% = 6.942, so the test is significant (according to this significance threshold),
+# #     Here, Q10% = 5.606, so the test is significant (according to this significance threshold),
 # #     meaning we detected differences between habitats overall.
-# #   * The p-value of the associated STRAPP test. Here, p = 0.071.
+# #   * The p-value of the associated STRAPP test. Here, p = 0.083.
 # 
 # # We can explore those potential differences with post hoc pairwise tests,
 # # with both one-tailed hypothesis tests or two-tailed tests (See Steps 3 & 4 below).
@@ -730,6 +744,7 @@ knitr::include_graphics("figures/4_Explore_STRAPP_hypotheses_3.2_Example_cat_3lv
 #    trait_data_type = "categorical",
 #    BAMM_object = Ponerinae_BAMM_object_old_calib,
 #    focal_time = focal_time,
+#    uncertainty_strategy = "rates_only",
 #    two_tailed = TRUE, # Select two-tailed tests for the post hoc tests (Default)
 #    posthoc_pairwise_tests = TRUE, # Ask for post hoc tests to be carried out
 #    rate_type = "net_diversification",
@@ -756,7 +771,7 @@ knitr::include_graphics("figures/4_Explore_STRAPP_hypotheses_3.2_Example_cat_3lv
 #   plot_posthoc_tests = TRUE)
 # 
 # # Only the test for the pair "arboreal =! terricolous" is significant as the red line
-# # (quantile 5% = 0.759) is above the null expectation that Δ Dunn's Z-stats = 0.
+# # (quantile 5% = 0.532) is above the null expectation that Δ Dunn's Z-stats = 0.
 # # The conclusion is that it is the difference in rates between "arboreal" ants
 # # and "terricolous" ants that drives the differences in rates recorded overall
 # # with the Kruskal-Wallis test.
@@ -794,6 +809,7 @@ knitr::include_graphics("figures/4_Explore_STRAPP_hypotheses_3.2_Example_cat_3lv
 #    trait_data_type = "categorical",
 #    BAMM_object = Ponerinae_BAMM_object_old_calib,
 #    focal_time = 10,
+#    uncertainty_strategy = "rates_only",
 #    two_tailed = TRUE, # Select two-tailed tests for the post hoc tests (Default)
 #    posthoc_pairwise_tests = TRUE, # Ask for post hoc tests to be carried out
 #    rate_type = "net_diversification",
@@ -830,6 +846,7 @@ knitr::include_graphics("figures/4_Explore_STRAPP_hypotheses_3.3_Example_cat_3lv
 #    trait_data_type = "categorical",
 #    BAMM_object = Ponerinae_BAMM_object_old_calib,
 #    focal_time = focal_time,
+#    uncertainty_strategy = "rates_only",
 #    two_tailed = FALSE, # Select one-tailed tests for the post hoc tests
 #    posthoc_pairwise_tests = TRUE, # Ask for post hoc tests to be carried out
 #    rate_type = "net_diversification",
@@ -845,11 +862,11 @@ knitr::include_graphics("figures/4_Explore_STRAPP_hypotheses_3.3_Example_cat_3lv
 # # We obtain a p-value for each pair of states in each direction.
 # # Here there are 3 possible pairs = 6 one-tailed tests.
 # # Only the alternative hypothesis "arboreal < terricolous" yields to a significant result.
-# # For this test, we obtain a p-value = 0.012 leading us to discard the null hypothesis that
+# # For this test, we obtain a p-value = 0.014 leading us to discard the null hypothesis that
 # # "arboreal" ants have equivalent or higher rates than "terricolous" ants.
 # # The estimate is the quantile 5% of the distribution of differences
 # # in Dunn's Z-stats between observed and permuted data.
-# # The test is significant as the estimate is higher than zero (Q5% = 1.718).
+# # The test is significant as the estimate is higher than zero (Q5% = 1.713).
 # # We can conclude that our data support the idea that "arboreal" ants
 # # have lower diversification rates than "terricolous" ants.
 # 
@@ -859,7 +876,7 @@ knitr::include_graphics("figures/4_Explore_STRAPP_hypotheses_3.3_Example_cat_3lv
 #   plot_posthoc_tests = TRUE)
 # 
 # # Only the test for the alternative hypothesis "arboreal < terricolous" is significant as the red line
-# # (quantile 5% = 1.718) is above the null expectation that Δ Dunn's Z-stats = 0.
+# # (quantile 5% = 1.713) is above the null expectation that Δ Dunn's Z-stats = 0.
 # # The conclusion is that it is the higher rates in "terricolous" ants vs. lower rates in "arboreal" ants
 # # that drives the differences in rates recorded overall with the Kruskal-Wallis test.
 
@@ -872,6 +889,7 @@ knitr::include_graphics("figures/4_Explore_STRAPP_hypotheses_3.3_Example_cat_3lv
 #    trait_data_type = "categorical",
 #    BAMM_object = Ponerinae_BAMM_object_old_calib,
 #    focal_time = 10,
+#    uncertainty_strategy = "rates_only",
 #    two_tailed = FALSE, # Select one-tailed tests for the post hoc tests
 #    posthoc_pairwise_tests = TRUE, # Ask for post hoc tests to be carried out
 #    rate_type = "net_diversification",

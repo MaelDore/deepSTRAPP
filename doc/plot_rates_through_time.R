@@ -153,7 +153,7 @@ knitr::opts_chunk$set(
 # ## Generate default plot
 # plot_RTT_continuous_1 <- plot_rates_through_time(
 #    deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_old_calib_0_40,
-#    color_scale = color_scale, display_plot = FALSE)
+#    color_scale = color_scale, display_plot = FALSE, verbose = FALSE)
 # plot_RTT_continuous_1 <- plot_RTT_continuous_1$rates_TT_ggplot +
 #   ggplot2::ggtitle(label = "Default plot")
 # 
@@ -161,7 +161,7 @@ knitr::opts_chunk$set(
 # plot_RTT_continuous_2 <- plot_rates_through_time(
 #    deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_old_calib_0_40,
 #    quantile_ranges = c(0, 0.20, 0.40, 0.60, 0.80, 1.0),
-#    color_scale = color_scale, display_plot = FALSE)
+#    color_scale = color_scale, display_plot = FALSE, verbose = FALSE)
 # plot_RTT_continuous_2 <- plot_RTT_continuous_2$rates_TT_ggplot +
 #   ggplot2::ggtitle(label = "Five groups")
 # 
@@ -171,7 +171,7 @@ knitr::opts_chunk$set(
 #    color_scale = color_scale,
 #    plot_CI = TRUE, # To add CI on the plot
 #    CI_type = "fuzzy", # Select type of CI
-#    display_plot = FALSE)
+#    display_plot = FALSE, verbose = FALSE)
 # plot_RTT_continuous_3 <- plot_RTT_continuous_3$rates_TT_ggplot +
 #   ggplot2::ggtitle(label = "Fuzzy CI")
 # 
@@ -182,7 +182,7 @@ knitr::opts_chunk$set(
 #    plot_CI = TRUE, # To add CI on the plot
 #    CI_type = "quantiles_rect", # Select type of CI
 #    CI_quantiles = 0.9, # Adjust range of CI
-#    display_plot = FALSE)
+#    display_plot = FALSE, verbose = FALSE)
 # plot_RTT_continuous_4 <- plot_RTT_continuous_4$rates_TT_ggplot +
 #   ggplot2::ggtitle(label = "Rectangular CI")
 # 
@@ -194,7 +194,7 @@ knitr::opts_chunk$set(
 #    plot_CI = TRUE, # To add CI on the plot
 #    CI_type = "quantiles_rect", # Select type of CI
 #    CI_quantiles = 0.9, # Adjust range of CI
-#    display_plot = FALSE)
+#    display_plot = FALSE, verbose = FALSE)
 # plot_RTT_continuous_5 <- plot_RTT_continuous_5$rates_TT_ggplot +
 #   ggplot2::ggtitle(label = "Speciation rates")
 # 
@@ -206,7 +206,7 @@ knitr::opts_chunk$set(
 #    plot_CI = TRUE, # To add CI on the plot
 #    CI_type = "quantiles_rect", # Select type of CI
 #    CI_quantiles = 0.9, # Adjust range of CI
-#    display_plot = FALSE)
+#    display_plot = FALSE, verbose = FALSE)
 # plot_RTT_continuous_6 <- plot_RTT_continuous_6$rates_TT_ggplot +
 #   ggplot2::ggtitle(label = "Extinction rates")
 # 
@@ -290,7 +290,7 @@ knitr::include_graphics("figures/5_Explore_plot_RTT_1_Example_continuous.PNG")
 # plot_RTT_categorical_1 <- plot_rates_through_time(
 #    deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40,
 #    colors_per_levels = colors_per_states,
-#    display_plot = FALSE)
+#    display_plot = FALSE, verbose = FALSE)
 # plot_RTT_categorical_1 <- plot_RTT_categorical_1$rates_TT_ggplot +
 #   ggplot2::ggtitle(label = "Default plot")
 # 
@@ -300,7 +300,7 @@ knitr::include_graphics("figures/5_Explore_plot_RTT_1_Example_continuous.PNG")
 #    colors_per_levels = colors_per_states,
 #    plot_CI = TRUE,
 #    CI_type = "fuzzy",
-#    display_plot = FALSE)
+#    display_plot = FALSE, verbose = FALSE)
 # plot_RTT_categorical_2 <- plot_RTT_categorical_2$rates_TT_ggplot +
 #   ggplot2::ggtitle(label = "Fuzzy CI")
 # 
@@ -310,7 +310,7 @@ knitr::include_graphics("figures/5_Explore_plot_RTT_1_Example_continuous.PNG")
 #    colors_per_levels = colors_per_states,
 #    plot_CI = TRUE,
 #    CI_type = "quantiles_rect",
-#    display_plot = FALSE)
+#    display_plot = FALSE, verbose = FALSE)
 # plot_RTT_categorical_3 <- plot_RTT_categorical_3$rates_TT_ggplot +
 #   ggplot2::ggtitle(label = "Rectangular CI")
 # 
@@ -321,7 +321,7 @@ knitr::include_graphics("figures/5_Explore_plot_RTT_1_Example_continuous.PNG")
 #    colors_per_levels = colors_per_states[c("arboreal", "terricolous")], # Subset colors
 #    plot_CI = TRUE,
 #    CI_type = "quantiles_rect",
-#    display_plot = FALSE)
+#    display_plot = FALSE, verbose = FALSE)
 # plot_RTT_categorical_4 <- plot_RTT_categorical_4$rates_TT_ggplot +
 #   ggplot2::ggtitle(label = "Subset two states")
 # 
