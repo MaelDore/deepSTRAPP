@@ -1,6 +1,6 @@
 ## Functions to extract the most likely trait data from a mapped phylogeny at a given focal time
 # One master function to select the proper pipeline according to data type
-# Three sub-functions extracting trait evolution according to data type
+# Three internal sub-functions extracting trait evolution according to data type
 
 ### Master function to select the proper sub-function according to data type ####
 
@@ -111,11 +111,6 @@
 #'   The mapping in `contMap(s)`/`densityMaps` (`$tree$maps` and `$tree$mapped.edge`) or `simmaps` (`$maps` and `$mapped.edge`)
 #'   is updated accordingly by removing mapping associated with the cut off branches.
 #'
-#'   A specific sub-function (that can be used independently) is called according to the type of trait data:
-#'   * For continuous traits: [deepSTRAPP::extract_most_likely_trait_values_from_contMap_for_focal_time()] [deepSTRAPP::extract_most_likely_trait_values_from_contMaps_for_focal_time()]
-#'   * For categorical traits: [deepSTRAPP::extract_most_likely_states_from_densityMaps_for_focal_time()] [deepSTRAPP::extract_most_likely_states_from_simmaps_for_focal_time()]
-#'   * For biogeographic ranges: [deepSTRAPP::extract_most_likely_ranges_from_densityMaps_for_focal_time()] [deepSTRAPP::extract_most_likely_ranges_from_simmaps_for_focal_time()]
-#'
 #'   To extract all trait data across multiple stochastic maps, and not just the most likely trait value/state/range,
 #'   see this associated function: [deepSTRAPP::extract_all_trait_values_for_focal_time()]
 #'
@@ -160,12 +155,6 @@
 #'
 #' Equivalent function to extract all data for multiple stochastic maps
 #' [deepSTRAPP::extract_all_trait_values_for_focal_time()]
-#'
-#' Associated sub-functions per type of trait data:
-#'
-#' [deepSTRAPP::extract_most_likely_trait_values_from_contMap_for_focal_time()]
-#' [deepSTRAPP::extract_most_likely_states_from_densityMaps_for_focal_time()]
-#' [deepSTRAPP::extract_most_likely_ranges_from_densityMaps_for_focal_time()]
 #'
 #' @examples
 #' # ----- Example 1: Continuous trait ----- #
@@ -491,7 +480,6 @@ extract_most_likely_trait_values_for_focal_time <- function (contMap = NULL,
 #'   must retained their initial `tip.label` on the updated contMap. Default is `TRUE`.
 #'   Used only if `update_contMap = TRUE`.
 #'
-#' @export
 #' @importFrom phytools nodeHeights plot.contMap
 #' @importFrom ape nodelabels
 #'
@@ -540,13 +528,6 @@ extract_most_likely_trait_values_for_focal_time <- function (contMap = NULL,
 #' @seealso [deepSTRAPP::cut_phylo_for_focal_time()] [deepSTRAPP::cut_contMap_for_focal_time()]
 #'
 #' Associated main function: [deepSTRAPP::extract_most_likely_trait_values_for_focal_time()]
-#'
-#' Sub-function for `contMaps` as alternative input: [deepSTRAPP::extract_most_likely_trait_values_from_contMaps_for_focal_time()]
-#'
-#' Sub-functions for other types of trait data:
-#'
-#' [deepSTRAPP::extract_most_likely_states_from_densityMaps_for_focal_time()] [deepSTRAPP::extract_most_likely_states_from_simmaps_for_focal_time()]
-#' [deepSTRAPP::extract_most_likely_ranges_from_densityMaps_for_focal_time()] [deepSTRAPP::extract_most_likely_ranges_from_simmaps_for_focal_time()]
 #'
 #' @examples
 #' # ----- Example 1: Only extent taxa (Ultrametric tree) ----- #
@@ -969,7 +950,6 @@ extract_most_likely_trait_values_from_contMap_for_focal_time <- function (
 #'   must retained their initial `tip.label` on the updated contMap. Default is `TRUE`.
 #'   Used only if `update_contMaps = TRUE`.
 #'
-#' @export
 #' @importFrom phytools nodeHeights plot.contMap
 #' @importFrom ape nodelabels
 #'
@@ -1018,13 +998,6 @@ extract_most_likely_trait_values_from_contMap_for_focal_time <- function (
 #' @seealso [deepSTRAPP::cut_phylo_for_focal_time()] [deepSTRAPP::cut_contMap_for_focal_time()]
 #'
 #' Associated main function: [deepSTRAPP::extract_most_likely_trait_values_for_focal_time()]
-#'
-#' Sub-function for `contMap` as alternative input: [deepSTRAPP::extract_most_likely_trait_values_from_contMap_for_focal_time()]
-#'
-#' Sub-functions for other types of trait data:
-#'
-#' [deepSTRAPP::extract_most_likely_states_from_densityMaps_for_focal_time()] [deepSTRAPP::extract_most_likely_states_from_simmaps_for_focal_time()]
-#' [deepSTRAPP::extract_most_likely_ranges_from_densityMaps_for_focal_time()] [deepSTRAPP::extract_most_likely_ranges_from_simmaps_for_focal_time()]
 #'
 #' @examples
 #' if (deepSTRAPP::is_dev_version())
@@ -1111,7 +1084,7 @@ extract_most_likely_trait_values_from_contMaps_for_focal_time <- function (
     if (is.null(contMaps))
     {
       stop(paste0("You must provide 'contMaps' for continuous traits.\n",
-                  "See ?deepSTRAPP::prepare_trait_data(), ?contsimmap::make.contsimmap(), and ?deepSTRAPP::convert_contsimmap_to_contMaps_list() to learn how to generate those objects."))
+                  "See ?deepSTRAPP::prepare_trait_data(), ?contsimmap::make.contsimmap(), and ?deepSTRAPP::convert_contsimmap_to_contMaps() to learn how to generate those objects."))
     }
     # contMaps must be a list of "contMap" class object
     if (!all(unlist(lapply(X = contMaps, FUN = inherits, what = 'contMap'))))
@@ -1195,10 +1168,10 @@ extract_most_likely_trait_values_from_contMaps_for_focal_time <- function (
   }
 
   ## Aggregate all contMaps into a mean contMap
-  mean_contMap <- aggregate_contMaps_list(contMaps_list = contMaps,
-                                          fun = "mean", # To select the aggregating function. Options are mean and median
-                                          display_plot = FALSE, # Whether to plot the resulting aggregated contMap
-                                          verbose = FALSE)
+  mean_contMap <- aggregate_contMaps(contMaps = contMaps,
+                                     fun = "mean", # To select the aggregating function. Options are mean and median
+                                     display_plot = FALSE, # Whether to plot the resulting aggregated contMap
+                                     verbose = FALSE)
 
   ## Identify edges present at focal time
   all_edges_df <- identify_edges_at_focal_time(phylo = mean_contMap$tree, focal_time = focal_time, tolerance = 10^-5)
@@ -1361,7 +1334,6 @@ extract_most_likely_trait_values_from_contMaps_for_focal_time <- function (
 #'   must retained their initial `tip.label` on the updated densityMaps. Default is `TRUE`.
 #'   Used only if `update_Map = TRUE`.
 #'
-#' @export
 #' @importFrom phytools nodeHeights plot.densityMap
 #' @importFrom ape nodelabels
 #' @importFrom dplyr left_join join_by
@@ -1412,13 +1384,6 @@ extract_most_likely_trait_values_from_contMaps_for_focal_time <- function (
 #' @seealso [deepSTRAPP::cut_phylo_for_focal_time()] [deepSTRAPP::cut_densityMaps_for_focal_time()]
 #'
 #' Associated main function: [deepSTRAPP::extract_most_likely_trait_values_for_focal_time()]
-#'
-#' Sub-function for `simmaps` as alternative input: [deepSTRAPP::extract_most_likely_states_from_simmaps_for_focal_time()]
-#'
-#' Sub-functions for other types of trait data:
-#'
-#' [deepSTRAPP::extract_most_likely_trait_values_from_contMap_for_focal_time()] [deepSTRAPP::extract_most_likely_trait_values_from_contMaps_for_focal_time()]
-#' [deepSTRAPP::extract_most_likely_ranges_from_densityMaps_for_focal_time()] [deepSTRAPP::extract_most_likely_ranges_from_simmaps_for_focal_time()]
 #'
 #' @examples
 #' # ----- Example 1: Only extent taxa (Ultrametric tree) ----- #
@@ -1881,7 +1846,6 @@ extract_most_likely_states_from_densityMaps_for_focal_time <- function (
 #'   must retained their initial `tip.label` on the updated simmaps. Default is `TRUE`.
 #'   Used only if `update_Map = TRUE`.
 #'
-#' @export
 #' @importFrom phytools nodeHeights
 #' @importFrom ape nodelabels
 #' @importFrom dplyr left_join join_by
@@ -1931,13 +1895,6 @@ extract_most_likely_states_from_densityMaps_for_focal_time <- function (
 #' @seealso [deepSTRAPP::cut_phylo_for_focal_time()] [deepSTRAPP::cut_simmaps_for_focal_time()]
 #'
 #' Associated main function: [deepSTRAPP::extract_most_likely_trait_values_for_focal_time()]
-#'
-#' Sub-function for `densityMaps` as alternative input: [deepSTRAPP::extract_most_likely_states_from_densityMaps_for_focal_time()]
-#'
-#' Sub-functions for other types of trait data:
-#'
-#' [deepSTRAPP::extract_most_likely_trait_values_from_contMap_for_focal_time()] [deepSTRAPP::extract_most_likely_trait_values_from_contMaps_for_focal_time()]
-#' [deepSTRAPP::extract_most_likely_ranges_from_densityMaps_for_focal_time()] [deepSTRAPP::extract_most_likely_ranges_from_simmaps_for_focal_time()]
 #'
 #' @examples
 #' # ----- Example 1: Only extent taxa (Ultrametric tree) ----- #
@@ -2417,7 +2374,6 @@ extract_most_likely_states_from_simmaps_for_focal_time <- function (
 #'   must retained their initial `tip.label` on the updated densityMaps. Default is `TRUE`.
 #'   Used only if `update_Map = TRUE`.
 #'
-#' @export
 #' @importFrom phytools nodeHeights plot.densityMap
 #' @importFrom ape nodelabels
 #' @importFrom dplyr left_join join_by
@@ -2468,11 +2424,6 @@ extract_most_likely_states_from_simmaps_for_focal_time <- function (
 #' @seealso [deepSTRAPP::cut_phylo_for_focal_time()] [deepSTRAPP::cut_densityMaps_for_focal_time()]
 #'
 #' Associated main function: [deepSTRAPP::extract_most_likely_trait_values_for_focal_time()]
-#'
-#' Sub-functions for other types of trait data:
-#'
-#' [deepSTRAPP::extract_most_likely_trait_values_from_contMap_for_focal_time()]
-#' [deepSTRAPP::extract_most_likely_states_from_densityMaps_for_focal_time()]
 #'
 #' @examples
 #'
@@ -2915,7 +2866,6 @@ extract_most_likely_ranges_from_densityMaps_for_focal_time <- function (
 #'   must retained their initial `tip.label` on the updated simmaps. Default is `TRUE`.
 #'   Used only if `update_Map = TRUE`.
 #'
-#' @export
 #' @importFrom phytools nodeHeights
 #' @importFrom ape nodelabels
 #' @importFrom dplyr left_join join_by
@@ -2965,13 +2915,6 @@ extract_most_likely_ranges_from_densityMaps_for_focal_time <- function (
 #' @seealso [deepSTRAPP::cut_phylo_for_focal_time()] [deepSTRAPP::cut_simmaps_for_focal_time()]
 #'
 #' Associated main function: [deepSTRAPP::extract_most_likely_trait_values_for_focal_time()]
-#'
-#' Sub-function for `densityMaps` as alternative input: [deepSTRAPP::extract_most_likely_ranges_from_densityMaps_for_focal_time()]
-#'
-#' Sub-functions for other types of trait data:
-#'
-#' [deepSTRAPP::extract_most_likely_trait_values_from_contMap_for_focal_time()] [deepSTRAPP::extract_most_likely_trait_values_from_contMaps_for_focal_time()]
-#' [deepSTRAPP::extract_most_likely_ranges_from_densityMaps_for_focal_time()] [deepSTRAPP::extract_most_likely_ranges_from_simmaps_for_focal_time()]
 #'
 #' @examples
 #' ## Load categorical trait data mapped on a phylogeny

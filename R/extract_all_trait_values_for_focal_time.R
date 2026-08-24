@@ -726,7 +726,7 @@ extract_all_trait_values_from_contMaps_for_focal_time <- function (
         edge_ID_k <- as.numeric(present_edges_df$edge_ID[k])
 
         # Extract associated edge mapping
-        edge_map_k <- contMap$tree$maps[[edge_ID_k]]
+        edge_map_k <- contMap_i$tree$maps[[edge_ID_k]]
 
         # Extract rootward node scaled ACE values as the first mapped values on the edge
         # With contMap, discrepancy with actual rootward node ACE values as this is the expected value for the mean age of the first segment of the edge...
