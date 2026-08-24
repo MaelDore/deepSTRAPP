@@ -441,6 +441,7 @@ plot_traits_vs_rates_on_phylogeny_for_focal_time <- function (
 
   ## Save initial par() and reassign them on exit
   oldpar <- par(no.readonly = TRUE)
+  oldpar$new <- NULL
   on.exit(par(oldpar))
 
   ## Extract nb_tips

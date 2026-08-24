@@ -1,12 +1,12 @@
 
 #' @title Plot rates vs. trait data for a given focal time
 #'
-#' @description Plot rates vs. trait data as extracted for a given focal time.
+#' @description Plot rates vs. trait data of branches as extracted for a given focal time.
 #'   Data are extracted from the output of a deepSTRAPP run carried out with
 #'   [deepSTRAPP::run_deepSTRAPP_for_focal_time()] or
 #'   [deepSTRAPP::run_deepSTRAPP_over_time()]).
 #'
-#'   Returns a single plot showing rates vs. trait data for a given focal time.
+#'   Returns a single plot showing mean rates vs. trait data extracted across all branches for a given focal time.
 #'   If the trait data are 'continuous', the plot is a scatter plot.
 #'   If the trait data are 'categorical' or 'biogeographic', the plot is a boxplot.
 #'
@@ -34,8 +34,8 @@
 #'   If `NULL` (default), the default ggplot2 color palette ([scales::hue_pal()]) will be used. Only for categorical and biogeographic data.
 #' @param display_plot Logical. Whether to display the plot generated in the R console. Default is `TRUE`.
 #' @param PDF_file_path Character string. If provided, the plot will be saved in a PDF file following the path provided here. The path must end with ".pdf".
-#' @param return_mean_rates_vs_trait_data_df Logical. Whether to include in the output the data.frame of mean rates per trait values/states/ranges computed for
-#'   each stochastic map X BAMM posterior sample at the focal time. Default is `FALSE`.
+#' @param return_mean_data_per_branches_df Logical. Whether to include in the output the data.frame of mean rates per trait values/states/ranges
+#'   of all branches computed at the focal time and used for the plot. Default is `FALSE`.
 #'
 #' @export
 #' @importFrom ggplot2 ggplot geom_jitter aes geom_point geom_boxplot scale_color_gradientn scale_color_manual ylab xlab guides ggtitle theme element_line element_rect element_text margin
@@ -67,8 +67,8 @@
 #'     on the console with `print(output$rates_vs_trait_ggplot)`. It corresponds to the plot being displayed on the console
 #'     when the function is run, if `display_plot = TRUE`, and can be further modify for aesthetics using the ggplot2 grammar.
 #'
-#'   If the trait data are 'continuous', the plot is a scatter plot showing how diversification rates varies with trait values.
-#'   If the trait data are 'categorical' or 'biogeographic', the plot is a boxplot showing diversification rates per states/ranges.
+#'   If the trait data are 'continuous', the plot is a scatter plot showing how mean diversification rates varies with mean trait values across branches.
+#'   If the trait data are 'categorical' or 'biogeographic', the plot is a boxplot showing mean diversification rates by states/ranges per branches.
 #'
 #'   Each plot also displays summary statistics for the STRAPP test associated with the data displayed:
 #'   * An observed statistic computed across the mean traits/ranges and rates values shown on the plot. This is not the statistic of the STRAPP test itself,
@@ -78,10 +78,10 @@
 #'   * The p-value of the associated STRAPP test.
 #'
 #'   Optional summary data.frame:
-#'   * `mean_rates_vs_trait_data_df` A data.frame with four columns providing the `$mean_rates` and `$trait_value`
-#'     observed along branches (`$tip_ID`) at `focal_time`. Rates are averaged for each stochastic maps X BAMM posterior samples used for testing,
+#'   * `mean_data_per_branches_df` A data.frame with four columns providing the `$mean_trait_values` (continuous) / `$states` (categorical) / `$ranges` (biogeographic)
+#'     and `$mean_rates` computed along branches (`$tip_ID`) at `focal_time`. Rates/Traits are averaged for each stochastic maps X BAMM posterior samples used for testing,
 #'     in accordance with the `uncertainty_strategy` selected when running deepSTRAPP.
-#'     This is the raw data used to draw the plot. Included if `return_mean_rates_vs_trait_data_df = TRUE`.
+#'     This is the raw data used to draw the plot. Included if `return_mean_data_per_branches_df = TRUE`.
 #'
 #'   If a `PDF_file_path` is provided, the function will also generate a PDF file of the plot.
 #'
@@ -160,14 +160,14 @@
 #'     color_scale = c("grey80", "orange"),
 #'     display_plot = TRUE,
 #'     # PDF_file_path = "./plot_rates_vs_trait_10My.pdf"
-#'     return_mean_rates_vs_trait_data_df = TRUE)
+#'     return_mean_data_per_branches_df = TRUE)
 #'  # Adjust aesthetics a posteriori
 #'  rates_vs_trait_ggplot_adj <- rates_vs_trait_output$rates_vs_trait_ggplot +
 #'     ggplot2::theme(plot.title = ggplot2::element_text(color = "red", size = 15))
 #'  print(rates_vs_trait_ggplot_adj)
 #'
 #'  # Explore melted data.frame of mean rates and trait values extracted for the given focal time.
-#'  head(rates_vs_trait_output$mean_rates_vs_trait_data_df) }
+#'  head(rates_vs_trait_output$mean_data_per_branches_df) }
 #'
 #'  # ----- Plot scatterplot of rates vs. trait values from run_deepSTRAPP_over_time() ----- #
 #'
@@ -271,7 +271,7 @@
 #'     colors_per_levels = colors_per_states[c("arboreal", "terricolous")], # Adjust colors
 #'     display_plot = TRUE,
 #'     # PDF_file_path = "./plot_rates_vs_trait_10My.pdf",
-#'     return_mean_rates_vs_trait_data_df = TRUE)
+#'     return_mean_data_per_branches_df = TRUE)
 #'
 #'  # Adjust aesthetics a posteriori
 #'  rates_vs_trait_ggplot_adj <- rates_vs_trait_output$rates_vs_trait_ggplot +
@@ -279,7 +279,7 @@
 #'  print(rates_vs_trait_ggplot_adj)
 #'
 #'  # Explore melted data.frame of mean rates and states extracted for the given focal time.
-#'  head(rates_vs_trait_output$mean_rates_vs_trait_data_df) }
+#'  head(rates_vs_trait_output$mean_data_per_branches_df) }
 #'  }
 #'
 
@@ -292,7 +292,7 @@ plot_rates_vs_trait_data_for_focal_time <- function (deepSTRAPP_outputs,
                                                      colors_per_levels = NULL,
                                                      display_plot = TRUE,
                                                      PDF_file_path = NULL,
-                                                     return_mean_rates_vs_trait_data_df = FALSE)
+                                                     return_mean_data_per_branches_df = FALSE)
 
 {
   ### Check input validity
@@ -420,6 +420,7 @@ plot_rates_vs_trait_data_for_focal_time <- function (deepSTRAPP_outputs,
 
     ## Save initial par() and reassign them on exit
     oldpar <- par(no.readonly = TRUE)
+    oldpar$new <- NULL
     on.exit(par(oldpar))
 
     ## Extract type of trait
@@ -577,13 +578,28 @@ plot_rates_vs_trait_data_for_focal_time <- function (deepSTRAPP_outputs,
       relationship = "many-to-many")
   }
 
-  ## Compute mean rates across stochastic map X BAMM samples per branches X trait values
-  data_melted_df <- data_per_samples_df |>
-    dplyr::group_by(tip_ID, trait_value) |>
-    dplyr::summarize(mean_rates = mean(rates))
 
   # Bind column names to prevent Notes
-  tip_ID <- rates <- mean_rates <- trait_value <- NA
+  tip_ID <- mean_rates <- rates <- mean_trait_values <- trait_value <- states <- ranges <- NA
+
+  ## Compute mean rates and traits across stochastic map X BAMM samples per branches (X most frequent trait state/range)
+
+  # For continuous traits, simply compute the mean rates and trait values per branches
+  if (trait_data_type == "continuous")
+  {
+    data_melted_df <- data_per_samples_df |>
+      dplyr::group_by(tip_ID) |>
+      dplyr::summarize(mean_rates = mean(rates),
+                       mean_trait_values = mean(trait_value))
+  }
+  if (trait_data_type %in% c("categorical", "biogeographic"))
+  {
+    # For categorical/biogeographic traits, aggregating per trait_value = computing a mean across each state/range
+    data_melted_df <- data_per_samples_df |>
+      dplyr::group_by(tip_ID, trait_value) |>
+      dplyr::summarize(mean_rates = mean(rates)) |>
+      dplyr::rename(states = trait_value)
+  }
 
   ## Extract test summary
   if (STRAPP_results_available)
@@ -617,7 +633,7 @@ plot_rates_vs_trait_data_for_focal_time <- function (deepSTRAPP_outputs,
       }
 
       # Compute observed stat across mean data
-      stat_estimate <- spearman_test(rates = data_melted_df$mean_rates, trait_data = data_melted_df$trait_value)
+      stat_estimate <- spearman_test(rates = data_melted_df$mean_rates, trait_data = data_melted_df$mean_trait_values)
     }
 
     if (STRAPP_results$trait_data_type_for_stats == "binary")
@@ -653,13 +669,13 @@ plot_rates_vs_trait_data_for_focal_time <- function (deepSTRAPP_outputs,
 
       # Compute observed stat across mean data
       stat_estimate <- mann_whitney_wilcoxon_test(rates = data_melted_df$mean_rates,
-                                                  trait_data = data_melted_df$trait_value,
+                                                  trait_data = data_melted_df$states,
                                                   two_tailed = two_tailed,
                                                   trait_states = trait_states)
       # Center stats around location shift of the null hypothesis (mu)
       # Null hypothesis is that ranks of the values of the two groups are random
       # Compute location shift (mu) from state frequencies as average of the products of frequencies
-      trait_data_counts <- table(data_melted_df$trait_value)
+      trait_data_counts <- table(data_melted_df$states)
       trait_data_counts <- trait_data_counts[!is.na(names(trait_data_counts))] # Remove NA
       stat_mu <- prod(trait_data_counts)/2
       # Center U-stats to get an estimate of how greater/lower (far away) than the null hypothesis (mu) is the observed U-stats
@@ -691,12 +707,12 @@ plot_rates_vs_trait_data_for_focal_time <- function (deepSTRAPP_outputs,
       }
 
       # Compute observed stat across mean data
-      stat_estimate <- kruskal_wallis_test(rates = data_melted_df$mean_rates, trait_data = data_melted_df$trait_value)
+      stat_estimate <- kruskal_wallis_test(rates = data_melted_df$mean_rates, trait_data = data_melted_df$states)
     }
   }
 
   ## Set label for y-lab
-  y_label <- stringr::str_to_sentence(paste0(sub(x = rate_type, pattern = "_", replacement = " "), " rates"))
+  y_label <- stringr::str_to_sentence(paste0("Mean ",sub(x = rate_type, pattern = "_", replacement = " "), " rates"))
 
   ## Case for continuous trait data
   if (trait_data_type == "continuous")
@@ -718,8 +734,8 @@ plot_rates_vs_trait_data_for_focal_time <- function (deepSTRAPP_outputs,
 
       # Plot points for all samples
       ggplot2::geom_point(mapping = ggplot2::aes(y = mean_rates,
-                                                 x = trait_value,
-                                                 color = trait_value),
+                                                 x = mean_trait_values,
+                                                 color = mean_trait_values),
                           alpha = 0.80, size = 3) +
 
       # Adjust point colors
@@ -728,7 +744,7 @@ plot_rates_vs_trait_data_for_focal_time <- function (deepSTRAPP_outputs,
 
       # Adjust axis titles
       ggplot2::ylab(y_label) +
-      ggplot2::xlab("Trait values") +
+      ggplot2::xlab("Mean trait values") +
 
       # Add title
       ggplot2::ggtitle(paste0("Mean rates vs. trait values\n",
@@ -765,16 +781,16 @@ plot_rates_vs_trait_data_for_focal_time <- function (deepSTRAPP_outputs,
     ## Case for categorical/biogeographic trait data
 
     # Filter data to keep only the selected states/ranges
-    data_melted_df <- data_melted_df[data_melted_df$trait_value %in% states_in_trait_data_df, ]
+    data_melted_df <- data_melted_df[data_melted_df$states %in% states_in_trait_data_df, ]
 
     ## Prepare colors_per_levels to use in plots
     if (is.null(colors_per_levels))
     {
-      nb_groups <- length(levels(as.factor(data_melted_df$trait_value)))
+      nb_groups <- length(levels(as.factor(data_melted_df$states)))
       # Default: use the default ggplot palette from scales
       col_fn <- scales::hue_pal()
       colors_per_levels <- col_fn(n = nb_groups)
-      names(colors_per_levels) <- levels(as.factor(data_melted_df$trait_value))
+      names(colors_per_levels) <- levels(as.factor(data_melted_df$states))
     }
 
     if (trait_data_type == "categorical")
@@ -785,11 +801,11 @@ plot_rates_vs_trait_data_for_focal_time <- function (deepSTRAPP_outputs,
       ggplot_rates_vs_traits <- ggplot2::ggplot(data = data_melted_df) +
 
         # Plot boxplot per states
-        ggplot2::geom_boxplot(mapping = ggplot2::aes(y = mean_rates, x = trait_value,
-                                                     fill = trait_value)) +
+        ggplot2::geom_boxplot(mapping = ggplot2::aes(y = mean_rates, x = states,
+                                                     fill = states)) +
         # Plot points for all samples
-        ggplot2::geom_jitter(mapping = ggplot2::aes(y = mean_rates, x = trait_value,
-                                                    fill = trait_value),
+        ggplot2::geom_jitter(mapping = ggplot2::aes(y = mean_rates, x = states,
+                                                    fill = states),
                              alpha = 0.50, size = 3, width = 0.25, shape = 21, color = "black") +
 
         # Adjust legend
@@ -841,11 +857,11 @@ plot_rates_vs_trait_data_for_focal_time <- function (deepSTRAPP_outputs,
       ggplot_rates_vs_traits <- ggplot2::ggplot(data = data_melted_df) +
 
         # Plot boxplot per ranges
-        ggplot2::geom_boxplot(mapping = ggplot2::aes(y = mean_rates, x = trait_value,
-                                                     fill = trait_value)) +
+        ggplot2::geom_boxplot(mapping = ggplot2::aes(y = mean_rates, x = states,
+                                                     fill = states)) +
         # Plot points for all samples
-        ggplot2::geom_jitter(mapping = ggplot2::aes(y = mean_rates, x = trait_value,
-                                                    fill = trait_value),
+        ggplot2::geom_jitter(mapping = ggplot2::aes(y = mean_rates, x = states,
+                                                    fill = states),
                              alpha = 0.50, size = 3, width = 0.25, shape = 21, color = "black") +
 
         # Adjust legend
@@ -912,12 +928,34 @@ plot_rates_vs_trait_data_for_focal_time <- function (deepSTRAPP_outputs,
   output$rates_vs_trait_ggplot <- ggplot_rates_vs_traits
 
   ## Store melted df if requested
-  if (return_mean_rates_vs_trait_data_df)
+  if (return_mean_data_per_branches_df)
   {
-    mean_rates_vs_trait_data_df <- as.data.frame(data_melted_df) |>
-      dplyr::mutate(focal_time = focal_time) |> # Inform the focal_time
-      dplyr::select(focal_time, tip_ID, trait_value, mean_rates)
-    output$mean_rates_vs_trait_data_df <- mean_rates_vs_trait_data_df
+    # Inform the focal_time
+    mean_data_per_branches_df <- as.data.frame(data_melted_df) |>
+      dplyr::mutate(focal_time = focal_time)
+
+    if (trait_data_type == "continuous")
+    {
+      # Reorder
+      mean_data_per_branches_df <- mean_data_per_branches_df |>
+        dplyr::select(focal_time, tip_ID, mean_trait_values, mean_rates)
+    }
+    if (trait_data_type == "categorical")
+    {
+      # Reorder
+      mean_data_per_branches_df <- mean_data_per_branches_df |>
+        dplyr::select(focal_time, tip_ID, states, mean_rates)
+    }
+    if (trait_data_type == "biogeographic")
+    {
+      # Rename and reorder
+      mean_data_per_branches_df <- mean_data_per_branches_df |>
+        dplyr::rename(ranges = states) |>
+        dplyr::select(focal_time, tip_ID, ranges, mean_rates)
+    }
+
+    ## Export
+    output$mean_data_per_branches_df <- mean_data_per_branches_df
   }
 
   ## Return output

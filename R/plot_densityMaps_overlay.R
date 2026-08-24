@@ -11,7 +11,7 @@
 #'   that contains a phylogenetic tree and associated posterior probability of being in a given state/range along branches.
 #'   Each object (i.e., `densityMap`) corresponds to a state/range. If no color is provided for multi-area ranges, they will be interpolated.
 #' @param colors_per_levels Named character string. To set the colors to use to map each state/range posterior probabilities. Names = states/ranges; values = colors.
-#'   If `NULL` (default), the color scale provided `densityMaps` will be used.
+#'   If `NULL` (default), the color scale provided in the `densityMaps` will be used.
 #' @param add_ACE_pies Logical. Whether to add pies of posterior probabilities of states/ranges at internal nodes on the mapped phylogeny. Default = `TRUE`.
 #' @param cex_pies Numerical. To adjust the size of the ACE pies. Default = `0.5`.
 #' @param ace Numerical matrix. To provide the posterior probabilities of ancestral states/ranges (characters) estimates (ACE) at internal nodes

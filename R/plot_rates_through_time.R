@@ -34,7 +34,7 @@
 #'   Default = `NULL` will use the 'Spectral' color palette in [RColorBrewer::brewer.pal()].
 #' @param colors_per_levels Named character string. To set the colors to use to plot rates of each state/range. Names = states/ranges; values = colors.
 #'   If `NULL` (default), the default ggplot2 color palette ([scales::hue_pal()]) will be used. Only for categorical and biogeographic data.
-#' @param plot_CI Logical. Whether to plot a confidence interval (CI) based on the distribution of rates found in posterior samples. Default is `TRUE`.
+#' @param plot_CI Logical. Whether to plot a confidence interval (CI) based on the distribution of rates found in posterior samples. Default is `FALSE`.
 #' @param CI_type Character string. To select the type of confidence interval (CI) to plot.
 #'  * `fuzzy` (default): to overlay the evolution of rates found in all posterior samples with high transparency levels.
 #'  * `quantiles_rect`: to add a polygon encompassing a proportion of the rate values found in posterior samples.
@@ -52,6 +52,7 @@
 #' @export
 #' @importFrom ggplot2 ggplot geom_line aes geom_hline geom_polygon scale_y_continuous scale_x_continuous scale_color_discrete scale_color_brewer scale_fill_brewer xlab ylab ggtitle theme element_line element_rect element_text unit margin
 #' @importFrom dplyr left_join join_by group_by reframe summarise ungroup mutate arrange select filter
+#' @importFrom rlang expr eval_tidy sym
 #' @importFrom cowplot save_plot
 #' @importFrom stringr str_to_title
 #' @importFrom stats quantile
@@ -224,7 +225,7 @@ plot_rates_through_time <- function (
     time_range = NULL,
     color_scale = NULL,
     colors_per_levels = NULL,
-    plot_CI = TRUE,
+    plot_CI = FALSE,
     CI_type = "fuzzy",
     CI_quantiles = 0.95,
     display_plot = TRUE,
@@ -340,6 +341,7 @@ plot_rates_through_time <- function (
 
   ## Save initial par() and reassign them on exit
   oldpar <- par(no.readonly = TRUE)
+  oldpar$new <- NULL # Do not include this parameter to avoid warnings
   on.exit(par(oldpar))
 
   ## Detect the type of trait data
@@ -362,7 +364,8 @@ plot_rates_through_time <- function (
              display_plot = display_plot,
              PDF_file_path = PDF_file_path,
              return_mean_data_per_samples_df = return_mean_data_per_samples_df,
-             return_median_data_across_samples_df = return_median_data_across_samples_df
+             return_median_data_across_samples_df = return_median_data_across_samples_df,
+             verbose = verbose
            )
          },
          categorical =  { # Case for categorical data
@@ -379,7 +382,8 @@ plot_rates_through_time <- function (
              display_plot = display_plot,
              PDF_file_path = PDF_file_path,
              return_mean_data_per_samples_df = return_mean_data_per_samples_df,
-             return_median_data_across_samples_df = return_median_data_across_samples_df
+             return_median_data_across_samples_df = return_median_data_across_samples_df,
+             verbose = verbose
            )
          },
          biogeographic = { # Case for biogeographic data
@@ -396,7 +400,8 @@ plot_rates_through_time <- function (
              display_plot = display_plot,
              PDF_file_path = PDF_file_path,
              return_mean_data_per_samples_df = return_mean_data_per_samples_df,
-             return_median_data_across_samples_df = return_median_data_across_samples_df
+             return_median_data_across_samples_df = return_median_data_across_samples_df,
+             verbose = verbose
            )
          }
   )
@@ -572,7 +577,31 @@ plot_rates_through_time_for_continuous_data <- function (
 
   ### Attribute a quantile range to trait values found across branches for each focal_time, per Map X BAMM samples
 
-  ## Reformat into wide_df
+  # ## Fast solution with pre-defined intervals
+  #
+  # ## Reformat into wide_df
+  # quantiles_wide_df <- quantiles_data_df |>
+  #   dplyr::mutate(quantile = paste0("Q", quantile_probs * 100)) |>
+  #   dplyr::select(focal_time, Map_ID, BAMM_sample_ID, quantile, quant_traits) |>
+  #   tidyr::pivot_wider(names_from = quantile,
+  #                      values_from = quant_traits)
+  #
+  # ## Join quantiles thresholds to data
+  # data_per_samples_df <- data_per_samples_df |>
+  #   dplyr::left_join(quantiles_wide_df, by = c("focal_time", "Map_ID", "BAMM_sample_ID"))
+  #
+  # ## Attribute quantiles_ranges based on thresholds
+  # data_per_samples_df <- data_per_samples_df |>
+  #   dplyr::mutate(quantile_ranges = dplyr::case_when(
+  #       trait_value <= Q25 ~ "Q0% - Q25%",
+  #       trait_value <= Q50 ~ "Q25% - Q50%",
+  #       trait_value <= Q75 ~ "Q50% - Q75%",
+  #       TRUE               ~ "Q75% - Q100%"))
+
+  ## Create labels for the user-defined intervals
+  quantile_labels <- paste0("Q", quantile_ranges[-length(quantile_ranges)] * 100,"% - Q", quantile_ranges[-1] * 100, "%")
+
+  ## Reformat into wide_df with quantile thresholds as columns
   quantiles_wide_df <- quantiles_data_df |>
     dplyr::mutate(quantile = paste0("Q", quantile_probs * 100)) |>
     dplyr::select(focal_time, Map_ID, BAMM_sample_ID, quantile, quant_traits) |>
@@ -583,15 +612,16 @@ plot_rates_through_time_for_continuous_data <- function (
   data_per_samples_df <- data_per_samples_df |>
     dplyr::left_join(quantiles_wide_df, by = c("focal_time", "Map_ID", "BAMM_sample_ID"))
 
-  ## Attribute quantiles_ranges based on thresholds
-  data_per_samples_df <- data_per_samples_df |>
-    dplyr::mutate(quantile_ranges = dplyr::case_when(
-        trait_value <= Q25 ~ "Q0% - Q25%",
-        trait_value <= Q50 ~ "Q25% - Q50%",
-        trait_value <= Q75 ~ "Q50% - Q75%",
-        TRUE               ~ "Q75% - Q100%"))
+  ## Generate expressions for case_when() conditions dynamically
+  case_conditions <- lapply(X = seq_along(quantile_ranges)[-length(quantile_ranges)],
+                            FUN = function(i) { rlang::expr(trait_value <= !!rlang::sym(paste0("Q", quantile_ranges[i + 1] * 100)) ~ !!quantile_labels[i]) } )
 
-  # table(data_per_samples_df$quantile_ranges) # Should be roughly equally distributed
+  ## Attribute quantile ranges using case_when
+  data_per_samples_df <- data_per_samples_df |>
+    dplyr::mutate(quantile_ranges = rlang::eval_tidy(rlang::expr(dplyr::case_when(!!!case_conditions))))
+
+  # head(data_per_samples_df)
+  # table(data_per_samples_df$quantile_ranges) # Should be roughly equally distributed if groups are of the same quantile range
 
   if (verbose)
   {

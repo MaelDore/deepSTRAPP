@@ -406,6 +406,7 @@ plot_histograms_STRAPP_tests_over_time <- function (
 
   ## Save initial par() and reassign them on exit
   oldpar <- par(no.readonly = TRUE)
+  oldpar$new <- NULL
   on.exit(par(oldpar))
 
   if (!plot_posthoc_tests)

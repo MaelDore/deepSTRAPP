@@ -198,6 +198,7 @@ plot_BAMM_rates <- function (BAMM_object,
 
   ## Save initial par() and reassign them on exit
   oldpar <- par(no.readonly = TRUE)
+  oldpar$new <- NULL # Do not include this parameter to avoid warnings
   on.exit(par(oldpar))
 
   ## Convert 'rate_type' into 'spex'
