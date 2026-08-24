@@ -74,7 +74,7 @@
 #'  \donttest{ # (May take several seconds to run)
 #'  eel_contsimmap <- contsimmap::make.contsimmap(
 #'     tree = eel.tree,
-#'     trait.data = eel_tip_data ,
+#'     trait.data = eel_tip_data,
 #'     nsim = 100, res = 100,
 #'     verbose = TRUE)
 #'
@@ -82,20 +82,20 @@
 #'
 #'  # ----- Convert to a list of contMaps ----- #
 #'
-#'  eel_contMaps_list <- convert_contsimmap_to_contMaps_list(
+#'  eel_contMaps <- convert_contsimmap_to_contMaps(
 #'     contsimmap = eel_contsimmap, verbose = TRUE)
 #'
 #'  # ----- Explore contMaps ----- #
 #'
 #'  # Plot contMap from simulation n°1
-#'  plot_contMap(eel_contMaps_list[[1]])
+#'  plot_contMap(eel_contMaps[[1]])
 #'  # Plot contMap from simulation n°50
-#'  plot_contMap(eel_contMaps_list[[50]])
+#'  plot_contMap(eel_contMaps[[50]])
 #'  }
 #' }
 #'
 
-convert_contsimmap_to_contMaps_list <- function (contsimmap, verbose = FALSE)
+convert_contsimmap_to_contMaps <- function (contsimmap, verbose = FALSE)
 {
   ## Control for contsimmap install
   if (!requireNamespace("contsimmap", quietly = TRUE))
@@ -232,14 +232,14 @@ unscale_0_1000 <- function (x_scaled, min_val, max_val)
 }
 
 
-## Function to aggregate trait values across a list of contMap
+## Function to aggregate trait values across a list of contMaps
 
 #' @title Aggregate a list of contMaps into a unique mean/median contMap
 #'
 #' @description Aggregate a list of contMapsinto a unique mean/median contMap
 #'   as produced by the [phytools::contMap()] function.
 #'
-#' @param contMaps_list List of objects of class `"contMap"` that represent independent simulations of the evolution of a continuous trait
+#' @param contMaps List of objects of class `"contMap"` that represent independent simulations of the evolution of a continuous trait
 #'   (i.e., continuous stochastic maps).
 #' @param fun Character string. Select the aggregating function. Available options are `"mean"` and `"median"`. Default = `"mean"`.
 #' @param color_scale Vector of character string. List of colors to use to build the color scale with [grDevices::colorRampPalette()]
@@ -254,13 +254,13 @@ unscale_0_1000 <- function (x_scaled, min_val, max_val)
 #'
 #' @details The function is primarily designed to average trait values across multiple continuous stochastic maps
 #'    produced from the same simulation, typically with [contsimmap::make.contsimmap()] and then converted to a list of contMaps
-#'    (phytools format) with the [convert_contsimmap_to_contMaps_list] function.
+#'    (phytools format) with the [deepSTRAPP::convert_contsimmap_to_contMaps()] function.
 #'
 #'    The result is a unique `contMap` which should be consistent with the `contMap` produced by [phytools::contMap()]
 #'    when interpolating maximum likelihood estimates of ancestral trait values between nodes.
 #'
 #' @return Returns a unique `"contMap"` object representing the average trait evolutionary history
-#'    recorded across all continuous stochastic maps provided as input in `contMaps_list`.
+#'    recorded across all continuous stochastic maps provided as input in `contMaps`.
 #'
 #'    The resulting aggregated `"contMap"` is a list with three items:
 #'    * `$tree` A list of classes `"simmap"` and `"phylo"`. The mapped phylogeny including:
@@ -308,20 +308,20 @@ unscale_0_1000 <- function (x_scaled, min_val, max_val)
 #'
 #'  # ----- Convert to a list of contMaps ----- #
 #'
-#'  eel_contMaps_list <- convert_contsimmap_to_contMaps_list(
+#'  eel_contMaps <- convert_contsimmap_to_contMaps(
 #'     contsimmap = eel_contsimmap, verbose = TRUE)
 #'
 #'  # ----- Explore contMaps ----- #
 #'
 #'  # Plot contMap from simulation n°1
-#'  plot_contMap(eel_contMaps_list[[1]])
+#'  plot_contMap(eel_contMaps[[1]])
 #'  # Plot contMap from simulation n°50
-#'  plot_contMap(eel_contMaps_list[[50]])
+#'  plot_contMap(eel_contMaps[[50]])
 #'
 #'  # ----- Aggregate all simulations ----- #
 #'
-#'  eel_aggregated_contMap <- aggregate_contMaps_list(
-#'     contMaps_list = eel_contMaps_list,
+#'  eel_aggregated_contMap <- aggregate_contMaps(
+#'     contMaps = eel_contMaps,
 #'     verbose = TRUE, display_plot = FALSE)
 #'
 #'  plot_contMap(eel_aggregated_contMap)
@@ -344,37 +344,37 @@ unscale_0_1000 <- function (x_scaled, min_val, max_val)
 #' }
 #'
 
-aggregate_contMaps_list <- function (contMaps_list,
-                                     fun = "mean", # To select the aggregating function. Options are mean and median
-                                     color_scale = NULL,
-                                     display_plot = TRUE, # Whether to plot the resulting aggregated contMap
-                                     ..., # Arguments to pass down to plot_contMap() if ploting is requested
-                                     verbose = TRUE) # Whether to display progress every 1000 edges
+aggregate_contMaps <- function (contMaps,
+                                fun = "mean", # To select the aggregating function. Options are mean and median
+                                color_scale = NULL,
+                                display_plot = TRUE, # Whether to plot the resulting aggregated contMap
+                                ..., # Arguments to pass down to plot_contMap() if ploting is requested
+                                verbose = TRUE) # Whether to display progress every 1000 edges
 {
   ### Check input validity
   {
-    ## contMaps_list
+    ## contMaps
     # Check that object is a list of contMap objects
-    if (!all(lapply(X = contMaps_list, FUN = class) == "contMap"))
+    if (!all(lapply(X = contMaps, FUN = class) == "contMap"))
     {
-      stop(paste0("'contMaps_list' must be a list of objects of class 'contMap'.\n",
-                  "Check 'deepSTRAPP::convert_contsimmap_to_contMaps_list()' to learn how to produce this kind of object from 'contsimmap::make.contsimmap()' outputs."))
+      stop(paste0("'contMaps' must be a list of objects of class 'contMap'.\n",
+                  "Check 'deepSTRAPP::convert_contsimmap_to_contMaps()' to learn how to produce this kind of object from 'contsimmap::make.contsimmap()' outputs."))
     }
 
     # All contMap objects must be built on the same phylogeny
-    all_trees <- lapply(X = contMaps_list, FUN = function (x) { x$tree[c("edge", "edge.length", "Nnode", "tip.label")] })
+    all_trees <- lapply(X = contMaps, FUN = function (x) { x$tree[c("edge", "edge.length", "Nnode", "tip.label")] })
     if (!all(unlist(lapply(X = all_trees, FUN = identical, all_trees[[1]]))))
     {
-      stop(paste0("'contMaps_list' must be built on the same phylogeny.\n",
-                  "Check 'deepSTRAPP::convert_contsimmap_to_contMaps_list()' to learn how to produce this kind of object from 'contsimmap::make.contsimmap()' outputs."))
+      stop(paste0("'contMaps' must be built on the same phylogeny.\n",
+                  "Check 'deepSTRAPP::convert_contsimmap_to_contMaps()' to learn how to produce this kind of object from 'contsimmap::make.contsimmap()' outputs."))
     }
 
     # All contMap objects must be built with the same time points
-    all_maps <- lapply(X = contMaps_list, FUN = function (x) { unname(unlist(x$tree$maps)) })
+    all_maps <- lapply(X = contMaps, FUN = function (x) { unname(unlist(x$tree$maps)) })
     if (!all(unlist(lapply(X = all_maps, FUN = identical, all_maps[[1]]))))
     {
-      stop(paste0("'contMaps_list' must be built with the same time points.\n",
-                  "Check 'deepSTRAPP::convert_contsimmap_to_contMaps_list()' to learn how to produce this kind of object from 'contsimmap::make.contsimmap()' outputs."))
+      stop(paste0("'contMaps' must be built with the same time points.\n",
+                  "Check 'deepSTRAPP::convert_contsimmap_to_contMaps()' to learn how to produce this kind of object from 'contsimmap::make.contsimmap()' outputs."))
     }
 
     ## fun
@@ -386,7 +386,7 @@ aggregate_contMaps_list <- function (contMaps_list,
   }
 
   ## Extract number of edges
-  nb_edges <- length(contMaps_list[[1]]$tree$maps)
+  nb_edges <- length(contMaps[[1]]$tree$maps)
 
   ## Loop across edges to record trait values
   aggregated_map <- list()
@@ -398,16 +398,16 @@ aggregate_contMaps_list <- function (contMaps_list,
     edge_maps_df_k <- data.frame()
 
     ## Loop across maps
-    for (i in seq_along(contMaps_list))
+    for (i in seq_along(contMaps))
     {
       # i <- 1
 
       # Extract trait values
-      edge_k_map_i <- as.numeric(names(contMaps_list[[i]]$tree$maps[[k]]))
+      edge_k_map_i <- as.numeric(names(contMaps[[i]]$tree$maps[[k]]))
       # Convert trait values back to raw scale
       edge_k_map_i <- unscale_0_1000(x_scaled = edge_k_map_i,
-                                     min_val = contMaps_list[[i]]$lims[1],
-                                     max_val = contMaps_list[[i]]$lims[2])
+                                     min_val = contMaps[[i]]$lims[1],
+                                     max_val = contMaps[[i]]$lims[2])
       # Store values
       edge_maps_df_k <- rbind(edge_maps_df_k, edge_k_map_i)
     }
@@ -436,7 +436,7 @@ aggregate_contMaps_list <- function (contMaps_list,
                                    min_val = min_value, max_val = max_value)
 
   ## Remap averaged values across initial map
-  new_map <- contMaps_list[[1]]$tree$maps
+  new_map <- contMaps[[1]]$tree$maps
   for (k in 1:nb_edges)
   {
     # k <- 1
@@ -445,7 +445,7 @@ aggregate_contMaps_list <- function (contMaps_list,
   }
 
   ## Extract phylo
-  tree <- contMaps_list[[1]]$tree
+  tree <- contMaps[[1]]$tree
   # str(tree, 1)
 
   ## Replace the $maps
@@ -457,7 +457,7 @@ aggregate_contMaps_list <- function (contMaps_list,
   tree$mapped.edge <- mapped.edge
 
   # Build the final aggregated contMap object
-  aggregated_contMap <- list(tree = tree, cols = contMaps_list[[1]]$cols, lims = c(min_value, max_value))
+  aggregated_contMap <- list(tree = tree, cols = contMaps[[1]]$cols, lims = c(min_value, max_value))
   class(aggregated_contMap) <- "contMap"
 
   ## Update color palette if requested
