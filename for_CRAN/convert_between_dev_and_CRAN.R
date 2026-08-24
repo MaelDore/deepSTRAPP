@@ -42,7 +42,7 @@ unlink(x = "./R/datasets_doc.R", force = T)
 file.copy(from = "./for_CRAN/datasets_doc_for_CRAN.R", to = "./R/datasets_doc_for_CRAN.R", overwrite = T)
 
 ## 1.4/ Add pre-rendered visual outputs to the vignette folder
-prerendered_vignette_outputs_path <- list.files(path = "./for_CRAN/", pattern = ".PNG")
+prerendered_vignette_outputs_path <- list.files(path = "./for_CRAN/Figures_for_vignettes_Low_resolution/", pattern = ".PNG")
 file.copy(from = paste0("./for_CRAN/Figures_for_vignettes_Low_resolution/",prerendered_vignette_outputs_path), to = paste0("./vignettes/figures/",prerendered_vignette_outputs_path), overwrite = T)
 
 ## 1.5/ Replace deepSTRAPP workflow figure with LQ version
@@ -81,7 +81,7 @@ unlink(x = "./R/datasets_doc_for_CRAN.R", force = T)
 file.copy(from = "./for_CRAN/datasets_doc.R", to = "./R/datasets_doc.R", overwrite = T)
 
 ## 2.4/ Remove pre-rendered visual outputs to the vignette folder
-prerendered_vignette_outputs_path <- list.files(path = "./for_CRAN/", pattern = ".PNG")
+prerendered_vignette_outputs_path <- list.files(path = "./for_CRAN/Figures_for_vignettes_Low_resolution/", pattern = ".PNG")
 unlink(x = paste0("./vignettes/figures/",prerendered_vignette_outputs_path), force = T)
 
 ## 2.5/ Replace deepSTRAPP workflow figure with HQ version
