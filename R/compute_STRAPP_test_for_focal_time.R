@@ -392,37 +392,46 @@ compute_STRAPP_test_for_focal_time <- function (BAMM_object, trait_data_list,
     # BAMM_object must be a 'bammdata' object
     if (!("bammdata" %in% class(BAMM_object)))
     {
-      stop("'BAMM_object' must have the 'bammdata' class. See ?BAMMtools::getEventData() and ?deepSTRAPP::update_rates_and_regimes_for_focal_time() to learn how to generate those objects.")
+      stop("'BAMM_object' must have the 'bammdata' class. See ?BAMMtools::getEventData() and ?deepSTRAPP::build_BAMM_object() to learn how to generate those objects.")
     }
     # Number of posterior sample data must be equal between $tipStates, $tipLambda and $tipMu
     posterior_samples_length <- c(length(BAMM_object$tipStates), length(BAMM_object$tipLambda), length(BAMM_object$tipMu))
     if (length(unique(posterior_samples_length)) != 1)
     {
-      stop("Number of posterior samples in 'BAMM_object' must be equal between $tipStates, $tipLambda and $tipMu.\nPlease check the structure of your 'BAMM_object' with str(BAMM_object, 1)")
+      stop("Number of posterior samples in 'BAMM_object' must be equal between $tipStates, $tipLambda and $tipMu.\n",
+           "Please check the structure of your 'BAMM_object' with str(BAMM_object, 1).\n",
+           "See ?BAMMtools::getEventData() and ?deepSTRAPP::build_BAMM_object() to learn how to generate those objects.")
     }
     # Number of branches in each posterior sample must be equal within $tipStates, $tipLambda and $tipMu
     tipStates_data_length <- unlist(lapply(X = BAMM_object$tipStates, FUN = length))
     if (length(unique(tipStates_data_length)) != 1)
     {
-      stop("Number of branches in each posterior sample of 'BAMM_object$tipStates' must be equal.\nPlease check the structure of your 'BAMM_object' with str(BAMM_object$tipStates, 1)")
+      stop("Number of branches in each posterior sample of 'BAMM_object$tipStates' must be equal.\n",
+           "Please check the structure of your 'BAMM_object' with str(BAMM_object$tipStates, 1).\n",
+           "See ?BAMMtools::getEventData() and ?deepSTRAPP::build_BAMM_object() to learn how to generate those objects.")
     }
     tipLambda_data_length <- unlist(lapply(X = BAMM_object$tipLambda, FUN = length))
     if (length(unique(tipLambda_data_length)) != 1)
     {
-      stop("Number of branches in each posterior sample of 'BAMM_object$tipLambda' must be equal.\nPlease check the structure of your 'BAMM_object' with str(BAMM_object$tipLambda, 1)")
+      stop("Number of branches in each posterior sample of 'BAMM_object$tipLambda' must be equal.\n",
+           "Please check the structure of your 'BAMM_object' with str(BAMM_object$tipLambda, 1)\n",
+           "See ?BAMMtools::getEventData() and ?deepSTRAPP::build_BAMM_object() to learn how to generate those objects.")
     }
     tipMu_data_length <- unlist(lapply(X = BAMM_object$tipMu, FUN = length))
     if (length(unique(tipMu_data_length)) != 1)
     {
-      stop("Number of branches in each posterior sample of 'BAMM_object$tipMu' must be equal.\nPlease check the structure of your 'BAMM_object' with str(BAMM_object$tipMu, 1)")
+      stop("Number of branches in each posterior sample of 'BAMM_object$tipMu' must be equal.\n",
+           "Please check the structure of your 'BAMM_object' with str(BAMM_object$tipMu, 1)\n",
+           "See ?BAMMtools::getEventData() and ?deepSTRAPP::build_BAMM_object() to learn how to generate those objects.")
     }
     # Number of branches in each posterior sample must be equal between $tipStates, $tipLambda and $tipMu
     posterior_samples_data_length <- c(unique(tipStates_data_length), unique(tipLambda_data_length), unique(tipMu_data_length))
     if (length(unique(posterior_samples_data_length)) != 1)
     {
       stop(paste0("Number of branches in posterior samples of 'BAMM_object$tipMu', 'BAMM_object$tipLambda', and 'BAMM_object$tipMu' must be equal.\n",
-      "There respective number of branches is: ",paste(posterior_samples_data_length, collapse = ", "),".\n",
-      "Please check the structure of your 'BAMM_object' with str(BAMM_object, 2)"))
+                  "There respective number of branches is: ",paste(posterior_samples_data_length, collapse = ", "),".\n",
+                  "Please check the structure of your 'BAMM_object' with str(BAMM_object, 2)\n",
+                  "See ?BAMMtools::getEventData() and ?deepSTRAPP::build_BAMM_object() to learn how to generate those objects."))
     }
 
     ## trait_data_list
@@ -465,7 +474,7 @@ compute_STRAPP_test_for_focal_time <- function (BAMM_object, trait_data_list,
       # Length of $trait_data should match length of $tipStates, $tipLambda and $tipMu (for each posterior sample)
       if (length(trait_data_list$trait_data) != unique(posterior_samples_data_length))
       {
-        stop("Number of branches in 'trait_data_list$trait_data' must be equal to number of branches in posterior samples in 'BAMM_object$tipStates', 'BAMM_object$$tipLambda' and 'BAMM_object$tipMu'.\n",
+        stop("Number of branches in 'trait_data_list$trait_data' must be equal to number of branches in posterior samples in 'BAMM_object$tipStates', 'BAMM_object$tipLambda' and 'BAMM_object$tipMu'.\n",
         "Please check the structure of your 'BAMM_object' with str(BAMM_object, 2)")
       }
       # Names of $trait_data should match names in $tipStates, $tipLambda and $tipMu (for each posterior sample)
@@ -509,7 +518,7 @@ compute_STRAPP_test_for_focal_time <- function (BAMM_object, trait_data_list,
       # Length of $trait_data should match length of $tipStates, $tipLambda and $tipMu (for each posterior sample)
       if (unique(unlist(lapply(X = trait_data_list$trait_data, FUN = length))) != unique(posterior_samples_data_length))
       {
-        stop("Number of branches in elements of 'trait_data_list$trait_data' must be equal to number of branches in posterior samples in 'BAMM_object$tipStates', 'BAMM_object$$tipLambda' and 'BAMM_object$tipMu'.\n",
+        stop("Number of branches in elements of 'trait_data_list$trait_data' must be equal to number of branches in posterior samples in 'BAMM_object$tipStates', 'BAMM_object$tipLambda' and 'BAMM_object$tipMu'.\n",
         "Please check the structure of your 'BAMM_object' with str(BAMM_object, 2)")
       }
       # Names of $trait_data should match names in $tipStates, $tipLambda and $tipMu (for each posterior sample)
@@ -833,6 +842,8 @@ compute_STRAPP_test_for_focal_time <- function (BAMM_object, trait_data_list,
     # For 'rates_only' strategy, there is only one trait data, so no need to resample
     # For 'full' strategy, all trait data are matched with all BAMM samples, so no need to resample
 
+    Map_sample_ID <- names(trait_data)
+
     # For 'paired' strategy, apply sub-sampling/replication step to match nb_permutations only on the valid trait data / stochastic maps !
     if (uncertainty_strategy == "paired" & (length(trait_data) != nb_permutations))
     {
@@ -1036,11 +1047,11 @@ compute_STRAPP_test_for_continuous_data <- function (
   } else { # In series
     posterior_samples_permuted_rates_data <- lapply(posterior_samples_random_rates_data, block_permute_rates_data)
   }
-  names(posterior_samples_permuted_rates_data) <- paste0("BAMM_",BAMM_data$BAMM_posterior_sample_ID)
+  names(posterior_samples_permuted_rates_data) <- BAMM_data$BAMM_posterior_sample_ID
 
   # Extract initial observed tip rates
   posterior_samples_obs_rates_data <- lapply(X = posterior_samples_random_rates_data, FUN = function (x) { x$rates })
-  names(posterior_samples_obs_rates_data) <- paste0("BAMM_",BAMM_data$BAMM_posterior_sample_ID)
+  names(posterior_samples_obs_rates_data) <- BAMM_data$BAMM_posterior_sample_ID
 
   ## Print what is tested
   if (print_hypothesis)
@@ -1456,11 +1467,11 @@ compute_STRAPP_test_for_binary_data <- function (
   } else { # In series
     posterior_samples_permuted_rates_data <- lapply(posterior_samples_random_rates_data, block_permute_rates_data)
   }
-  names(posterior_samples_permuted_rates_data) <- paste0("BAMM_",BAMM_data$BAMM_posterior_sample_ID)
+  names(posterior_samples_permuted_rates_data) <- BAMM_data$BAMM_posterior_sample_ID
 
   # Extract initial observed tip rates
   posterior_samples_obs_rates_data <- lapply(X = posterior_samples_random_rates_data, FUN = function (x) { x$rates })
-  names(posterior_samples_obs_rates_data) <- paste0("BAMM_",BAMM_data$BAMM_posterior_sample_ID)
+  names(posterior_samples_obs_rates_data) <- BAMM_data$BAMM_posterior_sample_ID
 
   ## Display hypothesis
 
@@ -1942,11 +1953,11 @@ compute_STRAPP_test_for_multinominal_data <- function (
   } else { # In series
     posterior_samples_permuted_rates_data <- lapply(posterior_samples_random_rates_data, block_permute_rates_data)
   }
-  names(posterior_samples_permuted_rates_data) <- paste0("BAMM_",BAMM_data$BAMM_posterior_sample_ID)
+  names(posterior_samples_permuted_rates_data) <- BAMM_data$BAMM_posterior_sample_ID
 
   # Extract initial observed tip rates
   posterior_samples_obs_rates_data <- lapply(X = posterior_samples_random_rates_data, FUN = function (x) { x$rates })
-  names(posterior_samples_obs_rates_data) <- paste0("BAMM_",BAMM_data$BAMM_posterior_sample_ID)
+  names(posterior_samples_obs_rates_data) <- BAMM_data$BAMM_posterior_sample_ID
 
   ## Display hypothesis
 
@@ -2268,6 +2279,7 @@ compute_STRAPP_test_for_multinominal_data <- function (
         # Run fake Dunn test to get pairs
         nb_taxa <- length(rates)
         fake_rates <- c(rep(x = 1, times = nb_taxa/2), rep(x = 2, times = nb_taxa/2))
+        if (round(nb_taxa/2) != (nb_taxa/2)) { fake_rates <- c(fake_rates, 2) } # Add an extra rates for odd number of rates
         invisible(utils::capture.output(test_output <- dunn.test::dunn.test(x = fake_rates, g = trait_data)))
         Z_approximation <- stats::qnorm(p = 1 - 10^-9)
         # Create dummy test_output_df
