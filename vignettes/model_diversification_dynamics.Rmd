@@ -63,6 +63,10 @@ BAMM website: [http://bamm-project.org/](http://bamm-project.org/)
 deepSTRAPP builds upon __BAMM__ and functions from R package `[BAMMtools]` to offer a simplified framework to model and visualize __diversification dynamics__ on a __time-calibrated phylogeny__.
 <br>
 
+For a detailed explanation on how to load results from __external analyses__ within deepSTRAPP rather than relying on deepSTRAPP all-in-one function to infer diversification dynamics, please see the example in this vignette: `vignette("import_external_analyses")`.
+
+<br>
+
 ```{r model_diversity_dynamics}
 ## Goal: Map evolution of diversification rates and regime shifts on the time-calibrated phylogeny
 

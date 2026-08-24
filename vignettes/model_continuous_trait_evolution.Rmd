@@ -61,6 +61,10 @@ For an example with __biogeographic__ data, see this vignette: `vignette("model_
 
 <br>
 
+For a detailed explanation on how to load results from __external analyses__ within deepSTRAPP rather than relying on deepSTRAPP all-in-one function to infer trait evolution, please see the examples in this vignette: `vignette("import_external_analyses")`.
+
+<br>
+
 ```{r model_trait_evolution_cont}
 
 # ------ Step 0: Load data ------ #
@@ -162,7 +166,11 @@ eel_cont_data <- prepare_trait_data(
     evolutionary_models = c("BM", "OU",  "EB", "rate_trend", "lambda", "kappa", "delta"), 
     control = list(niter = 200), # Example of additional parameters that can be pass down
     # to geiger::fitContinuous() to control parameter optimization.
-    res = 100, # To set the reoslution of the continuous mapping of trait value on the contMap
+    res = 100, # To set the resolution of the continuous mapping of trait value on the contMap
+    # Perform simulations of trait evolution (i.e., continuous stochastic mapping) such as
+    # the uncertainty in trait estimates is captured through the simulations.
+    run_stochastic_maps = TRUE,
+    nb_simulations = 100,
     color_scale = c("darkgreen", "limegreen", "orange", "red"),
     plot_map = FALSE,
     # PDF_file_path = "./eel_contMap.pdf", # To export in PDF the contMap generated
@@ -177,25 +185,52 @@ eel_cont_data <- prepare_trait_data(
 ## Explore output
 str(eel_cont_data, 1)
 
-## Extract the contMap showing interpolated continuous trait evolution
-## on the phylogeny as estimated from the model
+## Extract the contMap showing interpolated ML estimates of the continuous trait 
+## evolution on the phylogeny as estimated from the model
 eel_contMap <- eel_cont_data$contMap
 
 # Plot with initial color_scale
 plot_contMap(eel_contMap,
              fsize = c(0.6, 1)) # Adjust tip label size
+title(main = "\nML estimates")
+
 # Plot with updated color_scale
 plot_contMap(contMap = eel_contMap,
              color_scale = c("purple", "violet", "cyan", "blue"),
              fsize = c(0.6, 1)) # Adjust tip label size
-# The contMap is the main input needed to perform a deepSTRAPP run on continuous trait data.
+title(main = "\nML estimates")
 
-## Extract the Ancestral Character Estimates (ACE) = trait values at nodes
+# The contMap is the main input needed to perform a deepSTRAPP run on continuous trait data.
+# However, since it only represents Maximum Likelihood (ML) estimates of ancestral trait values,
+# it does not allow to account for uncertainty in trait estimates. *
+# For this, we need to provide the full set of stochastic maps as contMaps
+
+## Extract the contMaps representing independent simulated evolutionary histories 
+## conditioned to the observed trait data and model fit.
+## The variance observed across the maps represent the uncertainty in ancestral trait estimates.
+eel_contMaps <- eel_cont_data$contMaps
+
+# Plot contMap n°1 with initial color_scale
+plot_contMap(eel_contMaps[[1]],
+             fsize = c(0.6, 1)) # Adjust tip label size
+title(main = "\nStochastic Mapping simulation n°1")
+# Plot contMap n°10 with initial color_scale
+plot_contMap(eel_contMaps[[10]],
+             fsize = c(0.6, 1)) # Adjust tip label size
+title(main = "\nStochastic Mapping simulation n°10")
+# Plot contMap n°100 with initial color_scale
+plot_contMap(eel_contMaps[[100]],
+             fsize = c(0.6, 1)) # Adjust tip label size
+title(main = "\nStochastic Mapping simulation n°100")
+
+# Each simulation is different, but in average, they converge around the ML estimates showed in the contMap
+
+## Extract the Ancestral Character Estimates (ACE) = ML trait estimates at nodes
 eel_ACE <- eel_cont_data$ace
 head(eel_ACE)
 # This is a named numerical vector with names = internal node ID and values = ACE.
 # It can be used as an optional input in deepSTRAPP run to provide
-# perfectly accurate estimates for trait values at internal nodes. 
+# perfectly accurate ML estimates for trait values at internal nodes. 
 
 ## Explore summary of model selection
 eel_cont_data$model_selection_df # Summary of model selection
@@ -210,8 +245,11 @@ eel_cont_data$best_model_fit$opt # Parameter estimates and goodness-of-fit infor
 # 'lambda' = 0.636. The best model detects a moderate degree of phylogenetic signal.
 
 
-## Inputs needed to run deepSTRAPP are the contMap (eel_contMap), and optionally,
-## the tip_data (eel_tip_data), and the ACE (eel_ACE)
+## The minimal input needed to run deepSTRAPP is the contMap (eel_contMap).
+## If you want to account for uncertainty in trait estimates, you need to provide the full sets of stochastic maps (eel_contMaps),
+## and chose either 'paired' (the default) or 'full' as the uncertainty_strategy.
+## Optionally, you can provide the tip_data (eel_tip_data) and the ACE (eel_ACE) to force 
+## the use of the exact trait values at tips and nodes (in practice, the difference is negligible).
 
 
 ```
@@ -238,6 +276,8 @@ eel_cont_data <- suppressWarnings(prepare_trait_data(
     evolutionary_models = c("BM", "OU",  "EB", "rate_trend", "lambda", "kappa", "delta"), # All possible models
     control = list(niter = 200), # Example of additional parameters that can be pass down to geiger::fitContinuous() to control parameter optimization.
     res = 100, # To set the resolution of the continuous mapping of trait value on the contMap
+    run_stochastic_maps = TRUE,
+    nb_simulations = 100,
     color_scale = c("darkgreen", "limegreen", "orange", "red"),
     plot_map = FALSE,
     # PDF_file_path = "./eel_contMap.pdf", # To export in PDF the contMap generated
@@ -249,11 +289,28 @@ eel_cont_data <- suppressWarnings(prepare_trait_data(
 # Plot with initial color_scale
 plot_contMap(contMap = eel_cont_data$contMap,
              fsize = c(0.6, 1)) # Adjust tip label size
+title(main = "\nML estimates")
 
 # Plot with updated color_scale
 plot_contMap(contMap = eel_cont_data$contMap,
              color_scale = c("purple", "violet", "cyan", "blue"),
              fsize = c(0.6, 1)) # Adjust tip label size
+title(main = "\nML estimates")
+
+eel_contMaps <- eel_cont_data$contMaps
+
+# Plot contMap n°1 with initial color_scale
+plot_contMap(eel_contMaps[[1]],
+             fsize = c(0.6, 1)) # Adjust tip label size
+title(main = "\nStochastic Mapping simulation n°1")
+# Plot contMap n°10 with initial color_scale
+plot_contMap(eel_contMaps[[10]],
+             fsize = c(0.6, 1)) # Adjust tip label size
+title(main = "\nStochastic Mapping simulation n°10")
+# Plot contMap n°100 with initial color_scale
+plot_contMap(eel_contMaps[[100]],
+             fsize = c(0.6, 1)) # Adjust tip label size
+title(main = "\nStochastic Mapping simulation n°100")
 
 ## Explore summary of model selection
 eel_cont_data$model_selection_df # Summary of model selection
