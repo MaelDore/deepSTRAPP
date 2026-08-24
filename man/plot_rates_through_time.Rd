@@ -12,7 +12,7 @@ plot_rates_through_time(
   time_range = NULL,
   color_scale = NULL,
   colors_per_levels = NULL,
-  plot_CI = TRUE,
+  plot_CI = FALSE,
   CI_type = "fuzzy",
   CI_quantiles = 0.95,
   display_plot = TRUE,
@@ -52,7 +52,7 @@ Default = \code{NULL} will use the 'Spectral' color palette in \code{\link[RColo
 \item{colors_per_levels}{Named character string. To set the colors to use to plot rates of each state/range. Names = states/ranges; values = colors.
 If \code{NULL} (default), the default ggplot2 color palette (\code{\link[scales:pal_hue]{scales::hue_pal()}}) will be used. Only for categorical and biogeographic data.}
 
-\item{plot_CI}{Logical. Whether to plot a confidence interval (CI) based on the distribution of rates found in posterior samples. Default is \code{TRUE}.}
+\item{plot_CI}{Logical. Whether to plot a confidence interval (CI) based on the distribution of rates found in posterior samples. Default is \code{FALSE}.}
 
 \item{CI_type}{Character string. To select the type of confidence interval (CI) to plot.
 \itemize{

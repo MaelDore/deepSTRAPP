@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_rates_vs_trait_data_over_time.R
 \name{plot_rates_vs_trait_data_over_time}
 \alias{plot_rates_vs_trait_data_over_time}
-\title{Plot rates vs. trait data over time-steps}
+\title{Plot mean rates vs. trait data over time-steps}
 \usage{
 plot_rates_vs_trait_data_over_time(
   deepSTRAPP_outputs,
@@ -12,7 +12,7 @@ plot_rates_vs_trait_data_over_time(
   colors_per_levels = NULL,
   display_plot = TRUE,
   PDF_file_path = NULL,
-  return_mean_rates_vs_trait_data_df = FALSE
+  return_mean_data_per_branches_df = FALSE
 )
 }
 \arguments{
@@ -41,8 +41,8 @@ If \code{NULL} (default), the default ggplot2 color palette (\code{\link[scales:
 
 \item{PDF_file_path}{Character string. If provided, the plot will be saved in a PDF file following the path provided here. The path must end with ".pdf".}
 
-\item{return_mean_rates_vs_trait_data_df}{Logical. Whether to include in the output the data.frame of mean rates per trait values/states/ranges computed for
-each stochastic map X posterior sample over all time-steps. Default is \code{FALSE}.}
+\item{return_mean_data_per_branches_df}{Logical. Whether to include in the output the data.frame of mean rates per trait values/states/ranges
+of all branches computed over all time-steps and used for the plots. Default is \code{FALSE}.}
 }
 \value{
 The function returns a list with at least one element.
@@ -53,8 +53,8 @@ They correspond to the plots being displayed on the console one by one when the 
 and can be further modify for aesthetics using the ggplot2 grammar.
 }
 
-If the trait data are 'continuous', the plots are scatter plots showing how diversification rates varies with trait values.
-If the trait data are 'categorical' or 'biogeographic', the plots are boxplots showing diversification rates per states/ranges.
+If the trait data are 'continuous', the plots are scatter plots showing how mean diversification rates varies with mean trait values across branches.
+If the trait data are 'categorical' or 'biogeographic', the plots are boxplots showing mean diversification rates per states/ranges per branches.
 
 Each plot also displays summary statistics for the STRAPP test associated with the data displayed:
 \itemize{
@@ -67,16 +67,16 @@ which is conducted across stochastic maps X BAMM posterior samples (i.e., it is 
 
 Optional summary data.frame:
 \itemize{
-\item \code{mean_rates_vs_trait_data_df} A data.frame with four columns providing the \verb{$mean_rates} and \verb{$trait_value}
-observed along branches (\verb{$tip_ID}) at the different \code{focal_time}. Rates are averaged for each stochastic maps X BAMM posterior samples used for testing,
-in accordance with the \code{uncertainty_strategy} selected when running deepSTRAPP.
-This is the raw data used to draw each plot for each \code{focal_time}. Included if \code{return_mean_rates_vs_trait_data_df = TRUE}.
+\item \code{mean_data_per_branches_df} A data.frame with four columns providing the \verb{$mean_trait_value} (continuous) / \verb{$states} (categorical) / \verb{$ranges} (biogeographic)
+and \verb{$mean_rates} computed along branches (\verb{$tip_ID}) at the different \code{focal_time}. Rates/Traits are averaged for each stochastic maps X BAMM posterior samples
+used for testing, in accordance with the \code{uncertainty_strategy} selected when running deepSTRAPP.
+This is the raw data used to draw each plot for each \code{focal_time}. Included if \code{return_mean_data_per_branches_df = TRUE}.
 }
 
 If a \code{PDF_file_path} is provided, the function will also generate a unique PDF file with one plot/page per \verb{$time_steps}.
 }
 \description{
-Plot rates vs. trait data as extracted for all trait_data_dftime-steps.
+Plot mean rates vs. trait data of branches as extracted for all time-steps.
 Data are extracted from the output of a deepSTRAPP run carried out with
 \code{\link[=run_deepSTRAPP_over_time]{run_deepSTRAPP_over_time()}}) over multiple time-steps.
 
@@ -184,13 +184,13 @@ if (deepSTRAPP::is_dev_version())
     color_scale = c("grey80", "purple"), # Adjust color scale
     display_plot = TRUE,
     # PDF_file_path = "./plot_rates_vs_trait_0_40My.pdf",
-    return_mean_rates_vs_trait_data_df = TRUE)
+    return_mean_data_per_branches_df = TRUE)
 
  ## Print plot for time step 3 = 10 My
  print(rates_vs_trait_outputs$rates_vs_trait_ggplots[[3]])
 
  ## Explore melted data.frame of rates and trait data
- head(rates_vs_trait_outputs$mean_rates_vs_trait_data_df)
+ head(rates_vs_trait_outputs$mean_data_per_branches_df)
 
  # ----- Example 2: Categorical data ----- #
 
@@ -284,13 +284,13 @@ if (deepSTRAPP::is_dev_version())
     colors_per_levels = colors_per_states, # Adjust color scheme
     display_plot = TRUE,
     # PDF_file_path = "./plot_rates_vs_trait_0_40My.pdf",
-    return_mean_rates_vs_trait_data_df = TRUE)
+    return_mean_data_per_branches_df = TRUE)
 
  ## Print plot for time step 3 = 10 My
  print(rates_vs_trait_outputs$rates_vs_trait_ggplots[[3]])
 
  ## Explore melted data.frame of rates and states
- head(rates_vs_trait_outputs$mean_rates_vs_trait_data_df)
+ head(rates_vs_trait_outputs$mean_data_per_branches_df)
 }
 
 }

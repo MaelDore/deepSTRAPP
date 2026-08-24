@@ -21,7 +21,7 @@ that contains a phylogenetic tree and associated posterior probability of being 
 Each object (i.e., \code{densityMap}) corresponds to a state/range. If no color is provided for multi-area ranges, they will be interpolated.}
 
 \item{colors_per_levels}{Named character string. To set the colors to use to map each state/range posterior probabilities. Names = states/ranges; values = colors.
-If \code{NULL} (default), the color scale provided \code{densityMaps} will be used.}
+If \code{NULL} (default), the color scale provided in the \code{densityMaps} will be used.}
 
 \item{add_ACE_pies}{Logical. Whether to add pies of posterior probabilities of states/ranges at internal nodes on the mapped phylogeny. Default = \code{TRUE}.}
 

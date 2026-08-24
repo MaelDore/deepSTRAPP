@@ -109,7 +109,7 @@ and the most frequent state/range observed across stochastic maps for categorica
 When the number of BAMM samples and stochastic maps differ, random pairing with replacement from the smaller set is used
 so that all posterior samples and stochastic maps contribute to the analysis.
 \item \code{"full"}: Exhaustive option that accounts for trait/range- and rate- uncertainty by crossing all BAMM posterior samples with all stochastic maps.
-Accounts for both diversification-rate and ancestral reconstruction uncertainty by evaluating every combination of BAMM posterior sample and stochastic map.
+Accounts for both diversification-rate and ancestral reconstruction uncertainty by evaluating every combination of BAMM posterior samples and stochastic maps.
 WARNING: This exhaustive approach can substantially increase computation time and memory requirements and is therefore recommended only for moderate-sized analyses.
 }}
 

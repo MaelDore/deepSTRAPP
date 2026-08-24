@@ -120,7 +120,7 @@ and the most frequent state/range observed across stochastic maps for categorica
 When the number of BAMM samples and stochastic maps differ, random pairing with replacement from the smaller set is used
 so that all posterior samples and stochastic maps contribute to the analysis.
 \item \code{"full"}: Exhaustive option that accounts for trait/range- and rate- uncertainty by crossing all BAMM posterior samples with all stochastic maps.
-Accounts for both diversification-rate and ancestral reconstruction uncertainty by evaluating every combination of BAMM posterior sample and stochastic map.
+Accounts for both diversification-rate and ancestral reconstruction uncertainty by evaluating every combination of BAMM posterior samples and stochastic maps.
 WARNING: This exhaustive approach can substantially increase computation time and memory requirements and is therefore recommended only for moderate-sized analyses.
 }}
 
@@ -422,7 +422,8 @@ str(Ponerinae_deepSTRAPP_cont_old_calib_0_40, max.level = 1)
     alpha = 0.05)
 
  # Plot evolution of mean rates through time
- plot_rates_through_time(deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_old_calib_0_40)
+ plot_rates_through_time(deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_old_calib_0_40,
+    plot_CI = TRUE)
 
  # Plot rates vs. trait values across branches for time step = 10 My
  plot_rates_vs_trait_data_for_focal_time(
@@ -531,10 +532,10 @@ str(Ponerinae_deepSTRAPP_cont_old_calib_0_40, max.level = 1)
  deepSTRAPP_outputs$pvalues_summary_df_for_posthoc_pairwise_tests
 
  # Access trait data in a melted data.frame
- # Trait data were extracted from densityMaps recording only frequency of states.
- # Thus, trait states have been distributed accordingly across 'Dummy_maps'
- # to reproduce the recorded frequencies.
  head(deepSTRAPP_outputs$trait_data_df_over_time)
+ # Trait data were extracted from densityMaps recording only frequency of states.
+ # Thus, trait states have been distributed accordingly across 100 'Dummy_maps'
+ # to reproduce the recorded frequencies.
  table(deepSTRAPP_outputs$trait_data_df_over_time$Map_ID)
 
  # Access the diversification data in a melted data.frame
@@ -574,7 +575,7 @@ str(Ponerinae_deepSTRAPP_cont_old_calib_0_40, max.level = 1)
 
  # Plot evolution of mean rates through time
  plot_rates_through_time(deepSTRAPP_outputs = deepSTRAPP_outputs,
-    colors_per_levels = colors_per_states)
+    colors_per_levels = colors_per_states, plot_CI = TRUE)
 
  # Plot rates vs. trait values across branches for time step n°2 = 10 My
  plot_rates_vs_trait_data_for_focal_time(
@@ -698,7 +699,7 @@ str(Ponerinae_deepSTRAPP_cont_old_calib_0_40, max.level = 1)
  # Ranges were extracted from densityMaps recording only frequency of states.
  # Thus, ranges have been distributed accordingly across 'Dummy_maps'
  # to reproduce the recorded frequencies.
-table(deepSTRAPP_outputs$trait_data_df_over_time$Map_ID)
+ table(deepSTRAPP_outputs$trait_data_df_over_time$Map_ID)
 
  # Access the diversification data in a melted data.frame
  head(deepSTRAPP_outputs$diversification_data_df_over_time)
@@ -731,7 +732,7 @@ table(deepSTRAPP_outputs$trait_data_df_over_time$Map_ID)
 
 # Plot evolution of mean rates through time
  plot_rates_through_time(deepSTRAPP_outputs = deepSTRAPP_outputs,
-   colors_per_levels = colors_per_ranges)
+   colors_per_levels = colors_per_ranges, plot_CI = TRUE)
 
  # Plot rates vs. trait values across branches for time step n°2 = 10 My
  plot_rates_vs_trait_data_for_focal_time(
