@@ -35,6 +35,17 @@ is_dev_version <- function (pkg = "deepSTRAPP")
 
 ```
 
+```{r adjust_dpi_CRAN, include = FALSE, eval = !is_dev_version()}
+knitr::opts_chunk$set(
+  dpi = 50   # Lower DPI to save space
+)
+```
+```{r adjust_dpi_dev, include = FALSE, eval = is_dev_version()}
+knitr::opts_chunk$set(
+  dpi = 72   # Default DPI for the dev version
+)
+```
+
 <br>
 This vignette presents the different options available to __plot rates through time__ following a deepSTRAPP workflow.
 
@@ -230,7 +241,7 @@ cowplot::plot_grid(plotlist = list(plot_RTT_continuous_1, plot_RTT_continuous_2,
 ```{r plot_RTT_cont_eval_CRAN, eval = !is_dev_version(), echo = FALSE, out.width = "100%"}
 
 # Plot pre-rendered graph
-knitr::include_graphics("figures/5_Explore_plot_RTT_1_Example_continuous.png")
+knitr::include_graphics("figures/5_Explore_plot_RTT_1_Example_continuous.PNG")
 
 ```
 
@@ -345,7 +356,7 @@ cowplot::plot_grid(plotlist = list(plot_RTT_categorical_1, plot_RTT_categorical_
 ```{r plot_RTT_cat_3lvl_eval_CRAN, eval = !is_dev_version(), echo = FALSE, out.width = "100%"}
 
 # Plot pre-rendered graph
-knitr::include_graphics("figures/5_Explore_plot_RTT_2_Example_multinominal.png")
+knitr::include_graphics("figures/5_Explore_plot_RTT_2_Example_multinominal.PNG")
 
 ```
 

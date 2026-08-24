@@ -3,11 +3,37 @@ knitr::opts_chunk$set(
   eval = FALSE, # Chunks of codes will not be evaluated by default
   collapse = TRUE,
   comment = "#>",
-  fig.width = 7, fig.height = 5   # Set device size at rendering time (when plots are generated)
+  fig.width = 7, fig.height = 5,   # Set device size at rendering time (when plots are generated)
+  out.width = "100%" # Ensure that figures are fitting the vignette width
 )
 
 ## ----setup, eval = TRUE, include = FALSE--------------------------------------
 library(deepSTRAPP)
+
+is_dev_version <- function (pkg = "deepSTRAPP")
+{
+  # # Check if ran on CRAN
+  # not_cran <- identical(Sys.getenv("NOT_CRAN"), "true") # || interactive()
+
+  # Version number check
+  version <- tryCatch(as.character(utils::packageVersion(pkg)), error = function(e) "")
+  dev_version <- grepl("\\.9000", version)
+
+  # not_cran || dev_version
+  
+  return(dev_version)
+}
+
+
+## ----adjust_dpi_CRAN, include = FALSE, eval = !is_dev_version()---------------
+knitr::opts_chunk$set(
+  dpi = 72   # Lower DPI to save space
+)
+
+## ----adjust_dpi_dev, include = FALSE, eval = is_dev_version()-----------------
+# knitr::opts_chunk$set(
+#   dpi = 72   # Default DPI for the dev version
+# )
 
 ## ----model_diversity_dynamics-------------------------------------------------
 # ## Goal: Map evolution of diversification rates and regime shifts on the time-calibrated phylogeny
@@ -121,7 +147,7 @@ library(deepSTRAPP)
 ## Include the three evaluation files within the package, so I can load the ESS table, and include display of the two evaluation plots here
 
 # 1/ MCMC trace
-knitr::include_graphics("figures/whale_MCMC_trace_logLik.png")
+knitr::include_graphics("figures/whale_MCMC_trace_logLik.png", dpi = 50)
 
 # 2/ ESS data.frame
 whale_ESS_df <- read.table(file = "tables/whale_ESS_df.csv", sep = ",", header = TRUE)
@@ -130,7 +156,7 @@ whale_ESS <- unlist(whale_ESS_df[1, , drop = TRUE])
 print(whale_ESS)
 
 # 3/ PP nb shifts vs. Prior
-knitr::include_graphics("figures/whale_PP_nb_shifts_plot.png")
+knitr::include_graphics("figures/whale_PP_nb_shifts_plot.png", dpi = 50)
 
 
 ## ----explore_diversity_dynamics-----------------------------------------------

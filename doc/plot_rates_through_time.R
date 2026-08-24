@@ -24,6 +24,16 @@ is_dev_version <- function (pkg = "deepSTRAPP")
 }
 
 
+## ----adjust_dpi_CRAN, include = FALSE, eval = !is_dev_version()---------------
+knitr::opts_chunk$set(
+  dpi = 50   # Lower DPI to save space
+)
+
+## ----adjust_dpi_dev, include = FALSE, eval = is_dev_version()-----------------
+# knitr::opts_chunk$set(
+#   dpi = 72   # Default DPI for the dev version
+# )
+
 ## ----plot_RTT_cont------------------------------------------------------------
 # # ------ Example 1: Continuous trait data ------ #
 # 
@@ -209,7 +219,7 @@ is_dev_version <- function (pkg = "deepSTRAPP")
 ## ----plot_RTT_cont_eval_CRAN, eval = !is_dev_version(), echo = FALSE, out.width = "100%"----
 
 # Plot pre-rendered graph
-knitr::include_graphics("figures/5_Explore_plot_RTT_1_Example_continuous.png")
+knitr::include_graphics("figures/5_Explore_plot_RTT_1_Example_continuous.PNG")
 
 
 ## ----plot_RTT_cat_3lvl--------------------------------------------------------
@@ -323,6 +333,6 @@ knitr::include_graphics("figures/5_Explore_plot_RTT_1_Example_continuous.png")
 ## ----plot_RTT_cat_3lvl_eval_CRAN, eval = !is_dev_version(), echo = FALSE, out.width = "100%"----
 
 # Plot pre-rendered graph
-knitr::include_graphics("figures/5_Explore_plot_RTT_2_Example_multinominal.png")
+knitr::include_graphics("figures/5_Explore_plot_RTT_2_Example_multinominal.PNG")
 
 
