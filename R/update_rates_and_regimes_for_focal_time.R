@@ -255,46 +255,49 @@ update_rates_and_regimes_for_focal_time <- function (BAMM_object, focal_time,
     root_age <- max(phytools::nodeHeights(BAMM_object)[,2])
 
     ## BAMM_object
-    # BAMM_object must be of class "bammdata"
+    # BAMM_object must be a 'bammdata' object
     if (!("bammdata" %in% class(BAMM_object)))
     {
-      stop("'BAMM_object' must have the 'bammdata' class. See ?BAMMtools::getEventData() to learn how to generate those objects.")
+      stop("'BAMM_object' must have the 'bammdata' class. See ?BAMMtools::getEventData() and ?deepSTRAPP::build_BAMM_object() to learn how to generate those objects.")
     }
-    # BAMM_object must contain at least the elements $eventData, $tipStates, $tipLambda and $tipMu.
-    if (!all(c("eventData", "tipStates", "tipLambda", "tipMu") %in% names(BAMM_object)))
-    {
-      stop(paste0("'BAMM_object' must contain at least the elements $eventData, $tipStates, $tipLambda and $tipMu to extract diversification rates and regimes.\n",
-                  "See ?BAMMtools::getEventData() to learn how to generate those objects."))
-    }
-    # Number of posterior sample data must be equal between $eventData, $tipStates, $tipLambda and $tipMu
-    posterior_samples_length <- c(length(BAMM_object$eventData), length(BAMM_object$tipStates), length(BAMM_object$tipLambda), length(BAMM_object$tipMu))
+    # Number of posterior sample data must be equal between $tipStates, $tipLambda and $tipMu
+    posterior_samples_length <- c(length(BAMM_object$tipStates), length(BAMM_object$tipLambda), length(BAMM_object$tipMu))
     if (length(unique(posterior_samples_length)) != 1)
     {
-      stop(paste0("Number of posterior samples in 'BAMM_object' must be equal between $eventData, $tipStates, $tipLambda and $tipMu.\n",
-                  "Please check the structure of your 'BAMM_object' with str(BAMM_object, 1).\n",
-                  "See ?BAMMtools::getEventData() to learn how to generate those objects."))
+      stop("Number of posterior samples in 'BAMM_object' must be equal between $tipStates, $tipLambda and $tipMu.\n",
+           "Please check the structure of your 'BAMM_object' with str(BAMM_object, 1).\n",
+           "See ?BAMMtools::getEventData() and ?deepSTRAPP::build_BAMM_object() to learn how to generate those objects.")
     }
-    # BAMM_object must have an $tipStates that is a list of N posterior samples with integer vector of regime membership per tips
-    # Check that all integer vectors have a length equal to $tip.label
-    if (!all(unlist(lapply(BAMM_object$tipStates, FUN = length)) == length(BAMM_object$tip.label)))
+    # Number of branches in each posterior sample must be equal within $tipStates, $tipLambda and $tipMu
+    tipStates_data_length <- unlist(lapply(X = BAMM_object$tipStates, FUN = length))
+    if (length(unique(tipStates_data_length)) != 1)
     {
-      stop(paste0("Number of values in posterior samples of 'BAMM_object$tipStates' must be equal to the number of tips in the phylogeny.\n",
-                  "Please check the structure of your 'BAMM_object' with str(BAMM_object$tipStates, 1).\n",
-                  "See ?BAMMtools::getEventData() to learn how to generate those objects."))
+      stop("Number of branches in each posterior sample of 'BAMM_object$tipStates' must be equal.\n",
+           "Please check the structure of your 'BAMM_object' with str(BAMM_object$tipStates, 1).\n",
+           "See ?BAMMtools::getEventData() and ?deepSTRAPP::build_BAMM_object() to learn how to generate those objects.")
     }
-    # BAMM_object must have an $tipLambda that is a list of N posterior samples with integer vector of final speciation rates at tips = current speciation rates
-    if (!all(unlist(lapply(BAMM_object$tipLambda, FUN = length)) == length(BAMM_object$tip.label)))
+    tipLambda_data_length <- unlist(lapply(X = BAMM_object$tipLambda, FUN = length))
+    if (length(unique(tipLambda_data_length)) != 1)
     {
-      stop(paste0("Number of values in posterior samples of 'BAMM_object$tipLambda' must be equal to the number of tips in the phylogeny.\n",
-                  "Please check the structure of your 'BAMM_object' with str(BAMM_object$tipLambda, 1).\n",
-                  "See ?BAMMtools::getEventData() to learn how to generate those objects."))
+      stop("Number of branches in each posterior sample of 'BAMM_object$tipLambda' must be equal.\n",
+           "Please check the structure of your 'BAMM_object' with str(BAMM_object$tipLambda, 1)\n",
+           "See ?BAMMtools::getEventData() and ?deepSTRAPP::build_BAMM_object() to learn how to generate those objects.")
     }
-    # BAMM_object must have an $tipMu that is a list of N posterior samples with integer vector of final extinction rates at tips = current extinction rates
-    if (!all(unlist(lapply(BAMM_object$tipMu, FUN = length)) == length(BAMM_object$tip.label)))
+    tipMu_data_length <- unlist(lapply(X = BAMM_object$tipMu, FUN = length))
+    if (length(unique(tipMu_data_length)) != 1)
     {
-      stop(paste0("Number of values in posterior samples of 'BAMM_object$tipMu' must be equal to the number of tips in the phylogeny.\n",
-                  "Please check the structure of your 'BAMM_object' with str(BAMM_object$tipMu, 1).\n",
-                  "See ?BAMMtools::getEventData() to learn how to generate those objects."))
+      stop("Number of branches in each posterior sample of 'BAMM_object$tipMu' must be equal.\n",
+           "Please check the structure of your 'BAMM_object' with str(BAMM_object$tipMu, 1)\n",
+           "See ?BAMMtools::getEventData() and ?deepSTRAPP::build_BAMM_object() to learn how to generate those objects.")
+    }
+    # Number of branches in each posterior sample must be equal between $tipStates, $tipLambda and $tipMu
+    posterior_samples_data_length <- c(unique(tipStates_data_length), unique(tipLambda_data_length), unique(tipMu_data_length))
+    if (length(unique(posterior_samples_data_length)) != 1)
+    {
+      stop(paste0("Number of branches in posterior samples of 'BAMM_object$tipMu', 'BAMM_object$tipLambda', and 'BAMM_object$tipMu' must be equal.\n",
+                  "There respective number of branches is: ",paste(posterior_samples_data_length, collapse = ", "),".\n",
+                  "Please check the structure of your 'BAMM_object' with str(BAMM_object, 2)\n",
+                  "See ?BAMMtools::getEventData() and ?deepSTRAPP::build_BAMM_object() to learn how to generate those objects."))
     }
 
     ## focal_time
