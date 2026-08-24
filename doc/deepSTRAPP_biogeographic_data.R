@@ -218,7 +218,7 @@ names(colors_per_ranges) <- c("N", "O")
 # Ponerinae_biogeo_data_old_calib$ace_all_ranges # Including multi-area ranges too (Here, NO)
 # 
 # 
-# ## Inputs needed for Step 2 are the densityMaps (Ponerinae_densityMaps), and optionally,
+# ## Inputs needed for Step 3 are the densityMaps (Ponerinae_densityMaps), and optionally,
 # ## the tip_data (Ponerinae_NO_tip_data), and the ACE (Ponerinae_ACE)
 # 
 # 
@@ -295,6 +295,11 @@ names(colors_per_ranges) <- c("N", "O")
 # time_step_duration <- 5
 # time_range <- c(0, 40)
 # 
+# # In this example, we provide the 'densityMaps' as input. Those records frequencies of ranges
+# # observed across stochastic simulations of biogeographic history.
+# # If we want to keep track of which simulation produced which ranges,
+# # we need to provide the full sets of stochastic maps ('simmaps') as inputs.
+# 
 # # Run deepSTRAPP on net diversification rates
 # ## This step is time-consuming. You can skip it and load directly the result if needed
 # Ponerinae_deepSTRAPP_biogeo_old_calib_0_40 <- run_deepSTRAPP_over_time(
@@ -308,23 +313,23 @@ names(colors_per_ranges) <- c("N", "O")
 #     BAMM_object = Ponerinae_BAMM_object_old_calib,
 #     time_range = time_range,
 #     time_step_duration = time_step_duration,
-#     # Deal with uncertainty in estimates by pairing trait states
+#     # Deal with uncertainty in estimates by pairing ranges
 #     # (reconstructed from densityMaps) with BAMM posterior samples
 #     uncertainty_strategy = "paired",
 #     seed = 1234, # Set seed for reproducibility
 #     alpha = 0.10, # Select a generous level of significance for the sake of the example
 #     # Needed to obtain STRAPP stats and plot evaluation histograms (See 4.2)
 #     return_perm_data = TRUE,
-#      # Needed to get trait data and plot rates through time (See 4.3)
+#     # Needed to get trait data, plot rates through time (See 4.3) and trait vs. rates (See 4.4)
 #     extract_trait_data_melted_df = TRUE,
-#     # Needed to get diversification data and plot rates through time (See 4.3)
+#     # Needed to get diversification data, plot rates through time (See 4.3) and trait vs. rates (See 4.4)
 #     extract_diversification_data_melted_df = TRUE,
 #     # Needed to obtain STRAPP stats and plot evaluation histograms (See 4.2)
 #     return_STRAPP_results = TRUE,
-#     # Needed to plot updated densityMaps (See 4.4)
-#     return_updated_trait_data_with_Map = TRUE,
-#     # Needed to map diversification rates on updated phylogenies (See 4.5)
-#     return_updated_BAMM_object = TRUE,
+#     # Needed to plot updated densityMaps (See 4.5)
+#     return_updated_Maps = TRUE,
+#     # Needed to map diversification rates on updated phylogenies (See 4.6)
+#     return_updated_BAMM_objects = TRUE,
 #     verbose = TRUE,
 #     verbose_extended = TRUE)
 # 
@@ -351,15 +356,23 @@ names(colors_per_ranges) <- c("N", "O")
 # 
 # # Access trait data in a melted data.frame
 # head(Ponerinae_deepSTRAPP_biogeo_old_calib_0_40$trait_data_df_over_time)
+# # Range data were extracted from densityMaps recording only frequency of ranges.
+# # Thus, ranges have been distributed accordingly across 100 'Dummy_maps'
+# # to reproduce the recorded frequencies.
+# table(Ponerinae_deepSTRAPP_biogeo_old_calib_0_40$trait_data_df_over_time$Map_ID)
+# 
 # # Access the diversification data in a melted data.frame
 # head(Ponerinae_deepSTRAPP_biogeo_old_calib_0_40$diversification_data_df_over_time)
-# # Both can be passed down to [deepSTRAPP::plot_rates_through_time()] to generate a plot
+# # Diversification data includes 1000 BAMM posteriors
+# table(Ponerinae_deepSTRAPP_biogeo_old_calib_0_40$diversification_data_df_over_time$BAMM_sample_ID)
+# 
+# # Both melted data.frames can be passed down to [deepSTRAPP::plot_rates_through_time()] to generate a plot
 # # showing the evolution of diversification rates though time in relation to trait values
 # 
 # # Access updated densityMaps for each focal time
 # # Can be used to plot densityMaps with branch cut-off at focal time
 # # with [deepSTRAPP::plot_densityMaps_overlay()]
-# str(Ponerinae_deepSTRAPP_biogeo_old_calib_0_40$updated_trait_data_with_Map_over_time, max.level = 2)
+# str(Ponerinae_deepSTRAPP_biogeo_old_calib_0_40$updated_trait_Maps_over_time, max.level = 2)
 # 
 # # Access updated BAMM_object for each focal time
 # # Can be used to map rates and regime shifts on phylogeny with branch cut-off
@@ -406,7 +419,7 @@ names(colors_per_ranges) <- c("N", "O")
 # # of STRAPP tests change over time.
 # # Differences in net diversification rates are not significant in the present
 # # (assuming a significant threshold of alpha = 0.10).
-# # Meanwhile, rates are significantly different in the past between 8 My to 30 My (the green area).
+# # Meanwhile, rates are significantly different in the past between ca. 8 My to 28 My (the green area).
 # # This result supports the idea that differences in biodiversity across bioregions
 # # (i.e., "Old World" vs. "New World" ants) can be explained by differences of diversification rates
 # # that was detected in the past.
@@ -463,10 +476,10 @@ knitr::include_graphics("figures/1.3_deepSTRAPP_biogeographic_data_4.1_plot_pval
 # # The black line represents the expected value under the null hypothesis H0
 # #  => Δ Mann-Whitney-Wilcoxon U-stat = 0.
 # # The histogram shows the distribution of the test statistics as observed
-# # across the 1000 posterior samples from BAMM.
+# # across the 1000 combinations of stochastic maps and posterior samples from BAMM.
 # # The red line represents the significance threshold for which 90% of the observed data
 # # exhibited a higher value than expected.
-# # Since this red line is above the null expectation (quantile 10% = 380.4),
+# # Since this red line is above the null expectation (quantile 10% = 278.8),
 # # the test is significant for a value of alpha = 0.10.
 # 
 # # Plot the histograms of test stats for all time-steps
@@ -505,11 +518,11 @@ knitr::include_graphics("figures/1.3_deepSTRAPP_biogeographic_data_4.2_plot_STRA
 # 
 # # This plot helps to visualize how differences in rates evolved over time.
 # # You can see that both bioregions "New World" and "Old World" had fairly different rates over time,
-# # with differences detected as significant between 8 to 30 My.
+# # with differences detected as significant between ca. 8 to 28 My.
 # # However, in the present, we recorded an increase in diversification rates that blurred
 # # these differences and led to a non-significant STRAPP test when comparing current rates.
 # # This plot, alongside results of deepSTRAPP, supports the Diversification Rate Hypothesis
-# # in showing how "Old World" ant lineages may have accumulated faster, especially between 8 to 30 My.
+# # in showing how "Old World" ant lineages may have accumulated faster, especially between 8 to 28 My.
 # 
 # # N.B.: The increase of diversification rates recorded in the present may largely be artifactual,
 # # due to the fact some lineages in the present will go extinct in the future,
@@ -521,7 +534,7 @@ knitr::include_graphics("figures/1.3_deepSTRAPP_biogeographic_data_4.2_plot_STRA
 
 ## ----plot_rates_through_time_biogeo_2lvl_eval_dev, eval = is_dev_version(), echo = FALSE----
 # plot_rates_through_time(deepSTRAPP_outputs = Ponerinae_deepSTRAPP_biogeo_old_calib_0_40,
-#                         colors_per_levels = colors_per_ranges,
+#                         colors_per_levels = colors_per_ranges, verbose = FALSE,
 #                         plot_CI = TRUE)
 
 ## ----plot_rates_through_time_biogeo_2lvl_eval_CRAN, eval = !is_dev_version(), echo = FALSE, out.width = "100%"----
@@ -546,18 +559,19 @@ knitr::include_graphics("figures/1.3_deepSTRAPP_biogeographic_data_4.3_plot_rate
 #    colors_per_levels = colors_per_ranges)
 # 
 # # Here we focus on T = 10 My to highlight the differences detected in the previous steps.
-# # You can see that "Old World" ants tend to have higher rates than "New World" ants, at this time-step.
+# # You can see that "Old World" ants tend to have higher mean rates than "New World" ants, at this time-step.
 # # This plot, alongside other results of deepSTRAPP, supports the Diversification Rate Hypothesis in showing
-# # "Old World" ant lineages may have accumulated faster, especially between 8 to 30 My.
+# # "Old World" ant lineages may have accumulated faster, especially between 8 to 28 My.
 # # Additionally, the plot displays summary statistics for the STRAPP test associated with the data shown:
 # #   * An observed statistic computed across the mean rates and trait states (i.e., habitats) shown on the plot.
-# #     Here, U-stat obs = -27346, indicating ants in the "New World" exhibited lower rates than "Old World" ants.
-# #     This is not the statistic of the STRAPP test itself, which is conducted across all BAMM posterior samples.
+# #     Here, the low negative U-stat obs = -29636, indicates ants in the "New World" exhibited lower rates than "Old World" ants.
+# #     This is not the statistic of the STRAPP test itself, which is conducted across all paired stochastic maps
+# #     and BAMM posterior samples according to the default "uncertainty_strategy" used for testing.
 # #   * The quantile of null statistic distribution at the significant threshold used to define test significance.
 # #     The test will be considered significant (i.e., the null hypothesis is rejected)
 # #     if this value is higher than zero, as shown on the histogram in Section 4.2.
-# #     Here, Q10% = 380.4, so the test is significant (according to this significance threshold).
-# #   * The p-value of the associated STRAPP test. Here, p = 0.088.
+# #     Here, Q10% = 278.8, so the test is significant (according to this significance threshold).
+# #   * The p-value of the associated STRAPP test. Here, p = 0.089.
 # 
 # # Plot rates vs. ranges for all time-steps
 # plot_rates_vs_trait_data_over_time(
@@ -592,7 +606,7 @@ knitr::include_graphics("figures/1.3_deepSTRAPP_biogeographic_data_4.4_plot_rate
 # ## The next plot shows the evolution of trait data across the whole phylogeny (100-0 My).
 # 
 # # Plot initial densityMaps (t = 0)
-# densityMaps_0My <- Ponerinae_deepSTRAPP_biogeo_old_calib_0_40$updated_trait_data_with_Map_over_time[[1]]
+# densityMaps_0My <- Ponerinae_deepSTRAPP_biogeo_old_calib_0_40$updated_Maps_over_time[[1]]
 # plot_densityMaps_overlay(densityMaps_0My$densityMaps,
 #                          colors_per_levels = colors_per_ranges,
 #                          cex_pies = 0.3, # Reduce pie size
@@ -602,7 +616,7 @@ knitr::include_graphics("figures/1.3_deepSTRAPP_biogeographic_data_4.4_plot_rate
 # ## The next plot shows the evolution of trait data from root to 10 Mya (100-10 My).
 # 
 # # Plot updated densityMaps for time-step n°3 = 10 My
-# densityMaps_10My <- Ponerinae_deepSTRAPP_biogeo_old_calib_0_40$updated_trait_data_with_Map_over_time[[3]]
+# densityMaps_10My <- Ponerinae_deepSTRAPP_biogeo_old_calib_0_40$updated_Maps_over_time[[3]]
 # plot_densityMaps_overlay(densityMaps_10My$densityMaps,
 #                          colors_per_levels = colors_per_ranges,
 #                          cex_pies = 0.4, # Reduce pie size
@@ -612,7 +626,7 @@ knitr::include_graphics("figures/1.3_deepSTRAPP_biogeographic_data_4.4_plot_rate
 # ## The next plot shows the evolution of trait data from root to 40 Mya (100-40 My).
 # 
 # # Plot updated densityMaps for time-step n°9 = 40 My
-# densityMaps_40My <- Ponerinae_deepSTRAPP_biogeo_old_calib_0_40$updated_trait_data_with_Map_over_time[[9]]
+# densityMaps_40My <- Ponerinae_deepSTRAPP_biogeo_old_calib_0_40$updated_Maps_over_time[[9]]
 # plot_densityMaps_overlay(densityMaps_40My$densityMaps,
 #                          colors_per_levels = colors_per_ranges,
 #                          fsize = 0.2) # Reduce tip label size
@@ -621,7 +635,7 @@ knitr::include_graphics("figures/1.3_deepSTRAPP_biogeographic_data_4.4_plot_rate
 
 ## ----plot_updated_densityMaps_biogeo_2lvl_eval, eval = is_dev_version(), echo = FALSE----
 # # Plot initial densityMaps (t = 0)
-# densityMaps_0My <- Ponerinae_deepSTRAPP_biogeo_old_calib_0_40$updated_trait_data_with_Map_over_time[[1]]
+# densityMaps_0My <- Ponerinae_deepSTRAPP_biogeo_old_calib_0_40$updated_Maps_over_time[[1]]
 # plot_densityMaps_overlay(densityMaps_0My$densityMaps,
 #                          colors_per_levels = colors_per_ranges,
 #                          cex_pies = 0.3, # Reduce pie size
@@ -629,7 +643,7 @@ knitr::include_graphics("figures/1.3_deepSTRAPP_biogeographic_data_4.4_plot_rate
 # title(main = "Trait evolution for 100-0 My")
 # 
 # # Plot updated densityMaps for time-step n°9 = 40 My
-# densityMaps_40My <- Ponerinae_deepSTRAPP_biogeo_old_calib_0_40$updated_trait_data_with_Map_over_time[[9]]
+# densityMaps_40My <- Ponerinae_deepSTRAPP_biogeo_old_calib_0_40$updated_Maps_over_time[[9]]
 # plot_densityMaps_overlay(densityMaps_40My$densityMaps,
 #                          colors_per_levels = colors_per_ranges,
 #                          fsize = 0.2)

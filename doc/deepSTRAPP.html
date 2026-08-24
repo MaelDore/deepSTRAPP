@@ -12,7 +12,7 @@
 
 <meta name="author" content="Maël Doré" />
 
-<meta name="date" content="2026-08-19" />
+<meta name="date" content="2026-08-24" />
 
 <title>deepSTRAPP: All tutorials</title>
 
@@ -239,7 +239,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <h1 class="title toc-ignore">deepSTRAPP: All tutorials</h1>
 <h4 class="author">Maël Doré</h4>
-<h4 class="date">2026-08-19</h4>
+<h4 class="date">2026-08-24</h4>
 
 
 
@@ -319,15 +319,38 @@ options for plotting diversification <strong>rates through time</strong>
 in relation to trait data</a>:
 <code>vignette(&quot;plot_rates_through_time&quot;)</code>.</p>
 </div>
+<div id="handle-uncertainty" class="section level3">
+<h3><strong>6/ Handle uncertainty</strong></h3>
+<p>    ●   <a href="https://maeldore.github.io/deepSTRAPP/articles/handle_uncertainty.html">Handle
+<strong>uncertainty</strong> in trait and rate estimates</a>:
+<code>vignette(&quot;handle_uncertainty&quot;)</code>.</p>
+<p>Explore the three strategies available: - ‘rates_only’: Only accounts
+for diversification-rate uncertainty across BAMM posterior samples. -
+‘paired’: Accounts for both diversification-rate and ancestral
+trait/range reconstruction uncertainty by pairing BAMM posterior samples
+with stochastic maps. - ‘full’: Accounts for both diversification-rate
+and ancestral reconstruction uncertainty by evaluating every combination
+of BAMM posterior samples and stochastic maps. <br></p>
+</div>
+<div id="import-external-analyses" class="section level3">
+<h3><strong>7/ Import external analyses</strong></h3>
+<p>    ●   <a href="https://maeldore.github.io/deepSTRAPP/articles/import_external_analyses.html">Import
+<strong>external analyses</strong></a>:
+<code>vignette(&quot;import_external_analyses&quot;)</code>.</p>
+<p>Import and format results of external analyses of trait-evolution
+histories and diversification dynamics, and make them ready-to-use as
+inputs for a deepSTRAPP run. <br></p>
+</div>
 <div id="cut-phylogenies" class="section level3">
-<h3><strong>6/ Cut phylogenies</strong></h3>
+<h3><strong>8/ Cut phylogenies</strong></h3>
 <p>    ●   <a href="https://maeldore.github.io/deepSTRAPP/articles/cut_phylogenies.html">Cut
 different types of <strong>(mapped) phylogenies</strong> for a given
 focal-time</a>: <code>vignette(&quot;cut_phylogenies&quot;)</code>.</p>
 <ul>
 <li>time-calibrated phylogenies.</li>
-<li>contMap for continuous traits.</li>
-<li>densityMap for categorical and biogeographic traits.</li>
+<li>contMap(s) for continuous traits.</li>
+<li>densityMap(s) for categorical and biogeographic traits.</li>
+<li>simmaps for categorical and biogeographic traits.</li>
 <li>BAMM_object for diversification dynamics. <br></li>
 </ul>
 </div>

@@ -173,7 +173,7 @@ names(colors_per_states) <- c("arboreal", "subterranean", "terricolous")
 # head(Ponerinae_ACE)
 # 
 # 
-# ## Inputs needed for Step 2 are the densityMaps, and optionally, the tip_data
+# ## Inputs needed for Step 3 are the densityMaps, and optionally, the tip_data
 # ## (Ponerinae_cat_3lvl_tip_data), and the ACE (Ponerinae_ACE)
 # 
 # 
@@ -256,31 +256,42 @@ names(colors_per_states) <- c("arboreal", "subterranean", "terricolous")
 # time_step_duration <- 5
 # time_range <- c(0, 40)
 # 
+# # In this example, we provide the 'densityMaps' as input. Those records frequencies of trait states
+# # observed across stochastic simulations of trait evolution.
+# # If we want to keep track of which simulation produced which states,
+# # we need to provide the full sets of stochastic maps ('simmaps') as inputs.
+# 
 # # Run deepSTRAPP on net diversification rates
 # ## This step is time-consuming. You can skip it and load directly the result if needed
 # Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40 <- run_deepSTRAPP_over_time(
 #     densityMaps = Ponerinae_densityMaps,
+#     # Inform the number of simulation to be able to reconstruct
+#     # distributions of states based on frequencies recorded in the the densityMaps
+#     nb_simulations = 100,
 #     ace = Ponerinae_ACE,
 #     tip_data = Ponerinae_cat_3lvl_data,
 #     trait_data_type = "categorical",
 #     BAMM_object = Ponerinae_BAMM_object_old_calib,
 #     time_range = time_range,
 #     time_step_duration = time_step_duration,
+#     # Deal with uncertainty in estimates by pairing trait states
+#     # (reconstructed from densityMaps) with BAMM posterior samples
+#     uncertainty_strategy = "paired",
 #     seed = 1234, # Set seed for reproducibility
 #     alpha = 0.10, # Set significance threshold to use for tests
 #     posthoc_pairwise_tests = TRUE, # To run pairwise posthoc tests between pairs of states
 #     # Needed to obtain STRAPP stats and plot evaluation histograms (See 4.2)
 #     return_perm_data = TRUE,
-#     # Needed to get trait data and plot rates through time (See 4.3)
+#     # Needed to get trait data, plot rates through time (See 4.3) and trait vs. rates (See 4.4)
 #     extract_trait_data_melted_df = TRUE,
-#     # Needed to get diversification data and plot rates through time (See 4.3)
+#     # Needed to get diversification data, plot rates through time (See 4.3) and trait vs. rates (See 4.4)
 #     extract_diversification_data_melted_df = TRUE,
 #     # Needed to obtain STRAPP stats and plot evaluation histograms (See 4.2)
 #     return_STRAPP_results = TRUE,
-#     # Needed to plot updated densityMaps (See 4.4)
-#     return_updated_trait_data_with_Map = TRUE,
-#     # Needed to map diversification rates on updated phylogenies (See 4.5)
-#     return_updated_BAMM_object = TRUE,
+#     # Needed to plot updated densityMaps (See 4.5)
+#     return_updated_Maps = TRUE,
+#     # Needed to map diversification rates on updated phylogenies (See 4.6)
+#     return_updated_BAMM_objects = TRUE,
 #     verbose = TRUE,
 #     verbose_extended = TRUE)
 # 
@@ -317,15 +328,23 @@ names(colors_per_states) <- c("arboreal", "subterranean", "terricolous")
 # 
 # # Access trait data in a melted data.frame
 # head(Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40$trait_data_df_over_time)
+# # Trait data were extracted from densityMaps recording only frequency of states.
+# # Thus, trait states have been distributed accordingly across 100 'Dummy_maps'
+# # to reproduce the recorded frequencies.
+# table(Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40$trait_data_df_over_time$Map_ID)
+# 
 # # Access the diversification data in a melted data.frame
 # head(Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40$diversification_data_df_over_time)
-# # Both can be passed down to [deepSTRAPP::plot_rates_through_time()] to generate a plot
+# # Diversification data includes 1000 BAMM posteriors
+# table(Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40$diversification_data_df_over_time$BAMM_sample_ID)
+# 
+# # Both melted data.frames can be passed down to [deepSTRAPP::plot_rates_through_time()] to generate a plot
 # # showing the evolution of diversification rates though time in relation to trait values
 # 
 # # Access updated densityMaps for each focal time
 # # Can be used to plot densityMaps with branch cut-off at focal time
 # # with [deepSTRAPP::plot_densityMaps_overlay()]
-# str(Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40$updated_trait_data_with_Map_over_time, max.level = 2)
+# str(Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40$updated_Maps_over_time, max.level = 2)
 # 
 # # Access updated BAMM_object for each focal time
 # # Can be used to map rates and regime shifts on phylogeny with branch cut-off
@@ -375,7 +394,7 @@ names(colors_per_states) <- c("arboreal", "subterranean", "terricolous")
 # # STRAPP tests change over time.
 # # Differences in net diversification rates are not significant in the present
 # # (assuming a significant threshold of alpha = 0.10).
-# # Meanwhile, rates are significantly different in the past between 5 My to 15 My (the green area).
+# # Meanwhile, rates are significantly different in the past between ca. 4 My to 22 My (the green area).
 # # This result supports the idea that differences in biodiversity across habitats
 # # (i.e., "arboreal" vs. , "subterranean" vs. "terricolous" ants) can be explained
 # # by differences of diversification rates that was detected in the past. Without use of deepSTRAPP,
@@ -395,7 +414,7 @@ names(colors_per_states) <- c("arboreal", "subterranean", "terricolous")
 # 
 # # Here, post hoc pairwise Dunn's tests for rate difference between pairs of states are shown.
 # # These results show that differences in rates were only detected between "arboreal"
-# # and "terricolous" ants between 2 My to 15 My (the green area), providing more detailed insights on
+# # and "terricolous" ants between 2 My to 18 My (the green area), providing more detailed insights on
 # # how type of habitats may affect diversification rates.
 # # Note: This is NOT true ecological data. It is not a valid scientific result,
 # # but an illustration of the use of deepSTRAPP.
@@ -428,7 +447,7 @@ names(colors_per_states) <- c("arboreal", "subterranean", "terricolous")
 #   ggplot2::theme(
 #     plot.title = ggplot2::element_text(size = 18),
 #     legend.title = ggplot2::element_text(size  = 12),
-#     legend.position.inside = c(0.30, 0.40),
+#     legend.position.inside = c(0.25, 0.45),
 #     legend.text = ggplot2::element_text(size = 9))
 # # Print plot
 # print(ggplot_STRAPP_pvalues_posthoc)
@@ -468,10 +487,10 @@ knitr::include_graphics("figures/1.2_deepSTRAPP_categorical_3lvl_data_4.1_plot_p
 # # The black line represents the expected value under the null hypothesis H0
 # #   => Δ Kruskal-Wallis H-stat = 0.
 # # The histogram shows the distribution of the test statistics as observed across
-# # the 1000 posterior samples from BAMM.
+# # the 1000 combinations of stochastic maps and posterior samples from BAMM.
 # # The red line represents the significance threshold for which 90% of the observed data
 # # exhibited a higher value than expected.
-# # Since this red line is below the null expectation (quantile 10% = 6.942),
+# # Since this red line is below the null expectation (quantile 10% = 8.852),
 # # the test is significant for a value of alpha = 0.10.
 # # However, this significance must be discussed in regards to the relatively generous
 # # significance threshold chosen here (alpha = 0.10).
@@ -496,11 +515,12 @@ knitr::include_graphics("figures/1.2_deepSTRAPP_categorical_3lvl_data_4.1_plot_p
 # # This red line is below the null expectation for the "arboreal != subterranean" and
 # # "subterranean != terricolous" pairs. This means the test is not significant for these pairs of habitats.
 # # The red line is above the null expectation for the "arboreal != terricolous" pair
-# # (Q10% = 1.695, p = 0.025). This means the test is significant for this pair of habitat.
+# # (Q10% = 1.513, p = 0.024). This means the test is significant for this pair of habitat.
 # # This is the pair that is driving the significance detected in the previous plot
 # # when looking at differences across all habitats.
+# 
 # # This significance must still be discussed in regards to the relatively generous
-# # significance threshold chosen here (alpha = 0.10).
+# # significance threshold chosen for the overall Kruskal-Wallis test here (alpha = 0.10).
 # 
 # # Plot the histograms of posthoc pairwise Dunn's stats for all time-steps
 # plot_histograms_STRAPP_tests_over_time(
@@ -557,7 +577,7 @@ knitr::include_graphics("figures/1.2_deepSTRAPP_categorical_3lvl_data_4.2_plot_h
 # # Produce RTT plot
 # ggplot_RTT_list <- plot_rates_through_time(deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40,
 #                         colors_per_levels = colors_per_states,
-#                         plot_CI = TRUE, display_plot = FALSE)
+#                         plot_CI = TRUE, display_plot = FALSE, verbose = FALSE)
 # # Adjust title size
 # ggplot_RTT <- ggplot_RTT_list$rates_TT_ggplot +
 #   ggplot2::theme(plot.title = ggplot2::element_text(size = 18),
@@ -588,18 +608,19 @@ knitr::include_graphics("figures/1.2_deepSTRAPP_categorical_3lvl_data_4.3_plot_r
 #    colors_per_levels = colors_per_states)
 # 
 # # Here we focus on T = 10 My to highlight the differences detected in the previous steps.
-# # You can see that "terricolous" ants tend to have higher rates than "subterranean" ants,
-# # who tends to have higher rates than "arboreal" ants, at this time-step.
+# # You can see that "terricolous" ants tend to have higher mean rates than "subterranean" ants,
+# # who tends to have higher mean rates than "arboreal" ants, at this time-step.
 # # This plot, alongside other results of deepSTRAPP, supports the Diversification Rate Hypothesis in showing
 # # how "terricolous" ant lineages may have accumulated faster, especially between 5 to 15 My.
 # # Additionally, the plot displays summary statistics for the STRAPP test associated with the data shown:
 # #   * An observed statistic computed across the mean rates and trait states (i.e., habitats) shown on the plot.
-# #     Here, H-stat obs = 374.82. Please note that this is not the statistic of the STRAPP test itself,
-# #     which is conducted across all BAMM posterior samples.
+# #     Here, the high H-stat obs = 376.528 indicates a difference of rates between states.
+# #     Please note that this is not the statistic of the STRAPP test itself,
+# #     which is conducted across all pairs of stochastic maps and BAMM posterior samples.
 # #   * The quantile of null statistic distribution at the significant threshold used to define test significance.
 # #     The test will be considered significant (i.e., the null hypothesis is rejected)
 # #     if this value is higher than zero, as shown on the histogram in Section 4.2.
-# #     Here, Q10% = 6.942, so the test is significant (according to this significance threshold).
+# #     Here, Q10% = 8.852, so the test is significant (according to this significance threshold).
 # #   * The p-value of the associated STRAPP test. Here, p = 0.071.
 # 
 # # Plot rates vs. trait data for all time-steps
@@ -635,7 +656,7 @@ knitr::include_graphics("figures/1.2_deepSTRAPP_categorical_3lvl_data_4.4_plot_r
 # ## The next plot shows the evolution of states across the whole phylogeny (100-0 My).
 # 
 # # Plot initial densityMaps (t = 0)
-# densityMaps_0My <- Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40$updated_trait_data_with_Map_over_time[[1]]
+# densityMaps_0My <- Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40$updated_Maps_over_time[[1]]
 # plot_densityMaps_overlay(densityMaps_0My$densityMaps,
 #                          colors_per_levels = colors_per_states,
 #                          fsize = 0.1) # Reduce tip label size
@@ -647,7 +668,7 @@ knitr::include_graphics("figures/1.2_deepSTRAPP_categorical_3lvl_data_4.4_plot_r
 # ## The next plot shows the evolution of states from root to 10 Mya (100-10 My).
 # 
 # # Plot updated densityMaps for time-step n°3 = 10 My
-# densityMaps_10My <- Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40$updated_trait_data_with_Map_over_time[[3]]
+# densityMaps_10My <- Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40$updated_Maps_over_time[[3]]
 # plot_densityMaps_overlay(densityMaps_10My$densityMaps,
 #                          colors_per_levels = colors_per_states,
 #                          fsize = 0.1) # Reduce tip label size
@@ -656,7 +677,7 @@ knitr::include_graphics("figures/1.2_deepSTRAPP_categorical_3lvl_data_4.4_plot_r
 # ## The next plot shows the evolution of states from root to 40 Mya (100-40 My).
 # 
 # # Plot updated densityMaps for time-step n°9 = 40 My
-# densityMaps_40My <- Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40$updated_trait_data_with_Map_over_time[[9]]
+# densityMaps_40My <- Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40$updated_Maps_over_time[[9]]
 # plot_densityMaps_overlay(densityMaps = densityMaps_40My$densityMaps,
 #                          colors_per_levels = colors_per_states,
 #                          fsize = 0.2) # Reduce tip label size
@@ -667,7 +688,7 @@ knitr::include_graphics("figures/1.2_deepSTRAPP_categorical_3lvl_data_4.4_plot_r
 
 ## ----plot_updated_densityMaps_cat_3lvl_eval_dev, fig.height = 7, eval = is_dev_version(), echo = FALSE----
 # # Plot initial densityMaps (t = 0)
-# densityMaps_0My <- Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40$updated_trait_data_with_Map_over_time[[1]]
+# densityMaps_0My <- Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40$updated_Maps_over_time[[1]]
 # plot_densityMaps_overlay(densityMaps_0My$densityMaps,
 #                          colors_per_levels = colors_per_states,
 #                          cex_pies = 0.3,
@@ -675,7 +696,7 @@ knitr::include_graphics("figures/1.2_deepSTRAPP_categorical_3lvl_data_4.4_plot_r
 # title(main = "Trait evolution for 100-0 My")
 # 
 # # Plot updated densityMaps for time-step n°9 = 40 My
-# densityMaps_40My <- Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40$updated_trait_data_with_Map_over_time[[9]]
+# densityMaps_40My <- Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40$updated_Maps_over_time[[9]]
 # plot_densityMaps_overlay(densityMaps_40My$densityMaps,
 #                          colors_per_levels = colors_per_states,
 #                          cex_pies = 0.4,

@@ -66,13 +66,31 @@ They provide explanations on available arguments and interpretations of results 
 
 &nbsp;&nbsp;&nbsp;&nbsp;&#x25CF;&nbsp;&nbsp; [Explore options for plotting diversification __rates through time__ in relation to trait data](https://maeldore.github.io/deepSTRAPP/articles/plot_rates_through_time.html): `vignette("plot_rates_through_time")`.
 
-### **6/ Cut phylogenies**
+### **6/ Handle uncertainty**
+
+&nbsp;&nbsp;&nbsp;&nbsp;&#x25CF;&nbsp;&nbsp; [Handle __uncertainty__ in trait and rate estimates](https://maeldore.github.io/deepSTRAPP/articles/handle_uncertainty.html): `vignette("handle_uncertainty")`.
+
+  Explore the three strategies available:
+  - 'rates_only': Only accounts for diversification-rate uncertainty across BAMM posterior samples.
+  - 'paired': Accounts for both diversification-rate and ancestral trait/range reconstruction uncertainty by pairing BAMM posterior samples with stochastic maps.
+  - 'full': Accounts for both diversification-rate and ancestral reconstruction uncertainty by evaluating every combination of BAMM posterior samples and stochastic maps.
+<br>
+
+### **7/ Import external analyses**
+
+&nbsp;&nbsp;&nbsp;&nbsp;&#x25CF;&nbsp;&nbsp; [Import __external analyses__](https://maeldore.github.io/deepSTRAPP/articles/import_external_analyses.html): `vignette("import_external_analyses")`.
+
+  Import and format results of external analyses of trait-evolution histories and diversification dynamics, and make them ready-to-use as inputs for a deepSTRAPP run.
+<br>
+
+### **8/ Cut phylogenies**
 
 &nbsp;&nbsp;&nbsp;&nbsp;&#x25CF;&nbsp;&nbsp; [Cut different types of __(mapped) phylogenies__ for a given focal-time](https://maeldore.github.io/deepSTRAPP/articles/cut_phylogenies.html): `vignette("cut_phylogenies")`.
 
   - time-calibrated phylogenies.
-  - contMap for continuous traits.
-  - densityMap for categorical and biogeographic traits.
+  - contMap(s) for continuous traits.
+  - densityMap(s) for categorical and biogeographic traits.
+  - simmaps for categorical and biogeographic traits.
   - BAMM_object for diversification dynamics.
 <br>
  
