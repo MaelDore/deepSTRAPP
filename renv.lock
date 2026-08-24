@@ -273,6 +273,17 @@
       "Repository": "CRAN",
       "Hash": "1c0aa18b97e6aaa17f93b8b866c0ace5"
     },
+    "S7": {
+      "Package": "S7",
+      "Version": "0.2.2",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "utils"
+      ],
+      "Hash": "6a72e94a8c9be4ef719af3aa3628f2dc"
+    },
     "SparseM": {
       "Package": "SparseM",
       "Version": "1.84-2",
@@ -573,6 +584,23 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "14eb0596f987c71535d07c3aff814742"
+    },
+    "contsimmap": {
+      "Package": "contsimmap",
+      "Version": "0.1.0",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteRepo": "contsimmap",
+      "RemoteUsername": "bstaggmartin",
+      "RemoteSha": "0013b2527a139bf75057f9f21e8a83eadf302cf2",
+      "Requirements": [
+        "R",
+        "ape",
+        "methods",
+        "phytools"
+      ],
+      "Hash": "54f87b30754e53c36935bea196cc21ef"
     },
     "cowplot": {
       "Package": "cowplot",
@@ -993,28 +1021,25 @@
     },
     "ggplot2": {
       "Package": "ggplot2",
-      "Version": "3.5.1",
+      "Version": "4.0.3",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
-        "MASS",
         "R",
+        "S7",
         "cli",
-        "glue",
         "grDevices",
         "grid",
         "gtable",
         "isoband",
         "lifecycle",
-        "mgcv",
         "rlang",
         "scales",
         "stats",
-        "tibble",
         "vctrs",
         "withr"
       ],
-      "Hash": "44c6a2f8202d5b7e878ea274b1092426"
+      "Hash": "98520fe6b2745c466dca8e46aaa86242"
     },
     "gh": {
       "Package": "gh",
@@ -1293,7 +1318,7 @@
     },
     "knitr": {
       "Package": "knitr",
-      "Version": "1.50",
+      "Version": "1.51",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -1305,7 +1330,7 @@
         "xfun",
         "yaml"
       ],
-      "Hash": "5a07d8ec459d7b80bd4acca5f4a6e062"
+      "Hash": "27682babb50f03b6eb7939ea69ec79ca"
     },
     "ks": {
       "Package": "ks",
@@ -1417,7 +1442,7 @@
     },
     "maps": {
       "Package": "maps",
-      "Version": "3.4.2.1",
+      "Version": "3.4.3",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -1425,7 +1450,7 @@
         "graphics",
         "utils"
       ],
-      "Hash": "354a8094c634031421eeb5103f2e1f80"
+      "Hash": "fd17b77df6edadecf2fe08382c5a2eb1"
     },
     "mclust": {
       "Package": "mclust",
@@ -1538,17 +1563,6 @@
         "methods"
       ],
       "Hash": "cf60fcb1c13e9d209aed3a36a7ef8f39"
-    },
-    "munsell": {
-      "Package": "munsell",
-      "Version": "0.5.1",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Requirements": [
-        "colorspace",
-        "methods"
-      ],
-      "Hash": "4fd8900853b746af55b81fda99da7695"
     },
     "mvtnorm": {
       "Package": "mvtnorm",
@@ -1690,7 +1704,7 @@
     },
     "phytools": {
       "Package": "phytools",
-      "Version": "2.4-4",
+      "Version": "2.5-2",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -1718,7 +1732,7 @@
         "stats",
         "utils"
       ],
-      "Hash": "82910675bc6bff3e16d6f3d7c5757b31"
+      "Hash": "f6ac05b2c44e3b5136fe8d03042a5463"
     },
     "pillar": {
       "Package": "pillar",
@@ -2084,18 +2098,18 @@
     },
     "rlang": {
       "Package": "rlang",
-      "Version": "1.1.6",
+      "Version": "1.3.0",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
         "R",
         "utils"
       ],
-      "Hash": "892124978869b74935dc3934c42bfe5a"
+      "Hash": "8d05afdb0b0dd5ef01b306db289fe21f"
     },
     "rmarkdown": {
       "Package": "rmarkdown",
-      "Version": "2.29",
+      "Version": "2.31",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -2114,7 +2128,7 @@
         "xfun",
         "yaml"
       ],
-      "Hash": "df99277f63d01c34e95e3d2f06a79736"
+      "Hash": "f34039d57d861d2869cbf9be813ed08e"
     },
     "rncl": {
       "Package": "rncl",
@@ -2200,7 +2214,7 @@
     },
     "scales": {
       "Package": "scales",
-      "Version": "1.3.0",
+      "Version": "1.4.0",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -2212,11 +2226,10 @@
         "glue",
         "labeling",
         "lifecycle",
-        "munsell",
         "rlang",
         "viridisLite"
       ],
-      "Hash": "c19df082ba346b0ffa6f833e92de34d1"
+      "Hash": "c5bba8f0d1df8c4b9538a40570798d9b"
     },
     "scatterplot3d": {
       "Package": "scatterplot3d",
