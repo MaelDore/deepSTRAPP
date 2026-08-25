@@ -33,7 +33,7 @@ jobs:
         with:
           extra-packages: any::pkgdown, local::.
           needs: website
-          dependencies: '"hard"'
+          dependencies: '"hard"' # Added to skip Suggests dependencies from pak checking
 
       - name: Build site
         run: pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE)
