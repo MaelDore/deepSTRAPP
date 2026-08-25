@@ -894,30 +894,35 @@ prepare_trait_data_for_continuous_data <- function (
   # plot(rescaled_phylo)
 
   ## Run ACE inference with BM on transformed tree
-  # ?phytools::anc.ML()
 
-  BM_fit <- phytools::anc.ML(tree = rescaled_phylo,
-                             x = tip_data,
-                             model = "BM")
-  # Extract ACE
-  ACE_output <- BM_fit$ace
+  # Use phytools::fastAnc if no continuous stochastic mapping is required
+  if (!run_stochastic_maps)
+  {
+    ## Run BM model on transformed tree to get ACE
+    # ?phytools::fastAnc = Phylogenetic Independent Contrasts
+
+    ACE_output <- phytools::fastAnc(tree = rescaled_phylo,
+                                    x = tip_data,
+                                    vars = FALSE, # Compute the variance of ancestral state estimates
+                                    CI = FALSE) # Compute the 95% CI of ancestral state estimates
+  } else {
+    # Evolutionary rate is needed to parametrize the continuous stochastic map simulations
+
+    # ?phytools::anc.ML() = ML optimization
+
+    ## Use phytools::anc.ML() to get ACE and evolutionary rate = sigma²
+    BM_fit <- phytools::anc.ML(tree = rescaled_phylo,
+                               x = tip_data,
+                               model = "BM")
+    # Extract ACE
+    ACE_output <- BM_fit$ace
+
+    # Extract evolutionary rate = sigma²
+    sigma2 <- BM_fit$sig2
+  }
 
   # ACE_output are node ML ancestral estimates. They are required for interpolating ML estimates with phytools::contMap(),
   # but not to generate continuous stochastic maps with contsimmap::make.contsimmap()
-
-  # Extract evolutionary rate = sigma²
-  sigma2 <- BM_fit$sig2
-
-  # Evolutionary rate is needed to parametrize the continuous stochastic map simulations
-
-  # ## Run BM model on transformed tree to get evolutioanry rate and ACE
-  # # ?phytools::
-  #
-  # ACE_output <- phytools::fastAnc(tree = rescaled_phylo,
-  #                                 x = tip_data,
-  #                                 vars = FALSE, # Compute the variance of ancestral state estimates
-  #                                 CI = FALSE) # Compute the 95% CI of ancestral state estimates
-  #
 
   ### Step 4 - Create continuous stochastic maps (contMaps) using ACE computed with the best fitting model
 
