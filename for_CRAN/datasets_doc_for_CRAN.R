@@ -229,7 +229,7 @@
 # #'  This is NOT real biological/ecological data. They were designed for illustrative purposes only.
 # #'  The phylogeny used is also NOT a properly time-calibrated phylogeny. It uses an ill-designed old calibration for illustrative purposes.
 # #'
-# #' @usage data(Ponerinae_cont_data_old_calib)
+# #' @usage Ponerinae_cont_data_old_calib <- readRDS(system.file("extdata", "Ponerinae_cont_data_old_calib", package = "deepSTRAPP"))
 # #' @format A list with 5 elements.
 # #'
 # #' @details A list of five objects containing information on the evolution of fake size data in Ponerinae ants.
@@ -243,7 +243,6 @@
 # #'   * `$ace` Numerical. Named vector that records the ML ancestral states (characters) estimates (ACE) at internal nodes.
 # #'     Names are internal nodes ID. Values are ML estimates of trait values per node.
 # #'
-# #' @docType data
 # #' @keywords datasets
 # #' @name Ponerinae_cont_data_old_calib
 # #'
@@ -734,7 +733,7 @@
 # #'   It summaries STRAPP test results and can optionally include trait and diversification rate data frames, STRAPP test outputs,
 # #'   updated trait data objects, and updated BAMM objects, that are required fro downstream plots and analyses.
 # #'
-# #' @usage data(Ponerinae_deepSTRAPP_cont_old_calib_0_40)
+# #' @usage Ponerinae_deepSTRAPP_cont_old_calib_0_40 <- readRDS(system.file("extdata", "Ponerinae_deepSTRAPP_cont_old_calib_0_40", package = "deepSTRAPP"))
 # #' @format A list with 10 elements.
 # #'
 # #' @details deepSTRAPP output summarizing results of a deepSTRAPP run carried out with [deepSTRAPP::run_deepSTRAPP_over_time()].
@@ -770,7 +769,6 @@
 # #'     Updated `BAMM_object` can be plotted with [deepSTRAPP::plot_BAMM_rates()] to display a phylogeny mapped with
 # #'     diversification rates with branches cut at each `focal_time`.
 # #'
-# #' @docType data
 # #' @keywords datasets
 # #' @name Ponerinae_deepSTRAPP_cont_old_calib_0_40
 # #'
@@ -785,7 +783,7 @@
 # #'   It summaries STRAPP test results and can optionally include trait and diversification rate data frames, STRAPP test outputs,
 # #'   updated trait data objects, and updated BAMM objects, that are required fro downstream plots and analyses.
 # #'
-# #' @usage data(Ponerinae_deepSTRAPP_cat_2lvl_old_calib_0_40)
+# #' @usage Ponerinae_deepSTRAPP_cat_2lvl_old_calib_0_40 <- readRDS(system.file("extdata", "Ponerinae_deepSTRAPP_cat_2lvl_old_calib_0_40", package = "deepSTRAPP"))
 # #' @format A list with 10 elements.
 # #'
 # #' @details deepSTRAPP output summarizing results of a deepSTRAPP run carried out with [deepSTRAPP::run_deepSTRAPP_over_time()].
@@ -826,7 +824,6 @@
 # #'     Updated `BAMM_object` can be plotted with [deepSTRAPP::plot_BAMM_rates()] to display a phylogeny mapped with
 # #'     diversification rates with branches cut at each `focal_time`.
 # #'
-# #' @docType data
 # #' @keywords datasets
 # #' @name Ponerinae_deepSTRAPP_cat_2lvl_old_calib_0_40
 # #'
@@ -841,7 +838,7 @@
 # #'   It summaries STRAPP test results and can optionally include trait and diversification rate data frames, STRAPP test outputs,
 # #'   updated trait data objects, and updated BAMM objects, that are required fro downstream plots and analyses.
 # #'
-# #' @usage data(Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40)
+# #' @usage Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40 <- readRDS(system.file("extdata", "Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40", package = "deepSTRAPP"))
 # #' @format A list with 11 elements.
 # #'
 # #' @details deepSTRAPP output summarizing results of a deepSTRAPP run carried out with [deepSTRAPP::run_deepSTRAPP_over_time()].
@@ -884,7 +881,6 @@
 # #'     Updated `BAMM_object` can be plotted with [deepSTRAPP::plot_BAMM_rates()] to display a phylogeny mapped with
 # #'     diversification rates with branches cut at each `focal_time`.
 # #'
-# #' @docType data
 # #' @keywords datasets
 # #' @name Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40
 # #'
@@ -899,7 +895,7 @@
 # #'   It summaries STRAPP test results and can optionally include trait and diversification rate data frames, STRAPP test outputs,
 # #'   updated trait data objects, and updated BAMM objects, that are required fro downstream plots and analyses.
 # #'
-# #' @usage data(Ponerinae_deepSTRAPP_biogeo_old_calib_0_40)
+# #' @usage Ponerinae_deepSTRAPP_biogeo_old_calib_0_40 <- readRDS(system.file("extdata", "Ponerinae_deepSTRAPP_biogeo_old_calib_0_40", package = "deepSTRAPP"))
 # #' @format A list with 10 elements.
 # #'
 # #' @details deepSTRAPP output summarizing results of a deepSTRAPP run carried out with [deepSTRAPP::run_deepSTRAPP_over_time()].
@@ -938,7 +934,6 @@
 # #'     Updated `BAMM_object` can be plotted with [deepSTRAPP::plot_BAMM_rates()] to display a phylogeny mapped with
 # #'     diversification rates with branches cut at each `focal_time`.
 # #'
-# #' @docType data
 # #' @keywords datasets
 # #' @name Ponerinae_deepSTRAPP_biogeo_old_calib_0_40
 # #'
