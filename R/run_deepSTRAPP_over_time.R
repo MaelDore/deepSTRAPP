@@ -255,12 +255,6 @@
 #'      plot_map = FALSE,
 #'      verbose = TRUE)
 #'
-#'  ## Load directly trait data output
-#'  data(Ponerinae_cont_data_old_calib, package = "deepSTRAPP")
-#'  ## This dataset is only available in development versions installed from GitHub.
-#'  # It is not available in CRAN versions.
-#'  # Use remotes::install_github(repo = "MaelDore/deepSTRAPP") to get the latest development version.
-#'
 #'  # Plot contMap = ML estimates of continuous trait evolution
 #'  plot_contMap(contMap = Ponerinae_cont_data_old_calib$contMap,
 #'               color_scale = color_scale)
@@ -292,7 +286,8 @@
 #'     verbose_extended = TRUE) }
 #'
 #'  ## Load directly deepSTRAPP output
-#'  data(Ponerinae_deepSTRAPP_cont_old_calib_0_40, package = "deepSTRAPP")
+#'  Ponerinae_deepSTRAPP_cont_old_calib_0_40 <- readRDS(system.file("extdata",
+#'      "Ponerinae_deepSTRAPP_cont_old_calib_0_40.rds", package = "deepSTRAPP"))
 #'  ## This dataset is only available in development versions installed from GitHub.
 #'  # It is not available in CRAN versions.
 #' # Use remotes::install_github(repo = "MaelDore/deepSTRAPP") to get the latest development version.
@@ -434,7 +429,8 @@
 #'     verbose_extended = TRUE) }
 #'
 #'  ## Load directly deepSTRAPP output
-#'  data(Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40, package = "deepSTRAPP")
+#'  Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40 <- readRDS(system.file("extdata",
+#'      "Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40.rds", package = "deepSTRAPP"))
 #'  deepSTRAPP_outputs <- Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40
 #'  ## This dataset is only available in development versions installed from GitHub.
 #'  # It is not available in CRAN versions.
@@ -599,7 +595,8 @@
 #'     verbose_extended = TRUE) }
 #'
 #'  ## Load directly output
-#'  data(Ponerinae_deepSTRAPP_biogeo_old_calib_0_40, package = "deepSTRAPP")
+#'  Ponerinae_deepSTRAPP_biogeo_old_calib_0_40 <- readRDS(system.file("extdata",
+#'     "Ponerinae_deepSTRAPP_biogeo_old_calib_0_40.rds", package = "deepSTRAPP"))
 #'  deepSTRAPP_outputs <- Ponerinae_deepSTRAPP_biogeo_old_calib_0_40
 #'  ## This dataset is only available in development versions installed from GitHub.
 #'  # It is not available in CRAN versions.
@@ -1140,17 +1137,15 @@ run_deepSTRAPP_over_time <- function (contMap = NULL,
 
 }
 
-# Ensure all functions exported in NAMESPACE are listed in the YALM of the website
+## Shift to development version.
 
-# Get check() to pass
+Ponerinae_deepSTRAPP_cat_2lvl_old_calib_0_40 <- readRDS(system.file("extdata", "Ponerinae_deepSTRAPP_cont_old_calib_0_40.rds", package = "deepSTRAPP"))
 
-# Build new vignettes locally
+## Move the 5 heavy datasets in inst/extdata as .rds files instead of .rda
+# Adjust all loading code. Replace data(data_file, package = "deepSTRAPP") by data_file <- readRDS(system.file("extdata", "data_file.rds", package = "deepSTRAPP")
+  # In vignettes,
 
-# Ensure the renv project is synched
-
-## Push the update on GitHub
-
-## Check the website integrity, especially the menu for tutorial/functions may have been messed up by names changes (check the YALM file)
+## Check the website integrity, especially the menu for tutorial/functions may have been messed up by names changes (check the YAML file)
 
 # Ask Bonnie and Yichen for review/testing
 

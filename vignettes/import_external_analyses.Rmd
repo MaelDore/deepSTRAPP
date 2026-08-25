@@ -66,7 +66,7 @@ In deepSTRAPP, diversification-rate estimates are inferred with this function: [
 ```{r modularity_figure_eval, eval = TRUE, echo = FALSE, out.width = "100%"}
 
 # Plot pre-rendered graph
-knitr::include_graphics("figures/deepSTRAPP_modularity.PNG")
+knitr::include_graphics("figures/deepSTRAPP_modularity.png")
 
 ```
 __Figure 1: deepSTRAPP modularity scheme illustrating input formats and functions available to feed a deepSTRAPP run__. Users can use all-in-one deepSTRAPP functions to infer trait-evolution histories and diversification dynamics and produce ready-to-use inputs for deepSTRAPP. Alternatively, they can use deepSTRAPP functions to import results of external analyses into deepSTRAPP. Input data in grey. Data processing in blue (main) and beige (internal). External analyses in purple. Intermediate objects = inputs for deepSTRAPP runs in light green. Final outputs in dark green.

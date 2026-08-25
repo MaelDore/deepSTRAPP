@@ -687,9 +687,11 @@ Ponerinae_cont_data_old_calib <- prepare_trait_data(# tip_data = Ponerinae_data_
 # Explore output
 str(Ponerinae_cont_data_old_calib, 1)
 
-## Export Ponerinae_cat_2lvl_data_old_calib in deepSTRAPP
-usethis::use_data(Ponerinae_cont_data_old_calib, overwrite = TRUE)
+# ## Export Ponerinae_cat_2lvl_data_old_calib in deepSTRAPP
+# usethis::use_data(Ponerinae_cont_data_old_calib, overwrite = TRUE)
 
+# Export as .rds in inst/extdata/ to avoid lazyloading a large dataset at start
+saveRDS(object = Ponerinae_cont_data_old_calib, file = "inst/extdata/Ponerinae_cont_data_old_calib.rds", compress = "xz")
 
 ### 6/ Generate categorical (2-lvl) trait evolution data for Ponerinae ants_old_calib #####
 
@@ -1062,8 +1064,11 @@ plot_STRAPP_pvalues_over_time(
 plot_rates_through_time(deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_old_calib_0_40,
                         plot_CI = TRUE)
 
-# Export in deepSTRAPP
-usethis::use_data(Ponerinae_deepSTRAPP_cont_old_calib_0_40, overwrite = TRUE)
+# # Export in deepSTRAPP
+# usethis::use_data(Ponerinae_deepSTRAPP_cont_old_calib_0_40, overwrite = TRUE)
+
+# Export as .rds in inst/extdata/ to avoid lazyloading a large dataset at start
+saveRDS(object = Ponerinae_deepSTRAPP_cont_old_calib_0_40, file = "inst/extdata/Ponerinae_deepSTRAPP_cont_old_calib_0_40.rds", compress = "xz")
 
 
 ### 16/ Generate Ponerinae_deepSTRAPP_cat_2lvl_old_calib_0_40 ####
@@ -1222,8 +1227,11 @@ plot_rates_through_time(
   colors_per_levels = colors_per_states,
   plot_CI = TRUE)
 
-# Export in deepSTRAPP
-usethis::use_data(Ponerinae_deepSTRAPP_cat_2lvl_old_calib_0_40, overwrite = TRUE)
+# # Export in deepSTRAPP
+# usethis::use_data(Ponerinae_deepSTRAPP_cat_2lvl_old_calib_0_40, overwrite = TRUE)
+
+# Export as .rds in inst/extdata/ to avoid lazyloading a large dataset at start
+saveRDS(object = Ponerinae_deepSTRAPP_cat_2lvl_old_calib_0_40, file = "inst/extdata/Ponerinae_deepSTRAPP_cat_2lvl_old_calib_0_40.rds", compress = "xz")
 
 
 ### 17/ Generate Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40 ####
@@ -1286,9 +1294,11 @@ plot_STRAPP_pvalues_over_time(
   deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40,
   plot_posthoc_tests = TRUE)
 
-# Export in deepSTRAPP
-usethis::use_data(Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40, overwrite = TRUE)
+# # Export in deepSTRAPP
+# usethis::use_data(Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40, overwrite = TRUE)
 
+# Export as .rds in inst/extdata/ to avoid lazyloading a large dataset at start
+saveRDS(object = Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40, file = "inst/extdata/Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40.rds", compress = "xz")
 
 
 ### 18/ Generate Ponerinae_deepSTRAPP_biogeo_old_calib_0_40 ####
@@ -1421,9 +1431,11 @@ plot_rates_through_time(
   colors_per_levels = colors_per_levels,
   plot_CI = TRUE)
 
-# Export in deepSTRAPP
-usethis::use_data(Ponerinae_deepSTRAPP_biogeo_old_calib_0_40, overwrite = TRUE)
+# # Export in deepSTRAPP
+# usethis::use_data(Ponerinae_deepSTRAPP_biogeo_old_calib_0_40, overwrite = TRUE)
 
+# Export as .rds in inst/extdata/ to avoid lazyloading a large dataset at start
+saveRDS(object = Ponerinae_deepSTRAPP_biogeo_old_calib_0_40, file = "inst/extdata/Ponerinae_deepSTRAPP_biogeo_old_calib_0_40.rds", compress = "xz")
 
 
 

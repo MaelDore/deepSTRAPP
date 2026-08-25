@@ -60,7 +60,8 @@
 #' if (deepSTRAPP::is_dev_version())
 #' {
 #'   ## Load results of run_deepSTRAPP_over_time() for categorical data with 3-levels
-#'   data(Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40, package = "deepSTRAPP")
+#'   Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40 <- readRDS(system.file("extdata",
+#'      "Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40.rds", package = "deepSTRAPP"))
 #'   ## This dataset is only available in development versions installed from GitHub.
 #'   # It is not available in CRAN versions.
 #'   # Use remotes::install_github(repo = "MaelDore/deepSTRAPP") to get the latest development version.

@@ -62,7 +62,8 @@ Below are examples with __continuous data__ (Example 1) and __categorical multin
 #### Step 1: Prepare data ####
 
 # Load results of a STRAPP test workflow run on continuous trait data
-data(Ponerinae_deepSTRAPP_cont_old_calib_0_40, package = "deepSTRAPP")
+Ponerinae_deepSTRAPP_cont_old_calib_0_40 <- readRDS(system.file("extdata", 
+    "Ponerinae_deepSTRAPP_cont_old_calib_0_40.rds", package = "deepSTRAPP"))
 # This dataset is only available in development versions installed from GitHub.
 # It is not available in CRAN versions.
 # Use remotes::install_github(repo = "MaelDore/deepSTRAPP") to get the latest development version.
@@ -167,7 +168,8 @@ plot_rates_through_time(
 ```
 ```{r plot_RTT_cont_eval_dev, fig.width = 16, fig.height = 15, out.width = "100%", eval = is_dev_version(), echo = FALSE}
 # Load results of a STRAPP test workflow run on continuous trait data
-data(Ponerinae_deepSTRAPP_cont_old_calib_0_40, package = "deepSTRAPP")
+Ponerinae_deepSTRAPP_cont_old_calib_0_40 <- readRDS(system.file("extdata", 
+    "Ponerinae_deepSTRAPP_cont_old_calib_0_40.rds", package = "deepSTRAPP"))
 
 # Select a color scheme from lowest to highest values
 color_scale = c("darkgreen", "limegreen", "orange", "red")
@@ -251,7 +253,8 @@ knitr::include_graphics("figures/5_Explore_plot_RTT_1_Example_continuous.PNG")
 #### Step 1: Prepare data ####
 
 # Load results of a STRAPP test workflow run on continuous trait data
-data(Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40, package = "deepSTRAPP")
+Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40 <- readRDS(system.file("extdata", 
+    "Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40.rds", package = "deepSTRAPP"))
 # This dataset is only available in development versions installed from GitHub.
 # It is not available in CRAN versions.
 # Use remotes::install_github(repo = "MaelDore/deepSTRAPP") to get the latest development version.
@@ -303,7 +306,8 @@ plot_RTT_categorical <- plot_rates_through_time(
 ```
 ```{r plot_RTT_cat_3lvl_eval_dev, fig.width = 14, fig.height = 10, out.width = "100%", eval = is_dev_version(), echo = FALSE}
 # Load results of a STRAPP test workflow run on continuous trait data
-data(Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40, package = "deepSTRAPP")
+Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40 <- readRDS(system.file("extdata", 
+    "Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40.rds", package = "deepSTRAPP"))
 
 ## Select color scheme for states
 colors_per_states <- c("forestgreen", "sienna", "goldenrod")

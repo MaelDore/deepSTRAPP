@@ -253,7 +253,8 @@
 #'     verbose = TRUE)
 #'
 #'  ## Load directly trait data output
-#'  data(Ponerinae_cont_data_old_calib, package = "deepSTRAPP")
+#'  Ponerinae_cont_data_old_calib <- readRDS(system.file("extdata",
+#'     "Ponerinae_cont_data_old_calib.rds", package = "deepSTRAPP"))
 #'  ## This dataset is only available in development versions installed from GitHub.
 #'  # It is not available in CRAN versions.
 #'  # Use remotes::install_github(repo = "MaelDore/deepSTRAPP") to get the latest development version.

@@ -256,7 +256,8 @@ Ponerinae_deepSTRAPP_cont_old_calib_0_40 <- run_deepSTRAPP_over_time(
     verbose_extended = TRUE)
 
 # Load the deepSTRAPP output summarizing results for 0 to 40 My
-data(Ponerinae_deepSTRAPP_cont_old_calib_0_40, package = "deepSTRAPP")
+Ponerinae_deepSTRAPP_cont_old_calib_0_40 <- readRDS(system.file("extdata", 
+    "Ponerinae_deepSTRAPP_cont_old_calib_0_40.rds", package = "deepSTRAPP"))
 # This dataset is only available in development versions installed from GitHub.
 # It is not available in CRAN versions.
 # Use remotes::install_github(repo = "MaelDore/deepSTRAPP") to get the latest development version.
@@ -320,7 +321,8 @@ str(Ponerinae_deepSTRAPP_cont_old_calib_0_40$updated_BAMM_objects_over_time, max
 # Each plot is achieved through a dedicated function
 
 # Load the deepSTRAPP output summarizing results for 0 to 40 My
-data(Ponerinae_deepSTRAPP_cont_old_calib_0_40, package = "deepSTRAPP")
+Ponerinae_deepSTRAPP_cont_old_calib_0_40 <- readRDS(system.file("extdata", 
+    "Ponerinae_deepSTRAPP_cont_old_calib_0_40.rds", package = "deepSTRAPP"))
 # This dataset is only available in development versions installed from GitHub.
 # It is not available in CRAN versions.
 # Use remotes::install_github(repo = "MaelDore/deepSTRAPP") to get the latest development version.
@@ -350,7 +352,8 @@ deepSTRAPP::plot_STRAPP_pvalues_over_time(
 ```{r plot_pvalues_cont_eval_dev, eval = is_dev_version(), echo = FALSE}
 
 # Load the deepSTRAPP output summarizing results for 0 to 40 My
-data(Ponerinae_deepSTRAPP_cont_old_calib_0_40, package = "deepSTRAPP")
+Ponerinae_deepSTRAPP_cont_old_calib_0_40 <- readRDS(system.file("extdata", 
+  "Ponerinae_deepSTRAPP_cont_old_calib_0_40.rds", package = "deepSTRAPP"))
 
 # Produce the results of overall Kruskal-Wallis tests over time
 ggplot_STRAPP_pvalues <- deepSTRAPP::plot_STRAPP_pvalues_over_time(
