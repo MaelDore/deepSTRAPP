@@ -68,9 +68,35 @@ reference:
   contents:
   - prepare_trait_data
   - prepare_diversification_data
+- title: Run deepSTRAPP worflow
+  desc: |
+    Core functions to run deepSTRAPP.
+  contents:
+  - run_deepSTRAPP_for_focal_time
+  - run_deepSTRAPP_over_time
+  - compute_STRAPP_test_for_focal_time
+- title: Plot deepSTRAPP outputs
+  desc: |
+    Plot results from deepSTRAPP runs.
+  contents:
+  - plot_STRAPP_pvalues_over_time
+  - plot_histogram_STRAPP_test_for_focal_time
+  - plot_histograms_STRAPP_tests_over_time
+  - plot_rates_through_time
+  - plot_rates_vs_trait_data_for_focal_time
+  - plot_rates_vs_trait_data_over_time
+- title: Plot mapped phylogenies
+  desc: |
+    Plot phylogenies with mapped trait or diversification rates evolution on branches.
+  contents:
+  - plot_contMap
+  - plot_densityMaps_overlay
+  - plot_BAMM_rates
+  - plot_traits_vs_rates_on_phylogeny_for_focal_time
+  - plot_traits_vs_rates_on_phylogeny_over_time
 - title: Import results from external analyses
   desc: |
-    Functions to format results from external analyses as inputs for a deepSTRAPP run.
+    Format results from external analyses as inputs for a deepSTRAPP run.
   contents:
   - convert_contsimmap_to_contMaps
   - aggregate_contMaps
@@ -78,17 +104,22 @@ reference:
   - convert_simmaps_to_densityMaps
   - build_BAMM_object
   - subset_BAMM_object
-- title: Run deepSTRAPP worflow
+- title: Model selection
+  desc: |
+    Select best models based on AICc.
   contents:
-  - run_deepSTRAPP_for_focal_time
-  - run_deepSTRAPP_over_time
-  - compute_STRAPP_test_for_focal_time
+  - select_best_trait_model_from_geiger
+  - select_best_model_from_BioGeoBEARS
 - title: Extract data from mapped phylogenies
+  desc: |
+    Extract trait data from contMap(s), densityMaps, simmaps.
   contents:
   - extract_most_likely_trait_values_for_focal_time
   - extract_all_trait_values_for_focal_time
   - extract_trait_data_melted_df_for_focal_time
 - title: Extract data from BAMM objects
+  desc: |
+    Extract diversification rates and regimes from BAMM objects.
   contents:
   - extract_diversification_data_melted_df_for_focal_time
   - update_rates_and_regimes_for_focal_time
@@ -103,29 +134,6 @@ reference:
   - cut_densityMaps_for_focal_time
   - cut_simmap_for_focal_time
   - cut_simmaps_for_focal_time
-- title: Plot mapped phylogenies
-  contents:
-  - plot_contMap
-  - plot_densityMaps_overlay
-  - plot_BAMM_rates
-  - plot_traits_vs_rates_on_phylogeny_for_focal_time
-  - plot_traits_vs_rates_on_phylogeny_over_time
-- title: Plot deepSTRAPP outputs
-  contents:
-  - plot_STRAPP_pvalues_over_time
-  - plot_histogram_STRAPP_test_for_focal_time
-  - plot_histograms_STRAPP_tests_over_time
-  - plot_rates_through_time
-  - plot_rates_vs_trait_data_for_focal_time
-  - plot_rates_vs_trait_data_over_time
-- title: Miscellaneous functions
-  desc: |
-    Additional utility functions used mostly internally.
-  contents:
-  - BSM_to_phytools_simmap
-  - BSMs_to_phytools_simmaps
-  - select_best_trait_model_from_geiger
-  - select_best_model_from_BioGeoBEARS
 - title: Datasets
   desc: |
     Datasets used to run examples and display expected results.
