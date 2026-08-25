@@ -229,7 +229,9 @@
 #'  This is NOT real biological/ecological data. They were designed for illustrative purposes only.
 #'  The phylogeny used is also NOT a properly time-calibrated phylogeny. It uses an ill-designed old calibration for illustrative purposes.
 #'
-#' @usage Ponerinae_cont_data_old_calib <- readRDS(system.file("extdata", "Ponerinae_cont_data_old_calib.rds", package = "deepSTRAPP"))
+#'  The object can be loaded with:
+#'  Ponerinae_cont_data_old_calib <- readRDS(system.file("extdata", "Ponerinae_cont_data_old_calib.rds", package = "deepSTRAPP"))
+#'
 #' @format A list with 5 elements.
 #'
 #' @details A list of five objects containing information on the evolution of fake size data in Ponerinae ants.
@@ -733,7 +735,9 @@ NULL
 #'   It summaries STRAPP test results and can optionally include trait and diversification rate data frames, STRAPP test outputs,
 #'   updated trait data objects, and updated BAMM objects, that are required fro downstream plots and analyses.
 #'
-#' @usage Ponerinae_deepSTRAPP_cont_old_calib_0_40 <- readRDS(system.file("extdata", "Ponerinae_deepSTRAPP_cont_old_calib_0_40.rds", package = "deepSTRAPP"))
+#'   The object can be loaded with:
+#'   Ponerinae_deepSTRAPP_cont_old_calib_0_40 <- readRDS(system.file("extdata", "Ponerinae_deepSTRAPP_cont_old_calib_0_40.rds", package = "deepSTRAPP"))
+#'
 #' @format A list with 10 elements.
 #'
 #' @details deepSTRAPP output summarizing results of a deepSTRAPP run carried out with [deepSTRAPP::run_deepSTRAPP_over_time()].
@@ -783,7 +787,9 @@ NULL
 #'   It summaries STRAPP test results and can optionally include trait and diversification rate data frames, STRAPP test outputs,
 #'   updated trait data objects, and updated BAMM objects, that are required fro downstream plots and analyses.
 #'
-#' @usage Ponerinae_deepSTRAPP_cat_2lvl_old_calib_0_40 <- readRDS(system.file("extdata", "Ponerinae_deepSTRAPP_cat_2lvl_old_calib_0_40.rds", package = "deepSTRAPP"))
+#'   The object can be loaded with:
+#'   Ponerinae_deepSTRAPP_cat_2lvl_old_calib_0_40 <- readRDS(system.file("extdata", "Ponerinae_deepSTRAPP_cat_2lvl_old_calib_0_40.rds", package = "deepSTRAPP"))
+#'
 #' @format A list with 10 elements.
 #'
 #' @details deepSTRAPP output summarizing results of a deepSTRAPP run carried out with [deepSTRAPP::run_deepSTRAPP_over_time()].
@@ -838,7 +844,9 @@ NULL
 #'   It summaries STRAPP test results and can optionally include trait and diversification rate data frames, STRAPP test outputs,
 #'   updated trait data objects, and updated BAMM objects, that are required fro downstream plots and analyses.
 #'
-#' @usage Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40 <- readRDS(system.file("extdata", "Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40.rds", package = "deepSTRAPP"))
+#'   The object can be loaded with:
+#'   Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40 <- readRDS(system.file("extdata", "Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40.rds", package = "deepSTRAPP"))
+#'
 #' @format A list with 11 elements.
 #'
 #' @details deepSTRAPP output summarizing results of a deepSTRAPP run carried out with [deepSTRAPP::run_deepSTRAPP_over_time()].
@@ -896,7 +904,9 @@ NULL
 #'   It summaries STRAPP test results and can optionally include trait and diversification rate data frames, STRAPP test outputs,
 #'   updated trait data objects, and updated BAMM objects, that are required fro downstream plots and analyses.
 #'
-#' @usage Ponerinae_deepSTRAPP_biogeo_old_calib_0_40 <- readRDS(system.file("extdata", "Ponerinae_deepSTRAPP_biogeo_old_calib_0_40.rds", package = "deepSTRAPP"))
+#'   The object can be loaded with:
+#'   Ponerinae_deepSTRAPP_biogeo_old_calib_0_40 <- readRDS(system.file("extdata", "Ponerinae_deepSTRAPP_biogeo_old_calib_0_40.rds", package = "deepSTRAPP"))
+#'
 #' @format A list with 10 elements.
 #'
 #' @details deepSTRAPP output summarizing results of a deepSTRAPP run carried out with [deepSTRAPP::run_deepSTRAPP_over_time()].
