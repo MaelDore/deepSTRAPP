@@ -112,7 +112,14 @@ From **GitHub**, for the current development version, including all
 
 ``` r
 library(devtools)
+
+# If you want to have access to the vignettes/tutorials locally, run:
 remotes::install_github(repo = "MaelDore/deepSTRAPP")
+
+# Altough, this is time-consuming, you can also opt for this light installation:
+remotes::install_github(repo = "MaelDore/deepSTRAPP", build_vignettes = FALSE)
+# You will not have access to the vignettes/tutorials within R, but can still acess them through this website.
+# See the dedicated Sections below.
 ```
 
 You may need additional tools for package compilation such as Rtools
