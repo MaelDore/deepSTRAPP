@@ -72,7 +72,7 @@ reference:
   desc: |
     Functions to format results from external analyses as inputs for a deepSTRAPP run.
   contents:
-  - convert_contsimmap_to_contMaps_list
+  - convert_contsimmap_to_contMaps
   - aggregate_contMaps
   - convert_BSM_to_simmap
   - convert_simmaps_to_densityMaps
