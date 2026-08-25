@@ -538,6 +538,7 @@ prepare_trait_data <- function (
 
   ## Save initial par() and reassign them on exit
   oldpar <- par(no.readonly = TRUE)
+  oldpar$new <- NULL
   on.exit(par(oldpar))
 
   ## Filter list of additional arguments to avoid warnings from functions
@@ -875,7 +876,7 @@ prepare_trait_data_for_continuous_data <- function (
 
   ### Step 3 - Get ACE (useful in all cases to build the contMap)
 
-  if (verbose) { cat(paste0(Sys.time(), " - Infer Ancestral Character Estimates from the best fitting model: ",best_model_name,".\n\n")) }
+  if (verbose) { cat(paste0("\n", Sys.time(), " - Infer Ancestral Character Estimates from the best fitting model: ",best_model_name,".\n\n")) }
 
   ## Rescale the tree such as the relative branch length account for trait rates in the best fitting model
   # ?geiger::rescale.phylo
