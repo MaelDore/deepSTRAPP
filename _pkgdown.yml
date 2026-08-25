@@ -100,7 +100,7 @@ reference:
   contents:
   - convert_contsimmap_to_contMaps
   - aggregate_contMaps
-  - convert_BSM_to_simmap
+  - convert_BSMs_to_simmaps
   - convert_simmaps_to_densityMaps
   - build_BAMM_object
   - subset_BAMM_object

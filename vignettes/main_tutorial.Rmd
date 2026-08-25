@@ -400,6 +400,10 @@ deepSTRAPP::plot_STRAPP_pvalues_over_time(
 
 ```
 ```{r plot_pvalues_main_tutorial_eval_dev, eval = is_dev_version(), echo = FALSE}
+# Load the deepSTRAPP output summarizing results for 0 to 40 My
+Ponerinae_deepSTRAPP_cat_2lvl_old_calib_0_40 <- readRDS(system.file("extdata", 
+    "Ponerinae_deepSTRAPP_cat_2lvl_old_calib_0_40.rds", package = "deepSTRAPP"))
+
 # Produce results of overall Kruskal-Wallis tests over time
 ggplot_STRAPP_pvalues <- deepSTRAPP::plot_STRAPP_pvalues_over_time(
    deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cat_2lvl_old_calib_0_40, display_plot = FALSE)

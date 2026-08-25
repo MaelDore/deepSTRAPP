@@ -524,6 +524,7 @@ convert_BSM_to_simmap <- function(model_fit, phylo, BSM_output, sim_index)
 
 ### Same but for list of multiple BSM maps
 
+#' @export
 #'
 #' @rdname convert_BSM_to_simmap
 #'
