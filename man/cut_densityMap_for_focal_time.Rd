@@ -128,8 +128,7 @@ ape::nodelabels(cex = 0.8, text = updated_mammals_densityMap_small$tree$initial_
 
 }
 \seealso{
-\code{\link[=cut_phylo_for_focal_time]{cut_phylo_for_focal_time()}} \code{\link[=extract_most_likely_trait_values_for_focal_time]{extract_most_likely_trait_values_for_focal_time()}}
-\code{\link[=extract_most_likely_states_from_densityMaps_for_focal_time]{extract_most_likely_states_from_densityMaps_for_focal_time()}}
+\code{\link[=cut_phylo_for_focal_time]{cut_phylo_for_focal_time()}} \code{\link[=extract_most_likely_trait_values_for_focal_time]{extract_most_likely_trait_values_for_focal_time()}} \code{\link[=extract_all_trait_values_for_focal_time]{extract_all_trait_values_for_focal_time()}}
 
 For a guided tutorial, see this vignette: \code{vignette("cut_phylogenies", package = "deepSTRAPP")}
 }

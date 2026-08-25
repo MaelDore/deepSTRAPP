@@ -131,8 +131,7 @@ plot_densityMaps_overlay(densityMaps = updated_mammals_densityMaps, fsize = 0.8)
 }
 \seealso{
 \code{\link[=cut_phylo_for_focal_time]{cut_phylo_for_focal_time()}} \code{\link[=cut_densityMap_for_focal_time]{cut_densityMap_for_focal_time()}}
-\code{\link[=extract_most_likely_trait_values_for_focal_time]{extract_most_likely_trait_values_for_focal_time()}}
-\code{\link[=extract_most_likely_states_from_densityMaps_for_focal_time]{extract_most_likely_states_from_densityMaps_for_focal_time()}}
+\code{\link[=extract_most_likely_trait_values_for_focal_time]{extract_most_likely_trait_values_for_focal_time()}} \code{\link[=extract_all_trait_values_for_focal_time]{extract_all_trait_values_for_focal_time()}}
 }
 \author{
 Maël Doré

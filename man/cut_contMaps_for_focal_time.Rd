@@ -129,8 +129,7 @@ if (deepSTRAPP::is_dev_version())
 
 }
 \seealso{
-\code{\link[=cut_phylo_for_focal_time]{cut_phylo_for_focal_time()}} \code{\link[=extract_most_likely_trait_values_for_focal_time]{extract_most_likely_trait_values_for_focal_time()}}
-\code{\link[=extract_most_likely_trait_values_from_contMap_for_focal_time]{extract_most_likely_trait_values_from_contMap_for_focal_time()}}
+\code{\link[=cut_phylo_for_focal_time]{cut_phylo_for_focal_time()}} \code{\link[=extract_most_likely_trait_values_for_focal_time]{extract_most_likely_trait_values_for_focal_time()}} \code{\link[=extract_all_trait_values_for_focal_time]{extract_all_trait_values_for_focal_time()}}
 
 For a guided tutorial, see this vignette: \code{vignette("cut_phylogenies", package = "deepSTRAPP")}
 }
