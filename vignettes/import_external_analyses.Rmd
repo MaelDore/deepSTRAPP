@@ -695,6 +695,10 @@ par(mfrow = c(1,1))
 ```
 ```{r import_biogeo_eval, eval = is_dev_version(), echo = FALSE}
 
+## Load phylogeny
+library(phytools)
+data(eel.tree)
+
 ## Load directly the output of prepare_trait_data() on biogeographic data to save time
 data(eel_biogeo_data, package = "deepSTRAPP")
 DEC_J_fit <- eel_biogeo_data$best_model_fit
