@@ -37,8 +37,7 @@
 #'   Diagonal must be populated with `NA`. `row.names(Q_matrix)` and `col.names(Q_matrix)` are the states.
 #'   Provide `"matrix"` among the model listed in 'evolutionary_models' to use the custom Q-matrix for modeling. Only for categorical data.
 #' @param BioGeoBEARS_directory_path Character string. The path to the directory used to store input/output files generated
-#'   for/by BioGeoBEARS during biogeographic historical inferences. Use '/' to separate directory and sub-directories. It must end with '/'.
-#'   Only for biogeographic data.
+#'   for/by BioGeoBEARS during biogeographic historical inferences. Only for biogeographic data.
 #' @param keep_BioGeoBEARS_files Logical. Whether the `BioGeoBEARS_directory` and its content should be kept after the run. Default = `TRUE`. Only for biogeographic data.
 #' @param prefix_for_files Character string. Prefix to add to all BioGeoBEARS files stored in the `BioGeoBEARS_directory_path` if `keep_BioGeoBEARS_files = TRUE`.
 #'   Files will be exported such as 'prefix_*' with an underscore separating the prefix and the file name.
@@ -1680,12 +1679,12 @@ prepare_trait_data_for_biogeographic_data <- function (
 
   ## Prepare phylogeny for BioGeoBEARS
 
-  # Build path to phylogeny
+  # Build absolute path to phylogeny
   if (is.null(prefix_for_files))
   {
-    path_to_phylo <- BioGeoBEARS::np(paste0(BioGeoBEARS_directory_path, "phylo.tree"))
+    path_to_phylo <- BioGeoBEARS::np(file.path(paste0(BioGeoBEARS_directory_path, "phylo.tree")))
   } else {
-    path_to_phylo <- BioGeoBEARS::np(paste0(BioGeoBEARS_directory_path, prefix_for_files,"_phylo.tree"))
+    path_to_phylo <- BioGeoBEARS::np(file.path(BioGeoBEARS_directory_path, paste0(prefix_for_files,"_phylo.tree")))
   }
   # Export phylogeny in Newick format
   write.tree(phylo, file = path_to_phylo)
@@ -1722,9 +1721,9 @@ prepare_trait_data_for_biogeographic_data <- function (
   # Set path to tip ranges object
   if (is.null(prefix_for_files))
   {
-    path_to_tip_ranges <- BioGeoBEARS::np(paste0(BioGeoBEARS_directory_path,"tip_ranges.data"))
+    path_to_tip_ranges <- BioGeoBEARS::np(file.path(BioGeoBEARS_directory_path, "tip_ranges.data"))
   } else {
-    path_to_tip_ranges <- BioGeoBEARS::np(paste0(BioGeoBEARS_directory_path,prefix_for_files,"_tip_ranges.data"))
+    path_to_tip_ranges <- BioGeoBEARS::np(file.path(BioGeoBEARS_directory_path, paste0(prefix_for_files,"_tip_ranges.data")))
   }
 
   # Export tip ranges in Lagrange/PHYLIP format
@@ -1962,9 +1961,9 @@ prepare_trait_data_for_biogeographic_data <- function (
     # Open log file
     if (is.null(prefix_for_files))
     {
-      log_file <- file(paste0(BioGeoBEARS_directory_path,"DEC_run_log.txt"), open = "wt")
+      log_file <- file(file.path(BioGeoBEARS_directory_path, "DEC_run_log.txt"), open = "wt")
     } else {
-      log_file <- file(paste0(BioGeoBEARS_directory_path,prefix_for_files,"_DEC_run_log.txt"), open = "wt")
+      log_file <- file(file.path(BioGeoBEARS_directory_path, paste0(prefix_for_files,"_DEC_run_log.txt")), open = "wt")
     }
 
     # Run model while saving logs
@@ -1988,18 +1987,18 @@ prepare_trait_data_for_biogeographic_data <- function (
       # Save model fit
       if (is.null(prefix_for_files))
       {
-        saveRDS(object = DEC_fit, file = paste0(BioGeoBEARS_directory_path,"DEC_fit.rds"))
+        saveRDS(object = DEC_fit, file = file.path(BioGeoBEARS_directory_path, "DEC_fit.rds"))
       } else {
-        saveRDS(object = DEC_fit, file = paste0(BioGeoBEARS_directory_path,prefix_for_files,"_DEC_fit.rds"))
+        saveRDS(object = DEC_fit, file = file.path(BioGeoBEARS_directory_path, paste0(prefix_for_files,"_DEC_fit.rds")))
       }
 
     } else {
       # Remove log if DEC model not requested in outputs
       if (is.null(prefix_for_files))
       {
-        file.remove(file.path(paste0(BioGeoBEARS_directory_path,"DEC_run_log.txt")))
+        file.remove(file.path(BioGeoBEARS_directory_path,"DEC_run_log.txt"))
       } else {
-        file.remove(file.path(paste0(BioGeoBEARS_directory_path,prefix_for_files,"_DEC_run_log.txt")))
+        file.remove(file.path(BioGeoBEARS_directory_path, paste0(prefix_for_files,"_DEC_run_log.txt")))
       }
     }
   }
@@ -2021,9 +2020,9 @@ prepare_trait_data_for_biogeographic_data <- function (
     # Open log file
     if (is.null(prefix_for_files))
     {
-      log_file <- file(paste0(BioGeoBEARS_directory_path,"DEC_J_run_log.txt"), open = "wt")
+      log_file <- file(file.path(BioGeoBEARS_directory_path, "DEC_J_run_log.txt"), open = "wt")
     } else {
-      log_file <- file(paste0(BioGeoBEARS_directory_path,prefix_for_files,"_DEC_J_run_log.txt"), open = "wt")
+      log_file <- file(file.path(BioGeoBEARS_directory_path, paste0(prefix_for_files,"_DEC_J_run_log.txt")), open = "wt")
     }
 
     # Run model while saving logs
@@ -2041,9 +2040,9 @@ prepare_trait_data_for_biogeographic_data <- function (
     # Save model fit
     if (is.null(prefix_for_files))
     {
-      saveRDS(object = DEC_J_fit, file = paste0(BioGeoBEARS_directory_path,"DEC_J_fit.rds"))
+      saveRDS(object = DEC_J_fit, file = file.path(BioGeoBEARS_directory_path, "DEC_J_fit.rds"))
     } else {
-      saveRDS(object = DEC_J_fit, file = paste0(BioGeoBEARS_directory_path,prefix_for_files,"_DEC_J_fit.rds"))
+      saveRDS(object = DEC_J_fit, file = file.path(BioGeoBEARS_directory_path, paste0(prefix_for_files,"_DEC_J_fit.rds")))
     }
 
     # Store output
@@ -2059,9 +2058,9 @@ prepare_trait_data_for_biogeographic_data <- function (
     # Open log file
     if (is.null(prefix_for_files))
     {
-      log_file <- file(paste0(BioGeoBEARS_directory_path,"DIVALIKE_run_log.txt"), open = "wt")
+      log_file <- file(file.path(BioGeoBEARS_directory_path, "DIVALIKE_run_log.txt"), open = "wt")
     } else {
-      log_file <- file(paste0(BioGeoBEARS_directory_path,prefix_for_files,"_DIVALIKE_run_log.txt"), open = "wt")
+      log_file <- file(file.path(BioGeoBEARS_directory_path, paste0(prefix_for_files,"_DIVALIKE_run_log.txt")), open = "wt")
     }
 
     # Run model while saving logs
@@ -2085,18 +2084,18 @@ prepare_trait_data_for_biogeographic_data <- function (
       # Save model fit
       if (is.null(prefix_for_files))
       {
-        saveRDS(object = DIVALIKE_fit, file = paste0(BioGeoBEARS_directory_path,"DIVALIKE_fit.rds"))
+        saveRDS(object = DIVALIKE_fit, file = file.path(BioGeoBEARS_directory_path, "DIVALIKE_fit.rds"))
       } else {
-        saveRDS(object = DIVALIKE_fit, file = paste0(BioGeoBEARS_directory_path,prefix_for_files,"_DIVALIKE_fit.rds"))
+        saveRDS(object = DIVALIKE_fit, file = file.path(BioGeoBEARS_directory_path, paste0(prefix_for_files,"_DIVALIKE_fit.rds")))
       }
 
     } else {
       # Remove log if DIVALIKE model not requested in outputs
       if (is.null(prefix_for_files))
       {
-        file.remove(file.path(paste0(BioGeoBEARS_directory_path,"DIVALIKE_run_log.txt")))
+        file.remove(file.path(BioGeoBEARS_directory_path,"DIVALIKE_run_log.txt"))
       } else {
-        file.remove(file.path(paste0(BioGeoBEARS_directory_path,prefix_for_files,"_DIVALIKE_run_log.txt")))
+        file.remove(file.path(BioGeoBEARS_directory_path, paste0(prefix_for_files,"_DIVALIKE_run_log.txt")))
       }
     }
   }
@@ -2118,9 +2117,9 @@ prepare_trait_data_for_biogeographic_data <- function (
     # Open log file
     if (is.null(prefix_for_files))
     {
-      log_file <- file(paste0(BioGeoBEARS_directory_path,"DIVALIKE_J_run_log.txt"), open = "wt")
+      log_file <- file(file.path(BioGeoBEARS_directory_path, "DIVALIKE_J_run_log.txt"), open = "wt")
     } else {
-      log_file <- file(paste0(BioGeoBEARS_directory_path,prefix_for_files,"_DIVALIKE_J_run_log.txt"), open = "wt")
+      log_file <- file(file.path(BioGeoBEARS_directory_path, paste0(prefix_for_files,"_DIVALIKE_J_run_log.txt")), open = "wt")
     }
 
     # Run model while saving logs
@@ -2138,9 +2137,9 @@ prepare_trait_data_for_biogeographic_data <- function (
     # Save model fit
     if (is.null(prefix_for_files))
     {
-      saveRDS(object = DIVALIKE_J_fit, file = paste0(BioGeoBEARS_directory_path,"DIVALIKE_J_fit.rds"))
+      saveRDS(object = DIVALIKE_J_fit, file = file.path(BioGeoBEARS_directory_path, "DIVALIKE_J_fit.rds"))
     } else {
-      saveRDS(object = DIVALIKE_J_fit, file = paste0(BioGeoBEARS_directory_path,prefix_for_files,"_DIVALIKE_J_fit.rds"))
+      saveRDS(object = DIVALIKE_J_fit, file = file.path(BioGeoBEARS_directory_path, paste0(prefix_for_files,"_DIVALIKE_J_fit.rds")))
     }
 
     # Store output
@@ -2156,9 +2155,9 @@ prepare_trait_data_for_biogeographic_data <- function (
     # Open log file
     if (is.null(prefix_for_files))
     {
-      log_file <- file(paste0(BioGeoBEARS_directory_path,"BAYAREALIKE_run_log.txt"), open = "wt")
+      log_file <- file(file.path(BioGeoBEARS_directory_path, "BAYAREALIKE_run_log.txt"), open = "wt")
     } else {
-      log_file <- file(paste0(BioGeoBEARS_directory_path,prefix_for_files,"_BAYAREALIKE_run_log.txt"), open = "wt")
+      log_file <- file(file.path(BioGeoBEARS_directory_path, paste0(prefix_for_files,"_BAYAREALIKE_run_log.txt")), open = "wt")
     }
 
     # Run model while saving logs
@@ -2182,18 +2181,18 @@ prepare_trait_data_for_biogeographic_data <- function (
       # Save model fit
       if (is.null(prefix_for_files))
       {
-        saveRDS(object = BAYAREALIKE_fit, file = paste0(BioGeoBEARS_directory_path,"BAYAREALIKE_fit.rds"))
+        saveRDS(object = BAYAREALIKE_fit, file = file.path(BioGeoBEARS_directory_path, "BAYAREALIKE_fit.rds"))
       } else {
-        saveRDS(object = BAYAREALIKE_fit, file = paste0(BioGeoBEARS_directory_path,prefix_for_files,"_BAYAREALIKE_fit.rds"))
+        saveRDS(object = BAYAREALIKE_fit, file = file.path(BioGeoBEARS_directory_path, paste0(prefix_for_files,"_BAYAREALIKE_fit.rds")))
       }
 
     } else {
       # Remove log if DIVALIKE model not requested in outputs
       if (is.null(prefix_for_files))
       {
-        file.remove(file.path(paste0(BioGeoBEARS_directory_path,"BAYAREALIKE_run_log.txt")))
+        file.remove(file.path(BioGeoBEARS_directory_path, "BAYAREALIKE_run_log.txt"))
       } else {
-        file.remove(file.path(paste0(BioGeoBEARS_directory_path,prefix_for_files,"_BAYAREALIKE_run_log.txt")))
+        file.remove(file.path(BioGeoBEARS_directory_path, paste0(prefix_for_files,"_BAYAREALIKE_run_log.txt")))
       }
     }
   }
@@ -2215,9 +2214,9 @@ prepare_trait_data_for_biogeographic_data <- function (
     # Open log file
     if (is.null(prefix_for_files))
     {
-      log_file <- file(paste0(BioGeoBEARS_directory_path,"BAYAREALIKE_J_run_log.txt"), open = "wt")
+      log_file <- file(file.path(BioGeoBEARS_directory_path, "BAYAREALIKE_J_run_log.txt"), open = "wt")
     } else {
-      log_file <- file(paste0(BioGeoBEARS_directory_path,prefix_for_files,"_BAYAREALIKE_J_run_log.txt"), open = "wt")
+      log_file <- file(file.path(BioGeoBEARS_directory_path, paste0(prefix_for_files,"_BAYAREALIKE_J_run_log.txt")), open = "wt")
     }
 
     # Run model while saving logs
@@ -2235,9 +2234,9 @@ prepare_trait_data_for_biogeographic_data <- function (
     # Save model fit
     if (is.null(prefix_for_files))
     {
-      saveRDS(object = BAYAREALIKE_J_fit, file = paste0(BioGeoBEARS_directory_path,"BAYAREALIKE_J_fit.rds"))
+      saveRDS(object = BAYAREALIKE_J_fit, file = file.path(BioGeoBEARS_directory_path, "BAYAREALIKE_J_fit.rds"))
     } else {
-      saveRDS(object = BAYAREALIKE_J_fit, file = paste0(BioGeoBEARS_directory_path,prefix_for_files,"_BAYAREALIKE_J_fit.rds"))
+      saveRDS(object = BAYAREALIKE_J_fit, file = file.path(BioGeoBEARS_directory_path, paste0(prefix_for_files,"_BAYAREALIKE_J_fit.rds")))
     }
 
     # Store output
@@ -2307,12 +2306,12 @@ prepare_trait_data_for_biogeographic_data <- function (
   ## Rename BSM outputs
   if (!is.null(prefix_for_files))
   {
-    file.rename(from = file.path(paste0(BioGeoBEARS_directory_path,"RES_ana_events_tables.Rdata")),
-                to = file.path(paste0(BioGeoBEARS_directory_path,prefix_for_files,"_RES_ana_events_tables.Rdata")))
-    file.rename(from = file.path(paste0(BioGeoBEARS_directory_path,"RES_ana_events_tables_PARTIAL.Rdata")),
-                to = file.path(paste0(BioGeoBEARS_directory_path,prefix_for_files,"_RES_ana_events_tables_PARTIAL.Rdata")))
-    file.rename(from = file.path(paste0(BioGeoBEARS_directory_path,"RES_clado_events_tables.Rdata")),
-                to = file.path(paste0(BioGeoBEARS_directory_path,prefix_for_files,"_RES_clado_events_tables.Rdata")))
+    file.rename(from = file.path(BioGeoBEARS_directory_path, "RES_ana_events_tables.Rdata"),
+                to = file.path(BioGeoBEARS_directory_path, paste0(prefix_for_files,"_RES_ana_events_tables.Rdata")))
+    file.rename(from = file.path(BioGeoBEARS_directory_path,"RES_ana_events_tables_PARTIAL.Rdata"),
+                to = file.path(BioGeoBEARS_directory_path, paste0(prefix_for_files,"_RES_ana_events_tables_PARTIAL.Rdata")))
+    file.rename(from = file.path(BioGeoBEARS_directory_path, "RES_clado_events_tables.Rdata"),
+                to = file.path(BioGeoBEARS_directory_path, paste0(prefix_for_files,"_RES_clado_events_tables.Rdata")))
   }
 
   ## Convert BioGeoBEARS BSM output to simmaps
@@ -2639,50 +2638,50 @@ prepare_trait_data_for_biogeographic_data <- function (
   {
     if (is.null(prefix_for_files))
     {
-      files_path <- BioGeoBEARS_directory_path
+      files_path <- file.path(BioGeoBEARS_directory_path)
     } else {
-      files_path <- paste0(BioGeoBEARS_directory_path, prefix_for_files, "_")
+      files_path <- file.path(BioGeoBEARS_directory_path, paste0(prefix_for_files, "_"))
     }
 
     # Remove input files
-    file.remove(file.path(paste0(BioGeoBEARS_directory_path,"phylo.tree")))
-    file.remove(file.path(paste0(BioGeoBEARS_directory_path,"tip_ranges.data")))
+    file.remove(file.path(BioGeoBEARS_directory_path, "phylo.tree"))
+    file.remove(file.path(BioGeoBEARS_directory_path, "tip_ranges.data"))
 
     # Remove BSM files
-    file.remove(file.path(paste0(BioGeoBEARS_directory_path,"RES_ana_events_tables.Rdata")))
-    file.remove(file.path(paste0(BioGeoBEARS_directory_path,"RES_ana_events_tables_PARTIAL.Rdata")))
-    file.remove(file.path(paste0(BioGeoBEARS_directory_path,"RES_clado_events_tables.Rdata")))
+    file.remove(file.path(BioGeoBEARS_directory_path, "RES_ana_events_tables.Rdata"))
+    file.remove(file.path(BioGeoBEARS_directory_path, "RES_ana_events_tables_PARTIAL.Rdata"))
+    file.remove(file.path(BioGeoBEARS_directory_path, "RES_clado_events_tables.Rdata"))
 
     # Remove models outputs
     if ("DEC" %in% evolutionary_models)
     {
-      file.remove(file.path(paste0(BioGeoBEARS_directory_path,"DEC_run_log.txt")))
-      file.remove(file.path(paste0(BioGeoBEARS_directory_path,"DEC_fit.rds")))
+      file.remove(file.path(BioGeoBEARS_directory_path, "DEC_run_log.txt"))
+      file.remove(file.path(BioGeoBEARS_directory_path, "DEC_fit.rds"))
     }
     if ("DEC+J" %in% evolutionary_models)
     {
-      file.remove(file.path(paste0(BioGeoBEARS_directory_path,"DEC_J_run_log.txt")))
-      file.remove(file.path(paste0(BioGeoBEARS_directory_path,"DEC_J_fit.rds")))
+      file.remove(file.path(BioGeoBEARS_directory_path, "DEC_J_run_log.txt"))
+      file.remove(file.path(BioGeoBEARS_directory_path, "DEC_J_fit.rds"))
     }
     if ("DIVALIKE" %in% evolutionary_models)
     {
-      file.remove(file.path(paste0(BioGeoBEARS_directory_path,"DIVALIKE_run_log.txt")))
-      file.remove(file.path(paste0(BioGeoBEARS_directory_path,"DIVALIKE_fit.rds")))
+      file.remove(file.path(BioGeoBEARS_directory_path, "DIVALIKE_run_log.txt"))
+      file.remove(file.path(BioGeoBEARS_directory_path, "DIVALIKE_fit.rds"))
     }
     if ("DIVALIKE+J" %in% evolutionary_models)
     {
-      file.remove(file.path(paste0(BioGeoBEARS_directory_path,"DIVALIKE_J_run_log.txt")))
-      file.remove(file.path(paste0(BioGeoBEARS_directory_path,"DIVALIKE_J_fit.rds")))
+      file.remove(file.path(BioGeoBEARS_directory_path, "DIVALIKE_J_run_log.txt"))
+      file.remove(file.path(BioGeoBEARS_directory_path, "DIVALIKE_J_fit.rds"))
     }
     if ("BAYAREALIKE" %in% evolutionary_models)
     {
-      file.remove(file.path(paste0(BioGeoBEARS_directory_path,"BAYAREALIKE_run_log.txt")))
-      file.remove(file.path(paste0(BioGeoBEARS_directory_path,"BAYAREALIKE_fit.rds")))
+      file.remove(file.path(BioGeoBEARS_directory_path, "BAYAREALIKE_run_log.txt"))
+      file.remove(file.path(BioGeoBEARS_directory_path, "BAYAREALIKE_fit.rds"))
     }
     if ("BAYAREALIKE+J" %in% evolutionary_models)
     {
-      file.remove(file.path(paste0(BioGeoBEARS_directory_path,"BAYAREALIKE_J_run_log.txt")))
-      file.remove(file.path(paste0(BioGeoBEARS_directory_path,"BAYAREALIKE_J_fit.rds")))
+      file.remove(file.path(BioGeoBEARS_directory_path, "BAYAREALIKE_J_run_log.txt"))
+      file.remove(file.path(BioGeoBEARS_directory_path, "BAYAREALIKE_J_fit.rds"))
     }
 
     # If empty, remove the BioGeoBEARS_directory
@@ -2938,7 +2937,7 @@ select_best_trait_model_from_geiger <- function (list_model_fits)
 #'  BioGeoBEARS_directory_path = "./BioGeoBEARS_directory/"
 #'
 #'  # Export phylo
-#'  path_to_phylo <- BioGeoBEARS::np(paste0(BioGeoBEARS_directory_path, "phylo.tree"))
+#'  path_to_phylo <- BioGeoBEARS::np(file.path(BioGeoBEARS_directory_path, "phylo.tree"))
 #'  write.tree(phy = eel.tree, file = path_to_phylo)
 #'
 #'  ## Prepare range data
@@ -2976,7 +2975,7 @@ select_best_trait_model_from_geiger <- function (list_model_fits)
 #'  Taxa_bioregions_tipranges_obj <- BioGeoBEARS::define_tipranges_object(tmpdf = binary_df_num)
 #'
 #'  # Set path to tip ranges object
-#'  path_to_tip_ranges <- BioGeoBEARS::np(paste0(BioGeoBEARS_directory_path,"tip_ranges.data"))
+#'  path_to_tip_ranges <- BioGeoBEARS::np(file.path(BioGeoBEARS_directory_path, "tip_ranges.data"))
 #'
 #'  # Export tip ranges in Lagrange/PHYLIP format
 #'  BioGeoBEARS::save_tipranges_to_LagrangePHYLIP(
