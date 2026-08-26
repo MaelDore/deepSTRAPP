@@ -53,7 +53,7 @@ if (deepSTRAPP::is_dev_version())
  BioGeoBEARS_directory_path = "./BioGeoBEARS_directory/"
 
  # Export phylo
- path_to_phylo <- BioGeoBEARS::np(paste0(BioGeoBEARS_directory_path, "phylo.tree"))
+ path_to_phylo <- BioGeoBEARS::np(file.path(BioGeoBEARS_directory_path, "phylo.tree"))
  write.tree(phy = eel.tree, file = path_to_phylo)
 
  ## Prepare range data
@@ -91,7 +91,7 @@ if (deepSTRAPP::is_dev_version())
  Taxa_bioregions_tipranges_obj <- BioGeoBEARS::define_tipranges_object(tmpdf = binary_df_num)
 
  # Set path to tip ranges object
- path_to_tip_ranges <- BioGeoBEARS::np(paste0(BioGeoBEARS_directory_path,"tip_ranges.data"))
+ path_to_tip_ranges <- BioGeoBEARS::np(file.path(BioGeoBEARS_directory_path, "tip_ranges.data"))
 
  # Export tip ranges in Lagrange/PHYLIP format
  BioGeoBEARS::save_tipranges_to_LagrangePHYLIP(
