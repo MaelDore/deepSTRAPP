@@ -186,7 +186,8 @@
 #'
 #'  ## Extract all trait values for focal time = 10 Mya
 #'  extract_trait_data_10My <- extract_all_trait_values_for_focal_time(
-#'     contMaps = eel_contMaps, focal_time = 10, update_Map = T)
+#'     contMaps = eel_contMaps, trait_data_type = "continuous",
+#'     focal_time = 10, update_Map = T)
 #'
 #'  # Convert in data.frame
 #'   # Rows = Stochastic maps
@@ -222,6 +223,7 @@
 #' # Extract from the densityMaps
 #' eel_cat_3lvl_data_10My <- extract_all_trait_values_for_focal_time(
 #'    densityMaps = eel_cat_3lvl_data$densityMaps,
+#'    trait_data_type = "categorical",
 #'    nb_simulations = 100,
 #'    focal_time = focal_time,
 #'    update_Map = TRUE)
@@ -261,6 +263,7 @@
 #' # Extract from the simmaps
 #' eel_biogeo_data_10My <- extract_all_trait_values_for_focal_time(
 #'    simmaps = eel_biogeo_data$simmaps,
+#'    trait_data_type = "biogeographic",
 #'    focal_time = focal_time,
 #'    update_Map = TRUE)
 #'
