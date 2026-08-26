@@ -65,8 +65,7 @@ Diagonal must be populated with \code{NA}. \code{row.names(Q_matrix)} and \code{
 Provide \code{"matrix"} among the model listed in 'evolutionary_models' to use the custom Q-matrix for modeling. Only for categorical data.}
 
 \item{BioGeoBEARS_directory_path}{Character string. The path to the directory used to store input/output files generated
-for/by BioGeoBEARS during biogeographic historical inferences. Use '/' to separate directory and sub-directories. It must end with '/'.
-Only for biogeographic data.}
+for/by BioGeoBEARS during biogeographic historical inferences. Only for biogeographic data.}
 
 \item{keep_BioGeoBEARS_files}{Logical. Whether the \code{BioGeoBEARS_directory} and its content should be kept after the run. Default = \code{TRUE}. Only for biogeographic data.}
 
