@@ -185,7 +185,7 @@
 #'  focal_time <- 10
 #'
 #'  ## Extract all trait values for focal time = 10 Mya
-#'  extract_trait_data_10My <- extract_all_trait_values_from_contMaps_for_focal_time(
+#'  extract_trait_data_10My <- extract_all_trait_values_for_focal_time(
 #'     contMaps = eel_contMaps, focal_time = 10, update_contMaps = T)
 #'
 #'  # Convert in data.frame
@@ -220,7 +220,7 @@
 #' ## Extract trait data and update densityMaps for the given focal_time
 #'
 #' # Extract from the densityMaps
-#' eel_cat_3lvl_data_10My <- extract_all_states_from_densityMaps_for_focal_time(
+#' eel_cat_3lvl_data_10My <- extract_all_trait_values_for_focal_time(
 #'    densityMaps = eel_cat_3lvl_data$densityMaps,
 #'    nb_simulations = 100,
 #'    focal_time = focal_time,
@@ -259,7 +259,7 @@
 #' ## Extract trait data and update simmaps for the given focal_time
 #'
 #' # Extract from the simmaps
-#' eel_biogeo_data_10My <- extract_all_ranges_from_simmaps_for_focal_time(
+#' eel_biogeo_data_10My <- extract_all_trait_values_for_focal_time(
 #'    simmaps = eel_biogeo_data$simmaps,
 #'    focal_time = focal_time,
 #'    update_simmaps = TRUE)
