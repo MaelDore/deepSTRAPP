@@ -6,14 +6,14 @@
 \format{
 A list with 5 elements.
 }
-\usage{
-Ponerinae_cont_data_old_calib <- readRDS(system.file("extdata", "Ponerinae_cont_data_old_calib.rds", package = "deepSTRAPP"))
-}
 \description{
 A list containing fake size data of Ponerinae ants mapped on the phylogeny,
 modeled with \code{\link[contsimmap:make.contsimmap]{contsimmap::make.contsimmap()}}. This object was obtained with \code{\link[=prepare_trait_data]{prepare_trait_data()}}.
 This is NOT real biological/ecological data. They were designed for illustrative purposes only.
 The phylogeny used is also NOT a properly time-calibrated phylogeny. It uses an ill-designed old calibration for illustrative purposes.
+
+The object can be loaded with:
+Ponerinae_cont_data_old_calib <- readRDS(system.file("extdata", "Ponerinae_cont_data_old_calib.rds", package = "deepSTRAPP"))
 }
 \details{
 A list of five objects containing information on the evolution of fake size data in Ponerinae ants.

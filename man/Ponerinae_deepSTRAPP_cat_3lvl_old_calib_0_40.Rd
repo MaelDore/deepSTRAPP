@@ -6,14 +6,14 @@
 \format{
 A list with 11 elements.
 }
-\usage{
-Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40 <- readRDS(system.file("extdata", "Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40.rds", package = "deepSTRAPP"))
-}
 \description{
 deepSTRAPP output for fake categorical habitat data with 3-levels mapped on old time-calibrated ponerine ant phylogeny over 0 to 40 Mya.
 This object is the typical result of a deepSTRAPP run carried out with \code{\link[=run_deepSTRAPP_over_time]{run_deepSTRAPP_over_time()}}.
 It summaries STRAPP test results and can optionally include trait and diversification rate data frames, STRAPP test outputs,
 updated trait data objects, and updated BAMM objects, that are required fro downstream plots and analyses.
+
+The object can be loaded with:
+Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40 <- readRDS(system.file("extdata", "Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40.rds", package = "deepSTRAPP"))
 }
 \details{
 deepSTRAPP output summarizing results of a deepSTRAPP run carried out with \code{\link[=run_deepSTRAPP_over_time]{run_deepSTRAPP_over_time()}}.
