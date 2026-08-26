@@ -1,6 +1,6 @@
 ## Functions to extract all trait data from multiple stochastic maps at a given focal time
 # One master function to select the proper pipeline according to data type
-# Three sub-functions extracting trait evolution according to data type
+# Five internal sub-functions extracting trait evolution according to data type
 
 ### Master function to select the proper sub-function according to data type ####
 
@@ -86,11 +86,6 @@
 #'
 #'   The mapping in `contMap`/`densityMaps`/`simmaps` (`$maps` and `$mapped.edge`) is updated accordingly by removing mapping associated with the cut off branches.
 #'
-#'   A specific sub-function (that can be used independently) is called according to the type of trait data and inputs provided:
-#'   * For continuous traits: [deepSTRAPP::extract_all_trait_values_from_contMaps_for_focal_time()]
-#'   * For categorical traits: [deepSTRAPP::extract_all_states_from_densityMaps_for_focal_time()] and [deepSTRAPP::extract_all_states_from_simmaps_for_focal_time()]
-#'   * For biogeographic ranges: [deepSTRAPP::extract_all_ranges_from_densityMaps_for_focal_time()] and [deepSTRAPP::extract_all_ranges_from_simmaps_for_focal_time()]
-#'
 #'   To extract only the most likely trait value/state/range, see this associated function: [deepSTRAPP::extract_most_likely_trait_values_for_focal_time()]
 #'
 #' @return By default, the function returns a list with three elements.
@@ -140,14 +135,6 @@
 #'
 #' Equivalent function to extract the most likely trait value/state/range from mapped phylogenies:
 #' [deepSTRAPP::extract_most_likely_trait_values_for_focal_time()]
-#'
-#' Associated sub-functions per type of trait data:
-#'
-#' [deepSTRAPP::extract_all_trait_values_from_contMaps_for_focal_time()]
-#' [deepSTRAPP::extract_all_states_from_densityMaps_for_focal_time()]
-#' [deepSTRAPP::extract_all_states_from_simmaps_for_focal_time()]
-#' [deepSTRAPP::extract_all_ranges_from_densityMaps_for_focal_time()]
-#' [deepSTRAPP::extract_all_ranges_from_simmaps_for_focal_time()]
 #'
 #' @examples
 #' # ----- Example 1: Continuous trait ----- #
@@ -476,7 +463,7 @@ extract_all_trait_values_for_focal_time <- function (contMaps = NULL,
 #'   must retained their initial `tip.label` on the updated contMaps. Default is `TRUE`.
 #'   Used only if `update_contMaps = TRUE`.
 #'
-#' @export
+#' @noRd
 #' @importFrom phytools nodeHeights plot.contMap
 #' @importFrom ape nodelabels
 #'
@@ -839,7 +826,7 @@ extract_all_trait_values_from_contMaps_for_focal_time <- function (
 #'   must retained their initial `tip.label` on the updated densityMaps. Default is `TRUE`.
 #'   Used only if `update_Map = TRUE`.
 #'
-#' @export
+#' @noRd
 #' @importFrom phytools nodeHeights plot.densityMap
 #' @importFrom ape nodelabels
 #' @importFrom dplyr left_join join_by
@@ -1303,7 +1290,7 @@ extract_all_states_from_densityMaps_for_focal_time <- function (
 #'   must retained their initial `tip.label` on the updated simmaps. Default is `TRUE`.
 #'   Used only if `update_Map = TRUE`.
 #'
-#' @export
+#' @noRd
 #' @importFrom phytools nodeHeights plot.densityMap
 #' @importFrom ape nodelabels
 #' @importFrom dplyr left_join join_by
@@ -1757,7 +1744,7 @@ extract_all_states_from_simmaps_for_focal_time <- function (
 #'   must retained their initial `tip.label` on the updated densityMaps. Default is `TRUE`.
 #'   Used only if `update_Map = TRUE`.
 #'
-#' @export
+#' @noRd
 #' @importFrom phytools nodeHeights plot.densityMap
 #' @importFrom ape nodelabels
 #' @importFrom dplyr left_join join_by
@@ -2195,7 +2182,7 @@ extract_all_ranges_from_densityMaps_for_focal_time <- function (
 #'   must retained their initial `tip.label` on the updated simmaps. Default is `TRUE`.
 #'   Used only if `update_Map = TRUE`.
 #'
-#' @export
+#' @noRd
 #' @importFrom phytools nodeHeights plot.densityMap
 #' @importFrom ape nodelabels
 #' @importFrom dplyr left_join join_by
