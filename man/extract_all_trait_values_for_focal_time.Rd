@@ -208,8 +208,8 @@ if (deepSTRAPP::is_dev_version())
  focal_time <- 10
 
  ## Extract all trait values for focal time = 10 Mya
- extract_trait_data_10My <- extract_all_trait_values_from_contMaps_for_focal_time(
-    contMaps = eel_contMaps, focal_time = 10, update_contMaps = T)
+ extract_trait_data_10My <- extract_all_trait_values_for_focal_time(
+    contMaps = eel_contMaps, focal_time = 10, update_Map = T)
 
  # Convert in data.frame
   # Rows = Stochastic maps
@@ -243,11 +243,11 @@ focal_time <- 10
 ## Extract trait data and update densityMaps for the given focal_time
 
 # Extract from the densityMaps
-eel_cat_3lvl_data_10My <- extract_all_states_from_densityMaps_for_focal_time(
+eel_cat_3lvl_data_10My <- extract_all_trait_values_for_focal_time(
    densityMaps = eel_cat_3lvl_data$densityMaps,
    nb_simulations = 100,
    focal_time = focal_time,
-   update_densityMaps = TRUE)
+   update_Map = TRUE)
 
 ## Print trait data
 str(eel_cat_3lvl_data_10My, 1)
@@ -282,10 +282,10 @@ focal_time <- 10
 ## Extract trait data and update simmaps for the given focal_time
 
 # Extract from the simmaps
-eel_biogeo_data_10My <- extract_all_ranges_from_simmaps_for_focal_time(
+eel_biogeo_data_10My <- extract_all_trait_values_for_focal_time(
    simmaps = eel_biogeo_data$simmaps,
    focal_time = focal_time,
-   update_simmaps = TRUE)
+   update_Map = TRUE)
 
 ## Print trait data
 str(eel_biogeo_data_10My, 1)

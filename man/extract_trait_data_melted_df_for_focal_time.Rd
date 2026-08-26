@@ -84,7 +84,7 @@ focal_time <- 10
 ## Extract range data across stochastic maps for the given focal_time
 
 # Extract from the simmaps
-eel_biogeo_data_10My <- extract_all_ranges_from_simmaps_for_focal_time(
+eel_biogeo_data_10My <- extract_all_trait_values_for_focal_time(
    simmaps = eel_biogeo_data$simmaps,
    focal_time = focal_time)
 
