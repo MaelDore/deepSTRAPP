@@ -36,7 +36,7 @@
 #'  the estimated overall richness in the clade. It acts as a multiplier on the rates needed to achieve such extant diversity.
 #'  Default is `1.0` (assuming all taxa are in the phylogeny).
 #' @param sampleProbsFilename Character string. The path to the `.txt` file used to provide clade-specific sampling fractions.
-#'  See [BAMMtools::samplingProbs()] to generate such file. If provided, `globalSamplingFraction` is ignored.
+#'  See [BAMMtools::samplingProbs()] to generate such file. If provided, `globalSamplingFraction` is ignored. Default = `NULL`.
 #' @param expectedNumberOfShifts Integer. Set the expected number of regime shifts. It acts as an hyperparameter controlling the exponential prior distribution
 #'  used to modulate reversible jumps across model configurations in the rjMCMC run.
 #'  If set to `NULL` (default), an empirical rule will be used to define this value: 1 regime shift expected for every 100 tips in the phylogeny, with a minimum of 1.
@@ -1342,6 +1342,7 @@ prepare_diversification_data <- function (BAMM_install_directory_path,
       # Display plot if requested
       if (plot_evaluations)
       {
+        # graphics::plot.new() # Use a different panel
         BAMMtools::plotPrior(mcmc = MCMC_log,
                              expectedNumberOfShifts = expectedNumberOfShifts,
                              burnin = burn_in,
@@ -1573,7 +1574,7 @@ get_mean_eventData <- function (BAMM_object, sample_indices)
       dset <- c(BAMM_object$tip.label[shifts_tipward_nodes_ID[i]], NA)
     }
     else {
-      tmp <- ape::extract.clade(as.phylo(BAMM_object), node = shifts_tipward_nodes_ID[i])
+      tmp <- ape::extract.clade(ape::as.phylo(BAMM_object), node = shifts_tipward_nodes_ID[i])
       dset <- tmp$tip.label[c(1, length(tmp$tip.label))]
     }
     tmp2 <- ff[ff$node == shifts_tipward_nodes_ID[i], ]
