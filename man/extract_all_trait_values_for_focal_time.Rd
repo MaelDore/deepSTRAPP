@@ -157,13 +157,6 @@ the leaf left is labeled with the node ID of the MRCA of the cut-off clade.
 
 The mapping in \code{contMap}/\code{densityMaps}/\code{simmaps} (\verb{$maps} and \verb{$mapped.edge}) is updated accordingly by removing mapping associated with the cut off branches.
 
-A specific sub-function (that can be used independently) is called according to the type of trait data and inputs provided:
-\itemize{
-\item For continuous traits: \code{\link[=extract_all_trait_values_from_contMaps_for_focal_time]{extract_all_trait_values_from_contMaps_for_focal_time()}}
-\item For categorical traits: \code{\link[=extract_all_states_from_densityMaps_for_focal_time]{extract_all_states_from_densityMaps_for_focal_time()}} and \code{\link[=extract_all_states_from_simmaps_for_focal_time]{extract_all_states_from_simmaps_for_focal_time()}}
-\item For biogeographic ranges: \code{\link[=extract_all_ranges_from_densityMaps_for_focal_time]{extract_all_ranges_from_densityMaps_for_focal_time()}} and \code{\link[=extract_all_ranges_from_simmaps_for_focal_time]{extract_all_ranges_from_simmaps_for_focal_time()}}
-}
-
 To extract only the most likely trait value/state/range, see this associated function: \code{\link[=extract_most_likely_trait_values_for_focal_time]{extract_most_likely_trait_values_for_focal_time()}}
 }
 \examples{
@@ -324,14 +317,6 @@ plot(eel_biogeo_data_10My$simmaps[[1]], fsize = 0.7)
 
 Equivalent function to extract the most likely trait value/state/range from mapped phylogenies:
 \code{\link[=extract_most_likely_trait_values_for_focal_time]{extract_most_likely_trait_values_for_focal_time()}}
-
-Associated sub-functions per type of trait data:
-
-\code{\link[=extract_all_trait_values_from_contMaps_for_focal_time]{extract_all_trait_values_from_contMaps_for_focal_time()}}
-\code{\link[=extract_all_states_from_densityMaps_for_focal_time]{extract_all_states_from_densityMaps_for_focal_time()}}
-\code{\link[=extract_all_states_from_simmaps_for_focal_time]{extract_all_states_from_simmaps_for_focal_time()}}
-\code{\link[=extract_all_ranges_from_densityMaps_for_focal_time]{extract_all_ranges_from_densityMaps_for_focal_time()}}
-\code{\link[=extract_all_ranges_from_simmaps_for_focal_time]{extract_all_ranges_from_simmaps_for_focal_time()}}
 }
 \author{
 Maël Doré
