@@ -23,7 +23,7 @@
 #'   See the BAMM website: \url{http://bamm-project.org/} and the companion R package `{BAMMtools}`.
 #'
 #' @param BAMM_install_directory_path Character string. The path to the directory where BAMM is.
-#'   Use '/' to separate directory and sub-directories. The path must end with '/'.
+#'   It can be an absolute path, or path relative to the current working directory (Check with `getwd()` if needed).
 #' @param phylo Time-calibrated phylogeny. Object of class `"phylo"` as defined in R package `{ape}`. The phylogeny must be rooted and fully resolved.
 #'   BAMM does not currently work with fossils, so the tree must also be ultrametric.
 #' @param prefix_for_files Character string. Prefix to add to all BAMM files stored in the `BAMM_output_directory_path` if `keep_BAMM_outputs = TRUE`.
@@ -52,7 +52,7 @@
 #'  Ex: `list(lambdaInit0 = 0.5, muInit0 = 0)`. See available settings in the template file provided within the deepSTRAPP package files as 'BAMM_template_diversification.txt'.
 #'  The template can also be loaded directly in R with `utils::data(BAMM_template_diversification)` and displayed with `print(BAMM_template_diversification)`.
 #' @param BAMM_output_directory_path Character string. The path to the directory used to store input/output files generated.
-#'  Use '/' to separate directory and subdirectories. It must end with '/'.
+#'  It can be an absolute path, or path relative to the current working directory (Check with `getwd()` if needed).
 #' @param keep_BAMM_outputs Logical. Whether the `BAMM_output_directory` should be kept after the run. Default = `TRUE`.
 #' @param MAP_odd_ratio_threshold Numerical. Controls the definition of 'core-shifts' used to distinguish across configurations when fetching the MAP samples.
 #'   Shifts that have an odd-ratio of marginal posterior probability / prior lower than `MAP_odd_ratio_threshold` are ignored. See [BAMMtools::getBestShiftConfiguration()]. Default = `5`.
@@ -285,10 +285,21 @@ prepare_diversification_data <- function (BAMM_install_directory_path,
   ### Check input validity
   {
     ## BAMM_install_directory_path
-    # BAMM_install_directory_path must be a directory, so it must end with '/'
-    if (!stringr::str_detect(BAMM_install_directory_path, pattern = "/$"))
+    # Build robust absolute BAMM path
+    BAMM_path <- file.path(BAMM_install_directory_path, "bamm")
+    BAMM_path <- normalizePath(BAMM_path, mustWork = FALSE)
+    # Try to access BAMM help to check if the path is valid
+    BAMM_help <- tryCatch(
+      # Test to run
+      system(paste0(BAMM_path, " --help"), intern = TRUE),
+      # Provide NULL if getting a warning
+      warning = function(w) { NULL },
+      # Provide NULL if getting an error
+      error = function(e) { NULL }
+    )
+    if (is.null(BAMM_help) || !any(grepl("^Usage: bamm", BAMM_help)))
     {
-      stop(paste0("'BAMM_install_directory_path' must end with '/'"))
+      stop("Could not execute BAMM at '", BAMM_path,"'. Please check that BAMM is correctly installed or if the path provided correct.")
     }
 
     ## phylo
@@ -362,7 +373,7 @@ prepare_diversification_data <- function (BAMM_install_directory_path,
     }
 
     ## sampleProbsFilename
-    # If provided, sampleProbsFilename must be a directory, so it must end with '/'
+    # If provided, sampleProbsFilename must be a text file, so it must end with '.txt'
     if (!is.null(sampleProbsFilename))
     {
       if (!stringr::str_detect(sampleProbsFilename, pattern = "\\.txt$"))
@@ -452,13 +463,6 @@ prepare_diversification_data <- function (BAMM_install_directory_path,
 
     }
 
-    ## BAMM_output_directory_path
-    # BAMM_output_directory_path must be a directory, so it must end with '/'
-    if (!stringr::str_detect(BAMM_output_directory_path, pattern = "/$"))
-    {
-      stop(paste0("'BAMM_output_directory_path' must end with '/'"))
-    }
-
     ## skip_evaluations & (plot_evaluations | save_evaluations)
     if (skip_evaluations & plot_evaluations)
     {
@@ -484,6 +488,7 @@ prepare_diversification_data <- function (BAMM_install_directory_path,
 
   ## Save initial par() and reassign them on exit
   oldpar <- par(no.readonly = TRUE)
+  oldpar$new <- NULL
   on.exit(par(oldpar))
 
   #### ----------- Step 1: Set BAMM ----------- ####
@@ -500,6 +505,8 @@ prepare_diversification_data <- function (BAMM_install_directory_path,
     if (!dir.exists(paths = file.path(BAMM_output_directory_path)))
     {
       dir.create(path = file.path(BAMM_output_directory_path))
+      cat(paste0("WARNING: the directory provided as 'BAMM_output_directory_path' does not exist.\n",
+                 "It was created at ", BAMM_output_directory_path,"'.\n\n"))
     }
 
     ## Export the phylogeny in a .tree file
@@ -507,9 +514,9 @@ prepare_diversification_data <- function (BAMM_install_directory_path,
     # Build path
     if (is.null(prefix_for_files))
     {
-      phy_path <- file.path(paste0(BAMM_output_directory_path, "phylogeny.tree"))
+      phy_path <- file.path(BAMM_output_directory_path, "phylogeny.tree")
     } else {
-      phy_path <- file.path(paste0(BAMM_output_directory_path, prefix_for_files,"_phylogeny.tree"))
+      phy_path <- file.path(BAMM_output_directory_path, paste0(prefix_for_files,"_phylogeny.tree"))
     }
     # Export tree
     ape::write.tree(phy = phylo, file = phy_path)
@@ -699,9 +706,9 @@ prepare_diversification_data <- function (BAMM_install_directory_path,
     # Build path to priors file
     if (is.null(prefix_for_files))
     {
-      priors_path <- file.path(paste0(BAMM_output_directory_path, "priors.txt"))
+      priors_path <- file.path(BAMM_output_directory_path, "priors.txt")
     } else {
-      priors_path <- file.path(paste0(BAMM_output_directory_path, prefix_for_files,"_priors.txt"))
+      priors_path <- file.path(BAMM_output_directory_path, paste0(prefix_for_files,"_priors.txt"))
     }
     # Generate priors file
     invisible(capture.output(BAMMtools::setBAMMpriors(phy = phylo, outfile = priors_path, suppressWarning = TRUE)))
@@ -1175,9 +1182,9 @@ prepare_diversification_data <- function (BAMM_install_directory_path,
     # Build path
     if (is.null(prefix_for_files))
     {
-      config_file_path <- file.path(paste0(BAMM_output_directory_path, "config_file.txt"))
+      config_file_path <- file.path(BAMM_output_directory_path, "config_file.txt")
     } else {
-      config_file_path <- file.path(paste0(BAMM_output_directory_path, prefix_for_files,"_config_file.txt"))
+      config_file_path <- file.path(BAMM_output_directory_path, paste0(prefix_for_files,"_config_file.txt"))
     }
     # Export my_config_file
     writeLines(text = my_config_file, con = config_file_path)
@@ -1191,9 +1198,15 @@ prepare_diversification_data <- function (BAMM_install_directory_path,
   ## Run BAMM and move output files in dedicated directory
 
   {
-    ## run BAMM
-    BAMM_path <- file.path(paste0(BAMM_install_directory_path, "bamm"))
-    system(paste0(BAMM_path, " -c ", config_file_path))
+    ## Build a robust absolute path to BAMM
+    BAMM_path <- file.path(BAMM_install_directory_path, "bamm")
+    BAMM_path <- normalizePath(BAMM_path, mustWork = FALSE)
+
+    ## Build a robust absolute path to config_file
+    config_file_path_absolute <- normalizePath(config_file_path, mustWork = TRUE)
+
+    ## Run BAMM
+    system(paste0(BAMM_path, " -c ", config_file_path_absolute))
 
     ### Outputs
     # run_info.txt file containing a summary of your parameters/settings
@@ -1206,22 +1219,22 @@ prepare_diversification_data <- function (BAMM_install_directory_path,
     # Detect output files
     if (is.null(prefix_for_files))
     {
-      file.rename(from = runInfoFilename, to = file.path(paste0(BAMM_output_directory_path, runInfoFilename)))
-      file.rename(from = mcmcOutfile, to = file.path(paste0(BAMM_output_directory_path, mcmcOutfile)))
-      file.rename(from = eventDataOutfile, to = file.path(paste0(BAMM_output_directory_path, eventDataOutfile)))
-      file.rename(from = chainSwapFileName, to = file.path(paste0(BAMM_output_directory_path, chainSwapFileName)))
+      file.rename(from = runInfoFilename, to = file.path(BAMM_output_directory_path, runInfoFilename))
+      file.rename(from = mcmcOutfile, to = file.path(BAMM_output_directory_path, mcmcOutfile))
+      file.rename(from = eventDataOutfile, to = file.path(BAMM_output_directory_path, eventDataOutfile))
+      file.rename(from = chainSwapFileName, to = file.path(BAMM_output_directory_path, chainSwapFileName))
       if (outputAcceptanceInfo == 1)
       {
-        file.rename(from = acceptanceInfoFileName, to = file.path(paste0(BAMM_output_directory_path, acceptanceInfoFileName)))
+        file.rename(from = acceptanceInfoFileName, to = file.path(BAMM_output_directory_path, acceptanceInfoFileName))
       }
     } else {
-      file.rename(from = file.path(paste0(prefix_for_files, "_", runInfoFilename)), to = file.path(paste0(BAMM_output_directory_path, prefix_for_files, "_", runInfoFilename)))
-      file.rename(from = file.path(paste0(prefix_for_files, "_", mcmcOutfile)), to = file.path(paste0(BAMM_output_directory_path, prefix_for_files, "_", mcmcOutfile)))
-      file.rename(from = file.path(paste0(prefix_for_files, "_", eventDataOutfile)), to = file.path(paste0(BAMM_output_directory_path, prefix_for_files, "_", eventDataOutfile)))
-      file.rename(from = file.path(paste0(prefix_for_files, "_", chainSwapFileName)), to = file.path(paste0(BAMM_output_directory_path, prefix_for_files, "_", chainSwapFileName)))
+      file.rename(from = file.path(paste0(prefix_for_files, "_", runInfoFilename)), to = file.path(BAMM_output_directory_path, paste0(prefix_for_files, "_", runInfoFilename)))
+      file.rename(from = file.path(paste0(prefix_for_files, "_", mcmcOutfile)), to = file.path(BAMM_output_directory_path, paste0(prefix_for_files, "_", mcmcOutfile)))
+      file.rename(from = file.path(paste0(prefix_for_files, "_", eventDataOutfile)), to = file.path(BAMM_output_directory_path, paste0(prefix_for_files, "_", eventDataOutfile)))
+      file.rename(from = file.path(paste0(prefix_for_files, "_", chainSwapFileName)), to = file.path(BAMM_output_directory_path, paste0(prefix_for_files, "_", chainSwapFileName)))
       if (outputAcceptanceInfo == 1)
       {
-        file.rename(from = acceptanceInfoFileName, to = file.path(paste0(BAMM_output_directory_path, prefix_for_files, "_", acceptanceInfoFileName)))
+        file.rename(from = acceptanceInfoFileName, to = file.path(BAMM_output_directory_path, paste0(prefix_for_files, "_", acceptanceInfoFileName)))
       }
     }
   }
@@ -1241,9 +1254,9 @@ prepare_diversification_data <- function (BAMM_install_directory_path,
       # Load the MCMC log file
       if (is.null(prefix_for_files))
       {
-        MCMC_log <- utils::read.csv(file.path(paste0(BAMM_output_directory_path, mcmcOutfile)), header = T)
+        MCMC_log <- utils::read.csv(file.path(BAMM_output_directory_path, mcmcOutfile), header = T)
       } else {
-        MCMC_log <- utils::read.csv(file.path(paste0(BAMM_output_directory_path, prefix_for_files, "_", mcmcOutfile)), header = T)
+        MCMC_log <- utils::read.csv(file.path(BAMM_output_directory_path, paste0(prefix_for_files, "_", mcmcOutfile)), header = T)
       }
 
       # Find generations used to cut-off the burn-in
@@ -1288,9 +1301,9 @@ prepare_diversification_data <- function (BAMM_install_directory_path,
       {
         if (is.null(prefix_for_files))
         {
-          MCMC_logLik_path <- file.path(paste0(BAMM_output_directory_path, "MCMC_trace_logLik.pdf"))
+          MCMC_logLik_path <- file.path(BAMM_output_directory_path, "MCMC_trace_logLik.pdf")
         } else {
-          MCMC_logLik_path <- file.path(paste0(BAMM_output_directory_path, prefix_for_files, "_MCMC_trace_logLik.pdf"))
+          MCMC_logLik_path <- file.path(BAMM_output_directory_path, paste0(prefix_for_files, "_MCMC_trace_logLik.pdf"))
         }
         cowplot::save_plot(plot = MCMC_logLik_ggplot,
                            filename = MCMC_logLik_path,
@@ -1318,9 +1331,9 @@ prepare_diversification_data <- function (BAMM_install_directory_path,
       {
         if (is.null(prefix_for_files))
         {
-          utils::write.csv(x = ESS_df, file = file.path(paste0(BAMM_output_directory_path, "ESS_df.csv")), row.names = FALSE)
+          utils::write.csv(x = ESS_df, file = file.path(BAMM_output_directory_path, "ESS_df.csv"), row.names = FALSE)
         } else {
-          utils::write.csv(x = ESS_df, file = file.path(paste0(BAMM_output_directory_path, prefix_for_files, "_ESS_df.csv")), row.names = FALSE)
+          utils::write.csv(x = ESS_df, file = file.path(BAMM_output_directory_path, paste0(prefix_for_files, "_ESS_df.csv")), row.names = FALSE)
         }
       }
 
@@ -1340,9 +1353,9 @@ prepare_diversification_data <- function (BAMM_install_directory_path,
       {
         if (is.null(prefix_for_files))
         {
-          PP_nb_shifts_path <- file.path(paste0(BAMM_output_directory_path, "PP_nb_shifts_plot.pdf"))
+          PP_nb_shifts_path <- file.path(BAMM_output_directory_path, "PP_nb_shifts_plot.pdf")
         } else {
-          PP_nb_shifts_path <- file.path(paste0(BAMM_output_directory_path, prefix_for_files, "_PP_nb_shifts_plot.pdf"))
+          PP_nb_shifts_path <- file.path(BAMM_output_directory_path, paste0(prefix_for_files, "_PP_nb_shifts_plot.pdf"))
         }
         grDevices::pdf(file = file.path(PP_nb_shifts_path),
                        width = 10, height = 8)
@@ -1368,9 +1381,9 @@ prepare_diversification_data <- function (BAMM_install_directory_path,
     ## Build path to eventData file
     if (is.null(prefix_for_files))
     {
-      eventData_path <- file.path(paste0(BAMM_output_directory_path, eventDataOutfile))
+      eventData_path <- file.path(BAMM_output_directory_path, eventDataOutfile)
     } else {
-      eventData_path <- file.path(paste0(BAMM_output_directory_path, prefix_for_files, "_", eventDataOutfile))
+      eventData_path <- file.path(BAMM_output_directory_path, paste0(prefix_for_files, "_", eventDataOutfile))
     }
 
     ## Create the bammdata summarizing BAMM outputs
@@ -1477,23 +1490,23 @@ prepare_diversification_data <- function (BAMM_install_directory_path,
       # Remove files generated during the BAMM run
       if (is.null(prefix_for_files))
       {
-        file.remove(file.path(paste0(BAMM_output_directory_path, runInfoFilename)))
-        file.remove(file.path(paste0(BAMM_output_directory_path, mcmcOutfile)))
-        file.remove(file.path(paste0(BAMM_output_directory_path, eventDataOutfile)))
-        file.remove(file.path(paste0(BAMM_output_directory_path, chainSwapFileName)))
+        file.remove(file.path(BAMM_output_directory_path, runInfoFilename))
+        file.remove(file.path(BAMM_output_directory_path, mcmcOutfile))
+        file.remove(file.path(BAMM_output_directory_path, eventDataOutfile))
+        file.remove(file.path(BAMM_output_directory_path, chainSwapFileName))
 
         if (outputAcceptanceInfo == 1)
         {
-          file.remove(file.path(paste0(BAMM_output_directory_path, acceptanceInfoFileName)))
+          file.remove(file.path(BAMM_output_directory_path, acceptanceInfoFileName))
         }
       } else {
-        file.remove(file.path(paste0(BAMM_output_directory_path, prefix_for_files, "_", runInfoFilename)))
-        file.remove(file.path(paste0(BAMM_output_directory_path, prefix_for_files, "_", mcmcOutfile)))
-        file.remove(file.path(paste0(BAMM_output_directory_path, prefix_for_files, "_", eventDataOutfile)))
-        file.remove(file.path(paste0(BAMM_output_directory_path, prefix_for_files, "_", chainSwapFileName)))
+        file.remove(file.path(BAMM_output_directory_path, paste0(prefix_for_files, "_", runInfoFilename)))
+        file.remove(file.path(BAMM_output_directory_path, paste0(prefix_for_files, "_", mcmcOutfile)))
+        file.remove(file.path(BAMM_output_directory_path, paste0(prefix_for_files, "_", eventDataOutfile)))
+        file.remove(file.path(BAMM_output_directory_path, paste0(prefix_for_files, "_", chainSwapFileName)))
         if (outputAcceptanceInfo == 1)
         {
-          file.remove(file.path(paste0(BAMM_output_directory_path, prefix_for_files, "_", acceptanceInfoFileName)))
+          file.remove(file.path(BAMM_output_directory_path, paste0(prefix_for_files, "_", acceptanceInfoFileName)))
         }
       }
 
