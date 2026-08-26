@@ -27,7 +27,7 @@ prepare_diversification_data(
 }
 \arguments{
 \item{BAMM_install_directory_path}{Character string. The path to the directory where BAMM is.
-Use '/' to separate directory and sub-directories. The path must end with '/'.}
+It can be an absolute path, or path relative to the current working directory (Check with \code{getwd()} if needed).}
 
 \item{phylo}{Time-calibrated phylogeny. Object of class \code{"phylo"} as defined in R package \code{{ape}}. The phylogeny must be rooted and fully resolved.
 BAMM does not currently work with fossils, so the tree must also be ultrametric.}
@@ -46,7 +46,7 @@ the estimated overall richness in the clade. It acts as a multiplier on the rate
 Default is \code{1.0} (assuming all taxa are in the phylogeny).}
 
 \item{sampleProbsFilename}{Character string. The path to the \code{.txt} file used to provide clade-specific sampling fractions.
-See \code{\link[BAMMtools:samplingProbs]{BAMMtools::samplingProbs()}} to generate such file. If provided, \code{globalSamplingFraction} is ignored.}
+See \code{\link[BAMMtools:samplingProbs]{BAMMtools::samplingProbs()}} to generate such file. If provided, \code{globalSamplingFraction} is ignored. Default = \code{NULL}.}
 
 \item{expectedNumberOfShifts}{Integer. Set the expected number of regime shifts. It acts as an hyperparameter controlling the exponential prior distribution
 used to modulate reversible jumps across model configurations in the rjMCMC run.
@@ -68,7 +68,7 @@ Ex: \code{list(lambdaInit0 = 0.5, muInit0 = 0)}. See available settings in the t
 The template can also be loaded directly in R with \code{utils::data(BAMM_template_diversification)} and displayed with \code{print(BAMM_template_diversification)}.}
 
 \item{BAMM_output_directory_path}{Character string. The path to the directory used to store input/output files generated.
-Use '/' to separate directory and subdirectories. It must end with '/'.}
+It can be an absolute path, or path relative to the current working directory (Check with \code{getwd()} if needed).}
 
 \item{keep_BAMM_outputs}{Logical. Whether the \code{BAMM_output_directory} should be kept after the run. Default = \code{TRUE}.}
 
