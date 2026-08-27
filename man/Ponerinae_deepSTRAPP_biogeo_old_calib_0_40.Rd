@@ -52,7 +52,7 @@ See \code{\link[=compute_STRAPP_test_for_focal_time]{compute_STRAPP_test_for_foc
 Combined with \code{return_perm_data = TRUE}, it allows to plot the histograms of the null distributions
 used to assess significance of the tests with \code{\link[=plot_histogram_STRAPP_test_for_focal_time]{plot_histogram_STRAPP_test_for_focal_time()}}.
 (for a single \code{focal_time}) and \code{\link[=plot_histograms_STRAPP_tests_over_time]{plot_histograms_STRAPP_tests_over_time()}} (for multiple \code{time_steps}).
-\item \verb{$updated_trait_data_with_Map_over_time} List of objects containing trait data and updated \code{contMap}/\code{densityMaps}.
+\item \verb{$updated_Maps_over_time} List of objects containing the updated \code{densityMaps} for each time-step.
 Updated \code{densityMaps} can be plotted with \code{\link[=plot_densityMaps_overlay]{plot_densityMaps_overlay()}} to display a phylogeny mapped with inferred states with branches cut at each \code{focal_time}.
 \item \verb{$updated_BAMM_objects_over_time} List of objects containing rates and regimes ID mapped on phylogeny.
 Updated \code{BAMM_object} can be plotted with \code{\link[=plot_BAMM_rates]{plot_BAMM_rates()}} to display a phylogeny mapped with

@@ -939,7 +939,7 @@ NULL
 #'     Combined with `return_perm_data = TRUE`, it allows to plot the histograms of the null distributions
 #'     used to assess significance of the tests with [deepSTRAPP::plot_histogram_STRAPP_test_for_focal_time()].
 #'     (for a single `focal_time`) and [deepSTRAPP::plot_histograms_STRAPP_tests_over_time()] (for multiple `time_steps`).
-#'   * `$updated_trait_data_with_Map_over_time` List of objects containing trait data and updated `contMap`/`densityMaps`.
+#'   * `$updated_Maps_over_time` List of objects containing the updated `densityMaps` for each time-step.
 #'     Updated `densityMaps` can be plotted with [deepSTRAPP::plot_densityMaps_overlay()] to display a phylogeny mapped with inferred states with branches cut at each `focal_time`.
 #'   * `$updated_BAMM_objects_over_time` List of objects containing rates and regimes ID mapped on phylogeny.
 #'     Updated `BAMM_object` can be plotted with [deepSTRAPP::plot_BAMM_rates()] to display a phylogeny mapped with
