@@ -121,7 +121,8 @@ if (deepSTRAPP::is_dev_version())
  \donttest{ # (May take several minutes to run)
  # Run a Stochastic Mapping based on a Brownian Motion model
  # to interpolate values along branches and obtain a "contMap" object
- Ponerinae_contMap <- phytools::contMap(Ponerinae_tree, x = Ponerinae_cont_tip_data,
+ Ponerinae_contMap <- phytools::contMap(tree = Ponerinae_tree_old_calib,
+                                        x = Ponerinae_cont_tip_data,
                                         res = 100, # Number of time steps
                                         plot = FALSE)
  # Plot contMap = stochastic mapping of continuous trait
@@ -188,7 +189,7 @@ if (deepSTRAPP::is_dev_version())
  ## Load data
 
  # Load phylogeny
- data(Ponerinae_tree, package = "deepSTRAPP")
+ data(Ponerinae_tree_old_calib, package = "deepSTRAPP")
  # Load trait df
  data(Ponerinae_trait_tip_data, package = "deepSTRAPP")
 
