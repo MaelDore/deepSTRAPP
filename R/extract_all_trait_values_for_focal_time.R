@@ -187,7 +187,7 @@
 #'  ## Extract all trait values for focal time = 10 Mya
 #'  extract_trait_data_10My <- extract_all_trait_values_for_focal_time(
 #'     contMaps = eel_contMaps, trait_data_type = "continuous",
-#'     focal_time = 10, update_Map = T)
+#'     focal_time = 10, update_Map = TRUE)
 #'
 #'  # Convert in data.frame
 #'   # Rows = Stochastic maps
@@ -571,7 +571,7 @@ extract_all_trait_values_for_focal_time <- function (contMaps = NULL,
 #'
 #'  ## Extract all trait values for focal time = 10 Mya
 #'  extract_trait_data_10My <- extract_all_trait_values_from_contMaps_for_focal_time(
-#'     contMaps = eel_contMaps, focal_time = 10, update_contMaps = T)
+#'     contMaps = eel_contMaps, focal_time = 10, update_contMaps = TRUE)
 #'
 #'  # Convert in data.frame
 #'   # Rows = Stochastic maps

@@ -210,7 +210,7 @@ if (deepSTRAPP::is_dev_version())
  ## Extract all trait values for focal time = 10 Mya
  extract_trait_data_10My <- extract_all_trait_values_for_focal_time(
     contMaps = eel_contMaps, trait_data_type = "continuous",
-    focal_time = 10, update_Map = T)
+    focal_time = 10, update_Map = TRUE)
 
  # Convert in data.frame
   # Rows = Stochastic maps

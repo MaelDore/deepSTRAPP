@@ -77,6 +77,7 @@
 #' # Extract from the simmaps
 #' eel_biogeo_data_10My <- extract_all_trait_values_for_focal_time(
 #'    simmaps = eel_biogeo_data$simmaps,
+#'    trait_data_type = "biogeographic",
 #'    focal_time = focal_time)
 #'
 #' ## Format range data as a melted df
