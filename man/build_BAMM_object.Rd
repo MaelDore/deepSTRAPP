@@ -8,7 +8,7 @@ build_BAMM_object(
   phylo,
   eventdata,
   burn_in = 0.25,
-  nb_posterior_samples = 1000,
+  nb_posterior_samples = NULL,
   seed = NULL,
   expectedNumberOfShifts,
   MAP_odd_ratio_threshold = 5,
@@ -23,7 +23,8 @@ The phylogeny must be rooted and fully resolved.}
 
 \item{burn_in}{Numerical. Proportion of posterior samples removed from the BAMM output to ensure that the remaining samples where drawn once the equilibrium distribution was reached. Default is \code{0.25}}
 
-\item{nb_posterior_samples}{Numerical. Number of posterior samples to extract, after removing the burn-in, in the final \code{BAMM_object} to use for downstream analyses. Default = \code{1000}.}
+\item{nb_posterior_samples}{Numerical. Number of posterior samples to extract, after removing the burn-in, in the final \code{BAMM_object} to use for downstream analyses.
+If set to \code{NULL} (default), all samples remaining after removing the burn-in will be kept.}
 
 \item{seed}{Integer. Set the seed to ensure reproducibility when drawing random posterior samples. Default is \code{NULL} (a random seed is used).}
 

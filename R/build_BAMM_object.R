@@ -38,7 +38,8 @@
 #'   The phylogeny must be rooted and fully resolved.
 #' @param eventdata Character string specifying the path to a BAMM event-data file. Alternatively, an object of class data.frame that includes the event data from a BAMM run.
 #' @param burn_in Numerical. Proportion of posterior samples removed from the BAMM output to ensure that the remaining samples where drawn once the equilibrium distribution was reached. Default is `0.25`
-#' @param nb_posterior_samples Numerical. Number of posterior samples to extract, after removing the burn-in, in the final `BAMM_object` to use for downstream analyses. Default = `1000`.
+#' @param nb_posterior_samples Numerical. Number of posterior samples to extract, after removing the burn-in, in the final `BAMM_object` to use for downstream analyses.
+#'  If set to `NULL` (default), all samples remaining after removing the burn-in will be kept.
 #' @param seed Integer. Set the seed to ensure reproducibility when drawing random posterior samples. Default is `NULL` (a random seed is used).
 #' @param expectedNumberOfShifts Integer. The expected number of regime shifts sets during the BAMM run as an hyperparameter controlling the exponential prior distribution
 #'  used to modulate reversible jumps across model configurations in the rjMCMC run. This is needed to compute priors for regime shift along branches.
@@ -128,7 +129,7 @@
 build_BAMM_object <- function (phylo,
                                eventdata,
                                burn_in = 0.25,
-                               nb_posterior_samples = 1000,
+                               nb_posterior_samples = NULL,
                                seed = NULL,
                                expectedNumberOfShifts,
                                MAP_odd_ratio_threshold = 5,
@@ -171,11 +172,17 @@ build_BAMM_object <- function (phylo,
     }
 
     ## nb_posterior_samples
-    # nb_posterior_samples must be a positive integer
-    if ((nb_posterior_samples != abs(nb_posterior_samples)) | (nb_posterior_samples != round(nb_posterior_samples)))
+    # nb_posterior_samples must be a positive integer or NULL
+    if (!is.null(nb_posterior_samples))
     {
-      stop(paste0("'nb_posterior_samples' must be a positive integer defining the number of posterior samples retained in the 'BAMM_object' output used for downstream analyses.\n",
-                  "Default is '1000'. Current value of 'nb_posterior_samples' is ",nb_posterior_samples,"."))
+      if ((nb_posterior_samples != abs(nb_posterior_samples)) | (nb_posterior_samples != round(nb_posterior_samples)))
+      {
+        stop(paste0("'nb_posterior_samples' must be a positive integer defining the number of posterior samples retained in the 'BAMM_object' output used for downstream analyses.\n",
+                    "Alternatively, you can set 'nb_posterior_samples' to 'NULL' to retain all remaining posterior samples after removing burn-in.\n",
+                    "You can also use [deepSTRAPP::subset_BAMM_object()] to subset the BAMM_object after having built it with this function.\n",
+                    "Current value of 'nb_posterior_samples' is ",nb_posterior_samples,"."))
+      }
+
     }
 
     ## seed
@@ -220,6 +227,14 @@ build_BAMM_object <- function (phylo,
                                               type = "diversification",
                                               verbose = verbose)
 
+  ## If not provided, set the number of posterior samples to equal the number of samples remaining after burn-in
+  if (is.null(nb_posterior_samples))
+  {
+    nb_posterior_samples <- length(BAMM_data_output$eventData)
+    cat(paste0("WARNING: you set 'nb_posterior_samples = NULL', thus all posterior samples remaining after burn-in have been retained.\n",
+               "The final number of BAMM posterior samples is ",nb_posterior_samples,".\n\n"))
+  }
+
   ## Check if the requested number of posterior samples is compatible with the loaded object and requested burnin.
   nb_samples_loaded <- length(BAMM_data_output$eventData)
   if (nb_posterior_samples > nb_samples_loaded)
@@ -229,15 +244,22 @@ build_BAMM_object <- function (phylo,
                 "Currently, ",nb_samples_loaded," samples were loaded. 'nb_posterior_samples' = ",nb_posterior_samples,"; 'burn_in' = ",burn_in,"."))
   }
 
-  ## Select the subset of posterior samples
+  ## Select the subset of posterior samples (if needed)
 
-  # Get a subset of a selected number of posterior samples
-  if (!is.null(seed))
+  if (nb_posterior_samples < nb_samples_loaded)
   {
-    set.seed(seed = seed)
+    # Get a subset of a selected number of posterior samples
+    if (!is.null(seed))
+    {
+      set.seed(seed = seed)
+    }
+    sample_indices <- sample(x = 1:length(BAMM_data_output$eventData), size = nb_posterior_samples)
+    BAMM_posterior_samples_data <- BAMMtools::subsetEventData(BAMM_data_output, index = sample_indices)
+  } else {
+    # Case when the number or posterior samples requested = the number of samples loaded
+    # No need to subsample the loaded BAMM object
+    BAMM_posterior_samples_data <- BAMM_data_output
   }
-  sample_indices <- sample(x = 1:length(BAMM_data_output$eventData), size = nb_posterior_samples)
-  BAMM_posterior_samples_data <- BAMMtools::subsetEventData(BAMM_data_output, index = sample_indices)
 
   ## Add the expectedNumberOfShifts as information in the output
   BAMM_posterior_samples_data$expectedNumberOfShifts <- expectedNumberOfShifts
