@@ -239,6 +239,7 @@
 #'     densityMaps = Ponerinae_biogeo_data_old_calib$densityMaps,
 #'     ace = Ponerinae_biogeo_data_old_calib$ace,
 #'     tip_data = Ponerinae_ON_tip_data,
+#'     nb_simulations = 100,
 #'     trait_data_type = "biogeographic",
 #'     BAMM_object = Ponerinae_BAMM_object_old_calib,
 #'     time_range = time_range,

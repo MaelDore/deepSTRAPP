@@ -406,6 +406,7 @@
 #'  ## Run deepSTRAPP on net diversification rates across time-steps.
 #'  Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40 <- run_deepSTRAPP_over_time(
 #'     densityMaps = Ponerinae_cat_3lvl_data_old_calib$densityMaps,
+#'     # Inform the nb of simulations to reconstruct state distribution across stochastic maps
 #'     nb_simulations = 100,
 #'     ace = Ponerinae_cat_3lvl_data_old_calib$ace,
 #'     tip_data = Ponerinae_cat_3lvl_tip_data,
@@ -574,6 +575,7 @@
 #'  ## Run deepSTRAPP on net diversification rates for time-steps = 0 to 40 Mya.
 #'  Ponerinae_deepSTRAPP_biogeo_old_calib_0_40 <- run_deepSTRAPP_over_time(
 #'    densityMaps = Ponerinae_biogeo_data_old_calib$densityMaps,
+#'    # Inform the nb of simulations to reconstruct state distribution across stochastic maps
 #'     nb_simulations = 100,
 #'     ace = Ponerinae_biogeo_data_old_calib$ace,
 #'     tip_data = Ponerinae_NO_tip_data,
@@ -1137,15 +1139,13 @@ run_deepSTRAPP_over_time <- function (contMap = NULL,
 
 }
 
-## Shift to development version.
-
-Ponerinae_deepSTRAPP_cat_2lvl_old_calib_0_40 <- readRDS(system.file("extdata", "Ponerinae_deepSTRAPP_cont_old_calib_0_40.rds", package = "deepSTRAPP"))
-
-## Move the 5 heavy datasets in inst/extdata as .rds files instead of .rda
-# Adjust all loading code. Replace data(data_file, package = "deepSTRAPP") by data_file <- readRDS(system.file("extdata", "data_file.rds", package = "deepSTRAPP")
-  # In vignettes,
+## Push the dev version to the website
 
 ## Check the website integrity, especially the menu for tutorial/functions may have been messed up by names changes (check the YAML file)
+
+## Revert to CRAN version
+# Move to 1.1.0 (check NEWS and dev_history tips) and push to GitHub (but do not deploy the website or push to CRAN yet)
+
 
 # Ask Bonnie and Yichen for review/testing
 

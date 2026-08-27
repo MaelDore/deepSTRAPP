@@ -246,6 +246,7 @@ if (deepSTRAPP::is_dev_version())
     densityMaps = Ponerinae_cat_3lvl_data_old_calib$densityMaps,
     ace = Ponerinae_cat_3lvl_data_old_calib$ace,
     tip_data = Ponerinae_cat_3lvl_tip_data,
+    nb_simulations = 100,
     trait_data_type = "categorical",
     BAMM_object = Ponerinae_BAMM_object_old_calib,
     # nb_time_steps = nb_time_steps,

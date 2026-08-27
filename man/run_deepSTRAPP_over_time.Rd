@@ -487,6 +487,7 @@ str(Ponerinae_deepSTRAPP_cont_old_calib_0_40, max.level = 1)
  ## Run deepSTRAPP on net diversification rates across time-steps.
  Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40 <- run_deepSTRAPP_over_time(
     densityMaps = Ponerinae_cat_3lvl_data_old_calib$densityMaps,
+    # Inform the nb of simulations to reconstruct state distribution across stochastic maps
     nb_simulations = 100,
     ace = Ponerinae_cat_3lvl_data_old_calib$ace,
     tip_data = Ponerinae_cat_3lvl_tip_data,
@@ -655,6 +656,7 @@ str(Ponerinae_deepSTRAPP_cont_old_calib_0_40, max.level = 1)
  ## Run deepSTRAPP on net diversification rates for time-steps = 0 to 40 Mya.
  Ponerinae_deepSTRAPP_biogeo_old_calib_0_40 <- run_deepSTRAPP_over_time(
    densityMaps = Ponerinae_biogeo_data_old_calib$densityMaps,
+   # Inform the nb of simulations to reconstruct state distribution across stochastic maps
     nb_simulations = 100,
     ace = Ponerinae_biogeo_data_old_calib$ace,
     tip_data = Ponerinae_NO_tip_data,

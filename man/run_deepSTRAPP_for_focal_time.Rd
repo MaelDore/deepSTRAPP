@@ -565,6 +565,7 @@ focal_time <- 10
 
 deepSTRAPP_output <- run_deepSTRAPP_for_focal_time(
    densityMaps = Ponerinae_biogeo_data_old_calib$densityMaps,
+   # Inform the nb of simulations to reconstruct state distribution across stochastic maps
    nb_simulations = 100,
    ace = Ponerinae_biogeo_data_old_calib$ace,
    tip_data = Ponerinae_NO_data,
