@@ -263,7 +263,7 @@
 #'
 #'  ## Load directly outputs from run_deepSTRAPP_over_time()
 #'  Ponerinae_deepSTRAPP_biogeo_old_calib_0_40 <- readRDS(system.file("extdata",
-#'     "Ponerinae_deepSTRAPP_biogeo_calib_0_40.rds", package = "deepSTRAPP"))
+#'     "Ponerinae_deepSTRAPP_biogeo_old_calib_0_40.rds", package = "deepSTRAPP"))
 #'  ## This dataset is only available in development versions installed from GitHub.
 #'  # It is not available in CRAN versions.
 #'  # Use remotes::install_github(repo = "MaelDore/deepSTRAPP") to get the latest development version.
