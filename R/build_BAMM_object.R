@@ -280,9 +280,10 @@ build_BAMM_object <- function (phylo,
   BAMM_posterior_samples_data$MAP_indices <- MAP_detection$indices[[1]]
 
   # Compute mean rates/regimes across MAP samples
-  MAP_BAMM_object <- BAMMtools::getBestShiftConfiguration(BAMM_posterior_samples_data,
-                                                          expectedNumberOfShifts = expectedNumberOfShifts,
-                                                          threshold = MAP_odd_ratio_threshold) # Odd-ratio threshold used to select core-shifts used to compare configurations
+  # MAP_BAMM_object <- BAMMtools::getBestShiftConfiguration(BAMM_posterior_samples_data,
+  MAP_BAMM_object <- getBestShiftConfiguration_fixed(BAMM_posterior_samples_data,
+                                                     expectedNumberOfShifts = expectedNumberOfShifts,
+                                                     threshold = MAP_odd_ratio_threshold) # Odd-ratio threshold used to select core-shifts used to compare configurations
 
   # Reorder elements to fit order in the main BAMM_object
   if ("node.label" %in% names(MAP_BAMM_object))

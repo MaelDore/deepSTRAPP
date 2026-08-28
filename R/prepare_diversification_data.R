@@ -1414,7 +1414,7 @@ prepare_diversification_data <- function (BAMM_install_directory_path,
     # Ignore shifts that have an odd-ratio of marginal posterior probability / prior < 'MAP_odd_ratio_threshold' to avoid noise from non-core shifts
     # Rates are then averaged across all samples with the most frequent shift configuration of core-shifts
 
-    MAP_detection <- BAMMtools::credibleShiftSet(BAMM_posterior_samples_data,
+    MAP_detection <- BAMMtools::credibleShiftSet(ephy = BAMM_posterior_samples_data,
                                                  expectedNumberOfShifts = expectedNumberOfShifts,
                                                  threshold = MAP_odd_ratio_threshold,
                                                  set.limit = 0.95)
@@ -1422,9 +1422,10 @@ prepare_diversification_data <- function (BAMM_install_directory_path,
     BAMM_posterior_samples_data$MAP_indices <- MAP_detection$indices[[1]]
 
     # Compute mean rates/regimes across MAP samples
-    MAP_BAMM_object <- BAMMtools::getBestShiftConfiguration(BAMM_posterior_samples_data,
-                                                            expectedNumberOfShifts = expectedNumberOfShifts,
-                                                            threshold = MAP_odd_ratio_threshold) # Odd-ratio threshold used to select core-shifts used to compare configurations
+    # MAP_BAMM_object <- BAMMtools::getBestShiftConfiguration(x = BAMM_posterior_samples_data,
+    MAP_BAMM_object <- getBestShiftConfiguration_fixed(x = BAMM_posterior_samples_data,
+                                                       expectedNumberOfShifts = expectedNumberOfShifts,
+                                                       threshold = MAP_odd_ratio_threshold) # Odd-ratio threshold used to select core-shifts used to compare configurations
 
     # Reorder elements to fit order in the main BAMM_object
     if ("node.label" %in% names(MAP_BAMM_object))
@@ -1532,6 +1533,155 @@ prepare_diversification_data <- function (BAMM_install_directory_path,
 # usethis::use_build_ignore("BAMM_outputs/*")
 
 
+### Internal function replacing BAMMtools::getBestShiftConfiguration()
+
+## Used to aggregate rates/regimes across posterior samples with the Maximum A Posteriori probability (MAP)
+## Fix a potential issue with the way children tips of core-shift nodes are identified
+
+# Source: BAMMtools::getBestShiftConfiguration()
+# Author: Dan Rabosky
+# Fixes: Maël Doré
+
+#' @importFrom ape as.phylo
+#' @importFrom BAMMtools credibleShiftSet subsetEventData getEventData
+
+
+getBestShiftConfiguration_fixed <- function (x,
+                                             expectedNumberOfShifts,
+                                             threshold = 5) # Odd-ratio threshold used to select core-shifts used to compare configurations
+{
+  # Build credibleShiftSet if needed
+  if (inherits(x, "bammdata"))
+  {
+    x <- BAMMtools::credibleShiftSet(x, expectedNumberOfShifts, threshold,
+                                     set.limit = 0.95)
+  } else if (inherits(x, "credibleshiftset")) {
+  } else {
+    stop("Argument x must be of class bammdata or credibleshiftset\n")
+  }
+  class(x) <- "bammdata"
+
+  # Subset the MAP configurations
+  subb <- BAMMtools::subsetEventData(x, index = x$indices[[1]])
+
+  ## Identify location of core-shifts in MAP configurations
+  # Add root among the core-shifts (core-shifts are stored as tipward node ID, not edge ID!)
+  coreshifts <- c((length(x$tip.label) + 1), x$coreshifts)
+  # Get core-shifts as intersection of events recorded in MAP config and all core-shifts
+  coreshifts <- intersect(subb$eventData[[1]]$node, coreshifts)
+
+  # rbind all eventData tables. All have the same location for core-shifts, but they can differ in any other respect:
+  # nb of other shifts, location alogn edges, diversification rates
+  for (i in 1:length(subb$eventData))
+  {
+    if (i == 1)
+    {
+      ff <- subb$eventData[[i]]
+    }
+    ff <- rbind(ff, subb$eventData[[i]])
+  }
+  # Initial vectors for core-shifts
+  xn <- numeric(length(coreshifts))
+  xc <- character(length(coreshifts))
+
+  if (x$type == "diversification")
+  {
+    # Initialize df to record info on core-shifts as in eventData
+    dff <- data.frame(generation = xn, leftchild = xc, rightchild = xc,
+                      abstime = xn, lambdainit = xn, lambdashift = xn,
+                      muinit = xn, mushift = xn, stringsAsFactors = F)
+    for (i in 1:length(coreshifts))
+    {
+      if (coreshifts[i] <= length(x$tip.label))
+      {
+        # Case for a terminal nodes
+        dset <- c(x$tip.label[coreshifts[i]], NA)
+      } else {
+        # Case for internal nodes
+
+        # Here is the issue! This is used to assign left and right children to the edge where the core-shift happens
+        # It is using the first and last tips of the extracted clade to define one left child and one right child
+        # However, this does not work all the time!!!
+
+        # tmp <- ape::extract.clade(as.phylo(x), node = coreshifts[i])
+        # dset <- tmp$tip.label[c(1, length(tmp$tip.label))]
+
+        # Fix: do not use first and last tip from extracted clades to define left and right childs!
+
+        # Get two descending nodes from the core shifts = left and right elements of the partition
+        children_nodes <- phy$edge[phy$edge[, 1] == coreshifts[i], 2]
+
+        # Get one representative tip for each element = left and right children
+        left_child <- get_descendant_tip_label(phy, children_nodes[1])
+        right_child <- get_descendant_tip_label(phy, children_nodes[2])
+        dset <- c(left_child, right_child)
+
+        # Sanity control: does the MRCA method used downstream in getEventData recovered the desired node from the children tips?
+        # stopifnot(ape::getMRCA(phy, dset) == coreshifts[i])
+      }
+
+      # Extract events for the given coreshift
+      tmp2 <- ff[ff$node == coreshifts[i], ]
+
+      # Record children tips
+      dff$leftchild[i] <- dset[1]
+      dff$rightchild[i] <- dset[2]
+
+      # Average location and rates across all MAP samples
+      dff$abstime[i] <- mean(tmp2$time)
+      dff$lambdainit[i] <- mean(tmp2$lam1)
+      dff$lambdashift[i] <- mean(tmp2$lam2)
+      dff$muinit[i] <- mean(tmp2$mu1)
+      dff$mushift[i] <- mean(tmp2$mu2)
+    }
+
+    # Reconstruct BAMM_object with only the mean core-shifts of the MAP configs
+
+    ## This is where the error occurs
+    best_ed <- getEventData(phy = ape::as.phylo(x), eventdata = dff)
+
+  } else if (x$type == "trait") {
+    dff <- data.frame(generation = xn, leftchild = xc, rightchild = xc,
+                      abstime = xn, betainit = xn, betashift = xn, stringsAsFactors = F)
+    for (i in 1:length(coreshifts))
+    {
+      if (coreshifts[i] <= length(x$tip.label))
+      {
+        dset <- c(x$tip.label[coreshifts[i]], NA)
+      } else {
+        ## Same issue for "trait" run
+        # tmp <- ape::extract.clade(as.phylo(x), node = coreshifts[i])
+        # dset <- tmp$tip.label[c(1, length(tmp$tip.label))]
+
+        ## Same fix
+        # Get two descending nodes from the core shifts = left and right elements of the partition
+        children_nodes <- phy$edge[phy$edge[, 1] == coreshifts[i], 2]
+
+        # Get one representative tip for each element = left and right children
+        left_child <- get_descendant_tip_label(phy, children_nodes[1])
+        right_child <- get_descendant_tip_label(phy, children_nodes[2])
+        dset <- c(left_child, right_child)
+
+        # Sanity control: does the MRCA method used downstream in getEventData recovered the desired node from the children tips?
+        # stopifnot(ape::getMRCA(phy, dset) == coreshifts[i])
+
+      }
+      tmp2 <- ff[ff$node == coreshifts[i], ]
+      dff$leftchild[i] <- dset[1]
+      dff$rightchild[i] <- dset[2]
+      dff$abstime[i] <- mean(tmp2$time)
+      dff$betainit[i] <- mean(tmp2$lam1)
+      dff$betashift[i] <- mean(tmp2$lam2)
+    }
+
+    best_ed <- getEventData(as.phylo(x), eventdata = dff,
+                            type = "trait")
+  } else {
+    stop("error in getBestShiftConfiguration; invalid type")
+  }
+  return(best_ed)
+}
+
 
 ### Internal function used to compute mean BAMM_object across a selected set of posterior samples
 
@@ -1540,8 +1690,8 @@ prepare_diversification_data <- function (BAMM_install_directory_path,
 # Source: BAMMtools::getBestShiftConfiguration()
 # Author: Dan Rabosky
 
-#' @importFrom ape as.phylo extract.clade
-#' @importFrom BAMMtools maximumShiftCredibility subsetEventData getEventData
+#' @importFrom ape as.phylo
+#' @importFrom BAMMtools subsetEventData getEventData
 
 get_mean_eventData <- function (BAMM_object, sample_indices)
 {
@@ -1571,11 +1721,28 @@ get_mean_eventData <- function (BAMM_object, sample_indices)
     # Extract most left/right descendant tips of the regime
     if (shifts_tipward_nodes_ID[i] <= length(BAMM_object$tip.label))
     {
+      # Case for a terminal nodes
       dset <- c(BAMM_object$tip.label[shifts_tipward_nodes_ID[i]], NA)
     }
     else {
-      tmp <- ape::extract.clade(ape::as.phylo(BAMM_object), node = shifts_tipward_nodes_ID[i])
-      dset <- tmp$tip.label[c(1, length(tmp$tip.label))]
+      # Case for internal nodes
+
+      # Issue! Using the first and last tips of the extracted clade to define one left child and one right child
+      # However, this does not work all the time!!!
+      # tmp <- ape::extract.clade(ape::as.phylo(BAMM_object), node = shifts_tipward_nodes_ID[i])
+      # dset <- tmp$tip.label[c(1, length(tmp$tip.label))]
+
+      # Fix: do not use first and last tip from extracted clades to define left and right childs!
+
+      # Get two descending nodes from the core shifts = left and right elements of the partition
+      phy <- ape::as.phylo(BAMM_object)
+      children_nodes <- phy$edge[phy$edge[, 1] == shifts_tipward_nodes_ID[i], 2]
+
+      # Get one representative tip for each element = left and right children
+      left_child <- get_descendant_tip_label(phy, children_nodes[1])
+      right_child <- get_descendant_tip_label(phy, children_nodes[2])
+      dset <- c(left_child, right_child)
+
     }
     tmp2 <- ff[ff$node == shifts_tipward_nodes_ID[i], ]
     dff$leftchild[i] <- dset[1]
@@ -1594,3 +1761,18 @@ get_mean_eventData <- function (BAMM_object, sample_indices)
 }
 
 
+### Helper function to quickly go down a tree and extract a representative tip for a given node
+
+# Author: Maël Doré
+
+get_descendant_tip_label <- function(phy, node)
+{
+  # If 'node' is an internal node, keep going
+  # Stop when 'node' is a terminal tip
+  while (node > length(phy$tip.label))
+  {
+    node <- phy$edge[match(node, phy$edge[, 1]), 2]
+  }
+
+  return(phy$tip.label[node])
+}
