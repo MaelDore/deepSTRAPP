@@ -206,6 +206,10 @@
 #'  names(colors_per_levels) <- c("N", "O")
 #'
 #'  \donttest{ # (May take several minutes to run)
+#'
+#'  # Load BioGeoBEARS to use models internally
+#'  library(BioGeoBEARS)
+#'
 #'  ## Run evolutionary models
 #'  Ponerinae_biogeo_data <- prepare_trait_data(
 #'      tip_data = Ponerinae_NO_data,

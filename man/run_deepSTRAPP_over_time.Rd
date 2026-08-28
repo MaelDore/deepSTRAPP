@@ -629,6 +629,10 @@ str(Ponerinae_deepSTRAPP_cont_old_calib_0_40, max.level = 1)
  names(colors_per_ranges) <- c("N", "O")
 
  \donttest{ # (May take several minutes to run)
+
+ # Load BioGeoBEARS to use models internally
+ library(BioGeoBEARS)
+
  ## Run evolutionary models
  Ponerinae_biogeo_data <- prepare_trait_data(
    tip_data = Ponerinae_NO_tip_data,
