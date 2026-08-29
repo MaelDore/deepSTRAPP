@@ -1609,6 +1609,7 @@ getBestShiftConfiguration_fixed <- function (x,
         # Fix: do not use first and last tip from extracted clades to define left and right childs!
 
         # Get two descending nodes from the core shifts = left and right elements of the partition
+        phy <- ape::as.phylo(x)
         children_nodes <- phy$edge[phy$edge[, 1] == coreshifts[i], 2]
 
         # Get one representative tip for each element = left and right children
