@@ -256,7 +256,8 @@ if (deepSTRAPP::is_dev_version())
 
  \donttest{ # (May take several minutes to run)
 
- # Load BioGeoBEARS to use models internally
+ # Load ape and BioGeoBEARS to use models internally
+ library(ape)
  library(BioGeoBEARS)
 
  ## Run evolutionary models

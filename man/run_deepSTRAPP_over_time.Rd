@@ -630,7 +630,8 @@ str(Ponerinae_deepSTRAPP_cont_old_calib_0_40, max.level = 1)
 
  \donttest{ # (May take several minutes to run)
 
- # Load BioGeoBEARS to use models internally
+ # Load ape and BioGeoBEARS to use models internally
+ library(ape)
  library(BioGeoBEARS)
 
  ## Run evolutionary models
