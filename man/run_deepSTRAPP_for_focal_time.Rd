@@ -398,7 +398,7 @@ if (deepSTRAPP::is_dev_version())
  ## Load data
 
  # Load phylogeny
- data(Ponerinae_tree, package = "deepSTRAPP")
+ data(Ponerinae_tree_old_calib, package = "deepSTRAPP")
  # Load trait df
  data(Ponerinae_trait_tip_data, package = "deepSTRAPP")
 
