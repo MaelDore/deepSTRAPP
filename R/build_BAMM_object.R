@@ -261,6 +261,12 @@ build_BAMM_object <- function (phylo,
     BAMM_posterior_samples_data <- BAMM_data_output
   }
 
+  ## Name the tip-level elements with the tip labels
+  # BAMMtools::getEventData() returns $tipStates, $tipLambda, $tipMu, $meanTipLambda and $meanTipMu
+  # unnamed, ordered by tip ID. Naming them makes the mapping to tips explicit, and is required by the
+  # deepSTRAPP functions that match tips by label, such as deepSTRAPP::compute_STRAPP_test_for_focal_time().
+  BAMM_posterior_samples_data <- name_tip_elements(BAMM_posterior_samples_data)
+
   ## Add the expectedNumberOfShifts as information in the output
   BAMM_posterior_samples_data$expectedNumberOfShifts <- expectedNumberOfShifts
 
@@ -298,6 +304,9 @@ build_BAMM_object <- function (phylo,
                                          "eventVectors", "tipStates", "tipLambda", "tipMu", "eventBranchSegs",
                                          "meanTipLambda", "meanTipMu", "type")]
   }
+  ## Name the tip-level elements with the tip labels, as for the main BAMM_object
+  MAP_BAMM_object <- name_tip_elements(MAP_BAMM_object)
+
   class(MAP_BAMM_object) <- "bammdata"
   attr(x = MAP_BAMM_object, which = "order") <- "cladewise"
 
@@ -326,6 +335,9 @@ build_BAMM_object <- function (phylo,
                                          "eventVectors", "tipStates", "tipLambda", "tipMu", "eventBranchSegs",
                                          "meanTipLambda", "meanTipMu", "type")]
   }
+  ## Name the tip-level elements with the tip labels, as for the main BAMM_object
+  MSC_BAMM_object <- name_tip_elements(MSC_BAMM_object)
+
   class(MSC_BAMM_object) <- "bammdata"
   attr(x = MSC_BAMM_object, which = "order") <- "cladewise"
 
@@ -573,4 +585,70 @@ subset_BAMM_object <- function (BAMM_object,
 }
 
 
+## Helper function to name the tip-level elements of a BAMM object ####
 
+#' @title Name the tip-level elements of a BAMM object
+#'
+#' @description Assign tip labels as names to every element of a `"bammdata"` object that holds
+#'   one value per tip: `$tipStates`, `$tipLambda`, `$tipMu`, `$meanTipLambda` and `$meanTipMu`.
+#'
+#'   [BAMMtools::getEventData()] returns those elements unnamed, ordered by tip ID, so that the i-th
+#'   value corresponds to the i-th label in `$tip.label`. Naming them makes the mapping explicit, and
+#'   makes the object directly usable by the deepSTRAPP functions that match tips by label,
+#'   such as [deepSTRAPP::compute_STRAPP_test_for_focal_time()], which requires the names of
+#'   `trait_data_list$trait_data` to match those of `BAMM_object$tipStates`.
+#'
+#'   Elements that are already named are simply overwritten with the same labels, so the function
+#'   is safe to apply to an object that went through
+#'   [deepSTRAPP::update_rates_and_regimes_for_focal_time()].
+#'
+#' @param BAMM_object Object of class `"bammdata"`, or a list holding the same elements.
+#'
+#' @return The input object, with named tip-level elements.
+#'
+#' @author Maël Doré
+#'
+#' @noRd
+#'
+
+name_tip_elements <- function (BAMM_object)
+{
+  tip_labels <- BAMM_object$tip.label
+  nb_tips <- length(tip_labels)
+
+  ## Elements holding one value per tip, in each posterior sample
+  for (element in c("tipStates", "tipLambda", "tipMu"))
+  {
+    if (!is.null(BAMM_object[[element]]))
+    {
+      # Safety check: the element must hold exactly one value per tip
+      element_lengths <- unlist(lapply(X = BAMM_object[[element]], FUN = length))
+      if (any(element_lengths != nb_tips))
+      {
+        stop(paste0("Internal error: 'BAMM_object$",element,"' must hold exactly one value per tip to be named with the tip labels.\n",
+                    "The phylogeny holds ",nb_tips," tips, but the posterior samples hold ",paste(unique(element_lengths), collapse = ", ")," values."))
+      }
+
+      BAMM_object[[element]] <- lapply(X = BAMM_object[[element]],
+                                       FUN = function (x) { names(x) <- tip_labels ; return(x) })
+    }
+  }
+
+  ## Elements holding one value per tip, averaged across posterior samples
+  for (element in c("meanTipLambda", "meanTipMu"))
+  {
+    if (!is.null(BAMM_object[[element]]))
+    {
+      # Safety check: the element must hold exactly one value per tip
+      if (length(BAMM_object[[element]]) != nb_tips)
+      {
+        stop(paste0("Internal error: 'BAMM_object$",element,"' must hold exactly one value per tip to be named with the tip labels.\n",
+                    "The phylogeny holds ",nb_tips," tips, but the element holds ",length(BAMM_object[[element]])," values."))
+      }
+
+      names(BAMM_object[[element]]) <- tip_labels
+    }
+  }
+
+  return(BAMM_object)
+}

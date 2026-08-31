@@ -1403,6 +1403,12 @@ prepare_diversification_data <- function (BAMM_install_directory_path,
     sample_indices <- sample(x = 1:length(BAMM_data_output$eventData), size = nb_posterior_samples)
     BAMM_posterior_samples_data <- BAMMtools::subsetEventData(BAMM_data_output, index = sample_indices)
 
+    ## Name the tip-level elements with the tip labels
+    # BAMMtools::getEventData() returns $tipStates, $tipLambda, $tipMu, $meanTipLambda and $meanTipMu
+    # unnamed, ordered by tip ID. Naming them makes the mapping to tips explicit, and is required by the
+    # deepSTRAPP functions that match tips by label, such as deepSTRAPP::compute_STRAPP_test_for_focal_time().
+    BAMM_posterior_samples_data <- name_tip_elements(BAMM_posterior_samples_data)
+
     ## Add the expectedNumberOfShifts as information in the output
     BAMM_posterior_samples_data$expectedNumberOfShifts <- expectedNumberOfShifts
 
@@ -1440,6 +1446,9 @@ prepare_diversification_data <- function (BAMM_install_directory_path,
                                            "eventVectors", "tipStates", "tipLambda", "tipMu", "eventBranchSegs",
                                            "meanTipLambda", "meanTipMu", "type")]
     }
+    ## Name the tip-level elements with the tip labels, as for the main BAMM_object
+    MAP_BAMM_object <- name_tip_elements(MAP_BAMM_object)
+
     class(MAP_BAMM_object) <- "bammdata"
     attr(x = MAP_BAMM_object, which = "order") <- "cladewise"
 
@@ -1468,6 +1477,9 @@ prepare_diversification_data <- function (BAMM_install_directory_path,
                                            "eventVectors", "tipStates", "tipLambda", "tipMu", "eventBranchSegs",
                                            "meanTipLambda", "meanTipMu", "type")]
     }
+    ## Name the tip-level elements with the tip labels, as for the main BAMM_object
+    MSC_BAMM_object <- name_tip_elements(MSC_BAMM_object)
+
     class(MSC_BAMM_object) <- "bammdata"
     attr(x = MSC_BAMM_object, which = "order") <- "cladewise"
 
