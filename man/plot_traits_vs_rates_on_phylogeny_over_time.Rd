@@ -243,13 +243,13 @@ if (deepSTRAPP::is_dev_version())
  # No overlap in ranges
  table(Ponerinae_binary_range_table$Old_World, Ponerinae_binary_range_table$New_World)
 
- Ponerinae_NO_data <- stats::setNames(object = Ponerinae_binary_range_table$Old_World,
+ Ponerinae_NO_tip_data <- stats::setNames(object = Ponerinae_binary_range_table$Old_World,
                                       nm = Ponerinae_binary_range_table$Taxa)
- Ponerinae_NO_data <- as.character(Ponerinae_NO_data)
- Ponerinae_NO_data[Ponerinae_NO_data == "TRUE"] <- "O" # O = Old World
- Ponerinae_NO_data[Ponerinae_NO_data == "FALSE"] <- "N" # N = New World
- names(Ponerinae_NO_data) <- Ponerinae_binary_range_table$Taxa
- table(Ponerinae_NO_data)
+ Ponerinae_NO_tip_data <- as.character(Ponerinae_NO_tip_data)
+ Ponerinae_NO_tip_data[Ponerinae_NO_tip_data == "TRUE"] <- "O" # O = Old World
+ Ponerinae_NO_tip_data[Ponerinae_NO_tip_data == "FALSE"] <- "N" # N = New World
+ names(Ponerinae_NO_tip_data) <- Ponerinae_binary_range_table$Taxa
+ table(Ponerinae_NO_tip_data)
 
  colors_per_levels <- c("mediumpurple2", "peachpuff2")
  names(colors_per_levels) <- c("N", "O")
@@ -262,7 +262,7 @@ if (deepSTRAPP::is_dev_version())
 
  ## Run evolutionary models
  Ponerinae_biogeo_data <- prepare_trait_data(
-    tip_data = Ponerinae_NO_data,
+    tip_data = Ponerinae_NO_tip_data,
     trait_data_type = "biogeographic",
     phylo = Ponerinae_tree_old_calib,
     evolutionary_models = "DEC+J", # Default = "DEC" for biogeographic
@@ -288,7 +288,7 @@ if (deepSTRAPP::is_dev_version())
  Ponerinae_deepSTRAPP_biogeo_old_calib_0_40 <- run_deepSTRAPP_over_time(
     densityMaps = Ponerinae_biogeo_data_old_calib$densityMaps,
     ace = Ponerinae_biogeo_data_old_calib$ace,
-    tip_data = Ponerinae_ON_tip_data,
+    tip_data = Ponerinae_NO_tip_data,
     nb_simulations = 100,
     trait_data_type = "biogeographic",
     BAMM_object = Ponerinae_BAMM_object_old_calib,
