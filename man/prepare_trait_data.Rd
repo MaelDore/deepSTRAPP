@@ -374,6 +374,11 @@ if (deepSTRAPP::is_dev_version())
  names(colors_per_ranges) <- c("A", "B")
 
  \donttest{ # (May take several minutes to run)
+
+ # Load ape and BioGeoBEARS to use models internally
+ library(ape)
+ library(BioGeoBEARS)
+
  ## Run evolutionary models
  eel_biogeo_data <- prepare_trait_data(
     tip_data = eel_data,
