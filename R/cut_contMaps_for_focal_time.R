@@ -293,7 +293,7 @@ cut_contMap_for_focal_time <- function(contMap, focal_time, keep_tip_labels = TR
 #'  # ----- Example 2: keep_tip_labels = FALSE ----- #
 #'
 #'  # Cut contMap to 20 Mya while NOT keeping tip.label.
-#'  updated_contMaps <- cut_contMaps_for_focal_time(contMap = eel_contMaps,
+#'  updated_contMaps <- cut_contMaps_for_focal_time(contMaps = eel_contMaps,
 #'                                                  focal_time = 20,
 #'                                                  keep_tip_labels = FALSE)
 #'

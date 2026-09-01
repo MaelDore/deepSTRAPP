@@ -146,7 +146,7 @@
 #'  # Plot all histograms
 #'  histogram_ggplots <- plot_histograms_STRAPP_tests_over_time(
 #'     deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_old_calib_0_40,
-#'     display_plot = TRUE,
+#'     display_plots = TRUE,
 #'     # PDF_file_path = "./plot_STRAPP_histogram_overall_test.pdf",
 #'     plot_posthoc_tests = FALSE)
 #'
@@ -246,7 +246,7 @@
 #'
 #'  histogram_ggplots <- plot_histograms_STRAPP_tests_over_time(
 #'     deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40,
-#'     display_plot = TRUE,
+#'     display_plots = TRUE,
 #'     # PDF_file_path = "./plot_STRAPP_histograms_overall_tests.pdf",
 #'     plot_posthoc_tests = FALSE)
 #'
@@ -263,7 +263,7 @@
 #'
 #'  histograms_ggplots_list <- plot_histograms_STRAPP_tests_over_time(
 #'      deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40,
-#'      display_plot = TRUE,
+#'      display_plots = TRUE,
 #'      # PDF_file_path = "./plot_STRAPP_histograms_posthoc_tests.pdf",
 #'      plot_posthoc_tests = TRUE)
 #'

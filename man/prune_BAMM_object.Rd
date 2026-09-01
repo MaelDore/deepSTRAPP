@@ -215,7 +215,7 @@ str(whale_BAMM_object_pruned, 1)
 length(whale_BAMM_object_pruned$tip.label)
 # We have now 87 - 30 = 57 tips in the pruned phylogeny
 
- The tips that were removed are recorded in the pruned BAMM_object
+# The tips that were removed are recorded in the pruned BAMM_object
 head(whale_BAMM_object_pruned$pruned_tip_labels)
 
 # Branches leading to removed tips are dropped, and the remaining branches are merged
