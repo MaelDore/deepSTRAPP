@@ -31,6 +31,7 @@
 #'   If `NULL` (default), the color scale provided `densityMaps` will be used. (For categorical and biogeographic data only)
 #' @param add_ACE_pies Logical. Whether to add pies of posterior probabilities of states/ranges at internal nodes on the mapped phylogeny. Default = `TRUE`.
 #' @param cex_pies Numerical. To adjust the size of the ACE pies. Default = `0.5`.
+#'   Provide the full argument name to avoid ambiguity with the `cex` graphical argument.
 #' @param rate_type A character string specifying the type of diversification rates to plot.
 #'   Must be one of 'speciation', 'extinction' or 'net_diversification' (default).
 #' @param keep_initial_colorbreaks Logical. Whether to keep the same color breaks as used for the most recent focal time. Typically, the current time (t = 0).
@@ -48,6 +49,7 @@
 #' @param adjust_size_to_prob Logical. Whether to scale the size of the symbols showing the location of regime shifts according to
 #'   the marginal shift probability of the shift happening on each location/branch. This will only works if there is an `$MSP_tree` element
 #'   summarizing the marginal shift probabilities across branches in the `BAMM_object`. Default is `TRUE`.
+#'   Provide the full argument name to avoid ambiguity with the `adj` graphical argument.
 #' @param regimes_fill Character string. Set the color of the background of the symbols showing the location of regime shifts.
 #'   Equivalent to the `bg` argument in [BAMMtools::addBAMMshifts()]. Default is `"grey"`.
 #' @param regimes_size Numerical. Set the size of the symbols showing the location of regime shifts.
@@ -298,19 +300,20 @@ plot_traits_vs_rates_on_phylogeny_for_focal_time <- function (
     color_scale = NULL,
     colors_per_levels = NULL,
     add_ACE_pies = TRUE,
-    cex_pies = 0.5,
     rate_type = "net_diversification",
     keep_initial_colorbreaks = FALSE,
     add_regime_shifts = TRUE,
     configuration_type = "MAP", # MAP, MSC, or index
     sample_index = 1,
-    adjust_size_to_prob = TRUE, # To adjust size of points representing regime shifts to their marginal posterior probabilities
     regimes_fill = "grey", # Replace 'bg' argument in BAMMtools::addBAMMshifts()
     regimes_size = 1, # Replace 'cex' argument in BAMMtools::addBAMMshifts()
     regimes_pch = 21, # Replace 'pch' argument in BAMMtools::addBAMMshifts()
     regimes_border_col = "black", # Replace 'col' argument in BAMMtools::addBAMMshifts()
     regimes_border_width = 1, # Replace 'lwd' argument in BAMMtools::addBAMMshifts()
     ..., # To pass down to BAMMtools::plot.bammdata(), BAMMtools::addBAMMshifts(), and par()
+    cex_pies = 0.5, # Placed after ... so any 'cex' argument provided is not captured by 'cex_pies'
+    # To adjust size of points representing regime shifts to their marginal posterior probabilities
+    adjust_size_to_prob = TRUE, # Placed after ... so any 'adj' argument provided is not captured by 'djust_size_to_prob'
     display_plot = TRUE,
     PDF_file_path = NULL)
 {

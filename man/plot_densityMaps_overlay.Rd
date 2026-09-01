@@ -6,11 +6,11 @@
 \usage{
 plot_densityMaps_overlay(
   densityMaps,
+  ace = NULL,
+  ...,
   colors_per_levels = NULL,
   add_ACE_pies = TRUE,
   cex_pies = 0.5,
-  ace = NULL,
-  ...,
   display_plot = TRUE,
   PDF_file_path = NULL
 )
@@ -20,13 +20,6 @@ plot_densityMaps_overlay(
 that contains a phylogenetic tree and associated posterior probability of being in a given state/range along branches.
 Each object (i.e., \code{densityMap}) corresponds to a state/range. If no color is provided for multi-area ranges, they will be interpolated.}
 
-\item{colors_per_levels}{Named character string. To set the colors to use to map each state/range posterior probabilities. Names = states/ranges; values = colors.
-If \code{NULL} (default), the color scale provided in the \code{densityMaps} will be used.}
-
-\item{add_ACE_pies}{Logical. Whether to add pies of posterior probabilities of states/ranges at internal nodes on the mapped phylogeny. Default = \code{TRUE}.}
-
-\item{cex_pies}{Numerical. To adjust the size of the ACE pies. Default = \code{0.5}.}
-
 \item{ace}{Numerical matrix. To provide the posterior probabilities of ancestral states/ranges (characters) estimates (ACE) at internal nodes
 used to plot the ACE pies. Rows are internal nodes. Columns are states/ranges. Values are posterior probabilities of each state per node.
 Typically generated with \code{\link[=prepare_trait_data]{prepare_trait_data()}} in the \verb{$ace} slot.
@@ -34,6 +27,16 @@ If \code{NULL} (default), the ACE are extracted from the \code{densityMaps} with
 and estimated posterior probabilities of ancestral states.}
 
 \item{...}{Additional arguments to pass down to \code{\link[phytools:plotSimmap]{phytools::plotSimmap()}} to control plotting.}
+
+\item{colors_per_levels}{Named character string. To set the colors to use to map each state/range posterior probabilities. Names = states/ranges; values = colors.
+If \code{NULL} (default), the color scale provided in the \code{densityMaps} will be used.
+Provide the full argument name to avoid ambiguity with the \code{col} graphical argument.}
+
+\item{add_ACE_pies}{Logical. Whether to add pies of posterior probabilities of states/ranges at internal nodes on the mapped phylogeny. Default = \code{TRUE}.
+Provide the full argument name to avoid ambiguity with the \code{add} graphical argument.}
+
+\item{cex_pies}{Numerical. To adjust the size of the ACE pies. Default = \code{0.5}.
+Provide the full argument name to avoid ambiguity with the \code{cex} graphical argument.}
 
 \item{display_plot}{Logical. Whether to display the plot generated in the R console. Default is \code{TRUE}.}
 

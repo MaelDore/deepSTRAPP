@@ -245,6 +245,7 @@ unscale_0_1000 <- function (x_scaled, min_val, max_val)
 #' @param color_scale Vector of character string. List of colors to use to build the color scale with [grDevices::colorRampPalette()]
 #'   showing the evolution of the continuous trait. From lowest values to highest values.
 #'   Default (`color_scale = NULL`) is using the color palette recorded in the `contMap$cols` item. If none was provided, the `rainbow()` palette is used.
+#'   Provide the full argument name to avoid ambiguity with the `col` graphical argument.
 #' @param display_plot Logical. Whether to plot the resulting aggregated contMap. Default = `TRUE`.
 #' @param ... List of named arguments. Additional arguments to be passed down to `deepSTRAPP::plot_contMap()`.
 #' @param verbose Logical. Whether to display progress every 100 edges.
@@ -346,9 +347,9 @@ unscale_0_1000 <- function (x_scaled, min_val, max_val)
 
 aggregate_contMaps <- function (contMaps,
                                 fun = "mean", # To select the aggregating function. Options are mean and median
-                                color_scale = NULL,
                                 display_plot = TRUE, # Whether to plot the resulting aggregated contMap
                                 ..., # Arguments to pass down to plot_contMap() if ploting is requested
+                                color_scale = NULL, # Placed after ... so any 'col' argument provided is not captured by 'color_scale'
                                 verbose = TRUE) # Whether to display progress every 1000 edges
 {
   ### Check input validity

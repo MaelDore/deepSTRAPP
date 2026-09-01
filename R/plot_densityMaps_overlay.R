@@ -12,8 +12,11 @@
 #'   Each object (i.e., `densityMap`) corresponds to a state/range. If no color is provided for multi-area ranges, they will be interpolated.
 #' @param colors_per_levels Named character string. To set the colors to use to map each state/range posterior probabilities. Names = states/ranges; values = colors.
 #'   If `NULL` (default), the color scale provided in the `densityMaps` will be used.
+#'   Provide the full argument name to avoid ambiguity with the `col` graphical argument.
 #' @param add_ACE_pies Logical. Whether to add pies of posterior probabilities of states/ranges at internal nodes on the mapped phylogeny. Default = `TRUE`.
+#'   Provide the full argument name to avoid ambiguity with the `add` graphical argument.
 #' @param cex_pies Numerical. To adjust the size of the ACE pies. Default = `0.5`.
+#'   Provide the full argument name to avoid ambiguity with the `cex` graphical argument.
 #' @param ace Numerical matrix. To provide the posterior probabilities of ancestral states/ranges (characters) estimates (ACE) at internal nodes
 #'   used to plot the ACE pies. Rows are internal nodes. Columns are states/ranges. Values are posterior probabilities of each state per node.
 #'   Typically generated with [deepSTRAPP::prepare_trait_data()] in the `$ace` slot.
@@ -89,11 +92,11 @@
 
 plot_densityMaps_overlay <- function (
     densityMaps,
-    colors_per_levels = NULL,
-    add_ACE_pies = TRUE,
-    cex_pies = 0.5,
     ace = NULL,
     ..., # To allow to pass down arguments in the plotSimmap() function
+    colors_per_levels = NULL, # Placed after ... so any 'col' argument provided is not captured by 'colors_per_levels'
+    add_ACE_pies = TRUE, # Placed after ... so any 'add' argument provided is not captured by 'add_ACE_pies'
+    cex_pies = 0.5, # Placed after ... so any 'cex' argument provided is not captured by 'cex_pies'
     display_plot = TRUE,
     PDF_file_path = NULL)
 {

@@ -6,8 +6,8 @@
 \usage{
 plot_contMap(
   contMap,
-  color_scale = NULL,
   ...,
+  color_scale = NULL,
   display_plot = TRUE,
   PDF_file_path = NULL
 )
@@ -16,11 +16,12 @@ plot_contMap(
 \item{contMap}{List of class \code{"contMap"}, typically generated with \code{\link[=prepare_trait_data]{prepare_trait_data()}},
 that contains a phylogenetic tree and associated ancestral trait estimates mapped along branches in \code{contMap$tree$maps}.}
 
+\item{...}{Additional arguments to pass down to \code{\link[phytools:contMap]{phytools::plot.contMap()}} to control plotting.}
+
 \item{color_scale}{Vector of character string. List of colors to use to build the color scale with \code{\link[grDevices:colorRamp]{grDevices::colorRampPalette()}}
 showing the evolution of a continuous trait. From lowest values to highest values.
-Default (\code{color_scale = NULL}) is using the color palette recorded in the \code{contMap$cols} item. If none was provided, the \code{rainbow()} palette is used.}
-
-\item{...}{Additional arguments to pass down to \code{\link[phytools:contMap]{phytools::plot.contMap()}} to control plotting.}
+Default (\code{color_scale = NULL}) is using the color palette recorded in the \code{contMap$cols} item. If none was provided, the \code{rainbow()} palette is used.
+Provide the full argument name to avoid ambiguity with the \code{col} graphical argument.}
 
 \item{display_plot}{Logical. Whether to display the plot generated in the R console. Default is \code{TRUE}.}
 

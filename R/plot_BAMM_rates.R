@@ -21,6 +21,7 @@
 #'   * `method = "phylogram"` (default) plots the phylogenetic tree using rectangular coordinates.
 #'   * `method = "polar"` plots the phylogenetic tree using polar coordinates.
 #' @param add_regime_shifts Logical. Whether to add the location of regime shifts on the phylogeny (Step 2). Default is `TRUE`.
+#'   Provide the full argument name to avoid ambiguity with the `add` graphical argument.
 #' @param configuration_type A character string specifying how to select the location of regime shifts across posterior samples.
 #'   * `configuration_type = "MAP"`: Use the average locations recorded in posterior samples with the Maximum A Posteriori probability (MAP) configuration.
 #'     This regime shift configuration is the most frequent configuration among the posterior samples (See [BAMMtools::getBestShiftConfiguration()]).
@@ -33,6 +34,7 @@
 #' @param adjust_size_to_prob Logical. Whether to scale the size of the symbols showing the location of regime shifts according to
 #'   the marginal shift probability of the shift happening on each location/branch. This will only works if there is an `$MSP_tree` element
 #'   summarizing the marginal shift probabilities across branches in the `BAMM_object`. Default is `TRUE`.
+#'   Provide the full argument name to avoid ambiguity with the `adj` graphical argument.
 #' @param regimes_fill Character string. Set the color of the background of the symbols showing the location of regime shifts.
 #'   Equivalent to the `bg` argument in [BAMMtools::addBAMMshifts()]. Default is `"grey"`.
 #' @param regimes_size Numerical. Set the size of the symbols showing the location of regime shifts.
@@ -113,16 +115,16 @@
 plot_BAMM_rates <- function (BAMM_object,
                              rate_type = "net_diversification",
                              method = "phylogram",
-                             add_regime_shifts = TRUE,
                              configuration_type = "MAP", # MAP, MSC, or index
                              sample_index = 1,
-                             adjust_size_to_prob = TRUE, # To adjust size of points representing regime shifts to their marginal posterior probabilities
                              regimes_fill = "grey", # Replace 'bg' argument in BAMMtools::addBAMMshifts()
                              regimes_size = 1, # Replace 'cex' argument in BAMMtools::addBAMMshifts()
                              regimes_pch = 21, # Replace 'pch' argument in BAMMtools::addBAMMshifts()
                              regimes_border_col = "black", # Replace 'col' argument in BAMMtools::addBAMMshifts()
                              regimes_border_width = 1, # Replace 'lwd' argument in BAMMtools::addBAMMshifts()
                              ..., # To pass down to BAMMtools::plot.bammdata(), BAMMtools::addBAMMshifts(), and par()
+                             add_regime_shifts = TRUE, # Placed after ... so any 'add' argument provided is not captured by 'add_regime_shifts'
+                             adjust_size_to_prob = TRUE, # Placed after ... so any 'adj' argument provided is not captured by 'adjust_size_to_prob'
                              display_plot = TRUE,
                              PDF_file_path = NULL)
 {

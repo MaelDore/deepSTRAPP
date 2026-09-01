@@ -11,19 +11,19 @@ plot_traits_vs_rates_on_phylogeny_for_focal_time(
   color_scale = NULL,
   colors_per_levels = NULL,
   add_ACE_pies = TRUE,
-  cex_pies = 0.5,
   rate_type = "net_diversification",
   keep_initial_colorbreaks = FALSE,
   add_regime_shifts = TRUE,
   configuration_type = "MAP",
   sample_index = 1,
-  adjust_size_to_prob = TRUE,
   regimes_fill = "grey",
   regimes_size = 1,
   regimes_pch = 21,
   regimes_border_col = "black",
   regimes_border_width = 1,
   ...,
+  cex_pies = 0.5,
+  adjust_size_to_prob = TRUE,
   display_plot = TRUE,
   PDF_file_path = NULL
 )
@@ -46,8 +46,6 @@ If \code{NULL} (default), the color scale provided \code{densityMaps} will be us
 
 \item{add_ACE_pies}{Logical. Whether to add pies of posterior probabilities of states/ranges at internal nodes on the mapped phylogeny. Default = \code{TRUE}.}
 
-\item{cex_pies}{Numerical. To adjust the size of the ACE pies. Default = \code{0.5}.}
-
 \item{rate_type}{A character string specifying the type of diversification rates to plot.
 Must be one of 'speciation', 'extinction' or 'net_diversification' (default).}
 
@@ -69,10 +67,6 @@ This regime shift configuration has the highest product of marginal probabilitie
 \item{sample_index}{Integer. Index of the posterior samples to use to plot the location of regime shifts.
 Used only if \code{configuration_type = index}. Default = \code{1}.}
 
-\item{adjust_size_to_prob}{Logical. Whether to scale the size of the symbols showing the location of regime shifts according to
-the marginal shift probability of the shift happening on each location/branch. This will only works if there is an \verb{$MSP_tree} element
-summarizing the marginal shift probabilities across branches in the \code{BAMM_object}. Default is \code{TRUE}.}
-
 \item{regimes_fill}{Character string. Set the color of the background of the symbols showing the location of regime shifts.
 Equivalent to the \code{bg} argument in \code{\link[BAMMtools:addBAMMshifts]{BAMMtools::addBAMMshifts()}}. Default is \code{"grey"}.}
 
@@ -90,6 +84,14 @@ Equivalent to the \code{lwd} argument in \code{\link[BAMMtools:addBAMMshifts]{BA
 
 \item{...}{Additional graphical arguments to pass down to \code{\link[phytools:contMap]{phytools::plot.contMap()}}, \code{\link[phytools:plotSimmap]{phytools::plotSimmap()}},
 \code{\link[=plot_densityMaps_overlay]{plot_densityMaps_overlay()}}, \code{\link[BAMMtools:plot]{BAMMtools::plot.bammdata()}}, \code{\link[BAMMtools:addBAMMshifts]{BAMMtools::addBAMMshifts()}}, and \code{\link[=par]{par()}}.}
+
+\item{cex_pies}{Numerical. To adjust the size of the ACE pies. Default = \code{0.5}.
+Provide the full argument name to avoid ambiguity with the \code{cex} graphical argument.}
+
+\item{adjust_size_to_prob}{Logical. Whether to scale the size of the symbols showing the location of regime shifts according to
+the marginal shift probability of the shift happening on each location/branch. This will only works if there is an \verb{$MSP_tree} element
+summarizing the marginal shift probabilities across branches in the \code{BAMM_object}. Default is \code{TRUE}.
+Provide the full argument name to avoid ambiguity with the \code{adj} graphical argument.}
 
 \item{display_plot}{Logical. Whether to display the plot generated in the R console. Default is \code{TRUE}.}
 

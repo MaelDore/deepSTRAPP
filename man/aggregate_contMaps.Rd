@@ -7,9 +7,9 @@
 aggregate_contMaps(
   contMaps,
   fun = "mean",
-  color_scale = NULL,
   display_plot = TRUE,
   ...,
+  color_scale = NULL,
   verbose = TRUE
 )
 }
@@ -19,13 +19,14 @@ aggregate_contMaps(
 
 \item{fun}{Character string. Select the aggregating function. Available options are \code{"mean"} and \code{"median"}. Default = \code{"mean"}.}
 
-\item{color_scale}{Vector of character string. List of colors to use to build the color scale with \code{\link[grDevices:colorRamp]{grDevices::colorRampPalette()}}
-showing the evolution of the continuous trait. From lowest values to highest values.
-Default (\code{color_scale = NULL}) is using the color palette recorded in the \code{contMap$cols} item. If none was provided, the \code{rainbow()} palette is used.}
-
 \item{display_plot}{Logical. Whether to plot the resulting aggregated contMap. Default = \code{TRUE}.}
 
 \item{...}{List of named arguments. Additional arguments to be passed down to \code{deepSTRAPP::plot_contMap()}.}
+
+\item{color_scale}{Vector of character string. List of colors to use to build the color scale with \code{\link[grDevices:colorRamp]{grDevices::colorRampPalette()}}
+showing the evolution of the continuous trait. From lowest values to highest values.
+Default (\code{color_scale = NULL}) is using the color palette recorded in the \code{contMap$cols} item. If none was provided, the \code{rainbow()} palette is used.
+Provide the full argument name to avoid ambiguity with the \code{col} graphical argument.}
 
 \item{verbose}{Logical. Whether to display progress every 100 edges.}
 }
