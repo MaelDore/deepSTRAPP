@@ -7,7 +7,7 @@
 ^README\.Rmd$
 ^README\.html$
 ^R/_contMap_commented\.R$
-^R/_verify_prune_BAMM_object.R\.R$
+^R/_verify_prune_BAMM_object\.R$
 ^data-raw$
 ^software/*
 ^BAMM_outputs/*
