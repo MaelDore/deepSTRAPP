@@ -251,7 +251,7 @@ all.equal(whale_BAMM_object_pruned, whale_BAMM_object_kept)
 # ----- Example 3: Prune to retain a single subclade ----- #
 
 # Plot the initial phylogeny to pick the MRCA node of the focal subclade
-plot(as.phylo(whale_BAMM_object), cex = 0.5)
+plot(ape::as.phylo(whale_BAMM_object), cex = 0.5)
 ape::nodelabels()
 
 # Subset BAMM object to focus on node 103 = Odontoceti Infra-order ("toothed whales")

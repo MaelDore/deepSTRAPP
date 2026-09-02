@@ -2939,7 +2939,8 @@ select_best_trait_model_from_geiger <- function (list_model_fits)
 #'  ## Prepare phylo
 #'
 #'  # Set path to BioGeoBEARS directory
-#'  BioGeoBEARS_directory_path = "./BioGeoBEARS_directory/"
+#'  BioGeoBEARS_directory_path = tempfile("BioGeoBEARS_directory_")
+#'  dir.create(BioGeoBEARS_directory_path, recursive = TRUE, showWarnings = FALSE)
 #'
 #'  # Export phylo
 #'  path_to_phylo <- BioGeoBEARS::np(file.path(BioGeoBEARS_directory_path, "phylo.tree"))
