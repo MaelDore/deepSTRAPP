@@ -882,9 +882,9 @@ all.equal(whale_BAMM_object_pruned$meanTipLambda,
 
 par(mfrow = c(1, 2))
 
-plot_BAMM_rates(whale_BAMM_object_subsetted, labels = TRUE, cex = 0.5)
+plot_BAMM_rates(whale_BAMM_object_subsetted, labels = TRUE, cex = 0.5, par.reset = FALSE)
 title("Initial phylogeny")
-plot_BAMM_rates(whale_BAMM_object_pruned, labels = TRUE, cex = 0.5)
+plot_BAMM_rates(whale_BAMM_object_pruned, labels = TRUE, cex = 0.5, par.reset = FALSE)
 title("Pruned phylogeny")
 
 par(mfrow = c(1, 1))
@@ -911,10 +911,10 @@ whale_BAMM_object_pruned <- prune_BAMM_object(
 ## Compare the initial and the pruned phylogeny
 par(mfrow = c(1, 2))
 
-plot_BAMM_rates(whale_BAMM_object_subsetted, labels = TRUE, cex = 0.5)
-# title("Initial phylogeny")
-plot_BAMM_rates(whale_BAMM_object_pruned, labels = TRUE, cex = 0.5)
-# title("Pruned phylogeny")
+plot_BAMM_rates(whale_BAMM_object_subsetted, labels = TRUE, cex = 0.5, par.reset = FALSE)
+title("Initial phylogeny")
+plot_BAMM_rates(whale_BAMM_object_pruned, labels = TRUE, cex = 0.5, par.reset = FALSE)
+title("Pruned phylogeny")
 
 par(mfrow = c(1, 1))
 
