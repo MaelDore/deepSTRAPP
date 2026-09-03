@@ -1,3 +1,169 @@
+###########################################################################################
+##                                                                                       ##
+##   Benchmark: update_rates_and_regimes_for_focal_time(), old vs new implementation      ##
+##                                                                                       ##
+##   Author: Maël Doré                                                                   ##
+##                                                                                       ##
+##   Times both versions, and compares their outputs element by element.                  ##
+##                                                                                       ##
+##   Requires 'update_rates_and_regimes_for_focal_time_old_version()' to be available,     ##
+##   for instance sourced from the previous version of the file.                           ##
+##                                                                                        ##
+###########################################################################################
+
+devtools::load_all(".")   # so that the internal helpers are visible to both versions
+library(phytools)         # the old version calls phytools::getDescendants()
+
+data(Ponerinae_BAMM_object, package = "deepSTRAPP")
+
+focal_time <- 10
+
+## Number of posterior samples used for the benchmark.
+## The old version scales with this, so start small and increase once it looks sane.
+## Set to NULL to use all 1000 samples (slow: this is the whole point of the exercise).
+nb_test_samples <- 100
+
+## Number of times each version is timed. Keep it low, these calls are expensive.
+nb_reps <- 3
+
+
+### 1/ Prepare the input ##################################################################
+
+if (!is.null(nb_test_samples))
+{
+  BAMM_object <- subset_BAMM_object(BAMM_object = Ponerinae_BAMM_object,
+                                    nb_posterior_samples = nb_test_samples,
+                                    seed = 1234)
+} else {
+  BAMM_object <- Ponerinae_BAMM_object
+}
+
+cat(sprintf("\n%d tips, %d posterior samples, focal_time = %g\n\n",
+            length(BAMM_object$tip.label), length(BAMM_object$eventData), focal_time))
+
+
+### 2/ Time both versions #################################################################
+
+## 'verbose' is switched off: printing progress to the console costs time that has nothing
+## to do with the code being compared, and it is not spent equally by both versions.
+run_new <- function ()
+{
+  update_rates_and_regimes_for_focal_time(
+    BAMM_object = BAMM_object, focal_time = focal_time,
+    update_rates = TRUE, update_regimes = TRUE,
+    update_tree = TRUE, update_plot = TRUE,
+    update_all_elements = TRUE, keep_tip_labels = TRUE, verbose = FALSE)
+}
+run_old <- function ()
+{
+  update_rates_and_regimes_for_focal_time_old_version(
+    BAMM_object = BAMM_object, focal_time = focal_time,
+    update_rates = TRUE, update_regimes = TRUE,
+    update_tree = TRUE, update_plot = TRUE,
+    update_all_elements = TRUE, keep_tip_labels = TRUE, verbose = FALSE)
+}
+
+## Versions are alternated, and the order is reversed on every other repetition, so that a
+## slow first call, or memory that fills up as the session goes on, does not favour either one.
+timings <- data.frame(rep = integer(0), version = character(0), elapsed = numeric(0),
+                      stringsAsFactors = FALSE)
+
+for (r in seq_len(nb_reps))
+{
+  order_r <- if (r %% 2 == 1) c("new", "old") else c("old", "new")
+  for (v in order_r)
+  {
+    invisible(gc(verbose = FALSE))   # start each timing from a comparable memory state
+    elapsed <- system.time(output <- if (v == "new") run_new() else run_old())[["elapsed"]]
+    timings <- rbind(timings, data.frame(rep = r, version = v, elapsed = elapsed,
+                                         stringsAsFactors = FALSE))
+    if (v == "new") { output_new <- output } else { output_old <- output }
+    cat(sprintf("  rep %d  %-3s  %8.2f s\n", r, v, elapsed))
+  }
+}
+
+cat("\n---- timings (seconds) ----\n")
+print(aggregate(elapsed ~ version, data = timings,
+                FUN = function (x) c(min = min(x), median = median(x), max = max(x))))
+
+speed_up <- median(timings$elapsed[timings$version == "old"]) /
+            median(timings$elapsed[timings$version == "new"])
+cat(sprintf("\nMedian speed-up: %.1fx\n", speed_up))
+
+if (!is.null(nb_test_samples))
+{
+  cat(sprintf("Extrapolated to 1000 samples: old %.1f min -> new %.1f min per focal time\n",
+              median(timings$elapsed[timings$version == "old"]) / nb_test_samples * 1000 / 60,
+              median(timings$elapsed[timings$version == "new"]) / nb_test_samples * 1000 / 60))
+}
+
+
+### 3/ Compare the outputs ################################################################
+
+## The two versions are NOT expected to agree everywhere.
+## The elements describing the posterior samples must be identical: the new version only
+## replaces repeated phytools::getDescendants() calls by a lookup in a precomputed list.
+## The $MAP_BAMM_object and $MSC_BAMM_object elements may differ: in the old version, the
+## descendants of the MAP/MSC regime nodes were read from the phylogeny AFTER its $edge had
+## been replaced by the cut topology, while the node IDs fed in were still those of the
+## initial phylogeny. The new version reads them from the initial topology throughout.
+
+compare_elements <- function (a, b, elements)
+{
+  for (el in elements)
+  {
+    if (is.null(a[[el]]) & is.null(b[[el]])) { cat(sprintf("  %-22s absent from both\n", el)) ; next }
+    same <- isTRUE(all.equal(a[[el]], b[[el]]))
+    cat(sprintf("  %-22s %s\n", el, ifelse(same, "identical", "*** DIFFERENT ***")))
+  }
+}
+
+cat("\n---- core elements: these MUST be identical ----\n")
+compare_elements(output_new, output_old,
+                 c("edge", "Nnode", "tip.label", "edge.length", "begin", "end",
+                   "downseq", "lastvisit", "numberEvents", "eventData", "eventVectors",
+                   "tipStates", "tipLambda", "tipMu", "eventBranchSegs",
+                   "meanTipLambda", "meanTipMu", "MSP_tree"))
+
+cat("\n---- MAP / MSC: a difference here is the expected effect of the ordering fix ----\n")
+compare_elements(output_new, output_old, c("MAP_BAMM_object", "MSC_BAMM_object"))
+
+## If the MAP object differs, show where, so the change can be judged rather than assumed
+if (!isTRUE(all.equal(output_new$MAP_BAMM_object, output_old$MAP_BAMM_object)))
+{
+  cat("\n  MAP_BAMM_object, element by element:\n")
+  compare_elements(output_new$MAP_BAMM_object, output_old$MAP_BAMM_object,
+                   names(output_new$MAP_BAMM_object))
+  cat("\n  Regimes assigned to tips, new vs old:\n")
+  print(table(new = output_new$MAP_BAMM_object$tipStates[[1]],
+              old = output_old$MAP_BAMM_object$tipStates[[1]]))
+}
+
+#### 4/ Compare plots #####
+
+plot(1:10, type = "n", axes = FALSE, ylab = "", xlab = "")
+plot_BAMM_rates(BAMM_object = output_new)
+plot(1:10, type = "n", axes = FALSE, ylab = "", xlab = "new")
+plot_BAMM_rates(BAMM_object = output_old)
+plot(1:10, type = "n", axes = FALSE, ylab = "", xlab = "old")
+
+plot(1:10, type = "n", axes = FALSE, ylab = "", xlab = "")
+plot_BAMM_rates(BAMM_object = output_new$MAP_BAMM_object, configuration_type = "index")
+plot(1:10, type = "n", axes = FALSE, ylab = "", xlab = "new")
+plot_BAMM_rates(BAMM_object = output_old$MAP_BAMM_object, configuration_type = "index")
+plot(1:10, type = "n", axes = FALSE, ylab = "", xlab = "old")
+
+plot(1:10, type = "n", axes = FALSE, ylab = "", xlab = "")
+plot_BAMM_rates(BAMM_object = output_new$MSC_BAMM_object, configuration_type = "index")
+plot(1:10, type = "n", axes = FALSE, ylab = "", xlab = "new")
+plot_BAMM_rates(BAMM_object = output_old$MSC_BAMM_object, configuration_type = "index")
+plot(1:10, type = "n", axes = FALSE, ylab = "", xlab = "old")
+
+
+
+##### Source code for the old version of the function #####
+
+
 #' @title Update diversification rates/regimes mapped on a phylogeny up to a given time in the past
 #'
 #' @description Updates an object of class `"bammdata"` to obtain the diversification rates/regimes
@@ -33,7 +199,7 @@
 #'   100 BAMM posterior samples updated. Default is `TRUE`.
 #'
 #' @export
-#' @importFrom phytools nodeHeights
+#' @importFrom phytools nodeHeights getDescendants
 #' @importFrom BAMMtools plot.bammdata dtRates
 #'
 #' @details The object of class `"bammdata"` (`BAMM_object`) is cut-off at a specific time in the past
@@ -240,12 +406,12 @@
 # dev.off()
 
 
-update_rates_and_regimes_for_focal_time <- function (BAMM_object, focal_time,
-                                                     update_rates = TRUE, update_regimes = TRUE,
-                                                     update_tree = FALSE, update_plot = FALSE,
-                                                     update_all_elements = FALSE,
-                                                     keep_tip_labels = TRUE,
-                                                     verbose = TRUE)
+update_rates_and_regimes_for_focal_time_old_version <- function (BAMM_object, focal_time,
+                                                                 update_rates = TRUE, update_regimes = TRUE,
+                                                                 update_tree = FALSE, update_plot = FALSE,
+                                                                 update_all_elements = FALSE,
+                                                                 keep_tip_labels = TRUE,
+                                                                 verbose = TRUE)
 {
   ### Check input validity
   {
@@ -343,9 +509,6 @@ update_rates_and_regimes_for_focal_time <- function (BAMM_object, focal_time,
   ## Identify edges present at focal time
   all_edges_df <- identify_edges_at_focal_time(phylo = updated_BAMM_object, focal_time = focal_time, tolerance = 10^-5)
 
-  ## List the descendants of every nodes once, instead for doing it at every iterations of the posterior samples X regimes loop.
-  all_descendants <- get_all_descendants(phylo = updated_BAMM_object)
-
   # # Detect root node ID as the only rootward node that is not also the tipward node of any edge
   # root_node_ID <- updated_BAMM_object$edge[which.min(updated_BAMM_object$edge[, 1] %in% updated_BAMM_object$edge[, 2]), 1]
 
@@ -380,12 +543,8 @@ update_rates_and_regimes_for_focal_time <- function (BAMM_object, focal_time,
 
         tipward_node_ID_j <- eventData_i$node[j] # Nodes are tipward nodes ID of the branch where the regime starts
 
-        # # Get descendant tipward nodes of regime j
-        # regime_nodes_j <- phytools::getDescendants(tree = updated_BAMM_object, node = tipward_node_ID_j)
-
-        # Get descendant tipward nodes of regime j, identified from the precomputed list
-        regime_nodes_j <- all_descendants[[tipward_node_ID_j]]
-
+        # Get descendant tipward nodes of regime j
+        regime_nodes_j <- phytools::getDescendants(tree = updated_BAMM_object, node = tipward_node_ID_j)
         # Remove tipward node of the starting edge
         regime_nodes_j <- setdiff(regime_nodes_j, tipward_node_ID_j)
 
@@ -607,9 +766,6 @@ update_rates_and_regimes_for_focal_time <- function (BAMM_object, focal_time,
       ## Add "phylo" class to be compatible with phytools::getDescendants()
       class(updated_BAMM_object$MAP_BAMM_object) <- unique(c(class(updated_BAMM_object$MAP_BAMM_object), "phylo"))
 
-      # ## List the descendants of every node of the updated topology (No need, since the MAP topology is the same as the main tree)
-      # MAP_descendants <- get_all_descendants(phylo = updated_BAMM_object$MAP_BAMM_object)
-
       ## Use the $MAP_BAMM_object following updates from the main BAMM_object
       updated_BAMM_object$MAP_BAMM_object$edge <- updated_BAMM_object$edge
       updated_BAMM_object$MAP_BAMM_object$Nnode <- updated_BAMM_object$Nnode
@@ -638,11 +794,8 @@ update_rates_and_regimes_for_focal_time <- function (BAMM_object, focal_time,
 
         tipward_node_ID_j <- MAP_eventData$node[j] # Nodes are tipward nodes ID of the branch where the regime starts
 
-        # # Get descendant tipward nodes of regime j
-        # regime_nodes_j <- phytools::getDescendants(tree = updated_BAMM_object$MAP_BAMM_object, node = tipward_node_ID_j)
-
-        # Get descendant tipward nodes of regime j, identified from the precomputed list
-        regime_nodes_j <- all_descendants[[tipward_node_ID_j]]
+        # Get descendant tipward nodes of regime j
+        regime_nodes_j <- phytools::getDescendants(tree = updated_BAMM_object$MAP_BAMM_object, node = tipward_node_ID_j)
 
         # Assign regime ID
         all_edges_df$regime_ID[all_edges_df$tipward_node_ID %in% regime_nodes_j] <- j
@@ -804,9 +957,6 @@ update_rates_and_regimes_for_focal_time <- function (BAMM_object, focal_time,
       ## Add "phylo" class to be compatible with phytools::getDescendants()
       class(updated_BAMM_object$MSC_BAMM_object) <- unique(c(class(updated_BAMM_object$MSC_BAMM_object), "phylo"))
 
-      # ## List the descendants of every node of the updated topology (No need since the MSC topology is the same as the main tree)
-      # MSC_descendants <- get_all_descendants(phylo = updated_BAMM_object$MSC_BAMM_object)
-
       ## Use the $MSC_BAMM_object following updates from the main BAMM_object
       updated_BAMM_object$MSC_BAMM_object$edge <- updated_BAMM_object$edge
       updated_BAMM_object$MSC_BAMM_object$Nnode <- updated_BAMM_object$Nnode
@@ -835,11 +985,8 @@ update_rates_and_regimes_for_focal_time <- function (BAMM_object, focal_time,
 
         tipward_node_ID_j <- MSC_eventData$node[j] # Nodes are tipward nodes ID of the branch where the regime starts
 
-        # # Get descendant tipward nodes of regime j
-        # regime_nodes_j <- phytools::getDescendants(tree = updated_BAMM_object$MAP_BAMM_object, node = tipward_node_ID_j)
-
-        # Get descendant tipward nodes of regime j, identified from the precomputed list
-        regime_nodes_j <- all_descendants[[tipward_node_ID_j]]
+        # Get descendant tipward nodes of regime j
+        regime_nodes_j <- phytools::getDescendants(tree = updated_BAMM_object$MSC_BAMM_object, node = tipward_node_ID_j)
 
         # Assign regime ID
         all_edges_df$regime_ID[all_edges_df$tipward_node_ID %in% regime_nodes_j] <- j
@@ -1077,14 +1224,14 @@ update_rates_and_regimes_for_focal_time <- function (BAMM_object, focal_time,
       if ("node.label" %in% names(updated_BAMM_object$MAP_BAMM_object))
       {
         updated_BAMM_object$MAP_BAMM_object <- updated_BAMM_object$MAP_BAMM_object[c("edge", "Nnode", "tip.label", "edge.length", "node.label",
-            "begin", "end", "downseq", "lastvisit", "numberEvents", "eventData",
-            "eventVectors", "tipStates", "tipLambda", "tipMu", "eventBranchSegs",
-            "meanTipLambda", "meanTipMu", "type", "dtrates", "initial_colorbreaks")]
+                                                                                     "begin", "end", "downseq", "lastvisit", "numberEvents", "eventData",
+                                                                                     "eventVectors", "tipStates", "tipLambda", "tipMu", "eventBranchSegs",
+                                                                                     "meanTipLambda", "meanTipMu", "type", "dtrates", "initial_colorbreaks")]
       } else {
         updated_BAMM_object$MAP_BAMM_object <- updated_BAMM_object$MAP_BAMM_object[c("edge", "Nnode", "tip.label", "edge.length",
-            "begin", "end", "downseq", "lastvisit", "numberEvents", "eventData",
-            "eventVectors", "tipStates", "tipLambda", "tipMu", "eventBranchSegs",
-            "meanTipLambda", "meanTipMu", "type", "dtrates", "initial_colorbreaks")]
+                                                                                     "begin", "end", "downseq", "lastvisit", "numberEvents", "eventData",
+                                                                                     "eventVectors", "tipStates", "tipLambda", "tipMu", "eventBranchSegs",
+                                                                                     "meanTipLambda", "meanTipMu", "type", "dtrates", "initial_colorbreaks")]
       }
       class(updated_BAMM_object$MAP_BAMM_object) <- "bammdata"
       attr(x = updated_BAMM_object$MAP_BAMM_object, which = "order") <- "cladewise"
@@ -1159,49 +1306,4 @@ getRecursiveSequence <- function (phy)
   phy$lastvisit = as.integer(L[[6]])
   return(phy)
 }
-
-
-## Helper function to list the descendants of every node in one tree traversal ####
-
-#' @title List the descendants of every node of a phylogeny
-#'
-#' @description For each node of a phylogeny, returns the IDs of all the nodes and tips descending
-#'   from it, in a single post-order traversal.
-#'
-#'   Typically used to compute once all descendants of a given tree topology and refer to this list
-#'   instead of computing descendants multiple times within a loop, saving computation time.
-#'
-#' @param phylo Object of class `"phylo"`, or any object holding `$edge` and `$Nnode`.
-#'
-#' @return A list indexed by node ID. Each element contains the IDs of the nodes and tips descending from
-#'   that node, as [phytools::getDescendants()] would return them. Tips return `NULL`.
-#'
-#' @importFrom ape reorder.phylo
-#'
-#' @author Maël Doré
-#'
-#' @noRd
-#'
-
-get_all_descendants <- function (phylo)
-{
-  nb_nodes <- max(phylo$edge)
-  descendants <- vector(mode = "list", length = nb_nodes)
-
-  ## The "postorder" ordering guarantees that the descendants of a node are resolved before the node
-  ## itself is reached, so a single pass over the edges is enough
-  postorder_edges <- ape::reorder.phylo(phylo, order = "postorder")$edge
-
-  for (k in seq_len(nrow(postorder_edges)))
-  {
-    # Extract rootward and tipward nodes ID of edge k
-    rootward_node_k <- postorder_edges[k, 1]
-    tipward_node_k <- postorder_edges[k, 2]
-    # Populate descending nodes iteratively by concatenating the descendants of the tipward node already identified, with the rootward node
-    descendants[[rootward_node_k]] <- c(descendants[[rootward_node_k]], tipward_node_k, descendants[[tipward_node_k]])
-  }
-
-  return(descendants)
-}
-
 
