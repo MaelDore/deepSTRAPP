@@ -301,21 +301,33 @@ plot(whale.tree)
 # 87 whale species
 nb_taxa <- length(whale.tree$tip.label)
 
-# Create fake categorical data for the whale example
-whale_tip_cat_data <- c(rep(x = "small", times = 30),
+## For the sake of example, we will pretend we are missing data on 10 species (See section 2.3) 
+
+# Randomly produce missing species 
+set.seed(1234)
+tips_without_data <- sample(whale_BAMM_object$tip.label, size = 10, replace = FALSE)
+tips_with_data <- setdiff(whale.tree$tip.label, tips_without_data)
+
+# Prune the whale phylogeny to keep only species with data
+whale_tree_pruned <- ape::keep.tip(phy = whale.tree, tip = tips_with_data)
+# New pruned phylogeny has 87 - 10 = 77 species
+nb_taxa <- length(whale_tree_pruned$tip.label)
+
+## Create fake categorical data for the whale example with N = 77
+whale_tip_cat_data <- c(rep(x = "small", times = 25),
                         rep(x = "medium", times = 20),
-                        rep(x = "large", times = 37))
+                        rep(x = "large", times = 32))
 table(whale_tip_cat_data)
 
 # Assign species names
 whale_tip_cat_data <- setNames(object = whale_tip_cat_data,
-                               nm = whale.tree$tip.label)
+                               nm = whale_tree_pruned$tip.label)
 head(whale_tip_cat_data)
 
 ## Model trait evolution using an Equal-Rates Mk model
 ?geiger::fitDiscrete()
 
-ER_fit <- geiger::fitDiscrete(phy = whale.tree,
+ER_fit <- geiger::fitDiscrete(phy = whale_tree_pruned,
                               dat = whale_tip_cat_data,
                               model = "ER")
 
@@ -336,7 +348,7 @@ Q_matrix <- phytools::as.Qmatrix(ER_fit)
 
 # This may take several minutes
 whale_simmaps <- phytools::make.simmap(
-   tree = whale.tree,
+   tree = whale_tree_pruned,
    x = whale_tip_cat_data,
    model = "ER",
    nsim = 100,
@@ -403,17 +415,27 @@ plot(whale_densityMaps[[3]])
 
 ```
 ```{r import_cat_eval, eval = TRUE, echo = FALSE}
-# Create fake categorical data for the whale example
-whale_tip_cat_data <- c(rep(x = "small", times = 30),
+
+# Randomly produce missing species 
+set.seed(1234)
+tips_without_data <- sample(whale_BAMM_object$tip.label, size = 10, replace = FALSE)
+tips_with_data <- setdiff(whale.tree$tip.label, tips_without_data)
+
+# Prune the whale phylogeny to keep only species with data
+whale_tree_pruned <- ape::keep.tip(phy = whale.tree, tip = tips_with_data)
+
+
+## Create fake categorical data for the whale example with N = 77
+whale_tip_cat_data <- c(rep(x = "small", times = 25),
                         rep(x = "medium", times = 20),
-                        rep(x = "large", times = 37))
+                        rep(x = "large", times = 32))
 
 # Assign species names
 whale_tip_cat_data <- setNames(object = whale_tip_cat_data,
-                               nm = whale.tree$tip.label)
+                               nm = whale_tree_pruned$tip.label)
 
 ## Model trait evolution using an Equal-Rates Mk model
-ER_fit <- geiger::fitDiscrete(phy = whale.tree,
+ER_fit <- geiger::fitDiscrete(phy = whale_tree_pruned,
                               dat = whale_tip_cat_data,
                               model = "ER")
 
@@ -421,7 +443,7 @@ ER_fit <- geiger::fitDiscrete(phy = whale.tree,
 ## Generate multiple simulations of evolutionary histories
 # conditioned to the tip data and model fit (i.e., continuous stochastic maps)
 whale_simmaps <- phytools::make.simmap(
-   tree = whale.tree,
+   tree = whale_tree_pruned,
    x = whale_tip_cat_data,
    model = "ER",
    nsim = 100,
@@ -767,6 +789,7 @@ knitr::include_graphics("figures/7_Import_external_analyses_1.4.5_Biogeo_density
 
 ?deepSTRAPP::build_BAMM_object()
 ?deepSTRAPP::subset_BAMM_object()
+?deepSTRAPP::prune_BAMM_object()
 
 ## Please note that the 'whale_event_data.txt' file used in this example here is not provided within deepSTRAPP
 
@@ -788,16 +811,84 @@ length(Ponerinae_BAMM_object_old_calib$eventData)
 
 ### 2.2/ Subset the BAMM_object to retain a lower number of posterior samples ####
 
-whale_BAMM_object <- subset_BAMM_object(
+whale_BAMM_object_subsetted <- subset_BAMM_object(
      BAMM_object = whale_BAMM_object,
      nb_posterior_samples = 100,
      seed = 1234)
 
 # Inspect resulting object
-str(whale_BAMM_object, 1)
+str(whale_BAMM_object_subsetted, 1)
 # Check updated number of BAMM posterior samples
-length(whale_BAMM_object$eventData)
+length(whale_BAMM_object_subsetted$eventData)
 # We have now 100 posterior samples in the updated BAMM object
+
+### 2.3/ Prune the BAMM_object to retain a subset of tips ####
+
+## Trait or range data are rarely available for every species of a phylogeny.
+# When they are missing for some taxa, the BAMM_object must be reduced to the taxa that will
+# actually be tested, so that it holds exactly the same tips as the trait data.
+
+## The tips to retain can be defined in three mutually exclusive ways:
+#  * 'tips_to_keep'  = the tips to retain.
+#  * 'tips_to_prune' = the tips to remove.
+#  * 'MRCA_node'     = the internal node subtending the subclade to retain.
+
+# Let's prune the BAMM object so that it retains the same 77 species has
+# the ones in our pruned phylogeny and densityMaps
+
+# Identify the tips to keep
+tips_with_data <- whale_tree_pruned$tip.label
+
+# Prune the already subsetted BAMM object
+whale_BAMM_object_pruned <- prune_BAMM_object(
+    BAMM_object = whale_BAMM_object_subsetted,
+    tips_to_keep = tips_with_data,
+    verbose = TRUE)
+
+# Inspect resulting object
+str(whale_BAMM_object_pruned, 1)
+# Check the updated number of tips
+length(whale_BAMM_object_pruned$tip.label)
+# We have now 87 - 10 = 77 tips in the pruned phylogeny
+
+## All BAMM elements are updated, not just the phylogeny.
+# Removing tips leaves some internal nodes with a single descendant. Those nodes are suppressed,
+# and their parent and child branches are merged into one. Regime shifts that were located on a
+# removed branch are dropped, those located on a merged branch are re-attached to it, and the
+# macroevolutionary regimes are re-indexed accordingly.
+
+# The tips that were removed are recorded in the pruned BAMM_object
+head(whale_BAMM_object_pruned$pruned_tip_labels)
+# Conversion tables relate the pruned phylogeny back to the initial one
+head(whale_BAMM_object_pruned$pruning_nodes_ID_df)
+head(whale_BAMM_object_pruned$pruning_edges_ID_df)
+# Branches that merge several initial branches hold several rows in the edge conversion table
+table(whale_BAMM_object_pruned$pruning_edges_ID_df$nb_merged_edges)
+
+## /!\ Pruning subsets an existing BAMM posterior. It does NOT re-estimate diversification rates.
+# Removing tips changes the incomplete taxon sampling of the phylogeny, but the sampling fractions
+# used during the original BAMM run are not updated, and rates are not inferred again.
+# Pruning is meant to restrict a deepSTRAPP analysis to the taxa for which trait data are available,
+# while keeping the diversification dynamics inferred on the full phylogeny.
+# If you need rates estimated for a specific set of taxa, run a dedicated BAMM analysis on that
+# subset with appropriate sampling fractions. See [deepSTRAPP::prepare_diversification_data()].
+
+## Diversification rates estimated at the retained tips are left untouched by the pruning
+retained_tips <- match(whale_BAMM_object_pruned$tip.label, whale_BAMM_object$tip.label)
+all.equal(whale_BAMM_object_pruned$meanTipLambda,
+          whale_BAMM_object$meanTipLambda[retained_tips])
+
+## Compare the mean BAMM rates before and after pruning
+
+par(mfrow = c(1, 2))
+
+plot_BAMM_rates(whale_BAMM_object_subsetted, labels = TRUE, cex = 0.5)
+title("Initial phylogeny")
+plot_BAMM_rates(whale_BAMM_object_pruned, labels = TRUE, cex = 0.5)
+title("Pruned phylogeny")
+
+par(mfrow = c(1, 1))
+
 
 ```
 ```{r import_BAMM_object_eval, eval = is_dev_version(), echo = FALSE}
@@ -806,10 +897,32 @@ length(whale_BAMM_object$eventData)
 data(whale_BAMM_object, package = "deepSTRAPP")
 
 ## Subset BAMM_object
-whale_BAMM_object <- subset_BAMM_object(
+whale_BAMM_object_subsetted <- subset_BAMM_object(
   BAMM_object = whale_BAMM_object,
   nb_posterior_samples = 100,
   seed = 1234)
+
+## Prune BAMM_object
+whale_BAMM_object_pruned <- prune_BAMM_object(
+  BAMM_object = whale_BAMM_object,
+  tips_to_keep = whale_tree_pruned$tip.label,
+  verbose = FALSE)
+
+## Compare the initial and the pruned phylogeny
+par(mfrow = c(1, 2))
+
+plot_BAMM_rates(whale_BAMM_object_subsetted, labels = TRUE, cex = 0.5)
+# title("Initial phylogeny")
+plot_BAMM_rates(whale_BAMM_object_pruned, labels = TRUE, cex = 0.5)
+# title("Pruned phylogeny")
+
+par(mfrow = c(1, 1))
+
+```
+```{r import_BAMM_object_CRAN, eval = !is_dev_version(), echo = FALSE, out.width = "100%"}
+
+# Plot pre-rendered graph
+knitr::include_graphics("figures/7_Import_external_analyses_2.3_Pruned_BAMM_object.PNG")
 
 ```
 
@@ -820,21 +933,23 @@ whale_BAMM_object <- subset_BAMM_object(
 # the same way we would have if they were created directly using the dedicated [deepSTRAPP::prepare_trait_data()] 
 # and [deepSTRAPP::prepare_diversification_data()] functions.
 
-## Here is an example using the newly created 'densityMaps' object summarizing the ancestral characters of whales
-# combined with our newly subsetted 'BAMM_object' build from the output from an external BAMM run.
+## Here is an example using the 'densityMaps' object summarizing the ancestral characters of whales,
+# combined with the 'BAMM_object' built from the output of an external BAMM run.
+# Both were subsetted and pruned in sections 2.2 to 2.4, so that they describe the same 57 species,
+# and the same 100 BAMM posterior samples.
 
 # Set focal time to 5 Mya
 focal_time <- 5
 
 ## Run deepSTRAPP on net diversification rates for focal time = 5 Mya.
 deepSTRAPP_output <- run_deepSTRAPP_for_focal_time( 
-      densityMaps = whale_densityMaps,
+      densityMaps = whale_densityMaps_pruned,
       # Inform the nb of simulations to reconstruct
       # state distribution across dummy stochastic maps
       nb_simulations = 100,
       trait_data_type = "categorical",
       rate_type = "net_diversification",
-      BAMM_object = whale_BAMM_object,
+      BAMM_object = whale_BAMM_object_pruned,
       focal_time = focal_time,
       seed = 1,
       uncertainty_strategy = "paired",
@@ -882,13 +997,13 @@ focal_time <- 5
 
 ## Run deepSTRAPP on net diversification rates for focal time = 5 Mya.
 deepSTRAPP_output <- run_deepSTRAPP_for_focal_time( 
-      densityMaps = whale_densityMaps,
+      densityMaps = whale_densityMaps_pruned,
       # Inform the nb of simulations to reconstruct
       # state distribution across dummy stochastic maps
       nb_simulations = 100,
       trait_data_type = "categorical",
       rate_type = "net_diversification",
-      BAMM_object = whale_BAMM_object,
+      BAMM_object = whale_BAMM_object_pruned,
       focal_time = focal_time,
       seed = 1,
       uncertainty_strategy = "paired",
