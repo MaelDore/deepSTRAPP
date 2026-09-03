@@ -343,6 +343,9 @@ update_rates_and_regimes_for_focal_time <- function (BAMM_object, focal_time,
   ## Identify edges present at focal time
   all_edges_df <- identify_edges_at_focal_time(phylo = updated_BAMM_object, focal_time = focal_time, tolerance = 10^-5)
 
+  ## List the descendants of every nodes once, instead for doing it at every iterations of the posterior samples X regimes loop.
+  all_descendants <- get_all_descendants(phylo = updated_BAMM_object)
+
   # # Detect root node ID as the only rootward node that is not also the tipward node of any edge
   # root_node_ID <- updated_BAMM_object$edge[which.min(updated_BAMM_object$edge[, 1] %in% updated_BAMM_object$edge[, 2]), 1]
 
@@ -377,8 +380,12 @@ update_rates_and_regimes_for_focal_time <- function (BAMM_object, focal_time,
 
         tipward_node_ID_j <- eventData_i$node[j] # Nodes are tipward nodes ID of the branch where the regime starts
 
-        # Get descendant tipward nodes of regime j
-        regime_nodes_j <- phytools::getDescendants(tree = updated_BAMM_object, node = tipward_node_ID_j)
+        # # Get descendant tipward nodes of regime j
+        # regime_nodes_j <- phytools::getDescendants(tree = updated_BAMM_object, node = tipward_node_ID_j)
+
+        # Get descendant tipward nodes of regime j, identified from the precomputed list
+        regime_nodes_j <- all_descendants[[tipward_node_ID_j]]
+
         # Remove tipward node of the starting edge
         regime_nodes_j <- setdiff(regime_nodes_j, tipward_node_ID_j)
 
@@ -600,6 +607,9 @@ update_rates_and_regimes_for_focal_time <- function (BAMM_object, focal_time,
       ## Add "phylo" class to be compatible with phytools::getDescendants()
       class(updated_BAMM_object$MAP_BAMM_object) <- unique(c(class(updated_BAMM_object$MAP_BAMM_object), "phylo"))
 
+      # ## List the descendants of every node of the updated topology (No need, since the MAP topology is the same as the main tree)
+      # MAP_descendants <- get_all_descendants(phylo = updated_BAMM_object$MAP_BAMM_object)
+
       ## Use the $MAP_BAMM_object following updates from the main BAMM_object
       updated_BAMM_object$MAP_BAMM_object$edge <- updated_BAMM_object$edge
       updated_BAMM_object$MAP_BAMM_object$Nnode <- updated_BAMM_object$Nnode
@@ -628,8 +638,11 @@ update_rates_and_regimes_for_focal_time <- function (BAMM_object, focal_time,
 
         tipward_node_ID_j <- MAP_eventData$node[j] # Nodes are tipward nodes ID of the branch where the regime starts
 
-        # Get descendant tipward nodes of regime j
-        regime_nodes_j <- phytools::getDescendants(tree = updated_BAMM_object$MAP_BAMM_object, node = tipward_node_ID_j)
+        # # Get descendant tipward nodes of regime j
+        # regime_nodes_j <- phytools::getDescendants(tree = updated_BAMM_object$MAP_BAMM_object, node = tipward_node_ID_j)
+
+        # Get descendant tipward nodes of regime j, identified from the precomputed list
+        regime_nodes_j <- all_descendants[[tipward_node_ID_j]]
 
         # Assign regime ID
         all_edges_df$regime_ID[all_edges_df$tipward_node_ID %in% regime_nodes_j] <- j
@@ -791,6 +804,9 @@ update_rates_and_regimes_for_focal_time <- function (BAMM_object, focal_time,
       ## Add "phylo" class to be compatible with phytools::getDescendants()
       class(updated_BAMM_object$MSC_BAMM_object) <- unique(c(class(updated_BAMM_object$MSC_BAMM_object), "phylo"))
 
+      # ## List the descendants of every node of the updated topology (No need since the MSC topology is the same as the main tree)
+      # MSC_descendants <- get_all_descendants(phylo = updated_BAMM_object$MSC_BAMM_object)
+
       ## Use the $MSC_BAMM_object following updates from the main BAMM_object
       updated_BAMM_object$MSC_BAMM_object$edge <- updated_BAMM_object$edge
       updated_BAMM_object$MSC_BAMM_object$Nnode <- updated_BAMM_object$Nnode
@@ -819,8 +835,11 @@ update_rates_and_regimes_for_focal_time <- function (BAMM_object, focal_time,
 
         tipward_node_ID_j <- MSC_eventData$node[j] # Nodes are tipward nodes ID of the branch where the regime starts
 
-        # Get descendant tipward nodes of regime j
-        regime_nodes_j <- phytools::getDescendants(tree = updated_BAMM_object$MSC_BAMM_object, node = tipward_node_ID_j)
+        # # Get descendant tipward nodes of regime j
+        # regime_nodes_j <- phytools::getDescendants(tree = updated_BAMM_object$MAP_BAMM_object, node = tipward_node_ID_j)
+
+        # Get descendant tipward nodes of regime j, identified from the precomputed list
+        regime_nodes_j <- all_descendants[[tipward_node_ID_j]]
 
         # Assign regime ID
         all_edges_df$regime_ID[all_edges_df$tipward_node_ID %in% regime_nodes_j] <- j
@@ -1140,3 +1159,49 @@ getRecursiveSequence <- function (phy)
   phy$lastvisit = as.integer(L[[6]])
   return(phy)
 }
+
+
+## Helper function to list the descendants of every node in one tree traversal ####
+
+#' @title List the descendants of every node of a phylogeny
+#'
+#' @description For each node of a phylogeny, returns the IDs of all the nodes and tips descending
+#'   from it, in a single post-order traversal.
+#'
+#'   Typically used to compute once all descendants of a given tree topology and refer to this list
+#'   instead of computing descendants multiple times within a loop, saving computation time.
+#'
+#' @param phylo Object of class `"phylo"`, or any object holding `$edge` and `$Nnode`.
+#'
+#' @return A list indexed by node ID. Each element contains the IDs of the nodes and tips descending from
+#'   that node, as [phytools::getDescendants()] would return them. Tips return `NULL`.
+#'
+#' @importFrom ape reorder.phylo
+#'
+#' @author Maël Doré
+#'
+#' @noRd
+#'
+
+get_all_descendants <- function (phylo)
+{
+  nb_nodes <- max(phylo$edge)
+  descendants <- vector(mode = "list", length = nb_nodes)
+
+  ## The "postorder" ordering guarantees that the descendants of a node are resolved before the node
+  ## itself is reached, so a single pass over the edges is enough
+  postorder_edges <- ape::reorder.phylo(phylo, order = "postorder")$edge
+
+  for (k in seq_len(nrow(postorder_edges)))
+  {
+    # Extract rootward and tipward nodes ID of edge k
+    rootward_node_k <- postorder_edges[k, 1]
+    tipward_node_k <- postorder_edges[k, 2]
+    # Populate descending nodes iteratively by concatenating the descendants of the tipward node already identified, with the rootward node
+    descendants[[rootward_node_k]] <- c(descendants[[rootward_node_k]], tipward_node_k, descendants[[tipward_node_k]])
+  }
+
+  return(descendants)
+}
+
+
