@@ -158,6 +158,7 @@ Most Recent Common Ancestor (MRCA) of the retained tips. The macroevolutionary r
 the branch subtending that MRCA becomes the new background/root regime, and its rate parameters are
 re-anchored on the new root age (the rates occurring at any given time along the retained branches are unchanged,
 only the time of reference at which the initial rates are recorded is shifted).
+The time shift from the initial root age to the new MRCA age is recorded in \verb{$pruning_root_shift}.
 
 This function also preserves and updates the additional deepSTRAPP elements:
 \itemize{

@@ -46,6 +46,7 @@
 #' @param regimes_border_width Numerical. Set the width of the border of the symbols showing the location of regime shifts.
 #'   Equivalent to the `lwd` argument in [BAMMtools::addBAMMshifts()]. Default is `1`.
 #' @param ... Additional graphical arguments to pass down to [BAMMtools::plot.bammdata()], [BAMMtools::addBAMMshifts()], and [par()].
+#'   Among them, `par.reset` defaults to `FALSE` to allow the plot to be annotated afterwards.
 #' @param display_plot Logical. Whether to display the plot generated in the R console. Default is `TRUE`.
 #' @param PDF_file_path Character string. If provided, the plot will be saved in a PDF file following the path provided here. The path must end with ".pdf".
 #'
@@ -198,10 +199,18 @@ plot_BAMM_rates <- function (BAMM_object,
     }
   }
 
-  ## Save initial par() and reassign them on exit
-  oldpar <- par(no.readonly = TRUE)
-  oldpar$new <- NULL # Do not include this parameter to avoid warnings
-  on.exit(par(oldpar))
+  # ## Save initial par() and reassign them on exit
+  # oldpar <- par(no.readonly = TRUE)
+  # oldpar$new <- NULL # Do not include this parameter to avoid warnings
+  # on.exit(par(oldpar))
+
+  ## Not needed here as the function does not set any graphical parameter itself:
+  # everything passed through '...' is forwarded to [BAMMtools::plot.bammdata()]
+  # and [BAMMtools::addBAMMshifts()], which applies and manages them.
+
+  # Restore only the graphical parameters that needs to be restored
+  oldpar <- list(mar = par("mar"))
+  on.exit(par(oldpar), add = TRUE)
 
   ## Convert 'rate_type' into 'spex'
   if (rate_type == "net_diversification") { spex <- "netdiv" }
@@ -239,7 +248,10 @@ plot_BAMM_rates <- function (BAMM_object,
   if ("breaksmethod" %in% names(add_args_for_plot)) { breaksmethod <- add_args_for_plot$breaksmethod } else { breaksmethod <- "linear" }
   if ("color.interval" %in% names(add_args_for_plot)) { color.interval <- add_args_for_plot$color.interval } else { color.interval <- NULL }
   if ("JenksSubset" %in% names(add_args_for_plot)) { JenksSubset <- add_args_for_plot$JenksSubset } else { JenksSubset <- 20000 }
-  if ("par.reset" %in% names(add_args_for_plot)) { par.reset <- add_args_for_plot$par.reset } else { par.reset <- TRUE } # Set to TRUE to avoid affecting next plots
+  # 'par.reset' is passed down to [BAMMtools::plot.bammdata()] and [deepSTRAPP:::addBAMMshifts_custom()].
+  # Both restore a full par(no.readonly = TRUE) snapshot when it is TRUE, which prevent annotation and breaks faceting.
+  # Thus, the default behavior is to not restore all par() parameters
+  if ("par.reset" %in% names(add_args_for_plot)) { par.reset <- add_args_for_plot$par.reset } else { par.reset <- FALSE }
   if ("direction" %in% names(add_args_for_plot)) { direction <- add_args_for_plot$direction } else { direction <- "rightwards" }
 
   ## Display plot if requested
@@ -266,7 +278,7 @@ plot_BAMM_rates <- function (BAMM_object,
       add_args <- list(...)
       add_args_for_addBAMMshifts <- add_args[names(add_args) %in% args_names_for_addBAMMshifts]
       if ("shiftnodes" %in% names(add_args_for_addBAMMshifts)) { shiftnodes <- add_args_for_addBAMMshifts$shiftnodes } else { shiftnodes <- NULL }
-      if ("par.reset" %in% names(add_args_for_addBAMMshifts)) { par.reset <- add_args_for_addBAMMshifts$par.reset } else { par.reset <- TRUE }
+      if ("par.reset" %in% names(add_args_for_addBAMMshifts)) { par.reset <- add_args_for_addBAMMshifts$par.reset } else { par.reset <- FALSE }
       add_args_for_par <- add_args_for_par[!(names(add_args_for_par) %in% c("bg", "cex", "pch", "col", "lwd"))]
 
       # Provide Marginal Shift Probabilities to adjust size if requested
@@ -398,7 +410,7 @@ plot_BAMM_rates <- function (BAMM_object,
       add_args <- list(...)
       add_args_for_addBAMMshifts <- add_args[names(add_args) %in% args_names_for_addBAMMshifts]
       if ("shiftnodes" %in% names(add_args_for_addBAMMshifts)) { shiftnodes <- add_args_for_addBAMMshifts$shiftnodes } else { shiftnodes <- NULL }
-      if ("par.reset" %in% names(add_args_for_addBAMMshifts)) { par.reset <- add_args_for_addBAMMshifts$par.reset } else { par.reset <- TRUE }
+      if ("par.reset" %in% names(add_args_for_addBAMMshifts)) { par.reset <- add_args_for_addBAMMshifts$par.reset } else { par.reset <- FALSE }
       add_args_for_par <- add_args_for_par[!(names(add_args_for_par) %in% c("bg", "cex", "pch", "col", "lwd"))]
 
       # Provide Marginal Shift Probabilities to adjust size if requested
