@@ -46,7 +46,12 @@
 #' @param regimes_border_width Numerical. Set the width of the border of the symbols showing the location of regime shifts.
 #'   Equivalent to the `lwd` argument in [BAMMtools::addBAMMshifts()]. Default is `1`.
 #' @param ... Additional graphical arguments to pass down to [BAMMtools::plot.bammdata()], [BAMMtools::addBAMMshifts()], and [par()].
-#'   Among them, `par.reset` defaults to `FALSE` to allow the plot to be annotated afterwards.
+#'   Among them, `par.reset` is ignored, with a message: it would make [BAMMtools::plot.bammdata()]
+#'   restore a full par() snapshot, discarding the coordinate system of the phylogeny and rewinding
+#'   the panel counter of a multi-panel layout. Graphical parameters are instead restored by
+#'   `plot_BAMM_rates()` when it exits: every parameter the call actually changed is put back, except
+#'   those describing the plot itself, which are kept so that the phylogeny can be annotated
+#'   afterwards with for instance [graphics::abline()] or [graphics::title()], as in the examples.
 #' @param display_plot Logical. Whether to display the plot generated in the R console. Default is `TRUE`.
 #' @param PDF_file_path Character string. If provided, the plot will be saved in a PDF file following the path provided here. The path must end with ".pdf".
 #'
@@ -90,11 +95,14 @@
 #'                 add_regime_shifts = TRUE,
 #'                 configuration_type = "MAP",
 #'                 regimes_size = 3, bg = "black")
+#' title("Overall mean - MAP shift config")
+#'
 #' ## Plot overall mean rates with MSC configuration for regime shifts
 #' # (rates are averaged across all posterior samples)
 #' plot_BAMM_rates(whale_BAMM_object, add_regime_shifts = TRUE,
 #'                 configuration_type = "MSC",
 #'                 regimes_size = 3, bg = "black")
+#' title("Overall mean - MSC shift config")
 #'
 #' ## Plot mean MAP rates with regime shifts
 #' # (rates are averaged only across MAP samples)
@@ -102,7 +110,9 @@
 #'                 add_regime_shifts = TRUE,
 #'                 configuration_type = "index",
 #'                 # Set to index to use the regime shift location from MAP configuration
-#'                 regimes_size = 3, bg = "black")
+#'                 regimes_size = 3, bg = "black")*
+#' title("MAP mean - MAP shift config")
+#'
 #' ## Plot mean MSC rates with regime shifts
 #' # (rates averaged only across MSC samples)
 #' plot_BAMM_rates(whale_BAMM_object$MSC_BAMM_object, # Use the MSC object to plot mean MSC rates
@@ -110,6 +120,7 @@
 #'                 configuration_type = "index",
 #'                 # Set to index to use the regime shift data from MSC configuration
 #'                 regimes_size = 3, bg = "black")
+#' title("MSC mean - MSC shift config")
 #'
 
 
@@ -206,7 +217,37 @@ plot_BAMM_rates <- function (BAMM_object,
   if (rate_type == "speciation") { spex <- "s" }
   if (rate_type == "extinction") { spex <- "e" }
 
-  ## Filter list of additional arguments to avoid warnings from par()
+
+  ## Restore, on exit, every graphical parameter that this call changed
+  # Everything is restored, whether it was set by this function, by the BAMMtools functions it
+  # calls, or passed by the user through '...'. The only exceptions are the parameters describing
+  # the plot that was just drawn: restoring those rewinds the panel counter of a multi-panel
+  # layout, and discards the coordinate system of the phylogeny, which makes it impossible to
+  # annotate the plot afterwards and breaks multi-facetting.
+
+  # List graphical parameters describing the plot that now exists (Never to restore as they describe the current plot state)
+  plot_state_par_names <- c("usr", "plt", "fig", "mfg", "new", "xaxp", "yaxp", "pin")
+  # Save current graphic parameters
+  entry_par <- par(no.readonly = TRUE)
+
+  # On exit, compare changes in par and restore the ones that have change, but the plot_state_par
+  on.exit({
+    # List par on exit
+    exit_par <- par(no.readonly = TRUE)
+    # Identify differences with initial parameters
+    changed_par_names <- names(entry_par)[!vapply(X = names(entry_par),
+                                                  FUN = function (x) { isTRUE(all.equal(entry_par[[x]], exit_par[[x]])) },
+                                                  FUN.VALUE = logical(1))]
+    # Exclude plot state parameters from the restore
+    changed_par_names <- setdiff(changed_par_names, plot_state_par_names)
+    # Restore parameters if any has changed
+    if (length(changed_par_names) > 0)
+    {
+      par(entry_par[changed_par_names])
+    }
+  }, add = TRUE)
+
+  ## Filter list of additional arguments and distribute across subfunctions to avoid warnings from par()
   add_args <- list(...)
   args_names_for_plot <- c("tau", "xlim", "ylim", "vtheta", "rbf", "show", "labels", "legend",
                            "spex", "lwd", "cex", "pal", "mask", "mask.color", "colorbreaks", "logcolor",
@@ -216,33 +257,6 @@ plot_BAMM_rates <- function (BAMM_object,
 
   add_args_for_plot <- add_args[names(add_args) %in% args_names_for_plot]
   add_args_for_par <- add_args[!(names(add_args) %in% c(args_names_for_plot, args_names_for_addBAMMshifts))]
-
-  ## Restore the graphical parameters that this call may leave changed
-  # Two sources feed par() here, and with 'par.reset = FALSE' neither is restored by BAMMtools:
-  #  * '$mar', which [BAMMtools::plot.bammdata()] widens to make room for the legend.
-  #  * every graphical parameter the user passed through '...', gathered in 'add_args_for_par',
-  #    and forwarded to par() by [BAMMtools::plot.bammdata()].
-  # Parameters describing the plot that was just drawn are deliberately excluded: restoring them
-  # rewinds the panel counter of a multi-panel layout, and discards the coordinate system of the
-  # phylogeny, which makes the plot impossible to annotate afterwards.
-
-  # List graphical parameters describing the plot that now exists (Never to restore as they describe the current plot state)
-  # If restores, annotation and facetting are broken
-  plot_state_par_names <- c("usr", "plt", "fig", "mfg", "new", "xaxp", "yaxp", "pin")
-  # List graphical parameters to restore if requested (also affect the next plot)
-  par_names_to_restore <- setdiff(unique(c("mar", names(add_args_for_par))), plot_state_par_names)
-  # Keep only actual, settable graphical parameters
-  par_names_to_restore <- intersect(par_names_to_restore, names(par(no.readonly = TRUE)))
-
-  if (length(par_names_to_restore) > 0)
-  {
-    # Retrieve current par values
-    oldpar <- lapply(X = par_names_to_restore, FUN = par)
-    # Save them as a named list
-    names(oldpar) <- par_names_to_restore
-    # Restore on exit
-    on.exit(par(oldpar), add = TRUE)
-  }
 
   ## Retrieve named arguments for plot.bammdata
   if ("tau" %in% names(add_args_for_plot)) { tau <- add_args_for_plot$tau } else { tau <- 0.01 }
@@ -264,11 +278,20 @@ plot_BAMM_rates <- function (BAMM_object,
   if ("breaksmethod" %in% names(add_args_for_plot)) { breaksmethod <- add_args_for_plot$breaksmethod } else { breaksmethod <- "linear" }
   if ("color.interval" %in% names(add_args_for_plot)) { color.interval <- add_args_for_plot$color.interval } else { color.interval <- NULL }
   if ("JenksSubset" %in% names(add_args_for_plot)) { JenksSubset <- add_args_for_plot$JenksSubset } else { JenksSubset <- 20000 }
+  if ("direction" %in% names(add_args_for_plot)) { direction <- add_args_for_plot$direction } else { direction <- "rightwards" }
+
+  ## Deal with par.reset
   # 'par.reset' is passed down to [BAMMtools::plot.bammdata()] and [deepSTRAPP:::addBAMMshifts_custom()].
   # Both restore a full par(no.readonly = TRUE) snapshot when it is TRUE, which prevent annotation and breaks faceting.
-  # Thus, the default behavior is to not restore all par() parameters
-  if ("par.reset" %in% names(add_args_for_plot)) { par.reset <- add_args_for_plot$par.reset } else { par.reset <- FALSE }
-  if ("direction" %in% names(add_args_for_plot)) { direction <- add_args_for_plot$direction } else { direction <- "rightwards" }
+  # Thus, the default behavior is to not restore all par() parameters but rather restore on exit
+  # only the relevant parameters, without side effects on annotation and facetting.
+  if ("par.reset" %in% names(add_args_for_plot))
+  {
+    message(paste0("'par.reset' is not used by deepSTRAPP::plot_BAMM_rates() and was ignored.\n",
+                   "Graphical parameters are restored when the function exits, except those describing\n",
+                   "the plot itself, which are kept so that the phylogeny can be annotated afterwards."))
+  }
+  par.reset <- FALSE
 
   ## Display plot if requested
   if (display_plot)
@@ -294,7 +317,7 @@ plot_BAMM_rates <- function (BAMM_object,
       add_args <- list(...)
       add_args_for_addBAMMshifts <- add_args[names(add_args) %in% args_names_for_addBAMMshifts]
       if ("shiftnodes" %in% names(add_args_for_addBAMMshifts)) { shiftnodes <- add_args_for_addBAMMshifts$shiftnodes } else { shiftnodes <- NULL }
-      if ("par.reset" %in% names(add_args_for_addBAMMshifts)) { par.reset <- add_args_for_addBAMMshifts$par.reset } else { par.reset <- FALSE }
+      par.reset <- FALSE   # Always FALSE, whatever the user passed. See the note above.
       add_args_for_par <- add_args_for_par[!(names(add_args_for_par) %in% c("bg", "cex", "pch", "col", "lwd"))]
 
       # Provide Marginal Shift Probabilities to adjust size if requested
@@ -426,7 +449,7 @@ plot_BAMM_rates <- function (BAMM_object,
       add_args <- list(...)
       add_args_for_addBAMMshifts <- add_args[names(add_args) %in% args_names_for_addBAMMshifts]
       if ("shiftnodes" %in% names(add_args_for_addBAMMshifts)) { shiftnodes <- add_args_for_addBAMMshifts$shiftnodes } else { shiftnodes <- NULL }
-      if ("par.reset" %in% names(add_args_for_addBAMMshifts)) { par.reset <- add_args_for_addBAMMshifts$par.reset } else { par.reset <- FALSE }
+      par.reset <- FALSE   # Always FALSE, whatever the user passed. See the note above.
       add_args_for_par <- add_args_for_par[!(names(add_args_for_par) %in% c("bg", "cex", "pch", "col", "lwd"))]
 
       # Provide Marginal Shift Probabilities to adjust size if requested
@@ -535,7 +558,6 @@ plot_BAMM_rates <- function (BAMM_object,
 
 ## Handle adjustment of regime shift point size controlled by both cex and msp
 ## Fix issue with conflicting parameter names between the main function and par()
-# Set par.reset = FALSE as the default to allow annotation and faceting of the plot
 
 # Source: BAMMtools::addBAMMshifts()
 # Author: Mike Grundler
