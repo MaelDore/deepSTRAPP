@@ -13,6 +13,7 @@
 ^R/_audit_examples\.R$
 ^R/_audit_ambiguous_args\.R$
 ^R/_benchmark_update_rates\.R$
+^R/_test_par_behavior\.R$
 ^data-raw$
 ^software/*
 ^BAMM_outputs/*
