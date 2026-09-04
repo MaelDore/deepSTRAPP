@@ -89,20 +89,29 @@
 #' # Load BAMM output
 #' data(whale_BAMM_object, package = "deepSTRAPP")
 #'
+#' mfrow_ini <- par()$mfrow
+#' par(mfrow = c(1,2))
+#'
 #' ## Plot overall mean rates with MAP configuration for regime shifts
 #' # (rates are averaged across all posterior samples)
 #' plot_BAMM_rates(whale_BAMM_object, # Use the full object to plot mean overall rates
 #'                 add_regime_shifts = TRUE,
 #'                 configuration_type = "MAP",
 #'                 regimes_size = 3, bg = "black")
-#' title("Overall mean - MAP shift config")
+#' title("Overall mean - MAP shift config", col.main = "white")
 #'
 #' ## Plot overall mean rates with MSC configuration for regime shifts
 #' # (rates are averaged across all posterior samples)
 #' plot_BAMM_rates(whale_BAMM_object, add_regime_shifts = TRUE,
 #'                 configuration_type = "MSC",
 #'                 regimes_size = 3, bg = "black")
-#' title("Overall mean - MSC shift config")
+#' title("Overall mean - MSC shift config", col.main = "white")
+#'
+#' par(mfrow_ini)
+#'
+#'
+#' mfrow_ini <- par()$mfrow
+#' par(mfrow = c(1,2))
 #'
 #' ## Plot mean MAP rates with regime shifts
 #' # (rates are averaged only across MAP samples)
@@ -110,7 +119,7 @@
 #'                 add_regime_shifts = TRUE,
 #'                 configuration_type = "index",
 #'                 # Set to index to use the regime shift location from MAP configuration
-#'                 regimes_size = 3, bg = "black")*
+#'                 regimes_size = 3)
 #' title("MAP mean - MAP shift config")
 #'
 #' ## Plot mean MSC rates with regime shifts
@@ -119,8 +128,11 @@
 #'                 add_regime_shifts = TRUE,
 #'                 configuration_type = "index",
 #'                 # Set to index to use the regime shift data from MSC configuration
-#'                 regimes_size = 3, bg = "black")
+#'                 regimes_size = 3)
 #' title("MSC mean - MSC shift config")
+#'
+#' par(mfrow_ini)
+#'
 #'
 
 
