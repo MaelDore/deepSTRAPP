@@ -519,7 +519,7 @@ plot_traits_vs_rates_on_phylogeny_for_focal_time <- function (
   ### Display plots
   if (display_plot)
   {
-    initial_oma <- graphics::par()$oma
+    initial_par <- graphics::par("oma", "mfrow")
     graphics::par(mfrow = c(1, 2), oma = c(0, 0, 3, 0))
 
     ### Plot facet A: Trait evolution
@@ -607,7 +607,7 @@ plot_traits_vs_rates_on_phylogeny_for_focal_time <- function (
     main_title <- paste0("Focal time = ", focal_time)
     graphics::mtext(text = main_title, outer = TRUE, cex = 1.5, line = -1)
 
-    graphics::par(mfrow = c(1, 1), oma = initial_oma)
+    graphics::par(initial_par)
   }
 
   ## Save PDF
@@ -622,7 +622,7 @@ plot_traits_vs_rates_on_phylogeny_for_focal_time <- function (
     grDevices::pdf(file = file.path(PDF_file_path),
                   width = width, height = height)
 
-    initial_oma <- graphics::par()$oma
+    initial_par <- graphics::par("oma", "mfrow")
     top_outer_margin <- height * 0.20
     graphics::par(mfrow = c(1, 2), oma = c(0, 0, top_outer_margin, 0))
 
@@ -712,7 +712,7 @@ plot_traits_vs_rates_on_phylogeny_for_focal_time <- function (
     base_cex = width/12 # Scale the size of the text relative to PDF size so it appears constant
     graphics::mtext(text = main_title, outer = TRUE, cex = base_cex*1.3, line = 0)
 
-    graphics::par(mfrow = c(1, 1), oma = initial_oma)
+    graphics::par(initial_par)
 
     ## Close PDF
     invisible(grDevices::dev.off())
