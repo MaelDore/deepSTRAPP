@@ -199,18 +199,7 @@ plot_BAMM_rates <- function (BAMM_object,
     }
   }
 
-  # ## Save initial par() and reassign them on exit
-  # oldpar <- par(no.readonly = TRUE)
-  # oldpar$new <- NULL # Do not include this parameter to avoid warnings
-  # on.exit(par(oldpar))
-
-  ## Not needed here as the function does not set any graphical parameter itself:
-  # everything passed through '...' is forwarded to [BAMMtools::plot.bammdata()]
-  # and [BAMMtools::addBAMMshifts()], which applies and manages them.
-
   # Restore only the graphical parameters that needs to be restored
-  oldpar <- list(mar = par("mar"))
-  on.exit(par(oldpar), add = TRUE)
 
   ## Convert 'rate_type' into 'spex'
   if (rate_type == "net_diversification") { spex <- "netdiv" }
@@ -227,6 +216,32 @@ plot_BAMM_rates <- function (BAMM_object,
 
   add_args_for_plot <- add_args[names(add_args) %in% args_names_for_plot]
   add_args_for_par <- add_args[!(names(add_args) %in% c(args_names_for_plot, args_names_for_addBAMMshifts))]
+
+  ## Restore the graphical parameters that this call may leave changed
+  # Two sources feed par() here, and with 'par.reset = FALSE' neither is restored by BAMMtools:
+  #  * '$mar', which [BAMMtools::plot.bammdata()] widens to make room for the legend.
+  #  * every graphical parameter the user passed through '...', gathered in 'add_args_for_par',
+  #    and forwarded to par() by [BAMMtools::plot.bammdata()].
+  # Parameters describing the plot that was just drawn are deliberately excluded: restoring them
+  # rewinds the panel counter of a multi-panel layout, and discards the coordinate system of the
+  # phylogeny, which makes the plot impossible to annotate afterwards.
+
+  # List graphical parameters describing the plot that now exists (Not to restore otherwise annotation and facetting are broken)
+  plot_state_par_names <- c("usr", "plt", "fig", "mfg", "new", "xaxp", "yaxp")
+  # List graphical parameters to restore
+  par_names_to_restore <- setdiff(unique(c("mar", names(add_args_for_par))), plot_state_par_names)
+  # Keep only actual, settable graphical parameters
+  par_names_to_restore <- intersect(par_names_to_restore, names(par(no.readonly = TRUE)))
+
+  if (length(par_names_to_restore) > 0)
+  {
+    # Retrieve current par values
+    oldpar <- lapply(X = par_names_to_restore, FUN = par)
+    # Save them as a named list
+    names(oldpar) <- par_names_to_restore
+    # Restore on exit
+    on.exit(par(oldpar), add = TRUE)
+  }
 
   ## Retrieve named arguments for plot.bammdata
   if ("tau" %in% names(add_args_for_plot)) { tau <- add_args_for_plot$tau } else { tau <- 0.01 }
