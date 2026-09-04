@@ -882,9 +882,9 @@ all.equal(whale_BAMM_object_pruned$meanTipLambda,
 
 par(mfrow = c(1, 2))
 
-plot_BAMM_rates(whale_BAMM_object_subsetted, labels = TRUE, cex = 0.5, par.reset = FALSE)
+plot_BAMM_rates(whale_BAMM_object_subsetted, labels = TRUE, cex = 0.5)
 title("Initial phylogeny")
-plot_BAMM_rates(whale_BAMM_object_pruned, labels = TRUE, cex = 0.5, par.reset = FALSE)
+plot_BAMM_rates(whale_BAMM_object_pruned, labels = TRUE, cex = 0.5)
 title("Pruned phylogeny")
 
 par(mfrow = c(1, 1))
@@ -911,9 +911,9 @@ whale_BAMM_object_pruned <- prune_BAMM_object(
 ## Compare the initial and the pruned phylogeny
 par(mfrow = c(1, 2))
 
-plot_BAMM_rates(whale_BAMM_object_subsetted, labels = TRUE, cex = 0.5, par.reset = FALSE)
+plot_BAMM_rates(whale_BAMM_object_subsetted, labels = TRUE, cex = 0.5)
 title("Initial phylogeny")
-plot_BAMM_rates(whale_BAMM_object_pruned, labels = TRUE, cex = 0.5, par.reset = FALSE)
+plot_BAMM_rates(whale_BAMM_object_pruned, labels = TRUE, cex = 0.5)
 title("Pruned phylogeny")
 
 par(mfrow = c(1, 1))
@@ -943,7 +943,7 @@ focal_time <- 5
 
 ## Run deepSTRAPP on net diversification rates for focal time = 5 Mya.
 deepSTRAPP_output <- run_deepSTRAPP_for_focal_time( 
-      densityMaps = whale_densityMaps_pruned,
+      densityMaps = whale_densityMaps,
       # Inform the nb of simulations to reconstruct
       # state distribution across dummy stochastic maps
       nb_simulations = 100,
@@ -997,7 +997,7 @@ focal_time <- 5
 
 ## Run deepSTRAPP on net diversification rates for focal time = 5 Mya.
 deepSTRAPP_output <- run_deepSTRAPP_for_focal_time( 
-      densityMaps = whale_densityMaps_pruned,
+      densityMaps = whale_densityMaps,
       # Inform the nb of simulations to reconstruct
       # state distribution across dummy stochastic maps
       nb_simulations = 100,

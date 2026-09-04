@@ -163,8 +163,7 @@
 #'
 #' ## Plot initial BAMM_object for t = 0 My
 #' plot_BAMM_rates(whale_BAMM_object, add_regime_shifts = TRUE,
-#'                 labels = TRUE, legend = TRUE, cex = 0.5,
-#'                 par.reset = FALSE) # Keep plotting parameters in memory to use abline().
+#'                 labels = TRUE, legend = TRUE, cex = 0.5)
 #' abline(v = root_age - focal_time,
 #'       col = "red", lty = 2, lwd = 2)
 #'

@@ -610,7 +610,7 @@ root_age <- max(phytools::nodeHeights(Ponerinae_tree_old_calib)[,2])
 
 # Plot diversification rates on initial phylogeny (t = 0)
 BAMM_map_0My <- Ponerinae_deepSTRAPP_cont_old_calib_0_40$updated_BAMM_objects_over_time[[1]]
-plot_BAMM_rates(BAMM_map_0My, labels = FALSE, par.reset = FALSE)
+plot_BAMM_rates(BAMM_map_0My, labels = FALSE)
 abline(v = root_age - 20, col = "red", lty = 2) # Show where the phylogeny will be cut
 title(main = "BAMM rates for 100-0 My")
 
@@ -629,7 +629,7 @@ par(mfrow = c(1, 2))
 
 # Plot diversification rates on initial phylogeny (t = 0)
 BAMM_map_0My <- Ponerinae_deepSTRAPP_cont_old_calib_0_40$updated_BAMM_objects_over_time[[1]]
-plot_BAMM_rates(BAMM_map_0My, labels = FALSE, legend = TRUE, par.reset = FALSE)
+plot_BAMM_rates(BAMM_map_0My, labels = FALSE, legend = TRUE)
 abline(v = max(phytools::nodeHeights(Ponerinae_tree_old_calib)[,2]) - 20, col = "red", lty = 2) # Show where the phylogeny will be cut
 title(main = "BAMM rates for 100-0 My")
 
@@ -668,8 +668,7 @@ plot_traits_vs_rates_on_phylogeny_for_focal_time(
   focal_time = 0,
   ftype = "off", lwd = 0.7,
   color_scale = c("darkgreen", "limegreen", "orange", "red"),
-  labels = FALSE, legend = FALSE,
-  par.reset = FALSE)
+  labels = FALSE, legend = FALSE)
 
 ## The next plot shows the evolution of trait values and rates from root to 20 Mya (100-20 My).
 
@@ -679,8 +678,7 @@ plot_traits_vs_rates_on_phylogeny_for_focal_time(
   focal_time = 20, 
   ftype = "off", lwd = 1.2,
   color_scale = c("darkgreen", "limegreen", "orange", "red"),
-  labels = FALSE, legend = FALSE,
-  par.reset = FALSE)
+  labels = FALSE, legend = FALSE)
 
 ```
 ```{r plot_traits_vs_rate_maps_cont_eval_dev, fig.height = 7, eval = is_dev_version(), echo = FALSE}
@@ -690,8 +688,7 @@ plot_traits_vs_rates_on_phylogeny_for_focal_time(
   focal_time = 0,
   ftype = "off", lwd = 0.7,
   color_scale = c("darkgreen", "limegreen", "orange", "red"),
-  labels = FALSE, legend = FALSE,
-  par.reset = FALSE)
+  labels = FALSE, legend = FALSE)
 
 # Plot diversification rates on updated phylogeny for time-step n°5 = 20 My
 plot_traits_vs_rates_on_phylogeny_for_focal_time(
@@ -699,8 +696,7 @@ plot_traits_vs_rates_on_phylogeny_for_focal_time(
   focal_time = 20, 
   ftype = "off", lwd = 1.2,
   color_scale = c("darkgreen", "limegreen", "orange", "red"),
-  labels = FALSE, legend = FALSE,
-  par.reset = FALSE)
+  labels = FALSE, legend = FALSE)
 ```
 ```{r plot_traits_vs_rate_maps_cont_eval_CRAN, eval = !is_dev_version(), echo = FALSE, out.width = "100%"}
 

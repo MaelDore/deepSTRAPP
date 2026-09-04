@@ -640,8 +640,7 @@ class(whale_BAMM_object) <- setdiff(class(whale_BAMM_object), "phylo")
 
 # Plot initial BAMM_object for t = 0 My
 plot_BAMM_rates(whale_BAMM_object, add_regime_shifts = TRUE,
-                labels = TRUE, legend = TRUE,
-                par.reset = FALSE) # Keep plotting parameters in memory to use abline().
+                labels = TRUE, legend = TRUE)
 abline(v = root_age - focal_time,
        col = "red", lty = 2, lwd = 2)
 title(main = "\nPresent BAMM rates - 0 Mya")
@@ -684,8 +683,7 @@ par(mfrow = c(1, 2))
 plot_BAMM_rates(whale_BAMM_object, add_regime_shifts = TRUE,
                 cex = 0.5, # Adjust tip.label size
                 regimes_size = 3,
-                labels = TRUE, legend = TRUE,
-                par.reset = FALSE) # Keep plotting parameters in memory to use abline().
+                labels = TRUE, legend = TRUE)
 abline(v = root_age - focal_time,
        col = "red", lty = 2, lwd = 2)
 title(main = "\nPresent BAMM rates - 0 Mya")

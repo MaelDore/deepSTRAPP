@@ -727,7 +727,7 @@ root_age <- max(phytools::nodeHeights(Ponerinae_tree_old_calib)[,2])
 
 # Plot diversification rates on initial phylogeny (t = 0)
 BAMM_map_0My <- Ponerinae_deepSTRAPP_biogeo_old_calib_0_40$updated_BAMM_objects_over_time[[1]]
-plot_BAMM_rates(BAMM_map_0My, labels = FALSE, par.reset = FALSE)
+plot_BAMM_rates(BAMM_map_0My, labels = FALSE)
 abline(v = root_age - 10, col = "red", lty = 2) # Show where the phylogeny will be cut for t = 10My
 abline(v = root_age - 40, col = "red", lty = 2) # Show where the phylogeny will be cut for t = 40My
 title(main = "BAMM rates for 100-0 My")
@@ -755,7 +755,7 @@ par(mfrow = c(1, 2))
 
 # Plot diversification rates on initial phylogeny (t = 0)
 BAMM_map_0My <- Ponerinae_deepSTRAPP_biogeo_old_calib_0_40$updated_BAMM_objects_over_time[[1]]
-plot_BAMM_rates(BAMM_map_0My, labels = FALSE, legend = TRUE, par.reset = FALSE)
+plot_BAMM_rates(BAMM_map_0My, labels = FALSE, legend = TRUE)
 abline(v = max(phytools::nodeHeights(Ponerinae_tree_old_calib)[,2]) - 10, col = "red", lty = 2) # Show where the phylogeny will be cut
 title(main = "BAMM rates for 100-0 My")
 
@@ -793,8 +793,7 @@ plot_traits_vs_rates_on_phylogeny_for_focal_time(
   focal_time = 0,
   ftype = "off", lwd = 0.7,
   colors_per_levels = colors_per_ranges,
-  labels = FALSE, legend = FALSE,
-  par.reset = FALSE)
+  labels = FALSE, legend = FALSE)
 
 ## The next plot shows the evolution of ranges and rates from root to 10 Mya (100-10 My).
 
@@ -804,8 +803,7 @@ plot_traits_vs_rates_on_phylogeny_for_focal_time(
   focal_time = 10, 
   ftype = "off", lwd = 1.2,
   colors_per_levels = colors_per_ranges,
-  labels = FALSE, legend = FALSE,
-  par.reset = FALSE)
+  labels = FALSE, legend = FALSE)
 
 ## The next plot shows the evolution of ranges and rates from root to 40 Mya (100-40 My).
 
@@ -815,8 +813,7 @@ plot_traits_vs_rates_on_phylogeny_for_focal_time(
   focal_time = 40, 
   ftype = "off", lwd = 1.2,
   colors_per_levels = colors_per_ranges,
-  labels = FALSE, legend = FALSE,
-  par.reset = FALSE)
+  labels = FALSE, legend = FALSE)
 
 ```
 ```{r plot_traits_vs_rates_on_phylogeny_biogeo_2lvl_eval_dev, eval = is_dev_version(), echo = FALSE}
@@ -826,8 +823,7 @@ plot_traits_vs_rates_on_phylogeny_for_focal_time(
   focal_time = 0,
   ftype = "off", lwd = 0.7,
   colors_per_levels = colors_per_ranges,
-  labels = FALSE, legend = FALSE,
-  par.reset = FALSE)
+  labels = FALSE, legend = FALSE)
 
 # Plot both mapped phylogenies for time-step n°9 = 40 My
 plot_traits_vs_rates_on_phylogeny_for_focal_time(
@@ -835,8 +831,7 @@ plot_traits_vs_rates_on_phylogeny_for_focal_time(
   focal_time = 40, 
   ftype = "off", lwd = 1.2,
   colors_per_levels = colors_per_ranges,
-  labels = FALSE, legend = FALSE,
-  par.reset = FALSE)
+  labels = FALSE, legend = FALSE)
 ```
 ```{r plot_traits_vs_rates_on_phylogeny_biogeo_2lvl_eval_CRAN, eval = !is_dev_version(), echo = FALSE, out.width = "100%"}
 
