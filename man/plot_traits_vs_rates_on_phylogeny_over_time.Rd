@@ -74,7 +74,8 @@ Equivalent to the \code{col} argument in \code{\link[BAMMtools:addBAMMshifts]{BA
 Equivalent to the \code{lwd} argument in \code{\link[BAMMtools:addBAMMshifts]{BAMMtools::addBAMMshifts()}}. Default is \code{1}.}
 
 \item{...}{Additional graphical arguments to pass down to \code{\link[phytools:contMap]{phytools::plot.contMap()}}, \code{\link[phytools:plotSimmap]{phytools::plot.simmap()}},
-\code{\link[=plot_densityMaps_overlay]{plot_densityMaps_overlay()}}, \code{\link[BAMMtools:plot]{BAMMtools::plot.bammdata()}}, \code{\link[BAMMtools:addBAMMshifts]{BAMMtools::addBAMMshifts()}}, and \code{\link[=par]{par()}}.}
+\code{\link[=plot_densityMaps_overlay]{plot_densityMaps_overlay()}}, \code{\link[BAMMtools:plot]{BAMMtools::plot.bammdata()}}, \code{\link[BAMMtools:addBAMMshifts]{BAMMtools::addBAMMshifts()}}, and \code{\link[=par]{par()}}.
+If provided, \code{par.reset} is ignored with a message. See \code{\link[=plot_BAMM_rates]{plot_BAMM_rates()}} for details.}
 
 \item{cex_pies}{Numerical. To adjust the size of the ACE pies. Default = \code{0.5}.
 Provide the full argument name to avoid ambiguity with the \code{cex} graphical argument.}
