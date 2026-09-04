@@ -226,9 +226,10 @@ plot_BAMM_rates <- function (BAMM_object,
   # rewinds the panel counter of a multi-panel layout, and discards the coordinate system of the
   # phylogeny, which makes the plot impossible to annotate afterwards.
 
-  # List graphical parameters describing the plot that now exists (Not to restore otherwise annotation and facetting are broken)
+  # List graphical parameters describing the plot that now exists (Never to restore as they describe the current plot state)
+  # If restores, annotation and facetting are broken
   plot_state_par_names <- c("usr", "plt", "fig", "mfg", "new", "xaxp", "yaxp", "pin")
-  # List graphical parameters to restore
+  # List graphical parameters to restore if requested (also affect the next plot)
   par_names_to_restore <- setdiff(unique(c("mar", names(add_args_for_par))), plot_state_par_names)
   # Keep only actual, settable graphical parameters
   par_names_to_restore <- intersect(par_names_to_restore, names(par(no.readonly = TRUE)))
@@ -534,6 +535,7 @@ plot_BAMM_rates <- function (BAMM_object,
 
 ## Handle adjustment of regime shift point size controlled by both cex and msp
 ## Fix issue with conflicting parameter names between the main function and par()
+# Set par.reset = FALSE as the default to allow annotation and faceting of the plot
 
 # Source: BAMMtools::addBAMMshifts()
 # Author: Mike Grundler
@@ -544,7 +546,7 @@ plot_BAMM_rates <- function (BAMM_object,
 
 addBAMMshifts_custom <- function (ephy, index = 1, method = "phylogram", regimes_size = 1, regimes_pch = 21,
                                   regimes_border_col = 1, regimes_border_width = 1, regimes_fill = 2,
-                                  msp = NULL, shiftnodes = NULL, par.reset = TRUE, ...)
+                                  msp = NULL, shiftnodes = NULL, par.reset = FALSE, ...)
 {
   if (!inherits(ephy, "bammdata"))
     stop("Object ephy must be of class bammdata")
