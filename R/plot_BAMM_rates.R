@@ -229,7 +229,6 @@ plot_BAMM_rates <- function (BAMM_object,
   if (rate_type == "speciation") { spex <- "s" }
   if (rate_type == "extinction") { spex <- "e" }
 
-
   ## Restore, on exit, every graphical parameter that this call changed
   # Everything is restored, whether it was set by this function, by the BAMMtools functions it
   # calls, or passed by the user through '...'. The only exceptions are the parameters describing
