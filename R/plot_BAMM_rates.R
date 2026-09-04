@@ -227,7 +227,7 @@ plot_BAMM_rates <- function (BAMM_object,
   # phylogeny, which makes the plot impossible to annotate afterwards.
 
   # List graphical parameters describing the plot that now exists (Not to restore otherwise annotation and facetting are broken)
-  plot_state_par_names <- c("usr", "plt", "fig", "mfg", "new", "xaxp", "yaxp")
+  plot_state_par_names <- c("usr", "plt", "fig", "mfg", "new", "xaxp", "yaxp", "pin")
   # List graphical parameters to restore
   par_names_to_restore <- setdiff(unique(c("mar", names(add_args_for_par))), plot_state_par_names)
   # Keep only actual, settable graphical parameters

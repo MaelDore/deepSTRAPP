@@ -9,6 +9,7 @@
 ^R/_contMap_commented\.R$
 ^R/_verify_prune_BAMM_object\.R$
 ^R/_check_examples_parsing\.R$
+^R/_check_par_leak\.R$
 ^R/_audit_examples\.R$
 ^R/_audit_ambiguous_args\.R$
 ^R/_benchmark_update_rates\.R$
