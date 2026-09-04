@@ -59,6 +59,7 @@
 #'   Equivalent to the `lwd` argument in [BAMMtools::addBAMMshifts()]. Default is `1`.
 #' @param ... Additional graphical arguments to pass down to [phytools::plot.contMap()], [phytools::plot.simmap()],
 #'   [deepSTRAPP::plot_densityMaps_overlay()], [BAMMtools::plot.bammdata()], [BAMMtools::addBAMMshifts()], and [par()].
+#'   If provided, `par.reset` is ignored with a message. See [deepSTRAPP::plot_BAMM_rates()] for details.
 #' @param display_plot Logical. Whether to display the plot generated in the R console. Default is `TRUE`.
 #' @param PDF_file_path Character string. If provided, the plot will be saved in a PDF file following the path provided here. The path must end with ".pdf".
 #'
@@ -345,9 +346,40 @@ plot_traits_vs_rates_on_phylogeny_over_time <- function (
     }
   }
 
-  ## Save initial par() and reassign them on exit
-  oldpar <- par(no.readonly = TRUE)
-  on.exit(par(oldpar))
+  ## Restore, on exit, every graphical parameter that this call changed
+  # Everything is restored, whether it was set by this function, by the functions it calls, or
+  # passed by the user through '...'. The only exceptions are the parameters describing the plot
+  # that was just drawn: restoring those rewinds the panel counter of a multi-panel layout, and
+  # discards the coordinate system of the plot, which makes it impossible to annotate afterwards.
+
+  # List graphical parameters describing the plot that now exists (Never to restore as they describe the current plot state)
+  plot_state_par_names <- c("usr", "plt", "fig", "mfg", "new", "xaxp", "yaxp", "pin")
+  # Save current graphic parameters
+  entry_par <- par(no.readonly = TRUE)
+
+  # On exit, compare changes in par and restore the ones that have change, but the plot_state_par
+  on.exit({
+    # List par on exit
+    exit_par <- par(no.readonly = TRUE)
+    # Identify differences with initial parameters
+    changed_par_names <- names(entry_par)[!vapply(X = names(entry_par),
+                                                  FUN = function (x) { isTRUE(all.equal(entry_par[[x]], exit_par[[x]])) },
+                                                  FUN.VALUE = logical(1))]
+    # Exclude plot state parameters from the restore
+    changed_par_names <- setdiff(changed_par_names, plot_state_par_names)
+    # Restore parameters if any has changed
+    if (length(changed_par_names) > 0)
+    {
+      par(entry_par[changed_par_names])
+    }
+
+    # Force new to FALSE, so the next plot calling plot.new() start on a new clean window,
+    # But only if we actually plot something
+    if (isTRUE(display_plot) || (isTRUE(exit_par$new) && !isTRUE(entry_par$new)))
+    {
+      par(new = FALSE)
+    }
+  }, add = TRUE)
 
   ## Extract time-steps
   time_steps <- deepSTRAPP_outputs$time_steps

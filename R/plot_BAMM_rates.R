@@ -256,6 +256,13 @@ plot_BAMM_rates <- function (BAMM_object,
     {
       par(entry_par[changed_par_names])
     }
+
+    # Force new to FALSE, so the next plot calling plot.new() start on a new clean window,
+    # But only if we actually plot something
+    if (isTRUE(display_plot) || (isTRUE(exit_par$new) && !isTRUE(entry_par$new)))
+    {
+      par(new = FALSE)
+    }
   }, add = TRUE)
 
   ## Filter list of additional arguments and distribute across subfunctions to avoid warnings from par()
