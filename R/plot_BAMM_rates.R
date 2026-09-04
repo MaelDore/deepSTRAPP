@@ -240,6 +240,7 @@ plot_BAMM_rates <- function (BAMM_object,
   plot_state_par_names <- c("usr", "plt", "fig", "mfg", "new", "xaxp", "yaxp", "pin")
   # Save current graphic parameters
   entry_par <- par(no.readonly = TRUE)
+  entry_display_plot <- isTRUE(display_plot)
 
   # On exit, compare changes in par and restore the ones that have change, but the plot_state_par
   on.exit({
@@ -259,7 +260,7 @@ plot_BAMM_rates <- function (BAMM_object,
 
     # Force new to FALSE, so the next plot calling plot.new() start on a new clean window,
     # But only if we actually plot something
-    if (isTRUE(display_plot) || (isTRUE(exit_par$new) && !isTRUE(entry_par$new)))
+    if (entry_display_plot || (isTRUE(exit_par$new) && !isTRUE(entry_par$new)))
     {
       par(new = FALSE)
     }
