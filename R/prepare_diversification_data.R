@@ -54,8 +54,8 @@
 #' @param BAMM_output_directory_path Character string. The path to the directory used to store input/output files generated.
 #'  It can be an absolute path, or a path relative to the current working directory (Check with `getwd()` if needed).
 #' @param keep_BAMM_outputs Logical. Whether the `BAMM_output_directory` should be kept after the run. Default = `TRUE`.
-#' @param MAP_odd_ratio_threshold Numerical. Controls the definition of 'core-shifts' used to distinguish across configurations when fetching the MAP samples.
-#'   Shifts that have an odds ratio of marginal posterior probability / prior lower than `MAP_odd_ratio_threshold` are ignored. See [BAMMtools::getBestShiftConfiguration()]. Default = `5`.
+#' @param MAP_odds_ratio_threshold Numerical. Controls the definition of 'core-shifts' used to distinguish across configurations when fetching the MAP samples.
+#'   Shifts that have an odds ratio of marginal posterior probability / prior lower than `MAP_odds_ratio_threshold` are ignored. See [BAMMtools::getBestShiftConfiguration()]. Default = `5`.
 #' @param skip_evaluations Logical. Whether to skip the Evaluation step including MCMC trace, ESS, and prior/posterior comparisons for expected number of shifts. Default = `FALSE`.
 #' @param plot_evaluations Logical. Whether to display the plots generated during the Evaluation step: MCMC trace, and prior/posterior comparisons for expected number of shifts. Default = `TRUE`.
 #' @param save_evaluations Logical. Whether to save the outputs of evaluations in a table (ESS), and PDFs (MCMC trace, and prior/posterior comparisons for expected number of shifts)
@@ -108,7 +108,7 @@
 #'   * Record the marginal posterior probability of regime shift along branches based on the proportion of samples harboring a regime shift along each branch.
 #'     (See [BAMMtools::marginalShiftProbsTree()]). Result is stored in `$MSP_tree` as phylogenetic tree with `$edge.length` scaled to the marginal posterior probability.
 #'   * Extract the Maximum A Posteriori probability (MAP) configuration = the configuration of regime shift location found the most frequently among the posterior samples.
-#'     (See [BAMMtools::getBestShiftConfiguration()]). This ignores shifts that have an odds ratio of marginal posterior probability / prior lower than `MAP_odd_ratio_threshold`
+#'     (See [BAMMtools::getBestShiftConfiguration()]). This ignores shifts that have an odds ratio of marginal posterior probability / prior lower than `MAP_odds_ratio_threshold`
 #'     to avoid noise from non-core shifts. MAP sample indices are stored in `$MAP_indices`. Diversification rates and shift locations on branches are then averaged across all MAP samples and
 #'     recorded as an object of class `"bammdata"` in `$MAP_BAMM_object` with a single `$eventData` table used to plot regime shifts on the phylogeny with [deepSTRAPP::plot_BAMM_rates()].
 #'   * Extract the Maximum Shift Credibility (MSC) configuration = the configuration of regime shift location with the highest product of marginal probabilities across branches.
@@ -276,7 +276,7 @@ prepare_diversification_data <- function (BAMM_install_directory_path,
                                           additional_BAMM_settings = list(),
                                           BAMM_output_directory_path = NULL, # "./BAMM_outputs/"
                                           keep_BAMM_outputs = TRUE,
-                                          MAP_odd_ratio_threshold = 5,
+                                          MAP_odds_ratio_threshold = 5,
                                           skip_evaluations = FALSE,
                                           plot_evaluations = TRUE,
                                           save_evaluations = TRUE)
@@ -1444,12 +1444,12 @@ prepare_diversification_data <- function (BAMM_install_directory_path,
     BAMM_posterior_samples_data$MSP_tree <- MSP_tree
 
     ## Extract the Maximum A Posteriori probability (MAP) configuration = the configuration of shift location showing up the most in the posterior sample
-    # Ignore shifts that have an odd-ratio of marginal posterior probability / prior < 'MAP_odd_ratio_threshold' to avoid noise from non-core shifts
+    # Ignore shifts that have an odds ratio of marginal posterior probability / prior < 'MAP_odds_ratio_threshold' to avoid noise from non-core shifts
     # Rates are then averaged across all samples with the most frequent shift configuration of core-shifts
 
     MAP_detection <- BAMMtools::credibleShiftSet(ephy = BAMM_posterior_samples_data,
                                                  expectedNumberOfShifts = expectedNumberOfShifts,
-                                                 threshold = MAP_odd_ratio_threshold,
+                                                 threshold = MAP_odds_ratio_threshold,
                                                  set.limit = 0.95)
     # Extract indices of MAP samples
     BAMM_posterior_samples_data$MAP_indices <- MAP_detection$indices[[1]]
@@ -1458,7 +1458,7 @@ prepare_diversification_data <- function (BAMM_install_directory_path,
     # MAP_BAMM_object <- BAMMtools::getBestShiftConfiguration(x = BAMM_posterior_samples_data,
     MAP_BAMM_object <- getBestShiftConfiguration_fixed(x = BAMM_posterior_samples_data,
                                                        expectedNumberOfShifts = expectedNumberOfShifts,
-                                                       threshold = MAP_odd_ratio_threshold) # Odd-ratio threshold used to select core-shifts used to compare configurations
+                                                       threshold = MAP_odds_ratio_threshold) # Odds ratio threshold used to select core-shifts used to compare configurations
 
     # Reorder elements to fit order in the main BAMM_object
     if ("node.label" %in% names(MAP_BAMM_object))
@@ -1587,7 +1587,7 @@ prepare_diversification_data <- function (BAMM_install_directory_path,
 
 getBestShiftConfiguration_fixed <- function (x,
                                              expectedNumberOfShifts,
-                                             threshold = 5) # Odd-ratio threshold used to select core-shifts used to compare configurations
+                                             threshold = 5) # Odds ratio threshold used to select core-shifts used to compare configurations
 {
   # Build credibleShiftSet if needed
   if (inherits(x, "bammdata"))

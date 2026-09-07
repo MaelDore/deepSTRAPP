@@ -10,7 +10,7 @@ prune_BAMM_object(
   tips_to_prune = NULL,
   MRCA_node = NULL,
   recompute_shift_configurations = FALSE,
-  MAP_odd_ratio_threshold = 5,
+  MAP_odds_ratio_threshold = 5,
   verbose = FALSE
 )
 }
@@ -42,8 +42,8 @@ the full phylogeny.
 configurations retained as MAP/MSC may differ from those of the full phylogeny.
 }}
 
-\item{MAP_odd_ratio_threshold}{Numerical. Controls the definition of 'core-shifts' used to distinguish across configurations when fetching the MAP samples.
-Shifts that have an odds ratio of marginal posterior probability / prior lower than \code{MAP_odd_ratio_threshold} are ignored. See \code{\link[BAMMtools:getBestShiftConfiguration]{BAMMtools::getBestShiftConfiguration()}}.
+\item{MAP_odds_ratio_threshold}{Numerical. Controls the definition of 'core-shifts' used to distinguish across configurations when fetching the MAP samples.
+Shifts that have an odds ratio of marginal posterior probability / prior lower than \code{MAP_odds_ratio_threshold} are ignored. See \code{\link[BAMMtools:getBestShiftConfiguration]{BAMMtools::getBestShiftConfiguration()}}.
 Only used when \code{recompute_shift_configurations = TRUE}. Default = \code{5}.}
 
 \item{verbose}{Logical. Whether to display progress in the console. Default = \code{FALSE}.}

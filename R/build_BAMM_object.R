@@ -43,8 +43,8 @@
 #' @param seed Integer. Set the seed to ensure reproducibility when drawing random posterior samples. Default is `NULL` (a random seed is used).
 #' @param expectedNumberOfShifts Integer. The expected number of regime shifts set during the BAMM run as a hyperparameter controlling the exponential prior distribution
 #'  used to modulate reversible jumps across model configurations in the rjMCMC run. This is needed to compute priors for regime shift along branches.
-#' @param MAP_odd_ratio_threshold Numerical. Controls the definition of 'core-shifts' used to distinguish across configurations when fetching the MAP samples.
-#'   Shifts that have an odds ratio of marginal posterior probability / prior lower than `MAP_odd_ratio_threshold` are ignored. See [BAMMtools::getBestShiftConfiguration()]. Default = `5`.
+#' @param MAP_odds_ratio_threshold Numerical. Controls the definition of 'core-shifts' used to distinguish across configurations when fetching the MAP samples.
+#'   Shifts that have an odds ratio of marginal posterior probability / prior lower than `MAP_odds_ratio_threshold` are ignored. See [BAMMtools::getBestShiftConfiguration()]. Default = `5`.
 #' @param verbose Logical. Whether to display progress in the console. Default = `FALSE`.
 #'
 #' @export
@@ -132,7 +132,7 @@ build_BAMM_object <- function (phylo,
                                nb_posterior_samples = NULL,
                                seed = NULL,
                                expectedNumberOfShifts,
-                               MAP_odd_ratio_threshold = 5,
+                               MAP_odds_ratio_threshold = 5,
                                verbose = FALSE)
 {
   ### Check input validity
@@ -206,12 +206,12 @@ build_BAMM_object <- function (phylo,
       }
     }
 
-    ## MAP_odd_ratio_threshold
-    # If provided, MAP_odd_ratio_threshold must be a positive numerical
-    if (!is.numeric(MAP_odd_ratio_threshold) | (MAP_odd_ratio_threshold < 0))
+    ## MAP_odds_ratio_threshold
+    # If provided, MAP_odds_ratio_threshold must be a positive numerical
+    if (!is.numeric(MAP_odds_ratio_threshold) | (MAP_odds_ratio_threshold < 0))
     {
       stop(paste0("'expectedNumberOfShifts' must be a positive numerical value. It controls the definition of 'core-shifts' used to distinguish across configurations when fetching the MAP samples.\n",
-                  "Shifts that have an odd-ratio of marginal posterior probability / prior lower than `MAP_odd_ratio_threshold` are ignored. See [BAMMtools::getBestShiftConfiguration()].\n"))
+                  "Shifts that have an odds ratio of marginal posterior probability / prior lower than `MAP_odds_ratio_threshold` are ignored. See [BAMMtools::getBestShiftConfiguration()].\n"))
     }
   }
 
@@ -275,12 +275,12 @@ build_BAMM_object <- function (phylo,
   BAMM_posterior_samples_data$MSP_tree <- MSP_tree
 
   ## Extract the Maximum A Posteriori probability (MAP) configuration = the configuration of shift location showing up the most in the posterior sample
-  # Ignore shifts that have an odd-ratio of marginal posterior probability / prior < 'MAP_odd_ratio_threshold' to avoid noise from non-core shifts
+  # Ignore shifts that have an odds ratio of marginal posterior probability / prior < 'MAP_odds_ratio_threshold' to avoid noise from non-core shifts
   # Rates are then averaged across all samples with the most frequent shift configuration of core-shifts
 
   MAP_detection <- BAMMtools::credibleShiftSet(BAMM_posterior_samples_data,
                                                expectedNumberOfShifts = expectedNumberOfShifts,
-                                               threshold = MAP_odd_ratio_threshold,
+                                               threshold = MAP_odds_ratio_threshold,
                                                set.limit = 0.95)
   # Extract indices of MAP samples
   BAMM_posterior_samples_data$MAP_indices <- MAP_detection$indices[[1]]
@@ -289,7 +289,7 @@ build_BAMM_object <- function (phylo,
   # MAP_BAMM_object <- BAMMtools::getBestShiftConfiguration(BAMM_posterior_samples_data,
   MAP_BAMM_object <- getBestShiftConfiguration_fixed(BAMM_posterior_samples_data,
                                                      expectedNumberOfShifts = expectedNumberOfShifts,
-                                                     threshold = MAP_odd_ratio_threshold) # Odd-ratio threshold used to select core-shifts used to compare configurations
+                                                     threshold = MAP_odds_ratio_threshold) # Odds ratio threshold used to select core-shifts used to compare configurations
 
   # Reorder elements to fit order in the main BAMM_object
   if ("node.label" %in% names(MAP_BAMM_object))

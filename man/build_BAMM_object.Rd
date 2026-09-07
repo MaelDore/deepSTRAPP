@@ -11,7 +11,7 @@ build_BAMM_object(
   nb_posterior_samples = NULL,
   seed = NULL,
   expectedNumberOfShifts,
-  MAP_odd_ratio_threshold = 5,
+  MAP_odds_ratio_threshold = 5,
   verbose = FALSE
 )
 }
@@ -31,8 +31,8 @@ If set to \code{NULL} (default), all samples remaining after removing the burn-i
 \item{expectedNumberOfShifts}{Integer. The expected number of regime shifts set during the BAMM run as a hyperparameter controlling the exponential prior distribution
 used to modulate reversible jumps across model configurations in the rjMCMC run. This is needed to compute priors for regime shift along branches.}
 
-\item{MAP_odd_ratio_threshold}{Numerical. Controls the definition of 'core-shifts' used to distinguish across configurations when fetching the MAP samples.
-Shifts that have an odds ratio of marginal posterior probability / prior lower than \code{MAP_odd_ratio_threshold} are ignored. See \code{\link[BAMMtools:getBestShiftConfiguration]{BAMMtools::getBestShiftConfiguration()}}. Default = \code{5}.}
+\item{MAP_odds_ratio_threshold}{Numerical. Controls the definition of 'core-shifts' used to distinguish across configurations when fetching the MAP samples.
+Shifts that have an odds ratio of marginal posterior probability / prior lower than \code{MAP_odds_ratio_threshold} are ignored. See \code{\link[BAMMtools:getBestShiftConfiguration]{BAMMtools::getBestShiftConfiguration()}}. Default = \code{5}.}
 
 \item{verbose}{Logical. Whether to display progress in the console. Default = \code{FALSE}.}
 }

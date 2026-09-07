@@ -143,7 +143,7 @@ whale_BAMM_object <- prepare_diversification_data(
    keep_BAMM_outputs = TRUE, # To keep the BAMM_output directory after the run
    # Controls the definition of 'core-shifts' used to distinguish across configurations 
    # when identifying the most frequent regime shift configuration (MAP) across samples.
-   MAP_odd_ratio_threshold = 5, 
+   MAP_odds_ratio_threshold = 5, 
    # To include (or not) the evaluation step and produce MCMC trace, ESS, 
    # and prior/posterior comparisons for expected number of shifts.
    skip_evaluations = FALSE, 
@@ -250,7 +250,7 @@ title(main = "Marginal posterior Shift Probabilities per branch")
    # along the branches.
    # For more details, see `[BAMMtools::credibleShiftSet()]`.
    # Only regime shifts with an odds ratio of marginal posterior shift probability / prior shift probability
-   # higher than the threshold provided in the `MAP_odd_ratio_threshold` argument (default = 5) 
+   # higher than the threshold provided in the `MAP_odds_ratio_threshold` argument (default = 5) 
    # are considered as core-shifts and used to identify the MAP configuration.
    # The location of the regimes along each branch is then averaged across all the identified MAP samples.
 

@@ -19,7 +19,7 @@ prepare_diversification_data(
   additional_BAMM_settings = list(),
   BAMM_output_directory_path = NULL,
   keep_BAMM_outputs = TRUE,
-  MAP_odd_ratio_threshold = 5,
+  MAP_odds_ratio_threshold = 5,
   skip_evaluations = FALSE,
   plot_evaluations = TRUE,
   save_evaluations = TRUE
@@ -72,8 +72,8 @@ It can be an absolute path, or a path relative to the current working directory 
 
 \item{keep_BAMM_outputs}{Logical. Whether the \code{BAMM_output_directory} should be kept after the run. Default = \code{TRUE}.}
 
-\item{MAP_odd_ratio_threshold}{Numerical. Controls the definition of 'core-shifts' used to distinguish across configurations when fetching the MAP samples.
-Shifts that have an odds ratio of marginal posterior probability / prior lower than \code{MAP_odd_ratio_threshold} are ignored. See \code{\link[BAMMtools:getBestShiftConfiguration]{BAMMtools::getBestShiftConfiguration()}}. Default = \code{5}.}
+\item{MAP_odds_ratio_threshold}{Numerical. Controls the definition of 'core-shifts' used to distinguish across configurations when fetching the MAP samples.
+Shifts that have an odds ratio of marginal posterior probability / prior lower than \code{MAP_odds_ratio_threshold} are ignored. See \code{\link[BAMMtools:getBestShiftConfiguration]{BAMMtools::getBestShiftConfiguration()}}. Default = \code{5}.}
 
 \item{skip_evaluations}{Logical. Whether to skip the Evaluation step including MCMC trace, ESS, and prior/posterior comparisons for expected number of shifts. Default = \code{FALSE}.}
 
@@ -203,7 +203,7 @@ Step 4: Import BAMM outputs
 \item Record the marginal posterior probability of regime shift along branches based on the proportion of samples harboring a regime shift along each branch.
 (See \code{\link[BAMMtools:ShiftProbsTree]{BAMMtools::marginalShiftProbsTree()}}). Result is stored in \verb{$MSP_tree} as phylogenetic tree with \verb{$edge.length} scaled to the marginal posterior probability.
 \item Extract the Maximum A Posteriori probability (MAP) configuration = the configuration of regime shift location found the most frequently among the posterior samples.
-(See \code{\link[BAMMtools:getBestShiftConfiguration]{BAMMtools::getBestShiftConfiguration()}}). This ignores shifts that have an odds ratio of marginal posterior probability / prior lower than \code{MAP_odd_ratio_threshold}
+(See \code{\link[BAMMtools:getBestShiftConfiguration]{BAMMtools::getBestShiftConfiguration()}}). This ignores shifts that have an odds ratio of marginal posterior probability / prior lower than \code{MAP_odds_ratio_threshold}
 to avoid noise from non-core shifts. MAP sample indices are stored in \verb{$MAP_indices}. Diversification rates and shift locations on branches are then averaged across all MAP samples and
 recorded as an object of class \code{"bammdata"} in \verb{$MAP_BAMM_object} with a single \verb{$eventData} table used to plot regime shifts on the phylogeny with \code{\link[=plot_BAMM_rates]{plot_BAMM_rates()}}.
 \item Extract the Maximum Shift Credibility (MSC) configuration = the configuration of regime shift location with the highest product of marginal probabilities across branches.

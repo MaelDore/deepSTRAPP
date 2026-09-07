@@ -56,8 +56,8 @@
 #'   * If `TRUE`, the MAP and MSC configurations are detected again from the pruned posterior samples, as in
 #'     [deepSTRAPP::build_BAMM_object()]. Shifts located on removed branches no longer contribute, so the
 #'     configurations retained as MAP/MSC may differ from those of the full phylogeny.
-#' @param MAP_odd_ratio_threshold Numerical. Controls the definition of 'core-shifts' used to distinguish across configurations when fetching the MAP samples.
-#'   Shifts that have an odds ratio of marginal posterior probability / prior lower than `MAP_odd_ratio_threshold` are ignored. See [BAMMtools::getBestShiftConfiguration()].
+#' @param MAP_odds_ratio_threshold Numerical. Controls the definition of 'core-shifts' used to distinguish across configurations when fetching the MAP samples.
+#'   Shifts that have an odds ratio of marginal posterior probability / prior lower than `MAP_odds_ratio_threshold` are ignored. See [BAMMtools::getBestShiftConfiguration()].
 #'   Only used when `recompute_shift_configurations = TRUE`. Default = `5`.
 #' @param verbose Logical. Whether to display progress in the console. Default = `FALSE`.
 #'
@@ -293,7 +293,7 @@ prune_BAMM_object <- function (BAMM_object,
                                tips_to_prune = NULL,
                                MRCA_node = NULL,
                                recompute_shift_configurations = FALSE,
-                               MAP_odd_ratio_threshold = 5,
+                               MAP_odds_ratio_threshold = 5,
                                verbose = FALSE)
 {
   ### Check input validity
@@ -475,7 +475,7 @@ prune_BAMM_object <- function (BAMM_object,
       stop(paste0("'verbose' must be a single logical value ('TRUE' or 'FALSE')."))
     }
 
-    ## expectedNumberOfShifts & MAP_odd_ratio_threshold
+    ## expectedNumberOfShifts & MAP_odds_ratio_threshold
     # Only needed when the MAP/MSC configurations must be detected again
     if (recompute_shift_configurations)
     {
@@ -494,10 +494,10 @@ prune_BAMM_object <- function (BAMM_object,
                     "This value is used to set the hyperprior from which the number of shifts is derived.\n",
                     "Current value of 'BAMM_object$expectedNumberOfShifts' is ",expectedNumberOfShifts,"."))
       }
-      if (!is.numeric(MAP_odd_ratio_threshold) | (MAP_odd_ratio_threshold < 0))
+      if (!is.numeric(MAP_odds_ratio_threshold) | (MAP_odds_ratio_threshold < 0))
       {
-        stop(paste0("'MAP_odd_ratio_threshold' must be a positive numerical value. It controls the definition of 'core-shifts' used to distinguish across configurations when fetching the MAP samples.\n",
-                    "Shifts that have an odd-ratio of marginal posterior probability / prior lower than 'MAP_odd_ratio_threshold' are ignored. See [BAMMtools::getBestShiftConfiguration()].\n"))
+        stop(paste0("'MAP_odds_ratio_threshold' must be a positive numerical value. It controls the definition of 'core-shifts' used to distinguish across configurations when fetching the MAP samples.\n",
+                    "Shifts that have an odds ratio of marginal posterior probability / prior lower than 'MAP_odds_ratio_threshold' are ignored. See [BAMMtools::getBestShiftConfiguration()].\n"))
       }
     }
   }
@@ -637,7 +637,7 @@ prune_BAMM_object <- function (BAMM_object,
 
     MAP_detection <- BAMMtools::credibleShiftSet(pruned_BAMM_object,
                                                  expectedNumberOfShifts = expectedNumberOfShifts,
-                                                 threshold = MAP_odd_ratio_threshold,
+                                                 threshold = MAP_odds_ratio_threshold,
                                                  set.limit = 0.95)
     # Extract indices of MAP samples
     pruned_BAMM_object$MAP_indices <- MAP_detection$indices[[1]]
@@ -645,7 +645,7 @@ prune_BAMM_object <- function (BAMM_object,
     # Compute mean rates/regimes across MAP samples
     MAP_BAMM_object <- getBestShiftConfiguration_fixed(pruned_BAMM_object,
                                                        expectedNumberOfShifts = expectedNumberOfShifts,
-                                                       threshold = MAP_odd_ratio_threshold)
+                                                       threshold = MAP_odds_ratio_threshold)
     pruned_BAMM_object$MAP_BAMM_object <- format_sub_BAMM_object(MAP_BAMM_object)
 
     if (verbose)
