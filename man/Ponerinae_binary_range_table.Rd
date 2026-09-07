@@ -20,7 +20,7 @@ Evolutionary history of ponerine ants highlights how the timing of dispersal eve
 \details{
 A data.frame of range locations covering the 1534 extant ponerine ant taxa (Ponerinae subfamily).
 \itemize{
-\item \verb{$Taxa} Character string. Names of ponerinae ant taxa.
+\item \verb{$Taxa} Character string. Names of Ponerinae ant taxa.
 \item \verb{$Afrotropics} Logical. Whether the range of the taxa extends to Afrotropics.
 \item \verb{$Australasia} Logical. Whether the range of the taxa extends to Australasia.
 \item \verb{$Indomalaya} Logical. Whether the range of the taxa extends to Indomalaya.

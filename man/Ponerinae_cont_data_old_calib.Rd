@@ -19,8 +19,8 @@ Ponerinae_cont_data_old_calib <- readRDS(system.file("extdata", "Ponerinae_cont_
 A list of five objects containing information on the evolution of fake size data in Ponerinae ants.
 This object was obtained with \code{\link[=prepare_trait_data]{prepare_trait_data()}}.
 \itemize{
-\item \verb{$contMap} List of class \code{"contMap"} that contains a phylogenetic tree and associated mapping of ML estimates trait values interpolated along branches.
-\item \verb{$contMaps} List of \code{"contMap"}objects that represent simulations of trait evolution conditioned to the observed data and evolutionary model fit
+\item \verb{$contMap} List of class \code{"contMap"} that contains a phylogenetic tree and associated mapping of ML estimates of trait values interpolated along branches.
+\item \verb{$contMaps} List of \code{"contMap"} objects that represent simulations of trait evolution conditioned on the observed data and evolutionary model fit
 (i.e., continuous stochastic maps).
 \item \verb{$trait_data_type} Character string. Record the type of trait data. Here: "continuous".
 \item \verb{$nb_simulations} Integer. Record the nb of simulations/stochastic maps. Here: "100".

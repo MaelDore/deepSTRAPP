@@ -21,9 +21,9 @@ A list of four elements containing information on the evolution of a continuous 
 \itemize{
 \item \verb{$trait_data} Named vector of numerical values. Names are the taxa or internal tipward node ID associated with the values.
 Values are the continuous trait data estimated along branches for 10 Mya.
-\item \verb{$focal_time} Numerical. Time in the past at which the trait data where extracted.
+\item \verb{$focal_time} Numerical. Time in the past at which the trait data were extracted.
 \item \verb{$trait_data_type} Character string. Record the type of trait data. Here: "continuous".
-\item \verb{$contMap} A phylogenetic tree and associated mapping of estimated trait values. It was updated such as the tips correspond to
+\item \verb{$contMap} A phylogenetic tree and associated mapping of estimated trait values. It was updated such that the tips correspond to
 lineages found 10 Mya (i.e., at the focal time in the past).
 }
 }

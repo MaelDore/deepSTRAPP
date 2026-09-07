@@ -9,8 +9,8 @@ A list with 10 elements.
 \description{
 deepSTRAPP output for biogeographic ranges mapped on old time-calibrated ponerine ant phylogeny over 0 to 40 Mya.
 This object is the typical result of a deepSTRAPP run carried out with \code{\link[=run_deepSTRAPP_over_time]{run_deepSTRAPP_over_time()}}.
-It summaries STRAPP test results and can optionally include trait and diversification rate data frames, STRAPP test outputs,
-updated trait data objects, and updated BAMM objects, that are required fro downstream plots and analyses.
+It summarizes STRAPP test results and can optionally include trait and diversification rate data frames, STRAPP test outputs,
+updated trait data objects, and updated BAMM objects, that are required for downstream plots and analyses.
 
 The object can be loaded with:
 Ponerinae_deepSTRAPP_biogeo_old_calib_0_40 <- readRDS(system.file("extdata", "Ponerinae_deepSTRAPP_biogeo_old_calib_0_40.rds", package = "deepSTRAPP"))
@@ -26,7 +26,7 @@ that can be passed down to \code{\link[=plot_STRAPP_pvalues_over_time]{plot_STRA
 \item \verb{$rate_type} Character string. The type of diversification rates used in the tests. Here: "net_diversification".
 }
 
-Optional summary df for multinominal data, if \code{posthoc_pairwise_tests = TRUE}:
+Optional summary df for multinomial data, if \code{posthoc_pairwise_tests = TRUE}:
 \itemize{
 \item \verb{$pvalues_summary_df_for_posthoc_pairwise_tests} Data.frame with four or five columns providing test stat \verb{$estimate}, \verb{$p_value}, and \verb{$p_value_adjusted}
 (if \code{p.adjust_method} used is not "none") for each \verb{$pair} of states involved in post hoc Dunn's tests obtained for each time step (i.e., \verb{$focal_time}).
@@ -42,14 +42,14 @@ Set \code{extract_trait_data_melted_df = TRUE} to include it in the output.
 found across all posterior samples (\verb{$BAMM_sample_ID}) over each time step (i.e., \verb{$focal_time}).
 Set \code{extract_diversification_data_melted_df = TRUE} to include it in the output.
 \item Those data.frames can be passed down to \code{\link[=plot_rates_through_time]{plot_rates_through_time()}} to generate a plot showing
-the evolution diversification rates across trait values over time.
+the evolution of diversification rates across trait values over time.
 }
 
 Optional objects generated for each time step (i.e., \code{focal_time}) and ordered as in \verb{$time_steps}:
 \itemize{
 \item \verb{$STRAPP_results_over_time} List of objects summarizing the results of the STRAPP tests
 See \code{\link[=compute_STRAPP_test_for_focal_time]{compute_STRAPP_test_for_focal_time()}} for a detailed description of the elements in each object.
-Combined with \code{return_perm_data = TRUE}, it allows to plot the histograms of the null distributions
+Combined with \code{return_perm_data = TRUE}, it allows you to plot the histograms of the null distributions
 used to assess significance of the tests with \code{\link[=plot_histogram_STRAPP_test_for_focal_time]{plot_histogram_STRAPP_test_for_focal_time()}}.
 (for a single \code{focal_time}) and \code{\link[=plot_histograms_STRAPP_tests_over_time]{plot_histograms_STRAPP_tests_over_time()}} (for multiple \code{time_steps}).
 \item \verb{$updated_Maps_over_time} List of objects containing the updated \code{densityMaps} for each time-step.

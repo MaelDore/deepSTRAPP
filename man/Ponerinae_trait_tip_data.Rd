@@ -17,7 +17,7 @@ This is NOT real biological/ecological data. They were designed for illustrative
 \details{
 A data.frame of fake trait data covering the 1534 extant ponerine ant taxa (Ponerinae subfamily).
 \itemize{
-\item \verb{$Taxa} Character string. Names of ponerinae ant taxa.
+\item \verb{$Taxa} Character string. Names of Ponerinae ant taxa.
 \item \verb{$fake_cont_tip_data} Numeric. Fake continuous trait data.
 \item \verb{$fake_cat_2lvl_tip_data} Vector of character strings. Fake categorical size data with two levels: "large" and "small".
 \item \verb{$fake_cat_3lvl_tip_data} Vector of character strings. Fake categorical habitat data with three levels: "arboreal", "subterranean", and "terricolous".

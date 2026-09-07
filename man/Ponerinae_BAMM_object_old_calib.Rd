@@ -11,7 +11,7 @@ A list with 24 elements.
 data(Ponerinae_BAMM_object_old_calib)
 }
 \description{
-An object of class \code{"bammdata"} containing information of diversification dynamics
+An object of class \code{"bammdata"} containing information on diversification dynamics
 of extant ponerine ants (Ponerinae subfamily) modeled with BAMM based on an old time-calibration for illustrative purposes.
 For a BAMM based on the proper time-calibrated phylogeny of ponerine ants, see the \code{Ponerinae_BAMM_object} in deepSTRAPP.
 
@@ -20,7 +20,7 @@ Evolutionary history of ponerine ants highlights how the timing of dispersal eve
 \doi{10.1038/s41467-025-63709-3}
 }
 \details{
-An object of class \code{"bammdata"} containing information of diversification dynamics
+An object of class \code{"bammdata"} containing information on diversification dynamics
 of extant ponerine ants (Ponerinae subfamily) modeled with BAMM based on an old time-calibration for illustrative purposes.
 
 Phylogeny-related elements used to plot a phylogeny with \code{\link[ape:plot.phylo]{ape::plot.phylo()}}:
@@ -43,11 +43,11 @@ BAMM elements summarizing diversification data:
 \itemize{
 \item \verb{$numberEvents} Vector of integer. Number of events/macroevolutionary regimes (k+1) recorded in each posterior configuration. k = number of shifts.
 \item \verb{$eventData} List of data.frames. One per posterior sample. Records shift events and macroevolutionary regimes parameters. 1st line = Background root regime.
-\item \verb{$eventVectors} List of integer vectors. One per posterior sample. Record regime ID per branches.
-\item \verb{$tipStates} List of integer vectors. One per posterior sample. Record regime ID per tips.
-\item \verb{$tipLambda} List of numerical vectors. One per posterior sample. Record speciation rates per tips.
-\item \verb{$tipMu} List of numerical vectors. One per posterior sample. Record extinction rates per tips.
-\item \verb{$eventBranchSegs} List of matrix of numerical. One per posterior sample. Record regime ID per segments of branches.
+\item \verb{$eventVectors} List of integer vectors. One per posterior sample. Record regime ID per branch.
+\item \verb{$tipStates} List of integer vectors. One per posterior sample. Record regime ID per tip.
+\item \verb{$tipLambda} List of numerical vectors. One per posterior sample. Record speciation rates per tip.
+\item \verb{$tipMu} List of numerical vectors. One per posterior sample. Record extinction rates per tip.
+\item \verb{$eventBranchSegs} List of matrix of numerical. One per posterior sample. Record regime ID per segment of branches.
 \item \verb{$meanTipLambda} Vector of numerical. Mean tip speciation rates across all posterior configurations of tips.
 \item \verb{$meanTipMu} Vector of numerical. Mean tip extinction rates across all posterior configurations of tips.
 \item \verb{$type} Character string. Set the type of data modeled with BAMM. Here, type = "diversification".
@@ -59,12 +59,12 @@ Additional elements providing key information for downstream analyses:
 \item \verb{$MSP_tree} Object of class \code{phylo}. List of 4 elements duplicating information from the Phylogeny-related elements above,
 except \verb{$MSP_tree$edge.length} is recording the Marginal Shift Probability of each branch (i.e., the probability of a regime shift to occur along each branch)
 \item \verb{$MAP_indices} Vector of integers. The indices of the Maximum A Posteriori probability (MAP) configurations among the posterior samples.
-\item \verb{$MAP_BAMM_object}. List of 18 elements of class `"bammdata" recording the mean rates and regime shift locations found across
-the Maximum A Posteriori probability (MAP) configurations. All BAMM elements summarizing diversification data holds a single entry describing
+\item \verb{$MAP_BAMM_object}. List of 18 elements of class \code{"bammdata"} recording the mean rates and regime shift locations found across
+the Maximum A Posteriori probability (MAP) configurations. All BAMM elements summarizing diversification data hold a single entry describing
 this mean diversification history.
 \item \verb{$MSC_indices} Vector of integers. The indices of the Maximum Shift Credibility (MSC) configurations among the posterior samples.
-\item \verb{$MSC_BAMM_object} List of 18 elements of class `"bammdata" recording the mean rates and regime shift locations found across
-the Maximum Shift Credibility (MSC) configurations. All BAMM elements summarizing diversification data holds a single entry describing
+\item \verb{$MSC_BAMM_object} List of 18 elements of class \code{"bammdata"} recording the mean rates and regime shift locations found across
+the Maximum Shift Credibility (MSC) configurations. All BAMM elements summarizing diversification data hold a single entry describing
 this mean diversification history.
 }
 }
