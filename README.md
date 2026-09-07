@@ -38,23 +38,23 @@ across tips between the different bioregions with for example a STRAPP
 test (*Rabosky & Huang, 2016*). However, such tests only compare current
 rates of diversification that may not be informative about the
 **long-term past dynamics shaping present-day biodiversity**. deepSTRAPP
-overcomes this methodological gap: it enables to test the DRH by
+overcomes this methodological gap: it enables users to test the DRH by
 comparing diversification rates **at any time step along evolutionary
 time**. As a typical outcome, it allows researchers to **identify
-time-frame of significance** during which diversification rates were
+time-frames of significance** during which diversification rates were
 different across trait values, providing a quantitative testing
 framework to **disentangle effects of past and current dynamics** in
 explaining current patterns of biodiversity.
 
 Beyond the biogeographic context, deepSTRAPP can be used to test for an
 evolutionary relationship between phenotypic evolution and
-diversification dynamics for **any type of traits**. It provides an
+diversification dynamics for **any type of trait**. It provides an
 alternative approach to state-dependent speciation and extinction (SSE)
 models that intend to model altogether trait evolution and
 diversification dynamics, but are often time-consuming and hard to
 parametrize, especially on large time-calibrated phylogenies. Thus,
 deepSTRAPP offers a flexible solution that **can be applied to
-phylogenies encompassing thousands of lineages** (*Doré al., 2025*).
+phylogenies encompassing thousands of lineages** (*Doré et al., 2025*).
 
 deepSTRAPP is especially suited for large phylogenies as the power of
 the statistical tests is limited by the number of diversification regime
@@ -69,12 +69,12 @@ A **full deepSTRAPP workflow** runs as follows:
 - **Step 1**: Map trait evolution
 - **Step 2:** Infer diversification dynamics (typically with BAMM)
 - **Step 3:** Run deepSTRAPP
-- **Step 3.1:** Extract traits values, diversification rates, and
-  regimes at a given time in the past
+- **Step 3.1:** Extract trait values, diversification rates, and regimes
+  at a given time in the past
 - **Step 3.2:** Run a STRAPP test
 - **Step 3.3:** Repeat steps 3.1 & 3.2 for many time steps along
   evolution time
-- **Step 4:** Summarize tests results
+- **Step 4:** Summarize test results
 
 ![Simplified deepSTRAPP workflow](man/figures/deepSTRAPP_workflow.png)
 **Figure 1: Simplified deepSTRAPP workflow showing the main functions
@@ -219,7 +219,7 @@ evolutionary times** is available
 and within R: `vignette("main_tutorial")`.
 
 This tutorial presents the main functions in a typical **deepSTRAPP
-workflow**. <br> For more advanced used, please refer to the
+workflow**. <br> For more advanced uses, please refer to the
 vignettes/tutorials below. <br>
 
 ## :scroll: Advanced uses / tutorials
@@ -263,7 +263,7 @@ and in this vignette: `vignette("deepSTRAPP")`.
 
 **4/ Explore the STRAPP test options**
 
-- [Test difference
+- [Test different
   hypotheses](https://maeldore.github.io/deepSTRAPP/articles/explore_STRAPP_test_types.html):
   `vignette("explore_STRAPP_test_types")`.
 
