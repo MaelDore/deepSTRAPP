@@ -97,7 +97,7 @@ eel_tip_data <- eel_tip_data[eel.tree$tip.label]
 
 # 1.1/ Fit evolutionary models to trait data using Maximum Likelihood.
 # 1.2/ Select the best fitting model comparing AICc.
-# 1.3/ Infer ancestral characters estimates (ACE) at nodes.
+# 1.3/ Infer ancestral character estimates (ACE) at nodes.
 # 1.4/ Infer ancestral states along branches using interpolation to produce a `contMap`.
 
 library(deepSTRAPP)
@@ -129,7 +129,7 @@ library(deepSTRAPP)
     # through time under the model r[t] = r[0] * exp(a * t),  where r[0] is the initial rate,
     # 'a' is the rate change parameter, and t is time. By default, 'a' is set to be negative,
     # therefore the model represents a decelerating rate of evolution.
-    # Parameter estimate boundaries can be change to allow accelerating evolution 
+    # Parameter estimate boundaries can be changed to allow accelerating evolution 
     # with positive values of 'a' (as in the ACDC model).
  # "rate_trend": Linear trend model.
     # Time dependent model where rate of evolution varies linearly with time 
@@ -140,19 +140,19 @@ library(deepSTRAPP)
     # predicts covariance among trait values for species (i.e., the degree of phylogenetic signal).
     # The model multiplies all internal branch lengths by 'lambda'.
     # 'lambda' close to zero indicates no phylogenetic signal. 
-    # 'lambda' close to one approximate the 'BM' model and indicates strong phylogenetic signal.
+    # 'lambda' close to one approximates the 'BM' model and indicates strong phylogenetic signal.
  # "kappa": Pagel's kappa model.
     # Based on branch length transformation. Punctuational (speciational) model where
     # trait divergence is related to the number of speciation events between pairs of species.
     # Assumes that speciation events are responsible for trait divergence.
     # The model raises all branch lengths to an estimated power 'kappa'.
     # 'kappa' close to zero indicates a strong dependency of trait evolution on speciation events.
-    # 'kappa' close to one approximate the 'BM' model and indicates strong phylogenetic signal.
+    # 'kappa' close to one approximates the 'BM' model and indicates strong phylogenetic signal.
  # "delta": Pagel's delta model.
     # Based on branch length transformation. Time-dependent model that modulates 
     # the relative contributions of early vs. late evolution in the tree.
     # The model raises all node depths to an estimated power 'delta'.
-    # 'delta' close to one approximate the 'BM' model and indicates strong phylogenetic signal.
+    # 'delta' close to one approximates the 'BM' model and indicates strong phylogenetic signal.
     # 'delta' lower than one gives more weight to early evolution, thus represents decelerating rates.
     # 'delta' higher than one gives more weight to late evolution, thus represents accelerating rates.
 
@@ -164,7 +164,7 @@ eel_cont_data <- prepare_trait_data(
     seed = 1234, # Set seed for reproducibility
     # All possible models
     evolutionary_models = c("BM", "OU",  "EB", "rate_trend", "lambda", "kappa", "delta"), 
-    control = list(niter = 200), # Example of additional parameters that can be pass down
+    control = list(niter = 200), # Example of additional parameters that can be passed down
     # to geiger::fitContinuous() to control parameter optimization.
     res = 100, # To set the resolution of the continuous mapping of trait value on the contMap
     # Perform simulations of trait evolution (i.e., continuous stochastic mapping) such as
@@ -202,12 +202,12 @@ title(main = "\nML estimates")
 
 # The contMap is the main input needed to perform a deepSTRAPP run on continuous trait data.
 # However, since it only represents Maximum Likelihood (ML) estimates of ancestral trait values,
-# it does not allow to account for uncertainty in trait estimates. *
+# it does not allow you to account for uncertainty in trait estimates.
 # For this, we need to provide the full set of stochastic maps as contMaps
 
 ## Extract the contMaps representing independent simulated evolutionary histories 
-## conditioned to the observed trait data and model fit.
-## The variance observed across the maps represent the uncertainty in ancestral trait estimates.
+## conditioned on the observed trait data and model fit.
+## The variance observed across the maps represents the uncertainty in ancestral trait estimates.
 eel_contMaps <- eel_cont_data$contMaps
 
 # Plot contMap n°1 with initial color_scale
@@ -223,13 +223,13 @@ plot_contMap(eel_contMaps[[100]],
              fsize = c(0.6, 1)) # Adjust tip label size
 title(main = "\nStochastic Mapping simulation n°100")
 
-# Each simulation is different, but in average, they converge around the ML estimates showed in the contMap
+# Each simulation is different, but on average, they converge around the ML estimates shown in the contMap.
 
 ## Extract the Ancestral Character Estimates (ACE) = ML trait estimates at nodes
 eel_ACE <- eel_cont_data$ace
 head(eel_ACE)
 # This is a named numerical vector with names = internal node ID and values = ACE.
-# It can be used as an optional input in deepSTRAPP run to provide
+# It can be used as an optional input in a deepSTRAPP run to provide
 # perfectly accurate ML estimates for trait values at internal nodes. 
 
 ## Explore summary of model selection
@@ -247,7 +247,7 @@ eel_cont_data$best_model_fit$opt # Parameter estimates and goodness-of-fit infor
 
 ## The minimal input needed to run deepSTRAPP is the contMap (eel_contMap).
 ## If you want to account for uncertainty in trait estimates, you need to provide the full sets of stochastic maps (eel_contMaps),
-## and chose either 'paired' (the default) or 'full' as the uncertainty_strategy.
+## and choose either 'paired' (the default) or 'full' as the uncertainty_strategy.
 ## Optionally, you can provide the tip_data (eel_tip_data) and the ACE (eel_ACE) to force 
 ## the use of the exact trait values at tips and nodes (in practice, the difference is negligible).
 
@@ -274,7 +274,7 @@ eel_cont_data <- suppressWarnings(prepare_trait_data(
     phylo = eel.tree,
     seed = 1234, # Set seed for reproducibility
     evolutionary_models = c("BM", "OU",  "EB", "rate_trend", "lambda", "kappa", "delta"), # All possible models
-    control = list(niter = 200), # Example of additional parameters that can be pass down to geiger::fitContinuous() to control parameter optimization.
+    control = list(niter = 200), # Example of additional parameters that can be passed down to geiger::fitContinuous() to control parameter optimization.
     res = 100, # To set the resolution of the continuous mapping of trait value on the contMap
     run_stochastic_maps = TRUE,
     nb_simulations = 100,
