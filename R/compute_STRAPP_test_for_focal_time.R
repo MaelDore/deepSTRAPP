@@ -34,10 +34,10 @@
 #'   ## Multinominal trait data
 #'
 #'   For categorical and biogeographic trait data with more than two states (ex: 'No leg' vs. 'Two legs' vs. 'Four legs').
-#'   Tests for differences in rates between states are carried out with `deepSTRAPP::compute_STRAPP_test_for_multinominal_data()`.
+#'   Tests for differences in rates between states are carried out with `deepSTRAPP::compute_STRAPP_test_for_multinomial_data()`.
 #'   The associated test for all states is the Kruskal-Wallis H test (See [stats::kruskal.test]).
 #'   If `posthoc_pairwise_tests = TRUE`, post hoc pairwise tests between pairs of states will be carried out too.
-#'   The associated test for post hoc pairwise tests is the Dunn's post hoc pairwise rank-sum test (See [dunn.test::dunn.test]).
+#'   The associated test for post hoc pairwise tests is Dunn's post hoc pairwise rank-sum test (See [dunn.test::dunn.test]).
 #'
 #' @param BAMM_object Object of class `"bammdata"`, typically generated with [deepSTRAPP::update_rates_and_regimes_for_focal_time()],
 #'   that contains a phylogenetic tree and associated diversification rates
@@ -70,32 +70,32 @@
 #'   If NULL (default), all BAMM posterior samples will be used once.
 #' @param alpha Numerical. Significance level to use to compute the `estimate` corresponding to the values of the test statistic used to assess significance of the test. This does NOT affect p-values. Default is `0.05`.
 #' @param two_tailed Logical. To define the type of tests. If `TRUE` (default), tests for correlations/differences in rates will be carried out with a null hypothesis
-#'   that rates are not correlated with trait values (continuous data) or equals between trait states (categorical and biogeographic data).
+#'   that rates are not correlated with trait values (continuous data) or equal between trait states (categorical and biogeographic data).
 #'   If `FALSE`, one-tailed tests are carried out.
 #'   * For continuous data, it involves defining a `one_tailed_hypothesis` testing for either a "positive" or "negative" correlation under the alternative hypothesis.
 #'   * For binary data (two states), it involves defining a `one_tailed_hypothesis` indicating which states have higher rates under the alternative hypothesis.
-#'   * For multinominal data (more than two states), it defines the type of post hoc pairwise tests to carry out between pairs of states.
+#'   * For multinomial data (more than two states), it defines the type of post hoc pairwise tests to carry out between pairs of states.
 #'     If `posthoc_pairwise_tests = TRUE`, all two-tailed (if `two_tailed = TRUE`) or one-tailed (if `two_tailed = FALSE`) tests are automatically carried out.
 #' @param one_tailed_hypothesis A character string specifying the alternative hypothesis in the one-tailed test.
 #'   For continuous data, it is either "negative" or "positive" correlation.
 #'   For binary data, it lists the trait states with states ordered in increasing rates under the alternative hypothesis, separated by a greater-than such as c('A > B').
-#' @param posthoc_pairwise_tests Logical. Only for multinominal data (with more than two states). If `TRUE`, all possible post hoc pairwise (Dunn) tests will be computed across all pairs of states.
+#' @param posthoc_pairwise_tests Logical. Only for multinomial data (with more than two states). If `TRUE`, all possible post hoc pairwise (Dunn) tests will be computed across all pairs of states.
 #'   This is a way to detect which pairs of states have significant differences in rates if the overall test (Kruskal-Wallis) is significant. Default is `FALSE`.
-#' @param p.adjust_method A character string. Only for multinominal data (with more than two states). It specifies the type of correction to apply to the p-values
+#' @param p.adjust_method A character string. Only for multinomial data (with more than two states). It specifies the type of correction to apply to the p-values
 #'  in the post hoc pairwise tests to account for multiple comparisons. See [stats::p.adjust()] for the available methods. Default is `none`.
 #' @param return_perm_data Logical. Whether to return the stats data computed from the posterior samples for observed and permuted data in the output.
 #'  This is needed to plot the histogram of the null distribution used to assess significance of the test with [deepSTRAPP::plot_histogram_STRAPP_test_for_focal_time()].
 #'  Default is `FALSE`.
-#' @param nthreads Integer. Number of threads to use for paralleled computing of the tests across the permutations. The R package `parallel` must be loaded for `nthreads > 1`. Default is `1`.
+#' @param nthreads Integer. Number of threads to use for parallel computing of the tests across the permutations. The R package `parallel` must be loaded for `nthreads > 1`. Default is `1`.
 #' @param print_hypothesis Logical. Whether to print information on what test is carried out, detailing the null and alternative hypotheses,
-#'  what significant level is used to rejected or not the null hypothesis, and how uncertainty in trait estimates is handled. Default is `TRUE`.
+#'  what significance level is used to reject or not the null hypothesis, and how uncertainty in trait estimates is handled. Default is `TRUE`.
 #'
 #' @export
 #' @importFrom stats wilcox.test cor.test kruskal.test p.adjust median qchisq qnorm quantile sd
 #' @importFrom dunn.test dunn.test
 #' @importFrom utils capture.output
 #'
-#' @details These set of functions carries out the STructured RAte Permutations on Phylogenies (STRAPP) test as defined in
+#' @details This set of functions carries out the STructured RAte Permutations on Phylogenies (STRAPP) test as defined in
 #'   Rabosky, D. L., & Huang, H. (2016). A robust semi-parametric test for detecting trait-dependent diversification.
 #'   Systematic biology, 65(2), 181-193.
 #'
@@ -103,27 +103,27 @@
 #'   carry out STRAPP test on extant time-calibrated phylogenies, but allowing here to test for
 #'   differences/correlations at any point in the past (i.e. the `focal_time`).
 #'
-#'   It takes an object of class `"bammdata"` (`BAMM_object`) that was updated such as
+#'   It takes an object of class `"bammdata"` (`BAMM_object`) that was updated such that
 #'   its diversification rates (`$tipLambda` and `$tipMu`) and regimes (`$tipStates`) are reflecting
-#'   values observed at at a specific time in the past (i.e. the `$focal_time`).
+#'   values observed at a specific time in the past (i.e. the `$focal_time`).
 #'   Similarly, it takes a list (`trait_data_list`) that provides `$trait_data` as observed on branches
-#'   at the same `focal_time` than the diversification rates and regimes.
+#'   at the same `focal_time` as the diversification rates and regimes.
 #'
 #'   A STRAPP test is carried out by drawing a random set of posterior samples from the `BAMM_object`, then randomly permuting rates
 #'   across blocks of tips defined by the macroevolutionary regimes. Test statistics are then computed across the initial observed data
 #'   and the permuted data for each sample.
-#'   In a two-tailed test, the p-value is the proportion of posterior samples in which the test stats is as extreme in the permuted than in the observed data.
+#'   In a two-tailed test, the p-value is the proportion of posterior samples in which the test stats is more extreme in the permuted than in the observed data.
 #'   In a one-tailed test, the p-value is the proportion of posterior samples in which the test stats is higher in the permuted than in the observed data.
 #'
 #'   ----------  Major changes compared to [BAMMtools::traitDependentBAMM()]  ----------
 #'
 #'   * Allow to account for uncertainty in trait estimates by pairing/mapping multiple trait data extracted from stochastic maps
 #'     across the BAMM samples. See the `uncertainty_strategy` argument for details.
-#'   * Add post hoc pairwise tests (Dunn test) for multinominal data. Use `posthoc_pairwise_tests = TRUE`.
+#'   * Add post hoc pairwise tests (Dunn test) for multinomial data. Use `posthoc_pairwise_tests = TRUE`.
 #'   * Provide outputs tailored for histogram plots [deepSTRAPP::plot_histogram_STRAPP_test_for_focal_time()]
 #'     and p-value time-series plots [deepSTRAPP::plot_STRAPP_pvalues_over_time()].
 #'   * Add prints detailing what test is carried out, what are the null and alternative hypotheses,
-#'     and what significant level is used to rejected or not the null hypothesis. (Enabled with `print_hypothesis = TRUE`).
+#'     and what significance level is used to reject or not the null hypothesis. (Enabled with `print_hypothesis = TRUE`).
 #'   * Split the function in multiple sub-functions according to the type of data (`$trait_data_type`).
 #'   * Prevent using Pearson's correlation tests and applying log-transformation for continuous data.
 #'     The rationale is that there is no reason to assume that tip rates are distributed normally or log-normally.
@@ -140,7 +140,7 @@
 #'   * `$method` Character string. The statistical method used to carry out the test.
 #'   * `$rate_type` Character string. The type of diversification rates tested. One of 'speciation', 'extinction' or 'net_diversification'.
 #'   * `$trait_data_type` Character string. The type of trait data as found in 'trait_data_list$trait_data_type'. One of 'continuous', 'categorical', or 'biogeographic'.
-#'   * `$trait_data_type_for_stats` Character string. The type of trait data used to select statistical method. One of 'continuous', 'binary', or 'multinominal'.
+#'   * `$trait_data_type_for_stats` Character string. The type of trait data used to select statistical method. One of 'continuous', 'binary', or 'multinomial'.
 #'   * `$uncertainty_strategy` Character string. The strategy used to account for uncertainty in estimates.
 #'   * `$trait_maps_vs_BAMM_samples_list` List of two elements recording the stochastic maps (`$trait_map_ID`) and BAMM samples (`$BAMM_posterior_sample_ID`) chosen for testing.
 #'      Those may partly differ from the actual maps and BAMM samples used for the test as recorded in `$perm_data_df` because invalid maps with not enough states/ranges are discarded.
@@ -167,7 +167,7 @@
 #'     + `$delta_*` OR `$abs_delta_*` Numerical. Test stats computed for the STRAPP test comparing observed stats and permuted stats.
 #'       Name depends on the test used and the type of tests (two-tailed compare absolute values; one-tailed compare raw values).
 #'   Combined with `posthoc_pairwise_tests = TRUE`, the stats data are also provided for the post hoc pairwise tests:
-#'   * `$posthoc_pairwise_tests$perm_data_array` A 3D array containing stats data for all post hoc pairwise tests in a similar format that `$perm_data_df`.
+#'   * `$posthoc_pairwise_tests$perm_data_array` A 3D array containing stats data for all post hoc pairwise tests in a similar format to `$perm_data_df`.
 #'
 #'   If no STRAPP test was performed in the case of categorical/biogeographic data with a single state/range at `focal_time`,
 #'   only the `$trait_data_type`, `$trait_data_type_for_stats` = "none", and `$focal_time` are returned.
@@ -217,7 +217,7 @@
 #'  # Save continuous data
 #'  trait_data_continuous <- Ponerinae_trait_cont_tip_data_10My
 #'
-#'  ## Transform trait data into binary and multinominal data
+#'  ## Transform trait data into binary and multinomial data
 #'
 #'  # Binarize data into two states
 #'  trait_data_binary <- trait_data_continuous
@@ -228,13 +228,13 @@
 #'  table(trait_data_binary$trait_data)
 #'
 #'  # Categorize data into three states
-#'  trait_data_multinominal <- trait_data_continuous
-#'  trait_data_multinominal$trait_data[trait_data_continuous$trait_data < 0.6] <- "state_B"
-#'  trait_data_multinominal$trait_data[trait_data_continuous$trait_data < 0.4] <- "state_A"
-#'  trait_data_multinominal$trait_data[trait_data_continuous$trait_data >= 0.6] <- "state_C"
-#'  trait_data_multinominal$trait_data_type <- "categorical"
+#'  trait_data_multinomial <- trait_data_continuous
+#'  trait_data_multinomial$trait_data[trait_data_continuous$trait_data < 0.6] <- "state_B"
+#'  trait_data_multinomial$trait_data[trait_data_continuous$trait_data < 0.4] <- "state_A"
+#'  trait_data_multinomial$trait_data[trait_data_continuous$trait_data >= 0.6] <- "state_C"
+#'  trait_data_multinomial$trait_data_type <- "categorical"
 #'
-#'  table(trait_data_multinominal$trait_data)
+#'  table(trait_data_multinomial$trait_data)
 #'
 #'  ## Duplicate trait data as if extracted from multiple stochastic maps
 #'
@@ -291,14 +291,14 @@
 #'     one_tailed_hypothesis = c("state_B > state_A"))
 #'  str(STRAPP_results, max.level = 1)
 #'
-#'  # ------ Compute STRAPP test for multinominal data ------ #
+#'  # ------ Compute STRAPP test for multinomial data ------ #
 #'
 #'  # Compute STRAPP test between all three states, and compute post hoc tests
 #'  # for differences in rates between all possible pairs of states
 #'  # with a p-value adjusted for multiple comparison using Bonferroni's correction
 #'  STRAPP_results <- compute_STRAPP_test_for_focal_time(
 #'     BAMM_object = Ponerinae_BAMM_object_10My,
-#'     trait_data_list = trait_data_multinominal,
+#'     trait_data_list = trait_data_multinomial,
 #'     uncertainty_strategy = "rates_only",
 #'     posthoc_pairwise_tests = TRUE,
 #'     two_tailed = TRUE,
@@ -711,7 +711,7 @@ compute_STRAPP_test_for_focal_time <- function (BAMM_object, trait_data_list,
       {
         trait_data_type_for_stats <- "binary"
       } else { # Case with more than two states
-        trait_data_type_for_stats <- "multinominal"
+        trait_data_type_for_stats <- "multinomial"
       }
     } else {
       trait_data_type_for_stats <- "continuous"
@@ -785,7 +785,7 @@ compute_STRAPP_test_for_focal_time <- function (BAMM_object, trait_data_list,
       {
         trait_data_type_for_stats <- "binary"
       } else { # Case with more than two states in at least one stochastic map
-        trait_data_type_for_stats <- "multinominal"
+        trait_data_type_for_stats <- "multinomial"
       }
     } else {
       trait_data_type_for_stats <- "continuous"
@@ -925,10 +925,10 @@ compute_STRAPP_test_for_focal_time <- function (BAMM_object, trait_data_list,
                nthreads = nthreads,
                print_hypothesis = print_hypothesis)
            },
-           multinominal = { # Case for multinominal data (Case of categorical/biogeographic data with more than two states)
+           multinomial = { # Case for multinomial data (Case of categorical/biogeographic data with more than two states)
              # Stat test = Kruskal-Wallis H test
              # Can define the post hoc pairwise tests to compute
-             STRAPP_results <- compute_STRAPP_test_for_multinominal_data(
+             STRAPP_results <- compute_STRAPP_test_for_multinomial_data(
                BAMM_data = BAMM_data,
                trait_data = trait_data,
                trait_data_type = trait_data_type,
@@ -1355,7 +1355,7 @@ compute_STRAPP_test_for_continuous_data <- function (
   STRAPP_results$one_tailed_hypothesis <- one_tailed_hypothesis # Type of hypothesis if one-tailed test
   STRAPP_results$rate_type <- rate_type # Type of rates: speciation, extinction, or net diversification
   STRAPP_results$trait_data_type <- trait_data_type # Type of trait data: continuous, categorical, or biogeographic
-  STRAPP_results$trait_data_type_for_stats <- "continuous" # Type of trait data used to select statistical method: continuous, binary, or multinominal
+  STRAPP_results$trait_data_type_for_stats <- "continuous" # Type of trait data used to select statistical method: continuous, binary, or multinomial
   STRAPP_results$uncertainty_strategy <- uncertainty_strategy # Type of strategy employed to account for uncertainty in estimates
 
   ## Save permutation results in a data.frame
@@ -1852,7 +1852,7 @@ compute_STRAPP_test_for_binary_data <- function (
   STRAPP_results$one_tailed_hypothesis <- one_tailed_hypothesis # Type of hypothesis if one-tailed test
   STRAPP_results$rate_type <- rate_type # Type of rates: speciation, extinction, or net diversification
   STRAPP_results$trait_data_type <- trait_data_type # Type of trait data: continuous, categorical, or biogeographic
-  STRAPP_results$trait_data_type_for_stats <- "binary" # Type of trait data used to select statistical method: continuous, binary, or multinominal
+  STRAPP_results$trait_data_type_for_stats <- "binary" # Type of trait data used to select statistical method: continuous, binary, or multinomial
   STRAPP_results$uncertainty_strategy <- uncertainty_strategy # Type of strategy employed to account for uncertainty in estimates
 
   ## Save permutation results in a data.frame
@@ -1886,9 +1886,9 @@ compute_STRAPP_test_for_binary_data <- function (
 }
 
 
-### Sub-function to handle multinominal data ####
+### Sub-function to handle multinomial data ####
 
-compute_STRAPP_test_for_multinominal_data <- function (
+compute_STRAPP_test_for_multinomial_data <- function (
     BAMM_data, trait_data,
     trait_data_type,
     rate_type = "net_diversification",
@@ -2209,7 +2209,7 @@ compute_STRAPP_test_for_multinominal_data <- function (
   STRAPP_results$method <- "Kruskal-Wallis" # Stats method
   STRAPP_results$rate_type <- rate_type # Type of rates: speciation, extinction, or net diversification
   STRAPP_results$trait_data_type <- trait_data_type # Type of trait data: continuous, categorical, or biogeographic
-  STRAPP_results$trait_data_type_for_stats <- "multinominal" # Type of trait data used to select statistical method: continuous, binary, or multinominal
+  STRAPP_results$trait_data_type_for_stats <- "multinomial" # Type of trait data used to select statistical method: continuous, binary, or multinomial
   STRAPP_results$uncertainty_strategy <- uncertainty_strategy # Type of strategy employed to account for uncertainty in estimates
 
   ## Save permutation results in a data.frame
@@ -2730,7 +2730,7 @@ compute_STRAPP_test_for_multinominal_data <- function (
 #'
 #' @description Permutes rates on tips using regime membership to define
 #'   blocks used for permutation as in a STRAPP test.
-#'   Each block of tips assigned the a regime has the same rates at a given point in time.
+#'   Each block of tips assigned to a regime has the same rates at a given point in time.
 #'   During permutation, each block of tips is assigned a unique rate from any regime drawn randomly.
 #'
 #' @param rates_regimes_df Data.frame with `$regimes` (integer) and `$rates` (numerical)

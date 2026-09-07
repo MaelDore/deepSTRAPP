@@ -169,12 +169,12 @@ plot(1:10, type = "n", axes = FALSE, ylab = "", xlab = "old")
 #' @description Updates an object of class `"bammdata"` to obtain the diversification rates/regimes
 #'   found along branches at a specific time in the past (i.e. the `focal_time`).
 #'   Optionally, the function can update the object to display a mapped phylogeny such as
-#'   branches overlapping the `focal_time` are shorten to the `focal_time`.
+#'   branches overlapping the `focal_time` are shortened to the `focal_time`.
 #'
 #' @param BAMM_object Object of class `"bammdata"`, typically generated with [deepSTRAPP::prepare_diversification_data()],
 #'   that contains a phylogenetic tree and associated diversification rate mapping across selected posterior samples.
 #'   The phylogenetic tree must be rooted and fully resolved/dichotomous,
-#'   but it does not need to be ultrametric (it can includes fossils).
+#'   but it does not need to be ultrametric (it can include fossils).
 #' @param focal_time Numerical. The time, in terms of time distance from the present,
 #'   at which the tree and rate mapping must be cut. It must be smaller than the root age of the phylogeny.
 #' @param update_rates Logical. Specify whether diversification rates stored in
@@ -234,8 +234,8 @@ plot(1:10, type = "n", axes = FALSE, ylab = "", xlab = "old")
 #'   than the `focal_time` are cut-off:
 #'   * `$begin` provides absolute time since root of edge/branch start (rootward).
 #'   * `$end` provides absolute time since root of edge/branch end (tipward).
-#'   * `$eventVectors` provides regime membership per branches in each posterior sample configuration.
-#'   * `$eventBranchSegs` provides regime membership per segments of branches in each posterior sample configuration.
+#'   * `$eventVectors` provides regime membership per branch in each posterior sample configuration.
+#'   * `$eventBranchSegs` provides regime membership per segment of branches in each posterior sample configuration.
 #'   * `$dtrates` provides mean speciation and extinction rates along segments of branches, and resolution fraction (tau) describing
 #'   the fraction of each segment length compared to the full depth of the initial tree (i.e., the root_age).
 #'
@@ -259,11 +259,11 @@ plot(1:10, type = "n", axes = FALSE, ylab = "", xlab = "old")
 #'   BAMM elements summarizing diversification data:
 #'   * `$numberEvents` Vector of integer. Number of events/macroevolutionary regimes (k+1) recorded in each posterior configuration. k = number of shifts.
 #'   * `$eventData` List of data.frames. One per posterior sample. Records shift events and macroevolutionary regimes parameters. 1st line = Background root regime.
-#'   * `$eventVectors` List of integer vectors. One per posterior sample. Record regime ID per branches.
-#'   * `$tipStates` List of named integer vectors. One per posterior sample. Record regime ID per tips present at `focal_time`. Updated if `update_regimes = TRUE`.
-#'   * `$tipLambda` List of named numerical vectors. One per posterior sample. Record speciation rates per tips present at `focal_time`. Updated if `update_rates = TRUE`.
-#'   * `$tipMu` List of named numerical vectors. One per posterior sample. Record extinction rates per tips present at `focal_time`. Updated if `update_rates = TRUE`.
-#'   * `$eventBranchSegs` List of matrix of numerical. One per posterior sample. Record regime ID per segments of branches.
+#'   * `$eventVectors` List of integer vectors. One per posterior sample. Record regime ID per branch.
+#'   * `$tipStates` List of named integer vectors. One per posterior sample. Record regime ID per tip present at `focal_time`. Updated if `update_regimes = TRUE`.
+#'   * `$tipLambda` List of named numerical vectors. One per posterior sample. Record speciation rates per tip present at `focal_time`. Updated if `update_rates = TRUE`.
+#'   * `$tipMu` List of named numerical vectors. One per posterior sample. Record extinction rates per tip present at `focal_time`. Updated if `update_rates = TRUE`.
+#'   * `$eventBranchSegs` List of matrix of numerical. One per posterior sample. Record regime ID per segment of branches.
 #'   * `$meanTipLambda` Vector of named numerical. Mean tip speciation rates across all posterior configurations of tips present at `focal_time` (does not includes older fossils).
 #'   * `$meanTipMu` Vector of named numerical. Mean tip extinction rates across all posterior configurations of tips present at `focal_time` (does not includes older fossils).
 #'   * `$type` Character string. Set the type of data modeled with BAMM. Should be "diversification".
@@ -274,12 +274,12 @@ plot(1:10, type = "n", axes = FALSE, ylab = "", xlab = "old")
 #'      except `$MSP_tree$edge.length` is recording the Marginal Shift Probability of each branch (i.e., the probability of a regime shift to occur along each branch)
 #'      whose origin is older that `focal_time`.
 #'   * `$MAP_indices` Vector of integers. The indices of the Maximum A Posteriori probability (MAP) configurations among the posterior samples.
-#'   * `$MAP_BAMM_object`. List of 18 elements of class `"bammdata" recording the mean rates and regime shift locations found across
-#'      the Maximum A Posteriori probability (MAP) configuration. All BAMM elements summarizing diversification data holds a single entry describing this
+#'   * `$MAP_BAMM_object`. List of 18 elements of class `"bammdata"` recording the mean rates and regime shift locations found across
+#'      the Maximum A Posteriori probability (MAP) configuration. All BAMM elements summarizing diversification data hold a single entry describing this
 #'      the mean diversification history, updated for the `focal_time`.
 #'   * `$MSC_indices` Vector of integers. The indices of the Maximum Shift Credibility (MSC) configurations among the posterior samples.
-#'   * `$MSC_BAMM_object` List of 18 elements of class `"bammdata" recording the mean rates and regime shift locations found across
-#'      the Maximum Shift Credibility (MSC) configurations. All BAMM elements summarizing diversification data holds a single entry describing
+#'   * `$MSC_BAMM_object` List of 18 elements of class `"bammdata"` recording the mean rates and regime shift locations found across
+#'      the Maximum Shift Credibility (MSC) configurations. All BAMM elements summarizing diversification data hold a single entry describing
 #'      this mean diversification history, updated for the `focal_time`.
 #'
 #'   New elements added to provide update information:

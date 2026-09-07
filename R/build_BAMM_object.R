@@ -11,25 +11,25 @@
 #'
 #'   This is a wrapper of the original [BAMMtools::getEventData()] function that additionally provides information on:
 #'    * the Marginal Shift Probability (MSP) = the probability of a regime shift to occur along each branch.
-#'    * the Maximum A Posteriori probability (MAP) configurations among the posterior samples = the configurations of regimes shifts
-#'      that was sampled most frequently (See [BAMMtools::getBestShiftConfiguration()]).
+#'    * the Maximum A Posteriori probability (MAP) configurations among the posterior samples = the configurations of regime shifts
+#'      that were sampled most frequently (See [BAMMtools::getBestShiftConfiguration()]).
 #'    * the Maximum Shift Credibility (MSC) configurations among the posterior samples = the configurations of regime shift location
 #'      with the highest product of marginal probabilities across branches (See [BAMMtools::maximumShiftCredibility()]).
 #'
 #'   Those additional elements are used by [deepSTRAPP::plot_BAMM_rates()] to display regime shift probabilities and locations.
 #'
 #'   This function is meant to enable users to inject into the deepSTRAPP framework the results of their own BAMM analyses.
-#'   Alternatively, a full BAMM analyses starting from a time-calibrated phylogeny alone can be carried within deepSTRAPP with [deepSTRAPP::prepare_diversification_data()].
+#'   Alternatively, a full BAMM analysis starting from a time-calibrated phylogeny alone can be carried out within deepSTRAPP with [deepSTRAPP::prepare_diversification_data()].
 #'
 #' # Note on Bayesian Analysis of Macroevolutionary Mixtures (BAMM)
 #'
 #'  BAMM is a model of diversification for time-calibrated phylogenies that explores complex diversification dynamics
 #'  by allowing multiple regime shifts across clades without a priori hypotheses on the location of such shifts.
 #'  It uses reversible jump Markov chain Monte Carlo (rjMCMC) to automatically explore a vast range of models with different
-#'  speciation and extinction rates, and different number and location of regime shits.
+#'  speciation and extinction rates, and different number and location of regime shifts.
 #'
 #'  BAMM is one option among others for modeling diversification on phylogenies.
-#'  You may wish to explore alternatives models such as LSBDS model in RevBayes (Höhna et al., 2016), the MTBD model (Barido-Sottani et al., 2020),
+#'  You may wish to explore alternative models such as LSBDS model in RevBayes (Höhna et al., 2016), the MTBD model (Barido-Sottani et al., 2020),
 #'  or the ClaDS2 model (Maliet et al., 2019) for your own data.
 #'  However, you will need Bayesian models that infer regime shifts to be able to perform STRAPP tests (Rabosky & Huang, 2016).
 #'  Additionally, you need to format the model output such as in `BAMM_object`, so it can be used in a deepSTRAPP workflow.
@@ -37,14 +37,14 @@
 #' @param phylo Object of class `"phylo"` as defined in R package `{ape}`. Time-calibrated phylogeny that was used to produce the BAMM run.
 #'   The phylogeny must be rooted and fully resolved.
 #' @param eventdata Character string specifying the path to a BAMM event-data file. Alternatively, an object of class data.frame that includes the event data from a BAMM run.
-#' @param burn_in Numerical. Proportion of posterior samples removed from the BAMM output to ensure that the remaining samples where drawn once the equilibrium distribution was reached. Default is `0.25`
+#' @param burn_in Numerical. Proportion of posterior samples removed from the BAMM output to ensure that the remaining samples were drawn once the equilibrium distribution was reached. Default is `0.25`
 #' @param nb_posterior_samples Numerical. Number of posterior samples to extract, after removing the burn-in, in the final `BAMM_object` to use for downstream analyses.
 #'  If set to `NULL` (default), all samples remaining after removing the burn-in will be kept.
 #' @param seed Integer. Set the seed to ensure reproducibility when drawing random posterior samples. Default is `NULL` (a random seed is used).
-#' @param expectedNumberOfShifts Integer. The expected number of regime shifts sets during the BAMM run as an hyperparameter controlling the exponential prior distribution
+#' @param expectedNumberOfShifts Integer. The expected number of regime shifts set during the BAMM run as a hyperparameter controlling the exponential prior distribution
 #'  used to modulate reversible jumps across model configurations in the rjMCMC run. This is needed to compute priors for regime shift along branches.
 #' @param MAP_odd_ratio_threshold Numerical. Controls the definition of 'core-shifts' used to distinguish across configurations when fetching the MAP samples.
-#'   Shifts that have an odd-ratio of marginal posterior probability / prior lower than `MAP_odd_ratio_threshold` are ignored. See [BAMMtools::getBestShiftConfiguration()]. Default = `5`.
+#'   Shifts that have an odds ratio of marginal posterior probability / prior lower than `MAP_odd_ratio_threshold` are ignored. See [BAMMtools::getBestShiftConfiguration()]. Default = `5`.
 #' @param verbose Logical. Whether to display progress in the console. Default = `FALSE`.
 #'
 #' @export
@@ -68,11 +68,11 @@
 #'   BAMM elements summarizing diversification data:
 #'   * `$numberEvents` Vector of integer. Number of events/macroevolutionary regimes (k+1) recorded in each posterior configuration. k = number of shifts.
 #'   * `$eventData` List of data.frames. One per posterior sample. Records shift events and macroevolutionary regimes parameters. 1st line = Background root regime.
-#'   * `$eventVectors` List of integer vectors. One per posterior sample. Record regime ID per branches.
-#'   * `$tipStates` List of named integer vectors. One per posterior sample. Record regime ID per tips.
-#'   * `$tipLambda` List of named numerical vectors. One per posterior sample. Record speciation rates per tips.
-#'   * `$tipMu` List of named numerical vectors. One per posterior sample. Record extinction rates per tips.
-#'   * `$eventBranchSegs` List of matrix of numerical. One per posterior sample. Record regime ID per segments of branches.
+#'   * `$eventVectors` List of integer vectors. One per posterior sample. Record regime ID per branch.
+#'   * `$tipStates` List of named integer vectors. One per posterior sample. Record regime ID per tip.
+#'   * `$tipLambda` List of named numerical vectors. One per posterior sample. Record speciation rates per tip.
+#'   * `$tipMu` List of named numerical vectors. One per posterior sample. Record extinction rates per tip.
+#'   * `$eventBranchSegs` List of matrix of numerical. One per posterior sample. Record regime ID per segment of branches.
 #'   * `$meanTipLambda` Vector of named numerical. Mean tip speciation rates across all posterior configurations of tips.
 #'   * `$meanTipMu` Vector of named numerical. Mean tip extinction rates across all posterior configurations of tips.
 #'   * `$type` Character string. Set the type of data modeled with BAMM. Should be "diversification".
@@ -82,12 +82,12 @@
 #'   * `$MSP_tree` Object of class `phylo`. List of 4 elements duplicating information from the Phylogeny-related elements above,
 #'      except `$MSP_tree$edge.length` is recording the Marginal Shift Probability of each branch (i.e., the probability of a regime shift to occur along each branch)
 #'   * `$MAP_indices` Vector of integers. The indices of the Maximum A Posteriori probability (MAP) configurations among the posterior samples.
-#'   * `$MAP_BAMM_object`. List of 18 elements of class `"bammdata" recording the mean rates and regime shift locations found across
-#'      the Maximum A Posteriori probability (MAP) configurations. All BAMM elements summarizing diversification data holds a single entry describing
+#'   * `$MAP_BAMM_object` List of 18 elements of class `"bammdata"` recording the mean rates and regime shift locations found across
+#'      the Maximum A Posteriori probability (MAP) configurations. All BAMM elements summarizing diversification data hold a single entry describing
 #'      this mean diversification history.
 #'   * `$MSC_indices` Vector of integers. The indices of the Maximum Shift Credibility (MSC) configurations among the posterior samples.
-#'   * `$MSC_BAMM_object` List of 18 elements of class `"bammdata" recording the mean rates and regime shift locations found across
-#'      the Maximum Shift Credibility (MSC) configurations. All BAMM elements summarizing diversification data holds a single entry describing
+#'   * `$MSC_BAMM_object` List of 18 elements of class `"bammdata"` recording the mean rates and regime shift locations found across
+#'      the Maximum Shift Credibility (MSC) configurations. All BAMM elements summarizing diversification data hold a single entry describing
 #'      this mean diversification history.
 #'
 #' @author Maël Doré
@@ -359,11 +359,11 @@ build_BAMM_object <- function (phylo,
 #'
 #'   This is a wrapper of the original [BAMMtools::subsetEventData()] function that additionally preserves information on:
 #'    * the Marginal Shift Probability (MSP) = the probability of a regime shift to occur along each branch.
-#'    * the Maximum A Posteriori probability (MAP) configurations among the posterior samples = the configurations of regimes shifts
-#'      that was sampled most frequently (See [BAMMtools::getBestShiftConfiguration()]).
+#'    * the Maximum A Posteriori probability (MAP) configurations among the posterior samples = the configurations of regime shifts
+#'      that were sampled most frequently (See [BAMMtools::getBestShiftConfiguration()]).
 #'    * the Maximum Shift Credibility (MSC) configurations among the posterior samples = the configurations of regime shift location
 #'      with the highest product of marginal probabilities across branches (See [BAMMtools::maximumShiftCredibility()])
-#'    that are stored in a `BAMM_object` when build with deepSTRAPP functions.
+#'    that are stored in a `BAMM_object` when built with deepSTRAPP functions.
 #'
 #'   Those additional elements are used by [deepSTRAPP::plot_BAMM_rates()] to display regime shift probabilities and locations.
 #'
@@ -395,11 +395,11 @@ build_BAMM_object <- function (phylo,
 #'   BAMM elements summarizing diversification data:
 #'   * `$numberEvents` Vector of integer. Number of events/macroevolutionary regimes (k+1) recorded in each posterior configuration. k = number of shifts.
 #'   * `$eventData` List of data.frames. One per posterior sample. Records shift events and macroevolutionary regimes parameters. 1st line = Background root regime.
-#'   * `$eventVectors` List of integer vectors. One per posterior sample. Record regime ID per branches.
-#'   * `$tipStates` List of named integer vectors. One per posterior sample. Record regime ID per tips.
-#'   * `$tipLambda` List of named numerical vectors. One per posterior sample. Record speciation rates per tips.
-#'   * `$tipMu` List of named numerical vectors. One per posterior sample. Record extinction rates per tips.
-#'   * `$eventBranchSegs` List of matrix of numerical. One per posterior sample. Record regime ID per segments of branches.
+#'   * `$eventVectors` List of integer vectors. One per posterior sample. Record regime ID per branch.
+#'   * `$tipStates` List of named integer vectors. One per posterior sample. Record regime ID per tip.
+#'   * `$tipLambda` List of named numerical vectors. One per posterior sample. Record speciation rates per tip.
+#'   * `$tipMu` List of named numerical vectors. One per posterior sample. Record extinction rates per tip.
+#'   * `$eventBranchSegs` List of matrix of numerical. One per posterior sample. Record regime ID per segment of branches.
 #'   * `$meanTipLambda` Vector of named numerical. Mean tip speciation rates across all posterior configurations of tips.
 #'   * `$meanTipMu` Vector of named numerical. Mean tip extinction rates across all posterior configurations of tips.
 #'   * `$type` Character string. Set the type of data modeled with BAMM. Should be "diversification".
@@ -409,12 +409,12 @@ build_BAMM_object <- function (phylo,
 #'   * `$MSP_tree` Object of class `phylo`. List of 4 elements duplicating information from the Phylogeny-related elements above,
 #'      except `$MSP_tree$edge.length` is recording the Marginal Shift Probability of each branch (i.e., the probability of a regime shift to occur along each branch)
 #'   * `$MAP_indices` Vector of integers. The indices of the Maximum A Posteriori probability (MAP) configurations among the posterior samples.
-#'   * `$MAP_BAMM_object`. List of 18 elements of class `"bammdata" recording the mean rates and regime shift locations found across
-#'      the Maximum A Posteriori probability (MAP) configurations. All BAMM elements summarizing diversification data holds a single entry describing
+#'   * `$MAP_BAMM_object` List of 18 elements of class `"bammdata"` recording the mean rates and regime shift locations found across
+#'      the Maximum A Posteriori probability (MAP) configurations. All BAMM elements summarizing diversification data hold a single entry describing
 #'      this mean diversification history.
 #'   * `$MSC_indices` Vector of integers. The indices of the Maximum Shift Credibility (MSC) configurations among the posterior samples.
-#'   * `$MSC_BAMM_object` List of 18 elements of class `"bammdata" recording the mean rates and regime shift locations found across
-#'      the Maximum Shift Credibility (MSC) configurations. All BAMM elements summarizing diversification data holds a single entry describing
+#'   * `$MSC_BAMM_object` List of 18 elements of class `"bammdata"` recording the mean rates and regime shift locations found across
+#'      the Maximum Shift Credibility (MSC) configurations. All BAMM elements summarizing diversification data hold a single entry describing
 #'      this mean diversification history.
 #'
 #' @author Maël Doré
