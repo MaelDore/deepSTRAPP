@@ -23,7 +23,7 @@ aggregate_contMaps(
 
 \item{...}{List of named arguments. Additional arguments to be passed down to \code{deepSTRAPP::plot_contMap()}.}
 
-\item{color_scale}{Vector of character string. List of colors to use to build the color scale with \code{\link[grDevices:colorRamp]{grDevices::colorRampPalette()}}
+\item{color_scale}{Vector of character strings. List of colors to use to build the color scale with \code{\link[grDevices:colorRamp]{grDevices::colorRampPalette()}}
 showing the evolution of the continuous trait. From lowest values to highest values.
 Default (\code{color_scale = NULL}) is using the color palette recorded in the \code{contMap$cols} item. If none was provided, the \code{rainbow()} palette is used.
 Provide the full argument name to avoid ambiguity with the \code{col} graphical argument.}
@@ -46,7 +46,7 @@ The resulting aggregated \code{"contMap"} is a list with three items:
 }
 }
 \description{
-Aggregate a list of contMapsinto a unique mean/median contMap
+Aggregate a list of contMaps into a unique mean/median contMap
 as produced by the \code{\link[phytools:contMap]{phytools::contMap()}} function.
 }
 \details{

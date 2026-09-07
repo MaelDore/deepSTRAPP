@@ -64,12 +64,12 @@ If NULL (default), all BAMM posterior samples will be used once.}
 \item{alpha}{Numerical. Significance level to use to compute the \code{estimate} corresponding to the values of the test statistic used to assess significance of the test. This does NOT affect p-values. Default is \code{0.05}.}
 
 \item{two_tailed}{Logical. To define the type of tests. If \code{TRUE} (default), tests for correlations/differences in rates will be carried out with a null hypothesis
-that rates are not correlated with trait values (continuous data) or equals between trait states (categorical and biogeographic data).
+that rates are not correlated with trait values (continuous data) or equal between trait states (categorical and biogeographic data).
 If \code{FALSE}, one-tailed tests are carried out.
 \itemize{
 \item For continuous data, it involves defining a \code{one_tailed_hypothesis} testing for either a "positive" or "negative" correlation under the alternative hypothesis.
 \item For binary data (two states), it involves defining a \code{one_tailed_hypothesis} indicating which states have higher rates under the alternative hypothesis.
-\item For multinominal data (more than two states), it defines the type of post hoc pairwise tests to carry out between pairs of states.
+\item For multinomial data (more than two states), it defines the type of post hoc pairwise tests to carry out between pairs of states.
 If \code{posthoc_pairwise_tests = TRUE}, all two-tailed (if \code{two_tailed = TRUE}) or one-tailed (if \code{two_tailed = FALSE}) tests are automatically carried out.
 }}
 
@@ -77,20 +77,20 @@ If \code{posthoc_pairwise_tests = TRUE}, all two-tailed (if \code{two_tailed = T
 For continuous data, it is either "negative" or "positive" correlation.
 For binary data, it lists the trait states with states ordered in increasing rates under the alternative hypothesis, separated by a greater-than such as c('A > B').}
 
-\item{posthoc_pairwise_tests}{Logical. Only for multinominal data (with more than two states). If \code{TRUE}, all possible post hoc pairwise (Dunn) tests will be computed across all pairs of states.
+\item{posthoc_pairwise_tests}{Logical. Only for multinomial data (with more than two states). If \code{TRUE}, all possible post hoc pairwise (Dunn) tests will be computed across all pairs of states.
 This is a way to detect which pairs of states have significant differences in rates if the overall test (Kruskal-Wallis) is significant. Default is \code{FALSE}.}
 
-\item{p.adjust_method}{A character string. Only for multinominal data (with more than two states). It specifies the type of correction to apply to the p-values
+\item{p.adjust_method}{A character string. Only for multinomial data (with more than two states). It specifies the type of correction to apply to the p-values
 in the post hoc pairwise tests to account for multiple comparisons. See \code{\link[stats:p.adjust]{stats::p.adjust()}} for the available methods. Default is \code{none}.}
 
 \item{return_perm_data}{Logical. Whether to return the stats data computed from the posterior samples for observed and permuted data in the output.
 This is needed to plot the histogram of the null distribution used to assess significance of the test with \code{\link[=plot_histogram_STRAPP_test_for_focal_time]{plot_histogram_STRAPP_test_for_focal_time()}}.
 Default is \code{FALSE}.}
 
-\item{nthreads}{Integer. Number of threads to use for paralleled computing of the tests across the permutations. The R package \code{parallel} must be loaded for \code{nthreads > 1}. Default is \code{1}.}
+\item{nthreads}{Integer. Number of threads to use for parallel computing of the tests across the permutations. The R package \code{parallel} must be loaded for \code{nthreads > 1}. Default is \code{1}.}
 
 \item{print_hypothesis}{Logical. Whether to print information on what test is carried out, detailing the null and alternative hypotheses,
-what significant level is used to rejected or not the null hypothesis, and how uncertainty in trait estimates is handled. Default is \code{TRUE}.}
+what significance level is used to reject or not the null hypothesis, and how uncertainty in trait estimates is handled. Default is \code{TRUE}.}
 }
 \value{
 The function returns a list with at least eleven elements.
@@ -105,7 +105,7 @@ according to the significance level provided (\code{alpha}). The test is signifi
 \item \verb{$method} Character string. The statistical method used to carry out the test.
 \item \verb{$rate_type} Character string. The type of diversification rates tested. One of 'speciation', 'extinction' or 'net_diversification'.
 \item \verb{$trait_data_type} Character string. The type of trait data as found in 'trait_data_list$trait_data_type'. One of 'continuous', 'categorical', or 'biogeographic'.
-\item \verb{$trait_data_type_for_stats} Character string. The type of trait data used to select statistical method. One of 'continuous', 'binary', or 'multinominal'.
+\item \verb{$trait_data_type_for_stats} Character string. The type of trait data used to select statistical method. One of 'continuous', 'binary', or 'multinomial'.
 \item \verb{$uncertainty_strategy} Character string. The strategy used to account for uncertainty in estimates.
 \item \verb{$trait_maps_vs_BAMM_samples_list} List of two elements recording the stochastic maps (\verb{$trait_map_ID}) and BAMM samples (\verb{$BAMM_posterior_sample_ID}) chosen for testing.
 Those may partly differ from the actual maps and BAMM samples used for the test as recorded in \verb{$perm_data_df} because invalid maps with not enough states/ranges are discarded.
@@ -142,7 +142,7 @@ This is needed to plot the histogram of the null distribution used to assess sig
 Name depends on the test used and the type of tests (two-tailed compare absolute values; one-tailed compare raw values).
 Combined with \code{posthoc_pairwise_tests = TRUE}, the stats data are also provided for the post hoc pairwise tests:
 }
-\item \verb{$posthoc_pairwise_tests$perm_data_array} A 3D array containing stats data for all post hoc pairwise tests in a similar format that \verb{$perm_data_df}.
+\item \verb{$posthoc_pairwise_tests$perm_data_array} A 3D array containing stats data for all post hoc pairwise tests in a similar format to \verb{$perm_data_df}.
 }
 
 If no STRAPP test was performed in the case of categorical/biogeographic data with a single state/range at \code{focal_time},
@@ -180,14 +180,14 @@ The associated test is the Mann-Whitney-Wilcoxon rank-sum test (See \link[stats:
 \subsection{Multinominal trait data}{
 
 For categorical and biogeographic trait data with more than two states (ex: 'No leg' vs. 'Two legs' vs. 'Four legs').
-Tests for differences in rates between states are carried out with \code{deepSTRAPP::compute_STRAPP_test_for_multinominal_data()}.
+Tests for differences in rates between states are carried out with \code{deepSTRAPP::compute_STRAPP_test_for_multinomial_data()}.
 The associated test for all states is the Kruskal-Wallis H test (See \link[stats:kruskal.test]{stats::kruskal.test}).
 If \code{posthoc_pairwise_tests = TRUE}, post hoc pairwise tests between pairs of states will be carried out too.
-The associated test for post hoc pairwise tests is the Dunn's post hoc pairwise rank-sum test (See \link[dunn.test:dunn.test]{dunn.test::dunn.test}).
+The associated test for post hoc pairwise tests is Dunn's post hoc pairwise rank-sum test (See \link[dunn.test:dunn.test]{dunn.test::dunn.test}).
 }
 }
 \details{
-These set of functions carries out the STructured RAte Permutations on Phylogenies (STRAPP) test as defined in
+This set of functions carries out the STructured RAte Permutations on Phylogenies (STRAPP) test as defined in
 Rabosky, D. L., & Huang, H. (2016). A robust semi-parametric test for detecting trait-dependent diversification.
 Systematic biology, 65(2), 181-193.
 
@@ -195,27 +195,27 @@ It is an extension of the original \code{\link[BAMMtools:traitDependentBAMM]{BAM
 carry out STRAPP test on extant time-calibrated phylogenies, but allowing here to test for
 differences/correlations at any point in the past (i.e. the \code{focal_time}).
 
-It takes an object of class \code{"bammdata"} (\code{BAMM_object}) that was updated such as
+It takes an object of class \code{"bammdata"} (\code{BAMM_object}) that was updated such that
 its diversification rates (\verb{$tipLambda} and \verb{$tipMu}) and regimes (\verb{$tipStates}) are reflecting
-values observed at at a specific time in the past (i.e. the \verb{$focal_time}).
+values observed at a specific time in the past (i.e. the \verb{$focal_time}).
 Similarly, it takes a list (\code{trait_data_list}) that provides \verb{$trait_data} as observed on branches
-at the same \code{focal_time} than the diversification rates and regimes.
+at the same \code{focal_time} as the diversification rates and regimes.
 
 A STRAPP test is carried out by drawing a random set of posterior samples from the \code{BAMM_object}, then randomly permuting rates
 across blocks of tips defined by the macroevolutionary regimes. Test statistics are then computed across the initial observed data
 and the permuted data for each sample.
-In a two-tailed test, the p-value is the proportion of posterior samples in which the test stats is as extreme in the permuted than in the observed data.
+In a two-tailed test, the p-value is the proportion of posterior samples in which the test stats is more extreme in the permuted than in the observed data.
 In a one-tailed test, the p-value is the proportion of posterior samples in which the test stats is higher in the permuted than in the observed data.
 
 ----------  Major changes compared to \code{\link[BAMMtools:traitDependentBAMM]{BAMMtools::traitDependentBAMM()}}  ----------
 \itemize{
 \item Allow to account for uncertainty in trait estimates by pairing/mapping multiple trait data extracted from stochastic maps
 across the BAMM samples. See the \code{uncertainty_strategy} argument for details.
-\item Add post hoc pairwise tests (Dunn test) for multinominal data. Use \code{posthoc_pairwise_tests = TRUE}.
+\item Add post hoc pairwise tests (Dunn test) for multinomial data. Use \code{posthoc_pairwise_tests = TRUE}.
 \item Provide outputs tailored for histogram plots \code{\link[=plot_histogram_STRAPP_test_for_focal_time]{plot_histogram_STRAPP_test_for_focal_time()}}
 and p-value time-series plots \code{\link[=plot_STRAPP_pvalues_over_time]{plot_STRAPP_pvalues_over_time()}}.
 \item Add prints detailing what test is carried out, what are the null and alternative hypotheses,
-and what significant level is used to rejected or not the null hypothesis. (Enabled with \code{print_hypothesis = TRUE}).
+and what significance level is used to reject or not the null hypothesis. (Enabled with \code{print_hypothesis = TRUE}).
 \item Split the function in multiple sub-functions according to the type of data (\verb{$trait_data_type}).
 \item Prevent using Pearson's correlation tests and applying log-transformation for continuous data.
 The rationale is that there is no reason to assume that tip rates are distributed normally or log-normally.
@@ -250,7 +250,7 @@ if (deepSTRAPP::is_dev_version())
  # Save continuous data
  trait_data_continuous <- Ponerinae_trait_cont_tip_data_10My
 
- ## Transform trait data into binary and multinominal data
+ ## Transform trait data into binary and multinomial data
 
  # Binarize data into two states
  trait_data_binary <- trait_data_continuous
@@ -261,13 +261,13 @@ if (deepSTRAPP::is_dev_version())
  table(trait_data_binary$trait_data)
 
  # Categorize data into three states
- trait_data_multinominal <- trait_data_continuous
- trait_data_multinominal$trait_data[trait_data_continuous$trait_data < 0.6] <- "state_B"
- trait_data_multinominal$trait_data[trait_data_continuous$trait_data < 0.4] <- "state_A"
- trait_data_multinominal$trait_data[trait_data_continuous$trait_data >= 0.6] <- "state_C"
- trait_data_multinominal$trait_data_type <- "categorical"
+ trait_data_multinomial <- trait_data_continuous
+ trait_data_multinomial$trait_data[trait_data_continuous$trait_data < 0.6] <- "state_B"
+ trait_data_multinomial$trait_data[trait_data_continuous$trait_data < 0.4] <- "state_A"
+ trait_data_multinomial$trait_data[trait_data_continuous$trait_data >= 0.6] <- "state_C"
+ trait_data_multinomial$trait_data_type <- "categorical"
 
- table(trait_data_multinominal$trait_data)
+ table(trait_data_multinomial$trait_data)
 
  ## Duplicate trait data as if extracted from multiple stochastic maps
 
@@ -324,14 +324,14 @@ if (deepSTRAPP::is_dev_version())
     one_tailed_hypothesis = c("state_B > state_A"))
  str(STRAPP_results, max.level = 1)
 
- # ------ Compute STRAPP test for multinominal data ------ #
+ # ------ Compute STRAPP test for multinomial data ------ #
 
  # Compute STRAPP test between all three states, and compute post hoc tests
  # for differences in rates between all possible pairs of states
  # with a p-value adjusted for multiple comparison using Bonferroni's correction
  STRAPP_results <- compute_STRAPP_test_for_focal_time(
     BAMM_object = Ponerinae_BAMM_object_10My,
-    trait_data_list = trait_data_multinominal,
+    trait_data_list = trait_data_multinomial,
     uncertainty_strategy = "rates_only",
     posthoc_pairwise_tests = TRUE,
     two_tailed = TRUE,

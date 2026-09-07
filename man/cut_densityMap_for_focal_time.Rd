@@ -10,12 +10,12 @@ cut_densityMap_for_focal_time(densityMap, focal_time, keep_tip_labels = TRUE)
 \item{densityMap}{Object of class \code{"densityMap"}, typically generated with \code{\link[phytools:densityMap]{phytools::densityMap()}},
 that contains a phylogenetic tree and associated posterior probability mapping of a categorical trait.
 The phylogenetic tree must be rooted and fully resolved/dichotomous,
-but it does not need to be ultrametric (it can includes fossils).}
+but it does not need to be ultrametric (it can include fossils).}
 
 \item{focal_time}{Numerical. The time, in terms of time distance from the present,
 for which the tree and mapping must be cut. It must be smaller than the root age of the phylogeny.}
 
-\item{keep_tip_labels}{Logical. Specify whether terminal branches with a single descendant tip must retained their initial \code{tip.label}. Default is \code{TRUE}.}
+\item{keep_tip_labels}{Logical. Specify whether terminal branches with a single descendant tip must retain their initial \code{tip.label}. Default is \code{TRUE}.}
 }
 \value{
 The function returns the cut densityMap as an object of class \code{"densityMap"} with three elements.
@@ -31,7 +31,7 @@ It contains a \verb{$tree} element of classes \code{"simmap"} and \code{"phylo"}
 
 The \verb{$col} element describes the colors used to map each possible posterior probability value from 0 to 1000.
 
-The \verb{$states} element provide the name of the states. Here, the first value is the absence of the state labeled as "Not X" with X being the state.
+The \verb{$states} element provides the name of the states. Here, the first value is the absence of the state labeled as "Not X" with X being the state.
 The second value is the name of the state.
 
 High posterior probability reflects high likelihood to harbor the state. Low probability reflects high likelihood to NOT harbor the state.
@@ -39,7 +39,7 @@ High posterior probability reflects high likelihood to harbor the state. Low pro
 \description{
 Cuts off all the branches of the phylogeny which are
 younger than a specific time in the past (i.e. the \code{focal_time}).
-Branches overlapping the \code{focal_time} are shorten to the \code{focal_time}.
+Branches overlapping the \code{focal_time} are shortened to the \code{focal_time}.
 Likewise, remove posterior probability mapping of the categorical trait for the cut off branches
 by updating the \verb{$tree$maps} and \verb{$tree$mapped.edge} elements.
 }

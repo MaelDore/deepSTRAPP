@@ -24,7 +24,7 @@ If \code{NULL} (default), the \code{rainbow()} color scale will be used.}
 \item{verbose}{Logical. Whether to display progress every 100 edges. Default = \code{TRUE}.}
 }
 \value{
-The function returns a \code{densityMaps} as a list objects of class \code{"densityMap"},
+The function returns a \code{densityMaps} as a list of objects of class \code{"densityMap"},
 where each object is mapping the frequency of presence/absence of a state/range.
 
 The number of objects depends on the number of states/ranges observed across the \code{simmaps} provided for conversion.
@@ -52,7 +52,7 @@ the frequency of presence/absence of a state/range.
 }
 \details{
 The function is a wrapper of the original \code{\link[phytools:densityMap]{phytools::densityMap()}} by Liam Revell.
-Although, it does not produce a single \code{densityMap} for binary states,
+However, it does not produce a single \code{densityMap} for binary states,
 but rather can handle \code{simmaps} mapping any number of states/ranges, and produce a \code{densityMaps} list
 that summarizes the frequency of presence/absence of each state/range in subsequent \code{densityMap} objects.
 

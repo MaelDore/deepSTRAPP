@@ -10,17 +10,17 @@ cut_simmaps_for_focal_time(simmaps, focal_time, keep_tip_labels = TRUE)
 \item{simmaps}{List of objects with the classes \code{"phylo"} and \code{"simmap"}, typically generated with \code{\link[phytools:make.simmap]{phytools::make.simmap()}},
 that contains a phylogenetic tree and associated categorical trait/range mapping.
 The phylogenetic tree must be rooted and fully resolved/dichotomous,
-but it does not need to be ultrametric (it can includes fossils).}
+but it does not need to be ultrametric (it can include fossils).}
 
 \item{focal_time}{Numerical. The time, in terms of time distance from the present,
 for which the tree and mapping must be cut. It must be smaller than the root age of the phylogeny.}
 
-\item{keep_tip_labels}{Logical. Specify whether terminal branches with a single descendant tip must retained their initial \code{tip.label}. Default is \code{TRUE}.}
+\item{keep_tip_labels}{Logical. Specify whether terminal branches with a single descendant tip must retain their initial \code{tip.label}. Default is \code{TRUE}.}
 }
 \value{
 The function returns an updated list of objects as cut/updated simmaps of classes \code{"phylo"} and \code{"simmap"}.
 
-Each simmap object represent an updated stochastic map cut/updated simmap as a list of at least six elements:
+Each simmap object represents an updated stochastic map cut/updated simmap as a list of at least six elements:
 
 Initial updated elements:
 \itemize{
@@ -48,7 +48,7 @@ Additional elements:
 \description{
 Cuts off all the branches of the phylogeny which are
 younger than a specific time in the past (i.e. the \code{focal_time}).
-Branches overlapping the \code{focal_time} are shorten to the \code{focal_time}.
+Branches overlapping the \code{focal_time} are shortened to the \code{focal_time}.
 Likewise, remove continuous trait mapping for the cut off branches
 by updating the \verb{$maps} and \verb{$mapped.edge} elements.
 }

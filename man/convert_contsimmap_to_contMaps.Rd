@@ -15,7 +15,7 @@ compatible with the associated evolutionary model fit on observed trait data.}
 }
 \value{
 Returns a list of \code{"contMap"} objects.
-Each \code{"contMap"} represents a unique evolutionary history simulation conditioned to the observed trait data and model fit
+Each \code{"contMap"} represents a unique evolutionary history simulation conditioned on the observed trait data and model fit
 (i.e., a continuous stochastic map).
 
 A \code{"contMap"} typically contains:
@@ -40,7 +40,7 @@ independent evolutionary history of a continuous trait mapped along a time-calib
 and compatible with the associated evolutionary model fit on observed trait data.
 The method is described in Martin & Weber, 2026.
 
-A typical \code{"contsimmap"} object store simulated trait values across maps in a 3D array,
+A typical \code{"contsimmap"} object stores simulated trait values across maps in a 3D array,
 recording values for all time-points used to represent the continuous evolution.
 While \code{"contsimmap"} objects can record evolution of multivariate traits,
 deepSTRAPP currently works only with simulation of univariate trait evolution.
@@ -49,8 +49,8 @@ See the \code{\link[contsimmap:make.contsimmap]{contsimmap::make.contsimmap()}} 
 A \code{"contMap"} object typically produced by the \code{\link[phytools:contMap]{phytools::contMap()}} function also records the evolution of a continuous
 trait alongside branches of a time-calibrated phylogeny. Trait values are stored in \verb{$maps} as list of named vectors recording
 trait values (as names scaled between 0 and 1000) and length of the associated branch segment between two time-points (as values).
-Therefore, a unique \code{"contsimmap"} object is converted in a list of \code{"contMaps"}, with each item being a \code{"contMap"} that represents
-a unique evolutionary history simulation conditioned to the observed trait data and model fit.
+Therefore, a unique \code{"contsimmap"} object is converted into a list of \code{"contMaps"}, with each item being a \code{"contMap"} that represents
+a unique evolutionary history simulation conditioned on the observed trait data and model fit.
 }
 \examples{
 if (deepSTRAPP::is_dev_version())

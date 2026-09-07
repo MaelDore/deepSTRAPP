@@ -10,12 +10,12 @@ cut_contMaps_for_focal_time(contMaps, focal_time, keep_tip_labels = TRUE)
 \item{contMaps}{List of objects of class \code{"contMap"}, typically generated with \code{\link[phytools:contMap]{phytools::contMap()}},
 that contains a phylogenetic tree and associated continuous trait mapping.
 The phylogenetic tree must be rooted and fully resolved/dichotomous,
-but it does not need to be ultrametric (it can includes fossils).}
+but it does not need to be ultrametric (it can include fossils).}
 
 \item{focal_time}{Numerical. The time, in terms of time distance from the present,
 for which the tree and mapping must be cut. It must be smaller than the root age of the phylogeny.}
 
-\item{keep_tip_labels}{Logical. Specify whether terminal branches with a single descendant tip must retained their initial \code{tip.label}. Default is \code{TRUE}.}
+\item{keep_tip_labels}{Logical. Specify whether terminal branches with a single descendant tip must retain their initial \code{tip.label}. Default is \code{TRUE}.}
 }
 \value{
 The function returns an updated list of objects as cut contMaps of class \code{"contMap"}.
@@ -32,14 +32,14 @@ Each contMap object contains three elements:
 \item \verb{$edges_ID_df} Data.frame with two columns. Provides the conversion from the \code{new_edge_ID} to the \code{initial_edge_ID}. Each row is an edge/branch.
 \item \verb{$initial_edges_ID} Vector of character strings. Provides the initial ID of edges/branches. Used to plot edge/branch IDs as labels with \code{\link[ape:nodelabels]{ape::edgelabels()}}.
 }
-\item \verb{$cols} A named vector of character string mapping trait values with colors to display on the plot.
+\item \verb{$cols} A named vector of character strings mapping trait values with colors to display on the plot.
 \item \verb{$lims} A numerical vector of 2 storing the initial min and max values of the trait (trait values are scaled between 0 and 1000 in \verb{$tree$maps})
 }
 }
 \description{
 Cuts off all the branches of the phylogeny which are
 younger than a specific time in the past (i.e. the \code{focal_time}).
-Branches overlapping the \code{focal_time} are shorten to the \code{focal_time}.
+Branches overlapping the \code{focal_time} are shortened to the \code{focal_time}.
 Likewise, remove continuous trait mapping for the cut off branches
 by updating the \verb{$tree$maps} and \verb{$tree$mapped.edge} elements.
 }

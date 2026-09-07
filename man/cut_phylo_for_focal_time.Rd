@@ -8,12 +8,12 @@ cut_phylo_for_focal_time(tree, focal_time, keep_tip_labels = TRUE)
 }
 \arguments{
 \item{tree}{Object of class \code{"phylo"}. The phylogenetic tree must be rooted and fully resolved/dichotomous,
-but it does not need to be ultrametric (it can includes fossils).}
+but it does not need to be ultrametric (it can include fossils).}
 
 \item{focal_time}{Numerical. The time, in terms of time distance from the present,
 for which the tree must be cut. It must be smaller than the root age of the phylogeny.}
 
-\item{keep_tip_labels}{Logical. Specify whether terminal branches with a single descendant tip must retained their initial \code{tip.label}. Default is \code{TRUE}.}
+\item{keep_tip_labels}{Logical. Specify whether terminal branches with a single descendant tip must retain their initial \code{tip.label}. Default is \code{TRUE}.}
 }
 \value{
 The function returns the cut phylogeny as an object of class \code{"phylo"}. It adds multiple useful elements to the object.
@@ -28,7 +28,7 @@ The function returns the cut phylogeny as an object of class \code{"phylo"}. It 
 \description{
 Cuts off all the branches of the phylogeny which are
 younger than a specific time in the past (i.e. the \code{focal_time}).
-Branches overlapping the \code{focal_time} are shorten to the \code{focal_time}.
+Branches overlapping the \code{focal_time} are shortened to the \code{focal_time}.
 }
 \details{
 When a branch with a single descendant tip is cut and \code{keep_tip_labels = TRUE},

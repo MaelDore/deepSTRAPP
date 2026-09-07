@@ -37,15 +37,15 @@ row.names() are the node ID at the rootward and tipward ends of each edge.
 in (raw) evolutionary time (i.e., branch lengths), and in percentage (perc).
 }
 
-The \code{\link[=convert_BSMs_to_simmaps]{convert_BSMs_to_simmaps()}} function loop around the \code{\link[=convert_BSM_to_simmap]{convert_BSM_to_simmap()}} function to aggregate all \code{simmaps}
+The \code{\link[=convert_BSMs_to_simmaps]{convert_BSMs_to_simmaps()}} function loops around the \code{\link[=convert_BSM_to_simmap]{convert_BSM_to_simmap()}} function to aggregate all \code{simmaps}
 from all biogeographic simulations in a unique list of classes \code{c("multiSimmap", "multiPhylo")}.
 \itemize{
-\item Each element in the \verb{$simmap} of a biogeographic simulation obtained with \code{\link[=convert_BSM_to_simmap]{convert_BSM_to_simmap()}}.
+\item Each element is the \verb{$simmap} of a biogeographic simulation obtained with \code{\link[=convert_BSM_to_simmap]{convert_BSM_to_simmap()}}.
 \item \verb{$residence_times} summary data.frames are not preserved.
 }
 }
 \description{
-These functions converts a Biogeographic Stochastic Map (BSM) output from BioGeoBEARS into
+These functions convert a Biogeographic Stochastic Map (BSM) output from BioGeoBEARS into
 a \code{simmap} object from R package \code{{phytools}} (See \code{\link[phytools:make.simmap]{phytools::make.simmap()}}).
 
 They require a model fit with \code{BioGeoBEARS::bears_optim_run()} and the output of a Biogeographic Stochastic Mapping
@@ -81,7 +81,7 @@ Please install it manually from: \href{https://github.com/nmatzke/BioGeoBEARS}{h
 
 \section{Notes on using the resulting simmap object in phytools (adapted from Nicholas J. Matzke)}{
 The phytools functions, like \code{\link[phytools:countSimmap]{phytools::countSimmap()}}, will only count the anagenetic events
-(range transitions occurring along branches) as it was written assuming purely anagenetic models.
+(range transitions occurring along branches) as they were written assuming purely anagenetic models.
 
 It remains possible to extract cladogenetic events (range transitions occurring at speciation)
 by comparing the last-state-below-a-node with the descendant-pairs-above-a-node.
@@ -100,7 +100,7 @@ Associated functions in R package \code{BioGeoBEARS}:
 Please note carefully that area-to-area dispersal events are not identical with the state transitions.
 For example, a state can be a geographic range with multiple areas, but under the logic of DEC-type models,
 a range-expansion event like  ABC->ABCD actually means that a dispersal happened from some specific area (A, B, or C)
-to the new area. BSMs track this area-to-area sourcing in its cladogenetic and anagenetic event tables,
+to the new area. BSMs track this area-to-area sourcing in their cladogenetic and anagenetic event tables,
 at least if \code{BioGeoBEARS::simulate_source_areas_ana_clado()} has been run on the output of \code{BioGeoBEARS::runBSM()}.
 }
 

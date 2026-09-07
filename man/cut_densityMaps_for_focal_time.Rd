@@ -10,12 +10,12 @@ cut_densityMaps_for_focal_time(densityMaps, focal_time, keep_tip_labels = TRUE)
 \item{densityMaps}{List of objects of class \code{"densityMap"}, typically generated with \code{\link[=prepare_trait_data]{prepare_trait_data()}}.
 Each densityMap (see \code{\link[phytools:densityMap]{phytools::densityMap()}}) contains a phylogenetic tree and associated posterior probability mapping of a categorical trait.
 The phylogenetic tree must be rooted and fully resolved/dichotomous,
-but it does not need to be ultrametric (it can includes fossils).}
+but it does not need to be ultrametric (it can include fossils).}
 
 \item{focal_time}{Numerical. The time, in terms of time distance from the present,
 for which the tree and mapping must be cut. It must be smaller than the root age of the phylogeny.}
 
-\item{keep_tip_labels}{Logical. Specify whether terminal branches with a single descendant tip must retained their initial \code{tip.label}. Default is \code{TRUE}.}
+\item{keep_tip_labels}{Logical. Specify whether terminal branches with a single descendant tip must retain their initial \code{tip.label}. Default is \code{TRUE}.}
 }
 \value{
 The function returns an updated list of objects as cut densityMaps of class \code{"densityMap"}.
@@ -42,7 +42,7 @@ High posterior probability reflects high likelihood to harbor the state. Low pro
 \description{
 Cuts off all the branches of the phylogeny which are
 younger than a specific time in the past (i.e. the \code{focal_time}).
-Branches overlapping the \code{focal_time} are shorten to the \code{focal_time}.
+Branches overlapping the \code{focal_time} are shortened to the \code{focal_time}.
 Likewise, remove posterior probability mapping of the categorical trait for the cut off branches
 by updating the \verb{$tree$maps} and \verb{$tree$mapped.edge} elements.
 }
