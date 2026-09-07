@@ -41,18 +41,18 @@ run_deepSTRAPP_for_focal_time(
 typically generated with \code{\link[=prepare_trait_data]{prepare_trait_data()}} or \code{\link[phytools:contMap]{phytools::contMap()}},
 that contains a phylogenetic tree and associated continuous trait mapping.
 The phylogenetic tree must be rooted and fully resolved/dichotomous,
-but it does not need to be ultrametric (it can includes fossils).}
+but it does not need to be ultrametric (it can include fossils).}
 
 \item{contMaps}{For continuous trait data. List of objects of class \code{"contMap"},
 typically generated with \code{\link[=prepare_trait_data]{prepare_trait_data()}},
 that contains multiple continuous stochastic maps that represent possible trait evolutionary histories
-conditioned to the observed trait values and model fit.}
+conditioned on the observed trait values and model fit.}
 
 \item{densityMaps}{For categorical trait or biogeographic data. List of objects of class \code{"densityMap"},
 typically generated with \code{\link[=prepare_trait_data]{prepare_trait_data()}} or \code{\link[phytools:densityMap]{phytools::densityMap()}},
 that contains a phylogenetic tree and associated posterior probability of being in a given state/range along branches.
 Each object (i.e., \code{densityMap}) corresponds to a state/range. The phylogenetic tree must be rooted and fully resolved/dichotomous,
-but it does not need to be ultrametric (it can includes fossils).}
+but it does not need to be ultrametric (it can include fossils).}
 
 \item{simmaps}{For categorical trait or biogeographic data. List of objects of class \code{"simmap"},
 typically generated with \code{\link[=prepare_trait_data]{prepare_trait_data()}} or \code{\link[phytools:make.simmap]{phytools::make.simmap()}},
@@ -70,7 +70,7 @@ Obtained with \code{\link[=prepare_trait_data]{prepare_trait_data()}} as output 
 \itemize{
 \item For continuous trait data: Named numerical vector typically generated with \code{\link[phytools:fastAnc]{phytools::fastAnc()}}, \code{\link[phytools:anc.ML]{phytools::anc.ML()}}, or \code{\link[ape:ace]{ape::ace()}}.
 Names are nodes_ID of the internal nodes. Values are ACE of the trait.
-\item For categorical trait or biogeographic data: Matrix that record the posterior probabilities of ancestral states/ranges.
+\item For categorical trait or biogeographic data: Matrix that records the posterior probabilities of ancestral states/ranges.
 Rows are internal nodes_ID. Columns are states/ranges. Values are posterior probabilities of each state per node.
 Needed in all cases to provide accurate estimates of trait values.
 }}
@@ -80,7 +80,7 @@ Needed in all cases to provide accurate estimates of trait values.
 \item For continuous trait data: Named numerical vector of trait values.
 \item For categorical trait or biogeographic data: Character string vector of states/ranges
 Names are nodes_ID of the internal nodes. Needed to provide accurate tip values.
-\item For biogeographic data, ranges should follow the coding scheme of BioGeoBEARS with a unique CAPITAL letter per unique areas
+\item For biogeographic data, ranges should follow the coding scheme of BioGeoBEARS with a unique CAPITAL letter per unique area
 (ex: A, B), combined to form multi-area ranges (Ex: AB). Alternatively, you can provide tip_data as a matrix or data.frame of
 binary presence/absence in each area (coded as unique CAPITAL letter). In this case, columns are unique areas, rows are taxa,
 and values are integer (0/1) signaling absence or presence of the taxa in the area.
@@ -89,11 +89,11 @@ and values are integer (0/1) signaling absence or presence of the taxa in the ar
 \item{trait_data_type}{Character string. Specify the type of trait data. Must be one of "continuous", "categorical", "biogeographic".}
 
 \item{keep_tip_labels}{Logical. Specify whether terminal branches with a single descendant tip
-must retained their initial \code{tip.label} on the updated phylogeny. Default is \code{TRUE}.}
+must retain their initial \code{tip.label} on the updated phylogeny. Default is \code{TRUE}.}
 
 \item{BAMM_object}{Object of class \code{"bammdata"}, typically generated with \code{\link[=prepare_diversification_data]{prepare_diversification_data()}},
 that contains a phylogenetic tree and associated diversification rate mapping across selected posterior samples.
-The phylogenetic tree must the same as the one associated with the \code{contMap}/\code{densityMaps}, \code{ace} and \code{tip_data}.}
+The phylogenetic tree must be the same as the one associated with the \code{contMap}/\code{densityMaps}, \code{ace} and \code{tip_data}.}
 
 \item{rate_type}{A character string specifying the type of diversification rates to use. Must be one of 'speciation', 'extinction' or 'net_diversification' (default).}
 
@@ -130,13 +130,13 @@ If NULL (default), all BAMM posterior samples will be used once.}
 This does NOT affect p-values. Default is \code{0.05}.}
 
 \item{two_tailed}{Logical. To define the type of tests. If \code{TRUE} (default), tests for correlations/differences in rates will be carried out with a null hypothesis
-that rates are not correlated with trait values (continuous data) or equals between trait states (categorical and biogeographic data).
+that rates are not correlated with trait values (continuous data) or equal between trait states (categorical and biogeographic data).
 If \code{FALSE}, one-tailed tests are carried out.
 \itemize{
 \item For continuous data, it involves defining a \code{one_tailed_hypothesis} testing for
 either a "positive" or "negative" correlation under the alternative hypothesis.
 \item For binary data (two states), it involves defining a \code{one_tailed_hypothesis} indicating which states have higher rates under the alternative hypothesis.
-\item For multinominal data (more than two states), it defines the type of post hoc pairwise tests to carry out between pairs of states.
+\item For multinomial data (more than two states), it defines the type of post hoc pairwise tests to carry out between pairs of states.
 If \code{posthoc_pairwise_tests = TRUE}, all two-tailed (if \code{two_tailed = TRUE}) or one-tailed (if \code{two_tailed = FALSE}) tests are automatically carried out.
 }}
 
@@ -144,22 +144,22 @@ If \code{posthoc_pairwise_tests = TRUE}, all two-tailed (if \code{two_tailed = T
 For continuous data, it is either "negative" or "positive" correlation.
 For binary data, it lists the trait states with states ordered in increasing rates under the alternative hypothesis, separated by a greater-than such as c('A > B').}
 
-\item{posthoc_pairwise_tests}{Logical. Only for multinominal data (with more than two states). If \code{TRUE}, all possible post hoc pairwise (Dunn) tests
+\item{posthoc_pairwise_tests}{Logical. Only for multinomial data (with more than two states). If \code{TRUE}, all possible post hoc pairwise (Dunn) tests
 will be computed across all pairs of states. This is a way to detect which pairs of states have significant differences in rates
 if the overall test (Kruskal-Wallis) is significant. Default is \code{FALSE}.}
 
-\item{p.adjust_method}{A character string. Only for multinominal data (with more than two states). It specifies the type of correction to apply to the p-values
+\item{p.adjust_method}{A character string. Only for multinomial data (with more than two states). It specifies the type of correction to apply to the p-values
 in the post hoc pairwise tests to account for multiple comparisons. See \code{\link[stats:p.adjust]{stats::p.adjust()}} for the available methods. Default is \code{none}.}
 
 \item{return_perm_data}{Logical. Whether to return the stats data computed from the posterior samples for observed and permuted data in the output.
 This is needed to plot the histogram of the null distribution used to assess significance of the test with \code{\link[=plot_histogram_STRAPP_test_for_focal_time]{plot_histogram_STRAPP_test_for_focal_time()}}.
 Default is \code{FALSE}.}
 
-\item{nthreads}{Integer. Number of threads to use for paralleled computing of the STRAPP tests across the permutations.
+\item{nthreads}{Integer. Number of threads to use for parallel computing of the STRAPP tests across the permutations.
 The R package \code{parallel} must be loaded for \code{nthreads > 1}. Default is \code{1}.}
 
 \item{print_hypothesis}{Logical. Whether to print information on what test is carried out, detailing the null and alternative hypotheses,
-what significant level is used to rejected or not the null hypothesis, and how uncertainty in trait estimates is handled.. Default is \code{TRUE}.}
+what significance level is used to reject or not the null hypothesis, and how uncertainty in trait estimates is handled. Default is \code{TRUE}.}
 
 \item{extract_trait_data_melted_df}{Logical. Specify whether trait data (values/states/ranges) must be extracted from the mapped phylogenies
 and returned in a melted data.frame. Default is \code{FALSE}.}
@@ -174,8 +174,8 @@ that are younger than the \code{focal_time}. Default is \code{FALSE}.}
 \item{return_updated_BAMM_object}{Logical. Specify whether the \code{updated_BAMM_object} with phylogeny and
 mapped diversification rates cut-off at the \code{focal_time} should be returned among the outputs.}
 
-\item{verbose}{Logical. Should progression be displayed? A message will be printed at each stepof the deepSTRAPP workflow,
-and for every batch of 100 BAMM posterior samples whose rates are regimes are updated, and optionally extracted in a melted data.frame
+\item{verbose}{Logical. Should progression be displayed? A message will be printed at each step of the deepSTRAPP workflow,
+and for every batch of 100 BAMM posterior samples whose rates and regimes are updated, and optionally extracted in a melted data.frame
 (if \code{extract_diversification_data_melted_df = TRUE}). Default is \code{TRUE}.}
 }
 \value{
@@ -185,7 +185,7 @@ The function returns a list with at least seven elements.
 See \code{\link[=compute_STRAPP_test_for_focal_time]{compute_STRAPP_test_for_focal_time()}} for a detailed description of the output.
 \item \verb{$focal_time} Integer. The time, in terms of time distance from the present, at which the data were extracted and the STRAPP test carried out.
 \item \verb{$trait_data_type} Character string. Specify the type of trait data. Possible values are: "continuous", "categorical", "biogeographic".
-\item \verb{$trait_data_type_for_stats} Character string. The type of trait data used to select statistical method. One of 'continuous', 'binary', or 'multinominal'.
+\item \verb{$trait_data_type_for_stats} Character string. The type of trait data used to select statistical method. One of 'continuous', 'binary', or 'multinomial'.
 \item \verb{$rate_type} Character string. The type of diversification rates used in the tests: 'speciation', 'extinction' or 'net_diversification'.
 \item \verb{$uncertainty_strategy} Character string. The strategy used to account for uncertainty in estimates. One of 'rates_only', 'paired', or 'full'.
 \item \verb{$trait_maps_vs_BAMM_samples_list} List of two elements recording the stochastic maps (\verb{$trait_map_ID}) and BAMM samples (\verb{$BAMM_posterior_sample_ID}) chosen for testing across time-steps.
@@ -245,7 +245,7 @@ and used as input to compute STRAPP tests with \code{\link[=compute_STRAPP_test_
 
 Optionally, if \code{return_updated_Maps = TRUE}, these functions can update the mapped phylogenies
 (\code{contMap(s)}/\code{densityMaps}/\code{simmaps}) provided as inputs such as
-branches overlapping the \code{focal_time} are shorten to the \code{focal_time},
+branches overlapping the \code{focal_time} are shortened to the \code{focal_time},
 and the trait mapping for the cut off branches are removed
 by updating the \verb{$tree$maps} and \verb{$tree$mapped.edge} elements.
 }
@@ -260,9 +260,9 @@ summarizing trait data as found on the phylogeny for the \code{focal_time}.
 \subsection{Extract diversification data}{
 
 \code{\link[=update_rates_and_regimes_for_focal_time]{update_rates_and_regimes_for_focal_time()}} updates the \code{BAMM_object} to obtain
-the diversification rates/regimes found along branches the \code{focal_time} across all BAMM posterior samples.
+the diversification rates/regimes found along branches at the \code{focal_time} across all BAMM posterior samples.
 Optionally, the function can update the \code{BAMM_object} to display a mapped phylogeny
-such as branches overlapping the \code{focal_time} are shorten to the \code{focal_time}
+such as branches overlapping the \code{focal_time} are shortened to the \code{focal_time}
 }
 
 \subsection{Extract diversification data in a melted df}{

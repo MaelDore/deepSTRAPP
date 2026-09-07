@@ -46,11 +46,11 @@ BAMM elements summarizing diversification data:
 \itemize{
 \item \verb{$numberEvents} Vector of integer. Number of events/macroevolutionary regimes (k+1) recorded in each posterior configuration. k = number of shifts.
 \item \verb{$eventData} List of data.frames. One per posterior sample. Records shift events and macroevolutionary regimes parameters. 1st line = Background root regime.
-\item \verb{$eventVectors} List of integer vectors. One per posterior sample. Record regime ID per branches.
-\item \verb{$tipStates} List of named integer vectors. One per posterior sample. Record regime ID per tips.
-\item \verb{$tipLambda} List of named numerical vectors. One per posterior sample. Record speciation rates per tips.
-\item \verb{$tipMu} List of named numerical vectors. One per posterior sample. Record extinction rates per tips.
-\item \verb{$eventBranchSegs} List of matrix of numerical. One per posterior sample. Record regime ID per segments of branches.
+\item \verb{$eventVectors} List of integer vectors. One per posterior sample. Record regime ID per branch.
+\item \verb{$tipStates} List of named integer vectors. One per posterior sample. Record regime ID per tip.
+\item \verb{$tipLambda} List of named numerical vectors. One per posterior sample. Record speciation rates per tip.
+\item \verb{$tipMu} List of named numerical vectors. One per posterior sample. Record extinction rates per tip.
+\item \verb{$eventBranchSegs} List of matrix of numerical. One per posterior sample. Record regime ID per segment of branches.
 \item \verb{$meanTipLambda} Vector of named numerical. Mean tip speciation rates across all posterior configurations of tips.
 \item \verb{$meanTipMu} Vector of named numerical. Mean tip extinction rates across all posterior configurations of tips.
 \item \verb{$type} Character string. Set the type of data modeled with BAMM. Should be "diversification".
@@ -62,12 +62,12 @@ Additional elements providing key information for downstream analyses:
 \item \verb{$MSP_tree} Object of class \code{phylo}. List of 4 elements duplicating information from the Phylogeny-related elements above,
 except \verb{$MSP_tree$edge.length} is recording the Marginal Shift Probability of each branch (i.e., the probability of a regime shift to occur along each branch)
 \item \verb{$MAP_indices} Vector of integers. The indices of the Maximum A Posteriori probability (MAP) configurations among the posterior samples.
-\item \verb{$MAP_BAMM_object}. List of 18 elements of class `"bammdata" recording the mean rates and regime shift locations found across
-the Maximum A Posteriori probability (MAP) configurations. All BAMM elements summarizing diversification data holds a single entry describing
+\item \verb{$MAP_BAMM_object} List of 18 elements of class \code{"bammdata"} recording the mean rates and regime shift locations found across
+the Maximum A Posteriori probability (MAP) configurations. All BAMM elements summarizing diversification data hold a single entry describing
 this mean diversification history.
 \item \verb{$MSC_indices} Vector of integers. The indices of the Maximum Shift Credibility (MSC) configurations among the posterior samples.
-\item \verb{$MSC_BAMM_object} List of 18 elements of class `"bammdata" recording the mean rates and regime shift locations found across
-the Maximum Shift Credibility (MSC) configurations. All BAMM elements summarizing diversification data holds a single entry describing
+\item \verb{$MSC_BAMM_object} List of 18 elements of class \code{"bammdata"} recording the mean rates and regime shift locations found across
+the Maximum Shift Credibility (MSC) configurations. All BAMM elements summarizing diversification data hold a single entry describing
 this mean diversification history.
 }
 }
@@ -80,11 +80,11 @@ or from external BAMM output files with \code{\link[=build_BAMM_object]{build_BA
 This is a wrapper of the original \code{\link[BAMMtools:subsetEventData]{BAMMtools::subsetEventData()}} function that additionally preserves information on:
 \itemize{
 \item the Marginal Shift Probability (MSP) = the probability of a regime shift to occur along each branch.
-\item the Maximum A Posteriori probability (MAP) configurations among the posterior samples = the configurations of regimes shifts
-that was sampled most frequently (See \code{\link[BAMMtools:getBestShiftConfiguration]{BAMMtools::getBestShiftConfiguration()}}).
+\item the Maximum A Posteriori probability (MAP) configurations among the posterior samples = the configurations of regime shifts
+that were sampled most frequently (See \code{\link[BAMMtools:getBestShiftConfiguration]{BAMMtools::getBestShiftConfiguration()}}).
 \item the Maximum Shift Credibility (MSC) configurations among the posterior samples = the configurations of regime shift location
 with the highest product of marginal probabilities across branches (See \code{\link[BAMMtools:maximumShiftCredibility]{BAMMtools::maximumShiftCredibility()}})
-that are stored in a \code{BAMM_object} when build with deepSTRAPP functions.
+that are stored in a \code{BAMM_object} when built with deepSTRAPP functions.
 }
 
 Those additional elements are used by \code{\link[=plot_BAMM_rates]{plot_BAMM_rates()}} to display regime shift probabilities and locations.

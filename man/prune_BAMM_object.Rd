@@ -43,7 +43,7 @@ configurations retained as MAP/MSC may differ from those of the full phylogeny.
 }}
 
 \item{MAP_odd_ratio_threshold}{Numerical. Controls the definition of 'core-shifts' used to distinguish across configurations when fetching the MAP samples.
-Shifts that have an odd-ratio of marginal posterior probability / prior lower than \code{MAP_odd_ratio_threshold} are ignored. See \code{\link[BAMMtools:getBestShiftConfiguration]{BAMMtools::getBestShiftConfiguration()}}.
+Shifts that have an odds ratio of marginal posterior probability / prior lower than \code{MAP_odd_ratio_threshold} are ignored. See \code{\link[BAMMtools:getBestShiftConfiguration]{BAMMtools::getBestShiftConfiguration()}}.
 Only used when \code{recompute_shift_configurations = TRUE}. Default = \code{5}.}
 
 \item{verbose}{Logical. Whether to display progress in the console. Default = \code{FALSE}.}
@@ -72,14 +72,14 @@ BAMM internal elements used for tree exploration updated for the new pruned tree
 BAMM elements summarizing diversification data:
 \itemize{
 \item \verb{$numberEvents} Vector of integer. Number of events/macroevolutionary regimes (k+1) retained in each posterior configuration. k = number of shifts.
-\item \verb{$eventData} List of data.frames. One per posterior sample. Records shift events and macroevolutionary regimes parameters. 1st line = Background root regime.
-\item \verb{$eventVectors} List of integer vectors. One per posterior sample. Record regime ID per branches.
-\item \verb{$tipStates} List of integer vectors. One per posterior sample. Record regime ID per tips.
+\item \verb{$eventData} List of data.frames. One per posterior sample. Records shift events and macroevolutionary regime parameters. 1st line = Background root regime.
+\item \verb{$eventVectors} List of integer vectors. One per posterior sample. Record regime ID per branch.
+\item \verb{$tipStates} List of integer vectors. One per posterior sample. Record regime ID per tip.
 Tip vectors are named after the tips only when they were named in the initial \code{BAMM_object}:
 the naming convention of the input is preserved.
-\item \verb{$tipLambda} List of numerical vectors. One per posterior sample. Record speciation rates per tips.
-\item \verb{$tipMu} List of numerical vectors. One per posterior sample. Record extinction rates per tips.
-\item \verb{$eventBranchSegs} List of matrix of numerical. One per posterior sample. Record regime ID per segments of branches.
+\item \verb{$tipLambda} List of numerical vectors. One per posterior sample. Record speciation rates per tip.
+\item \verb{$tipMu} List of numerical vectors. One per posterior sample. Record extinction rates per tip.
+\item \verb{$eventBranchSegs} List of matrix of numerical. One per posterior sample. Record regime ID per segment of branches.
 \item \verb{$meanTipLambda} Vector of numerical. Mean tip speciation rates across all posterior configurations of tips.
 \item \verb{$meanTipMu} Vector of numerical. Mean tip extinction rates across all posterior configurations of tips.
 \item \verb{$type} Character string. Set the type of data modeled with BAMM. Should be "diversification".
@@ -91,7 +91,7 @@ Additional elements providing key information for downstream analyses:
 \item \verb{$MSP_tree} Object of class \code{phylo}. List of 4 elements duplicating information from the Phylogeny-related elements above,
 except \verb{$MSP_tree$edge.length} is recording the Marginal Shift Probability of each branch, recomputed on the pruned phylogeny.
 \item \verb{$MAP_indices} Vector of integers. The indices of the Maximum A Posteriori probability (MAP) configurations among the posterior samples.
-\item \verb{$MAP_BAMM_object}. List of 18 elements of class \code{"bammdata"} recording the mean rates and regime shift locations found across
+\item \verb{$MAP_BAMM_object} List of 18 elements of class \code{"bammdata"} recording the mean rates and regime shift locations found across
 the Maximum A Posteriori probability (MAP) configurations, pruned to the retained tips.
 \item \verb{$MSC_indices} Vector of integers. The indices of the Maximum Shift Credibility (MSC) configurations among the posterior samples.
 \item \verb{$MSC_BAMM_object} List of 18 elements of class \code{"bammdata"} recording the mean rates and regime shift locations found across
@@ -135,8 +135,8 @@ carries all the regimes it went through.
 This function also preserves and updates the additional deepSTRAPP elements:
 \itemize{
 \item the Marginal Shift Probability (MSP) = the probability of a regime shift to occur along each branch.
-\item the Maximum A Posteriori probability (MAP) configurations among the posterior samples = the configurations of regimes shifts
-that was sampled most frequently (See \code{\link[BAMMtools:getBestShiftConfiguration]{BAMMtools::getBestShiftConfiguration()}}).
+\item the Maximum A Posteriori probability (MAP) configurations among the posterior samples = the configurations of regime shifts
+that were sampled most frequently (See \code{\link[BAMMtools:getBestShiftConfiguration]{BAMMtools::getBestShiftConfiguration()}}).
 \item the Maximum Shift Credibility (MSC) configurations among the posterior samples = the configurations of regime shift location
 with the highest product of marginal probabilities across branches (See \code{\link[BAMMtools:maximumShiftCredibility]{BAMMtools::maximumShiftCredibility()}}).
 }
@@ -163,8 +163,8 @@ The time shift from the initial root age to the new MRCA age is recorded in \ver
 This function also preserves and updates the additional deepSTRAPP elements:
 \itemize{
 \item the Marginal Shift Probability (MSP) = the probability of a regime shift to occur along each branch.
-\item the Maximum A Posteriori probability (MAP) configurations among the posterior samples = the configurations of regimes shifts
-that was sampled most frequently (See \code{\link[BAMMtools:getBestShiftConfiguration]{BAMMtools::getBestShiftConfiguration()}}).
+\item the Maximum A Posteriori probability (MAP) configurations among the posterior samples = the configurations of regime shifts
+that were sampled most frequently (See \code{\link[BAMMtools:getBestShiftConfiguration]{BAMMtools::getBestShiftConfiguration()}}).
 \item the Maximum Shift Credibility (MSC) configurations among the posterior samples = the configurations of regime shift location
 with the highest product of marginal probabilities across branches (See \code{\link[BAMMtools:maximumShiftCredibility]{BAMMtools::maximumShiftCredibility()}}).
 }

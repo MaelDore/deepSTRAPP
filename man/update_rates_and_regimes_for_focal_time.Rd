@@ -20,7 +20,7 @@ update_rates_and_regimes_for_focal_time(
 \item{BAMM_object}{Object of class \code{"bammdata"}, typically generated with \code{\link[=prepare_diversification_data]{prepare_diversification_data()}},
 that contains a phylogenetic tree and associated diversification rate mapping across selected posterior samples.
 The phylogenetic tree must be rooted and fully resolved/dichotomous,
-but it does not need to be ultrametric (it can includes fossils).}
+but it does not need to be ultrametric (it can include fossils).}
 
 \item{focal_time}{Numerical. The time, in terms of time distance from the present,
 at which the tree and rate mapping must be cut. It must be smaller than the root age of the phylogeny.}
@@ -33,12 +33,12 @@ rates found along branches at \code{focal_time}. Default is \code{TRUE}.}
 \verb{$tipStates} must be updated to summarize regimes found along branches at \code{focal_time}.
 Default is \code{TRUE}.}
 
-\item{update_tree}{Logical. Specify whether to update the phylogeny such as
+\item{update_tree}{Logical. Specify whether to update the phylogeny such that
 all branches that are younger than the \code{focal_time} are cut-off. Default is \code{FALSE}.}
 
 \item{update_plot}{Logical. Specify whether to update the phylogeny AND the elements
 used by \code{\link[=plot_BAMM_rates]{plot_BAMM_rates()}} to plot diversification rates on the phylogeny
-such as all branches that are younger than the \code{focal_time} are cut-off. Default is \code{FALSE}.
+such that all branches that are younger than the \code{focal_time} are cut-off. Default is \code{FALSE}.
 If set to \code{TRUE}, it will override the \code{update_tree} parameter and update the phylogeny.}
 
 \item{update_all_elements}{Logical. Specify whether to update all the elements in the object, including
@@ -80,13 +80,13 @@ BAMM elements summarizing diversification data:
 \itemize{
 \item \verb{$numberEvents} Vector of integer. Number of events/macroevolutionary regimes (k+1) recorded in each posterior configuration. k = number of shifts.
 \item \verb{$eventData} List of data.frames. One per posterior sample. Records shift events and macroevolutionary regimes parameters. 1st line = Background root regime.
-\item \verb{$eventVectors} List of integer vectors. One per posterior sample. Record regime ID per branches.
-\item \verb{$tipStates} List of named integer vectors. One per posterior sample. Record regime ID per tips present at \code{focal_time}. Updated if \code{update_regimes = TRUE}.
-\item \verb{$tipLambda} List of named numerical vectors. One per posterior sample. Record speciation rates per tips present at \code{focal_time}. Updated if \code{update_rates = TRUE}.
-\item \verb{$tipMu} List of named numerical vectors. One per posterior sample. Record extinction rates per tips present at \code{focal_time}. Updated if \code{update_rates = TRUE}.
-\item \verb{$eventBranchSegs} List of matrix of numerical. One per posterior sample. Record regime ID per segments of branches.
-\item \verb{$meanTipLambda} Vector of named numerical. Mean tip speciation rates across all posterior configurations of tips present at \code{focal_time} (does not includes older fossils).
-\item \verb{$meanTipMu} Vector of named numerical. Mean tip extinction rates across all posterior configurations of tips present at \code{focal_time} (does not includes older fossils).
+\item \verb{$eventVectors} List of integer vectors. One per posterior sample. Record regime ID per branch.
+\item \verb{$tipStates} List of named integer vectors. One per posterior sample. Record regime ID per tip present at \code{focal_time}. Updated if \code{update_regimes = TRUE}.
+\item \verb{$tipLambda} List of named numerical vectors. One per posterior sample. Record speciation rates per tip present at \code{focal_time}. Updated if \code{update_rates = TRUE}.
+\item \verb{$tipMu} List of named numerical vectors. One per posterior sample. Record extinction rates per tip present at \code{focal_time}. Updated if \code{update_rates = TRUE}.
+\item \verb{$eventBranchSegs} List of matrix of numerical. One per posterior sample. Record regime ID per segment of branches.
+\item \verb{$meanTipLambda} Vector of named numerical. Mean tip speciation rates across all posterior configurations of tips present at \code{focal_time} (does not include older fossils).
+\item \verb{$meanTipMu} Vector of named numerical. Mean tip extinction rates across all posterior configurations of tips present at \code{focal_time} (does not include older fossils).
 \item \verb{$type} Character string. Set the type of data modeled with BAMM. Should be "diversification".
 }
 
@@ -95,11 +95,15 @@ Additional elements providing key information for downstream analyses:
 \item \verb{$expectedNumberOfShifts} Integer. The expected number of regime shifts used to set the prior in BAMM.
 \item \verb{$MSP_tree} Object of class \code{phylo}. List of 4 elements duplicating information from the Phylogeny-related elements above,
 except \verb{$MSP_tree$edge.length} is recording the Marginal Shift Probability of each branch (i.e., the probability of a regime shift to occur along each branch)
-whose origin is older that \code{focal_time}.
+whose origin is older than \code{focal_time}.
 \item \verb{$MAP_indices} Vector of integers. The indices of the Maximum A Posteriori probability (MAP) configurations among the posterior samples.
-\item \verb{$MAP_BAMM_object}. List of 18 elements of class \verb{"bammdata" recording the mean rates and regime shift locations found across the Maximum A Posteriori probability (MAP) configuration. All BAMM elements summarizing diversification data holds a single entry describing this the mean diversification history, updated for the }focal_time`.
+\item \verb{$MAP_BAMM_object}. List of 18 elements of class \code{"bammdata"} recording the mean rates and regime shift locations found across
+the Maximum A Posteriori probability (MAP) configuration. All BAMM elements summarizing diversification data hold a single entry describing this
+the mean diversification history, updated for the \code{focal_time}.
 \item \verb{$MSC_indices} Vector of integers. The indices of the Maximum Shift Credibility (MSC) configurations among the posterior samples.
-\item \verb{$MSC_BAMM_object} List of 18 elements of class \verb{"bammdata" recording the mean rates and regime shift locations found across the Maximum Shift Credibility (MSC) configurations. All BAMM elements summarizing diversification data holds a single entry describing this mean diversification history, updated for the }focal_time`.
+\item \verb{$MSC_BAMM_object} List of 18 elements of class \code{"bammdata"} recording the mean rates and regime shift locations found across
+the Maximum Shift Credibility (MSC) configurations. All BAMM elements summarizing diversification data hold a single entry describing
+this mean diversification history, updated for the \code{focal_time}.
 }
 
 New elements added to provide update information:
@@ -118,14 +122,14 @@ compared to the full depth of the initial tree (i.e., the root_age)
 }
 \item \verb{$initial_colorbreaks} List of three vectors of numerical. Rate values of the percentiles delimiting the bins for mapping rates to colors with \code{\link[BAMMtools:plot]{BAMMtools::plot.bammdata()}}.
 Each element provides values for different type of rates (\verb{$speciation}, \verb{$extinction}, \verb{$net_diversification}).
-\item \verb{$focal_time} Integer. The time, in terms of time distance from the present, at which the rates/regimes were extracted and the tree was eventually cut.
+\item \verb{$focal_time} Integer. The time, in terms of time distance from the present, at which the rates/regimes were extracted and the tree was possibly cut.
 }
 }
 \description{
 Updates an object of class \code{"bammdata"} to obtain the diversification rates/regimes
 found along branches at a specific time in the past (i.e. the \code{focal_time}).
-Optionally, the function can update the object to display a mapped phylogeny such as
-branches overlapping the \code{focal_time} are shorten to the \code{focal_time}.
+Optionally, the function can update the object to display a mapped phylogeny such that
+branches overlapping the \code{focal_time} are shortened to the \code{focal_time}.
 }
 \details{
 The object of class \code{"bammdata"} (\code{BAMM_object}) is cut-off at a specific time in the past
@@ -134,7 +138,7 @@ The object of class \code{"bammdata"} (\code{BAMM_object}) is cut-off at a speci
 ----- Update diversification rate data -----
 
 If \code{update_rates = TRUE}, diversification rates of branches overlapping with \code{focal_time}
-will be updated. Each cut-off branches form a new tip present at \code{focal_time} with updated associated
+will be updated. Each cut-off branch forms a new tip present at \code{focal_time} with updated associated
 diversification rate data. Fossils older than \code{focal_time} do not yield any data.
 \itemize{
 \item \verb{$tipLambda} contains speciation rates.
@@ -142,13 +146,13 @@ diversification rate data. Fossils older than \code{focal_time} do not yield any
 }
 
 If \code{update_regimes = TRUE}, diversification regimes of branches overlapping with \code{focal_time}
-will be updated. Each cut-off branches form a new tip present at \code{focal_time} with updated associated
+will be updated. Each cut-off branch forms a new tip present at \code{focal_time} with updated associated
 diversification regime ID found in \verb{$tipStates}. Fossils older than \code{focal_time} do not yield any data.
 
 ----- Update the phylogeny -----
 
-If \code{update_tree = TRUE}, elements defining the phylogeny, as in an \code{"phylo"} object
-will be updated such as all branches that are younger than the \code{focal_time} are cut-off:
+If \code{update_tree = TRUE}, elements defining the phylogeny, as in a \code{"phylo"} object
+will be updated such that all branches that are younger than the \code{focal_time} are cut-off:
 \itemize{
 \item \verb{$edge} defines the tree topology.
 \item \verb{$Nnode} defines the number of internal nodes.
@@ -160,13 +164,13 @@ will be updated such as all branches that are younger than the \code{focal_time}
 ----- Update the plot from \code{\link[=plot_BAMM_rates]{plot_BAMM_rates()}} -----
 
 If \code{update_plot = TRUE}, elements used to plot diversification rates on the phylogeny
-using \code{\link[=plot_BAMM_rates]{plot_BAMM_rates()}} will be updated such as all branches that are younger
+using \code{\link[=plot_BAMM_rates]{plot_BAMM_rates()}} will be updated such that all branches that are younger
 than the \code{focal_time} are cut-off:
 \itemize{
 \item \verb{$begin} provides absolute time since root of edge/branch start (rootward).
 \item \verb{$end} provides absolute time since root of edge/branch end (tipward).
-\item \verb{$eventVectors} provides regime membership per branches in each posterior sample configuration.
-\item \verb{$eventBranchSegs} provides regime membership per segments of branches in each posterior sample configuration.
+\item \verb{$eventVectors} provides regime membership per branch in each posterior sample configuration.
+\item \verb{$eventBranchSegs} provides regime membership per segment of branches in each posterior sample configuration.
 \item \verb{$dtrates} provides mean speciation and extinction rates along segments of branches, and resolution fraction (tau) describing
 the fraction of each segment length compared to the full depth of the initial tree (i.e., the root_age).
 }

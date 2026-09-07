@@ -67,7 +67,7 @@ if (deepSTRAPP::is_dev_version())
  unique_areas <- unique(unlist(unique_areas_in_ranges_list))
  unique_areas <- unique_areas[order(unique_areas)]
 
- # Loop per unique areas
+ # Loop per unique area
  for (i in seq_along(unique_areas))
  {
    # i <- 1
