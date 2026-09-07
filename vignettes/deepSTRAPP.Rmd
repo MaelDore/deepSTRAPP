@@ -23,7 +23,7 @@ knitr::opts_chunk$set(
 A **simple use-case** that shows how deepSTRAPP can be used to **test for differences in diversification rates between two trait states along evolutionary times** is available [here](https://maeldore.github.io/deepSTRAPP/articles/main_tutorial.html) and within R: `vignette("main_tutorial")`.
 
 This tutorial presents the main functions in a typical **deepSTRAPP workflow**. <br>
-For more advanced used, please refer to the vignettes/tutorials below.
+For more advanced uses, please refer to the vignettes/tutorials below.
 
 
 ## Advanced uses / tutorials
@@ -31,7 +31,7 @@ For more advanced used, please refer to the vignettes/tutorials below.
 This vignette points to **tutorials** detailing how to use the [deepSTRAPP] package beyond the **simple use-case** presented in the README file and also available here: `vignette("main_tutorial")`.
 
 The following tutorials present more **advanced usages** of deepSTRAPP.
-They provide explanations on available arguments and interpretations of results of deepSTRAPP across multiple type of data. 
+They provide explanations on available arguments and interpretations of results of deepSTRAPP across multiple types of data. 
 
 ### **1/ Full deepSTRAPP workflows on different types of data**
 
