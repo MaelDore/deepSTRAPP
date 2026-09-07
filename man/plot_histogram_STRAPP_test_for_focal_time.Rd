@@ -23,8 +23,8 @@ run the whole deepSTRAPP workflow and store results inside \verb{$STRAPP_results
 
 \item{display_plot}{Logical. Whether to display the histogram(s) generated in the R console. Default is \code{TRUE}.}
 
-\item{plot_posthoc_tests}{Logical. For multinominal data only. Whether to plot the histogram for the overall Kruskal-Wallis test across all states (\code{plot_posthoc_tests = FALSE}),
-or plot the histograms for all the pairwise post hoc Dunn's test across pairs of states (\code{plot_posthoc_tests = TRUE}). Default is \code{FALSE}.}
+\item{plot_posthoc_tests}{Logical. For multinomial data only. Whether to plot the histogram for the overall Kruskal-Wallis test across all states (\code{plot_posthoc_tests = FALSE}),
+or plot the histograms for all the pairwise post hoc Dunn's tests across pairs of states (\code{plot_posthoc_tests = TRUE}). Default is \code{FALSE}.}
 
 \item{PDF_file_path}{Character string. If provided, the plot will be saved in a PDF file following the path provided here. The path must end with ".pdf".}
 }
@@ -34,16 +34,16 @@ This object is a ggplot that can be displayed on the console with \code{print(ou
 It corresponds to the histogram being displayed on the console when the function is run, if \code{display_plot = TRUE}, and can be further
 modify for aesthetics using the ggplot2 grammar.
 
-If using multinominal data and set \code{plot_posthoc_tests = TRUE}, the function will return a list of objects.
+If using multinomial data and setting \code{plot_posthoc_tests = TRUE}, the function will return a list of objects.
 Each object is the ggplot associated with a pairwise post hoc test.
 To plot each histogram \code{i} individually, use \code{print(output_list[[i]])}.
 To plot all histograms at once in a multifaceted plot, as displayed on the console if \code{display_plot = TRUE}, use \code{cowplot::plot_grid(plotlist = output_list)}.
 
 Each plot also displays summary statistics for the STRAPP test associated with the data displayed.
 \itemize{
-\item QX\% = The quantile of null statistic distribution at the significant threshold used to define test significance. This is the value found on the red dashed line.
+\item QX\% = The quantile of null statistic distribution at the significance threshold used to define test significance. This is the value found on the red dashed line.
 The test will be considered significant (i.e., the null hypothesis is rejected) if this value is higher than zero (the black dashed line).
-\item P-value =  The p-value of the STRAPP test which correspond the proportion of cases in which the statistics was lower than expected under the null hypothesis
+\item P-value =  The p-value of the STRAPP test which corresponds to the proportion of cases in which the statistic was lower than expected under the null hypothesis
 (i.e., the proportion of the histogram found below / on the left-side of the black dashed line).
 \item N = The number of test statistics in the null distribution.
 }
@@ -51,13 +51,13 @@ The test will be considered significant (i.e., the null hypothesis is rejected) 
 If a \code{PDF_file_path} is provided, the function will also generate a PDF file of the plot. For post hoc tests, this will save the multifaceted plot.
 }
 \description{
-Plot an histogram of the distribution of the test statistics
+Plot a histogram of the distribution of the test statistics
 obtained from a STRAPP test carried out for a unique \code{focal_time}.
 (See \code{\link[=compute_STRAPP_test_for_focal_time]{compute_STRAPP_test_for_focal_time()}} and
 \code{\link[=run_deepSTRAPP_for_focal_time]{run_deepSTRAPP_for_focal_time()}}).
 
 Returns a single histogram for overall tests.
-If \code{plot_posthoc_tests = TRUE}, it will return a faceted plot with an histogram per post hoc tests.
+If \code{plot_posthoc_tests = TRUE}, it will return a faceted plot with a histogram per post hoc test.
 
 If a PDF file path is provided in \code{PDF_file_path}, the plot will be saved directly in a PDF file.
 }
@@ -70,8 +70,8 @@ Such distributions are recorded in the outputs of a deepSTRAPP run carried out w
 when \code{return_perm_data = TRUE} so that the distributions of test stats computed across posterior samples are returned
 among the outputs under \verb{$STRAPP_results$perm_data_df}.
 
-For multinominal data (categorical or biogeographic data with more than 2 states), it is possible to plot the histograms of post hoc pairwise tests.
-Set \code{plot_posthoc_tests = TRUE} to generate histograms for all the pairwise post hoc Dunn's test across pairs of states.
+For multinomial data (categorical or biogeographic data with more than 2 states), it is possible to plot the histograms of post hoc pairwise tests.
+Set \code{plot_posthoc_tests = TRUE} to generate histograms for all the pairwise post hoc Dunn's tests across pairs of states.
 To achieve this, the \code{deepSTRAPP_outputs} input object must contain a \verb{$STRAPP_results$posthoc_pairwise_tests$perm_data_array} element
 that summarizes test statistics computed across posterior samples for all pairwise post hoc tests.
 This is obtained from \code{\link[=run_deepSTRAPP_for_focal_time]{run_deepSTRAPP_for_focal_time()}} when setting both \code{posthoc_pairwise_tests = TRUE} to carry out post hoc tests,
@@ -83,7 +83,7 @@ unique time-step used for plotting.
 \itemize{
 \item \code{return_perm_data} must be set to \code{TRUE} so that the permutation data used to compute the tests are returned among the outputs
 under \verb{$STRAPP_results_over_time[[i]]$perm_data_df}.
-\item \code{posthoc_pairwise_tests} must be set to \code{TRUE} so that the permutation data used to performed the post hoc tests are also
+\item \code{posthoc_pairwise_tests} must be set to \code{TRUE} so that the permutation data used to perform the post hoc tests are also
 returned among the outputs under \verb{$STRAPP_results_over_time[[i]]$posthoc_pairwise_tests$perm_data_array}.
 }
 

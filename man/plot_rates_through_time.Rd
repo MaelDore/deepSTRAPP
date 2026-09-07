@@ -71,7 +71,7 @@ This proportion is defined with \code{CI_quantiles}.
 each stochastic map X BAMM posterior sample at each time-step (aggregated across groups of branches based on trait data). This is used to draw the confidence interval. Default is \code{FALSE}.}
 
 \item{return_median_data_across_samples_df}{Logical. Whether to include in the output the data.frame of median rates per trait values
-across stochastic maps X BAMM posterior samples computed for at each time-step (aggregated across groups of branches based on trait data AND stochastic maps X BAMM posterior samples).
+across stochastic maps X BAMM posterior samples computed at each time-step (aggregated across groups of branches based on trait data AND stochastic maps X BAMM posterior samples).
 This is used to draw the median lines on the plot. Default is \code{FALSE}.}
 
 \item{verbose}{Logical. Should progression be displayed? Default is \code{TRUE}.}
@@ -81,7 +81,7 @@ The function returns a list with at least one element.
 \itemize{
 \item \code{rates_TT_ggplot} An object of classes \code{gg} and \code{ggplot}. This is a ggplot that can be displayed
 on the console with \code{print(output$rates_TT_ggplot)}. It corresponds to the plot being displayed on the console
-when the function is run, if \code{display_plot = TRUE}, and can be further modify for aesthetics using the ggplot2 grammar.
+when the function is run, if \code{display_plot = TRUE}, and can be further modified for aesthetics using the ggplot2 grammar.
 }
 
 Optional summary data frames:

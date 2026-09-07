@@ -50,7 +50,7 @@ If \code{PDF_file_path} is provided, the function exports the plot into a PDF fi
 Plot on a time-calibrated phylogeny the evolution of a categorical trait/biogeographic ranges
 summarized from \code{densityMaps} typically generated with \code{\link[=prepare_trait_data]{prepare_trait_data()}}.
 Each branch is colored according to the posterior probability of being in a given state/range.
-Color for each state/range are overlaid using transparency to produce a single plot for all states/ranges.
+Colors for each state/range are overlaid using transparency to produce a single plot for all states/ranges.
 }
 \examples{
 
@@ -72,7 +72,7 @@ table(eel_data)
 # Set symmetrical rates between state 2 ("kiss") and state 3 ("suction")
 Q_matrix = rbind(c(NA, 0, 0), c(1, NA, 2), c(0, 2, NA))
 
-# Set colors per states
+# Set colors per state
 colors_per_levels <- c("limegreen", "orange", "dodgerblue")
 names(colors_per_levels) <- c("bite", "kiss", "suction")
 

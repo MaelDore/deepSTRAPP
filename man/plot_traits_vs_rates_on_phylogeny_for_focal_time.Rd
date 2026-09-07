@@ -42,7 +42,7 @@ This must contain an updated \code{contMap}/\code{densityMaps} and updated \code
 showing the evolution of a continuous trait. From lowest values to highest values. (For continuous trait data only)}
 
 \item{colors_per_levels}{Named character string. To set the colors to use to map each state/range posterior probabilities. Names = states/ranges; values = colors.
-If \code{NULL} (default), the color scale provided \code{densityMaps} will be used. (For categorical and biogeographic data only)}
+If \code{NULL} (default), the color scale provided in \code{densityMaps} will be used. (For categorical and biogeographic data only)}
 
 \item{add_ACE_pies}{Logical. Whether to add pies of posterior probabilities of states/ranges at internal nodes on the mapped phylogeny. Default = \code{TRUE}.}
 
@@ -50,7 +50,7 @@ If \code{NULL} (default), the color scale provided \code{densityMaps} will be us
 Must be one of 'speciation', 'extinction' or 'net_diversification' (default).}
 
 \item{keep_initial_colorbreaks}{Logical. Whether to keep the same color breaks as used for the most recent focal time. Typically, the current time (t = 0).
-This will only works if you provide the output of \code{\link[=run_deepSTRAPP_over_time]{run_deepSTRAPP_over_time()}} as \code{deepSTRAPP_outputs}. Default = \code{FALSE}.}
+This will only work if you provide the output of \code{\link[=run_deepSTRAPP_over_time]{run_deepSTRAPP_over_time()}} as \code{deepSTRAPP_outputs}. Default = \code{FALSE}.}
 
 \item{add_regime_shifts}{Logical. Whether to add the location of regime shifts on the phylogeny (Step 2). Default is \code{TRUE}.}
 
@@ -61,7 +61,7 @@ This regime shift configuration is the most frequent configuration among the pos
 This is the default option.
 \item \code{configuration_type = "MSC"}: Use the average locations recorded in posterior samples with the Maximum Shift Credibility (MSC) configuration.
 This regime shift configuration has the highest product of marginal probabilities across branches (See \code{\link[BAMMtools:maximumShiftCredibility]{BAMMtools::maximumShiftCredibility()}}).
-\item \code{configuration_type = "index"}: Use the configuration of a unique posterior sample those index is provided in \code{sample_index}.
+\item \code{configuration_type = "index"}: Use the configuration of a unique posterior sample whose index is provided in \code{sample_index}.
 }}
 
 \item{sample_index}{Integer. Index of the posterior samples to use to plot the location of regime shifts.
@@ -90,7 +90,7 @@ If provided, \code{par.reset} is ignored with a message. See \code{\link[=plot_B
 Provide the full argument name to avoid ambiguity with the \code{cex} graphical argument.}
 
 \item{adjust_size_to_prob}{Logical. Whether to scale the size of the symbols showing the location of regime shifts according to
-the marginal shift probability of the shift happening on each location/branch. This will only works if there is an \verb{$MSP_tree} element
+the marginal shift probability of the shift happening on each location/branch. This will only work if there is an \verb{$MSP_tree} element
 summarizing the marginal shift probabilities across branches in the \code{BAMM_object}. Default is \code{TRUE}.
 Provide the full argument name to avoid ambiguity with the \code{adj} graphical argument.}
 
@@ -114,16 +114,16 @@ Plot two mapped phylogenies with evolutionary data with branches cut off at \cod
 \itemize{
 \item For continuous data: Each branch is colored according to the estimates value of the traits.
 \item For categorical and biogeographic data: Each branch is colored according to the posterior probability
-of being in a given state/range. Color for each state/range are overlaid using transparency
+of being in a given state/range. Colors for each state/range are overlaid using transparency
 to produce a single plot for all states/ranges.
 }
-\item Right facet: plot the evolution of diversification rates and location of regime shits estimated from a BAMM
+\item Right facet: plot the evolution of diversification rates and location of regime shifts estimated from a BAMM
 (Bayesian Analysis of Macroevolutionary Mixtures).
 Each branch is colored according to the estimated rates of speciation, extinction, or net diversification
-stored in an object of class \code{bammdata}. Rates can vary along time, thus colors evolved along individual branches.
+stored in an object of class \code{"bammdata"}. Rates can vary along time, thus colors evolve along individual branches.
 }
 
-This function is a wrapper multiple plotting functions:
+This function is a wrapper of multiple plotting functions:
 \itemize{
 \item For continuous traits: \code{\link[=plot_contMap]{plot_contMap()}}
 \item For categorical and biogeographic data: \code{\link[=plot_densityMaps_overlay]{plot_densityMaps_overlay()}}
@@ -133,7 +133,7 @@ This function is a wrapper multiple plotting functions:
 \details{
 The main input \code{deepSTRAPP_outputs} is the typical output of \code{\link[=run_deepSTRAPP_for_focal_time]{run_deepSTRAPP_for_focal_time()}}.
 It provides information on results of a STRAPP test performed at a given \code{focal_time}, and can also encompass
-updated phylogenies with mapped trait evolution and diversification rates and regimes shifts if appropriate arguments are set.
+updated phylogenies with mapped trait evolution and diversification rates and regime shifts if appropriate arguments are set.
 \itemize{
 \item \code{return_updated_Maps} must be set to \code{TRUE} so that the updated version of mapped phylogeny (\code{contMap}/\code{densityMaps})
 for the given \code{focal_time} is returned among the outputs under \verb{$updated_Maps}.
@@ -145,7 +145,7 @@ cut-off at the \code{focal_time} are returned among the outputs under \verb{$upd
 
 \verb{$MAP_BAMM_object} and \verb{$MSC_BAMM_object} elements are required in \verb{$updated_BAMM_object} to plot regime shift locations following the
 "MAP" or "MSC" \code{configuration_type} respectively.
-A \verb{$MSP_tree} element is required to scale the size of the symbols showing the location of regime shifts according marginal shift probabilities.
+A \verb{$MSP_tree} element is required to scale the size of the symbols showing the location of regime shifts according to marginal shift probabilities.
 (If \code{adjust_size_to_prob = TRUE}).
 
 Alternatively, the main input \code{deepSTRAPP_outputs} can be the output of \code{\link[=run_deepSTRAPP_over_time]{run_deepSTRAPP_over_time()}},

@@ -18,7 +18,7 @@ plot_rates_vs_trait_data_over_time(
 \arguments{
 \item{deepSTRAPP_outputs}{List of elements generated with \code{\link[=run_deepSTRAPP_over_time]{run_deepSTRAPP_over_time()}}
 that runs the whole deepSTRAPP workflow over multiple time-steps.
-The list needs to include two data.frame: \verb{$trait_data_df_over_time} and \verb{$diversification_data_df_over_time}
+The list needs to include two data.frames: \verb{$trait_data_df_over_time} and \verb{$diversification_data_df_over_time}
 by setting \code{extract_trait_data_melted_df = TRUE} and \code{extract_diversification_data_melted_df = TRUE}.}
 
 \item{rate_type}{A character string specifying the type of diversification rates to plot.
@@ -50,17 +50,17 @@ The function returns a list with at least one element.
 \item \code{rates_vs_trait_ggplots} A list of objects of classes \code{gg} and \code{ggplot} ordered as in \verb{$time_steps}.
 Each element corresponds to a ggplot for a given \code{focal_time}. They can be displayed on the console with \code{print(output$rates_vs_trait_ggplots[[i]])}.
 They correspond to the plots being displayed on the console one by one when the function is run, if \code{display_plot = TRUE},
-and can be further modify for aesthetics using the ggplot2 grammar.
+and can be further modified for aesthetics using the ggplot2 grammar.
 }
 
-If the trait data are 'continuous', the plots are scatter plots showing how mean diversification rates varies with mean trait values across branches.
-If the trait data are 'categorical' or 'biogeographic', the plots are boxplots showing mean diversification rates per states/ranges per branches.
+If the trait data are 'continuous', the plots are scatter plots showing how mean diversification rates vary with mean trait values across branches.
+If the trait data are 'categorical' or 'biogeographic', the plots are boxplots showing mean diversification rates per state/ranges per branch.
 
 Each plot also displays summary statistics for the STRAPP test associated with the data displayed:
 \itemize{
 \item An observed statistic computed across the mean traits/ranges and rates values shown on the plot. This is not the statistic of the STRAPP test itself,
-which is conducted across stochastic maps X BAMM posterior samples (i.e., it is a distribution, not a unique value)..
-\item The quantile of null statistic distribution at the significant threshold used to define test significance. The test will be considered significant
+which is conducted across stochastic maps X BAMM posterior samples (i.e., it is a distribution, not a unique value).
+\item The quantile of null statistic distribution at the significance threshold used to define test significance. The test will be considered significant
 (i.e., the null hypothesis is rejected) if this value is higher than zero.
 \item The p-value of the associated STRAPP test.
 }
