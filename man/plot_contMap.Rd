@@ -18,7 +18,7 @@ that contains a phylogenetic tree and associated ancestral trait estimates mappe
 
 \item{...}{Additional arguments to pass down to \code{\link[phytools:contMap]{phytools::plot.contMap()}} to control plotting.}
 
-\item{color_scale}{Vector of character string. List of colors to use to build the color scale with \code{\link[grDevices:colorRamp]{grDevices::colorRampPalette()}}
+\item{color_scale}{Character vector. List of colors to use to build the color scale with \code{\link[grDevices:colorRamp]{grDevices::colorRampPalette()}}
 showing the evolution of a continuous trait. From lowest values to highest values.
 Default (\code{color_scale = NULL}) is using the color palette recorded in the \code{contMap$cols} item. If none was provided, the \code{rainbow()} palette is used.
 Provide the full argument name to avoid ambiguity with the \code{col} graphical argument.}

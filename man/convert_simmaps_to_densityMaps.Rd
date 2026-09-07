@@ -19,7 +19,7 @@ that represent discrete character/geographic evolutionary history
 \item{colors_per_levels}{Named character string. To set the colors to use to map each state/range posterior probabilities. Names = states/ranges; values = colors.
 If \code{NULL} (default), the \code{rainbow()} color scale will be used.}
 
-\item{tol}{Positive numerical. To set the tolerance used to match node ages and time steps (i.e., consider them equal). Default = 1e-5.}
+\item{tol}{Positive numeric. To set the tolerance used to match node ages and time steps (i.e., consider them equal). Default = 1e-5.}
 
 \item{verbose}{Logical. Whether to display progress every 100 edges. Default = \code{TRUE}.}
 }

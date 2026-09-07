@@ -21,13 +21,13 @@ plot_STRAPP_pvalues_over_time(
 \item{deepSTRAPP_outputs}{List of elements generated with \code{\link[=run_deepSTRAPP_over_time]{run_deepSTRAPP_over_time()}},
 that summarize the results of multiple deepSTRAPP runs across \verb{$time_steps}.}
 
-\item{time_range}{Vector of two numerical values. Time boundaries used for the X-axis of the plot.
+\item{time_range}{Numeric vector of length 2. Time boundaries used for the X-axis of the plot.
 If \code{NULL} (the default), the range of data provided in \code{deepSTRAPP_outputs} will be used.}
 
-\item{pvalues_max}{Numerical. Set the max boundary used for the Y-axis of the plot.
+\item{pvalues_max}{Numeric. Set the max boundary used for the Y-axis of the plot.
 If \code{NULL} (the default), the maximum p-value provided in \code{deepSTRAPP_outputs} will be used.}
 
-\item{alpha}{Numerical. Significance level to display as a red dashed line on the plot. If set to \code{NULL}, no line will be added. Default is \code{0.05}.}
+\item{alpha}{Numeric. Significance level to display as a red dashed line on the plot. If set to \code{NULL}, no line will be added. Default is \code{0.05}.}
 
 \item{display_plot}{Logical. Whether to display the plot generated in the R console. Default is \code{TRUE}.}
 
@@ -38,7 +38,7 @@ or plot the p-values for the pairwise post hoc Dunn's test across pairs of state
 This is only possible if \code{deepSTRAPP_outputs} contains the \verb{$pvalues_summary_df_for_posthoc_pairwise_tests} element returned by
 \code{\link[=run_deepSTRAPP_over_time]{run_deepSTRAPP_over_time()}} when \code{posthoc_pairwise_tests = TRUE}.}
 
-\item{select_posthoc_pairs}{Vector of character strings used to specify the pairs to include in the plot. Names of pairs must match the pairs found in
+\item{select_posthoc_pairs}{Character vector used to specify the pairs to include in the plot. Names of pairs must match the pairs found in
 \code{deepSTRAPP_outputs$pvalues_summary_df_for_posthoc_pairwise_tests$pair}. Default is "all" to include all pairs.}
 
 \item{plot_adjusted_pvalues}{Logical. Whether to display the p-values adjusted for multiple testing rather than the raw p-values.

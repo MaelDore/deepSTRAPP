@@ -20,7 +20,7 @@ deepSTRAPP output summarizing results of a deepSTRAPP run carried out with \code
 \itemize{
 \item \verb{$pvalues_summary_df} Data.frame with three columns providing test stat \verb{$estimate} and \verb{$p_value} obtained for each time step (i.e., \verb{$focal_time}),
 that can be passed down to \code{\link[=plot_STRAPP_pvalues_over_time]{plot_STRAPP_pvalues_over_time()}} to generate a plot showing the evolution of the test results across time.
-\item \verb{$time_steps} Numerical vector. Time steps at which the STRAPP tests were carried out in the same order as the objects returned in the output lists.
+\item \verb{$time_steps} Numeric vector. Time steps at which the STRAPP tests were carried out in the same order as the objects returned in the output lists.
 \item \verb{$trait_data_type} Character string. Specify the type of trait data. Here: "categorical".
 \item \verb{$trait_data_type_for_stats} Character string. The type of trait data used to select statistical method. Here: "multinomial".
 \item \verb{$rate_type} Character string. The type of diversification rates used in the tests. Here: "net_diversification".

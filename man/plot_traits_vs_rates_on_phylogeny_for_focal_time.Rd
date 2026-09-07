@@ -35,10 +35,10 @@ that summarize the results of a STRAPP test for a specific time in the past (i.e
 run the whole deepSTRAPP workflow over multiple time-steps.
 This must contain an updated \code{contMap}/\code{densityMaps} and updated \code{BAMM_object} (see Details section below).}
 
-\item{focal_time}{Numerical. (Optional) If \code{deepSTRAPP_outputs} comprises results over multiple time-steps
+\item{focal_time}{Numeric. (Optional) If \code{deepSTRAPP_outputs} comprises results over multiple time-steps
 (i.e., output of \code{\link[=run_deepSTRAPP_over_time]{run_deepSTRAPP_over_time()}}, this is the time of the STRAPP test targeted for plotting.}
 
-\item{color_scale}{Vector of character string. List of colors to use to build the color scale with \code{\link[grDevices:colorRamp]{grDevices::colorRampPalette()}}
+\item{color_scale}{Character vector. List of colors to use to build the color scale with \code{\link[grDevices:colorRamp]{grDevices::colorRampPalette()}}
 showing the evolution of a continuous trait. From lowest values to highest values. (For continuous trait data only)}
 
 \item{colors_per_levels}{Named character string. To set the colors to use to map each state/range posterior probabilities. Names = states/ranges; values = colors.
@@ -70,7 +70,7 @@ Used only if \code{configuration_type = index}. Default = \code{1}.}
 \item{regimes_fill}{Character string. Set the color of the background of the symbols showing the location of regime shifts.
 Equivalent to the \code{bg} argument in \code{\link[BAMMtools:addBAMMshifts]{BAMMtools::addBAMMshifts()}}. Default is \code{"grey"}.}
 
-\item{regimes_size}{Numerical. Set the size of the symbols showing the location of regime shifts.
+\item{regimes_size}{Numeric. Set the size of the symbols showing the location of regime shifts.
 Equivalent to the \code{cex} argument in \code{\link[BAMMtools:addBAMMshifts]{BAMMtools::addBAMMshifts()}}. Default is \code{1}.}
 
 \item{regimes_pch}{Integer. Set the shape of the symbols showing the location of regime shifts.
@@ -79,14 +79,14 @@ Equivalent to the \code{pch} argument in \code{\link[BAMMtools:addBAMMshifts]{BA
 \item{regimes_border_col}{Character string. Set the color of the border of the symbols showing the location of regime shifts.
 Equivalent to the \code{col} argument in \code{\link[BAMMtools:addBAMMshifts]{BAMMtools::addBAMMshifts()}}. Default is \code{"black"}.}
 
-\item{regimes_border_width}{Numerical. Set the width of the border of the symbols showing the location of regime shifts.
+\item{regimes_border_width}{Numeric. Set the width of the border of the symbols showing the location of regime shifts.
 Equivalent to the \code{lwd} argument in \code{\link[BAMMtools:addBAMMshifts]{BAMMtools::addBAMMshifts()}}. Default is \code{1}.}
 
 \item{...}{Additional graphical arguments to pass down to \code{\link[phytools:contMap]{phytools::plot.contMap()}}, \code{\link[phytools:plotSimmap]{phytools::plotSimmap()}},
 \code{\link[=plot_densityMaps_overlay]{plot_densityMaps_overlay()}}, \code{\link[BAMMtools:plot]{BAMMtools::plot.bammdata()}}, \code{\link[BAMMtools:addBAMMshifts]{BAMMtools::addBAMMshifts()}}, and \code{\link[=par]{par()}}.
 If provided, \code{par.reset} is ignored with a message. See \code{\link[=plot_BAMM_rates]{plot_BAMM_rates()}} for details.}
 
-\item{cex_pies}{Numerical. To adjust the size of the ACE pies. Default = \code{0.5}.
+\item{cex_pies}{Numeric. To adjust the size of the ACE pies. Default = \code{0.5}.
 Provide the full argument name to avoid ambiguity with the \code{cex} graphical argument.}
 
 \item{adjust_size_to_prob}{Logical. Whether to scale the size of the symbols showing the location of regime shifts according to
@@ -137,7 +137,7 @@ updated phylogenies with mapped trait evolution and diversification rates and re
 \itemize{
 \item \code{return_updated_Maps} must be set to \code{TRUE} so that the updated version of mapped phylogeny (\code{contMap}/\code{densityMaps})
 for the given \code{focal_time} is returned among the outputs under \verb{$updated_Maps}.
-The updated \code{contMap}/\code{densityMaps} consists in cutting off branches and mappings that are younger than the \code{focal_time}.
+The update of the \code{contMap}/\code{densityMaps} consists of cutting off branches and mappings that are younger than the \code{focal_time}.
 \code{contMap}/\code{densityMaps} must have been provided among the inputs to \code{\link[=run_deepSTRAPP_for_focal_time]{run_deepSTRAPP_for_focal_time()}} in the first place.
 \item \code{return_updated_BAMM_object} must be set to \code{TRUE} so that the \code{updated_BAMM_object} with phylogeny and mapped diversification rates
 cut-off at the \code{focal_time} are returned among the outputs under \verb{$updated_BAMM_object}.

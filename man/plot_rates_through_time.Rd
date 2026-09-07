@@ -34,7 +34,7 @@ Even if the \code{deepSTRAPP_outputs} object was generated with \code{\link[=run
 for testing another type of rates, the \verb{$trait_data_df_over_time} and \verb{$diversification_data_df_over_time} data frames
 will contain data for all types of rates.}
 
-\item{quantile_ranges}{Vector of numerical. Only for continuous trait data. Quantiles used as thresholds to group branches
+\item{quantile_ranges}{Numeric vector. Only for continuous trait data. Quantiles used as thresholds to group branches
 by trait values. It must start with 0 and finish with 1. Default is \code{c(0, 0.25, 0.5, 0.75, 1.0)}
 which produces four balanced quantile groups.}
 
@@ -42,10 +42,10 @@ which produces four balanced quantile groups.}
 To provide a list of a subset of states/ranges to plot. Names must match the ones found in
 \code{deepSTRAPP_outputs$trait_data_df_over_time$trait_value}. Default is \code{all} which means all states/ranges will be plotted.}
 
-\item{time_range}{Vector of two numerical values. Time boundaries used for the plot.
+\item{time_range}{Numeric vector of length 2. Time boundaries used for the plot.
 If \code{NULL} (the default), the range of data provided in \code{deepSTRAPP_outputs} will be used.}
 
-\item{color_scale}{Vector of character string. List of colors to use to build the color scale with \code{\link[grDevices:colorRamp]{grDevices::colorRampPalette()}}
+\item{color_scale}{Character vector. List of colors to use to build the color scale with \code{\link[grDevices:colorRamp]{grDevices::colorRampPalette()}}
 to display the quantile groups used to discretize the continuous trait data. From lowest values to highest values. Only for continuous data.
 Default = \code{NULL} will use the 'Spectral' color palette in \code{\link[RColorBrewer:ColorBrewer]{RColorBrewer::brewer.pal()}}.}
 
@@ -61,7 +61,7 @@ If \code{NULL} (default), the default ggplot2 color palette (\code{\link[scales:
 This proportion is defined with \code{CI_quantiles}.
 }}
 
-\item{CI_quantiles}{Numerical. Proportion of rate values across posterior samples encompassed by the confidence interval. Only if \code{CI_type = "quantiles_rect"}. Default is \code{0.95}.}
+\item{CI_quantiles}{Numeric. Proportion of rate values across posterior samples encompassed by the confidence interval. Only if \code{CI_type = "quantiles_rect"}. Default is \code{0.95}.}
 
 \item{display_plot}{Logical. Whether to display the plot generated in the R console. Default is \code{TRUE}.}
 

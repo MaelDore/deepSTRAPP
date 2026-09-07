@@ -68,7 +68,7 @@ if only densityMaps summarizing posterior state/range density are provided, but 
 \item{ace}{(Optional) Ancestral Character Estimates (ACE) at the internal nodes.
 Obtained with \code{\link[=prepare_trait_data]{prepare_trait_data()}} as output in the \verb{$ace} slot.
 \itemize{
-\item For continuous trait data: Named numerical vector typically generated with \code{\link[phytools:fastAnc]{phytools::fastAnc()}}, \code{\link[phytools:anc.ML]{phytools::anc.ML()}}, or \code{\link[ape:ace]{ape::ace()}}.
+\item For continuous trait data: Named numeric vector typically generated with \code{\link[phytools:fastAnc]{phytools::fastAnc()}}, \code{\link[phytools:anc.ML]{phytools::anc.ML()}}, or \code{\link[ape:ace]{ape::ace()}}.
 Names are nodes_ID of the internal nodes. Values are ACE of the trait.
 \item For categorical trait or biogeographic data: Matrix that records the posterior probabilities of ancestral states/ranges.
 Rows are internal nodes_ID. Columns are states/ranges. Values are posterior probabilities of each state per node.
@@ -77,8 +77,8 @@ Needed in all cases to provide accurate estimates of trait values.
 
 \item{tip_data}{(Optional) Named vector of tip values of the trait.
 \itemize{
-\item For continuous trait data: Named numerical vector of trait values.
-\item For categorical trait or biogeographic data: Character string vector of states/ranges
+\item For continuous trait data: Named numeric vector of trait values.
+\item For categorical trait or biogeographic data: Named character vector of states/ranges.
 Names must match \code{tip.label} in the phylogeny. Needed to provide accurate tip values.
 \item For biogeographic data, ranges should follow the coding scheme of BioGeoBEARS with a unique CAPITAL letter per unique area
 (ex: A, B), combined to form multi-area ranges (Ex: AB). Alternatively, you can provide tip_data as a matrix or data.frame of
@@ -97,7 +97,7 @@ The phylogenetic tree must be the same as the one associated with the \code{cont
 
 \item{rate_type}{A character string specifying the type of diversification rates to use. Must be one of 'speciation', 'extinction' or 'net_diversification' (default).}
 
-\item{focal_time}{Numerical. The time, in terms of time distance from the present,
+\item{focal_time}{Numeric. The time, in terms of time distance from the present,
 at which data must be extracted and the phylogeny and mappings must be cut.
 It must be smaller than the root age of the phylogeny.}
 
@@ -126,7 +126,7 @@ Those may partly differ from the actual maps and BAMM samples used for the test 
 \item{nb_permutations}{Integer. To select the number of random permutations to perform during the tests.
 If NULL (default), all BAMM posterior samples will be used once.}
 
-\item{alpha}{Numerical. Significance level to use to compute the \code{estimate} corresponding to the values of the test statistic used to assess significance of the test.
+\item{alpha}{Numeric. Significance level to use to compute the \code{estimate} corresponding to the values of the test statistic used to assess significance of the test.
 This does NOT affect p-values. Default is \code{0.05}.}
 
 \item{two_tailed}{Logical. To define the type of tests. If \code{TRUE} (default), tests for correlations/differences in rates will be carried out with a null hypothesis
@@ -168,7 +168,7 @@ and returned in a melted data.frame. Default is \code{FALSE}.}
 and returned in a melted data.frame. Default is \code{FALSE}.}
 
 \item{return_updated_Maps}{Logical. Specify whether the  updated version of the mapped phylogenies (\code{contMap(s)}/\code{densityMaps}/\code{simmaps}),
-should be returned among the outputs. The updated \code{contMap(s)}/\code{densityMaps}/\code{simmaps} consists in cutting off branches and mapping
+should be returned among the outputs. The update of the \code{contMap(s)}/\code{densityMaps}/\code{simmaps} consists of cutting off branches and mapping
 that are younger than the \code{focal_time}. Default is \code{FALSE}.}
 
 \item{return_updated_BAMM_object}{Logical. Specify whether the \code{updated_BAMM_object} with phylogeny and

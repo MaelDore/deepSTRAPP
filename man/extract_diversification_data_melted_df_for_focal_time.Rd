@@ -36,7 +36,7 @@ all cut-off branches are labeled using their tipward node ID.
 Regime IDs are independent across posterior samples.
 \item \verb{$rate_type} Character string. Type of rates: "lambda" for speciation rates, "mu" for extinction rates,
 and "net_diversification" for net diversification rates (lambda - mu).
-\item \verb{$rates} Numerical. Rates in \[number of events / branch / evolutionary time\].
+\item \verb{$rates} Numeric. Rates in \[number of events / branch / evolutionary time\].
 }
 }
 \description{

@@ -19,8 +19,8 @@ A data.frame of fake trait data covering the 1534 extant ponerine ant taxa (Pone
 \itemize{
 \item \verb{$Taxa} Character string. Names of Ponerinae ant taxa.
 \item \verb{$fake_cont_tip_data} Numeric. Fake continuous trait data.
-\item \verb{$fake_cat_2lvl_tip_data} Vector of character strings. Fake categorical size data with two levels: "large" and "small".
-\item \verb{$fake_cat_3lvl_tip_data} Vector of character strings. Fake categorical habitat data with three levels: "arboreal", "subterranean", and "terricolous".
+\item \verb{$fake_cat_2lvl_tip_data} Character vector. Fake categorical size data with two levels: "large" and "small".
+\item \verb{$fake_cat_3lvl_tip_data} Character vector. Fake categorical habitat data with three levels: "arboreal", "subterranean", and "terricolous".
 }
 }
 \keyword{datasets}

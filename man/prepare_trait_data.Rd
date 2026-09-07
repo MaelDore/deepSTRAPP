@@ -36,7 +36,7 @@ prepare_trait_data(
 )
 }
 \arguments{
-\item{tip_data}{Named numerical or character string vector of trait values/states/ranges at tips.
+\item{tip_data}{Named numeric or character vector of trait values/states/ranges at tips.
 Names should be ordered as the tip labels in the phylogeny found in \code{phylo$tip.label}.
 For biogeographic data, ranges should follow the coding scheme of BioGeoBEARS with a unique CAPITAL letter per unique area
 (ex: A, B), combined to form multi-area ranges (Ex: AB). Alternatively, you can provide tip_data as a matrix or data.frame of
@@ -92,7 +92,7 @@ This functionality is currently not available for total-evidence phylogenies (i.
 
 \item{nb_simulations}{Integer. Define the number of simulations generated for stochastic mapping. Default = \code{100}.}
 
-\item{color_scale}{Vector of character string. List of colors to use to build the color scale with \code{\link[grDevices:colorRamp]{grDevices::colorRampPalette()}}
+\item{color_scale}{Character vector. List of colors to use to build the color scale with \code{\link[grDevices:colorRamp]{grDevices::colorRampPalette()}}
 showing the evolution of a continuous trait on the \code{contMap}. From lowest values to highest values. Only for continuous data. Default = \code{NULL} will use the rainbow() color palette.}
 
 \item{colors_per_levels}{Named character string. To set the colors to use to map each state/range posterior probabilities. Names = states/ranges; values = colors.

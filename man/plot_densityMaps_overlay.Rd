@@ -35,7 +35,7 @@ Provide the full argument name to avoid ambiguity with the \code{col} graphical 
 \item{add_ACE_pies}{Logical. Whether to add pies of posterior probabilities of states/ranges at internal nodes on the mapped phylogeny. Default = \code{TRUE}.
 Provide the full argument name to avoid ambiguity with the \code{add} graphical argument.}
 
-\item{cex_pies}{Numerical. To adjust the size of the ACE pies. Default = \code{0.5}.
+\item{cex_pies}{Numeric. To adjust the size of the ACE pies. Default = \code{0.5}.
 Provide the full argument name to avoid ambiguity with the \code{cex} graphical argument.}
 
 \item{display_plot}{Logical. Whether to display the plot generated in the R console. Default is \code{TRUE}.}

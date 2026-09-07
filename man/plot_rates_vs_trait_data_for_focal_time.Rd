@@ -24,7 +24,7 @@ by setting \code{extract_trait_data_melted_df = TRUE} and \code{extract_diversif
 \code{deepSTRAPP_outputs} can also be extracted from the output of \code{\link[=run_deepSTRAPP_over_time]{run_deepSTRAPP_over_time()}} that
 runs the whole deepSTRAPP workflow over multiple time-steps.}
 
-\item{focal_time}{Numerical. (Optional) If \code{deepSTRAPP_outputs} comprises results over multiple time-steps
+\item{focal_time}{Numeric. (Optional) If \code{deepSTRAPP_outputs} comprises results over multiple time-steps
 (i.e., output of \code{\link[=run_deepSTRAPP_over_time]{run_deepSTRAPP_over_time()}}, this is the time of the STRAPP test targeted for plotting.}
 
 \item{rate_type}{A character string specifying the type of diversification rates to plot.
@@ -36,7 +36,7 @@ for testing another type of rates, the object will contain data for all types of
 To provide a list of a subset of states/ranges to plot. Names must match the ones found in the \code{deepSTRAPP_outputs}.
 Default is \code{all} which means all states/ranges will be plotted.}
 
-\item{color_scale}{Vector of character string. List of colors to use to build the color scale with \code{\link[grDevices:colorRamp]{grDevices::colorRampPalette()}}
+\item{color_scale}{Character vector. List of colors to use to build the color scale with \code{\link[grDevices:colorRamp]{grDevices::colorRampPalette()}}
 to display the points. Color scale from lowest values to highest rate values. Only for continuous data.
 Default = \code{NULL} will use the 'Spectral' color palette in \code{\link[RColorBrewer:ColorBrewer]{RColorBrewer::brewer.pal()}}.}
 

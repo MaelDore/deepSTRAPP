@@ -30,7 +30,7 @@ for testing another type of rates, the object will contain data for all types of
 To provide a list of a subset of states/ranges to plot. Names must match the ones found in the \code{deepSTRAPP_outputs}.
 Default is \code{all} which means all states/ranges will be plotted.}
 
-\item{color_scale}{Vector of character string. List of colors to use to build the color scale with \code{\link[grDevices:colorRamp]{grDevices::colorRampPalette()}}
+\item{color_scale}{Character vector. List of colors to use to build the color scale with \code{\link[grDevices:colorRamp]{grDevices::colorRampPalette()}}
 to display the points. Color scale from lowest values to highest rate values. Only for continuous data.
 Default = \code{NULL} will use the 'Spectral' color palette in \code{\link[RColorBrewer:ColorBrewer]{RColorBrewer::brewer.pal()}}.}
 

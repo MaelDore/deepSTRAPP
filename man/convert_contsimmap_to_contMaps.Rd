@@ -22,7 +22,7 @@ A \code{"contMap"} typically contains:
 \itemize{
 \item \verb{$tree} A list of classes \code{"simmap"} and \code{"phylo"}. The mapped phylogeny including:
 \itemize{
-\item \verb{$maps} A list of named numerical vectors. Provides the mapping of trait values along each edge (scaled between 0 and 1000).
+\item \verb{$maps} A list of named numeric vectors. Provides the mapping of trait values along each edge (scaled between 0 and 1000).
 \item \verb{$mapped.edge} A numeric matrix. Provides the evolutionary time spent across trait values (columns) along the edges (rows).
 }
 \item \verb{$cols} A named vector mapping values to colors used to display trait evolution along the branches.

@@ -22,10 +22,10 @@ Evolutionary history of ponerine ants highlights how the timing of dispersal eve
 \details{
 A time-calibrated phylogeny as a \code{phylo} object with 4 elements.
 \itemize{
-\item \verb{$edge} Matrix of integers. Defines the tree topology by providing rootward and tipward node ID of each edge.
-\item \verb{$edge.length} Vector of numerical. Length of edges/branches.
+\item \verb{$edge} Integer matrix. Defines the tree topology by providing rootward and tipward node ID of each edge.
+\item \verb{$edge.length} Numeric vector. Length of edges/branches.
 \item \verb{$Nnode} Integer. Number of internal nodes.
-\item \verb{$tip.label} Vector of character strings. Labels of all tips.
+\item \verb{$tip.label} Character vector. Labels of all tips.
 }
 }
 \references{

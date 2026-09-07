@@ -24,7 +24,7 @@ This object was obtained with \code{\link[=prepare_trait_data]{prepare_trait_dat
 (i.e., continuous stochastic maps).
 \item \verb{$trait_data_type} Character string. Record the type of trait data. Here: "continuous".
 \item \verb{$nb_simulations} Integer. Record the nb of simulations/stochastic maps. Here: "100".
-\item \verb{$ace} Numerical. Named vector that records the ML ancestral states (characters) estimates (ACE) at internal nodes.
+\item \verb{$ace} Named numeric vector. Record the ML ancestral states (characters) estimates (ACE) at internal nodes.
 Names are internal nodes ID. Values are ML estimates of trait values per node.
 }
 }

@@ -61,7 +61,7 @@ Those may partly differ from the actual maps and BAMM samples used for the test,
 \item{nb_permutations}{Integer. To select the number of random permutations to perform during the tests.
 If NULL (default), all BAMM posterior samples will be used once.}
 
-\item{alpha}{Numerical. Significance level to use to compute the \code{estimate} corresponding to the values of the test statistic used to assess significance of the test. This does NOT affect p-values. Default is \code{0.05}.}
+\item{alpha}{Numeric. Significance level to use to compute the \code{estimate} corresponding to the values of the test statistic used to assess significance of the test. This does NOT affect p-values. Default is \code{0.05}.}
 
 \item{two_tailed}{Logical. To define the type of tests. If \code{TRUE} (default), tests for correlations/differences in rates will be carried out with a null hypothesis
 that rates are not correlated with trait values (continuous data) or equal between trait states (categorical and biogeographic data).
@@ -97,11 +97,11 @@ The function returns a list with at least eleven elements.
 
 Summary elements for the main test:
 \itemize{
-\item \verb{$estimate} Named numerical. Value of the test statistic used to assess significance of the test
+\item \verb{$estimate} Named numeric. Value of the test statistic used to assess significance of the test
 according to the significance level provided (\code{alpha}). The test is significant if \verb{$estimate} is higher than zero.
-\item \verb{$stats_median} Numerical. Median value of the distribution of test statistics.
+\item \verb{$stats_median} Numeric. Median value of the distribution of test statistics.
 \item \verb{$nb_test_stats} Integer. Number of test stats in the distribution.
-\item \verb{$p-value} Numerical. P-value of the test. The test is considered significant if \verb{$p-value} is lower than \code{alpha}.
+\item \verb{$p-value} Numeric. P-value of the test. The test is considered significant if \verb{$p-value} is lower than \code{alpha}.
 \item \verb{$method} Character string. The statistical method used to carry out the test.
 \item \verb{$rate_type} Character string. The type of diversification rates tested. One of 'speciation', 'extinction' or 'net_diversification'.
 \item \verb{$trait_data_type} Character string. The type of trait data as found in 'trait_data_list$trait_data_type'. One of 'continuous', 'categorical', or 'biogeographic'.
@@ -136,9 +136,9 @@ This is needed to plot the histogram of the null distribution used to assess sig
 \itemize{
 \item \verb{$trait_map_ID} Integer. ID of the stochastic map from which trait data were extracted and used for the STRAPP test.
 \item \verb{$BAMM_posterior_sample_ID} Integer. ID of the posterior samples randomly drawn and used for the STRAPP test.
-\item \verb{$*_obs} Numerical. Test stats computed from the observed data in the posterior samples. Name depends on the test used.
-\item \verb{$*_perm} Numerical. Test stats computed from the permuted data in the posterior samples. Name depends on the test used.
-\item \verb{$delta_*} OR \verb{$abs_delta_*} Numerical. Test stats computed for the STRAPP test comparing observed stats and permuted stats.
+\item \verb{$*_obs} Numeric. Test stats computed from the observed data in the posterior samples. Name depends on the test used.
+\item \verb{$*_perm} Numeric. Test stats computed from the permuted data in the posterior samples. Name depends on the test used.
+\item \verb{$delta_*} OR \verb{$abs_delta_*} Numeric. Test stats computed for the STRAPP test comparing observed stats and permuted stats.
 Name depends on the test used and the type of tests (two-tailed compare absolute values; one-tailed compare raw values).
 Combined with \code{posthoc_pairwise_tests = TRUE}, the stats data are also provided for the post hoc pairwise tests:
 }

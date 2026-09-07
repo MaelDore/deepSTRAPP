@@ -18,7 +18,7 @@ that summarize the results of a STRAPP test for a specific time in the past (i.e
 \code{deepSTRAPP_outputs} can also be extracted from the output of \code{\link[=run_deepSTRAPP_over_time]{run_deepSTRAPP_over_time()}} that
 run the whole deepSTRAPP workflow and store results inside \verb{$STRAPP_results_over_time}.}
 
-\item{focal_time}{Numerical. (Optional) If \code{deepSTRAPP_outputs} comprises results over multiple time-steps
+\item{focal_time}{Numeric. (Optional) If \code{deepSTRAPP_outputs} comprises results over multiple time-steps
 (i.e., output of \code{\link[=run_deepSTRAPP_over_time]{run_deepSTRAPP_over_time()}}, this is the time of the STRAPP test targeted for plotting.}
 
 \item{display_plot}{Logical. Whether to display the histogram(s) generated in the R console. Default is \code{TRUE}.}

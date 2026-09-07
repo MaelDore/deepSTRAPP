@@ -41,7 +41,7 @@ Files will be exported as 'prefix_*' with an underscore separating the prefix an
 and allow posterior samples to be uncorrelated. Check the Effective Sample Size of parameters with coda::effectiveSize() in the Evaluation step.
 Default value is \code{10^7}.}
 
-\item{globalSamplingFraction}{Numerical. Global sampling fraction representing the overall proportion of terminals in the phylogeny compared to
+\item{globalSamplingFraction}{Numeric. Global sampling fraction representing the overall proportion of terminals in the phylogeny compared to
 the estimated overall richness in the clade. It acts as a multiplier on the rates needed to achieve such extant diversity.
 Default is \code{1.0} (assuming all taxa are in the phylogeny).}
 
@@ -51,16 +51,16 @@ See \code{\link[BAMMtools:samplingProbs]{BAMMtools::samplingProbs()}} to generat
 \item{expectedNumberOfShifts}{Integer. Set the expected number of regime shifts. It acts as a hyperparameter controlling the exponential prior distribution
 used to modulate reversible jumps across model configurations in the rjMCMC run.
 If set to \code{NULL} (default), an empirical rule will be used to define this value: 1 regime shift expected for every 100 tips in the phylogeny, with a minimum of 1.
-The best practice consists in trying several values and inspecting the similarity of the prior and posterior distribution of the regime shift parameter.
+The best practice is to try several values and inspect the similarity of the prior and posterior distribution of the regime shift parameter.
 See \code{\link[BAMMtools:plotPrior]{BAMMtools::plotPrior()}} and the Evaluation step to produce such evaluation plot.}
 
 \item{eventDataWriteFreq}{Integer. Set the frequency at which to write the event data to the output file = the sampling frequency of posterior samples.
 If set to \code{NULL} (default), will set the frequency such that 2000 posterior samples are recorded, i.e. \code{eventDataWriteFreq = numberOfGenerations / 2000}.}
 
-\item{burn_in}{Numerical. Proportion of posterior samples removed from the BAMM output to ensure that the remaining samples were drawn once the equilibrium distribution was reached.
+\item{burn_in}{Numeric. Proportion of posterior samples removed from the BAMM output to ensure that the remaining samples were drawn once the equilibrium distribution was reached.
 This can be evaluated looking at the MCMC trace (see Evaluation step). Default is \code{0.25}.}
 
-\item{nb_posterior_samples}{Numerical. Number of posterior samples to extract, after removing the burn-in, in the final \code{BAMM_object} to use for downstream analyses.
+\item{nb_posterior_samples}{Numeric. Number of posterior samples to extract, after removing the burn-in, in the final \code{BAMM_object} to use for downstream analyses.
 Default = \code{1000}.}
 
 \item{additional_BAMM_settings}{List of named elements. Additional settings options for BAMM provided as a list of named arguments.
@@ -72,7 +72,7 @@ It can be an absolute path, or a path relative to the current working directory 
 
 \item{keep_BAMM_outputs}{Logical. Whether the \code{BAMM_output_directory} should be kept after the run. Default = \code{TRUE}.}
 
-\item{MAP_odds_ratio_threshold}{Numerical. Controls the definition of 'core-shifts' used to distinguish across configurations when fetching the MAP samples.
+\item{MAP_odds_ratio_threshold}{Numeric. Controls the definition of 'core-shifts' used to distinguish across configurations when fetching the MAP samples.
 Shifts that have an odds ratio of marginal posterior probability / prior lower than \code{MAP_odds_ratio_threshold} are ignored. See \code{\link[BAMMtools:getBestShiftConfiguration]{BAMMtools::getBestShiftConfiguration()}}. Default = \code{5}.}
 
 \item{skip_evaluations}{Logical. Whether to skip the Evaluation step including MCMC trace, ESS, and prior/posterior comparisons for expected number of shifts. Default = \code{FALSE}.}
@@ -87,32 +87,32 @@ The function returns a \code{BAMM_object} of class \code{"bammdata"} which is a 
 
 Phylogeny-related elements used to plot a phylogeny with \code{\link[ape:plot.phylo]{ape::plot.phylo()}}:
 \itemize{
-\item \verb{$edge} Matrix of integers. Defines the tree topology by providing rootward and tipward node ID of each edge.
+\item \verb{$edge} Integer matrix. Defines the tree topology by providing rootward and tipward node ID of each edge.
 \item \verb{$Nnode} Integer. Number of internal nodes.
-\item \verb{$tip.label} Vector of character strings. Labels of all tips.
-\item \verb{$edge.length} Vector of numerical. Length of edges/branches.
-\item \verb{$node.label} Vector of character strings. Labels of all internal nodes. (Present only if present in the initial \code{BAMM_object})
+\item \verb{$tip.label} Character vector. Labels of all tips.
+\item \verb{$edge.length} Numeric vector. Length of edges/branches.
+\item \verb{$node.label} Character vector. Labels of all internal nodes. (Present only if present in the initial \code{BAMM_object})
 }
 
 BAMM internal elements used for tree exploration:
 \itemize{
-\item \verb{$begin} Vector of numerical. Absolute time since root of edge/branch start (rootward).
-\item \verb{$end} Vector of numerical.  Absolute time since root of edge/branch end (tipward).
-\item \verb{$downseq} Vector of integers. Order of node visits when using a pre-order tree traversal.
+\item \verb{$begin} Numeric vector. Absolute time since root of edge/branch start (rootward).
+\item \verb{$end} Numeric vector.  Absolute time since root of edge/branch end (tipward).
+\item \verb{$downseq} Integer vector. Order of node visits when using a pre-order tree traversal.
 \item \verb{$lastvisit} ID of the last node visited when starting from the node in the corresponding position in \verb{$downseq}.
 }
 
 BAMM elements summarizing diversification data:
 \itemize{
-\item \verb{$numberEvents} Vector of integer. Number of events/macroevolutionary regimes (k+1) recorded in each posterior configuration. k = number of shifts.
+\item \verb{$numberEvents} Integer vector. Number of events/macroevolutionary regimes (k+1) recorded in each posterior configuration. k = number of shifts.
 \item \verb{$eventData} List of data.frames. One per posterior sample. Records shift events and macroevolutionary regimes parameters. 1st line = Background root regime.
 \item \verb{$eventVectors} List of integer vectors. One per posterior sample. Record regime ID per branch.
 \item \verb{$tipStates} List of named integer vectors. One per posterior sample. Record regime ID per tip.
-\item \verb{$tipLambda} List of named numerical vectors. One per posterior sample. Record speciation rates per tip.
-\item \verb{$tipMu} List of named numerical vectors. One per posterior sample. Record extinction rates per tip.
-\item \verb{$eventBranchSegs} List of matrix of numerical. One per posterior sample. Record regime ID per segment of branches.
-\item \verb{$meanTipLambda} Vector of named numerical. Mean tip speciation rates across all posterior configurations of tips.
-\item \verb{$meanTipMu} Vector of named numerical. Mean tip extinction rates across all posterior configurations of tips.
+\item \verb{$tipLambda} List of named numeric vectors. One per posterior sample. Record speciation rates per tip.
+\item \verb{$tipMu} List of named numeric vectors. One per posterior sample. Record extinction rates per tip.
+\item \verb{$eventBranchSegs} List of numeric matrices. One per posterior sample. Record regime ID per segment of branches.
+\item \verb{$meanTipLambda} Named numeric vector. Mean tip speciation rates across all posterior configurations of tips.
+\item \verb{$meanTipMu} Named numeric vector. Mean tip extinction rates across all posterior configurations of tips.
 \item \verb{$type} Character string. Set the type of data modeled with BAMM. Should be "diversification".
 }
 
@@ -121,11 +121,11 @@ Additional elements providing key information for downstream analyses:
 \item \verb{$expectedNumberOfShifts} Integer. The expected number of regime shifts used to set the prior in BAMM.
 \item \verb{$MSP_tree} Object of class \code{phylo}. List of 4 elements duplicating information from the Phylogeny-related elements above,
 except \verb{$MSP_tree$edge.length} is recording the Marginal Shift Probability of each branch (i.e., the probability of a regime shift to occur along each branch)
-\item \verb{$MAP_indices} Vector of integers. The indices of the Maximum A Posteriori probability (MAP) configurations among the posterior samples.
+\item \verb{$MAP_indices} Integer vector. The indices of the Maximum A Posteriori probability (MAP) configurations among the posterior samples.
 \item \verb{$MAP_BAMM_object}. List of 18 elements of class \code{"bammdata"} recording the mean rates and regime shift locations found across
 the Maximum A Posteriori probability (MAP) configurations. All BAMM elements summarizing diversification data hold a single entry describing
 this mean diversification history.
-\item \verb{$MSC_indices} Vector of integers. The indices of the Maximum Shift Credibility (MSC) configurations among the posterior samples.
+\item \verb{$MSC_indices} Integer vector. The indices of the Maximum Shift Credibility (MSC) configurations among the posterior samples.
 \item \verb{$MSC_BAMM_object} List of 18 elements of class \code{"bammdata"} recording the mean rates and regime shift locations found across
 the Maximum Shift Credibility (MSC) configurations. All BAMM elements summarizing diversification data hold a single entry describing
 this mean diversification history.
@@ -191,7 +191,7 @@ Output file = 'ESS_df.csv'.
 Output file = 'PP_nb_shifts_plot.pdf'.
 A good value for \code{expectedNumberOfShifts} is one with high similarities between the distributions
 hinting that the information in the data coincides with your expectations for the number of regime shifts.
-The best practice consists in trying several values to check whether it affects the final output.
+The best practice is to try several values to check whether it affects the final output.
 }
 
 Step 4: Import BAMM outputs

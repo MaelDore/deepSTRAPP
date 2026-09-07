@@ -53,7 +53,7 @@ Used only if \code{configuration_type = index}. Default = \code{1}.}
 \item{regimes_fill}{Character string. Set the color of the background of the symbols showing the location of regime shifts.
 Equivalent to the \code{bg} argument in \code{\link[BAMMtools:addBAMMshifts]{BAMMtools::addBAMMshifts()}}. Default is \code{"grey"}.}
 
-\item{regimes_size}{Numerical. Set the size of the symbols showing the location of regime shifts.
+\item{regimes_size}{Numeric. Set the size of the symbols showing the location of regime shifts.
 Equivalent to the \code{cex} argument in \code{\link[BAMMtools:addBAMMshifts]{BAMMtools::addBAMMshifts()}}. Default is \code{1}.}
 
 \item{regimes_pch}{Integer. Set the shape of the symbols showing the location of regime shifts.
@@ -62,7 +62,7 @@ Equivalent to the \code{pch} argument in \code{\link[BAMMtools:addBAMMshifts]{BA
 \item{regimes_border_col}{Character string. Set the color of the border of the symbols showing the location of regime shifts.
 Equivalent to the \code{col} argument in \code{\link[BAMMtools:addBAMMshifts]{BAMMtools::addBAMMshifts()}}. Default is \code{"black"}.}
 
-\item{regimes_border_width}{Numerical. Set the width of the border of the symbols showing the location of regime shifts.
+\item{regimes_border_width}{Numeric. Set the width of the border of the symbols showing the location of regime shifts.
 Equivalent to the \code{lwd} argument in \code{\link[BAMMtools:addBAMMshifts]{BAMMtools::addBAMMshifts()}}. Default is \code{1}.}
 
 \item{...}{Additional graphical arguments to pass down to \code{\link[BAMMtools:plot]{BAMMtools::plot.bammdata()}}, \code{\link[BAMMtools:addBAMMshifts]{BAMMtools::addBAMMshifts()}}, and \code{\link[=par]{par()}}.

@@ -31,10 +31,10 @@ In this case, unique areas are "N" (= "New World") and "O" (= "Old World")
 to harbor a given range along branches. The list contains one \code{"densityMap"} per range found along branches during the simulated biogeographic histories.
 Here those ranges are "N" (= "New World"), "O" (= "Old World"), and "NO" for multi-area ranges encompassing both regions.
 \item \verb{$trait_data_type} Character string. Record the type of trait data. Here: "biogeographic".
-\item \verb{$ace} Numerical matrix that records the posterior probabilities of ancestral ranges estimated at internal nodes.
+\item \verb{$ace} Numeric matrix. Record the posterior probabilities of ancestral ranges estimated at internal nodes.
 Only unique areas (i.e., "N" and "O") are considered among the ranges. Multi-area ranges (i.e., "NO") have been split among unique ranges.
 Rows are internal nodes. Columns are ranges. Values are posterior probabilities of each range per node.
-\item \verb{$ace_all_ranges} Numerical matrix that records the posterior probabilities of ancestral ranges estimated at internal nodes.
+\item \verb{$ace_all_ranges} Numeric matrix. Record the posterior probabilities of ancestral ranges estimated at internal nodes.
 All ranges observed along branches during the simulated biogeographic histories are present (i.e., "N", "O", and "NO").
 Rows are internal nodes. Columns are ranges. Values are posterior probabilities of each range per node.
 \item \verb{$model_selection_df} Data.frame that summarizes model comparisons used to select the best fitting model.

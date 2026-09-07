@@ -12,7 +12,7 @@ that contains a phylogenetic tree and associated continuous trait mapping.
 The phylogenetic tree must be rooted and fully resolved/dichotomous,
 but it does not need to be ultrametric (it can include fossils).}
 
-\item{focal_time}{Numerical. The time, in terms of time distance from the present,
+\item{focal_time}{Numeric. The time, in terms of time distance from the present,
 for which the tree and mapping must be cut. It must be smaller than the root age of the phylogeny.}
 
 \item{keep_tip_labels}{Logical. Specify whether terminal branches with a single descendant tip must retain their initial \code{tip.label}. Default is \code{TRUE}.}
@@ -24,16 +24,16 @@ Each contMap object contains three elements:
 \itemize{
 \item \verb{$tree}. A list of classes \code{"simmap"} and \code{"phylo"}. This function updates and adds multiple useful sub-elements to the \verb{$tree} element.
 \itemize{
-\item \verb{$maps} An updated list of named numerical vectors. Provides the mapping of trait values along each remaining edge.
+\item \verb{$maps} An updated list of named numeric vectors. Provides the mapping of trait values along each remaining edge.
 \item \verb{$mapped.edge} An updated matrix. Provides the evolutionary time spent across trait values (columns) along the remaining edges (rows).
 \item \verb{$root_age} Integer. Stores the age of the root of the tree.
 \item \verb{$nodes_ID_df} Data.frame with two columns. Provides the conversion from the \code{new_node_ID} to the \code{initial_node_ID}. Each row is a node.
-\item \verb{$initial_nodes_ID} Vector of character strings. Provides the initial ID of internal nodes. Used to plot internal node IDs as labels with \code{\link[ape:nodelabels]{ape::nodelabels()}}.
+\item \verb{$initial_nodes_ID} Character vector. Provides the initial ID of internal nodes. Used to plot internal node IDs as labels with \code{\link[ape:nodelabels]{ape::nodelabels()}}.
 \item \verb{$edges_ID_df} Data.frame with two columns. Provides the conversion from the \code{new_edge_ID} to the \code{initial_edge_ID}. Each row is an edge/branch.
-\item \verb{$initial_edges_ID} Vector of character strings. Provides the initial ID of edges/branches. Used to plot edge/branch IDs as labels with \code{\link[ape:nodelabels]{ape::edgelabels()}}.
+\item \verb{$initial_edges_ID} Character vector. Provides the initial ID of edges/branches. Used to plot edge/branch IDs as labels with \code{\link[ape:nodelabels]{ape::edgelabels()}}.
 }
-\item \verb{$cols} A named vector of character strings mapping trait values with colors to display on the plot.
-\item \verb{$lims} A numerical vector of 2 storing the initial min and max values of the trait (trait values are scaled between 0 and 1000 in \verb{$tree$maps})
+\item \verb{$cols} A named character vector mapping trait values with colors to display on the plot.
+\item \verb{$lims} A numeric vector of length 2 storing the initial min and max values of the trait (trait values are scaled between 0 and 1000 in \verb{$tree$maps})
 }
 }
 \description{

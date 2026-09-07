@@ -73,7 +73,7 @@ if only densityMaps summarizing posterior state/range density are provided, but 
 \item{ace}{(Optional) Ancestral Character Estimates (ACE) at the internal nodes.
 Obtained with \code{\link[=prepare_trait_data]{prepare_trait_data()}} as output in the \verb{$ace} slot.
 \itemize{
-\item For continuous trait data: Named numerical vector typically generated with \code{\link[phytools:fastAnc]{phytools::fastAnc()}}, \code{\link[phytools:anc.ML]{phytools::anc.ML()}}, or \code{\link[ape:ace]{ape::ace()}}.
+\item For continuous trait data: Named numeric vector typically generated with \code{\link[phytools:fastAnc]{phytools::fastAnc()}}, \code{\link[phytools:anc.ML]{phytools::anc.ML()}}, or \code{\link[ape:ace]{ape::ace()}}.
 Names are nodes_ID of the internal nodes. Values are ACE of the trait.
 \item For categorical trait or biogeographic data: Matrix that records the posterior probabilities of ancestral states/ranges.
 Rows are internal nodes_ID. Columns are states/ranges. Values are posterior probabilities of each state per node.
@@ -82,8 +82,8 @@ Needed in all cases to provide accurate estimates of trait values.
 
 \item{tip_data}{(Optional) Named vector of tip values of the trait.
 \itemize{
-\item For continuous trait data: Named numerical vector of trait values.
-\item For categorical trait or biogeographic data: Character string vector of states/ranges
+\item For continuous trait data: Named numeric vector of trait values.
+\item For categorical trait or biogeographic data: Named character vector of states/ranges.
 Names must match \code{tip.label} in the phylogeny. Needed to provide accurate tip values.
 \item For biogeographic data, ranges should follow the coding scheme of BioGeoBEARS with a unique CAPITAL letter per unique area
 (ex: A, B), combined to form multi-area ranges (Ex: AB). Alternatively, you can provide tip_data as a matrix or data.frame of
@@ -102,14 +102,14 @@ The phylogenetic tree must be the same as the one associated with the \code{cont
 
 \item{rate_type}{A character string specifying the type of diversification rates to use. Must be one of 'speciation', 'extinction' or 'net_diversification' (default).}
 
-\item{time_steps}{Numerical vector. Time steps at which the STRAPP tests should be carried out. If \code{NULL} (the default),
+\item{time_steps}{Numeric vector. Time steps at which the STRAPP tests should be carried out. If \code{NULL} (the default),
 \code{time_steps} will be generated from a combination of two arguments among \code{time_range}, \code{nb_time_steps}, and/or \code{time_step_duration}.}
 
-\item{time_range}{Vector of two numerical values. Time boundaries within which the \code{time_steps} must be defined if not provided.
+\item{time_range}{Numeric vector of length 2. Time boundaries within which the \code{time_steps} must be defined if not provided.
 If \code{NULL} (the default), and \code{time_range} is needed to generate the \code{time_steps}, the depth of the tree is used by default: \code{c(0, root_age)}.
 However, no time step will be generated for the 'root_age'.}
 
-\item{nb_time_steps, time_step_duration}{Numerical. Number of time steps and duration of each time step used to generate \code{time_steps} if not provided.
+\item{nb_time_steps, time_step_duration}{Numeric. Number of time steps and duration of each time step used to generate \code{time_steps} if not provided.
 You must provide at least one of those two arguments to be able to generate \code{time_steps}.}
 
 \item{uncertainty_strategy}{Character string. To select the strategy used to account for uncertainty in estimates.
@@ -138,7 +138,7 @@ because invalid maps with not enough states/ranges are discarded at each time-st
 \item{nb_permutations}{Integer. To select the number of random permutations to perform during the tests.
 If NULL (default), all posterior samples will be used once.}
 
-\item{alpha}{Numerical. Significance level to use to compute the \code{estimate} corresponding to the values of the test statistic used to assess significance of the test.
+\item{alpha}{Numeric. Significance level to use to compute the \code{estimate} corresponding to the values of the test statistic used to assess significance of the test.
 This does NOT affect p-values. Default is \code{0.05}.}
 
 \item{two_tailed}{Logical. To define the type of tests. If \code{TRUE} (default), tests for correlations/differences in rates will be carried out with a null hypothesis
@@ -182,7 +182,7 @@ at each time step and returned in a melted data.frame. Default is \code{FALSE}.}
 should be returned among the outputs in addition to the \verb{$pvalues_summary_df} already providing test stat estimates and p-values obtained across all \code{time_steps}.}
 
 \item{return_updated_Maps}{Logical. Specify whether the updated versions of the mapped phylogenies (\code{contMap(s)}/\code{densityMaps}/\code{simmaps}),
-should be returned among the outputs. The updated \code{contMap(s)}/\code{densityMaps}/\code{simmaps} consist in cutting off branches and mapping
+should be returned among the outputs. The update of the \code{contMap(s)}/\code{densityMaps}/\code{simmaps} consists of cutting off branches and mapping
 that are younger than the \code{time_steps} used to perform the tests. Default is \code{FALSE}.}
 
 \item{return_updated_BAMM_objects}{Logical. Specify whether the \code{updated_BAMM_objects} with phylogeny and
@@ -200,7 +200,7 @@ The function returns a list with at least five elements.
 \itemize{
 \item \verb{$pvalues_summary_df} Data.frame with three columns providing test stat \verb{$estimate} and \verb{$p_value} obtained for each time step (i.e., \verb{$focal_time}),
 that can be passed down to \code{\link[=plot_STRAPP_pvalues_over_time]{plot_STRAPP_pvalues_over_time()}} to generate a plot showing the evolution of the test results across time.
-\item \verb{$time_steps} Numerical vector. Time steps at which the STRAPP tests were carried out in the same order as the objects returned in the output lists.
+\item \verb{$time_steps} Numeric vector. Time steps at which the STRAPP tests were carried out in the same order as the objects returned in the output lists.
 \item \verb{$trait_data_type} Character string. Specify the type of trait data. Possible values are: "continuous", "categorical", "biogeographic".
 \item \verb{$trait_data_type_for_stats} Character string. The type of trait data used to select statistical method. One of 'continuous', 'binary', or 'multinomial'.
 \item \verb{$rate_type} Character string. The type of diversification rates used in the tests: 'speciation', 'extinction' or 'net_diversification'.

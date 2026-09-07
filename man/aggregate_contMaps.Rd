@@ -23,7 +23,7 @@ aggregate_contMaps(
 
 \item{...}{List of named arguments. Additional arguments to be passed down to \code{deepSTRAPP::plot_contMap()}.}
 
-\item{color_scale}{Vector of character strings. List of colors to use to build the color scale with \code{\link[grDevices:colorRamp]{grDevices::colorRampPalette()}}
+\item{color_scale}{Character vector. List of colors to use to build the color scale with \code{\link[grDevices:colorRamp]{grDevices::colorRampPalette()}}
 showing the evolution of the continuous trait. From lowest values to highest values.
 Default (\code{color_scale = NULL}) is using the color palette recorded in the \code{contMap$cols} item. If none was provided, the \code{rainbow()} palette is used.
 Provide the full argument name to avoid ambiguity with the \code{col} graphical argument.}
@@ -38,10 +38,10 @@ The resulting aggregated \code{"contMap"} is a list with three items:
 \itemize{
 \item \verb{$tree} A list of classes \code{"simmap"} and \code{"phylo"}. The mapped phylogeny including:
 \itemize{
-\item \verb{$maps} A list of named numerical vectors. Provides the mapping of aggregated trait values along each edge (scaled between 0 and 1000).
+\item \verb{$maps} A list of named numeric vectors. Provides the mapping of aggregated trait values along each edge (scaled between 0 and 1000).
 \item \verb{$mapped.edge} A numeric matrix. Provides the evolutionary time spent across trait values (columns) along the edges (rows).
 }
-\item \verb{$cols} A named vector mapping values to colors used to display trait evolution along the branches.
+\item \verb{$cols} A named character vector mapping values to colors used to display trait evolution along the branches.
 \item \verb{$lims} A numeric vector. Minimum and maximum aggregated trait values recorded.
 }
 }

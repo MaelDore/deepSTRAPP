@@ -47,7 +47,7 @@ that represent discrete character/geographic evolutionary history
 \item{ace}{(Optional) Ancestral Character Estimates (ACE) at the internal nodes.
 Obtained with \code{\link[=prepare_trait_data]{prepare_trait_data()}} as output in the \verb{$ace} slot.
 \itemize{
-\item For continuous trait data: Named numerical vector typically generated with \code{\link[phytools:fastAnc]{phytools::fastAnc()}}, \code{\link[phytools:anc.ML]{phytools::anc.ML()}}, or \code{\link[ape:ace]{ape::ace()}}.
+\item For continuous trait data: Named numeric vector typically generated with \code{\link[phytools:fastAnc]{phytools::fastAnc()}}, \code{\link[phytools:anc.ML]{phytools::anc.ML()}}, or \code{\link[ape:ace]{ape::ace()}}.
 Names are nodes_ID of the internal nodes. Values are ACE of the trait.
 \item For categorical trait or biogeographic data: Matrix that records the posterior probabilities of ancestral states/ranges.
 Rows are internal nodes_ID. Columns are states/ranges. Values are posterior probabilities of each state per node.
@@ -56,7 +56,7 @@ Needed in all cases to provide accurate estimates of trait values.
 
 \item{tip_data}{(Optional) Named vector of tip values of the trait.
 \itemize{
-\item For continuous trait data: Named numerical vector of trait values.
+\item For continuous trait data: Named numeric vector of trait values.
 \item For categorical trait or biogeographic data: Character string vector of states/ranges
 Names are nodes_ID of the internal nodes. Needed to provide accurate tip values.
 }}
@@ -68,7 +68,7 @@ at which the tree and mapping must be cut. It must be smaller than the root age 
 
 \item{update_Map}{Logical. Specify whether the mapped phylogeny (\code{contMap}, \code{densityMaps}, \code{simmaps})
 provided as input should be updated for visualization and returned among the outputs. Default is \code{FALSE}.
-The update consists in cutting off branches and mapping that are younger than the \code{focal_time}.}
+The update consists of cutting off branches and mapping that are younger than the \code{focal_time}.}
 
 \item{keep_tip_labels}{Logical. Specify whether terminal branches with a single descendant tip
 must retain their initial \code{tip.label} on the updated contMap. Default is \code{TRUE}.
@@ -77,7 +77,7 @@ Used only if \code{update_Map = TRUE}.}
 \value{
 By default, the function returns a list with three elements.
 \itemize{
-\item \verb{$trait_data} A named numerical vector with ML trait values found along branches overlapping the \code{focal_time}. Names are the tip.label/tipward node ID.
+\item \verb{$trait_data} A named numeric vector with ML trait values found along branches overlapping the \code{focal_time}. Names are the tip.label/tipward node ID.
 \item \verb{$focal_time} Integer. The time, in terms of time distance from the present, at which the trait data were extracted.
 \item \verb{$trait_data_type} Character string. Define the type of trait data as "continuous", "categorical", or "biogeographic". Used in downstream analyses to select appropriate statistical processing.
 }
@@ -91,9 +91,9 @@ The function also adds multiple useful sub-elements to the \verb{$contMap$tree} 
 \itemize{
 \item \verb{$root_age} Integer. Stores the age of the root of the tree.
 \item \verb{$nodes_ID_df} Data.frame with two columns. Provides the conversion from the \code{new_node_ID} to the \code{initial_node_ID}. Each row is a node.
-\item \verb{$initial_nodes_ID} Vector of character strings. Provides the initial ID of internal nodes. Used to plot internal node IDs as labels with \code{\link[ape:nodelabels]{ape::nodelabels()}}.
+\item \verb{$initial_nodes_ID} Character vector. Provides the initial ID of internal nodes. Used to plot internal node IDs as labels with \code{\link[ape:nodelabels]{ape::nodelabels()}}.
 \item \verb{$edges_ID_df} Data.frame with two columns. Provides the conversion from the \code{new_edge_ID} to the \code{initial_edge_ID}. Each row is an edge/branch.
-\item \verb{$initial_edges_ID} Vector of character strings. Provides the initial ID of edges/branches. Used to plot edge/branch IDs as labels with \code{\link[ape:nodelabels]{ape::edgelabels()}}.
+\item \verb{$initial_edges_ID} Character vector. Provides the initial ID of edges/branches. Used to plot edge/branch IDs as labels with \code{\link[ape:nodelabels]{ape::edgelabels()}}.
 }
 \item \verb{$contMaps} List of \code{"contMap"} objects as described above.
 }
@@ -106,9 +106,9 @@ The function also adds multiple useful sub-elements to the \verb{$densityMaps$tr
 \itemize{
 \item \verb{$root_age} Integer. Stores the age of the root of the tree.
 \item \verb{$nodes_ID_df} Data.frame with two columns. Provides the conversion from the \code{new_node_ID} to the \code{initial_node_ID}. Each row is a node.
-\item \verb{$initial_nodes_ID} Vector of character strings. Provides the initial ID of internal nodes. Used to plot internal node IDs as labels with \code{\link[ape:nodelabels]{ape::nodelabels()}}.
+\item \verb{$initial_nodes_ID} Character vector. Provides the initial ID of internal nodes. Used to plot internal node IDs as labels with \code{\link[ape:nodelabels]{ape::nodelabels()}}.
 \item \verb{$edges_ID_df} Data.frame with two columns. Provides the conversion from the \code{new_edge_ID} to the \code{initial_edge_ID}. Each row is an edge/branch.
-\item \verb{$initial_edges_ID} Vector of character strings. Provides the initial ID of edges/branches. Used to plot edge/branch IDs as labels with \code{\link[ape:nodelabels]{ape::edgelabels()}}.
+\item \verb{$initial_edges_ID} Character vector. Provides the initial ID of edges/branches. Used to plot edge/branch IDs as labels with \code{\link[ape:nodelabels]{ape::edgelabels()}}.
 }
 \item \verb{$simmaps} A list of objects of classes \code{"phylo"} and \code{"simmap"}, that contains the updated stochastic maps \code{simmap}
 for each simulation of trait/range evolution.
@@ -165,7 +165,7 @@ This quantity is fully equivalent to what is derived from the \code{densityMaps}
 ----- Update the \code{contMap(s)}/\code{densityMaps}/\code{simmaps} -----
 
 To obtain updated \code{contMap(s)}/\code{densityMaps}/\code{simmaps} alongside the trait data, set \code{update_Map = TRUE}.
-The update consists in cutting off branches and mapping that are younger than the \code{focal_time}.
+The update consists of cutting off branches and mapping that are younger than the \code{focal_time}.
 \itemize{
 \item When a branch with a single descendant tip is cut and \code{keep_tip_labels = TRUE},
 the leaf left is labeled with the tip.label of the unique descendant tip.

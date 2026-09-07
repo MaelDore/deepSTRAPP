@@ -18,10 +18,10 @@ prune_BAMM_object(
 \item{BAMM_object}{Object of class \code{"bammdata"}, typically generated with \code{\link[=prepare_diversification_data]{prepare_diversification_data()}}
 or \code{\link[=build_BAMM_object]{build_BAMM_object()}}, that contains a phylogenetic tree and associated diversification rate mapping across selected posterior samples.}
 
-\item{tips_to_keep}{Vector of character strings. Tips to retain in the pruned \code{BAMM_object},
+\item{tips_to_keep}{Character vector. Tips to retain in the pruned \code{BAMM_object},
 given as tip labels as found in \code{BAMM_object$tip.label}. Default = \code{NULL}.}
 
-\item{tips_to_prune}{Vector of character strings. Tips to remove from the \code{BAMM_object},
+\item{tips_to_prune}{Character vector. Tips to remove from the \code{BAMM_object},
 given as tip labels as found in \code{BAMM_object$tip.label}. Default = \code{NULL}.}
 
 \item{MRCA_node}{Integer. ID of a single internal node of \code{BAMM_object}, as found in \code{BAMM_object$edge},
@@ -42,7 +42,7 @@ the full phylogeny.
 configurations retained as MAP/MSC may differ from those of the full phylogeny.
 }}
 
-\item{MAP_odds_ratio_threshold}{Numerical. Controls the definition of 'core-shifts' used to distinguish across configurations when fetching the MAP samples.
+\item{MAP_odds_ratio_threshold}{Numeric. Controls the definition of 'core-shifts' used to distinguish across configurations when fetching the MAP samples.
 Shifts that have an odds ratio of marginal posterior probability / prior lower than \code{MAP_odds_ratio_threshold} are ignored. See \code{\link[BAMMtools:getBestShiftConfiguration]{BAMMtools::getBestShiftConfiguration()}}.
 Only used when \code{recompute_shift_configurations = TRUE}. Default = \code{5}.}
 
@@ -53,35 +53,35 @@ The function returns a \code{BAMM_object} of class \code{"bammdata"} which is a 
 
 Phylogeny-related elements used to plot a phylogeny with \code{\link[ape:plot.phylo]{ape::plot.phylo()}}:
 \itemize{
-\item \verb{$edge} Matrix of integers. Defines the tree topology by providing rootward and tipward node ID of each edge.
+\item \verb{$edge} Integer matrix. Defines the tree topology by providing rootward and tipward node ID of each edge.
 \item \verb{$Nnode} Integer. Number of internal nodes.
-\item \verb{$tip.label} Vector of character strings. Labels of all retained tips.
-\item \verb{$edge.length} Vector of numerical. Length of edges/branches. Branches resulting from the merging of several
+\item \verb{$tip.label} Character vector. Labels of all retained tips.
+\item \verb{$edge.length} Numeric vector. Length of edges/branches. Branches resulting from the merging of several
 initial branches have a length equal to the sum of the lengths of the initial branches.
-\item \verb{$node.label} Vector of character strings. Labels of all internal nodes. (Present only if present in the initial \code{BAMM_object})
+\item \verb{$node.label} Character vector. Labels of all internal nodes. (Present only if present in the initial \code{BAMM_object})
 }
 
 BAMM internal elements used for tree exploration updated for the new pruned tree:
 \itemize{
-\item \verb{$begin} Vector of numerical. Absolute time since root of edge/branch start (rootward).
-\item \verb{$end} Vector of numerical.  Absolute time since root of edge/branch end (tipward).
-\item \verb{$downseq} Vector of integers. Order of node visits when using a pre-order tree traversal.
+\item \verb{$begin} Numeric vector. Absolute time since root of edge/branch start (rootward).
+\item \verb{$end} Numeric vector.  Absolute time since root of edge/branch end (tipward).
+\item \verb{$downseq} Integer vector. Order of node visits when using a pre-order tree traversal.
 \item \verb{$lastvisit} ID of the last node visited when starting from the node in the corresponding position in \verb{$downseq}.
 }
 
 BAMM elements summarizing diversification data:
 \itemize{
-\item \verb{$numberEvents} Vector of integer. Number of events/macroevolutionary regimes (k+1) retained in each posterior configuration. k = number of shifts.
+\item \verb{$numberEvents} Integer vector. Number of events/macroevolutionary regimes (k+1) retained in each posterior configuration. k = number of shifts.
 \item \verb{$eventData} List of data.frames. One per posterior sample. Records shift events and macroevolutionary regime parameters. 1st line = Background root regime.
 \item \verb{$eventVectors} List of integer vectors. One per posterior sample. Record regime ID per branch.
 \item \verb{$tipStates} List of integer vectors. One per posterior sample. Record regime ID per tip.
 Tip vectors are named after the tips only when they were named in the initial \code{BAMM_object}:
 the naming convention of the input is preserved.
-\item \verb{$tipLambda} List of numerical vectors. One per posterior sample. Record speciation rates per tip.
-\item \verb{$tipMu} List of numerical vectors. One per posterior sample. Record extinction rates per tip.
-\item \verb{$eventBranchSegs} List of matrix of numerical. One per posterior sample. Record regime ID per segment of branches.
-\item \verb{$meanTipLambda} Vector of numerical. Mean tip speciation rates across all posterior configurations of tips.
-\item \verb{$meanTipMu} Vector of numerical. Mean tip extinction rates across all posterior configurations of tips.
+\item \verb{$tipLambda} List of numeric vectors. One per posterior sample. Record speciation rates per tip.
+\item \verb{$tipMu} List of numeric vectors. One per posterior sample. Record extinction rates per tip.
+\item \verb{$eventBranchSegs} List of numeric matrices. One per posterior sample. Record regime ID per segment of branches.
+\item \verb{$meanTipLambda} Numeric vector. Mean tip speciation rates across all posterior configurations of tips.
+\item \verb{$meanTipMu} Numeric vector. Mean tip extinction rates across all posterior configurations of tips.
 \item \verb{$type} Character string. Set the type of data modeled with BAMM. Should be "diversification".
 }
 
@@ -90,18 +90,18 @@ Additional elements providing key information for downstream analyses:
 \item \verb{$expectedNumberOfShifts} Integer. The expected number of regime shifts used to set the prior in BAMM.
 \item \verb{$MSP_tree} Object of class \code{phylo}. List of 4 elements duplicating information from the Phylogeny-related elements above,
 except \verb{$MSP_tree$edge.length} is recording the Marginal Shift Probability of each branch, recomputed on the pruned phylogeny.
-\item \verb{$MAP_indices} Vector of integers. The indices of the Maximum A Posteriori probability (MAP) configurations among the posterior samples.
+\item \verb{$MAP_indices} Integer vector. The indices of the Maximum A Posteriori probability (MAP) configurations among the posterior samples.
 \item \verb{$MAP_BAMM_object} List of 18 elements of class \code{"bammdata"} recording the mean rates and regime shift locations found across
 the Maximum A Posteriori probability (MAP) configurations, pruned to the retained tips.
-\item \verb{$MSC_indices} Vector of integers. The indices of the Maximum Shift Credibility (MSC) configurations among the posterior samples.
+\item \verb{$MSC_indices} Integer vector. The indices of the Maximum Shift Credibility (MSC) configurations among the posterior samples.
 \item \verb{$MSC_BAMM_object} List of 18 elements of class \code{"bammdata"} recording the mean rates and regime shift locations found across
 the Maximum Shift Credibility (MSC) configurations, pruned to the retained tips.
 }
 
 Elements tracking the pruning, that can be used to relate the pruned object to the initial one:
 \itemize{
-\item \verb{$pruned_tip_labels} Vector of character strings. Labels of the tips that were removed.
-\item \verb{$pruning_root_shift} Numerical. Time elapsed between the root of the initial phylogeny and the root of the
+\item \verb{$pruned_tip_labels} Character vector. Labels of the tips that were removed.
+\item \verb{$pruning_root_shift} Numeric. Time elapsed between the root of the initial phylogeny and the root of the
 pruned phylogeny. Equals \code{0} when the retained tips span the initial root. Since pruning does not change the
 distance of any retained node to the present, this is also the difference between the initial and the pruned root ages.
 \item \verb{$pruning_nodes_ID_df} Data.frame with four columns providing the conversion table for node IDs:

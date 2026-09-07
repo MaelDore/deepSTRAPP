@@ -22,7 +22,7 @@ that contains a phylogenetic tree and associated diversification rate mapping ac
 The phylogenetic tree must be rooted and fully resolved/dichotomous,
 but it does not need to be ultrametric (it can include fossils).}
 
-\item{focal_time}{Numerical. The time, in terms of time distance from the present,
+\item{focal_time}{Numeric. The time, in terms of time distance from the present,
 at which the tree and rate mapping must be cut. It must be smaller than the root age of the phylogeny.}
 
 \item{update_rates}{Logical. Specify whether diversification rates stored in
@@ -57,36 +57,36 @@ The function returns a list as an updated \code{BAMM_object} of class \code{"bam
 
 Phylogeny-related elements used to plot a phylogeny with \code{\link[ape:plot.phylo]{ape::plot.phylo()}}:
 \itemize{
-\item \verb{$edge} Matrix of integers. Defines the tree topology by providing rootward and tipward node ID of each edge.
+\item \verb{$edge} Integer matrix. Defines the tree topology by providing rootward and tipward node ID of each edge.
 \item \verb{$Nnode} Integer. Number of internal nodes.
-\item \verb{$tip.label} Vector of character strings. Labels of all tips, including fossils older than \code{focal_time} if present.
+\item \verb{$tip.label} Character vector. Labels of all tips, including fossils older than \code{focal_time} if present.
 \itemize{
 \item If \code{keep_tip_labels = TRUE}, cut-off branches with a single descendant tip retain their initial \code{tip.label}.
 \item If \code{keep_tip_labels = FALSE}, all cut-off branches are labeled using their tipward node ID.
 }
-\item \verb{$edge.length} Vector of numerical. Length of edges/branches.
-\item \verb{$node.label} Vector of character strings. Labels of all internal nodes. (Present only if present in the initial \code{BAMM_object})
+\item \verb{$edge.length} Numeric vector. Length of edges/branches.
+\item \verb{$node.label} Character vector. Labels of all internal nodes. (Present only if present in the initial \code{BAMM_object})
 }
 
 BAMM internal elements used for tree exploration:
 \itemize{
-\item \verb{$begin} Vector of numerical. Absolute time since root of edge/branch start (rootward).
-\item \verb{$end} Vector of numerical.  Absolute time since root of edge/branch end (tipward).
-\item \verb{$downseq} Vector of integers. Order of node visits when using a pre-order tree traversal.
+\item \verb{$begin} Numeric vector. Absolute time since root of edge/branch start (rootward).
+\item \verb{$end} Numeric vector.  Absolute time since root of edge/branch end (tipward).
+\item \verb{$downseq} Integer vector. Order of node visits when using a pre-order tree traversal.
 \item \verb{$lastvisit} ID of the last node visited when starting from the node in the corresponding position in \verb{$downseq}.
 }
 
 BAMM elements summarizing diversification data:
 \itemize{
-\item \verb{$numberEvents} Vector of integer. Number of events/macroevolutionary regimes (k+1) recorded in each posterior configuration. k = number of shifts.
+\item \verb{$numberEvents} Integer vector. Number of events/macroevolutionary regimes (k+1) recorded in each posterior configuration. k = number of shifts.
 \item \verb{$eventData} List of data.frames. One per posterior sample. Records shift events and macroevolutionary regimes parameters. 1st line = Background root regime.
 \item \verb{$eventVectors} List of integer vectors. One per posterior sample. Record regime ID per branch.
 \item \verb{$tipStates} List of named integer vectors. One per posterior sample. Record regime ID per tip present at \code{focal_time}. Updated if \code{update_regimes = TRUE}.
-\item \verb{$tipLambda} List of named numerical vectors. One per posterior sample. Record speciation rates per tip present at \code{focal_time}. Updated if \code{update_rates = TRUE}.
-\item \verb{$tipMu} List of named numerical vectors. One per posterior sample. Record extinction rates per tip present at \code{focal_time}. Updated if \code{update_rates = TRUE}.
-\item \verb{$eventBranchSegs} List of matrix of numerical. One per posterior sample. Record regime ID per segment of branches.
-\item \verb{$meanTipLambda} Vector of named numerical. Mean tip speciation rates across all posterior configurations of tips present at \code{focal_time} (does not include older fossils).
-\item \verb{$meanTipMu} Vector of named numerical. Mean tip extinction rates across all posterior configurations of tips present at \code{focal_time} (does not include older fossils).
+\item \verb{$tipLambda} List of named numeric vectors. One per posterior sample. Record speciation rates per tip present at \code{focal_time}. Updated if \code{update_rates = TRUE}.
+\item \verb{$tipMu} List of named numeric vectors. One per posterior sample. Record extinction rates per tip present at \code{focal_time}. Updated if \code{update_rates = TRUE}.
+\item \verb{$eventBranchSegs} List of numeric matrices. One per posterior sample. Record regime ID per segment of branches.
+\item \verb{$meanTipLambda} Named numeric vector. Mean tip speciation rates across all posterior configurations of tips present at \code{focal_time} (does not include older fossils).
+\item \verb{$meanTipMu} Named numeric vector. Mean tip extinction rates across all posterior configurations of tips present at \code{focal_time} (does not include older fossils).
 \item \verb{$type} Character string. Set the type of data modeled with BAMM. Should be "diversification".
 }
 
@@ -96,11 +96,11 @@ Additional elements providing key information for downstream analyses:
 \item \verb{$MSP_tree} Object of class \code{phylo}. List of 4 elements duplicating information from the Phylogeny-related elements above,
 except \verb{$MSP_tree$edge.length} is recording the Marginal Shift Probability of each branch (i.e., the probability of a regime shift to occur along each branch)
 whose origin is older than \code{focal_time}.
-\item \verb{$MAP_indices} Vector of integers. The indices of the Maximum A Posteriori probability (MAP) configurations among the posterior samples.
+\item \verb{$MAP_indices} Integer vector. The indices of the Maximum A Posteriori probability (MAP) configurations among the posterior samples.
 \item \verb{$MAP_BAMM_object}. List of 18 elements of class \code{"bammdata"} recording the mean rates and regime shift locations found across
 the Maximum A Posteriori probability (MAP) configuration. All BAMM elements summarizing diversification data hold a single entry describing this
 the mean diversification history, updated for the \code{focal_time}.
-\item \verb{$MSC_indices} Vector of integers. The indices of the Maximum Shift Credibility (MSC) configurations among the posterior samples.
+\item \verb{$MSC_indices} Integer vector. The indices of the Maximum Shift Credibility (MSC) configurations among the posterior samples.
 \item \verb{$MSC_BAMM_object} List of 18 elements of class \code{"bammdata"} recording the mean rates and regime shift locations found across
 the Maximum Shift Credibility (MSC) configurations. All BAMM elements summarizing diversification data hold a single entry describing
 this mean diversification history, updated for the \code{focal_time}.
@@ -110,17 +110,17 @@ New elements added to provide update information:
 \itemize{
 \item \verb{$root_age} Integer. Stores the age of the root of the tree.
 \item \verb{$nodes_ID_df} Data.frame with two columns. Provides the conversion from the \code{new_node_ID} to the \code{initial_node_ID}. Each row is a node.
-\item \verb{$initial_nodes_ID} Vector of character strings. Provides the initial ID of internal nodes. Used to plot internal node IDs as labels with \code{\link[ape:nodelabels]{ape::nodelabels()}}.
+\item \verb{$initial_nodes_ID} Character vector. Provides the initial ID of internal nodes. Used to plot internal node IDs as labels with \code{\link[ape:nodelabels]{ape::nodelabels()}}.
 \item \verb{$edges_ID_df} Data.frame with two columns. Provides the conversion from the \code{new_edge_ID} to the \code{initial_edge_ID}. Each row is an edge/branch.
-\item \verb{$initial_edges_ID} Vector of character strings. Provides the initial ID of edges/branches. Used to plot edge/branch IDs as labels with \code{\link[ape:nodelabels]{ape::edgelabels()}}.
+\item \verb{$initial_edges_ID} Character vector. Provides the initial ID of edges/branches. Used to plot edge/branch IDs as labels with \code{\link[ape:nodelabels]{ape::edgelabels()}}.
 \item \verb{$dtrates} List of three elements.
 \itemize{
-\item 1/ \verb{$dtrates$tau} Numerical. Resolution factor describing the fraction of each segment length used in \code{\link[=plot_BAMM_rates]{plot_BAMM_rates()}}
+\item 1/ \verb{$dtrates$tau} Numeric. Resolution factor describing the fraction of each segment length used in \code{\link[=plot_BAMM_rates]{plot_BAMM_rates()}}
 compared to the full depth of the initial tree (i.e., the root_age)
-\item 2/ \verb{$dtrates$rates} List of two numerical vectors. Speciation and extinction rates along segments used by \code{\link[=plot_BAMM_rates]{plot_BAMM_rates()}}.
-\item 3/ \verb{$dtrates$tmat} Matrix of numerical. Start and end times of segments in term of distance to the root.
+\item 2/ \verb{$dtrates$rates} List of two numeric vectors. Speciation and extinction rates along segments used by \code{\link[=plot_BAMM_rates]{plot_BAMM_rates()}}.
+\item 3/ \verb{$dtrates$tmat} Numeric matrix. Start and end times of segments in term of distance to the root.
 }
-\item \verb{$initial_colorbreaks} List of three vectors of numerical. Rate values of the percentiles delimiting the bins for mapping rates to colors with \code{\link[BAMMtools:plot]{BAMMtools::plot.bammdata()}}.
+\item \verb{$initial_colorbreaks} List of three numeric vectors. Rate values of the percentiles delimiting the bins for mapping rates to colors with \code{\link[BAMMtools:plot]{BAMMtools::plot.bammdata()}}.
 Each element provides values for different type of rates (\verb{$speciation}, \verb{$extinction}, \verb{$net_diversification}).
 \item \verb{$focal_time} Integer. The time, in terms of time distance from the present, at which the rates/regimes were extracted and the tree was possibly cut.
 }

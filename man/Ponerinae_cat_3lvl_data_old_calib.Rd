@@ -23,7 +23,7 @@ This object was obtained with \code{\link[=prepare_trait_data]{prepare_trait_dat
 \item \verb{$densityMaps} List of three objects of class \code{"densityMap"} that contains a phylogenetic tree and associated mapping of probability
 to harbor a given state along branches. The list contains one \code{"densityMap"} per state found in the \code{tip_data} (i.e., "arboreal", "subterranean", and "terricolous").
 \item \verb{$trait_data_type} Character string. Record the type of trait data. Here: "categorical".
-\item \verb{$ace} Numerical matrix that records the posterior probabilities of ancestral states (characters) estimates (ACE) at internal nodes.
+\item \verb{$ace} Numeric matrix. Record the posterior probabilities of ancestral states (characters) estimates (ACE) at internal nodes.
 Rows are internal nodes. Columns are states (i.e., "arboreal", "subterranean", and "terricolous"). Values are posterior probabilities of each state per node.
 \item \verb{$best_model_fit} List that provides the output of the best fitting model (Here: ARD model).
 \item \verb{$model_selection_df} Data.frame that summarizes model comparisons used to select the best fitting model.
