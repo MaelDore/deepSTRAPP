@@ -37,9 +37,9 @@
 #'
 #' @param BAMM_object Object of class `"bammdata"`, typically generated with [deepSTRAPP::prepare_diversification_data()]
 #'   or [deepSTRAPP::build_BAMM_object()], that contains a phylogenetic tree and associated diversification rate mapping across selected posterior samples.
-#' @param tips_to_keep Vector of character strings. Tips to retain in the pruned `BAMM_object`,
+#' @param tips_to_keep Character vector. Tips to retain in the pruned `BAMM_object`,
 #'   given as tip labels as found in `BAMM_object$tip.label`. Default = `NULL`.
-#' @param tips_to_prune Vector of character strings. Tips to remove from the `BAMM_object`,
+#' @param tips_to_prune Character vector. Tips to remove from the `BAMM_object`,
 #'   given as tip labels as found in `BAMM_object$tip.label`. Default = `NULL`.
 #' @param MRCA_node Integer. ID of a single internal node of `BAMM_object`, as found in `BAMM_object$edge`,
 #'   whose descendant branches/tips must be retained. Use it to focus on the diversification dynamics of one subclade,
@@ -56,7 +56,7 @@
 #'   * If `TRUE`, the MAP and MSC configurations are detected again from the pruned posterior samples, as in
 #'     [deepSTRAPP::build_BAMM_object()]. Shifts located on removed branches no longer contribute, so the
 #'     configurations retained as MAP/MSC may differ from those of the full phylogeny.
-#' @param MAP_odds_ratio_threshold Numerical. Controls the definition of 'core-shifts' used to distinguish across configurations when fetching the MAP samples.
+#' @param MAP_odds_ratio_threshold Numeric. Controls the definition of 'core-shifts' used to distinguish across configurations when fetching the MAP samples.
 #'   Shifts that have an odds ratio of marginal posterior probability / prior lower than `MAP_odds_ratio_threshold` are ignored. See [BAMMtools::getBestShiftConfiguration()].
 #'   Only used when `recompute_shift_configurations = TRUE`. Default = `5`.
 #' @param verbose Logical. Whether to display progress in the console. Default = `FALSE`.
@@ -105,47 +105,47 @@
 #' @return The function returns a `BAMM_object` of class `"bammdata"` which is a list with at least 26 elements.
 #'
 #'   Phylogeny-related elements used to plot a phylogeny with [ape::plot.phylo()]:
-#'   * `$edge` Matrix of integers. Defines the tree topology by providing rootward and tipward node ID of each edge.
+#'   * `$edge` Integer matrix. Defines the tree topology by providing rootward and tipward node ID of each edge.
 #'   * `$Nnode` Integer. Number of internal nodes.
-#'   * `$tip.label` Vector of character strings. Labels of all retained tips.
-#'   * `$edge.length` Vector of numerical. Length of edges/branches. Branches resulting from the merging of several
+#'   * `$tip.label` Character vector. Labels of all retained tips.
+#'   * `$edge.length` Numeric vector. Length of edges/branches. Branches resulting from the merging of several
 #'     initial branches have a length equal to the sum of the lengths of the initial branches.
-#'   * `$node.label` Vector of character strings. Labels of all internal nodes. (Present only if present in the initial `BAMM_object`)
+#'   * `$node.label` Character vector. Labels of all internal nodes. (Present only if present in the initial `BAMM_object`)
 #'
 #'   BAMM internal elements used for tree exploration updated for the new pruned tree:
-#'   * `$begin` Vector of numerical. Absolute time since root of edge/branch start (rootward).
-#'   * `$end` Vector of numerical.  Absolute time since root of edge/branch end (tipward).
-#'   * `$downseq` Vector of integers. Order of node visits when using a pre-order tree traversal.
+#'   * `$begin` Numeric vector. Absolute time since root of edge/branch start (rootward).
+#'   * `$end` Numeric vector.  Absolute time since root of edge/branch end (tipward).
+#'   * `$downseq` Integer vector. Order of node visits when using a pre-order tree traversal.
 #'   * `$lastvisit` ID of the last node visited when starting from the node in the corresponding position in `$downseq`.
 #'
 #'   BAMM elements summarizing diversification data:
-#'   * `$numberEvents` Vector of integer. Number of events/macroevolutionary regimes (k+1) retained in each posterior configuration. k = number of shifts.
+#'   * `$numberEvents` Integer vector. Number of events/macroevolutionary regimes (k+1) retained in each posterior configuration. k = number of shifts.
 #'   * `$eventData` List of data.frames. One per posterior sample. Records shift events and macroevolutionary regime parameters. 1st line = Background root regime.
 #'   * `$eventVectors` List of integer vectors. One per posterior sample. Record regime ID per branch.
 #'   * `$tipStates` List of integer vectors. One per posterior sample. Record regime ID per tip.
 #'     Tip vectors are named after the tips only when they were named in the initial `BAMM_object`:
 #'     the naming convention of the input is preserved.
-#'   * `$tipLambda` List of numerical vectors. One per posterior sample. Record speciation rates per tip.
-#'   * `$tipMu` List of numerical vectors. One per posterior sample. Record extinction rates per tip.
-#'   * `$eventBranchSegs` List of matrix of numerical. One per posterior sample. Record regime ID per segment of branches.
-#'   * `$meanTipLambda` Vector of numerical. Mean tip speciation rates across all posterior configurations of tips.
-#'   * `$meanTipMu` Vector of numerical. Mean tip extinction rates across all posterior configurations of tips.
+#'   * `$tipLambda` List of numeric vectors. One per posterior sample. Record speciation rates per tip.
+#'   * `$tipMu` List of numeric vectors. One per posterior sample. Record extinction rates per tip.
+#'   * `$eventBranchSegs` List of numeric matrices. One per posterior sample. Record regime ID per segment of branches.
+#'   * `$meanTipLambda` Numeric vector. Mean tip speciation rates across all posterior configurations of tips.
+#'   * `$meanTipMu` Numeric vector. Mean tip extinction rates across all posterior configurations of tips.
 #'   * `$type` Character string. Set the type of data modeled with BAMM. Should be "diversification".
 #'
 #'   Additional elements providing key information for downstream analyses:
 #'   * `$expectedNumberOfShifts` Integer. The expected number of regime shifts used to set the prior in BAMM.
 #'   * `$MSP_tree` Object of class `phylo`. List of 4 elements duplicating information from the Phylogeny-related elements above,
 #'      except `$MSP_tree$edge.length` is recording the Marginal Shift Probability of each branch, recomputed on the pruned phylogeny.
-#'   * `$MAP_indices` Vector of integers. The indices of the Maximum A Posteriori probability (MAP) configurations among the posterior samples.
+#'   * `$MAP_indices` Integer vector. The indices of the Maximum A Posteriori probability (MAP) configurations among the posterior samples.
 #'   * `$MAP_BAMM_object` List of 18 elements of class `"bammdata"` recording the mean rates and regime shift locations found across
 #'      the Maximum A Posteriori probability (MAP) configurations, pruned to the retained tips.
-#'   * `$MSC_indices` Vector of integers. The indices of the Maximum Shift Credibility (MSC) configurations among the posterior samples.
+#'   * `$MSC_indices` Integer vector. The indices of the Maximum Shift Credibility (MSC) configurations among the posterior samples.
 #'   * `$MSC_BAMM_object` List of 18 elements of class `"bammdata"` recording the mean rates and regime shift locations found across
 #'      the Maximum Shift Credibility (MSC) configurations, pruned to the retained tips.
 #'
 #'   Elements tracking the pruning, that can be used to relate the pruned object to the initial one:
-#'   * `$pruned_tip_labels` Vector of character strings. Labels of the tips that were removed.
-#'   * `$pruning_root_shift` Numerical. Time elapsed between the root of the initial phylogeny and the root of the
+#'   * `$pruned_tip_labels` Character vector. Labels of the tips that were removed.
+#'   * `$pruning_root_shift` Numeric. Time elapsed between the root of the initial phylogeny and the root of the
 #'      pruned phylogeny. Equals `0` when the retained tips span the initial root. Since pruning does not change the
 #'      distance of any retained node to the present, this is also the difference between the initial and the pruned root ages.
 #'   * `$pruning_nodes_ID_df` Data.frame with four columns providing the conversion table for node IDs:
@@ -496,7 +496,7 @@ prune_BAMM_object <- function (BAMM_object,
       }
       if (!is.numeric(MAP_odds_ratio_threshold) | (MAP_odds_ratio_threshold < 0))
       {
-        stop(paste0("'MAP_odds_ratio_threshold' must be a positive numerical value. It controls the definition of 'core-shifts' used to distinguish across configurations when fetching the MAP samples.\n",
+        stop(paste0("'MAP_odds_ratio_threshold' must be a positive numeric value. It controls the definition of 'core-shifts' used to distinguish across configurations when fetching the MAP samples.\n",
                     "Shifts that have an odds ratio of marginal posterior probability / prior lower than 'MAP_odds_ratio_threshold' are ignored. See [BAMMtools::getBestShiftConfiguration()].\n"))
       }
     }
@@ -918,25 +918,25 @@ prune_bammdata_core <- function (BAMM_object, pruning_map, verbose = FALSE)
 #'
 #' @param initial_phylo Object of class `"phylo"`. The initial, rooted, binary phylogeny.
 #'   The ordering of `$edge` must match the one of the initial `BAMM_object`, as edge IDs refer to it.
-#' @param initial_node.label Vector of character strings, or `NULL`. Node labels of the initial phylogeny.
+#' @param initial_node.label Character vector, or `NULL`. Node labels of the initial phylogeny.
 #' @param initial_root_node_ID Integer. ID of the root of the initial phylogeny.
-#' @param retained_tip_labels Vector of character strings. Labels of the tips to retain.
+#' @param retained_tip_labels Character vector. Labels of the tips to retain.
 #'
 #' @return A list with the following elements:
 #'   * `$pruned_phylo` Object of class `"phylo"`. The pruned phylogeny, in `"cladewise"` order.
-#'   * `$pruned_node.label` Vector of character strings, or `NULL`. Node labels of the pruned phylogeny.
-#'   * `$initial_node_of_new_node` Vector of integers, indexed by pruned node ID. ID of the matching node in the initial phylogeny.
-#'   * `$initial_tip_of_new_tip` Vector of integers, indexed by pruned tip ID. ID of the matching tip in the initial phylogeny.
+#'   * `$pruned_node.label` Character vector, or `NULL`. Node labels of the pruned phylogeny.
+#'   * `$initial_node_of_new_node` Integer vector, indexed by pruned node ID. ID of the matching node in the initial phylogeny.
+#'   * `$initial_tip_of_new_tip` Integer vector, indexed by pruned tip ID. ID of the matching tip in the initial phylogeny.
 #'   * `$edge_paths` List of vectors of integers, one per pruned branch. IDs of the initial branches merged into that pruned branch,
 #'      ordered from the most rootward to the most tipward.
-#'   * `$nb_merged_edges` Vector of integers. Number of initial branches merged into each pruned branch.
-#'   * `$new_tipward_node_of_initial_node` Vector of integers, indexed by initial node ID. ID of the tipward node of the pruned branch
+#'   * `$nb_merged_edges` Integer vector. Number of initial branches merged into each pruned branch.
+#'   * `$new_tipward_node_of_initial_node` Integer vector, indexed by initial node ID. ID of the tipward node of the pruned branch
 #'      that contains the initial branch subtending that node. Holds `0` for initial nodes that are not covered by the pruned phylogeny.
-#'   * `$root_shift` Numerical. Time elapsed between the root of the initial phylogeny and the root of the pruned phylogeny.
+#'   * `$root_shift` Numeric. Time elapsed between the root of the initial phylogeny and the root of the pruned phylogeny.
 #'   * `$initial_node_of_new_root` Integer. ID, in the initial phylogeny, of the node that became the root of the pruned phylogeny.
 #'   * `$new_root_node_ID` Integer. ID of the root of the pruned phylogeny.
-#'   * `$begin`, `$end` Vectors of numerical. Start and stop times of each pruned branch, in the time frame of the pruned phylogeny.
-#'   * `$downseq`, `$lastvisit` Vectors of integers. Pre-order tree traversal of the pruned phylogeny.
+#'   * `$begin`, `$end` Numeric vectors. Start and stop times of each pruned branch, in the time frame of the pruned phylogeny.
+#'   * `$downseq`, `$lastvisit` Integer vectors. Pre-order tree traversal of the pruned phylogeny.
 #'   * `$nodes_ID_df`, `$edges_ID_df` Data.frames. User-facing conversion tables, stored in the pruned `BAMM_object`.
 #'
 #' @author Maël Doré
@@ -1129,14 +1129,14 @@ build_pruning_map <- function (initial_phylo, initial_node.label, initial_root_n
 #'
 #'  Code was directly adapted from the original [BAMMtools::getEventData()] function.
 #'
-#' @param new_edge Matrix of integers. The `$edge` element of the pruned phylogeny.
-#' @param new_begin,new_end Vectors of numerical. The `$begin` and `$end` elements of the pruned phylogeny.
+#' @param new_edge Integer matrix. The `$edge` element of the pruned phylogeny.
+#' @param new_begin,new_end Numeric vectors. The `$begin` and `$end` elements of the pruned phylogeny.
 #' @param new_eventData Data.frame. The pruned and re-indexed `$eventData` of the focal posterior sample.
 #'   The background/root regime must be the first row, and hold `index = 1`.
-#' @param new_eventVectors Vector of integers. The pruned `$eventVectors` of the focal posterior sample.
+#' @param new_eventVectors Integer vector. The pruned `$eventVectors` of the focal posterior sample.
 #' @param new_root_node_ID Integer. ID of the root of the pruned phylogeny.
 #'
-#' @return A matrix of numerical with four columns: tipward node ID of the branch, start time of the segment,
+#' @return A numeric matrix with four columns: tipward node ID of the branch, start time of the segment,
 #'   stop time of the segment, and ID of the macroevolutionary regime found along the segment.
 #'   Rows are ordered by tipward node ID, then from the most rootward to the most tipward segment.
 #'
@@ -1247,11 +1247,11 @@ collapse_for_message <- function (x, max_items = 20)
 #'   [deepSTRAPP::update_rates_and_regimes_for_focal_time()], and it reproduces the unexported
 #'   `BAMMtools:::exponentialRate()`, which cannot be called from here.
 #'
-#' @param rate_0 Numerical. Initial rate of the macroevolutionary regime.
-#' @param shape Numerical. Shape parameter controlling the time-dependence of the rate.
-#' @param elapsed_time Numerical. Time elapsed since the start of the macroevolutionary regime.
+#' @param rate_0 Numeric. Initial rate of the macroevolutionary regime.
+#' @param shape Numeric. Shape parameter controlling the time-dependence of the rate.
+#' @param elapsed_time Numeric. Time elapsed since the start of the macroevolutionary regime.
 #'
-#' @return A numerical value. The rate reached after `elapsed_time`.
+#' @return A numeric value. The rate reached after `elapsed_time`.
 #'
 #' @author Maël Doré
 #'

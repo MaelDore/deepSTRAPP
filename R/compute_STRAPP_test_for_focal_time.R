@@ -68,7 +68,7 @@
 #' @param seed Integer. Set the seed to ensure reproducibility. Default is `NULL` (a random seed is used).
 #' @param nb_permutations Integer. To select the number of random permutations to perform during the tests.
 #'   If NULL (default), all BAMM posterior samples will be used once.
-#' @param alpha Numerical. Significance level to use to compute the `estimate` corresponding to the values of the test statistic used to assess significance of the test. This does NOT affect p-values. Default is `0.05`.
+#' @param alpha Numeric. Significance level to use to compute the `estimate` corresponding to the values of the test statistic used to assess significance of the test. This does NOT affect p-values. Default is `0.05`.
 #' @param two_tailed Logical. To define the type of tests. If `TRUE` (default), tests for correlations/differences in rates will be carried out with a null hypothesis
 #'   that rates are not correlated with trait values (continuous data) or equal between trait states (categorical and biogeographic data).
 #'   If `FALSE`, one-tailed tests are carried out.
@@ -132,11 +132,11 @@
 #' @return The function returns a list with at least eleven elements.
 #'
 #'   Summary elements for the main test:
-#'   * `$estimate` Named numerical. Value of the test statistic used to assess significance of the test
+#'   * `$estimate` Named numeric. Value of the test statistic used to assess significance of the test
 #'   according to the significance level provided (`alpha`). The test is significant if `$estimate` is higher than zero.
-#'   * `$stats_median` Numerical. Median value of the distribution of test statistics.
+#'   * `$stats_median` Numeric. Median value of the distribution of test statistics.
 #'   * `$nb_test_stats` Integer. Number of test stats in the distribution.
-#'   * `$p-value` Numerical. P-value of the test. The test is considered significant if `$p-value` is lower than `alpha`.
+#'   * `$p-value` Numeric. P-value of the test. The test is considered significant if `$p-value` is lower than `alpha`.
 #'   * `$method` Character string. The statistical method used to carry out the test.
 #'   * `$rate_type` Character string. The type of diversification rates tested. One of 'speciation', 'extinction' or 'net_diversification'.
 #'   * `$trait_data_type` Character string. The type of trait data as found in 'trait_data_list$trait_data_type'. One of 'continuous', 'categorical', or 'biogeographic'.
@@ -162,9 +162,9 @@
 #'   * `$perm_data_df` A data.frame with four variables summarizing the data generated during the STRAPP test:
 #'     + `$trait_map_ID` Integer. ID of the stochastic map from which trait data were extracted and used for the STRAPP test.
 #'     + `$BAMM_posterior_sample_ID` Integer. ID of the posterior samples randomly drawn and used for the STRAPP test.
-#'     + `$*_obs` Numerical. Test stats computed from the observed data in the posterior samples. Name depends on the test used.
-#'     + `$*_perm` Numerical. Test stats computed from the permuted data in the posterior samples. Name depends on the test used.
-#'     + `$delta_*` OR `$abs_delta_*` Numerical. Test stats computed for the STRAPP test comparing observed stats and permuted stats.
+#'     + `$*_obs` Numeric. Test stats computed from the observed data in the posterior samples. Name depends on the test used.
+#'     + `$*_perm` Numeric. Test stats computed from the permuted data in the posterior samples. Name depends on the test used.
+#'     + `$delta_*` OR `$abs_delta_*` Numeric. Test stats computed for the STRAPP test comparing observed stats and permuted stats.
 #'       Name depends on the test used and the type of tests (two-tailed compare absolute values; one-tailed compare raw values).
 #'   Combined with `posthoc_pairwise_tests = TRUE`, the stats data are also provided for the post hoc pairwise tests:
 #'   * `$posthoc_pairwise_tests$perm_data_array` A 3D array containing stats data for all post hoc pairwise tests in a similar format to `$perm_data_df`.
@@ -450,7 +450,7 @@ compute_STRAPP_test_for_focal_time <- function (BAMM_object, trait_data_list,
     ## Check trait_data_list$trait_data for ML_estimates
     if (trait_data_is_ML_estimates)
     {
-      # trait_data_list$trait_data must be a named vector (can be numerical or character string)
+      # trait_data_list$trait_data must be a named vector (can be numeric or character string)
       if (is.null(names(trait_data_list$trait_data)))
       {
         stop(paste0("'trait_data_list$trait_data' must be a named vector with names matching those found in BAMM_object$tipStates, BAMM_object$tipLambda, and BAMM_object$tipMu.\n",
@@ -494,7 +494,7 @@ compute_STRAPP_test_for_focal_time <- function (BAMM_object, trait_data_list,
     }
     if (!trait_data_is_ML_estimates)
     {
-      # trait_data_list$trait_data must be a named vector (can be numerical or character string)
+      # trait_data_list$trait_data must be a named vector (can be numeric or character string)
       if (is.null(names(trait_data_list$trait_data[[1]])))
       {
         stop(paste0("'trait_data_list$trait_data' must be (a list of) named vector(s) with names matching those found in BAMM_object$tipStates, BAMM_object$tipLambda, and BAMM_object$tipMu.\n",
@@ -2675,11 +2675,11 @@ compute_STRAPP_test_for_multinomial_data <- function (
 
       if (two_tailed)
       { # For two-tailed test, distribution based on difference in absolute Z-scores
-        perm_data_array <- array(data = list(), # Need to use list to be able to store both character strings and numerical values
+        perm_data_array <- array(data = list(), # Need to use list to be able to store both character strings and numeric values
                                  dim = c(pairs = length(pairs_list), test_ID = length(Dunn_obs), stats = 5),
                                  dimnames = list(pairs = pairs_list, test_ID = 1:length(Dunn_obs), stats = c("trait_map_ID", "BAMM_posterior_sample_ID", "Z_obs", "Z_perm", "abs_delta_Z")))
       } else { # For one-tailed test, distribution based on difference in Z-scores
-        perm_data_array <- array(data = list(), # Need to use list to be able to store both character strings and numerical values
+        perm_data_array <- array(data = list(), # Need to use list to be able to store both character strings and numeric values
                                  dim = c(pairs = length(pairs_list), test_ID = length(Dunn_obs), stats = 5),
                                  dimnames = list(pairs = pairs_list, test_ID = names(Dunn_obs), stats = c("trait_map_ID", "BAMM_posterior_sample_ID", "Z_obs", "Z_perm", "delta_Z")))
       }
@@ -2733,10 +2733,10 @@ compute_STRAPP_test_for_multinomial_data <- function (
 #'   Each block of tips assigned to a regime has the same rates at a given point in time.
 #'   During permutation, each block of tips is assigned a unique rate from any regime drawn randomly.
 #'
-#' @param rates_regimes_df Data.frame with `$regimes` (integer) and `$rates` (numerical)
+#' @param rates_regimes_df Data.frame with `$regimes` (integer) and `$rates` (numeric)
 #'   found in each tip (one row per tip).
 #'
-#' @return The function returns a numerical vector with permuted rates across tips.
+#' @return The function returns a numeric vector with permuted rates across tips.
 #'
 #' @author Maël Doré, Dan Rabosky, Huateng Huang
 #'

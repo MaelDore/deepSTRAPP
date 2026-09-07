@@ -16,7 +16,7 @@
 #'   (i.e., transitions in character states/geographic ranges) mapped along branches.
 #' @param colors_per_levels Named character string. To set the colors to use to map each state/range posterior probabilities. Names = states/ranges; values = colors.
 #'   If `NULL` (default), the `rainbow()` color scale will be used.
-#' @param tol Positive numerical. To set the tolerance used to match node ages and time steps (i.e., consider them equal). Default = 1e-5.
+#' @param tol Positive numeric. To set the tolerance used to match node ages and time steps (i.e., consider them equal). Default = 1e-5.
 #' @param verbose Logical. Whether to display progress every 100 edges. Default = `TRUE`.
 #'
 #' @export
@@ -225,7 +225,7 @@ convert_simmaps_to_densityMaps <- function (simmaps,
 #'   Original function written by Liam Revell, 2012 in the [phytools] package: [phytools::densityMap()].
 #'
 #' @inheritParams phytools::densityMap
-#' @param tol Positive numerical. To set the tolerance used to match node ages and time steps (i.e., consider them equal). Default = 1e-5.
+#' @param tol Positive numeric. To set the tolerance used to match node ages and time steps (i.e., consider them equal). Default = 1e-5.
 #' @param verbose Logical. To display progress every 100 edges. Default = `TRUE`.
 #' @param col_scale Character string vector. To set the color scale manually. Need to provide 1001 colors for the scale.
 #'   If `NULL` (the default), the `rainbow()` color scale will be used.
@@ -233,12 +233,12 @@ convert_simmaps_to_densityMaps <- function (simmaps,
 #' @return The function plots a tree with mapped trait probability densities and returns an object of class `densityMap` invisibly.
 #'   A `densityMap` is a list with three elements.
 #'     * `$tree` List of at least 8 elements. Includes the phylogeny, the trait evolution model data from the simmaps, and the newly mapped trait posterior densities.
-#'       * `$maps` List of N elements, one per edge. Each list comprises a named numerical vector that represents changes in posterior probability density of the focal state along segments of equal time.
+#'       * `$maps` List of N elements, one per edge. Each list comprises a named numeric vector that represents changes in posterior probability density of the focal state along segments of equal time.
 #'         Names are posterior probabilities scaled from 0 to 1000. Values are length of the segments. Segments are ordered from root to tips.
 #'       * `$mapped.edge` Matrix of edge per posterior probability summarizing the overall length of each edge attributed to a specific posterior probability value.
 #'       * `$Q` Numerical square matrix summarizing instantaneous transition rates between states as estimated from the evolutionary model.
 #'       Rows = initial states. Cols = final states.
-#'       * `$logL` Numerical. Log-likelihood of the data as optimized when estimating model parameters.
+#'       * `$logL` Numeric. Log-likelihood of the data as optimized when estimating model parameters.
 #'     * `$col` Named character string vector. Color scale used to map posterior probabilities. Names are the posterior probabilities scaled from 0 to 1000. Values are the colors.
 #'     * `$states` Character string. The name of the states.
 #'

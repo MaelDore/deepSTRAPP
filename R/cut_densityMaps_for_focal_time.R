@@ -18,7 +18,7 @@
 #'   that contains a phylogenetic tree and associated posterior probability mapping of a categorical trait.
 #'   The phylogenetic tree must be rooted and fully resolved/dichotomous,
 #'   but it does not need to be ultrametric (it can include fossils).
-#' @param focal_time Numerical. The time, in terms of time distance from the present,
+#' @param focal_time Numeric. The time, in terms of time distance from the present,
 #'   for which the tree and mapping must be cut. It must be smaller than the root age of the phylogeny.
 #' @param keep_tip_labels Logical. Specify whether terminal branches with a single descendant tip must retain their initial `tip.label`. Default is `TRUE`.
 #'
@@ -41,13 +41,13 @@
 #' @return The function returns the cut densityMap as an object of class `"densityMap"` with three elements.
 #'
 #'   It contains a `$tree` element of classes `"simmap"` and `"phylo"`. This function updates and adds multiple useful sub-elements to the `$tree` element.
-#'     * `$maps` An updated list of named numerical vectors. Provides the mapping of posterior probability of the state along each remaining edge.
+#'     * `$maps` An updated list of named numeric vectors. Provides the mapping of posterior probability of the state along each remaining edge.
 #'     * `$mapped.edge` An updated matrix. Provides the evolutionary time spent across posterior probabilities (columns) along the remaining edges (rows).
 #'     * `$root_age` Integer. Stores the age of the root of the tree.
 #'     * `$nodes_ID_df` Data.frame with two columns. Provides the conversion from the `new_node_ID` to the `initial_node_ID`. Each row is a node.
-#'     * `$initial_nodes_ID` Vector of character strings. Provides the initial ID of internal nodes. Used to plot internal node IDs as labels with [ape::nodelabels()].
+#'     * `$initial_nodes_ID` Character vector. Provides the initial ID of internal nodes. Used to plot internal node IDs as labels with [ape::nodelabels()].
 #'     * `$edges_ID_df` Data.frame with two columns. Provides the conversion from the `new_edge_ID` to the `initial_edge_ID`. Each row is an edge/branch.
-#'     * `$initial_edges_ID` Vector of character strings. Provides the initial ID of edges/branches. Used to plot edge/branch IDs as labels with [ape::edgelabels()].
+#'     * `$initial_edges_ID` Character vector. Provides the initial ID of edges/branches. Used to plot edge/branch IDs as labels with [ape::edgelabels()].
 #'
 #'   The `$col` element describes the colors used to map each possible posterior probability value from 0 to 1000.
 #'
@@ -215,7 +215,7 @@ cut_densityMap_for_focal_time <- function(densityMap, focal_time, keep_tip_label
 #'   Each densityMap (see [phytools::densityMap()]) contains a phylogenetic tree and associated posterior probability mapping of a categorical trait.
 #'   The phylogenetic tree must be rooted and fully resolved/dichotomous,
 #'   but it does not need to be ultrametric (it can include fossils).
-#' @param focal_time Numerical. The time, in terms of time distance from the present,
+#' @param focal_time Numeric. The time, in terms of time distance from the present,
 #'   for which the tree and mapping must be cut. It must be smaller than the root age of the phylogeny.
 #' @param keep_tip_labels Logical. Specify whether terminal branches with a single descendant tip must retain their initial `tip.label`. Default is `TRUE`.
 #'
@@ -239,13 +239,13 @@ cut_densityMap_for_focal_time <- function(densityMap, focal_time, keep_tip_label
 #'
 #'   Each densityMap object contains three elements:
 #'   * `$tree` element of classes `"simmap"` and `"phylo"`. This function updates and adds multiple useful sub-elements to the `$tree` element.
-#'     - `$maps` An updated list of named numerical vectors. Provides the mapping of posterior probability of the state along each remaining edge.
+#'     - `$maps` An updated list of named numeric vectors. Provides the mapping of posterior probability of the state along each remaining edge.
 #'     - `$mapped.edge` An updated matrix. Provides the evolutionary time spent across posterior probabilities (columns) along the remaining edges (rows).
 #'     - `$root_age` Integer. Stores the age of the root of the tree.
 #'     - `$nodes_ID_df` Data.frame with two columns. Provides the conversion from the `new_node_ID` to the `initial_node_ID`. Each row is a node.
-#'     - `$initial_nodes_ID` Vector of character strings. Provides the initial ID of internal nodes. Used to plot internal node IDs as labels with [ape::nodelabels()].
+#'     - `$initial_nodes_ID` Character vector. Provides the initial ID of internal nodes. Used to plot internal node IDs as labels with [ape::nodelabels()].
 #'     - `$edges_ID_df` Data.frame with two columns. Provides the conversion from the `new_edge_ID` to the `initial_edge_ID`. Each row is an edge/branch.
-#'     - `$initial_edges_ID` Vector of character strings. Provides the initial ID of edges/branches. Used to plot edge/branch IDs as labels with [ape::edgelabels()].
+#'     - `$initial_edges_ID` Character vector. Provides the initial ID of edges/branches. Used to plot edge/branch IDs as labels with [ape::edgelabels()].
 #'
 #'   * `$col` element describes the colors used to map each possible posterior probability value from 0 to 1000.
 #'

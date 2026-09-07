@@ -23,14 +23,14 @@
 #'   `deepSTRAPP_outputs` can also be extracted from the output of [deepSTRAPP::run_deepSTRAPP_over_time()] that
 #'   run the whole deepSTRAPP workflow over multiple time-steps.
 #'   This must contain an updated `contMap`/`densityMaps` and updated `BAMM_object` (see Details section below).
-#' @param focal_time Numerical. (Optional) If `deepSTRAPP_outputs` comprises results over multiple time-steps
+#' @param focal_time Numeric. (Optional) If `deepSTRAPP_outputs` comprises results over multiple time-steps
 #'   (i.e., output of [deepSTRAPP::run_deepSTRAPP_over_time()], this is the time of the STRAPP test targeted for plotting.
-#' @param color_scale Vector of character string. List of colors to use to build the color scale with [grDevices::colorRampPalette()]
+#' @param color_scale Character vector. List of colors to use to build the color scale with [grDevices::colorRampPalette()]
 #'   showing the evolution of a continuous trait. From lowest values to highest values. (For continuous trait data only)
 #' @param colors_per_levels Named character string. To set the colors to use to map each state/range posterior probabilities. Names = states/ranges; values = colors.
 #'   If `NULL` (default), the color scale provided in `densityMaps` will be used. (For categorical and biogeographic data only)
 #' @param add_ACE_pies Logical. Whether to add pies of posterior probabilities of states/ranges at internal nodes on the mapped phylogeny. Default = `TRUE`.
-#' @param cex_pies Numerical. To adjust the size of the ACE pies. Default = `0.5`.
+#' @param cex_pies Numeric. To adjust the size of the ACE pies. Default = `0.5`.
 #'   Provide the full argument name to avoid ambiguity with the `cex` graphical argument.
 #' @param rate_type A character string specifying the type of diversification rates to plot.
 #'   Must be one of 'speciation', 'extinction' or 'net_diversification' (default).
@@ -52,13 +52,13 @@
 #'   Provide the full argument name to avoid ambiguity with the `adj` graphical argument.
 #' @param regimes_fill Character string. Set the color of the background of the symbols showing the location of regime shifts.
 #'   Equivalent to the `bg` argument in [BAMMtools::addBAMMshifts()]. Default is `"grey"`.
-#' @param regimes_size Numerical. Set the size of the symbols showing the location of regime shifts.
+#' @param regimes_size Numeric. Set the size of the symbols showing the location of regime shifts.
 #'   Equivalent to the `cex` argument in [BAMMtools::addBAMMshifts()]. Default is `1`.
 #' @param regimes_pch Integer. Set the shape of the symbols showing the location of regime shifts.
 #'   Equivalent to the `pch` argument in [BAMMtools::addBAMMshifts()]. Default is `21`.
 #' @param regimes_border_col Character string. Set the color of the border of the symbols showing the location of regime shifts.
 #'   Equivalent to the `col` argument in [BAMMtools::addBAMMshifts()]. Default is `"black"`.
-#' @param regimes_border_width Numerical. Set the width of the border of the symbols showing the location of regime shifts.
+#' @param regimes_border_width Numeric. Set the width of the border of the symbols showing the location of regime shifts.
 #'   Equivalent to the `lwd` argument in [BAMMtools::addBAMMshifts()]. Default is `1`.
 #' @param ... Additional graphical arguments to pass down to [phytools::plot.contMap()], [phytools::plotSimmap()],
 #'   [deepSTRAPP::plot_densityMaps_overlay()], [BAMMtools::plot.bammdata()], [BAMMtools::addBAMMshifts()], and [par()].
@@ -76,7 +76,7 @@
 #'
 #'   * `return_updated_Maps` must be set to `TRUE` so that the updated version of mapped phylogeny (`contMap`/`densityMaps`)
 #'     for the given `focal_time` is returned among the outputs under `$updated_Maps`.
-#'     The updated `contMap`/`densityMaps` consists in cutting off branches and mappings that are younger than the `focal_time`.
+#'     The update of the `contMap`/`densityMaps` consists of cutting off branches and mappings that are younger than the `focal_time`.
 #'     `contMap`/`densityMaps` must have been provided among the inputs to [deepSTRAPP::run_deepSTRAPP_for_focal_time()] in the first place.
 #'   * `return_updated_BAMM_object` must be set to `TRUE` so that the `updated_BAMM_object` with phylogeny and mapped diversification rates
 #'     cut-off at the `focal_time` are returned among the outputs under `$updated_BAMM_object`.

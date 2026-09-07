@@ -67,9 +67,9 @@
 #' @return The [deepSTRAPP::convert_BSM_to_simmap()] function returns a list with two elements:
 #'   * `$simmap` A unique `simmap` for a given biogeographic simulation as an object of classes `c("simmap", "phylo")`.
 #'     This is a modified `{ape}` tree with additional elements to report range mapping, model parameters and likelihood.
-#'     - `$maps` A list of named numerical vectors. Provides the mapping of ranges along each remaining edge.
+#'     - `$maps` A list of named numeric vectors. Provides the mapping of ranges along each remaining edge.
 #'       Names are the ranges. Values are residence times in each state across segments
-#'     - `$mapped.edge` A numerical matrix. Provides the evolutionary time spent across ranges (columns) along the edges (rows).
+#'     - `$mapped.edge` A numeric matrix. Provides the evolutionary time spent across ranges (columns) along the edges (rows).
 #'       row.names() are the node ID at the rootward and tipward ends of each edge.
 #'     - `$Q` Numerical matrix. The transition rates across ranges calculated from the ML parameter estimates of the model.
 #'     - `$logL` Numeric. The log-likelihood of the data under the ML model.

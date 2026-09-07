@@ -15,7 +15,7 @@
 #'   Provide the full argument name to avoid ambiguity with the `col` graphical argument.
 #' @param add_ACE_pies Logical. Whether to add pies of posterior probabilities of states/ranges at internal nodes on the mapped phylogeny. Default = `TRUE`.
 #'   Provide the full argument name to avoid ambiguity with the `add` graphical argument.
-#' @param cex_pies Numerical. To adjust the size of the ACE pies. Default = `0.5`.
+#' @param cex_pies Numeric. To adjust the size of the ACE pies. Default = `0.5`.
 #'   Provide the full argument name to avoid ambiguity with the `cex` graphical argument.
 #' @param ace Numerical matrix. To provide the posterior probabilities of ancestral states/ranges (characters) estimates (ACE) at internal nodes
 #'   used to plot the ACE pies. Rows are internal nodes. Columns are states/ranges. Values are posterior probabilities of each state per node.

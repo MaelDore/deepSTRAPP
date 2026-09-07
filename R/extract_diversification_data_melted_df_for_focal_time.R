@@ -29,7 +29,7 @@
 #'   Regime IDs are independent across posterior samples.
 #'   * `$rate_type` Character string. Type of rates: "lambda" for speciation rates, "mu" for extinction rates,
 #'   and "net_diversification" for net diversification rates (lambda - mu).
-#'   * `$rates` Numerical. Rates in \\[number of events / branch / evolutionary time\\].
+#'   * `$rates` Numeric. Rates in \\[number of events / branch / evolutionary time\\].
 #'
 #' @author Maël Doré
 #'

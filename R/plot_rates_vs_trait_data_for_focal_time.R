@@ -18,7 +18,7 @@
 #'    by setting `extract_trait_data_melted_df = TRUE` and `extract_diversification_data_melted_df = TRUE`.
 #'   `deepSTRAPP_outputs` can also be extracted from the output of [deepSTRAPP::run_deepSTRAPP_over_time()] that
 #'   runs the whole deepSTRAPP workflow over multiple time-steps.
-#' @param focal_time Numerical. (Optional) If `deepSTRAPP_outputs` comprises results over multiple time-steps
+#' @param focal_time Numeric. (Optional) If `deepSTRAPP_outputs` comprises results over multiple time-steps
 #'   (i.e., output of [deepSTRAPP::run_deepSTRAPP_over_time()], this is the time of the STRAPP test targeted for plotting.
 #' @param rate_type A character string specifying the type of diversification rates to plot.
 #'   Must be one of 'speciation', 'extinction' or 'net_diversification' (default).
@@ -27,7 +27,7 @@
 #' @param select_trait_levels (Vector of) character string. Only for categorical and biogeographic trait data.
 #'  To provide a list of a subset of states/ranges to plot. Names must match the ones found in the `deepSTRAPP_outputs`.
 #'  Default is `all` which means all states/ranges will be plotted.
-#' @param color_scale Vector of character string. List of colors to use to build the color scale with [grDevices::colorRampPalette()]
+#' @param color_scale Character vector. List of colors to use to build the color scale with [grDevices::colorRampPalette()]
 #'   to display the points. Color scale from lowest values to highest rate values. Only for continuous data.
 #'   Default = `NULL` will use the 'Spectral' color palette in [RColorBrewer::brewer.pal()].
 #' @param colors_per_levels Named character string. To set the colors to use to plot data points and box for each state/range. Names = states/ranges; values = colors.

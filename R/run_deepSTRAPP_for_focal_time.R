@@ -41,14 +41,14 @@
 #'   if only densityMaps summarizing posterior state/range density are provided, but not the simmaps representing all evolutionary histories.
 #' @param ace (Optional) Ancestral Character Estimates (ACE) at the internal nodes.
 #'   Obtained with [deepSTRAPP::prepare_trait_data()] as output in the `$ace` slot.
-#'   * For continuous trait data: Named numerical vector typically generated with [phytools::fastAnc()], [phytools::anc.ML()], or [ape::ace()].
+#'   * For continuous trait data: Named numeric vector typically generated with [phytools::fastAnc()], [phytools::anc.ML()], or [ape::ace()].
 #'     Names are nodes_ID of the internal nodes. Values are ACE of the trait.
 #'   * For categorical trait or biogeographic data: Matrix that records the posterior probabilities of ancestral states/ranges.
 #'     Rows are internal nodes_ID. Columns are states/ranges. Values are posterior probabilities of each state per node.
 #'   Needed in all cases to provide accurate estimates of trait values.
 #' @param tip_data (Optional) Named vector of tip values of the trait.
-#'   * For continuous trait data: Named numerical vector of trait values.
-#'   * For categorical trait or biogeographic data: Character string vector of states/ranges
+#'   * For continuous trait data: Named numeric vector of trait values.
+#'   * For categorical trait or biogeographic data: Named character vector of states/ranges.
 #'   Names must match `tip.label` in the phylogeny. Needed to provide accurate tip values.
 #'   * For biogeographic data, ranges should follow the coding scheme of BioGeoBEARS with a unique CAPITAL letter per unique area
 #'   (ex: A, B), combined to form multi-area ranges (Ex: AB). Alternatively, you can provide tip_data as a matrix or data.frame of
@@ -61,7 +61,7 @@
 #'   that contains a phylogenetic tree and associated diversification rate mapping across selected posterior samples.
 #'   The phylogenetic tree must be the same as the one associated with the `contMap`/`densityMaps`, `ace` and `tip_data`.
 #' @param rate_type A character string specifying the type of diversification rates to use. Must be one of 'speciation', 'extinction' or 'net_diversification' (default).
-#' @param focal_time Numerical. The time, in terms of time distance from the present,
+#' @param focal_time Numeric. The time, in terms of time distance from the present,
 #'   at which data must be extracted and the phylogeny and mappings must be cut.
 #'   It must be smaller than the root age of the phylogeny.
 #' @param uncertainty_strategy Character string. To select the strategy used to account for uncertainty in estimates.
@@ -83,7 +83,7 @@
 #' @param seed Integer. Set the seed to ensure reproducibility. Default is `NULL` (a random seed is used).
 #' @param nb_permutations Integer. To select the number of random permutations to perform during the tests.
 #'   If NULL (default), all BAMM posterior samples will be used once.
-#' @param alpha Numerical. Significance level to use to compute the `estimate` corresponding to the values of the test statistic used to assess significance of the test.
+#' @param alpha Numeric. Significance level to use to compute the `estimate` corresponding to the values of the test statistic used to assess significance of the test.
 #'   This does NOT affect p-values. Default is `0.05`.
 #' @param two_tailed Logical. To define the type of tests. If `TRUE` (default), tests for correlations/differences in rates will be carried out with a null hypothesis
 #'   that rates are not correlated with trait values (continuous data) or equal between trait states (categorical and biogeographic data).
@@ -113,7 +113,7 @@
 #' @param extract_diversification_data_melted_df Logical. Specify whether diversification data (regimes ID and tip rates) must be extracted from the `updated_BAMM_object`
 #'   and returned in a melted data.frame. Default is `FALSE`.
 #' @param return_updated_Maps Logical. Specify whether the  updated version of the mapped phylogenies (`contMap(s)`/`densityMaps`/`simmaps`),
-#'   should be returned among the outputs. The updated `contMap(s)`/`densityMaps`/`simmaps` consists in cutting off branches and mapping
+#'   should be returned among the outputs. The update of the `contMap(s)`/`densityMaps`/`simmaps` consists of cutting off branches and mapping
 #'   that are younger than the `focal_time`. Default is `FALSE`.
 #' @param return_updated_BAMM_object Logical. Specify whether the `updated_BAMM_object` with phylogeny and
 #'   mapped diversification rates cut-off at the `focal_time` should be returned among the outputs.
@@ -594,7 +594,7 @@ run_deepSTRAPP_for_focal_time <- function (contMap = NULL,
       if (!all(PA_test))
       {
         stop("You provided 'tip_data' for 'biogeographic' data as a matrix/data.frame.\n",
-             "Please ensure presences/absences are recorded as numerical 0/1 values.\n")
+             "Please ensure presences/absences are recorded as numeric binary 0/1 values.\n")
       }
       unique_letters_test <- all(nchar(colnames(tip_data)) == 1)
       if (!all(unique_letters_test))

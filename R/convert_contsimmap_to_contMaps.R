@@ -38,7 +38,7 @@
 #'
 #'    A `"contMap"` typically contains:
 #'    * `$tree` A list of classes `"simmap"` and `"phylo"`. The mapped phylogeny including:
-#'      * `$maps` A list of named numerical vectors. Provides the mapping of trait values along each edge (scaled between 0 and 1000).
+#'      * `$maps` A list of named numeric vectors. Provides the mapping of trait values along each edge (scaled between 0 and 1000).
 #'      * `$mapped.edge` A numeric matrix. Provides the evolutionary time spent across trait values (columns) along the edges (rows).
 #'    * `$cols` A named vector mapping values to colors used to display trait evolution along the branches.
 #'    * `$lims` A numeric vector. Minimum and maximum trait values recorded during the simulation.
@@ -242,7 +242,7 @@ unscale_0_1000 <- function (x_scaled, min_val, max_val)
 #' @param contMaps List of objects of class `"contMap"` that represent independent simulations of the evolution of a continuous trait
 #'   (i.e., continuous stochastic maps).
 #' @param fun Character string. Select the aggregating function. Available options are `"mean"` and `"median"`. Default = `"mean"`.
-#' @param color_scale Vector of character strings. List of colors to use to build the color scale with [grDevices::colorRampPalette()]
+#' @param color_scale Character vector. List of colors to use to build the color scale with [grDevices::colorRampPalette()]
 #'   showing the evolution of the continuous trait. From lowest values to highest values.
 #'   Default (`color_scale = NULL`) is using the color palette recorded in the `contMap$cols` item. If none was provided, the `rainbow()` palette is used.
 #'   Provide the full argument name to avoid ambiguity with the `col` graphical argument.
@@ -265,9 +265,9 @@ unscale_0_1000 <- function (x_scaled, min_val, max_val)
 #'
 #'    The resulting aggregated `"contMap"` is a list with three items:
 #'    * `$tree` A list of classes `"simmap"` and `"phylo"`. The mapped phylogeny including:
-#'      * `$maps` A list of named numerical vectors. Provides the mapping of aggregated trait values along each edge (scaled between 0 and 1000).
+#'      * `$maps` A list of named numeric vectors. Provides the mapping of aggregated trait values along each edge (scaled between 0 and 1000).
 #'      * `$mapped.edge` A numeric matrix. Provides the evolutionary time spent across trait values (columns) along the edges (rows).
-#'    * `$cols` A named vector mapping values to colors used to display trait evolution along the branches.
+#'    * `$cols` A named character vector mapping values to colors used to display trait evolution along the branches.
 #'    * `$lims` A numeric vector. Minimum and maximum aggregated trait values recorded.
 #'
 #' @author Maël Doré

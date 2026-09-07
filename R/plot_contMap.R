@@ -10,7 +10,7 @@
 #'
 #' @param contMap List of class `"contMap"`, typically generated with [deepSTRAPP::prepare_trait_data()],
 #'   that contains a phylogenetic tree and associated ancestral trait estimates mapped along branches in `contMap$tree$maps`.
-#' @param color_scale Vector of character string. List of colors to use to build the color scale with [grDevices::colorRampPalette()]
+#' @param color_scale Character vector. List of colors to use to build the color scale with [grDevices::colorRampPalette()]
 #'   showing the evolution of a continuous trait. From lowest values to highest values.
 #'   Default (`color_scale = NULL`) is using the color palette recorded in the `contMap$cols` item. If none was provided, the `rainbow()` palette is used.
 #'   Provide the full argument name to avoid ambiguity with the `col` graphical argument.

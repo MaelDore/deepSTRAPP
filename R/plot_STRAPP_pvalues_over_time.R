@@ -13,18 +13,18 @@
 #'
 #' @param deepSTRAPP_outputs List of elements generated with [deepSTRAPP::run_deepSTRAPP_over_time()],
 #'   that summarize the results of multiple deepSTRAPP runs across `$time_steps`.
-#' @param time_range Vector of two numerical values. Time boundaries used for the X-axis of the plot.
+#' @param time_range Numeric vector of length 2. Time boundaries used for the X-axis of the plot.
 #'   If `NULL` (the default), the range of data provided in `deepSTRAPP_outputs` will be used.
-#' @param pvalues_max Numerical. Set the max boundary used for the Y-axis of the plot.
+#' @param pvalues_max Numeric. Set the max boundary used for the Y-axis of the plot.
 #'   If `NULL` (the default), the maximum p-value provided in `deepSTRAPP_outputs` will be used.
-#' @param alpha Numerical. Significance level to display as a red dashed line on the plot. If set to `NULL`, no line will be added. Default is `0.05`.
+#' @param alpha Numeric. Significance level to display as a red dashed line on the plot. If set to `NULL`, no line will be added. Default is `0.05`.
 #' @param display_plot Logical. Whether to display the plot generated in the R console. Default is `TRUE`.
 #' @param plot_significant_time_frame Logical. Whether to display a green band over the time frame that yields significant results according to the chosen alpha level. Default is `TRUE`.
 #' @param plot_posthoc_tests Logical. For multinomial data only. Whether to plot the p-values for the overall Kruskal-Wallis test across all states (`plot_posthoc_tests = FALSE`),
 #'   or plot the p-values for the pairwise post hoc Dunn's test across pairs of states (`plot_posthoc_tests = TRUE`). Default is `FALSE`.
 #'   This is only possible if `deepSTRAPP_outputs` contains the `$pvalues_summary_df_for_posthoc_pairwise_tests` element returned by
 #'   [deepSTRAPP::run_deepSTRAPP_over_time()] when `posthoc_pairwise_tests = TRUE`.
-#' @param select_posthoc_pairs Vector of character strings used to specify the pairs to include in the plot. Names of pairs must match the pairs found in
+#' @param select_posthoc_pairs Character vector used to specify the pairs to include in the plot. Names of pairs must match the pairs found in
 #'   `deepSTRAPP_outputs$pvalues_summary_df_for_posthoc_pairwise_tests$pair`. Default is "all" to include all pairs.
 #' @param plot_adjusted_pvalues Logical. Whether to display the p-values adjusted for multiple testing rather than the raw p-values.
 #'   See argument 'p.adjust_method' in [deepSTRAPP::run_deepSTRAPP_for_focal_time()] or [deepSTRAPP::run_deepSTRAPP_over_time()]. Default is `FALSE`.
@@ -131,12 +131,12 @@ plot_STRAPP_pvalues_over_time <-  function (
       # Check that two values are provided for time_range
       if (length(time_range) != 2)
       {
-        stop(paste0("'time_range' must be a vector of two positive numerical values providing the time boundaries of the X-axis used for the plot."))
+        stop(paste0("'time_range' must be a vector of two positive numeric values providing the time boundaries of the X-axis used for the plot."))
       }
       # Check that time_range is strictly positive
       if (!identical(time_range, abs(time_range)))
       {
-        stop(paste0("'time_range' must be strictly positive numerical values providing the time boundaries of the X-axis used for the plot."))
+        stop(paste0("'time_range' must be strictly positive numeric values providing the time boundaries of the X-axis used for the plot."))
       }
       # Ensure that time_range are properly ordered in increasing values
       time_range <- range(time_range)
@@ -161,7 +161,7 @@ plot_STRAPP_pvalues_over_time <-  function (
       # Check that pvalues_max is comprised within [0,1]
       if ((pvalues_max < 0) | (pvalues_max > 1))
       {
-        stop(paste0("'pvalues_max' must be strictly a positive numerical value between 0 and 1 providing the maximum boundary of the Y-axis used for the plot."))
+        stop(paste0("'pvalues_max' must be strictly a positive numeric value between 0 and 1 providing the maximum boundary of the Y-axis used for the plot."))
       }
     }
 

@@ -15,7 +15,7 @@
 #'   that summarize the results of a STRAPP test for a specific time in the past (i.e. the `focal_time`).
 #'   `deepSTRAPP_outputs` can also be extracted from the output of [deepSTRAPP::run_deepSTRAPP_over_time()] that
 #'   run the whole deepSTRAPP workflow and store results inside `$STRAPP_results_over_time`.
-#' @param focal_time Numerical. (Optional) If `deepSTRAPP_outputs` comprises results over multiple time-steps
+#' @param focal_time Numeric. (Optional) If `deepSTRAPP_outputs` comprises results over multiple time-steps
 #'   (i.e., output of [deepSTRAPP::run_deepSTRAPP_over_time()], this is the time of the STRAPP test targeted for plotting.
 #' @param display_plot Logical. Whether to display the histogram(s) generated in the R console. Default is `TRUE`.
 #' @param plot_posthoc_tests Logical. For multinomial data only. Whether to plot the histogram for the overall Kruskal-Wallis test across all states (`plot_posthoc_tests = FALSE`),

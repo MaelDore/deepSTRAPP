@@ -23,7 +23,7 @@
 #' @param select_trait_levels (Vector of) character string. Only for categorical and biogeographic trait data.
 #'  To provide a list of a subset of states/ranges to plot. Names must match the ones found in the `deepSTRAPP_outputs`.
 #'  Default is `all` which means all states/ranges will be plotted.
-#' @param color_scale Vector of character string. List of colors to use to build the color scale with [grDevices::colorRampPalette()]
+#' @param color_scale Character vector. List of colors to use to build the color scale with [grDevices::colorRampPalette()]
 #'   to display the points. Color scale from lowest values to highest rate values. Only for continuous data.
 #'   Default = `NULL` will use the 'Spectral' color palette in [RColorBrewer::brewer.pal()].
 #' @param colors_per_levels Named character string. To set the colors to use to plot data points and box for each state/range. Names = states/ranges; values = colors.

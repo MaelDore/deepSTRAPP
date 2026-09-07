@@ -36,13 +36,13 @@
 #'   (i.e., transitions in character states/geographic ranges) mapped along branches.
 #' @param ace (Optional) Ancestral Character Estimates (ACE) at the internal nodes.
 #'   Obtained with [deepSTRAPP::prepare_trait_data()] as output in the `$ace` slot.
-#'   * For continuous trait data: Named numerical vector typically generated with [phytools::fastAnc()], [phytools::anc.ML()], or [ape::ace()].
+#'   * For continuous trait data: Named numeric vector typically generated with [phytools::fastAnc()], [phytools::anc.ML()], or [ape::ace()].
 #'     Names are nodes_ID of the internal nodes. Values are ACE of the trait.
 #'   * For categorical trait or biogeographic data: Matrix that records the posterior probabilities of ancestral states/ranges.
 #'     Rows are internal nodes_ID. Columns are states/ranges. Values are posterior probabilities of each state per node.
 #'   Needed in all cases to provide accurate estimates of trait values.
 #' @param tip_data (Optional) Named vector of tip values of the trait.
-#'   * For continuous trait data: Named numerical vector of trait values.
+#'   * For continuous trait data: Named numeric vector of trait values.
 #'   * For categorical trait or biogeographic data: Character string vector of states/ranges
 #'   Names are nodes_ID of the internal nodes. Needed to provide accurate tip values.
 #' @param trait_data_type Character string. Specify the type of trait data. Must be one of "continuous", "categorical", "biogeographic".
@@ -50,7 +50,7 @@
 #'   at which the tree and mapping must be cut. It must be smaller than the root age of the phylogeny.
 #' @param update_Map Logical. Specify whether the mapped phylogeny (`contMap`, `densityMaps`, `simmaps`)
 #'   provided as input should be updated for visualization and returned among the outputs. Default is `FALSE`.
-#'   The update consists in cutting off branches and mapping that are younger than the `focal_time`.
+#'   The update consists of cutting off branches and mapping that are younger than the `focal_time`.
 #' @param keep_tip_labels Logical. Specify whether terminal branches with a single descendant tip
 #'   must retain their initial `tip.label` on the updated contMap. Default is `TRUE`.
 #'   Used only if `update_Map = TRUE`.
@@ -100,7 +100,7 @@
 #'   ----- Update the `contMap(s)`/`densityMaps`/`simmaps` -----
 #'
 #'   To obtain updated `contMap(s)`/`densityMaps`/`simmaps` alongside the trait data, set `update_Map = TRUE`.
-#'   The update consists in cutting off branches and mapping that are younger than the `focal_time`.
+#'   The update consists of cutting off branches and mapping that are younger than the `focal_time`.
 #'   * When a branch with a single descendant tip is cut and `keep_tip_labels = TRUE`,
 #'       the leaf left is labeled with the tip.label of the unique descendant tip.
 #'   * When a branch with a single descendant tip is cut and `keep_tip_labels = FALSE`,
@@ -116,7 +116,7 @@
 #'
 #' @return By default, the function returns a list with three elements.
 #'
-#'   * `$trait_data` A named numerical vector with ML trait values found along branches overlapping the `focal_time`. Names are the tip.label/tipward node ID.
+#'   * `$trait_data` A named numeric vector with ML trait values found along branches overlapping the `focal_time`. Names are the tip.label/tipward node ID.
 #'   * `$focal_time` Integer. The time, in terms of time distance from the present, at which the trait data were extracted.
 #'   * `$trait_data_type` Character string. Define the type of trait data as "continuous", "categorical", or "biogeographic". Used in downstream analyses to select appropriate statistical processing.
 #'
@@ -128,9 +128,9 @@
 #'      The function also adds multiple useful sub-elements to the `$contMap$tree` element.
 #'     + `$root_age` Integer. Stores the age of the root of the tree.
 #'     + `$nodes_ID_df` Data.frame with two columns. Provides the conversion from the `new_node_ID` to the `initial_node_ID`. Each row is a node.
-#'     + `$initial_nodes_ID` Vector of character strings. Provides the initial ID of internal nodes. Used to plot internal node IDs as labels with [ape::nodelabels()].
+#'     + `$initial_nodes_ID` Character vector. Provides the initial ID of internal nodes. Used to plot internal node IDs as labels with [ape::nodelabels()].
 #'     + `$edges_ID_df` Data.frame with two columns. Provides the conversion from the `new_edge_ID` to the `initial_edge_ID`. Each row is an edge/branch.
-#'     + `$initial_edges_ID` Vector of character strings. Provides the initial ID of edges/branches. Used to plot edge/branch IDs as labels with [ape::edgelabels()].
+#'     + `$initial_edges_ID` Character vector. Provides the initial ID of edges/branches. Used to plot edge/branch IDs as labels with [ape::edgelabels()].
 #'
 #'   * `$contMaps` List of `"contMap"` objects as described above.
 #'
@@ -141,9 +141,9 @@
 #'      The function also adds multiple useful sub-elements to the `$densityMaps$tree` elements.
 #'     + `$root_age` Integer. Stores the age of the root of the tree.
 #'     + `$nodes_ID_df` Data.frame with two columns. Provides the conversion from the `new_node_ID` to the `initial_node_ID`. Each row is a node.
-#'     + `$initial_nodes_ID` Vector of character strings. Provides the initial ID of internal nodes. Used to plot internal node IDs as labels with [ape::nodelabels()].
+#'     + `$initial_nodes_ID` Character vector. Provides the initial ID of internal nodes. Used to plot internal node IDs as labels with [ape::nodelabels()].
 #'     + `$edges_ID_df` Data.frame with two columns. Provides the conversion from the `new_edge_ID` to the `initial_edge_ID`. Each row is an edge/branch.
-#'     + `$initial_edges_ID` Vector of character strings. Provides the initial ID of edges/branches. Used to plot edge/branch IDs as labels with [ape::edgelabels()].
+#'     + `$initial_edges_ID` Character vector. Provides the initial ID of edges/branches. Used to plot edge/branch IDs as labels with [ape::edgelabels()].
 #'
 #'   * `$simmaps` A list of objects of classes `"phylo"` and `"simmap"`, that contains the updated stochastic maps `simmap`
 #'     for each simulation of trait/range evolution.
@@ -475,7 +475,7 @@ extract_most_likely_trait_values_for_focal_time <- function (contMap = NULL,
 #'   at which the tree and mapping must be cut. It must be smaller than the root age of the phylogeny.
 #' @param update_contMap Logical. Specify whether the mapped phylogeny (`contMap`)
 #'   provided as input should be updated for visualization and returned among the outputs. Default is `FALSE`.
-#'   The update consists in cutting off branches and mapping that are younger than the `focal_time`.
+#'   The update consists of cutting off branches and mapping that are younger than the `focal_time`.
 #' @param keep_tip_labels Logical. Specify whether terminal branches with a single descendant tip
 #'   must retain their initial `tip.label` on the updated contMap. Default is `TRUE`.
 #'   Used only if `update_contMap = TRUE`.
@@ -499,7 +499,7 @@ extract_most_likely_trait_values_for_focal_time <- function (contMap = NULL,
 #'   ----- Update the `contMap` -----
 #'
 #'   To obtain an updated `contMap` alongside the trait data, set `update_contMap = TRUE`.
-#'   The update consists in cutting off branches and mapping that are younger than the `focal_time`.
+#'   The update consists of cutting off branches and mapping that are younger than the `focal_time`.
 #'   * When a branch with a single descendant tip is cut and `keep_tip_labels = TRUE`,
 #'       the leaf left is labeled with the tip.label of the unique descendant tip.
 #'   * When a branch with a single descendant tip is cut and `keep_tip_labels = FALSE`,
@@ -511,7 +511,7 @@ extract_most_likely_trait_values_for_focal_time <- function (contMap = NULL,
 #'
 #' @return By default, the function returns a list with three elements.
 #'
-#'   * `$trait_data` A named numerical vector with ML trait values found along branches overlapping the `focal_time`. Names are the tip.label/tipward node ID.
+#'   * `$trait_data` A named numeric vector with ML trait values found along branches overlapping the `focal_time`. Names are the tip.label/tipward node ID.
 #'   * `$focal_time` Integer. The time, in terms of time distance from the present, at which the trait data were extracted.
 #'   * `$trait_data_type` Character string. Define the type of trait data as "continuous". Used in downstream analyses to select appropriate statistical processing.
 #'
@@ -520,9 +520,9 @@ extract_most_likely_trait_values_for_focal_time <- function (contMap = NULL,
 #'      The function also adds multiple useful sub-elements to the `$contMap$tree` element.
 #'     + `$root_age` Integer. Stores the age of the root of the tree.
 #'     + `$nodes_ID_df` Data.frame with two columns. Provides the conversion from the `new_node_ID` to the `initial_node_ID`. Each row is a node.
-#'     + `$initial_nodes_ID` Vector of character strings. Provides the initial ID of internal nodes. Used to plot internal node IDs as labels with [ape::nodelabels()].
+#'     + `$initial_nodes_ID` Character vector. Provides the initial ID of internal nodes. Used to plot internal node IDs as labels with [ape::nodelabels()].
 #'     + `$edges_ID_df` Data.frame with two columns. Provides the conversion from the `new_edge_ID` to the `initial_edge_ID`. Each row is an edge/branch.
-#'     + `$initial_edges_ID` Vector of character strings. Provides the initial ID of edges/branches. Used to plot edge/branch IDs as labels with [ape::edgelabels()].
+#'     + `$initial_edges_ID` Character vector. Provides the initial ID of edges/branches. Used to plot edge/branch IDs as labels with [ape::edgelabels()].
 #'
 #' @author Maël Doré
 #'
@@ -682,11 +682,11 @@ extract_most_likely_trait_values_from_contMap_for_focal_time <- function (
     ## ace
     if (!is.null(ace))
     {
-      # ace must be a named numerical vector
+      # ace must be a named numeric vector
       if (!is.numeric(ace))
       {
-        stop(paste0("For continuous traits, 'ace' must be a named numerical vector that provides trait values for internal nodes.\n",
-                    "The object you provided is not a numerical vector."))
+        stop(paste0("For continuous traits, 'ace' must be a named numeric vector that provides trait values for internal nodes.\n",
+                    "The object you provided is not a numeric vector."))
       }
       # ace should have many values as there are internal nodes in the contMap$tree
       if (length(ace) != contMap$tree$Nnode)
@@ -709,11 +709,11 @@ extract_most_likely_trait_values_from_contMap_for_focal_time <- function (
     ## tip_data
     if (!is.null(tip_data))
     {
-      # tip_data must be a named numerical vector
+      # tip_data must be a named numeric vector
       if (!is.numeric(tip_data))
       {
-        stop(paste0("For continuous traits, 'tip_data' must be a named numerical vector that provides trait values for tips.\n",
-                    "The object you provided is not a numerical vector."))
+        stop(paste0("For continuous traits, 'tip_data' must be a named numeric vector that provides trait values for tips.\n",
+                    "The object you provided is not a numeric vector."))
       }
       # tip_data should have many values as there are tips in the contMap$tree
       if (length(tip_data) != length(contMap$tree$tip.label))
@@ -946,7 +946,7 @@ extract_most_likely_trait_values_from_contMap_for_focal_time <- function (
 #'   at which the tree and mapping must be cut. It must be smaller than the root age of the phylogeny.
 #' @param update_contMaps Logical. Specify whether the continuous stochastic maps (`contMaps`)
 #'   provided as input should be updated for visualization and returned among the outputs. Default is `FALSE`.
-#'   The update consists in cutting off branches and mapping that are younger than the `focal_time`.
+#'   The update consists of cutting off branches and mapping that are younger than the `focal_time`.
 #' @param keep_tip_labels Logical. Specify whether terminal branches with a single descendant tip
 #'   must retain their initial `tip.label` on the updated contMap. Default is `TRUE`.
 #'   Used only if `update_contMaps = TRUE`.
@@ -970,7 +970,7 @@ extract_most_likely_trait_values_from_contMap_for_focal_time <- function (
 #'   ----- Update the `contMap` -----
 #'
 #'   To obtain an updated `contMap` alongside the trait data, set `update_contMap = TRUE`.
-#'   The update consists in cutting off branches and mapping that are younger than the `focal_time`.
+#'   The update consists of cutting off branches and mapping that are younger than the `focal_time`.
 #'   * When a branch with a single descendant tip is cut and `keep_tip_labels = TRUE`,
 #'       the leaf left is labeled with the tip.label of the unique descendant tip.
 #'   * When a branch with a single descendant tip is cut and `keep_tip_labels = FALSE`,
@@ -982,7 +982,7 @@ extract_most_likely_trait_values_from_contMap_for_focal_time <- function (
 #'
 #' @return By default, the function returns a list with three elements.
 #'
-#'   * `$trait_data` A named numerical vector with ML trait values found along branches overlapping the `focal_time`. Names are the tip.label/tipward node ID.
+#'   * `$trait_data` A named numeric vector with ML trait values found along branches overlapping the `focal_time`. Names are the tip.label/tipward node ID.
 #'   * `$focal_time` Integer. The time, in terms of time distance from the present, at which the trait data were extracted.
 #'   * `$trait_data_type` Character string. Define the type of trait data as "continuous". Used in downstream analyses to select appropriate statistical processing.
 #'
@@ -991,9 +991,9 @@ extract_most_likely_trait_values_from_contMap_for_focal_time <- function (
 #'      The function also adds multiple useful sub-elements to the `$contMap$tree` element.
 #'     + `$root_age` Integer. Stores the age of the root of the tree.
 #'     + `$nodes_ID_df` Data.frame with two columns. Provides the conversion from the `new_node_ID` to the `initial_node_ID`. Each row is a node.
-#'     + `$initial_nodes_ID` Vector of character strings. Provides the initial ID of internal nodes. Used to plot internal node IDs as labels with [ape::nodelabels()].
+#'     + `$initial_nodes_ID` Character vector. Provides the initial ID of internal nodes. Used to plot internal node IDs as labels with [ape::nodelabels()].
 #'     + `$edges_ID_df` Data.frame with two columns. Provides the conversion from the `new_edge_ID` to the `initial_edge_ID`. Each row is an edge/branch.
-#'     + `$initial_edges_ID` Vector of character strings. Provides the initial ID of edges/branches. Used to plot edge/branch IDs as labels with [ape::edgelabels()].
+#'     + `$initial_edges_ID` Character vector. Provides the initial ID of edges/branches. Used to plot edge/branch IDs as labels with [ape::edgelabels()].
 #'
 #' @author Maël Doré
 #'
@@ -1117,11 +1117,11 @@ extract_most_likely_trait_values_from_contMaps_for_focal_time <- function (
     ## tip_data
     if (!is.null(tip_data))
     {
-      # tip_data must be a named numerical vector
+      # tip_data must be a named numeric vector
       if (!is.numeric(tip_data))
       {
-        stop(paste0("For continuous traits, 'tip_data' must be a named numerical vector that provides trait values for tips.\n",
-                    "The object you provided is not a numerical vector."))
+        stop(paste0("For continuous traits, 'tip_data' must be a named numeric vector that provides trait values for tips.\n",
+                    "The object you provided is not a numeric vector."))
       }
       # tip_data should have many values as there are tips in the contMaps[[1]]$tree
       if (length(tip_data) != length(contMaps[[1]]$tree$tip.label))
@@ -1331,7 +1331,7 @@ extract_most_likely_trait_values_from_contMaps_for_focal_time <- function (
 #'   at which the tree and mapping must be cut. It must be smaller than the root age of the phylogeny.
 #' @param update_densityMaps Logical. Specify whether the mapped phylogeny (`densityMaps`)
 #'   provided as input should be updated for visualization and returned among the outputs. Default is `FALSE`.
-#'   The update consists in cutting off branches and mapping that are younger than the `focal_time`.
+#'   The update consists of cutting off branches and mapping that are younger than the `focal_time`.
 #' @param keep_tip_labels Logical. Specify whether terminal branches with a single descendant tip
 #'   must retain their initial `tip.label` on the updated densityMaps. Default is `TRUE`.
 #'   Used only if `update_Map = TRUE`.
@@ -1355,7 +1355,7 @@ extract_most_likely_trait_values_from_contMaps_for_focal_time <- function (
 #'   ----- Update the `densityMaps` -----
 #'
 #'   To obtain updated `densityMaps` alongside the trait data, set `update_densityMaps = TRUE`.
-#'   The update consists in cutting off branches and mapping that are younger than the `focal_time`.
+#'   The update consists of cutting off branches and mapping that are younger than the `focal_time`.
 #'   * When a branch with a single descendant tip is cut and `keep_tip_labels = TRUE`,
 #'       the leaf left is labeled with the tip.label of the unique descendant tip.
 #'   * When a branch with a single descendant tip is cut and `keep_tip_labels = FALSE`,
@@ -1378,9 +1378,9 @@ extract_most_likely_trait_values_from_contMaps_for_focal_time <- function (
 #'      The function also adds multiple useful sub-elements to the `$densityMaps$tree` elements.
 #'     + `$root_age` Integer. Stores the age of the root of the tree.
 #'     + `$nodes_ID_df` Data.frame with two columns. Provides the conversion from the `new_node_ID` to the `initial_node_ID`. Each row is a node.
-#'     + `$initial_nodes_ID` Vector of character strings. Provides the initial ID of internal nodes. Used to plot internal node IDs as labels with [ape::nodelabels()].
+#'     + `$initial_nodes_ID` Character vector. Provides the initial ID of internal nodes. Used to plot internal node IDs as labels with [ape::nodelabels()].
 #'     + `$edges_ID_df` Data.frame with two columns. Provides the conversion from the `new_edge_ID` to the `initial_edge_ID`. Each row is an edge/branch.
-#'     + `$initial_edges_ID` Vector of character strings. Provides the initial ID of edges/branches. Used to plot edge/branch IDs as labels with [ape::edgelabels()].
+#'     + `$initial_edges_ID` Character vector. Provides the initial ID of edges/branches. Used to plot edge/branch IDs as labels with [ape::edgelabels()].
 #'
 #' @author Maël Doré
 #'
@@ -1530,10 +1530,10 @@ extract_most_likely_states_from_densityMaps_for_focal_time <- function (
     ## ace
     if (!is.null(ace))
     {
-      # ace must be a numerical matrix
+      # ace must be a numeric matrix
       if (!is.matrix(ace))
       {
-        stop(paste0("For categorical traits, 'ace' must be a numerical matrix that provides posterior probability of each state per internal nodes.\n",
+        stop(paste0("For categorical traits, 'ace' must be a numeric matrix that provides posterior probability of each state per internal nodes.\n",
                     "The object you provided is not a matrix."))
       }
       # ace should have as many rows as there are internal nodes in the densityMaps$tree
@@ -1844,7 +1844,7 @@ extract_most_likely_states_from_densityMaps_for_focal_time <- function (
 #'   at which the tree and mapping must be cut. It must be smaller than the root age of the phylogeny.
 #' @param update_simmaps Logical. Specify whether the mapped phylogeny (`simmaps`)
 #'   provided as input should be updated for visualization and returned among the outputs. Default is `FALSE`.
-#'   The update consists in cutting off branches and mapping that are younger than the `focal_time`.
+#'   The update consists of cutting off branches and mapping that are younger than the `focal_time`.
 #' @param keep_tip_labels Logical. Specify whether terminal branches with a single descendant tip
 #'   must retain their initial `tip.label` on the updated simmaps. Default is `TRUE`.
 #'   Used only if `update_Map = TRUE`.
@@ -1867,7 +1867,7 @@ extract_most_likely_states_from_densityMaps_for_focal_time <- function (
 #'   ----- Update the `simmaps` -----
 #'
 #'   To obtain updated `simmaps` alongside the trait data, set `update_simmaps = TRUE`.
-#'   The update consists in cutting off branches and mapping that are younger than the `focal_time`.
+#'   The update consists of cutting off branches and mapping that are younger than the `focal_time`.
 #'   * When a branch with a single descendant tip is cut and `keep_tip_labels = TRUE`,
 #'       the leaf left is labeled with the tip.label of the unique descendant tip.
 #'   * When a branch with a single descendant tip is cut and `keep_tip_labels = FALSE`,
@@ -1890,9 +1890,9 @@ extract_most_likely_states_from_densityMaps_for_focal_time <- function (
 #'      The function also adds multiple useful sub-elements to each `simmap`.
 #'     + `$root_age` Integer. Stores the age of the root of the tree.
 #'     + `$nodes_ID_df` Data.frame with two columns. Provides the conversion from the `new_node_ID` to the `initial_node_ID`. Each row is a node.
-#'     + `$initial_nodes_ID` Vector of character strings. Provides the initial ID of internal nodes. Used to plot internal node IDs as labels with [ape::nodelabels()].
+#'     + `$initial_nodes_ID` Character vector. Provides the initial ID of internal nodes. Used to plot internal node IDs as labels with [ape::nodelabels()].
 #'     + `$edges_ID_df` Data.frame with two columns. Provides the conversion from the `new_edge_ID` to the `initial_edge_ID`. Each row is an edge/branch.
-#'     + `$initial_edges_ID` Vector of character strings. Provides the initial ID of edges/branches. Used to plot edge/branch IDs as labels with [ape::edgelabels()].
+#'     + `$initial_edges_ID` Character vector. Provides the initial ID of edges/branches. Used to plot edge/branch IDs as labels with [ape::edgelabels()].
 #'
 #' @author Maël Doré
 #'
@@ -2042,10 +2042,10 @@ extract_most_likely_states_from_simmaps_for_focal_time <- function (
     ## ace
     if (!is.null(ace))
     {
-      # ace must be a numerical matrix
+      # ace must be a numeric matrix
       if (!is.matrix(ace))
       {
-        stop(paste0("For categorical traits, 'ace' must be a numerical matrix that provides posterior probability of each state per internal nodes.\n",
+        stop(paste0("For categorical traits, 'ace' must be a numeric matrix that provides posterior probability of each state per internal nodes.\n",
                     "The object you provided is not a matrix."))
       }
       # ace should have as many rows as there are internal nodes in the simmaps
@@ -2373,7 +2373,7 @@ extract_most_likely_states_from_simmaps_for_focal_time <- function (
 #'   at which the tree and mapping must be cut. It must be smaller than the root age of the phylogeny.
 #' @param update_densityMaps Logical. Specify whether the mapped phylogeny (`densityMaps`)
 #'   provided as input should be updated for visualization and returned among the outputs. Default is `FALSE`.
-#'   The update consists in cutting off branches and mapping that are younger than the `focal_time`.
+#'   The update consists of cutting off branches and mapping that are younger than the `focal_time`.
 #' @param keep_tip_labels Logical. Specify whether terminal branches with a single descendant tip
 #'   must retain their initial `tip.label` on the updated densityMaps. Default is `TRUE`.
 #'   Used only if `update_Map = TRUE`.
@@ -2397,7 +2397,7 @@ extract_most_likely_states_from_simmaps_for_focal_time <- function (
 #'   ----- Update the `densityMaps` -----
 #'
 #'   To obtain updated `densityMaps` alongside the trait data, set `update_densityMaps = TRUE`.
-#'   The update consists in cutting off branches and mapping that are younger than the `focal_time`.
+#'   The update consists of cutting off branches and mapping that are younger than the `focal_time`.
 #'   * When a branch with a single descendant tip is cut and `keep_tip_labels = TRUE`,
 #'       the leaf left is labeled with the tip.label of the unique descendant tip.
 #'   * When a branch with a single descendant tip is cut and `keep_tip_labels = FALSE`,
@@ -2420,9 +2420,9 @@ extract_most_likely_states_from_simmaps_for_focal_time <- function (
 #'      The function also adds multiple useful sub-elements to the `$densityMaps$tree` elements.
 #'     + `$root_age` Integer. Stores the age of the root of the tree.
 #'     + `$nodes_ID_df` Data.frame with two columns. Provides the conversion from the `new_node_ID` to the `initial_node_ID`. Each row is a node.
-#'     + `$initial_nodes_ID` Vector of character strings. Provides the initial ID of internal nodes. Used to plot internal node IDs as labels with [ape::nodelabels()].
+#'     + `$initial_nodes_ID` Character vector. Provides the initial ID of internal nodes. Used to plot internal node IDs as labels with [ape::nodelabels()].
 #'     + `$edges_ID_df` Data.frame with two columns. Provides the conversion from the `new_edge_ID` to the `initial_edge_ID`. Each row is an edge/branch.
-#'     + `$initial_edges_ID` Vector of character strings. Provides the initial ID of edges/branches. Used to plot edge/branch IDs as labels with [ape::edgelabels()].
+#'     + `$initial_edges_ID` Character vector. Provides the initial ID of edges/branches. Used to plot edge/branch IDs as labels with [ape::edgelabels()].
 #'
 #' @author Maël Doré
 #'
@@ -2547,10 +2547,10 @@ extract_most_likely_ranges_from_densityMaps_for_focal_time <- function (
     ## ace
     if (!is.null(ace))
     {
-      # ace must be a numerical matrix
+      # ace must be a numeric matrix
       if (!is.matrix(ace))
       {
-        stop(paste0("For biogeographic data, 'ace' must be a numerical matrix that provides posterior probability of each range per internal nodes.\n",
+        stop(paste0("For biogeographic data, 'ace' must be a numeric matrix that provides posterior probability of each range per internal nodes.\n",
                     "The object you provided is not a matrix."))
       }
       # ace should have as many rows as there are internal nodes in the densityMaps$tree
@@ -2866,7 +2866,7 @@ extract_most_likely_ranges_from_densityMaps_for_focal_time <- function (
 #'   at which the tree and mapping must be cut. It must be smaller than the root age of the phylogeny.
 #' @param update_simmaps Logical. Specify whether the mapped phylogeny (`simmaps`)
 #'   provided as input should be updated for visualization and returned among the outputs. Default is `FALSE`.
-#'   The update consists in cutting off branches and mapping that are younger than the `focal_time`.
+#'   The update consists of cutting off branches and mapping that are younger than the `focal_time`.
 #' @param keep_tip_labels Logical. Specify whether terminal branches with a single descendant tip
 #'   must retain their initial `tip.label` on the updated simmaps. Default is `TRUE`.
 #'   Used only if `update_Map = TRUE`.
@@ -2889,7 +2889,7 @@ extract_most_likely_ranges_from_densityMaps_for_focal_time <- function (
 #'   ----- Update the `simmaps` -----
 #'
 #'   To obtain updated `simmaps` alongside the trait data, set `update_simmaps = TRUE`.
-#'   The update consists in cutting off branches and mapping that are younger than the `focal_time`.
+#'   The update consists of cutting off branches and mapping that are younger than the `focal_time`.
 #'   * When a branch with a single descendant tip is cut and `keep_tip_labels = TRUE`,
 #'       the leaf left is labeled with the tip.label of the unique descendant tip.
 #'   * When a branch with a single descendant tip is cut and `keep_tip_labels = FALSE`,
@@ -2912,9 +2912,9 @@ extract_most_likely_ranges_from_densityMaps_for_focal_time <- function (
 #'      The function also adds multiple useful sub-elements to each `simmap`.
 #'     + `$root_age` Integer. Stores the age of the root of the tree.
 #'     + `$nodes_ID_df` Data.frame with two columns. Provides the conversion from the `new_node_ID` to the `initial_node_ID`. Each row is a node.
-#'     + `$initial_nodes_ID` Vector of character strings. Provides the initial ID of internal nodes. Used to plot internal node IDs as labels with [ape::nodelabels()].
+#'     + `$initial_nodes_ID` Character vector. Provides the initial ID of internal nodes. Used to plot internal node IDs as labels with [ape::nodelabels()].
 #'     + `$edges_ID_df` Data.frame with two columns. Provides the conversion from the `new_edge_ID` to the `initial_edge_ID`. Each row is an edge/branch.
-#'     + `$initial_edges_ID` Vector of character strings. Provides the initial ID of edges/branches. Used to plot edge/branch IDs as labels with [ape::edgelabels()].
+#'     + `$initial_edges_ID` Character vector. Provides the initial ID of edges/branches. Used to plot edge/branch IDs as labels with [ape::edgelabels()].
 #'
 #' @author Maël Doré
 #'
@@ -3003,10 +3003,10 @@ extract_most_likely_ranges_from_simmaps_for_focal_time <- function (
     ## ace
     if (!is.null(ace))
     {
-      # ace must be a numerical matrix
+      # ace must be a numeric matrix
       if (!is.matrix(ace))
       {
-        stop(paste0("For biogeographic data, 'ace' must be a numerical matrix that provides posterior probability of each range per internal nodes.\n",
+        stop(paste0("For biogeographic data, 'ace' must be a numeric matrix that provides posterior probability of each range per internal nodes.\n",
                     "The object you provided is not a matrix."))
       }
       # ace should have as many rows as there are internal nodes in the simmaps

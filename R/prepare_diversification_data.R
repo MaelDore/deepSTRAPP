@@ -32,7 +32,7 @@
 #' @param numberOfGenerations Integer. Number of steps in the MCMC run. It should be set high enough to reach the equilibrium distribution
 #'  and allow posterior samples to be uncorrelated. Check the Effective Sample Size of parameters with coda::effectiveSize() in the Evaluation step.
 #'  Default value is `10^7`.
-#' @param globalSamplingFraction Numerical. Global sampling fraction representing the overall proportion of terminals in the phylogeny compared to
+#' @param globalSamplingFraction Numeric. Global sampling fraction representing the overall proportion of terminals in the phylogeny compared to
 #'  the estimated overall richness in the clade. It acts as a multiplier on the rates needed to achieve such extant diversity.
 #'  Default is `1.0` (assuming all taxa are in the phylogeny).
 #' @param sampleProbsFilename Character string. The path to the `.txt` file used to provide clade-specific sampling fractions.
@@ -40,13 +40,13 @@
 #' @param expectedNumberOfShifts Integer. Set the expected number of regime shifts. It acts as a hyperparameter controlling the exponential prior distribution
 #'  used to modulate reversible jumps across model configurations in the rjMCMC run.
 #'  If set to `NULL` (default), an empirical rule will be used to define this value: 1 regime shift expected for every 100 tips in the phylogeny, with a minimum of 1.
-#'  The best practice consists in trying several values and inspecting the similarity of the prior and posterior distribution of the regime shift parameter.
+#'  The best practice is to try several values and inspect the similarity of the prior and posterior distribution of the regime shift parameter.
 #'  See [BAMMtools::plotPrior()] and the Evaluation step to produce such evaluation plot.
 #' @param eventDataWriteFreq Integer. Set the frequency at which to write the event data to the output file = the sampling frequency of posterior samples.
 #'  If set to `NULL` (default), will set the frequency such that 2000 posterior samples are recorded, i.e. `eventDataWriteFreq = numberOfGenerations / 2000`.
-#' @param burn_in Numerical. Proportion of posterior samples removed from the BAMM output to ensure that the remaining samples were drawn once the equilibrium distribution was reached.
+#' @param burn_in Numeric. Proportion of posterior samples removed from the BAMM output to ensure that the remaining samples were drawn once the equilibrium distribution was reached.
 #'  This can be evaluated looking at the MCMC trace (see Evaluation step). Default is `0.25`.
-#' @param nb_posterior_samples Numerical. Number of posterior samples to extract, after removing the burn-in, in the final `BAMM_object` to use for downstream analyses.
+#' @param nb_posterior_samples Numeric. Number of posterior samples to extract, after removing the burn-in, in the final `BAMM_object` to use for downstream analyses.
 #'  Default = `1000`.
 #' @param additional_BAMM_settings List of named elements. Additional settings options for BAMM provided as a list of named arguments.
 #'  Ex: `list(lambdaInit0 = 0.5, muInit0 = 0)`. See available settings in the template file provided within the deepSTRAPP package files as 'BAMM_template_diversification.txt'.
@@ -54,7 +54,7 @@
 #' @param BAMM_output_directory_path Character string. The path to the directory used to store input/output files generated.
 #'  It can be an absolute path, or a path relative to the current working directory (Check with `getwd()` if needed).
 #' @param keep_BAMM_outputs Logical. Whether the `BAMM_output_directory` should be kept after the run. Default = `TRUE`.
-#' @param MAP_odds_ratio_threshold Numerical. Controls the definition of 'core-shifts' used to distinguish across configurations when fetching the MAP samples.
+#' @param MAP_odds_ratio_threshold Numeric. Controls the definition of 'core-shifts' used to distinguish across configurations when fetching the MAP samples.
 #'   Shifts that have an odds ratio of marginal posterior probability / prior lower than `MAP_odds_ratio_threshold` are ignored. See [BAMMtools::getBestShiftConfiguration()]. Default = `5`.
 #' @param skip_evaluations Logical. Whether to skip the Evaluation step including MCMC trace, ESS, and prior/posterior comparisons for expected number of shifts. Default = `FALSE`.
 #' @param plot_evaluations Logical. Whether to display the plots generated during the Evaluation step: MCMC trace, and prior/posterior comparisons for expected number of shifts. Default = `TRUE`.
@@ -98,7 +98,7 @@
 #'     Output file = 'PP_nb_shifts_plot.pdf'.
 #'     A good value for `expectedNumberOfShifts` is one with high similarities between the distributions
 #'     hinting that the information in the data coincides with your expectations for the number of regime shifts.
-#'     The best practice consists in trying several values to check whether it affects the final output.
+#'     The best practice is to try several values to check whether it affects the final output.
 #'
 #'  Step 4: Import BAMM outputs
 #'   * Load BAMM outputs with [BAMMtools::getEventData].
@@ -142,39 +142,39 @@
 #' @return The function returns a `BAMM_object` of class `"bammdata"` which is a list with at least 22 elements.
 #'
 #'   Phylogeny-related elements used to plot a phylogeny with [ape::plot.phylo()]:
-#'   * `$edge` Matrix of integers. Defines the tree topology by providing rootward and tipward node ID of each edge.
+#'   * `$edge` Integer matrix. Defines the tree topology by providing rootward and tipward node ID of each edge.
 #'   * `$Nnode` Integer. Number of internal nodes.
-#'   * `$tip.label` Vector of character strings. Labels of all tips.
-#'   * `$edge.length` Vector of numerical. Length of edges/branches.
-#'   * `$node.label` Vector of character strings. Labels of all internal nodes. (Present only if present in the initial `BAMM_object`)
+#'   * `$tip.label` Character vector. Labels of all tips.
+#'   * `$edge.length` Numeric vector. Length of edges/branches.
+#'   * `$node.label` Character vector. Labels of all internal nodes. (Present only if present in the initial `BAMM_object`)
 #'
 #'   BAMM internal elements used for tree exploration:
-#'   * `$begin` Vector of numerical. Absolute time since root of edge/branch start (rootward).
-#'   * `$end` Vector of numerical.  Absolute time since root of edge/branch end (tipward).
-#'   * `$downseq` Vector of integers. Order of node visits when using a pre-order tree traversal.
+#'   * `$begin` Numeric vector. Absolute time since root of edge/branch start (rootward).
+#'   * `$end` Numeric vector.  Absolute time since root of edge/branch end (tipward).
+#'   * `$downseq` Integer vector. Order of node visits when using a pre-order tree traversal.
 #'   * `$lastvisit` ID of the last node visited when starting from the node in the corresponding position in `$downseq`.
 #'
 #'   BAMM elements summarizing diversification data:
-#'   * `$numberEvents` Vector of integer. Number of events/macroevolutionary regimes (k+1) recorded in each posterior configuration. k = number of shifts.
+#'   * `$numberEvents` Integer vector. Number of events/macroevolutionary regimes (k+1) recorded in each posterior configuration. k = number of shifts.
 #'   * `$eventData` List of data.frames. One per posterior sample. Records shift events and macroevolutionary regimes parameters. 1st line = Background root regime.
 #'   * `$eventVectors` List of integer vectors. One per posterior sample. Record regime ID per branch.
 #'   * `$tipStates` List of named integer vectors. One per posterior sample. Record regime ID per tip.
-#'   * `$tipLambda` List of named numerical vectors. One per posterior sample. Record speciation rates per tip.
-#'   * `$tipMu` List of named numerical vectors. One per posterior sample. Record extinction rates per tip.
-#'   * `$eventBranchSegs` List of matrix of numerical. One per posterior sample. Record regime ID per segment of branches.
-#'   * `$meanTipLambda` Vector of named numerical. Mean tip speciation rates across all posterior configurations of tips.
-#'   * `$meanTipMu` Vector of named numerical. Mean tip extinction rates across all posterior configurations of tips.
+#'   * `$tipLambda` List of named numeric vectors. One per posterior sample. Record speciation rates per tip.
+#'   * `$tipMu` List of named numeric vectors. One per posterior sample. Record extinction rates per tip.
+#'   * `$eventBranchSegs` List of numeric matrices. One per posterior sample. Record regime ID per segment of branches.
+#'   * `$meanTipLambda` Named numeric vector. Mean tip speciation rates across all posterior configurations of tips.
+#'   * `$meanTipMu` Named numeric vector. Mean tip extinction rates across all posterior configurations of tips.
 #'   * `$type` Character string. Set the type of data modeled with BAMM. Should be "diversification".
 #'
 #'   Additional elements providing key information for downstream analyses:
 #'   * `$expectedNumberOfShifts` Integer. The expected number of regime shifts used to set the prior in BAMM.
 #'   * `$MSP_tree` Object of class `phylo`. List of 4 elements duplicating information from the Phylogeny-related elements above,
 #'      except `$MSP_tree$edge.length` is recording the Marginal Shift Probability of each branch (i.e., the probability of a regime shift to occur along each branch)
-#'   * `$MAP_indices` Vector of integers. The indices of the Maximum A Posteriori probability (MAP) configurations among the posterior samples.
+#'   * `$MAP_indices` Integer vector. The indices of the Maximum A Posteriori probability (MAP) configurations among the posterior samples.
 #'   * `$MAP_BAMM_object`. List of 18 elements of class `"bammdata"` recording the mean rates and regime shift locations found across
 #'      the Maximum A Posteriori probability (MAP) configurations. All BAMM elements summarizing diversification data hold a single entry describing
 #'      this mean diversification history.
-#'   * `$MSC_indices` Vector of integers. The indices of the Maximum Shift Credibility (MSC) configurations among the posterior samples.
+#'   * `$MSC_indices` Integer vector. The indices of the Maximum Shift Credibility (MSC) configurations among the posterior samples.
 #'   * `$MSC_BAMM_object` List of 18 elements of class `"bammdata"` recording the mean rates and regime shift locations found across
 #'      the Maximum Shift Credibility (MSC) configurations. All BAMM elements summarizing diversification data hold a single entry describing
 #'      this mean diversification history.
@@ -358,7 +358,7 @@ prepare_diversification_data <- function (BAMM_install_directory_path,
     }
 
     ## globalSamplingFraction
-    # globalSamplingFraction should be a numerical between 0 and 1
+    # globalSamplingFraction should be a numeric between 0 and 1
     if ((globalSamplingFraction < 0) | (globalSamplingFraction > 1))
     {
       stop(paste0("'globalSamplingFraction' represents the overall proportion of terminals in the phylogeny compared to the estimated overall richness in the clade.\n",

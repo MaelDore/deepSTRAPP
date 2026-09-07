@@ -44,14 +44,14 @@
 #'   if only densityMaps summarizing posterior state/range density are provided, but not the simmaps representing all evolutionary histories.
 #' @param ace (Optional) Ancestral Character Estimates (ACE) at the internal nodes.
 #'   Obtained with [deepSTRAPP::prepare_trait_data()] as output in the `$ace` slot.
-#'   * For continuous trait data: Named numerical vector typically generated with [phytools::fastAnc()], [phytools::anc.ML()], or [ape::ace()].
+#'   * For continuous trait data: Named numeric vector typically generated with [phytools::fastAnc()], [phytools::anc.ML()], or [ape::ace()].
 #'     Names are nodes_ID of the internal nodes. Values are ACE of the trait.
 #'   * For categorical trait or biogeographic data: Matrix that records the posterior probabilities of ancestral states/ranges.
 #'     Rows are internal nodes_ID. Columns are states/ranges. Values are posterior probabilities of each state per node.
 #'   Needed in all cases to provide accurate estimates of trait values.
 #' @param tip_data (Optional) Named vector of tip values of the trait.
-#'   * For continuous trait data: Named numerical vector of trait values.
-#'   * For categorical trait or biogeographic data: Character string vector of states/ranges
+#'   * For continuous trait data: Named numeric vector of trait values.
+#'   * For categorical trait or biogeographic data: Named character vector of states/ranges.
 #'   Names must match `tip.label` in the phylogeny. Needed to provide accurate tip values.
 #'   * For biogeographic data, ranges should follow the coding scheme of BioGeoBEARS with a unique CAPITAL letter per unique area
 #'   (ex: A, B), combined to form multi-area ranges (Ex: AB). Alternatively, you can provide tip_data as a matrix or data.frame of
@@ -64,12 +64,12 @@
 #'   that contains a phylogenetic tree and associated diversification rate mapping across selected posterior samples.
 #'   The phylogenetic tree must be the same as the one associated with the `contMap`, `ace` and `tip_data`.
 #' @param rate_type A character string specifying the type of diversification rates to use. Must be one of 'speciation', 'extinction' or 'net_diversification' (default).
-#' @param time_steps Numerical vector. Time steps at which the STRAPP tests should be carried out. If `NULL` (the default),
+#' @param time_steps Numeric vector. Time steps at which the STRAPP tests should be carried out. If `NULL` (the default),
 #'  `time_steps` will be generated from a combination of two arguments among `time_range`, `nb_time_steps`, and/or `time_step_duration`.
-#' @param time_range Vector of two numerical values. Time boundaries within which the `time_steps` must be defined if not provided.
+#' @param time_range Numeric vector of length 2. Time boundaries within which the `time_steps` must be defined if not provided.
 #'   If `NULL` (the default), and `time_range` is needed to generate the `time_steps`, the depth of the tree is used by default: `c(0, root_age)`.
 #'   However, no time step will be generated for the 'root_age'.
-#' @param nb_time_steps,time_step_duration Numerical. Number of time steps and duration of each time step used to generate `time_steps` if not provided.
+#' @param nb_time_steps,time_step_duration Numeric. Number of time steps and duration of each time step used to generate `time_steps` if not provided.
 #'   You must provide at least one of those two arguments to be able to generate `time_steps`.
 #' @param uncertainty_strategy Character string. To select the strategy used to account for uncertainty in estimates.
 #'   * `"rates_only"`: Only accounts for diversification-rate uncertainty across BAMM posterior samples. Uses ML estimates for continuous traits
@@ -91,7 +91,7 @@
 #' @param seed Integer. Set the seed to ensure reproducibility. Default is `NULL` (a random seed is used).
 #' @param nb_permutations Integer. To select the number of random permutations to perform during the tests.
 #'   If NULL (default), all posterior samples will be used once.
-#' @param alpha Numerical. Significance level to use to compute the `estimate` corresponding to the values of the test statistic used to assess significance of the test.
+#' @param alpha Numeric. Significance level to use to compute the `estimate` corresponding to the values of the test statistic used to assess significance of the test.
 #'   This does NOT affect p-values. Default is `0.05`.
 #' @param two_tailed Logical. To define the type of tests. If `TRUE` (default), tests for correlations/differences in rates will be carried out with a null hypothesis
 #'   that rates are not correlated with trait values (continuous data) or equal between trait states (categorical and biogeographic data).
@@ -122,7 +122,7 @@
 #' @param return_STRAPP_results Logical. Specify whether the `STRAPP_results` objects summarizing the results of the STRAPP tests carried out at each time step
 #'   should be returned among the outputs in addition to the `$pvalues_summary_df` already providing test stat estimates and p-values obtained across all `time_steps`.
 #' @param return_updated_Maps Logical. Specify whether the updated versions of the mapped phylogenies (`contMap(s)`/`densityMaps`/`simmaps`),
-#'   should be returned among the outputs. The updated `contMap(s)`/`densityMaps`/`simmaps` consist in cutting off branches and mapping
+#'   should be returned among the outputs. The update of the `contMap(s)`/`densityMaps`/`simmaps` consists of cutting off branches and mapping
 #'   that are younger than the `time_steps` used to perform the tests. Default is `FALSE`.
 #' @param return_updated_BAMM_objects Logical. Specify whether the `updated_BAMM_objects` with phylogeny and
 #'   mapped diversification rates cut-off at the `time_steps` used to perform the tests should be returned among the outputs.
@@ -171,7 +171,7 @@
 #'
 #'   * `$pvalues_summary_df` Data.frame with three columns providing test stat `$estimate` and `$p_value` obtained for each time step (i.e., `$focal_time`),
 #'     that can be passed down to [deepSTRAPP::plot_STRAPP_pvalues_over_time()] to generate a plot showing the evolution of the test results across time.
-#'   * `$time_steps` Numerical vector. Time steps at which the STRAPP tests were carried out in the same order as the objects returned in the output lists.
+#'   * `$time_steps` Numeric vector. Time steps at which the STRAPP tests were carried out in the same order as the objects returned in the output lists.
 #'   * `$trait_data_type` Character string. Specify the type of trait data. Possible values are: "continuous", "categorical", "biogeographic".
 #'   * `$trait_data_type_for_stats` Character string. The type of trait data used to select statistical method. One of 'continuous', 'binary', or 'multinomial'.
 #'   * `$rate_type` Character string. The type of diversification rates used in the tests: 'speciation', 'extinction' or 'net_diversification'.
@@ -785,12 +785,12 @@ run_deepSTRAPP_over_time <- function (contMap = NULL,
       root_age <- max(phytools::nodeHeights(simmaps[[1]])[,2])
     }
 
-    ## If provided, check that time_range is two positive numerical values, in increasing order, not above root_age.
+    ## If provided, check that time_range is two positive numeric values, in increasing order, not above root_age.
     if (!is.null(time_range))
     {
       if (!all(time_range >= 0))
       {
-        stop("'time_range' must be two positive numerical values.")
+        stop("'time_range' must be two positive numeric values.")
       } else {
         if (time_range[1] > time_range[2])
         {
@@ -824,12 +824,12 @@ run_deepSTRAPP_over_time <- function (contMap = NULL,
       }
     }
 
-    ## If provided, check that time_step_duration is a positive numerical, smaller than root_age.
+    ## If provided, check that time_step_duration is a positive numeric, smaller than root_age.
     if (!is.null(time_step_duration))
     {
       if (!(time_step_duration > 0))
       {
-        stop("'time_step_duration' must be a positive numerical.\n")
+        stop("'time_step_duration' must be a positive numeric.\n")
       } else {
         if (time_step_duration >= root_age)
         {

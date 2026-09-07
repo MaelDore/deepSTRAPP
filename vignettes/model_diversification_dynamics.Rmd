@@ -169,7 +169,7 @@ whale_BAMM_object <- prepare_diversification_data(
    # A good value for expectedNumberOfShifts is one with high similarities between the distributions
    # hinting that the information in the data coincides
    # with your expectations for the number of regime shifts. 
-   # The best practice consists in trying several values to control if it affects or not the final output.
+   # The best practice is to try several values to check whether it affects the final output.
 
 # An example of these plots and table is shown below:
 

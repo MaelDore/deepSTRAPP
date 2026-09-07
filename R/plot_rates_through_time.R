@@ -21,15 +21,15 @@
 #'   Even if the `deepSTRAPP_outputs` object was generated with [deepSTRAPP::run_deepSTRAPP_over_time()]
 #'   for testing another type of rates, the `$trait_data_df_over_time` and `$diversification_data_df_over_time` data frames
 #'   will contain data for all types of rates.
-#' @param quantile_ranges Vector of numerical. Only for continuous trait data. Quantiles used as thresholds to group branches
+#' @param quantile_ranges Numeric vector. Only for continuous trait data. Quantiles used as thresholds to group branches
 #'  by trait values. It must start with 0 and finish with 1. Default is `c(0, 0.25, 0.5, 0.75, 1.0)`
 #'  which produces four balanced quantile groups.
 #' @param select_trait_levels (Vector of) character string. Only for categorical and biogeographic trait data.
 #'  To provide a list of a subset of states/ranges to plot. Names must match the ones found in
 #'  `deepSTRAPP_outputs$trait_data_df_over_time$trait_value`. Default is `all` which means all states/ranges will be plotted.
-#' @param time_range Vector of two numerical values. Time boundaries used for the plot.
+#' @param time_range Numeric vector of length 2. Time boundaries used for the plot.
 #'   If `NULL` (the default), the range of data provided in `deepSTRAPP_outputs` will be used.
-#' @param color_scale Vector of character string. List of colors to use to build the color scale with [grDevices::colorRampPalette()]
+#' @param color_scale Character vector. List of colors to use to build the color scale with [grDevices::colorRampPalette()]
 #'   to display the quantile groups used to discretize the continuous trait data. From lowest values to highest values. Only for continuous data.
 #'   Default = `NULL` will use the 'Spectral' color palette in [RColorBrewer::brewer.pal()].
 #' @param colors_per_levels Named character string. To set the colors to use to plot rates of each state/range. Names = states/ranges; values = colors.
@@ -39,7 +39,7 @@
 #'  * `fuzzy` (default): to overlay the evolution of rates found in all posterior samples with high transparency levels.
 #'  * `quantiles_rect`: to add a polygon encompassing a proportion of the rate values found in posterior samples.
 #'   This proportion is defined with `CI_quantiles`.
-#' @param CI_quantiles Numerical. Proportion of rate values across posterior samples encompassed by the confidence interval. Only if `CI_type = "quantiles_rect"`. Default is `0.95`.
+#' @param CI_quantiles Numeric. Proportion of rate values across posterior samples encompassed by the confidence interval. Only if `CI_type = "quantiles_rect"`. Default is `0.95`.
 #' @param display_plot Logical. Whether to display the plot generated in the R console. Default is `TRUE`.
 #' @param PDF_file_path Character string. If provided, the plot will be saved in a PDF file following the path provided here. The path must end with ".pdf".
 #' @param return_mean_data_per_samples_df Logical. Whether to include in the output the data.frame of mean rates per trait values computed for
@@ -290,12 +290,12 @@ plot_rates_through_time <- function (
       # Check that two values are provided for time_range
       if (length(time_range) != 2)
       {
-        stop(paste0("'time_range' must be a vector of two positive numerical values providing the time boundaries used for the plot."))
+        stop(paste0("'time_range' must be a vector of two positive numeric values providing the time boundaries used for the plot."))
       }
       # Check that time_range is strictly positive
       if (!identical(time_range, abs(time_range)))
       {
-        stop(paste0("'time_range' must be strictly positive numerical values providing the time boundaries used for the plot."))
+        stop(paste0("'time_range' must be strictly positive numeric values providing the time boundaries used for the plot."))
       }
       # Ensure that time_range are properly ordered in increasing values
       time_range <- range(time_range)
@@ -321,7 +321,7 @@ plot_rates_through_time <- function (
     }
 
     ## CI_quantiles
-    # CI_quantiles should be a numerical between 0 and 1
+    # CI_quantiles should be a numeric between 0 and 1
     if ((CI_quantiles < 0) | (CI_quantiles > 1))
     {
       stop(paste0("'CI_quantiles' reflects the proportion of rate values encompass by the confidence interval.\n",
@@ -464,12 +464,12 @@ plot_rates_through_time_for_continuous_data <- function (
     # Check that quantile_ranges are between 0 and 1
     if (any(quantile_ranges < 0))
     {
-      stop(paste0("'quantile_ranges' must be numerical values between [0, 1] providing trait data quantiles to use to aggregate rate values.\n",
+      stop(paste0("'quantile_ranges' must be numeric values between [0, 1] providing trait data quantiles to use to aggregate rate values.\n",
                   "Current values are ", paste(quantile_ranges, collapse = ", ")),".")
     }
     if (any(quantile_ranges > 1))
     {
-      stop(paste0("'quantile_ranges' must be numerical values between [0, 1] providing trait data quantiles to use to aggregate rate values.\n",
+      stop(paste0("'quantile_ranges' must be numeric values between [0, 1] providing trait data quantiles to use to aggregate rate values.\n",
                   "Current values are ", paste(quantile_ranges, collapse = ", ")),".")
     }
     # Ensure that quantile_ranges are properly ordered in increasing values

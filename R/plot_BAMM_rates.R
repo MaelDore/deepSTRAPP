@@ -37,13 +37,13 @@
 #'   Provide the full argument name to avoid ambiguity with the `adj` graphical argument.
 #' @param regimes_fill Character string. Set the color of the background of the symbols showing the location of regime shifts.
 #'   Equivalent to the `bg` argument in [BAMMtools::addBAMMshifts()]. Default is `"grey"`.
-#' @param regimes_size Numerical. Set the size of the symbols showing the location of regime shifts.
+#' @param regimes_size Numeric. Set the size of the symbols showing the location of regime shifts.
 #'   Equivalent to the `cex` argument in [BAMMtools::addBAMMshifts()]. Default is `1`.
 #' @param regimes_pch Integer. Set the shape of the symbols showing the location of regime shifts.
 #'   Equivalent to the `pch` argument in [BAMMtools::addBAMMshifts()]. Default is `21`.
 #' @param regimes_border_col Character string. Set the color of the border of the symbols showing the location of regime shifts.
 #'   Equivalent to the `col` argument in [BAMMtools::addBAMMshifts()]. Default is `"black"`.
-#' @param regimes_border_width Numerical. Set the width of the border of the symbols showing the location of regime shifts.
+#' @param regimes_border_width Numeric. Set the width of the border of the symbols showing the location of regime shifts.
 #'   Equivalent to the `lwd` argument in [BAMMtools::addBAMMshifts()]. Default is `1`.
 #' @param ... Additional graphical arguments to pass down to [BAMMtools::plot.bammdata()], [BAMMtools::addBAMMshifts()], and [par()].
 #'   Among them, `par.reset` is ignored, with a message: it would make [BAMMtools::plot.bammdata()]

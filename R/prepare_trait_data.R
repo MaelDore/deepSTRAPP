@@ -16,7 +16,7 @@
 #'     - For categorical and biogeographic data: compute posterior frequencies of each state/range
 #'       to produce a `densityMap` for each state/range.
 #'
-#' @param tip_data Named numerical or character string vector of trait values/states/ranges at tips.
+#' @param tip_data Named numeric or character vector of trait values/states/ranges at tips.
 #'   Names should be ordered as the tip labels in the phylogeny found in `phylo$tip.label`.
 #'   For biogeographic data, ranges should follow the coding scheme of BioGeoBEARS with a unique CAPITAL letter per unique area
 #'   (ex: A, B), combined to form multi-area ranges (Ex: AB). Alternatively, you can provide tip_data as a matrix or data.frame of
@@ -54,7 +54,7 @@
 #'   Only for continuous data (This is always 'TRUE' for categorical and biogeographic data).
 #'   This functionality is currently not available for total-evidence phylogenies (i.e., including fossils as tips).
 #' @param nb_simulations Integer. Define the number of simulations generated for stochastic mapping. Default = `100`.
-#' @param color_scale Vector of character string. List of colors to use to build the color scale with [grDevices::colorRampPalette()]
+#' @param color_scale Character vector. List of colors to use to build the color scale with [grDevices::colorRampPalette()]
 #'   showing the evolution of a continuous trait on the `contMap`. From lowest values to highest values. Only for continuous data. Default = `NULL` will use the rainbow() color palette.
 #' @param colors_per_levels Named character string. To set the colors to use to map each state/range posterior probabilities. Names = states/ranges; values = colors.
 #'   If `NULL` (default), the `rainbow()` color scale will be used for categorical trait; the `BioGeoBEARS::get_colors_for_states_list_0based()` will be used for biogeographic ranges.
@@ -486,7 +486,7 @@ prepare_trait_data <- function (
     {
       stop("For 'trait_data_type = biogeographic', 'tip_data' must be a named vector of character strings providing tip ranges.\n",
            "Alternatively, you can provide a matrix/data.frame providing presence/absence binary information (0/1).\n",
-           "In this case, colnames(tip_data) must be unique areas symbolized by a unique UPPERCASE letter each. row.names(tip_data) must be taxa named as in the phylogeny. Data must be numerical 0/1.\n",
+           "In this case, colnames(tip_data) must be unique areas symbolized by a unique UPPERCASE letter each. row.names(tip_data) must be taxa named as in the phylogeny. Data must be numeric binary: 0/1.\n",
            "Taxa with multi-area range should record several presences (1) in their row.")
     }
 
@@ -1544,7 +1544,7 @@ prepare_trait_data_for_biogeographic_data <- function (
     if (!all(PA_test))
     {
       stop("You provided 'tip_data' for 'biogeographic' data as a matrix/data.frame.\n",
-           "Please ensure presences/absences are recorded as numerical 0/1 values.\n")
+           "Please ensure presences/absences are recorded as numeric binary 0/1 values.\n")
     }
     unique_letters_test <- all(nchar(colnames(tip_data)) == 1)
     if (!all(unique_letters_test))
@@ -1742,7 +1742,7 @@ prepare_trait_data_for_biogeographic_data <- function (
   }
   # Extract binary df of presence/absence
   binary_df <- ranges_df[, -1]
-  # Convert character strings into numerical factors
+  # Convert character strings into numeric factors
   binary_df_num <- as.data.frame(apply(X = binary_df, MARGIN = 2, FUN = as.numeric))
   row.names(binary_df_num) <- names(tip_data)
   names(binary_df_num) <- unique_areas
@@ -2999,7 +2999,7 @@ select_best_trait_model_from_geiger <- function (list_model_fits)
 #'  }
 #'  # Extract binary df of presence/absence
 #'  binary_df <- ranges_df[, -1]
-#'  # Convert character strings into numerical factors
+#'  # Convert character strings into numeric factors
 #'  binary_df_num <- as.data.frame(apply(X = binary_df, MARGIN = 2, FUN = as.numeric))
 #'  row.names(binary_df_num) <- names(tip_data)
 #'  names(binary_df_num) <- unique_areas
@@ -3197,7 +3197,7 @@ generate_list_ranges <- function (areas_list, max_range_size, include_null_range
 #'
 #' @return The function returns the rescaled contMap as an object of class `"contMap"`.
 #'   It contains a `$tree` element of classes `"simmap"` and `"phylo"`, that itself includes:
-#'   * `$maps` An updated list of named numerical vectors. Provides the mapping of trait values along each rescaled edge.
+#'   * `$maps` An updated list of named numeric vectors. Provides the mapping of trait values along each rescaled edge.
 #'   * `$mapped.edge` An updated matrix. Provides the evolutionary time spent across trait values (columns) along the rescaled edges (rows).
 #'
 #' @seealso [phytools::contMap()]
