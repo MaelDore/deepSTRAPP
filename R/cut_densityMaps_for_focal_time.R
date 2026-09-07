@@ -10,17 +10,17 @@
 #'
 #' @description Cuts off all the branches of the phylogeny which are
 #'   younger than a specific time in the past (i.e. the `focal_time`).
-#'   Branches overlapping the `focal_time` are shorten to the `focal_time`.
+#'   Branches overlapping the `focal_time` are shortened to the `focal_time`.
 #'   Likewise, remove posterior probability mapping of the categorical trait for the cut off branches
 #'   by updating the `$tree$maps` and `$tree$mapped.edge` elements.
 #'
 #' @param densityMap Object of class `"densityMap"`, typically generated with [phytools::densityMap()],
 #'   that contains a phylogenetic tree and associated posterior probability mapping of a categorical trait.
 #'   The phylogenetic tree must be rooted and fully resolved/dichotomous,
-#'   but it does not need to be ultrametric (it can includes fossils).
+#'   but it does not need to be ultrametric (it can include fossils).
 #' @param focal_time Numerical. The time, in terms of time distance from the present,
 #'   for which the tree and mapping must be cut. It must be smaller than the root age of the phylogeny.
-#' @param keep_tip_labels Logical. Specify whether terminal branches with a single descendant tip must retained their initial `tip.label`. Default is `TRUE`.
+#' @param keep_tip_labels Logical. Specify whether terminal branches with a single descendant tip must retain their initial `tip.label`. Default is `TRUE`.
 #'
 #' @export
 #' @importFrom phytools nodeHeights plot.densityMap
@@ -51,7 +51,7 @@
 #'
 #'   The `$col` element describes the colors used to map each possible posterior probability value from 0 to 1000.
 #'
-#'   The `$states` element provide the name of the states. Here, the first value is the absence of the state labeled as "Not X" with X being the state.
+#'   The `$states` element provides the name of the states. Here, the first value is the absence of the state labeled as "Not X" with X being the state.
 #'   The second value is the name of the state.
 #'
 #'   High posterior probability reflects high likelihood to harbor the state. Low probability reflects high likelihood to NOT harbor the state.
@@ -207,17 +207,17 @@ cut_densityMap_for_focal_time <- function(densityMap, focal_time, keep_tip_label
 #'
 #' @description Cuts off all the branches of the phylogeny which are
 #'   younger than a specific time in the past (i.e. the `focal_time`).
-#'   Branches overlapping the `focal_time` are shorten to the `focal_time`.
+#'   Branches overlapping the `focal_time` are shortened to the `focal_time`.
 #'   Likewise, remove posterior probability mapping of the categorical trait for the cut off branches
 #'   by updating the `$tree$maps` and `$tree$mapped.edge` elements.
 #'
 #' @param densityMaps List of objects of class `"densityMap"`, typically generated with [deepSTRAPP::prepare_trait_data()].
 #'   Each densityMap (see [phytools::densityMap()]) contains a phylogenetic tree and associated posterior probability mapping of a categorical trait.
 #'   The phylogenetic tree must be rooted and fully resolved/dichotomous,
-#'   but it does not need to be ultrametric (it can includes fossils).
+#'   but it does not need to be ultrametric (it can include fossils).
 #' @param focal_time Numerical. The time, in terms of time distance from the present,
 #'   for which the tree and mapping must be cut. It must be smaller than the root age of the phylogeny.
-#' @param keep_tip_labels Logical. Specify whether terminal branches with a single descendant tip must retained their initial `tip.label`. Default is `TRUE`.
+#' @param keep_tip_labels Logical. Specify whether terminal branches with a single descendant tip must retain their initial `tip.label`. Default is `TRUE`.
 #'
 #' @export
 #' @importFrom phytools nodeHeights plot.densityMap

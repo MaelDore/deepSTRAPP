@@ -2,13 +2,13 @@
 #'
 #' @description Cuts off all the branches of the phylogeny which are
 #'   younger than a specific time in the past (i.e. the `focal_time`).
-#'   Branches overlapping the `focal_time` are shorten to the `focal_time`.
+#'   Branches overlapping the `focal_time` are shortened to the `focal_time`.
 #'
 #' @param tree Object of class `"phylo"`. The phylogenetic tree must be rooted and fully resolved/dichotomous,
-#'   but it does not need to be ultrametric (it can includes fossils).
+#'   but it does not need to be ultrametric (it can include fossils).
 #' @param focal_time Numerical. The time, in terms of time distance from the present,
 #'   for which the tree must be cut. It must be smaller than the root age of the phylogeny.
-#' @param keep_tip_labels Logical. Specify whether terminal branches with a single descendant tip must retained their initial `tip.label`. Default is `TRUE`.
+#' @param keep_tip_labels Logical. Specify whether terminal branches with a single descendant tip must retain their initial `tip.label`. Default is `TRUE`.
 #'
 #' @export
 #' @importFrom phytools nodeHeights
@@ -235,13 +235,13 @@ cut_phylo_for_focal_time <- function(tree, focal_time, keep_tip_labels = TRUE)
 #' @title Identify edges present at a given focal time
 #'
 #' @description Identify edges of a phylogeny that are present at a given `focal time`.
-#'   A branch/edge is consider present if it overlaps with the given `focal time`, or if its tipward node.
+#'   A branch/edge is considered present if it overlaps with the given `focal time`, or if its tipward node.
 #'
 #'   For instance, on an ultrametric phylogeny, all terminal tips will be considered present at `focal time = 0`.
 #'   At the crown age of the phylogeny, the two descending branches/edges will be considered present.
 #'
 #' @param phylo Object of class `"phylo"`. The phylogenetic tree must be rooted,
-#'   but it does not need to be ultrametric (it can includes fossils).
+#'   but it does not need to be ultrametric (it can include fossils).
 #' @param focal_time Numeric. The time, in terms of time distance from the present,
 #'   at which present edges must be identified.
 #' @param tolerance Numeric. Fraction of the total phylogeny depth used to round ages.
@@ -252,14 +252,14 @@ cut_phylo_for_focal_time <- function(tree, focal_time, keep_tip_labels = TRUE)
 #'
 #' @return Returns a data.frame with nine columns.
 #'
-#'   * `$edge_ID` Integer. ID of the egdes as listed in `phylo$edge`.
+#'   * `$edge_ID` Integer. ID of the edges as listed in `phylo$edge`.
 #'   * `$rootward_node_ID` Integer. ID of the node found on the rootward end of the edge.
 #'   * `$tipward_node_ID` Integer. ID of the node found on the tipward end of the edge.
 #'   * `$rootward_node_age` Numeric. Age of the rootward node of the edge, in terms of time distance from the present.
 #'   * `$tipward_node_age` Numeric. Age of the tipward node of the edge, in terms of time distance from the present.
 #'   * `$tip.label` Character string. Label of the tipward node of the edge.
 #'     + For terminal tips, this is the tip label as in `phylo$tip.label`.
-#'     + For internal branches, this is the tipward node label as in `phylo$node.label`, or if absent, the `tipward_node_ID.`
+#'     + For internal branches, this is the tipward node label as in `phylo$node.label`, or if absent, the `tipward_node_ID`.
 #'   * `$rootward_test` Logical. Whether the rootward node of the edge existed before `focal time`.
 #'   * `$tipward_test` Logical. Whether the tipward node of the edge existed after or at `focal time`.
 #'   * `$edge_present` Logical. Whether the edge was present at `focal time`.

@@ -20,7 +20,7 @@
 #'    and compatible with the associated evolutionary model fit on observed trait data.
 #'    The method is described in Martin & Weber, 2026.
 #'
-#'    A typical `"contsimmap"` object store simulated trait values across maps in a 3D array,
+#'    A typical `"contsimmap"` object stores simulated trait values across maps in a 3D array,
 #'    recording values for all time-points used to represent the continuous evolution.
 #'    While `"contsimmap"` objects can record evolution of multivariate traits,
 #'    deepSTRAPP currently works only with simulation of univariate trait evolution.
@@ -29,11 +29,11 @@
 #'    A `"contMap"` object typically produced by the [phytools::contMap()] function also records the evolution of a continuous
 #'    trait alongside branches of a time-calibrated phylogeny. Trait values are stored in `$maps` as list of named vectors recording
 #'    trait values (as names scaled between 0 and 1000) and length of the associated branch segment between two time-points (as values).
-#'    Therefore, a unique `"contsimmap"` object is converted in a list of `"contMaps"`, with each item being a `"contMap"` that represents
-#'    a unique evolutionary history simulation conditioned to the observed trait data and model fit.
+#'    Therefore, a unique `"contsimmap"` object is converted into a list of `"contMaps"`, with each item being a `"contMap"` that represents
+#'    a unique evolutionary history simulation conditioned on the observed trait data and model fit.
 #'
 #' @return Returns a list of `"contMap"` objects.
-#'    Each `"contMap"` represents a unique evolutionary history simulation conditioned to the observed trait data and model fit
+#'    Each `"contMap"` represents a unique evolutionary history simulation conditioned on the observed trait data and model fit
 #'    (i.e., a continuous stochastic map).
 #'
 #'    A `"contMap"` typically contains:
@@ -236,13 +236,13 @@ unscale_0_1000 <- function (x_scaled, min_val, max_val)
 
 #' @title Aggregate a list of contMaps into a unique mean/median contMap
 #'
-#' @description Aggregate a list of contMapsinto a unique mean/median contMap
+#' @description Aggregate a list of contMaps into a unique mean/median contMap
 #'   as produced by the [phytools::contMap()] function.
 #'
 #' @param contMaps List of objects of class `"contMap"` that represent independent simulations of the evolution of a continuous trait
 #'   (i.e., continuous stochastic maps).
 #' @param fun Character string. Select the aggregating function. Available options are `"mean"` and `"median"`. Default = `"mean"`.
-#' @param color_scale Vector of character string. List of colors to use to build the color scale with [grDevices::colorRampPalette()]
+#' @param color_scale Vector of character strings. List of colors to use to build the color scale with [grDevices::colorRampPalette()]
 #'   showing the evolution of the continuous trait. From lowest values to highest values.
 #'   Default (`color_scale = NULL`) is using the color palette recorded in the `contMap$cols` item. If none was provided, the `rainbow()` palette is used.
 #'   Provide the full argument name to avoid ambiguity with the `col` graphical argument.

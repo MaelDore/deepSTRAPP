@@ -25,7 +25,7 @@
 #' @importFrom stats setNames
 #'
 #' @details The function is a wrapper of the original [phytools::densityMap()] by Liam Revell.
-#'   Although, it does not produce a single `densityMap` for binary states,
+#'   However, it does not produce a single `densityMap` for binary states,
 #'   but rather can handle `simmaps` mapping any number of states/ranges, and produce a `densityMaps` list
 #'   that summarizes the frequency of presence/absence of each state/range in subsequent `densityMap` objects.
 #'
@@ -43,7 +43,7 @@
 #'   The trade-off is that `densityMaps` discard the identity of individual simulations and
 #'   therefore cannot be used to track which simulated history generated a given set of trait values.
 #'
-#' @return The function returns a `densityMaps` as a list objects of class `"densityMap"`,
+#' @return The function returns a `densityMaps` as a list of objects of class `"densityMap"`,
 #'   where each object is mapping the frequency of presence/absence of a state/range.
 #'
 #'   The number of objects depends on the number of states/ranges observed across the `simmaps` provided for conversion.
@@ -226,26 +226,26 @@ convert_simmaps_to_densityMaps <- function (simmaps,
 #'
 #' @inheritParams phytools::densityMap
 #' @param tol Positive numerical. To set the tolerance used to match node ages and time steps (i.e., consider them equal). Default = 1e-5.
-#' @param verbose Logical. To display or progress every 100 edges. Default = `TRUE`.
+#' @param verbose Logical. To display progress every 100 edges. Default = `TRUE`.
 #' @param col_scale Character string vector. To set the color scale manually. Need to provide 1001 colors for the scale.
 #'   If `NULL` (the default), the `rainbow()` color scale will be used.
 #'
 #' @return The function plots a tree with mapped trait probability densities and returns an object of class `densityMap` invisibly.
 #'   A `densityMap` is a list with three elements.
 #'     * `$tree` List of at least 8 elements. Includes the phylogeny, the trait evolution model data from the simmaps, and the newly mapped trait posterior densities.
-#'       * `$maps` List of N elements, one per edge. Each list comprises a named numerical vector that represent changes in posterior probability density of the focal state along segments of equal time.
-#'         Named are posterior probabilities scaled from 0 to 1000. Values are length of the segments. Segments are ordered from root to tips.
-#'       * `$mapped.edge` Matrix of edge per posterior probability summarizing the overall length of each edge attributed to a specific posterior probabiliy value.
+#'       * `$maps` List of N elements, one per edge. Each list comprises a named numerical vector that represents changes in posterior probability density of the focal state along segments of equal time.
+#'         Names are posterior probabilities scaled from 0 to 1000. Values are length of the segments. Segments are ordered from root to tips.
+#'       * `$mapped.edge` Matrix of edge per posterior probability summarizing the overall length of each edge attributed to a specific posterior probability value.
 #'       * `$Q` Numerical square matrix summarizing instantaneous transition rates between states as estimated from the evolutionary model.
 #'       Rows = initial states. Cols = final states.
-#'       * `$logL` Numerical. Log-likelihood of the data as optimized when estimated model parameters.
+#'       * `$logL` Numerical. Log-likelihood of the data as optimized when estimating model parameters.
 #'     * `$col` Named character string vector. Color scale used to map posterior probabilities. Names are the posterior probabilities scaled from 0 to 1000. Values are the colors.
 #'     * `$states` Character string. The name of the states.
 #'
 #' @details Wrapped function of [phytools::densityMap()].
 #'   Additions to the initial function:
-#'   * Can modify manually the tolerance to handle issue with mismatch between node ages and time steps used.
-#'   * Can print progress across egdes
+#'   * Can modify manually the tolerance to handle issues with mismatches between node ages and time steps used.
+#'   * Can print progress across edges
 #'   * Can provide a manual color scale to replace the default rainbow scale. The color scale must have 1001 colors.
 #'
 #' @author Maël Doré. Initial function by Liam Revell, 2012 in the [phytools] package.

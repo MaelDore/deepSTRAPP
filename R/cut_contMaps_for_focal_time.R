@@ -11,17 +11,17 @@
 #'
 #' @description Cuts off all the branches of the phylogeny which are
 #'   younger than a specific time in the past (i.e. the `focal_time`).
-#'   Branches overlapping the `focal_time` are shorten to the `focal_time`.
+#'   Branches overlapping the `focal_time` are shortened to the `focal_time`.
 #'   Likewise, remove continuous trait mapping for the cut off branches
 #'   by updating the `$tree$maps` and `$tree$mapped.edge` elements.
 #'
 #' @param contMap Object of class `"contMap"`, typically generated with [phytools::contMap()],
 #'   that contains a phylogenetic tree and associated continuous trait mapping.
 #'   The phylogenetic tree must be rooted and fully resolved/dichotomous,
-#'   but it does not need to be ultrametric (it can includes fossils).
+#'   but it does not need to be ultrametric (it can include fossils).
 #' @param focal_time Numerical. The time, in terms of time distance from the present,
 #'   for which the tree and mapping must be cut. It must be smaller than the root age of the phylogeny.
-#' @param keep_tip_labels Logical. Specify whether terminal branches with a single descendant tip must retained their initial `tip.label`. Default is `TRUE`.
+#' @param keep_tip_labels Logical. Specify whether terminal branches with a single descendant tip must retain their initial `tip.label`. Default is `TRUE`.
 #'
 #' @export
 #' @importFrom phytools nodeHeights plot.contMap
@@ -48,7 +48,7 @@
 #'     * `$initial_nodes_ID` Vector of character strings. Provides the initial ID of internal nodes. Used to plot internal node IDs as labels with [ape::nodelabels()].
 #'     * `$edges_ID_df` Data.frame with two columns. Provides the conversion from the `new_edge_ID` to the `initial_edge_ID`. Each row is an edge/branch.
 #'     * `$initial_edges_ID` Vector of character strings. Provides the initial ID of edges/branches. Used to plot edge/branch IDs as labels with [ape::edgelabels()].
-#'  * `$cols` A named vector of character string mapping trait values with colors to display on the plot.
+#'  * `$cols` A named vector of character strings mapping trait values with colors to display on the plot.
 #'  * `$lims` A numerical vector of 2 storing the initial min and max values of the trait (trait values are scaled between 0 and 1000 in `$tree$maps`)
 #'
 #' @author Maël Doré
@@ -190,17 +190,17 @@ cut_contMap_for_focal_time <- function(contMap, focal_time, keep_tip_labels = TR
 #'
 #' @description Cuts off all the branches of the phylogeny which are
 #'   younger than a specific time in the past (i.e. the `focal_time`).
-#'   Branches overlapping the `focal_time` are shorten to the `focal_time`.
+#'   Branches overlapping the `focal_time` are shortened to the `focal_time`.
 #'   Likewise, remove continuous trait mapping for the cut off branches
 #'   by updating the `$tree$maps` and `$tree$mapped.edge` elements.
 #'
 #' @param contMaps List of objects of class `"contMap"`, typically generated with [phytools::contMap()],
 #'   that contains a phylogenetic tree and associated continuous trait mapping.
 #'   The phylogenetic tree must be rooted and fully resolved/dichotomous,
-#'   but it does not need to be ultrametric (it can includes fossils).
+#'   but it does not need to be ultrametric (it can include fossils).
 #' @param focal_time Numerical. The time, in terms of time distance from the present,
 #'   for which the tree and mapping must be cut. It must be smaller than the root age of the phylogeny.
-#' @param keep_tip_labels Logical. Specify whether terminal branches with a single descendant tip must retained their initial `tip.label`. Default is `TRUE`.
+#' @param keep_tip_labels Logical. Specify whether terminal branches with a single descendant tip must retain their initial `tip.label`. Default is `TRUE`.
 #'
 #' @export
 #' @importFrom phytools nodeHeights plot.contMap
@@ -229,7 +229,7 @@ cut_contMap_for_focal_time <- function(contMap, focal_time, keep_tip_labels = TR
 #'     * `$initial_nodes_ID` Vector of character strings. Provides the initial ID of internal nodes. Used to plot internal node IDs as labels with [ape::nodelabels()].
 #'     * `$edges_ID_df` Data.frame with two columns. Provides the conversion from the `new_edge_ID` to the `initial_edge_ID`. Each row is an edge/branch.
 #'     * `$initial_edges_ID` Vector of character strings. Provides the initial ID of edges/branches. Used to plot edge/branch IDs as labels with [ape::edgelabels()].
-#'  * `$cols` A named vector of character string mapping trait values with colors to display on the plot.
+#'  * `$cols` A named vector of character strings mapping trait values with colors to display on the plot.
 #'  * `$lims` A numerical vector of 2 storing the initial min and max values of the trait (trait values are scaled between 0 and 1000 in `$tree$maps`)
 #'
 #'

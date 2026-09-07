@@ -2,7 +2,7 @@
 
 #' @title Convert Biogeographic Stochastic Map (BSM) to phytools SIMMAP stochastic map (SM) format
 #'
-#' @description These functions converts a Biogeographic Stochastic Map (BSM) output from BioGeoBEARS into
+#' @description These functions convert a Biogeographic Stochastic Map (BSM) output from BioGeoBEARS into
 #'  a `simmap` object from R package `{phytools}` (See [phytools::make.simmap()]).
 #'
 #'  They require a model fit with `BioGeoBEARS::bears_optim_run()` and the output of a Biogeographic Stochastic Mapping
@@ -24,7 +24,7 @@
 #' # Notes on using the resulting simmap object in phytools (adapted from Nicholas J. Matzke)
 #'
 #'  The phytools functions, like [phytools::countSimmap()], will only count the anagenetic events
-#'  (range transitions occurring along branches) as it was written assuming purely anagenetic models.
+#'  (range transitions occurring along branches) as they were written assuming purely anagenetic models.
 #'
 #'  It remains possible to extract cladogenetic events (range transitions occurring at speciation)
 #'  by comparing the last-state-below-a-node with the descendant-pairs-above-a-node.
@@ -42,7 +42,7 @@
 #'  Please note carefully that area-to-area dispersal events are not identical with the state transitions.
 #'  For example, a state can be a geographic range with multiple areas, but under the logic of DEC-type models,
 #'  a range-expansion event like  ABC->ABCD actually means that a dispersal happened from some specific area (A, B, or C)
-#'  to the new area. BSMs track this area-to-area sourcing in its cladogenetic and anagenetic event tables,
+#'  to the new area. BSMs track this area-to-area sourcing in their cladogenetic and anagenetic event tables,
 #'  at least if `BioGeoBEARS::simulate_source_areas_ana_clado()` has been run on the output of `BioGeoBEARS::runBSM()`.
 #'
 #' @param model_fit A BioGeoBEARS results object, produced by ML inference via `BioGeoBEARS::bears_optim_run()`.
@@ -76,9 +76,9 @@
 #'   * `$residence_times` Data.frame with two rows. Summarizes the residence time spent in each range along all branches,
 #'    in (raw) evolutionary time (i.e., branch lengths), and in percentage (perc).
 #'
-#' The [deepSTRAPP::convert_BSMs_to_simmaps()] function loop around the [deepSTRAPP::convert_BSM_to_simmap()] function to aggregate all `simmaps`
+#' The [deepSTRAPP::convert_BSMs_to_simmaps()] function loops around the [deepSTRAPP::convert_BSM_to_simmap()] function to aggregate all `simmaps`
 #'   from all biogeographic simulations in a unique list of classes `c("multiSimmap", "multiPhylo")`.
-#'   * Each element in the `$simmap` of a biogeographic simulation obtained with [deepSTRAPP::convert_BSM_to_simmap()].
+#'   * Each element is the `$simmap` of a biogeographic simulation obtained with [deepSTRAPP::convert_BSM_to_simmap()].
 #'   * `$residence_times` summary data.frames are not preserved.
 #'
 #' @seealso [phytools::countSimmap()] [phytools::make.simmap()]

@@ -11,17 +11,17 @@
 #'
 #' @description Cuts off all the branches of the phylogeny which are
 #'   younger than a specific time in the past (i.e. the `focal_time`).
-#'   Branches overlapping the `focal_time` are shorten to the `focal_time`.
+#'   Branches overlapping the `focal_time` are shortened to the `focal_time`.
 #'   Likewise, remove mapping for the cut off branches
 #'   by updating the `$maps` and `$mapped.edge` elements.
 #'
 #' @param simmap Object with the classes `"phylo"` and `"simmap"`, typically generated with [phytools::make.simmap()],
 #'   that contains a phylogenetic tree and associated categorical trait/range mapping.
 #'   The phylogenetic tree must be rooted and fully resolved/dichotomous,
-#'   but it does not need to be ultrametric (it can includes fossils).
+#'   but it does not need to be ultrametric (it can include fossils).
 #' @param focal_time Numerical. The time, in terms of time distance from the present,
 #'   for which the tree and mapping must be cut. It must be smaller than the root age of the phylogeny.
-#' @param keep_tip_labels Logical. Specify whether terminal branches with a single descendant tip must retained their initial `tip.label`. Default is `TRUE`.
+#' @param keep_tip_labels Logical. Specify whether terminal branches with a single descendant tip must retain their initial `tip.label`. Default is `TRUE`.
 #'
 #' @export
 #'
@@ -204,17 +204,17 @@ cut_simmap_for_focal_time <- function(simmap, focal_time, keep_tip_labels = TRUE
 #'
 #' @description Cuts off all the branches of the phylogeny which are
 #'   younger than a specific time in the past (i.e. the `focal_time`).
-#'   Branches overlapping the `focal_time` are shorten to the `focal_time`.
+#'   Branches overlapping the `focal_time` are shortened to the `focal_time`.
 #'   Likewise, remove continuous trait mapping for the cut off branches
 #'   by updating the `$maps` and `$mapped.edge` elements.
 #'
 #' @param simmaps List of objects with the classes `"phylo"` and `"simmap"`, typically generated with [phytools::make.simmap()],
 #'   that contains a phylogenetic tree and associated categorical trait/range mapping.
 #'   The phylogenetic tree must be rooted and fully resolved/dichotomous,
-#'   but it does not need to be ultrametric (it can includes fossils).
+#'   but it does not need to be ultrametric (it can include fossils).
 #' @param focal_time Numerical. The time, in terms of time distance from the present,
 #'   for which the tree and mapping must be cut. It must be smaller than the root age of the phylogeny.
-#' @param keep_tip_labels Logical. Specify whether terminal branches with a single descendant tip must retained their initial `tip.label`. Default is `TRUE`.
+#' @param keep_tip_labels Logical. Specify whether terminal branches with a single descendant tip must retain their initial `tip.label`. Default is `TRUE`.
 #'
 #' @export
 #'
@@ -233,7 +233,7 @@ cut_simmap_for_focal_time <- function(simmap, focal_time, keep_tip_labels = TRUE
 #'
 #' @return The function returns an updated list of objects as cut/updated simmaps of classes `"phylo"` and `"simmap"`.
 #'
-#'  Each simmap object represent an updated stochastic map cut/updated simmap as a list of at least six elements:
+#'  Each simmap object represents an updated stochastic map cut/updated simmap as a list of at least six elements:
 #'
 #'  Initial updated elements:
 #'    * `$edge` A numerical matrix with two columns listing the updated ID of rootward and tipward nodes of the remaining edges
