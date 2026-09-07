@@ -20,16 +20,16 @@
 #'   typically generated with [deepSTRAPP::prepare_trait_data()] or [phytools::contMap()],
 #'   that contains a phylogenetic tree and associated continuous trait mapping.
 #'   The phylogenetic tree must be rooted and fully resolved/dichotomous,
-#'   but it does not need to be ultrametric (it can includes fossils).
+#'   but it does not need to be ultrametric (it can include fossils).
 #' @param contMaps For continuous trait data. List of objects of class `"contMap"`,
 #'   typically generated with [deepSTRAPP::prepare_trait_data()],
 #'   that contains multiple continuous stochastic maps that represent possible trait evolutionary histories
-#'   conditioned to the observed trait values and model fit.
+#'   conditioned on the observed trait values and model fit.
 #' @param densityMaps For categorical trait or biogeographic data. List of objects of class `"densityMap"`,
 #'   typically generated with [deepSTRAPP::prepare_trait_data()] or [phytools::densityMap()],
 #'   that contains a phylogenetic tree and associated posterior probability of being in a given state/range along branches.
 #'   Each object (i.e., `densityMap`) corresponds to a state/range. The phylogenetic tree must be rooted and fully resolved/dichotomous,
-#'   but it does not need to be ultrametric (it can includes fossils).
+#'   but it does not need to be ultrametric (it can include fossils).
 #' @param simmaps For categorical trait or biogeographic data. List of objects of class `"simmap"`,
 #'   typically generated with [deepSTRAPP::prepare_trait_data()] or [phytools::make.simmap()],
 #'   that represent discrete character/geographic evolutionary history
@@ -43,23 +43,23 @@
 #'   Obtained with [deepSTRAPP::prepare_trait_data()] as output in the `$ace` slot.
 #'   * For continuous trait data: Named numerical vector typically generated with [phytools::fastAnc()], [phytools::anc.ML()], or [ape::ace()].
 #'     Names are nodes_ID of the internal nodes. Values are ACE of the trait.
-#'   * For categorical trait or biogeographic data: Matrix that record the posterior probabilities of ancestral states/ranges.
+#'   * For categorical trait or biogeographic data: Matrix that records the posterior probabilities of ancestral states/ranges.
 #'     Rows are internal nodes_ID. Columns are states/ranges. Values are posterior probabilities of each state per node.
 #'   Needed in all cases to provide accurate estimates of trait values.
 #' @param tip_data (Optional) Named vector of tip values of the trait.
 #'   * For continuous trait data: Named numerical vector of trait values.
 #'   * For categorical trait or biogeographic data: Character string vector of states/ranges
 #'   Names are nodes_ID of the internal nodes. Needed to provide accurate tip values.
-#'   * For biogeographic data, ranges should follow the coding scheme of BioGeoBEARS with a unique CAPITAL letter per unique areas
+#'   * For biogeographic data, ranges should follow the coding scheme of BioGeoBEARS with a unique CAPITAL letter per unique area
 #'   (ex: A, B), combined to form multi-area ranges (Ex: AB). Alternatively, you can provide tip_data as a matrix or data.frame of
 #'   binary presence/absence in each area (coded as unique CAPITAL letter). In this case, columns are unique areas, rows are taxa,
 #'   and values are integer (0/1) signaling absence or presence of the taxa in the area.
 #' @param trait_data_type Character string. Specify the type of trait data. Must be one of "continuous", "categorical", "biogeographic".
 #' @param keep_tip_labels Logical. Specify whether terminal branches with a single descendant tip
-#'   must retained their initial `tip.label` on the updated phylogeny. Default is `TRUE`.
+#'   must retain their initial `tip.label` on the updated phylogeny. Default is `TRUE`.
 #' @param BAMM_object Object of class `"bammdata"`, typically generated with [deepSTRAPP::prepare_diversification_data()],
 #'   that contains a phylogenetic tree and associated diversification rate mapping across selected posterior samples.
-#'   The phylogenetic tree must the same as the one associated with the `contMap`/`densityMaps`, `ace` and `tip_data`.
+#'   The phylogenetic tree must be the same as the one associated with the `contMap`/`densityMaps`, `ace` and `tip_data`.
 #' @param rate_type A character string specifying the type of diversification rates to use. Must be one of 'speciation', 'extinction' or 'net_diversification' (default).
 #' @param focal_time Numerical. The time, in terms of time distance from the present,
 #'   at which data must be extracted and the phylogeny and mappings must be cut.
@@ -86,28 +86,28 @@
 #' @param alpha Numerical. Significance level to use to compute the `estimate` corresponding to the values of the test statistic used to assess significance of the test.
 #'   This does NOT affect p-values. Default is `0.05`.
 #' @param two_tailed Logical. To define the type of tests. If `TRUE` (default), tests for correlations/differences in rates will be carried out with a null hypothesis
-#'   that rates are not correlated with trait values (continuous data) or equals between trait states (categorical and biogeographic data).
+#'   that rates are not correlated with trait values (continuous data) or equal between trait states (categorical and biogeographic data).
 #'   If `FALSE`, one-tailed tests are carried out.
 #'   * For continuous data, it involves defining a `one_tailed_hypothesis` testing for
 #'   either a "positive" or "negative" correlation under the alternative hypothesis.
 #'   * For binary data (two states), it involves defining a `one_tailed_hypothesis` indicating which states have higher rates under the alternative hypothesis.
-#'   * For multinominal data (more than two states), it defines the type of post hoc pairwise tests to carry out between pairs of states.
+#'   * For multinomial data (more than two states), it defines the type of post hoc pairwise tests to carry out between pairs of states.
 #'     If `posthoc_pairwise_tests = TRUE`, all two-tailed (if `two_tailed = TRUE`) or one-tailed (if `two_tailed = FALSE`) tests are automatically carried out.
 #' @param one_tailed_hypothesis A character string specifying the alternative hypothesis in the one-tailed test.
 #'   For continuous data, it is either "negative" or "positive" correlation.
 #'   For binary data, it lists the trait states with states ordered in increasing rates under the alternative hypothesis, separated by a greater-than such as c('A > B').
-#' @param posthoc_pairwise_tests Logical. Only for multinominal data (with more than two states). If `TRUE`, all possible post hoc pairwise (Dunn) tests
+#' @param posthoc_pairwise_tests Logical. Only for multinomial data (with more than two states). If `TRUE`, all possible post hoc pairwise (Dunn) tests
 #'   will be computed across all pairs of states. This is a way to detect which pairs of states have significant differences in rates
 #'   if the overall test (Kruskal-Wallis) is significant. Default is `FALSE`.
-#' @param p.adjust_method A character string. Only for multinominal data (with more than two states). It specifies the type of correction to apply to the p-values
+#' @param p.adjust_method A character string. Only for multinomial data (with more than two states). It specifies the type of correction to apply to the p-values
 #'   in the post hoc pairwise tests to account for multiple comparisons. See [stats::p.adjust()] for the available methods. Default is `none`.
 #' @param return_perm_data Logical. Whether to return the stats data computed from the posterior samples for observed and permuted data in the output.
 #'   This is needed to plot the histogram of the null distribution used to assess significance of the test with [deepSTRAPP::plot_histogram_STRAPP_test_for_focal_time()].
 #'   Default is `FALSE`.
-#' @param nthreads Integer. Number of threads to use for paralleled computing of the STRAPP tests across the permutations.
+#' @param nthreads Integer. Number of threads to use for parallel computing of the STRAPP tests across the permutations.
 #'  The R package `parallel` must be loaded for `nthreads > 1`. Default is `1`.
 #' @param print_hypothesis Logical. Whether to print information on what test is carried out, detailing the null and alternative hypotheses,
-#'   what significant level is used to rejected or not the null hypothesis, and how uncertainty in trait estimates is handled.. Default is `TRUE`.
+#'   what significance level is used to reject or not the null hypothesis, and how uncertainty in trait estimates is handled. Default is `TRUE`.
 #' @param extract_trait_data_melted_df Logical. Specify whether trait data (values/states/ranges) must be extracted from the mapped phylogenies
 #'   and returned in a melted data.frame. Default is `FALSE`.
 #' @param extract_diversification_data_melted_df Logical. Specify whether diversification data (regimes ID and tip rates) must be extracted from the `updated_BAMM_object`
@@ -117,8 +117,8 @@
 #'   that are younger than the `focal_time`. Default is `FALSE`.
 #' @param return_updated_BAMM_object Logical. Specify whether the `updated_BAMM_object` with phylogeny and
 #'   mapped diversification rates cut-off at the `focal_time` should be returned among the outputs.
-#' @param verbose Logical. Should progression be displayed? A message will be printed at each stepof the deepSTRAPP workflow,
-#'   and for every batch of 100 BAMM posterior samples whose rates are regimes are updated, and optionally extracted in a melted data.frame
+#' @param verbose Logical. Should progression be displayed? A message will be printed at each step of the deepSTRAPP workflow,
+#'   and for every batch of 100 BAMM posterior samples whose rates and regimes are updated, and optionally extracted in a melted data.frame
 #'   (if `extract_diversification_data_melted_df = TRUE`). Default is `TRUE`.
 #'
 #' @export
@@ -140,7 +140,7 @@
 #'
 #'   Optionally, if `return_updated_Maps = TRUE`, these functions can update the mapped phylogenies
 #'   (`contMap(s)`/`densityMaps`/`simmaps`) provided as inputs such as
-#'   branches overlapping the `focal_time` are shorten to the `focal_time`,
+#'   branches overlapping the `focal_time` are shortened to the `focal_time`,
 #'   and the trait mapping for the cut off branches are removed
 #'   by updating the `$tree$maps` and `$tree$mapped.edge` elements.
 #'
@@ -153,9 +153,9 @@
 #'   ## Extract diversification data
 #'
 #'   [deepSTRAPP::update_rates_and_regimes_for_focal_time()] updates the `BAMM_object` to obtain
-#'   the diversification rates/regimes found along branches the `focal_time` across all BAMM posterior samples.
+#'   the diversification rates/regimes found along branches at the `focal_time` across all BAMM posterior samples.
 #'   Optionally, the function can update the `BAMM_object` to display a mapped phylogeny
-#'   such as branches overlapping the `focal_time` are shorten to the `focal_time`
+#'   such as branches overlapping the `focal_time` are shortened to the `focal_time`
 #'
 #'   ## Extract diversification data in a melted df
 #'
@@ -179,7 +179,7 @@
 #'     See [deepSTRAPP::compute_STRAPP_test_for_focal_time()] for a detailed description of the output.
 #'   * `$focal_time` Integer. The time, in terms of time distance from the present, at which the data were extracted and the STRAPP test carried out.
 #'   * `$trait_data_type` Character string. Specify the type of trait data. Possible values are: "continuous", "categorical", "biogeographic".
-#'   * `$trait_data_type_for_stats` Character string. The type of trait data used to select statistical method. One of 'continuous', 'binary', or 'multinominal'.
+#'   * `$trait_data_type_for_stats` Character string. The type of trait data used to select statistical method. One of 'continuous', 'binary', or 'multinomial'.
 #'   * `$rate_type` Character string. The type of diversification rates used in the tests: 'speciation', 'extinction' or 'net_diversification'.
 #'   * `$uncertainty_strategy` Character string. The strategy used to account for uncertainty in estimates. One of 'rates_only', 'paired', or 'full'.
 #'   * `$trait_maps_vs_BAMM_samples_list` List of two elements recording the stochastic maps (`$trait_map_ID`) and BAMM samples (`$BAMM_posterior_sample_ID`) chosen for testing across time-steps.

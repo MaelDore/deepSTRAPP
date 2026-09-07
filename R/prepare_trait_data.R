@@ -8,7 +8,7 @@
 #'
 #'   * Step 1: Fit evolutionary models to trait data using Maximum Likelihood.
 #'   * Step 2: Select the best fitting model comparing AICc.
-#'   * Step 3: Infer ancestral characters estimates (ACE) at nodes.
+#'   * Step 3: Infer ancestral character estimates (ACE) at nodes.
 #'   * Step 4: Run stochastic mapping simulations to generate evolutionary histories
 #'     compatible with the best model and inferred ACE. (Only for categorical and biogeographic data)
 #'   * Step 5: Infer ancestral states along branches.
@@ -18,7 +18,7 @@
 #'
 #' @param tip_data Named numerical or character string vector of trait values/states/ranges at tips.
 #'   Names should be ordered as the tip labels in the phylogeny found in `phylo$tip.label`.
-#'   For biogeographic data, ranges should follow the coding scheme of BioGeoBEARS with a unique CAPITAL letter per unique areas
+#'   For biogeographic data, ranges should follow the coding scheme of BioGeoBEARS with a unique CAPITAL letter per unique area
 #'   (ex: A, B), combined to form multi-area ranges (Ex: AB). Alternatively, you can provide tip_data as a matrix or data.frame of
 #'   binary presence/absence in each area (coded as unique CAPITAL letter). In this case, columns are unique areas, rows are taxa,
 #'   and values are integer (0/1) signaling absence or presence of the taxa in the area.
@@ -35,15 +35,15 @@
 #'   Transitions with similar integers are estimated with a shared rate parameter.
 #'   Transitions with `0` represent rates that are fixed to zero (i.e., impossible transitions).
 #'   Diagonal must be populated with `NA`. `row.names(Q_matrix)` and `col.names(Q_matrix)` are the states.
-#'   Provide `"matrix"` among the model listed in 'evolutionary_models' to use the custom Q-matrix for modeling. Only for categorical data.
+#'   Provide `"matrix"` among the models listed in 'evolutionary_models' to use the custom Q-matrix for modeling. Only for categorical data.
 #' @param BioGeoBEARS_directory_path Character string. The path to the directory used to store input/output files generated
 #'   for/by BioGeoBEARS during biogeographic historical inferences. Only for biogeographic data.
 #' @param keep_BioGeoBEARS_files Logical. Whether the `BioGeoBEARS_directory` and its content should be kept after the run. Default = `TRUE`. Only for biogeographic data.
 #' @param prefix_for_files Character string. Prefix to add to all BioGeoBEARS files stored in the `BioGeoBEARS_directory_path` if `keep_BioGeoBEARS_files = TRUE`.
 #'   Files will be exported such as 'prefix_*' with an underscore separating the prefix and the file name.
 #'   Default is `NULL` (no prefix is added). Only for biogeographic data.
-#' @param nb_cores Interger. Number of cores to use for parallel computation during BioGeoBEARS runs. Default = `1`. Only for biogeographic data.
-#' @param max_range_size Integer. Maximum number of unique areas encompassed by multi-range areas. Default = `2`. Only for biogeographic data.
+#' @param nb_cores Integer. Number of cores to use for parallel computation during BioGeoBEARS runs. Default = `1`. Only for biogeographic data.
+#' @param max_range_size Integer. Maximum number of unique areas encompassed by multi-area ranges. Default = `2`. Only for biogeographic data.
 #' @param split_multi_area_ranges Logical. Whether to split multi-area ranges across unique areas when mapping ranges.
 #'   Ex: For range EW, posterior probabilities will be split equally between Eastern Palearctic (E) and Western Palearctic (W).
 #'   Default = `FALSE`. Only for biogeographic data.
@@ -65,7 +65,7 @@
 #' @param add_ACE_pies Logical. Whether to add pies of posterior probabilities of states/ranges at internal nodes on the mapped phylogeny. Default = `TRUE`.
 #'   Only for categorical and biogeographic data.
 #' @param PDF_file_path Character string. If provided, the plot will be saved in a PDF file following the path provided here. The path must end with ".pdf".
-#' @param return_ace Logical. Whether the named vector of ancestral characters estimates (ACE) at internal nodes should be returned in the output. Default = `TRUE`.
+#' @param return_ace Logical. Whether the named vector of ancestral character estimates (ACE) at internal nodes should be returned in the output. Default = `TRUE`.
 #' @param return_BSM Logical. (Only for Biogeographic data) Whether the summary tables of anagenetic and cladogenetic events generated during the Biogeographic Stochastic Mapping (BSM)
 #'  process should be returned in the output. Default = `FALSE`.
 #' @param return_simmaps Logical. Whether the evolutionary histories simulated during stochastic mapping (i.e., `simmaps`) should be returned in the output.
@@ -73,7 +73,7 @@
 #'  although it may create voluminous objects.
 #' @param return_best_model_fit Logical. Whether to include the output of the best fitting model in the function output. Default = `FALSE`.
 #' @param return_model_selection_df Logical. Whether to include the data.frame summarizing model comparisons used to select the best fitting model should be returned in the output. Default = `FALSE`.
-#' @param verbose Logical. Should progression be displayed? A message will be printed for every steps in the process. Default is `TRUE`.
+#' @param verbose Logical. Should progression be displayed? A message will be printed for every step in the process. Default is `TRUE`.
 #'
 #' @export
 #' @importFrom stats logLik
@@ -86,7 +86,7 @@
 #'
 #' @details Map trait evolution on a time-calibrated phylogeny in several steps:
 #'
-#'  Step 1: Models are fit using Maximum Likelihood approach:
+#'  Step 1: Models are fit using a Maximum Likelihood approach:
 #'    * For "continuous" data models are fit with [geiger::fitContinuous()]: "BM", "OU", "EB", "rate_trend", "lambda", "kappa", "delta". Default is `"BM"`.
 #'    * For "categorical" data models are fit with [geiger::fitDiscrete()]: "ER", "SYM", "ARD", "meristic", "matrix". Default is `"ARD"`.
 #'    * For "biogeographic" data models are fit with R package `BioGeoBEARS`: "BAYAREALIKE", "DIVALIKE", "DEC", "BAYAREALIKE+J", "DIVALIKE+J", "DEC+J". Default is `"DEC"`.
@@ -94,17 +94,17 @@
 #'  Step 2: Best model is identified among the list of `evolutionary_models` by comparing the corrected AIC (AICc)
 #'    and selecting the  model with lowest AICc.
 #'
-#'  Step 3: For continuous traits: Ancestral characters estimates (ACE) are inferred with [phytools::fastAnc] on a tree
+#'  Step 3: For continuous traits: Ancestral character estimates (ACE) are inferred with [phytools::fastAnc] on a tree
 #'    with modified branch lengths scaled to reflect the evolutionary rates estimated from the best model using [phytools::rescale()].
 #'
 #'  Step 4: Stochastic Mapping.
 #'
 #'    For categorical and biogeographic data, stochastic mapping simulations are performed by default to generate evolutionary histories
 #'    compatible with the best model and inferred ACE. Node states/ranges are drawn from the scaled marginal likelihoods of ACE,
-#'    and states/ranges shifts along branches are simulated according to the transition matrix Q estimated from the best fitting model.
+#'    and state/range shifts along branches are simulated according to the transition matrix Q estimated from the best fitting model.
 #'
 #'    For continuous trait data, stochastic mapping simulations are performed only if `run_stochastic_maps = TRUE`.
-#'    Evolutionary histories of continuous trait evolution, conditioned to the observed trait data and model fit,
+#'    Evolutionary histories of continuous trait evolution, conditioned on the observed trait data and model fit,
 #'    including estimates of ancestral trait values and variance at nodes, are produced  with [contsimmap::make.contsimmap()].
 #'
 #'  Step 5: Infer ancestral states along branches.
@@ -112,7 +112,7 @@
 #'      * Ancestral values along branches are interpolated using [phytools::contMap()].
 #'        This provides quick estimates of trait value at any point in time, but does not account for uncertainty in trait estimates.
 #'        Moreover, it does not provide fully accurate ML estimates in  case of models that are time or trait-value dependent (such as "EB" or "OU")
-#'        as the interpolation used to built the contMap is assuming a constant rate along each branch. However, ancestral trait values at nodes remain accurate.
+#'        as the interpolation used to build the contMap is assuming a constant rate along each branch. However, ancestral trait values at nodes remain accurate.
 #'        It produces a single `$contMap` representing the ML estimates of ancestral trait evolution across the phylogeny.
 #'      * If `run_stochastic_maps = TRUE`, ancestral values along branches are recorded across all simulated evolutionary histories
 #'        (i.e., continuous stochastic maps), thus accounting for uncertainty in trait estimates.
@@ -134,12 +134,12 @@
 #'  # Note on macroevolutionary models of biogeographic history
 #'
 #'  This function provides an easy solution to infer ancestral geographic ranges using the BioGeoBEARS framework.
-#'  It allows to directly compare model fits across 6 models: DEC, DEC+J, DIVALIKE, DIVALIKE+J, BAYAREALIKE, BAYAREALIKE+J.
-#'  It uses a step-wise approach by using MLE estimates of previous runs as staring parameter values when increasing complexity (adding +J parameters).
+#'  It allows you to directly compare model fits across 6 models: DEC, DEC+J, DIVALIKE, DIVALIKE+J, BAYAREALIKE, BAYAREALIKE+J.
+#'  It uses a step-wise approach by using MLE estimates of previous runs as starting parameter values when increasing complexity (adding +J parameters).
 #'  However, it does not explore the most complex options for historical biogeography. You may need to explore more complex models
 #'  to capture the dynamics of range evolution such as time-stratification with adjacency matrices, dispersal multipliers (+W),
 #'  distance-based dispersal probabilities (+X), or other features.
-#'  See for instance, \href{http://phylo.wikidot.com/biogeobears}{http://phylo.wikidot.com/biogeobears}).
+#'  See for instance, \href{http://phylo.wikidot.com/biogeobears}{http://phylo.wikidot.com/biogeobears}.
 #'
 #'  The R package `BioGeoBEARS` is needed for this function to work with biogeographic data.
 #'  Please install it manually from: \href{https://github.com/nmatzke/BioGeoBEARS}{https://github.com/nmatzke/BioGeoBEARS}.
@@ -149,25 +149,25 @@
 #'   * `$contMap` (For "continuous" data) Object of class `"contMap"`, typically generated with [phytools::contMap()],
 #'     that contains a phylogenetic tree and a unique continuous trait mapping representing
 #'     the interpolated ML estimates of ancestral trait evolution across the phylogeny.
-#'   * `$contMaps` (For "continuous" data, with `run_stochastic_maps = TRUE`) List of objects of class `"contMap`,
-#'     each map representing a simulated ancestral trait evolution conditioned to the observed trait data and model fit.
-#'   * `$densityMaps` (For "categorical" and "biogeographic" data) List of objects of class `"densityMap`,
+#'   * `$contMaps` (For "continuous" data, with `run_stochastic_maps = TRUE`) List of objects of class `"contMap"`,
+#'     each map representing a simulated ancestral trait evolution conditioned on the observed trait data and model fit.
+#'   * `$densityMaps` (For "categorical" and "biogeographic" data) List of objects of class `"densityMap"`,
 #'     typically generated with [phytools::densityMap()], that contains a phylogenetic tree and associated mapping of probability
-#'     to harbor a given state/range along branches. The list contains one `"densityMap` per state/range found in the `tip_data`.
+#'     to harbor a given state/range along branches. The list contains one `"densityMap"` per state/range found in the `tip_data`.
 #'   * `$densityMaps_all_ranges` (For "biogeographic" data only, if `split_multi_area_ranges = TRUE`) Same as `$densityMaps`,
-#'     but for all ranges including the multi-areas ranges (e.g., AB) while `$densityMaps` will display posterior probabilities for
-#'     unique areas only (e.g., A and B), with multi-areas ranges split across the unique areas they encompass.
+#'     but for all ranges including the multi-area ranges (e.g., AB) while `$densityMaps` will display posterior probabilities for
+#'     unique areas only (e.g., A and B), with multi-area ranges split across the unique areas they encompass.
 #'
 #'   * `$trait_data_type` Character string. Record the type of trait data. Either: "continuous", "categorical" or "biogeographic".
 #'   * `$nb_simulations` Integer. The number of simulations / stochastic maps produced.
 #'
 #'   If `return_ace = TRUE`,
-#'   * `$ace` For continuous traits: Named vector that record the ancestral characters estimates (ACE) at internal nodes.
-#'     For categorical and biogeographic data: Matrix that record the posterior probabilities of ancestral states/ranges (characters) estimates (ACE) at internal nodes.
+#'   * `$ace` For continuous traits: Named vector that records the ancestral character estimates (ACE) at internal nodes.
+#'     For categorical and biogeographic data: Matrix that records the posterior probabilities of ancestral states/ranges (characters) estimates (ACE) at internal nodes.
 #'     Rows are internal nodes. Columns are states/ranges. Values are posterior probabilities of each state per node.
-#'   * `$ace_all_ranges` For biogeographic data, if `split_multi_area_ranges = TRUE`: Named vector that record the ancestral characters estimates (ACE) at internal nodes,
-#'     but including all ranges observed in the simmaps, including the multi-areas ranges (e.g., AB), while `$ace` will display posterior probabilities
-#'     for unique areas only (e.g., A and B), with multi-areas ranges split across the unique areas they encompass.
+#'   * `$ace_all_ranges` For biogeographic data, if `split_multi_area_ranges = TRUE`: Named vector that records the ancestral character estimates (ACE) at internal nodes,
+#'     but including all ranges observed in the simmaps, including the multi-area ranges (e.g., AB), while `$ace` will display posterior probabilities
+#'     for unique areas only (e.g., A and B), with multi-area ranges split across the unique areas they encompass.
 #'
 #'  If `return_BSM = TRUE`, (Only for biogeographic data)
 #'   * `$BSM_output` List of two lists that contains summary information of cladogenetic (`$RES_caldo_events_tables`) and anagenetic (`$RES_ana_events_tables`) events
@@ -185,7 +185,7 @@
 #'   If `model_selection_df = TRUE`,
 #'   * `$model_selection_df` Data.frame that summarizes model comparisons used to select the best fitting model.
 #'
-#'   For biogeographic data, the function also produce input and output files associated with BioGeoBEARS and stored in the directory
+#'   For biogeographic data, the function also produces input and output files associated with BioGeoBEARS and stored in the directory
 #'   specified in `BioGeoBEARS_directory_path`. The directory and its content are kept if `keep_BioGeoBEARS_files = TRUE`
 #'
 #' @author Maël Doré
@@ -264,7 +264,7 @@
 #' # Set symmetrical rates between state 2 ("kiss") and state 3 ("suction")
 #' Q_matrix = rbind(c(NA, 0, 0), c(1, NA, 2), c(0, 2, NA))
 #'
-#' # Set colors per states
+#' # Set colors per state
 #' colors_per_states <- c("limegreen", "orange", "dodgerblue")
 #' names(colors_per_states) <- c("bite", "kiss", "suction")
 #'
@@ -2783,7 +2783,7 @@ prepare_trait_data_for_biogeographic_data <- function (
 #'
 #' @return The function returns a list with three elements.
 #' * `$model_comparison_df` Data.frame summarizing information to compare model fits. It includes the model name (`$model`),
-#'   the log-likelihood (`$logLik`), the number of free-parameters (`$k`), the AIC (`$AICc`), the corrected AIC (`$AICc`),
+#'   the log-likelihood (`$logLik`), the number of free-parameters (`$k`), the AIC (`$AIC`), the corrected AIC (`$AICc`),
 #'   the delta to the best/lowest AICc (`$delta_AICc`), the Akaike weights (`$Akaike_weights`), and their rank based on AICc (`$rank`).
 #' * `$best_model_name` Character string. Name of the best model.
 #' * `$best_model_fit` List containing the output of [geiger::fitContinuous()] or [geiger::fitDiscrete()] for the model with the best fit.
@@ -2983,7 +2983,7 @@ select_best_trait_model_from_geiger <- function (list_model_fits)
 #'  unique_areas <- unique(unlist(unique_areas_in_ranges_list))
 #'  unique_areas <- unique_areas[order(unique_areas)]
 #'
-#'  # Loop per unique areas
+#'  # Loop per unique area
 #'  for (i in seq_along(unique_areas))
 #'  {
 #'    # i <- 1

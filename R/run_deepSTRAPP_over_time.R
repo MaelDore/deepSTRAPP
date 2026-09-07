@@ -23,16 +23,16 @@
 #'   typically generated with [deepSTRAPP::prepare_trait_data()] or [phytools::contMap()],
 #'   that contains a phylogenetic tree and associated continuous trait mapping.
 #'   The phylogenetic tree must be rooted and fully resolved/dichotomous,
-#'   but it does not need to be ultrametric (it can includes fossils).
+#'   but it does not need to be ultrametric (it can include fossils).
 #' @param contMaps For continuous trait data. List of objects of class `"contMap"`,
 #'   typically generated with [deepSTRAPP::prepare_trait_data()],
 #'   that contains multiple continuous stochastic maps that represent possible trait evolutionary histories
-#'   conditioned to the observed trait values and model fit.
+#'   conditioned on the observed trait values and model fit.
 #' @param densityMaps For categorical trait or biogeographic data. List of objects of class `"densityMap"`,
 #'   typically generated with [deepSTRAPP::prepare_trait_data()],
 #'   that contains a phylogenetic tree and associated posterior probability of being in a given state/range along branches.
 #'   Each object (i.e., `densityMap`) corresponds to a state/range. The phylogenetic tree must be rooted and fully resolved/dichotomous,
-#'   but it does not need to be ultrametric (it can includes fossils).
+#'   but it does not need to be ultrametric (it can include fossils).
 #' @param simmaps For categorical trait or biogeographic data. List of objects of class `"simmap"`,
 #'   typically generated with [deepSTRAPP::prepare_trait_data()] or [phytools::make.simmap()],
 #'   that represent discrete character/geographic evolutionary history
@@ -46,27 +46,27 @@
 #'   Obtained with [deepSTRAPP::prepare_trait_data()] as output in the `$ace` slot.
 #'   * For continuous trait data: Named numerical vector typically generated with [phytools::fastAnc()], [phytools::anc.ML()], or [ape::ace()].
 #'     Names are nodes_ID of the internal nodes. Values are ACE of the trait.
-#'   * For categorical trait or biogeographic data: Matrix that record the posterior probabilities of ancestral states/ranges.
+#'   * For categorical trait or biogeographic data: Matrix that records the posterior probabilities of ancestral states/ranges.
 #'     Rows are internal nodes_ID. Columns are states/ranges. Values are posterior probabilities of each state per node.
 #'   Needed in all cases to provide accurate estimates of trait values.
 #' @param tip_data (Optional) Named vector of tip values of the trait.
 #'   * For continuous trait data: Named numerical vector of trait values.
 #'   * For categorical trait or biogeographic data: Character string vector of states/ranges
 #'   Names are nodes_ID of the internal nodes. Needed to provide accurate tip values.
-#'   * For biogeographic data, ranges should follow the coding scheme of BioGeoBEARS with a unique CAPITAL letter per unique areas
+#'   * For biogeographic data, ranges should follow the coding scheme of BioGeoBEARS with a unique CAPITAL letter per unique area
 #'   (ex: A, B), combined to form multi-area ranges (Ex: AB). Alternatively, you can provide tip_data as a matrix or data.frame of
 #'   binary presence/absence in each area (coded as unique CAPITAL letter). In this case, columns are unique areas, rows are taxa,
 #'   and values are integer (0/1) signaling absence or presence of the taxa in the area.
 #' @param trait_data_type Character string. Specify the type of trait data. Must be one of "continuous", "categorical", "biogeographic".
 #' @param keep_tip_labels Logical. Specify whether terminal branches with a single descendant tip
-#'   must retained their initial `tip.label` on the updated phylogeny. Default is `TRUE`.
+#'   must retain their initial `tip.label` on the updated phylogeny. Default is `TRUE`.
 #' @param BAMM_object Object of class `"bammdata"`, typically generated with [deepSTRAPP::prepare_diversification_data()],
 #'   that contains a phylogenetic tree and associated diversification rate mapping across selected posterior samples.
-#'   The phylogenetic tree must the same as the one associated with the `contMap`, `ace` and `tip_data`.
+#'   The phylogenetic tree must be the same as the one associated with the `contMap`, `ace` and `tip_data`.
 #' @param rate_type A character string specifying the type of diversification rates to use. Must be one of 'speciation', 'extinction' or 'net_diversification' (default).
 #' @param time_steps Numerical vector. Time steps at which the STRAPP tests should be carried out. If `NULL` (the default),
 #'  `time_steps` will be generated from a combination of two arguments among `time_range`, `nb_time_steps`, and/or `time_step_duration`.
-#' @param time_range Vector of two numerical values. Time boundaries within with the `time_steps` must be defined if not provided.
+#' @param time_range Vector of two numerical values. Time boundaries within which the `time_steps` must be defined if not provided.
 #'   If `NULL` (the default), and `time_range` is needed to generate the `time_steps`, the depth of the tree is used by default: `c(0, root_age)`.
 #'   However, no time step will be generated for the 'root_age'.
 #' @param nb_time_steps,time_step_duration Numerical. Number of time steps and duration of each time step used to generate `time_steps` if not provided.
@@ -94,27 +94,27 @@
 #' @param alpha Numerical. Significance level to use to compute the `estimate` corresponding to the values of the test statistic used to assess significance of the test.
 #'   This does NOT affect p-values. Default is `0.05`.
 #' @param two_tailed Logical. To define the type of tests. If `TRUE` (default), tests for correlations/differences in rates will be carried out with a null hypothesis
-#'   that rates are not correlated with trait values (continuous data) or equals between trait states (categorical and biogeographic data).
+#'   that rates are not correlated with trait values (continuous data) or equal between trait states (categorical and biogeographic data).
 #'   If `FALSE`, one-tailed tests are carried out.
 #'   * For continuous data, it involves defining a `one_tailed_hypothesis` testing for either a "positive" or "negative" correlation under the alternative hypothesis.
 #'   * For binary data (two states), it involves defining a `one_tailed_hypothesis` indicating which states have higher rates under the alternative hypothesis.
-#'   * For multinominal data (more than two states), it defines the type of post hoc pairwise tests to carry out between pairs of states.
+#'   * For multinomial data (more than two states), it defines the type of post hoc pairwise tests to carry out between pairs of states.
 #'     If `posthoc_pairwise_tests = TRUE`, all two-tailed (if `two_tailed = TRUE`) or one-tailed (if `two_tailed = FALSE`) tests are automatically carried out.
 #' @param one_tailed_hypothesis A character string specifying the alternative hypothesis in the one-tailed test.
 #'   For continuous data, it is either "negative" or "positive" correlation.
 #'   For binary data, it lists the trait states with states ordered in increasing rates under the alternative hypothesis, separated by a greater-than such as c('A > B').
-#' @param posthoc_pairwise_tests Logical. Only for multinominal data (with more than two states). If `TRUE`, all possible post hoc pairwise (Dunn) tests
+#' @param posthoc_pairwise_tests Logical. Only for multinomial data (with more than two states). If `TRUE`, all possible post hoc pairwise (Dunn) tests
 #'   will be computed across all pairs of states. This is a way to detect which pairs of states have significant differences in rates
 #'   if the overall test (Kruskal-Wallis) is significant. Default is `FALSE`.
-#' @param p.adjust_method A character string. Only for multinominal data (with more than two states). It specifies the type of correction to apply to the p-values
+#' @param p.adjust_method A character string. Only for multinomial data (with more than two states). It specifies the type of correction to apply to the p-values
 #'  in the post hoc pairwise tests to account for multiple comparisons. See [stats::p.adjust()] for the available methods. Default is `none`.
 #' @param return_perm_data Logical. Whether to return the stats data computed from the posterior samples for observed and permuted data in the output.
 #'  This is needed to plot the histograms of the null distribution used to assess significance of the tests with [deepSTRAPP::plot_histogram_STRAPP_test_for_focal_time()].
 #'  (for a single `focal_time`) and [deepSTRAPP::plot_histograms_STRAPP_tests_over_time()] (for multiple `time_steps`). Default is `FALSE`.
-#' @param nthreads Integer. Number of threads to use for paralleled computing of the STRAPP tests across the permutations.
+#' @param nthreads Integer. Number of threads to use for parallel computing of the STRAPP tests across the permutations.
 #'  The R package `parallel` must be loaded for `nthreads > 1`. Default is `1`.
 #' @param print_hypothesis Logical. Whether to print information on what test is carried out, detailing the null and alternative hypotheses,
-#'  what significant level is used to rejected or not the null hypothesis, and how uncertainty in trait estimates is handled. Default is `TRUE`.
+#'  what significance level is used to reject or not the null hypothesis, and how uncertainty in trait estimates is handled. Default is `TRUE`.
 #' @param extract_trait_data_melted_df Logical. Specify whether trait data must be extracted from the mapped phylogenies at each time step
 #'  and returned in a melted data.frame. Default is `FALSE`.
 #' @param extract_diversification_data_melted_df Logical. Specify whether diversification data (regimes ID and tip rates) must be extracted from the `updated_BAMM_object`
@@ -127,10 +127,10 @@
 #' @param return_updated_BAMM_objects Logical. Specify whether the `updated_BAMM_objects` with phylogeny and
 #'   mapped diversification rates cut-off at the `time_steps` used to perform the tests should be returned among the outputs.
 #' @param verbose Logical. Should progression per `time_steps` be displayed? Default is `TRUE`.
-#' @param verbose_extended Should progression per `time_steps` AND within each deepSTRAPP workflow de displayed?
+#' @param verbose_extended Should progression per `time_steps` AND within each deepSTRAPP workflow be displayed?
 #'   In addition to printing progress along `time_steps`, a message will be printed at each step of the deepSTRAPP workflow,
-#'   and for every batch of 100 BAMM posterior samples whose rates are regimes are updated. If `extract_diversification_data_melted_df = TRUE`,
-#'   a message for will also be printed when rates are extracted. Default is `FALSE`.
+#'   and for every batch of 100 BAMM posterior samples whose rates and regimes are updated. If `extract_diversification_data_melted_df = TRUE`,
+#'   a message will also be printed when rates are extracted. Default is `FALSE`.
 #'
 #' @export
 #' @importFrom phytools nodeHeights
@@ -142,7 +142,7 @@
 #'
 #'   Its main output is the `$pvalues_summary_df`: a data.frame providing test stat estimates and p-values obtained across all `time_steps`,
 #'   that can be passed down to [deepSTRAPP::plot_STRAPP_pvalues_over_time()] to generate a plot showing the evolution of the test results across time.
-#'   If using multinominal data (with more than two states) and `posthoc_pairwise_tests = TRUE`, the output will also contain
+#'   If using multinomial data (with more than two states) and `posthoc_pairwise_tests = TRUE`, the output will also contain
 #'   a data.frame providing test stat estimates and p-values for post hoc pairwise tests in `$pvalues_summary_df_for_posthoc_pairwise_tests`.
 #'
 #'   The function offers options to generate summary data.frames of the data extracted across `time_steps`:
@@ -151,11 +151,11 @@
 #'   * If `extract_diversification_data_melted_df = TRUE`, a data.frame of diversification data (regimes ID and tip rates)
 #'     found along branches at each time step is provided in `$diversification_data_df_over_time`.
 #'   * Those data.frames can be passed down to [deepSTRAPP::plot_rates_through_time()] to generate a plot showing
-#'     the evolution diversification rates across trait values over time.
+#'     the evolution of diversification rates across trait values over time.
 #'
-#'   The function also allows to keep records of the intermediate objects generated during the STRAPP workflow:
+#'   The function also allows you to keep records of the intermediate objects generated during the STRAPP workflow:
 #'   * If `return_STRAPP_results = TRUE`, a list of STRAPP test outputs is provided in `$STRAPP_results_over_time`.
-#'     Combined with `return_perm_data = TRUE`, it allows to plot the histograms of the null distributions
+#'     Combined with `return_perm_data = TRUE`, it allows you to plot the histograms of the null distributions
 #'     used to assess significance of the tests with [deepSTRAPP::plot_histogram_STRAPP_test_for_focal_time()].
 #'     (for a single `focal_time`) and [deepSTRAPP::plot_histograms_STRAPP_tests_over_time()] (for multiple `time_steps`).
 #'   * If `return_updated_Maps = TRUE`, a list of objects containing the updated `contMap(s)`/`densityMaps`/`simmaps` provided as inputs
@@ -173,13 +173,13 @@
 #'     that can be passed down to [deepSTRAPP::plot_STRAPP_pvalues_over_time()] to generate a plot showing the evolution of the test results across time.
 #'   * `$time_steps` Numerical vector. Time steps at which the STRAPP tests were carried out in the same order as the objects returned in the output lists.
 #'   * `$trait_data_type` Character string. Specify the type of trait data. Possible values are: "continuous", "categorical", "biogeographic".
-#'   * `$trait_data_type_for_stats` Character string. The type of trait data used to select statistical method. One of 'continuous', 'binary', or 'multinominal'.
+#'   * `$trait_data_type_for_stats` Character string. The type of trait data used to select statistical method. One of 'continuous', 'binary', or 'multinomial'.
 #'   * `$rate_type` Character string. The type of diversification rates used in the tests: 'speciation', 'extinction' or 'net_diversification'.
 #'   * `$uncertainty_strategy` Character string. The strategy used to account for uncertainty in estimates. One of 'rates_only', 'paired', or 'full'.
 #'   * `$trait_maps_vs_BAMM_samples_list` List of two elements recording the stochastic maps (`$trait_map_ID`) and BAMM samples (`$BAMM_posterior_sample_ID`) chosen for testing across time-steps.
 #'     Those may partly differ from the actual maps and BAMM samples used for the tests as recorded in `$STRAPP_results_over_time[[X]]$perm_data_df` because invalid maps with not enough states/ranges are discarded.
 #'
-#'   Optional summary df for multinominal data, if `posthoc_pairwise_tests = TRUE`:
+#'   Optional summary df for multinomial data, if `posthoc_pairwise_tests = TRUE`:
 #'   * `$pvalues_summary_df_for_posthoc_pairwise_tests` Data.frame with four or five columns providing test stat `$estimate`, `$p_value`, and `$p_value_adjusted`
 #'     (if `p.adjust_method` used is not "none") for each `$pair` of states involved in post hoc Dunn's tests obtained for each time step (i.e., `$focal_time`).
 #'      This data.frame can be passed down to [deepSTRAPP::plot_STRAPP_pvalues_over_time()] to generate a plot showing the evolution of the post hoc test results across time.
@@ -191,13 +191,13 @@
 #'     found across all posterior samples (`$BAMM_sample_ID`) over each time step (i.e., `$focal_time`).
 #'     Set `extract_diversification_data_melted_df = TRUE` to include it in the output.
 #'   * Those data.frames can be passed down to [deepSTRAPP::plot_rates_through_time()] to generate a plot showing
-#'     the evolution diversification rates across trait values over time.
+#'     the evolution of diversification rates across trait values over time.
 #'
 #'   Optional objects generated for each time step (i.e., `focal_time`) and ordered as in `$time_steps`:
 #'   * `$STRAPP_results_over_time` List of objects summarizing the results of the STRAPP tests
 #'     See [compute_STRAPP_test_for_focal_time()] for a detailed description of the elements in each object.
 #'     Set `return_STRAPP_results = TRUE` to include it in the output.
-#'     Combined with `return_perm_data = TRUE`, it allows to plot the histograms of the null distributions
+#'     Combined with `return_perm_data = TRUE`, it allows you to plot the histograms of the null distributions
 #'     used to assess significance of the tests with [deepSTRAPP::plot_histogram_STRAPP_test_for_focal_time()].
 #'     (for a single `focal_time`) and [deepSTRAPP::plot_histograms_STRAPP_tests_over_time()] (for multiple `time_steps`).
 #'   * `$updated_Maps_over_time` List of objects containing updated `contMap(s)`/`densityMaps`/`simmaps`.
@@ -1044,9 +1044,9 @@ run_deepSTRAPP_over_time <- function (contMap = NULL,
   trait_data_type_for_stats_list <- unlist(lapply(X = deepSTRAPP_outputs_over_time, FUN = function (x) { x$STRAPP_results$trait_data_type_for_stats } ))
   trait_data_type_for_stats_list <- setdiff(trait_data_type_for_stats_list, "none")
   final_ouput$trait_data_type_for_stats <- unique(trait_data_type_for_stats_list)
-  if (length(final_ouput$trait_data_type_for_stats) > 1) # Deal with cases with a mix of binary and multinominal tests due to the absence of states at some time-steps
+  if (length(final_ouput$trait_data_type_for_stats) > 1) # Deal with cases with a mix of binary and multinomial tests due to the absence of states at some time-steps
   {
-    final_ouput$trait_data_type_for_stats <- "multinominal"
+    final_ouput$trait_data_type_for_stats <- "multinomial"
   }
 
   ## Store type of diversification rates tested
