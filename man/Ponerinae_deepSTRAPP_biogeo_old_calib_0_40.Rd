@@ -4,7 +4,7 @@
 \alias{Ponerinae_deepSTRAPP_biogeo_old_calib_0_40}
 \title{deepSTRAPP output for biogeographic ranges mapped on old time-calibrated ponerine ant phylogeny over 0 to 40 Mya}
 \format{
-A list with 10 elements.
+A list with 12 elements.
 }
 \description{
 deepSTRAPP output for biogeographic ranges mapped on old time-calibrated ponerine ant phylogeny over 0 to 40 Mya.

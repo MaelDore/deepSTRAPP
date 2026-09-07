@@ -20,7 +20,7 @@ Original data source: Collar, D. C., P. C. Wainwright, M. E. Alfaro, L. J. Revel
 \doi{10.1038/ncomms6505}
 }
 \details{
-A list of five objects containing information on the evolution of feeding habits in eels.
+A list of six elements containing information on the evolution of feeding habits in eels.
 This object was obtained with \code{\link[=prepare_trait_data]{prepare_trait_data()}}.
 \itemize{
 \item \verb{$densityMaps} List of objects of class \code{"densityMap"} that contains a phylogenetic tree and associated mapping of probability

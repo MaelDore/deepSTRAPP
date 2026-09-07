@@ -235,7 +235,7 @@ eel_cat_3lvl_data$model_selection_df # Summary of model selection
 # Here, the best model is the Equal-Rates model ('ER')
 
 ## Explore best model fit (ER model)
-eel_cat_3lvl_data$best_model_fit # Summary of best model optimization by geiger::fitContinuous()
+eel_cat_3lvl_data$best_model_fit # Summary of best model optimization by geiger::fitDiscrete()
 eel_cat_3lvl_data$best_model_fit$opt # Parameter estimates and goodness-of-fit information
 # Unique transition parameter = 0.0208 transitions per branch per My.
 

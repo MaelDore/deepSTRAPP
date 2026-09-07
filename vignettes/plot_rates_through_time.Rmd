@@ -252,7 +252,7 @@ knitr::include_graphics("figures/5_Explore_plot_RTT_1_Example_continuous.PNG")
 
 #### Step 1: Prepare data ####
 
-# Load results of a STRAPP test workflow run on continuous trait data
+# Load results of a STRAPP test workflow run on categorical (3-levels) trait data
 Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40 <- readRDS(system.file("extdata", 
     "Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40.rds", package = "deepSTRAPP"))
 # This dataset is only available in development versions installed from GitHub.

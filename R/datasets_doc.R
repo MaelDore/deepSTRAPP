@@ -197,7 +197,7 @@
 #' @usage data(eel_cat_3lvl_data)
 #' @format A list with 6 elements.
 #'
-#' @details A list of five objects containing information on the evolution of feeding habits in eels.
+#' @details A list of six elements containing information on the evolution of feeding habits in eels.
 #'  This object was obtained with [deepSTRAPP::prepare_trait_data()].
 #'
 #'   * `$densityMaps` List of objects of class `"densityMap"` that contains a phylogenetic tree and associated mapping of probability
@@ -303,7 +303,7 @@ NULL
 #'     to harbor a given state along branches. The list contains one `"densityMap"` per state found in the `tip_data` (i.e., "arboreal", "subterranean", and "terricolous").
 #'   * `$trait_data_type` Character string. Record the type of trait data. Here: "categorical".
 #'   * `$ace` Numerical matrix that records the posterior probabilities of ancestral states (characters) estimates (ACE) at internal nodes.
-#'     Rows are internal nodes. Columns are states (i.e., "large" and "small"). Values are posterior probabilities of each state per node.
+#'     Rows are internal nodes. Columns are states (i.e., "arboreal", "subterranean", and "terricolous"). Values are posterior probabilities of each state per node.
 #'   * `$best_model_fit` List that provides the output of the best fitting model (Here: ARD model).
 #'   * `$model_selection_df` Data.frame that summarizes model comparisons used to select the best fitting model.
 #'
@@ -380,7 +380,7 @@ NULL
 #' @usage data(Ponerinae_biogeo_data_old_calib)
 #' @format A list with 6 elements.
 #'
-#' @details A list of five objects containing information on the evolution of feeding habits in eels.
+#' @details A list of six elements containing information on the biogeographic history of Ponerinae ants.
 #'  This object was obtained with [deepSTRAPP::prepare_trait_data()].
 #'
 #'   * `$densityMaps` List of objects of class `"densityMap"` that contains a phylogenetic tree and associated mapping of probability
@@ -456,7 +456,7 @@ NULL
 #' @format A list with 24 elements.
 #'
 #' @details An object of class `"bammdata"` containing information on diversification dynamics
-#'   of extant ponerine ants (Ponerinae subfamily) modeled with BAMM.
+#'   of extant whales (Cetacea order) modeled with BAMM.
 #'
 #'   Phylogeny-related elements used to plot a phylogeny with [ape::plot.phylo()]:
 #'   * `$edge` Matrix of integers. Defines the tree topology by providing rootward and tipward node ID of each edge.
@@ -738,7 +738,7 @@ NULL
 #'   The object can be loaded with:
 #'   Ponerinae_deepSTRAPP_cont_old_calib_0_40 <- readRDS(system.file("extdata", "Ponerinae_deepSTRAPP_cont_old_calib_0_40.rds", package = "deepSTRAPP"))
 #'
-#' @format A list with 10 elements.
+#' @format A list with 12 elements.
 #'
 #' @details deepSTRAPP output summarizing results of a deepSTRAPP run carried out with [deepSTRAPP::run_deepSTRAPP_over_time()].
 #'
@@ -790,7 +790,7 @@ NULL
 #'   The object can be loaded with:
 #'   Ponerinae_deepSTRAPP_cat_2lvl_old_calib_0_40 <- readRDS(system.file("extdata", "Ponerinae_deepSTRAPP_cat_2lvl_old_calib_0_40.rds", package = "deepSTRAPP"))
 #'
-#' @format A list with 10 elements.
+#' @format A list with 12 elements.
 #'
 #' @details deepSTRAPP output summarizing results of a deepSTRAPP run carried out with [deepSTRAPP::run_deepSTRAPP_over_time()].
 #'
@@ -847,7 +847,7 @@ NULL
 #'   The object can be loaded with:
 #'   Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40 <- readRDS(system.file("extdata", "Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40.rds", package = "deepSTRAPP"))
 #'
-#' @format A list with 11 elements.
+#' @format A list with 13 elements.
 #'
 #' @details deepSTRAPP output summarizing results of a deepSTRAPP run carried out with [deepSTRAPP::run_deepSTRAPP_over_time()].
 #'
@@ -857,8 +857,6 @@ NULL
 #'   * `$trait_data_type` Character string. Specify the type of trait data. Here: "categorical".
 #'   * `$trait_data_type_for_stats` Character string. The type of trait data used to select statistical method. Here: "multinomial".
 #'   * `$rate_type` Character string. The type of diversification rates used in the tests. Here: "net_diversification".
-#'   * `$uncertainty_strategy` Character string. The strategy used to account for uncertainty in estimates. Here: 'paired'.
-#'   * `$trait_maps_vs_BAMM_samples_list` List of two elements recording the stochastic maps (`$trait_map_ID`) and BAMM samples (`$BAMM_posterior_sample_ID`) chosen for testing across time-steps.
 #'   * `$uncertainty_strategy` Character string. The strategy used to account for uncertainty in estimates. Here: 'paired'.
 #'   * `$trait_maps_vs_BAMM_samples_list` List of two elements recording the stochastic maps (`$trait_map_ID`) and BAMM samples (`$BAMM_posterior_sample_ID`) chosen for testing across time-steps.
 #'
@@ -907,7 +905,7 @@ NULL
 #'   The object can be loaded with:
 #'   Ponerinae_deepSTRAPP_biogeo_old_calib_0_40 <- readRDS(system.file("extdata", "Ponerinae_deepSTRAPP_biogeo_old_calib_0_40.rds", package = "deepSTRAPP"))
 #'
-#' @format A list with 10 elements.
+#' @format A list with 12 elements.
 #'
 #' @details deepSTRAPP output summarizing results of a deepSTRAPP run carried out with [deepSTRAPP::run_deepSTRAPP_over_time()].
 #'

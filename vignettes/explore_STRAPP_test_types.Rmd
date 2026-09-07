@@ -129,7 +129,7 @@ deepSTRAPP_output_two_tailed$STRAPP_results[1:5]
 # The test is significant as the estimate is higher than zero.
 # However, without plotting the rates vs. trait data, we do not know the direction of this correlation.
 
-# Plot histogram of Spearman sum-rank test stats
+# Plot histogram of Spearman rank correlation test stats
 plot_histogram_STRAPP_test_for_focal_time(
   deepSTRAPP_outputs = deepSTRAPP_output_two_tailed)
 
@@ -275,7 +275,7 @@ deepSTRAPP_output_one_tailed$STRAPP_results[1:5]
 # between observed and permuted data.
 # The test is significant as the estimate is lower than zero.
 
-# Plot histogram of Spearman sum-rank test stats
+# Plot histogram of Spearman rank correlation test stats
 plot_histogram_STRAPP_test_for_focal_time(
   deepSTRAPP_outputs = deepSTRAPP_output_one_tailed)
 
@@ -329,7 +329,7 @@ data("Ponerinae_BAMM_object_old_calib", package = "deepSTRAPP")
 # Use remotes::install_github(repo = "MaelDore/deepSTRAPP") to get the latest development version.
 
 
-# Extract continuous trait data as a named vector
+# Extract categorical (2-levels) trait data as a named vector
 Ponerinae_cat_2lvl_tip_data <- setNames(object = Ponerinae_trait_tip_data$fake_cat_2lvl_tip_data,
                                     nm = Ponerinae_trait_tip_data$Taxa)
 # Reorder tip data as in phylogeny
@@ -582,7 +582,7 @@ data("Ponerinae_BAMM_object_old_calib", package = "deepSTRAPP")
 # Use remotes::install_github(repo = "MaelDore/deepSTRAPP") to get the latest development version.
 
 
-# Extract continuous trait data as a named vector
+# Extract categorical (3-levels) data as a named vector
 Ponerinae_cat_3lvl_tip_data <- setNames(object = Ponerinae_trait_tip_data$fake_cat_3lvl_tip_data,
                                     nm = Ponerinae_trait_tip_data$Taxa)
 # Reorder tip data as in phylogeny
@@ -799,10 +799,10 @@ deepSTRAPP_output_two_tailed$STRAPP_results$posthoc_pairwise_tests$summary_df
 
 # We obtain a p-value for each pair of states. Here there are 3 possible pairs.
 # Only the pair "arboreal != terricolous" yields a significant result.
-# For this pair, we obtain a p-value = 0.025 leading us to discard the null hypothesis (no differences).
+# For this pair, we obtain a p-value = 0.030 leading us to discard the null hypothesis (no differences).
 # The estimate is the quantile 5% of the distribution of differences 
 # in absolute Dunn's Z-stats between observed and permuted data.
-# The test is significant as the estimate is higher than zero (Q5% = 0.759).
+# The test is significant as the estimate is higher than zero (Q5% = 0.532).
 # However, without plotting the rates vs. states, we would not have known the direction of this difference.
 
 # Plot histogram of all post hoc two-tailed test stats

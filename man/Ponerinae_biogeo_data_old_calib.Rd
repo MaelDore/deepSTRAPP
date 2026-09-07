@@ -21,7 +21,7 @@ Evolutionary history of ponerine ants highlights how the timing of dispersal eve
 \doi{10.1038/s41467-025-63709-3}
 }
 \details{
-A list of five objects containing information on the evolution of feeding habits in eels.
+A list of six elements containing information on the biogeographic history of Ponerinae ants.
 This object was obtained with \code{\link[=prepare_trait_data]{prepare_trait_data()}}.
 \itemize{
 \item \verb{$densityMaps} List of objects of class \code{"densityMap"} that contains a phylogenetic tree and associated mapping of probability

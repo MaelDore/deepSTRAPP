@@ -4,7 +4,7 @@
 \alias{Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40}
 \title{deepSTRAPP output for fake categorical habitat data with 3-levels mapped on old time-calibrated ponerine ant phylogeny over 0 to 40 Mya}
 \format{
-A list with 11 elements.
+A list with 13 elements.
 }
 \description{
 deepSTRAPP output for fake categorical habitat data with 3-levels mapped on old time-calibrated ponerine ant phylogeny over 0 to 40 Mya.
@@ -24,8 +24,6 @@ that can be passed down to \code{\link[=plot_STRAPP_pvalues_over_time]{plot_STRA
 \item \verb{$trait_data_type} Character string. Specify the type of trait data. Here: "categorical".
 \item \verb{$trait_data_type_for_stats} Character string. The type of trait data used to select statistical method. Here: "multinomial".
 \item \verb{$rate_type} Character string. The type of diversification rates used in the tests. Here: "net_diversification".
-\item \verb{$uncertainty_strategy} Character string. The strategy used to account for uncertainty in estimates. Here: 'paired'.
-\item \verb{$trait_maps_vs_BAMM_samples_list} List of two elements recording the stochastic maps (\verb{$trait_map_ID}) and BAMM samples (\verb{$BAMM_posterior_sample_ID}) chosen for testing across time-steps.
 \item \verb{$uncertainty_strategy} Character string. The strategy used to account for uncertainty in estimates. Here: 'paired'.
 \item \verb{$trait_maps_vs_BAMM_samples_list} List of two elements recording the stochastic maps (\verb{$trait_map_ID}) and BAMM samples (\verb{$BAMM_posterior_sample_ID}) chosen for testing across time-steps.
 }

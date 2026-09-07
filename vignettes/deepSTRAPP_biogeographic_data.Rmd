@@ -236,7 +236,7 @@ str(Ponerinae_biogeo_data_old_calib, 1)
 
 # densityMap for range n°1 (N = "New World")
 plot(Ponerinae_biogeo_data_old_calib$densityMaps[[1]])
-# densityMap for range n°2 (N = "Old World")
+# densityMap for range n°2 (O = "Old World")
 plot(Ponerinae_biogeo_data_old_calib$densityMaps[[2]])
 # densityMap for range n°3 (NO = "New World" + "Old World")
 plot(Ponerinae_biogeo_data_old_calib$densityMaps_all_ranges[[3]])
@@ -334,7 +334,7 @@ plot_BAMM_rates(Ponerinae_BAMM_object_old_calib,
 ?deepSTRAPP::run_deepSTRAPP_for_focal_time()
 ?deepSTRAPP::run_deepSTRAPP_over_time()
 
-## Set for five time steps of 5 My. Will generate deepSTRAPP workflows for 0 to 40 Mya.
+## Set for time steps of 5 My from 0 to 40 Mya.
 time_step_duration <- 5
 time_range <- c(0, 40)
 
@@ -614,7 +614,7 @@ plot_rates_vs_trait_data_for_focal_time(
 # This plot, alongside other results of deepSTRAPP, supports the Diversification Rate Hypothesis in showing 
 # "Old World" ant lineages may have accumulated faster, especially between 8 to 28 My.
 # Additionally, the plot displays summary statistics for the STRAPP test associated with the data shown:
-#   * An observed statistic computed across the mean rates and trait states (i.e., habitats) shown on the plot.
+#   * An observed statistic computed across the mean rates and geographic ranges shown on the plot.
 #     Here, the low negative U-stat obs = -29636, indicates ants in the "New World" exhibited lower rates than "Old World" ants.
 #     This is not the statistic of the STRAPP test itself, which is conducted across all paired stochastic maps
 #     and BAMM posterior samples according to the default "uncertainty_strategy" used for testing.

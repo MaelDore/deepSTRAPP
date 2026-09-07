@@ -278,7 +278,7 @@ eel_biogeo_data <- prepare_trait_data(
      # To include Ancestral Character Estimates (ACE) of ranges at nodes in the output
      return_ace = TRUE, 
      # To include the lists of cladogenetic and anagenetic events produced with BioGeoBEARS::runBSM()
-     return_BSM = FALSE, 
+     return_BSM = TRUE, 
      # To include the Biogeographic Stochastic Mapping simulations (simmaps) in the output
      # This is needed if you want to keep track of which simulation produced which ranges
      # used to compute the tests in deepSTRAPP

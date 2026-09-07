@@ -19,7 +19,7 @@ Radiation of extant cetaceans driven by restructuring of the oceans. Systematic 
 }
 \details{
 An object of class \code{"bammdata"} containing information on diversification dynamics
-of extant ponerine ants (Ponerinae subfamily) modeled with BAMM.
+of extant whales (Cetacea order) modeled with BAMM.
 
 Phylogeny-related elements used to plot a phylogeny with \code{\link[ape:plot.phylo]{ape::plot.phylo()}}:
 \itemize{

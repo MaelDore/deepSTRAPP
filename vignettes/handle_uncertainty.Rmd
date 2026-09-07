@@ -391,7 +391,7 @@ str(deepSTRAPP_paired, max.level = 1)
 deepSTRAPP_full <- run_deepSTRAPP_for_focal_time(
     # A contMap can be provided optionally to be used for plotting
     contMap = Ponerinae_contMap,
-    # Need to provide stochastic maps if using the "paired" strategy
+    # Need to provide stochastic maps if using the "full" strategy
     # as data from all simmaps are required to account for uncertainty in trait estimates
     contMaps = Ponerinae_contMaps,
     trait_data_type = "continuous",
@@ -507,7 +507,7 @@ print(STRAPP_results_df)
 # All analyses support a correlation between rates and trait values for focal_time = 10 Mya.
 
 # Therefore, "paired" is the recommended default strategy as it allows us to account
-# for trait estimates without inflating computation / RAM requirements
+# for uncertainty in trait estimates without inflating computation / RAM requirements
 
 
 ## Plot histograms of STRAPP test stats

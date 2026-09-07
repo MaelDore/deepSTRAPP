@@ -52,7 +52,7 @@
 #' @param tip_data (Optional) Named vector of tip values of the trait.
 #'   * For continuous trait data: Named numerical vector of trait values.
 #'   * For categorical trait or biogeographic data: Character string vector of states/ranges
-#'   Names are nodes_ID of the internal nodes. Needed to provide accurate tip values.
+#'   Names must match `tip.label` in the phylogeny. Needed to provide accurate tip values.
 #'   * For biogeographic data, ranges should follow the coding scheme of BioGeoBEARS with a unique CAPITAL letter per unique area
 #'   (ex: A, B), combined to form multi-area ranges (Ex: AB). Alternatively, you can provide tip_data as a matrix or data.frame of
 #'   binary presence/absence in each area (coded as unique CAPITAL letter). In this case, columns are unique areas, rows are taxa,
