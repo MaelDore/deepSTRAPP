@@ -395,7 +395,7 @@ Ponerinae_deepSTRAPP_biogeo_old_calib_0_40$pvalues_summary_df
 
 # Access STRAPP test results
 # Can be passed down to [deepSTRAPP::plot_histograms_STRAPP_tests_over_time()] to generate plots
-# showing the null distribution of the test statistics
+# showing the null distributions of the test statistics
 str(Ponerinae_deepSTRAPP_biogeo_old_calib_0_40$STRAPP_results, max.level = 2)
 
 # Access trait data in a melted data.frame
