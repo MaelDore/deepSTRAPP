@@ -5,7 +5,7 @@
 #' @description Plot on a time-calibrated phylogeny the evolution of a categorical trait/biogeographic ranges
 #'   summarized from `densityMaps` typically generated with [deepSTRAPP::prepare_trait_data()].
 #'   Each branch is colored according to the posterior probability of being in a given state/range.
-#'   Color for each state/range are overlaid using transparency to produce a single plot for all states/ranges.
+#'   Colors for each state/range are overlaid using transparency to produce a single plot for all states/ranges.
 #'
 #' @param densityMaps List of objects of class `"densityMap"`, typically generated with [deepSTRAPP::prepare_trait_data()],
 #'   that contains a phylogenetic tree and associated posterior probability of being in a given state/range along branches.
@@ -60,7 +60,7 @@
 #' # Set symmetrical rates between state 2 ("kiss") and state 3 ("suction")
 #' Q_matrix = rbind(c(NA, 0, 0), c(1, NA, 2), c(0, 2, NA))
 #'
-#' # Set colors per states
+#' # Set colors per state
 #' colors_per_levels <- c("limegreen", "orange", "dodgerblue")
 #' names(colors_per_levels) <- c("bite", "kiss", "suction")
 #'

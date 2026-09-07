@@ -45,7 +45,7 @@
 #' @param return_mean_data_per_samples_df Logical. Whether to include in the output the data.frame of mean rates per trait values computed for
 #'   each stochastic map X BAMM posterior sample at each time-step (aggregated across groups of branches based on trait data). This is used to draw the confidence interval. Default is `FALSE`.
 #' @param return_median_data_across_samples_df Logical. Whether to include in the output the data.frame of median rates per trait values
-#'  across stochastic maps X BAMM posterior samples computed for at each time-step (aggregated across groups of branches based on trait data AND stochastic maps X BAMM posterior samples).
+#'  across stochastic maps X BAMM posterior samples computed at each time-step (aggregated across groups of branches based on trait data AND stochastic maps X BAMM posterior samples).
 #'  This is used to draw the median lines on the plot. Default is `FALSE`.
 #' @param verbose Logical. Should progression be displayed? Default is `TRUE`.
 #'
@@ -63,7 +63,7 @@
 #'
 #'   * `rates_TT_ggplot` An object of classes `gg` and `ggplot`. This is a ggplot that can be displayed
 #'     on the console with `print(output$rates_TT_ggplot)`. It corresponds to the plot being displayed on the console
-#'     when the function is run, if `display_plot = TRUE`, and can be further modify for aesthetics using the ggplot2 grammar.
+#'     when the function is run, if `display_plot = TRUE`, and can be further modified for aesthetics using the ggplot2 grammar.
 #'
 #'   Optional summary data frames:
 #'   * `mean_data_per_samples_df` A data.frame with five columns providing the `$mean_rates` observed along branches

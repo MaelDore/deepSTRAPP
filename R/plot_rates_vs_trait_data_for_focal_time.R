@@ -14,7 +14,7 @@
 #'
 #' @param deepSTRAPP_outputs List of elements generated with [deepSTRAPP::run_deepSTRAPP_for_focal_time()],
 #'   that summarize the results of a STRAPP test for a specific time in the past (i.e. the `focal_time`).
-#'   The list needs to include two data.frame: `$trait_data_df_over_time` and `$diversification_data_df_over_time`
+#'   The list needs to include two data.frames: `$trait_data_df_over_time` and `$diversification_data_df_over_time`
 #'    by setting `extract_trait_data_melted_df = TRUE` and `extract_diversification_data_melted_df = TRUE`.
 #'   `deepSTRAPP_outputs` can also be extracted from the output of [deepSTRAPP::run_deepSTRAPP_over_time()] that
 #'   runs the whole deepSTRAPP workflow over multiple time-steps.
@@ -65,15 +65,15 @@
 #'
 #'   * `rates_vs_trait_ggplot` An object of classes `gg` and `ggplot`. This is a ggplot that can be displayed
 #'     on the console with `print(output$rates_vs_trait_ggplot)`. It corresponds to the plot being displayed on the console
-#'     when the function is run, if `display_plot = TRUE`, and can be further modify for aesthetics using the ggplot2 grammar.
+#'     when the function is run, if `display_plot = TRUE`, and can be further modified for aesthetics using the ggplot2 grammar.
 #'
-#'   If the trait data are 'continuous', the plot is a scatter plot showing how mean diversification rates varies with mean trait values across branches.
-#'   If the trait data are 'categorical' or 'biogeographic', the plot is a boxplot showing mean diversification rates by states/ranges per branches.
+#'   If the trait data are 'continuous', the plot is a scatter plot showing how mean diversification rates vary with mean trait values across branches.
+#'   If the trait data are 'categorical' or 'biogeographic', the plot is a boxplot showing mean diversification rates by states/ranges per branch.
 #'
 #'   Each plot also displays summary statistics for the STRAPP test associated with the data displayed:
 #'   * An observed statistic computed across the mean traits/ranges and rates values shown on the plot. This is not the statistic of the STRAPP test itself,
 #'     which is conducted across stochastic maps X BAMM posterior samples (i.e., it is a distribution, not a unique value).
-#'   * The quantile of null statistic distribution at the significant threshold used to define test significance. The test will be considered significant
+#'   * The quantile of null statistic distribution at the significance threshold used to define test significance. The test will be considered significant
 #'     (i.e., the null hypothesis is rejected) if this value is higher than zero.
 #'   * The p-value of the associated STRAPP test.
 #'
@@ -713,7 +713,7 @@ plot_rates_vs_trait_data_for_focal_time <- function (deepSTRAPP_outputs,
       # if (two_tailed) { stat_estimate <- abs(stat_estimate) }
     }
 
-    if (STRAPP_results$trait_data_type_for_stats == "multinominal")
+    if (STRAPP_results$trait_data_type_for_stats == "multinomial")
     {
       stat_name <- "H-stat"
 

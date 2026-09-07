@@ -1,22 +1,22 @@
 
 #' @title Plot multiple histograms of STRAPP test statistics over time-steps
 #'
-#' @description Plot an histogram of the distribution of the test statistics
+#' @description Plot a histogram of the distribution of the test statistics
 #'   obtained from a deepSTRAPP workflow carried out for each focal time in `$time_steps`.
 #'   Main input = output of a deepSTRAPP run over time using [deepSTRAPP::run_deepSTRAPP_over_time()]).
 #'
 #'   Returns one histogram for overall tests for each focal time in `$time_steps`.
-#'   If `plot_posthoc_tests = TRUE`, it will return one faceted plot with an histogram
-#'   per post hoc tests for each focal time in `$time_steps`.
+#'   If `plot_posthoc_tests = TRUE`, it will return one faceted plot with a histogram
+#'   per post hoc test for each focal time in `$time_steps`.
 #'
 #'   If a PDF file path is provided in `PDF_file_path`, the plots will be saved directly in a PDF file,
 #'   with one page per focal time in `$time_steps`.
 #'
 #' @param deepSTRAPP_outputs List of elements generated with [deepSTRAPP::run_deepSTRAPP_over_time()],
-#'   that summarize the results of multiple deepSTRAPP across `$time_steps`. It needs to include the `$STRAPP_results_over_time`
+#'   that summarize the results of multiple deepSTRAPP runs across `$time_steps`. It needs to include the `$STRAPP_results_over_time`
 #'   element with `$perm_data_df` obtained when setting both `return_STRAPP_results = TRUE` and `return_perm_data = TRUE`.
 #' @param display_plots Logical. Whether to display the histograms generated in the R console. Default is `TRUE`.
-#' @param plot_posthoc_tests Logical. For multinominal data only. Whether to plot the histograms for the overall Kruskal-Wallis test across all states (`plot_posthoc_tests = FALSE`),
+#' @param plot_posthoc_tests Logical. For multinomial data only. Whether to plot the histograms for the overall Kruskal-Wallis test across all states (`plot_posthoc_tests = FALSE`),
 #'   or plot the histograms for all the pairwise post hoc Dunn's tests across pairs of states (`plot_posthoc_tests = TRUE`).
 #'   Time-steps at which the data does not yield more than two states/ranges will show a warning and generate no plot. Default is `FALSE`.
 #' @param PDF_file_path Character string. If provided, the plots will be saved in a unique PDF file following the path provided here. The path must end with ".pdf".
@@ -29,15 +29,15 @@
 #' @importFrom grDevices pdf dev.off
 #'
 #' @details The main input `deepSTRAPP_outputs` is the typical output of [deepSTRAPP::run_deepSTRAPP_over_time()].
-#'   It provides information on results of a STRAPP tests performed over multiple time-steps.
+#'   It provides information on results of STRAPP tests performed over multiple time-steps.
 #'
 #'   Histograms are built based on the distribution of the test statistics.
 #'   Such distributions are recorded in the outputs of a deepSTRAPP run carried out with [deepSTRAPP::run_deepSTRAPP_over_time()]
 #'   when `return_STRAPP_results = TRUE` AND `return_perm_data = TRUE`. The `$STRAPP_results_over_time` objects provided within the input are lists that must contain
 #'   a `$perm_data_df` element that summarizes test statistics computed across posterior samples.
 #'
-#'   For multinominal data (categorical or biogeographic data with more than 2 states), it is possible to plot the histograms of post hoc pairwise tests.
-#'   Set `plot_posthoc_tests = TRUE` to generate histograms for all the pairwise post hoc Dunn's test across pairs of states.
+#'   For multinomial data (categorical or biogeographic data with more than 2 states), it is possible to plot the histograms of post hoc pairwise tests.
+#'   Set `plot_posthoc_tests = TRUE` to generate histograms for all the pairwise post hoc Dunn's tests across pairs of states.
 #'   To achieve this, the `$STRAPP_results_over_time` objects must contain a `$posthoc_pairwise_tests$perm_data_array` element that summarizes test statistics
 #'   computed across posterior samples for all pairwise post hoc tests. This is obtained from [deepSTRAPP::run_deepSTRAPP_over_time()] when setting
 #'   `return_STRAPP_results = TRUE` to return the STRAPP results, `posthoc_pairwise_tests = TRUE` to carry out post hoc tests,
@@ -48,16 +48,16 @@
 #'   Each sub-list corresponds to a ggplot for a given `focal_time` `i` that can be displayed on the console with `print(output[[i]])`.
 #'   If `display_plots = TRUE`, the histograms are being displayed on the console one by one while generated.
 #'
-#'   If using multinominal data and set `plot_posthoc_tests = TRUE`, the function will return a list of sub-lists of objects ordered as in `$time_steps`.
-#'   Each sub-list is a list of the ggplots associated with pairwise post hoc tests carried out for this a given `focal_time`.
+#'   If using multinomial data and set `plot_posthoc_tests = TRUE`, the function will return a list of sub-lists of objects ordered as in `$time_steps`.
+#'   Each sub-list is a list of the ggplots associated with pairwise post hoc tests carried out for a given `focal_time`.
 #'   For a given `focal_time` i, to plot each histogram j individually, use `print(output_list[[i]][[j]])`.
 #'   To plot all histograms of a given `focal_time` `i` at once in a multifaceted plot, as displayed sequentially on the console if `display_plots = TRUE`,
 #'   use `cowplot::plot_grid(plotlist = output_list[[i]])`.
 #'
 #'   Each plot also displays summary statistics for the STRAPP test associated with the data displayed.
-#'   * QX% = The quantile of null statistic distribution at the significant threshold used to define test significance. This is the value found on the red dashed line.
+#'   * QX% = The quantile of null statistic distribution at the significance threshold used to define test significance. This is the value found on the red dashed line.
 #'     The test will be considered significant (i.e., the null hypothesis is rejected) if this value is higher than zero (the black dashed line).
-#'   * P-value = The p-value of the STRAPP test which correspond the proportion of cases in which the statistics was lower than expected under the null hypothesis
+#'   * P-value = The p-value of the STRAPP test which corresponds to the proportion of cases in which the statistic was lower than expected under the null hypothesis
 #'     (i.e., the proportion of the histogram found below / on the left-side of the black dashed line).
 #'   * N = The number of test statistics in the null distribution.
 #'
@@ -353,8 +353,8 @@ plot_histograms_STRAPP_tests_over_time <- function (
     {
       # Extract $trait_data_type_for_stats from deepSTRAPP_outputs$STRAPP_results_over_time
       trait_data_type_for_stats <- deepSTRAPP_outputs$trait_data_type_for_stats
-      # plot_posthoc_tests = TRUE only for "multinominal" data
-      if (trait_data_type_for_stats != "multinominal")
+      # plot_posthoc_tests = TRUE only for "multinomial" data
+      if (trait_data_type_for_stats != "multinomial")
       {
         stop(paste0("'posthoc_pairwise_tests = TRUE' only makes sense for categorical/biogeographic data with more than two states/ranges.\n",
                     "Set 'posthoc_pairwise_tests = FALSE', or provide 'deepSTRAPP_outputs' for a trait with more than two states/ranges'.\n",
@@ -381,7 +381,7 @@ plot_histograms_STRAPP_tests_over_time <- function (
         }
       }
 
-      # Extract only STRAPP_results for time-step with multinominal data
+      # Extract only STRAPP_results for time-step with multinomial data
       STRAPP_results_over_time_for_post_hoc <- deepSTRAPP_outputs$STRAPP_results_over_time[posthoc_pairwise_tests_check_list]
 
       # Check if $posthoc_pairwise_tests$perm_data_array is present in elements of STRAPP_results_over_time_for_post_hoc.

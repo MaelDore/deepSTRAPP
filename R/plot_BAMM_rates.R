@@ -3,8 +3,8 @@
 #'
 #' @description Plot on a time-calibrated phylogeny the evolution of diversification rates and
 #'   the location of regime shifts estimated from a BAMM (Bayesian Analysis of Macroevolutionary Mixtures).
-#'   Each branch is colored accroding to the estimated rates of speciation, extinction, or net diversification
-#'   stored in an object of class `bammdata`. Rates can vary along time, thus colors evolved along individual branches.
+#'   Each branch is colored according to the estimated rates of speciation, extinction, or net diversification
+#'   stored in an object of class `"bammdata"`. Rates can vary along time, thus colors evolve along individual branches.
 #'
 #'   This function is a wrapper of original functions from the R package `{BAMMtools}`:
 #'
@@ -28,11 +28,11 @@
 #'     This is the default option.
 #'   * `configuration_type = "MSC"`: Use the average locations recorded in posterior samples with the Maximum Shift Credibility (MSC) configuration.
 #'     This regime shift configuration has the highest product of marginal probabilities across branches (See [BAMMtools::maximumShiftCredibility()]).
-#'   * `configuration_type = "index"`: Use the configuration of a unique posterior sample those index is provided in `sample_index`.
+#'   * `configuration_type = "index"`: Use the configuration of a unique posterior sample whose index is provided in `sample_index`.
 #' @param sample_index Integer. Index of the posterior samples to use to plot the location of regime shifts.
 #'   Used only if `configuration_type = index`. Default = `1`.
 #' @param adjust_size_to_prob Logical. Whether to scale the size of the symbols showing the location of regime shifts according to
-#'   the marginal shift probability of the shift happening on each location/branch. This will only works if there is an `$MSP_tree` element
+#'   the marginal shift probability of the shift happening on each location/branch. This will only work if there is an `$MSP_tree` element
 #'   summarizing the marginal shift probabilities across branches in the `BAMM_object`. Default is `TRUE`.
 #'   Provide the full argument name to avoid ambiguity with the `adj` graphical argument.
 #' @param regimes_fill Character string. Set the color of the background of the symbols showing the location of regime shifts.
@@ -60,21 +60,21 @@
 #' @importFrom BAMMtools plot.bammdata addBAMMshifts
 #'
 #' @details The main input `BAMM_object` is the typical output of [deepSTRAPP::prepare_diversification_data()].
-#'   It provides information on rates and regimes shifts across the posterior samples of a BAMM.
+#'   It provides information on rates and regime shifts across the posterior samples of a BAMM.
 #'
 #'   `$MAP_BAMM_object` and `$MSC_BAMM_object` elements are required to plot regime shift locations following the
 #'   "MAP" or "MSC" `configuration_type` respectively.
-#'   A `$MSP_tree` element is required to scale the size of the symbols showing the location of regime shifts according marginal shift probabilities.
+#'   A `$MSP_tree` element is required to scale the size of the symbols showing the location of regime shifts according to marginal shift probabilities.
 #'   (If `adjust_size_to_prob = TRUE`).
 #'
 #'   The default option to display regime shift is to use the average locations from the posterior samples with the Maximum A Posteriori probability (MAP) configuration.
-#'   However, sometimes, multiple configurations have similarly high frequency in the posterior samples (See [BAMMtools::credibleShiftSet()].
+#'   However, sometimes, multiple configurations have similarly high frequency in the posterior samples (See [BAMMtools::credibleShiftSet()]).
 #'   An alternative is to use the average locations from posterior samples with the Maximum Shift Credibility (MSC) configuration instead.
 #'   This regime shift configuration has the highest product of marginal probabilities across branches where a shift is estimated.
 #'   It may differ from the MAP configuration. (See [BAMMtools::maximumShiftCredibility()]).
 #'
-#' @return The function returns (invisibly) a list with three three elements similarly to [BAMMtools::plot.bammdata()].
-#'  * `$coords`: A matrix of plot coordinates. Rows correspond to branches. Columns 1-2 are starting (x,y) coordinates of each branch and columns 3-4 are ending (x,y) coordinates of each branch. If method = "polar" a fifth column gives the angle(in radians) of each branch.
+#' @return The function returns (invisibly) a list with three elements similarly to [BAMMtools::plot.bammdata()].
+#'  * `$coords`: A matrix of plot coordinates. Rows correspond to branches. Columns 1-2 are starting (x,y) coordinates of each branch and columns 3-4 are ending (x,y) coordinates of each branch. If method = "polar" a fifth column gives the angle (in radians) of each branch.
 #'  * `$colorbreaks`: A vector of percentiles used to group macroevolutionary rates into color bins.
 #'  * `$colordens`: A matrix of the kernel density estimates (column 2) of evolutionary rates (column 1) and the color (column 3) corresponding to each rate value.
 #'
