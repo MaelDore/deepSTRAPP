@@ -9,7 +9,7 @@
 #' @description Extracts all trait values/states/ranges found along branches
 #'   of multiple stochastic maps at a specific time in the past (i.e. the `focal_time`).
 #'   Optionally, the function can update the mapped phylogenies (`contMaps` or `densityMaps`)
-#'   such as branches overlapping the `focal_time` are shorten to the `focal_time`,
+#'   such as branches overlapping the `focal_time` are shortened to the `focal_time`,
 #'   and the trait mapping for the cut off branches are removed
 #'   by updating the `$maps` and `$mapped.edge` elements.
 #'
@@ -17,14 +17,14 @@
 #'   typically generated with [deepSTRAPP::prepare_trait_data()],
 #'   each containing a phylogenetic tree and associated continuous trait mapping that
 #'   represents an independent evolutionary history of ancestral trait evolution,
-#'   conditioned to observed trait data and model fit (i.e., stochastic maps).
+#'   conditioned on observed trait data and model fit (i.e., stochastic maps).
 #'   The phylogenetic tree must be rooted and fully resolved/dichotomous,
-#'   but it does not need to be ultrametric (it can includes fossils).
+#'   but it does not need to be ultrametric (it can include fossils).
 #' @param densityMaps For categorical trait or biogeographic data. List of objects of class `"densityMap"`,
 #'   typically generated with [deepSTRAPP::prepare_trait_data()],
 #'   that contains a phylogenetic tree and associated posterior probability of being in a given state/range along branches.
 #'   Each object (i.e., `densityMap`) corresponds to a state/range. The phylogenetic tree must be rooted and fully resolved/dichotomous,
-#'   but it does not need to be ultrametric (it can includes fossils).
+#'   but it does not need to be ultrametric (it can include fossils).
 #' @param simmaps For categorical trait or biogeographic data.
 #'   List of objects of classes `"phylo"` and `"simmap"`,
 #'   typically generated with [deepSTRAPP::prepare_trait_data()] or [phytools::make.simmap()],
@@ -46,7 +46,7 @@
 #'   provided as input should be updated for visualization and returned among the outputs. Default is `FALSE`.
 #'   The update consists in cutting off branches and mapping that are younger than the `focal_time`.
 #' @param keep_tip_labels Logical. Specify whether terminal branches with a single descendant tip
-#'   must retained their initial `tip.label` on the updated contMap. Default is `TRUE`.
+#'   must retain their initial `tip.label` on the updated contMap. Default is `TRUE`.
 #'   Used only if `update_Map = TRUE`.
 #'
 #' @export
@@ -64,7 +64,7 @@
 #'
 #'   For categorical trait and biogeographic data:
 #'
-#'   If `simmaps` are provided as input, all states/ranges are extracted directly from the stochastic mapes.
+#'   If `simmaps` are provided as input, all states/ranges are extracted directly from the stochastic maps.
 #'
 #'   If only `densityMaps` are provided, the posterior probabilities of states/ranges are extracted.
 #'   Posterior probabilities are multiplied by the `nb_simulations` to record the distribution of states/ranges
@@ -90,7 +90,7 @@
 #'
 #' @return By default, the function returns a list with three elements.
 #'
-#'   * `$trait_data` A list of named numerical vector with simulated trait values found along branches overlapping the `focal_time` across each of the stochastic maps.
+#'   * `$trait_data` A list of named numerical vectors with simulated trait values found along branches overlapping the `focal_time` across each of the stochastic maps.
 #'     Names are the tip.label/tipward node ID. ID of the associated stochastic maps associated with each item of the list can only be provided if simmaps are provided as inputs.
 #'     If only densityMaps are provided, the distribution of states/ranges is associated with dummy maps_ID.
 #'   * `$focal_time` Integer. The time, in terms of time distance from the present, at which the trait data were extracted.
@@ -449,21 +449,21 @@ extract_all_trait_values_for_focal_time <- function (contMaps = NULL,
 #' @description Extracts trait data across multiple continuous stochastic maps
 #'   found along branches at a specific time in the past (i.e. the `focal_time`).
 #'   Optionally, the function can update the continuous stochastic maps (`contMaps`) such as
-#'   branches overlapping the `focal_time` are shorten to the `focal_time`,
+#'   branches overlapping the `focal_time` are shortened to the `focal_time`,
 #'   and the continuous trait mapping for the cut off branches are removed
 #'   by updating the `$tree$maps` and `$tree$mapped.edge` elements.
 #'
-#' @param contMaps List of object of class `"contMap"`, typically generated with [deepSTRAPP::prepare_trait_data()]
+#' @param contMaps List of objects of class `"contMap"`, typically generated with [deepSTRAPP::prepare_trait_data()]
 #'   or [phytools::contMap()], that contains a phylogenetic tree and associated continuous trait mapping.
 #'   The phylogenetic tree must be rooted and fully resolved/dichotomous,
-#'   but it does not need to be ultrametric (it can includes fossils).
+#'   but it does not need to be ultrametric (it can include fossils).
 #' @param focal_time Integer. The time, in terms of time distance from the present,
 #'   at which the tree and mapping must be cut. It must be smaller than the root age of the phylogeny.
-#' @param update_contMaps Logical. Specify whether the continuous stochqstic maps (`contMaps`)
+#' @param update_contMaps Logical. Specify whether the continuous stochastic maps (`contMaps`)
 #'   provided as input should be updated for visualization and returned among the outputs. Default is `FALSE`.
 #'   The update consists in cutting off branches and mapping that are younger than the `focal_time`.
 #' @param keep_tip_labels Logical. Specify whether terminal branches with a single descendant tip
-#'   must retained their initial `tip.label` on the updated contMaps. Default is `TRUE`.
+#'   must retain their initial `tip.label` on the updated contMaps. Default is `TRUE`.
 #'   Used only if `update_contMaps = TRUE`.
 #'
 #' @noRd
@@ -478,7 +478,7 @@ extract_all_trait_values_for_focal_time <- function (contMaps = NULL,
 #'   Trait data are extracted from each `contMap` and stored in the `$trait_data` list.
 #'
 #'   If providing only `contMaps`, trait values at tips will be extracted from
-#'   the mapping of the `contMaps` leading to a slight dependency with the actual tip data.
+#'   the mapping of the `contMaps` leading to a slight discrepancy with the actual tip data.
 #'
 #'   True tip data will be used if `tip_data` are provided as optional inputs.
 #'   In practice the discrepancy is negligible.
@@ -498,7 +498,7 @@ extract_all_trait_values_for_focal_time <- function (contMaps = NULL,
 #'
 #' @return By default, the function returns a list with three elements.
 #'
-#'   * `$trait_data` A list of named numerical vector. Each item corresponds to trait data extracted from a stochastic map while found along branches overlapping the `focal_time`.
+#'   * `$trait_data` A list of named numerical vectors. Each item corresponds to trait data extracted from a stochastic map as found along branches overlapping the `focal_time`.
 #'     Names are the tip.label/tipward node ID.
 #'   * `$focal_time` Integer. The time, in terms of time distance from the present, at which the trait data were extracted.
 #'   * `$trait_data_type` Character string. Define the type of trait data as "continuous". Used in downstream analyses to select appropriate statistical processing.
@@ -808,13 +808,13 @@ extract_all_trait_values_from_contMaps_for_focal_time <- function (
 #'   at a specific time in the past (i.e. the `focal_time`).
 #'   As input, `densityMaps` summarize the posterior probabilities of each state, as observed across multiple stochastic maps.
 #'   Optionally, the function can update the `densityMaps`
-#'   such as branches overlapping the `focal_time` are shorten to the `focal_time`,
+#'   such as branches overlapping the `focal_time` are shortened to the `focal_time`,
 #'   and the posterior state density mapped on the cut off branches are removed
 #'   by updating the `$tree$maps` and `$tree$mapped.edge` elements in each `densityMap`.
 #' @param densityMaps List of objects of class `"densityMap"`, typically generated with [deepSTRAPP::prepare_trait_data()],
 #'   that contains a phylogenetic tree and associated posterior probability of being in a given state along branches.
 #'   Each object (i.e., `densityMap`) corresponds to a state. The phylogenetic tree must be rooted and fully resolved/dichotomous,
-#'   but it does not need to be ultrametric (it can includes fossils).
+#'   but it does not need to be ultrametric (it can include fossils).
 #' @param nb_simulations Integer. The number of stochastic maps used to simulate trait evolution.
 #'   This is needed to reconstruct the distribution of states across dummy stochastic maps based on
 #'   the posterior state density summarized in `densityMaps`.
@@ -826,7 +826,7 @@ extract_all_trait_values_from_contMaps_for_focal_time <- function (
 #'   provided as input should be updated for visualization and returned among the outputs. Default is `FALSE`.
 #'   The update consists in cutting off branches and mapping that are younger than the `focal_time`.
 #' @param keep_tip_labels Logical. Specify whether terminal branches with a single descendant tip
-#'   must retained their initial `tip.label` on the updated densityMaps. Default is `TRUE`.
+#'   must retain their initial `tip.label` on the updated densityMaps. Default is `TRUE`.
 #'   Used only if `update_Map = TRUE`.
 #'
 #' @noRd
@@ -846,7 +846,7 @@ extract_all_trait_values_from_contMaps_for_focal_time <- function (
 #'
 #'   ----- Extract `trait_data` -----
 #'
-#'   Posterior probabilities states are extracted from the `densityMaps`.
+#'   Posterior probabilities of states are extracted from the `densityMaps`.
 #'   A distribution of states across dummy stochastic maps is generated based on
 #'   the posterior state densities and the `nb_simulations`.
 #'   For each dummy stochastic map, states are assigned to each tip and cut branches at `focal_time`.
@@ -871,7 +871,7 @@ extract_all_trait_values_from_contMaps_for_focal_time <- function (
 #'
 #' @return By default, the function returns a list with three elements.
 #'
-#'   * `$trait_data` A list of named character string vector. Each item corresponds to the states extracted from a dummy stochastic map as found along branches overlapping the `focal_time`.
+#'   * `$trait_data` A list of named character string vectors. Each item corresponds to the states extracted from a dummy stochastic map as found along branches overlapping the `focal_time`.
 #'     Names are the tip.label/tipward node ID. Names of each item in the list are dummy stochastic maps (`Dummy_map_X`) and do not represent true simulated evolutionary histories.
 #'   * `$focal_time` Integer. The time, in terms of time distance from the present, at which the trait data were extracted.
 #'   * `$trait_data_type` Character string. Define the type of trait data as "categorical". Used in downstream analyses to select appropriate statistical processing.
@@ -1274,14 +1274,14 @@ extract_all_states_from_densityMaps_for_focal_time <- function (
 #'
 #' @description Extracts all states found along branches across multiple stochastic maps
 #'   at a specific time in the past (i.e. the `focal_time`).
-#'   As input, `simmaps` represent independent evolutionary histories simulated conditioned to observed data and model fit (i.e, stochastic maps)
+#'   As input, `simmaps` represent independent evolutionary histories simulated conditioned on observed data and model fit (i.e., stochastic maps)
 #'   Optionally, the function can update the `simmaps`
-#'   such as branches overlapping the `focal_time` are shorten to the `focal_time`,
+#'   such as branches overlapping the `focal_time` are shortened to the `focal_time`,
 #'   and the states mapped on the cut off branches are removed
 #'   by updating the `$maps` and `$mapped.edge` in each `simmap`.
 #' @param simmaps List of objects of classes `"phylo"` and `"simmap"`, typically generated with [deepSTRAPP::prepare_trait_data()],
 #'   that contains multiple evolutionary histories mapping state evolution along branches.
-#'   Each object (i.e., `simmap`) corresponds to an independent evolutionary histories simulated conditioned to observed data and model fit.
+#'   Each object (i.e., `simmap`) corresponds to an independent evolutionary history simulated conditioned on observed data and model fit.
 #' @param tip_data (Optional) Named character string vector of tip states.
 #'   Names are nodes_ID of the internal nodes. Needed to provide accurate tip values.
 #' @param focal_time Integer. The time, in terms of time distance from the present,
@@ -1290,7 +1290,7 @@ extract_all_states_from_densityMaps_for_focal_time <- function (
 #'   provided as input should be updated for visualization and returned among the outputs. Default is `FALSE`.
 #'   The update consists in cutting off branches and mapping that are younger than the `focal_time`.
 #' @param keep_tip_labels Logical. Specify whether terminal branches with a single descendant tip
-#'   must retained their initial `tip.label` on the updated simmaps. Default is `TRUE`.
+#'   must retain their initial `tip.label` on the updated simmaps. Default is `TRUE`.
 #'   Used only if `update_Map = TRUE`.
 #'
 #' @noRd
@@ -1326,7 +1326,7 @@ extract_all_states_from_densityMaps_for_focal_time <- function (
 #'
 #' @return By default, the function returns a list with three elements.
 #'
-#'   * `$trait_data` A list of named character string vector. Each item corresponds to the states extracted from a stochastic map as found along branches overlapping the `focal_time`.
+#'   * `$trait_data` A list of named character string vectors. Each item corresponds to the states extracted from a stochastic map as found along branches overlapping the `focal_time`.
 #'     Names are the tip.label/tipward node ID. Names of each item in the list are the stochastic maps ID (`Map_X`)
 #'   * `$focal_time` Integer. The time, in terms of time distance from the present, at which the trait data were extracted.
 #'   * `$trait_data_type` Character string. Define the type of trait data as "categorical". Used in downstream analyses to select appropriate statistical processing.
@@ -1335,7 +1335,7 @@ extract_all_states_from_densityMaps_for_focal_time <- function (
 #'
 #'   * `$simmaps` A list of objects with the class `"simmap"` that contains the updated stochastic map from each trait evolution simulation,
 #'      with branches and mapping that are younger than the `focal_time` cut off.
-#'      The function also adds multiple useful sub-elements each `simmap`.
+#'      The function also adds multiple useful sub-elements to each `simmap`.
 #'     + `$root_age` Integer. Stores the age of the root of the tree.
 #'     + `$nodes_ID_df` Data.frame with two columns. Provides the conversion from the `new_node_ID` to the `initial_node_ID`. Each row is a node.
 #'     + `$initial_nodes_ID` Vector of character strings. Provides the initial ID of internal nodes. Used to plot internal node IDs as labels with [ape::nodelabels()].
@@ -1726,13 +1726,13 @@ extract_all_states_from_simmaps_for_focal_time <- function (
 #'   at a specific time in the past (i.e. the `focal_time`).
 #'   As input, `densityMaps` summarize the posterior probabilities of each range, as observed across multiple biogeographic stochastic maps.
 #'   Optionally, the function can update the `densityMaps`
-#'   such as branches overlapping the `focal_time` are shorten to the `focal_time`,
+#'   such as branches overlapping the `focal_time` are shortened to the `focal_time`,
 #'   and the posterior range density mapped on the cut off branches are removed
 #'   by updating the `$tree$maps` and `$tree$mapped.edge` elements in each `densityMap`.
 #' @param densityMaps List of objects of class `"densityMap"`, typically generated with [deepSTRAPP::prepare_trait_data()],
 #'   that contains a phylogenetic tree and associated posterior probability of being associated with a given range along branches.
 #'   Each object (i.e., `densityMap`) corresponds to a biogeographic range. The phylogenetic tree must be rooted and fully resolved/dichotomous,
-#'   but it does not need to be ultrametric (it can includes fossils).
+#'   but it does not need to be ultrametric (it can include fossils).
 #' @param nb_simulations Integer. The number of stochastic maps used to simulate biogeographic range evolution.
 #'   This is needed to reconstruct the distribution of ranges across dummy stochastic maps based on
 #'   the posterior range density summarized in `densityMaps`.
@@ -1744,7 +1744,7 @@ extract_all_states_from_simmaps_for_focal_time <- function (
 #'   provided as input should be updated for visualization and returned among the outputs. Default is `FALSE`.
 #'   The update consists in cutting off branches and range mapping that are younger than the `focal_time`.
 #' @param keep_tip_labels Logical. Specify whether terminal branches with a single descendant tip
-#'   must retained their initial `tip.label` on the updated densityMaps. Default is `TRUE`.
+#'   must retain their initial `tip.label` on the updated densityMaps. Default is `TRUE`.
 #'   Used only if `update_Map = TRUE`.
 #'
 #' @noRd
@@ -1789,8 +1789,8 @@ extract_all_states_from_simmaps_for_focal_time <- function (
 #'
 #' @return By default, the function returns a list with three elements.
 #'
-#'   * `$trait_data` A list of named character string vector. Each item corresponds to the ranges extracted from a dummy stochastic map as found along branches overlapping the `focal_time`.
-#'     Names are the tip.label/tipward node ID. Names of each item in the list are dummy stochastic maps (`Dummy_map_X`) and do not represent true simulated biogeogaphic histories.
+#'   * `$trait_data` A list of named character string vectors. Each item corresponds to the ranges extracted from a dummy stochastic map as found along branches overlapping the `focal_time`.
+#'     Names are the tip.label/tipward node ID. Names of each item in the list are dummy stochastic maps (`Dummy_map_X`) and do not represent true simulated biogeographic histories.
 #'   * `$focal_time` Integer. The time, in terms of time distance from the present, at which the trait data were extracted.
 #'   * `$trait_data_type` Character string. Define the type of trait data as "biogeographic". Used in downstream analyses to select appropriate statistical processing.
 #'
@@ -2166,14 +2166,14 @@ extract_all_ranges_from_densityMaps_for_focal_time <- function (
 #'
 #' @description Extracts all ranges found along branches across multiple biogeographic stochastic maps
 #'   at a specific time in the past (i.e. the `focal_time`).
-#'   As input, `simmaps` represent independent biogeographic histories simulated conditioned to observed data and model fit (i.e, stochastic maps)
+#'   As input, `simmaps` represent independent biogeographic histories simulated conditioned on observed data and model fit (i.e., stochastic maps)
 #'   Optionally, the function can update the `simmaps`
-#'   such as branches overlapping the `focal_time` are shorten to the `focal_time`,
+#'   such as branches overlapping the `focal_time` are shortened to the `focal_time`,
 #'   and the states mapped on the cut off branches are removed
 #'   by updating the `$maps` and `$mapped.edge` in each `simmap`.
 #' @param simmaps List of objects of class `"simmap"`, typically generated with [deepSTRAPP::prepare_trait_data()],
 #'   that contains multiple biogeographic histories mapping range evolution along branches.
-#'   Each object (i.e., `simmap`) corresponds to an independent biogeographic histories simulated conditioned to observed data and model fit.
+#'   Each object (i.e., `simmap`) corresponds to an independent biogeographic history simulated conditioned on observed data and model fit.
 #' @param tip_data (Optional) Named character string vector of tip states.
 #'   Names are nodes_ID of the internal nodes. Needed to provide accurate tip values.
 #' @param focal_time Integer. The time, in terms of time distance from the present,
@@ -2182,7 +2182,7 @@ extract_all_ranges_from_densityMaps_for_focal_time <- function (
 #'   provided as input should be updated for visualization and returned among the outputs. Default is `FALSE`.
 #'   The update consists in cutting off branches and mapping that are younger than the `focal_time`.
 #' @param keep_tip_labels Logical. Specify whether terminal branches with a single descendant tip
-#'   must retained their initial `tip.label` on the updated simmaps. Default is `TRUE`.
+#'   must retain their initial `tip.label` on the updated simmaps. Default is `TRUE`.
 #'   Used only if `update_Map = TRUE`.
 #'
 #' @noRd
@@ -2218,7 +2218,7 @@ extract_all_ranges_from_densityMaps_for_focal_time <- function (
 #'
 #' @return By default, the function returns a list with three elements.
 #'
-#'   * `$trait_data` A list of named character string vector. Each item corresponds to the states extracted from a stochastic map as found along branches overlapping the `focal_time`.
+#'   * `$trait_data` A list of named character string vectors. Each item corresponds to the states extracted from a stochastic map as found along branches overlapping the `focal_time`.
 #'     Names are the tip.label/tipward node ID. Names of each item in the list are the stochastic maps ID (`Map_X`)
 #'   * `$focal_time` Integer. The time, in terms of time distance from the present, at which the trait data were extracted.
 #'   * `$trait_data_type` Character string. Define the type of trait data as "categorical". Used in downstream analyses to select appropriate statistical processing.
@@ -2227,7 +2227,7 @@ extract_all_ranges_from_densityMaps_for_focal_time <- function (
 #'
 #'   * `$simmaps` A list of objects with the class `"simmap"` that contains the updated stochastic map from each biogeographic range evolution simulation,
 #'      with branches and mapping that are younger than the `focal_time` cut off.
-#'      The function also adds multiple useful sub-elements each `simmap`.
+#'      The function also adds multiple useful sub-elements to each `simmap`.
 #'     + `$root_age` Integer. Stores the age of the root of the tree.
 #'     + `$nodes_ID_df` Data.frame with two columns. Provides the conversion from the `new_node_ID` to the `initial_node_ID`. Each row is a node.
 #'     + `$initial_nodes_ID` Vector of character strings. Provides the initial ID of internal nodes. Used to plot internal node IDs as labels with [ape::nodelabels()].

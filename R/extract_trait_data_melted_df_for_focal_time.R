@@ -16,10 +16,10 @@
 #'
 #'   * `$focal_time` Integer. The time, in terms of time distance from the present, at which the trait data were extracted. Should be equal for all rows
 #'   as a unique BAMM_object updated for a unique `focal_time` is being extracted.
-#'   * `$Map_ID` Character string. ID of the stochastic from which the trait data are extracted.
+#'   * `$Map_ID` Character string. ID of the stochastic map from which the trait data are extracted.
 #'     If using 'rate_only' strategy to account for uncertainty in ancestral estimate, this is fixed to "Map_ML".
 #'     If using 'paired' or 'full' strategies, this records either true stochastic maps "Map_X", or dummy maps "Dummy_map_X",
-#'     depending if you provided respectively stochastic maps (`contMaps`/`simmaps`) or simply `densityMaps` as inputs.
+#'     depending on whether you provided respectively stochastic maps (`contMaps`/`simmaps`) or simply `densityMaps` as inputs.
 #'   * `$tip_ID` Character string. Tip labels of the branches cut-off at `focal_time`.
 #'     + If `keep_tip_labels = TRUE` was used in [deepSTRAPP::update_rates_and_regimes_for_focal_time()],
 #'     cut-off branches with a single descendant tip retain their initial `tip.label`.

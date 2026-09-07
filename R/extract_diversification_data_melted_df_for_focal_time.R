@@ -1,6 +1,6 @@
 #' @title Extract diversification data from a BAMM_object
 #'
-#' @description Extracts regimes ID and tip rates from a `BAMM_object` that have been
+#' @description Extracts regime IDs and tip rates from a `BAMM_object` that has been
 #'   updated to provide diversification data for a specific time in the past (i.e. the `focal_time`).
 #'   Use [deepSTRAPP::update_rates_and_regimes_for_focal_time()] to obtain
 #'   a `BAMM_object` updated for a given `focal_time`.
