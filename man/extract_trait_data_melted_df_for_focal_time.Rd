@@ -17,10 +17,10 @@ Returns a data.frame with five columns.
 \itemize{
 \item \verb{$focal_time} Integer. The time, in terms of time distance from the present, at which the trait data were extracted. Should be equal for all rows
 as a unique BAMM_object updated for a unique \code{focal_time} is being extracted.
-\item \verb{$Map_ID} Character string. ID of the stochastic from which the trait data are extracted.
+\item \verb{$Map_ID} Character string. ID of the stochastic map from which the trait data are extracted.
 If using 'rate_only' strategy to account for uncertainty in ancestral estimate, this is fixed to "Map_ML".
 If using 'paired' or 'full' strategies, this records either true stochastic maps "Map_X", or dummy maps "Dummy_map_X",
-depending if you provided respectively stochastic maps (\code{contMaps}/\code{simmaps}) or simply \code{densityMaps} as inputs.
+depending on whether you provided respectively stochastic maps (\code{contMaps}/\code{simmaps}) or simply \code{densityMaps} as inputs.
 \item \verb{$tip_ID} Character string. Tip labels of the branches cut-off at \code{focal_time}.
 \itemize{
 \item If \code{keep_tip_labels = TRUE} was used in \code{\link[=update_rates_and_regimes_for_focal_time]{update_rates_and_regimes_for_focal_time()}},

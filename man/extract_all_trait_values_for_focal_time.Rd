@@ -21,15 +21,15 @@ extract_all_trait_values_for_focal_time(
 typically generated with \code{\link[=prepare_trait_data]{prepare_trait_data()}},
 each containing a phylogenetic tree and associated continuous trait mapping that
 represents an independent evolutionary history of ancestral trait evolution,
-conditioned to observed trait data and model fit (i.e., stochastic maps).
+conditioned on observed trait data and model fit (i.e., stochastic maps).
 The phylogenetic tree must be rooted and fully resolved/dichotomous,
-but it does not need to be ultrametric (it can includes fossils).}
+but it does not need to be ultrametric (it can include fossils).}
 
 \item{densityMaps}{For categorical trait or biogeographic data. List of objects of class \code{"densityMap"},
 typically generated with \code{\link[=prepare_trait_data]{prepare_trait_data()}},
 that contains a phylogenetic tree and associated posterior probability of being in a given state/range along branches.
 Each object (i.e., \code{densityMap}) corresponds to a state/range. The phylogenetic tree must be rooted and fully resolved/dichotomous,
-but it does not need to be ultrametric (it can includes fossils).}
+but it does not need to be ultrametric (it can include fossils).}
 
 \item{simmaps}{For categorical trait or biogeographic data.
 List of objects of classes \code{"phylo"} and \code{"simmap"},
@@ -60,13 +60,13 @@ provided as input should be updated for visualization and returned among the out
 The update consists in cutting off branches and mapping that are younger than the \code{focal_time}.}
 
 \item{keep_tip_labels}{Logical. Specify whether terminal branches with a single descendant tip
-must retained their initial \code{tip.label} on the updated contMap. Default is \code{TRUE}.
+must retain their initial \code{tip.label} on the updated contMap. Default is \code{TRUE}.
 Used only if \code{update_Map = TRUE}.}
 }
 \value{
 By default, the function returns a list with three elements.
 \itemize{
-\item \verb{$trait_data} A list of named numerical vector with simulated trait values found along branches overlapping the \code{focal_time} across each of the stochastic maps.
+\item \verb{$trait_data} A list of named numerical vectors with simulated trait values found along branches overlapping the \code{focal_time} across each of the stochastic maps.
 Names are the tip.label/tipward node ID. ID of the associated stochastic maps associated with each item of the list can only be provided if simmaps are provided as inputs.
 If only densityMaps are provided, the distribution of states/ranges is associated with dummy maps_ID.
 \item \verb{$focal_time} Integer. The time, in terms of time distance from the present, at which the trait data were extracted.
@@ -117,7 +117,7 @@ The function also adds multiple useful sub-elements to each \code{simmap}.
 Extracts all trait values/states/ranges found along branches
 of multiple stochastic maps at a specific time in the past (i.e. the \code{focal_time}).
 Optionally, the function can update the mapped phylogenies (\code{contMaps} or \code{densityMaps})
-such as branches overlapping the \code{focal_time} are shorten to the \code{focal_time},
+such as branches overlapping the \code{focal_time} are shortened to the \code{focal_time},
 and the trait mapping for the cut off branches are removed
 by updating the \verb{$maps} and \verb{$mapped.edge} elements.
 }
@@ -133,7 +133,7 @@ Simulated trait data are extracted from \code{contMaps} (i.e. continuous stochas
 
 For categorical trait and biogeographic data:
 
-If \code{simmaps} are provided as input, all states/ranges are extracted directly from the stochastic mapes.
+If \code{simmaps} are provided as input, all states/ranges are extracted directly from the stochastic maps.
 
 If only \code{densityMaps} are provided, the posterior probabilities of states/ranges are extracted.
 Posterior probabilities are multiplied by the \code{nb_simulations} to record the distribution of states/ranges

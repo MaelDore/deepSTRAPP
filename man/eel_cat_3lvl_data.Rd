@@ -23,12 +23,12 @@ Original data source: Collar, D. C., P. C. Wainwright, M. E. Alfaro, L. J. Revel
 A list of five objects containing information on the evolution of feeding habits in eels.
 This object was obtained with \code{\link[=prepare_trait_data]{prepare_trait_data()}}.
 \itemize{
-\item \verb{$densityMaps} List of objects of class \verb{"densityMap} that contains a phylogenetic tree and associated mapping of probability
-to harbor a given state/range along branches. The list contains one \verb{"densityMap} per state/range found in the \code{tip_data}.
+\item \verb{$densityMaps} List of objects of class \code{"densityMap"} that contains a phylogenetic tree and associated mapping of probability
+to harbor a given state/range along branches. The list contains one \code{"densityMap"} per state/range found in the \code{tip_data}.
 \item \verb{$trait_data_type} Character string. Record the type of trait data. Here: "categorical".
 \item \verb{$simmaps} List of 100 stochastic mapping simulations for trait evolution. Each element is a \code{"simmap"} object (see \link[phytools:make.simmap]{phytools::make.simmap})
-representing a possible evolutionary history that fits states observed on tips, infered ACE at internal nodes, and transition rates as estimated from the best fit model.
-\item \verb{$ace} Numerical matrix that record the posterior probabilities of ancestral states/ranges (characters) estimates (ACE) at internal nodes.
+representing a possible evolutionary history that fits states observed on tips, inferred ACE at internal nodes, and transition rates as estimated from the best fit model.
+\item \verb{$ace} Numerical matrix that records the posterior probabilities of ancestral states/ranges (characters) estimates (ACE) at internal nodes.
 Rows are internal nodes. Columns are states/ranges. Values are posterior probabilities of each state per node.
 \item \verb{$best_model_fit} List that provides the output of the best fitting model (Here: ER model).
 \item \verb{$model_selection_df} Data.frame that summarizes model comparisons used to select the best fitting model.

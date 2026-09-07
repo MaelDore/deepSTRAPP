@@ -3,7 +3,7 @@
 \docType{data}
 \name{mammals}
 \alias{mammals}
-\title{Phylogeny and body mass data for extant and extinct mammals families/genera from Slater, 2013}
+\title{Phylogeny and body mass data for extant and extinct mammal families/genera from Slater, 2013}
 \format{
 A list with 2 elements.
 \itemize{

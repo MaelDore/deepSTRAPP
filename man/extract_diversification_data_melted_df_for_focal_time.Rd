@@ -40,7 +40,7 @@ and "net_diversification" for net diversification rates (lambda - mu).
 }
 }
 \description{
-Extracts regimes ID and tip rates from a \code{BAMM_object} that have been
+Extracts regime IDs and tip rates from a \code{BAMM_object} that has been
 updated to provide diversification data for a specific time in the past (i.e. the \code{focal_time}).
 Use \code{\link[=update_rates_and_regimes_for_focal_time]{update_rates_and_regimes_for_focal_time()}} to obtain
 a \code{BAMM_object} updated for a given \code{focal_time}.

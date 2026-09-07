@@ -24,19 +24,19 @@ typically generated with \code{\link[=prepare_trait_data]{prepare_trait_data()}}
 that contains a phylogenetic tree and associated continuous trait mapping,
 representing interpolated ML estimates of ancestral trait values.
 The phylogenetic tree must be rooted and fully resolved/dichotomous,
-but it does not need to be ultrametric (it can includes fossils).}
+but it does not need to be ultrametric (it can include fossils).}
 
 \item{contMaps}{For continuous trait data. List of objects of class \code{"contMap"},
 typically generated with \code{\link[=prepare_trait_data]{prepare_trait_data()}},
 each containing a phylogenetic tree and associated continuous trait mapping that
 represents an independent evolutionary history of ancestral trait evolution,
-conditioned to observed trait data and model fit (i.e., stochastic maps).}
+conditioned on observed trait data and model fit (i.e., stochastic maps).}
 
 \item{densityMaps}{For categorical trait or biogeographic data. List of objects of class \code{"densityMap"},
 typically generated with \code{\link[=prepare_trait_data]{prepare_trait_data()}},
 that contains a phylogenetic tree and associated posterior probability of being in a given state/range along branches.
 Each object (i.e., \code{densityMap}) corresponds to a state/range. The phylogenetic tree must be rooted and fully resolved/dichotomous,
-but it does not need to be ultrametric (it can includes fossils).}
+but it does not need to be ultrametric (it can include fossils).}
 
 \item{simmaps}{For categorical trait or biogeographic data.
 List of objects of classes \code{"phylo"} and \code{"simmap"},
@@ -49,7 +49,7 @@ Obtained with \code{\link[=prepare_trait_data]{prepare_trait_data()}} as output 
 \itemize{
 \item For continuous trait data: Named numerical vector typically generated with \code{\link[phytools:fastAnc]{phytools::fastAnc()}}, \code{\link[phytools:anc.ML]{phytools::anc.ML()}}, or \code{\link[ape:ace]{ape::ace()}}.
 Names are nodes_ID of the internal nodes. Values are ACE of the trait.
-\item For categorical trait or biogeographic data: Matrix that record the posterior probabilities of ancestral states/ranges.
+\item For categorical trait or biogeographic data: Matrix that records the posterior probabilities of ancestral states/ranges.
 Rows are internal nodes_ID. Columns are states/ranges. Values are posterior probabilities of each state per node.
 Needed in all cases to provide accurate estimates of trait values.
 }}
@@ -71,7 +71,7 @@ provided as input should be updated for visualization and returned among the out
 The update consists in cutting off branches and mapping that are younger than the \code{focal_time}.}
 
 \item{keep_tip_labels}{Logical. Specify whether terminal branches with a single descendant tip
-must retained their initial \code{tip.label} on the updated contMap. Default is \code{TRUE}.
+must retain their initial \code{tip.label} on the updated contMap. Default is \code{TRUE}.
 Used only if \code{update_Map = TRUE}.}
 }
 \value{
@@ -112,14 +112,14 @@ The function also adds multiple useful sub-elements to the \verb{$densityMaps$tr
 }
 \item \verb{$simmaps} A list of objects of classes \code{"phylo"} and \code{"simmap"}, that contains the updated stochastic maps \code{simmap}
 for each simulation of trait/range evolution.
-The same useful sub-elements as describe above are also added to each \code{simmap} object.
+The same useful sub-elements as described above are also added to each \code{simmap} object.
 }
 }
 \description{
 Extracts the most likely trait values/states/ranges found along branches
 at a specific time in the past (i.e. the \code{focal_time}).
 Optionally, the function can update the mapped phylogeny (\code{contMap} or \code{densityMaps})
-such as branches overlapping the \code{focal_time} are shorten to the \code{focal_time},
+such as branches overlapping the \code{focal_time} are shortened to the \code{focal_time},
 and the trait mapping for the cut off branches are removed
 by updating the \verb{$tree$maps} and \verb{$tree$mapped.edge} elements.
 }
@@ -143,7 +143,7 @@ In practice the discrepancy is negligible.
 
 Alternatively to a unique \code{contMap}, the user can provide a full set of continuous stochastic maps
 as \code{contMaps}. Each map then represents an independent evolutionary history of ancestral trait evolution,
-conditioned to observed trait data and model fit (i.e., stochastic maps). The 'most likely' trait values
+conditioned on observed trait data and model fit (i.e., stochastic maps). The 'most likely' trait values
 will be extracted as the mean of values observed across the stochastic maps.
 This quantity closely approximates the ML estimates as typically provided with a \code{contMap}.
 
@@ -151,14 +151,14 @@ For categorical trait and biogeographic data:
 
 \code{densityMaps} are the default input. Most likely states/ranges are directly extracted from
 the posterior probabilities displayed in the \code{densityMaps}.
-The states/ranges with the highest probability is assigned to each tip and cut branches at \code{focal_time}.
+The state/range with the highest probability is assigned to each tip and cut branches at \code{focal_time}.
 
 True ML states/ranges will be used if \code{tip_data} and/or \code{ace} are provided as optional inputs.
 In practice the discrepancy is negligible.
 
 Alternatively to \code{densityMaps}, the user can provide a full set of stochastic maps as \code{simmaps}.
 Each map then represents an independent evolutionary history of ancestral trait evolution,
-conditioned to observed trait data and model fit (i.e., stochastic maps).
+conditioned on observed trait data and model fit (i.e., stochastic maps).
 The 'most likely' states / ranges will be extracted as the most frequent state/range observed across the stochastic maps.
 This quantity is fully equivalent to what is derived from the \code{densityMaps}.
 

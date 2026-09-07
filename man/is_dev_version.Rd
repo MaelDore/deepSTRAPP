@@ -18,10 +18,10 @@ Detect whether the current deepSTRAPP installation corresponds to
 a development version (e.g., version sourced from GitHub), as opposed to a CRAN release.
 
 The development versions include deepSTRAPP outputs as additional internal datasets to help
-produces examples and vignettes outputs. These additional datasets are removed from the CRAN releases
+produce examples and vignettes outputs. These additional datasets are removed from the CRAN releases
 because their size is not compatible with CRAN policies.
 
-This function is only used to check if an example must be ran or a vignette chunk evaluated
+This function is only used to check if an example must be run or a vignette chunk evaluated
 to produce output from data.
 }
 \examples{
