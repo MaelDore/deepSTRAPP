@@ -28,13 +28,19 @@ jobs:
       - uses: r-lib/actions/setup-r@v2
         with:
           use-public-rspm: true
-          # extra-repositories: https://maeldore.github.io/drat # Argument to include the drat repo for BioGeoBEARS and contsimmap in the R Session, so they can be checked by pak in setup-r-dependencies@v2 action, but it does not work somehow...
+          # extra-repositories: https://maeldore.github.io/drat # Argument to include the drat repo for BioGeoBERS and contsimmap in the R Session,
+          # so they can be checked by pak in next setup-r-dependencies@v2 action. However, it does not work because pak use a clean new R Session to check for the dependencies.
 
+      # Add direct url to the archived version of MultinomialCI (BioGeoBEARS dependency) so pak knows were to find it
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          extra-packages: any::pkgdown, local::.
+          extra-packages: |
+            any::pkgdown
+            local::.
+            url::https://cran.r-project.org/src/contrib/Archive/MultinomialCI/MultinomialCI_1.2.tar.gz
           needs: website
-          # dependencies: '"hard"' # Added to skip Suggests dependencies from pak checking. May be used for non-dev version (But favor deploying dev version anyway as they have all datasets)
+          # dependencies: '"hard"' # Added to skip Suggests dependencies from pak checking.
+          # May be used for non-dev version if the check fails, but favor deploying dev version anyway as they have all datasets)
 
       - name: Build site
         run: pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE)

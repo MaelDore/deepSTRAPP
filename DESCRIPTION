@@ -53,6 +53,7 @@ Suggests:
     parallel (>= 4.4.2),
     rmarkdown
 Remotes:
+    url::https://cran.r-project.org/src/contrib/Archive/MultinomialCI/MultinomialCI_1.2.tar.gz,
     github::nmatzke/BioGeoBEARS,
     github::bstaggmartin/contsimmap
 LinkingTo: Rcpp
