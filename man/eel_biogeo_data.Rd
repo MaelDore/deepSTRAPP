@@ -34,8 +34,8 @@ Rows are internal nodes. Columns are ranges. Values are posterior probabilities 
 \item \verb{$ace_all_ranges} Numeric matrix. Record the posterior probabilities of ancestral ranges estimated at internal nodes.
 All ranges observed along branches during the simulated biogeographic histories are present.
 Rows are internal nodes. Columns are ranges. Values are posterior probabilities of each range per node.
-\item \verb{$BSM_output} List of two lists that contain summary information of cladogenetic (\verb{$RES_caldo_events_tables}) and anagenetic (\verb{$RES_ana_events_tables}) events
-recording across the 1000 simulations of biogeographic histories performed during Biogeographic Stochastic Mapping (BSM).
+\item \verb{$BSM_output} List of two lists that contain summary information on cladogenetic (\verb{$RES_caldo_events_tables}) and anagenetic (\verb{$RES_ana_events_tables}) events
+recorded across the 1000 simulations of biogeographic histories performed during Biogeographic Stochastic Mapping (BSM).
 Each element of the list is a data.frame recording events occurring during one simulation.
 \item \verb{$simmaps} List of 1000 objects of class \code{"simmap"}.
 Each simmap object is a phylogeny with one simulated biogeographic history (i.e., transitions in geographic ranges) mapped along branches.
