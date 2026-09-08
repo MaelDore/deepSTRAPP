@@ -859,8 +859,6 @@ NULL
 #'   * `$rate_type` Character string. The type of diversification rates used in the tests. Here: "net_diversification".
 #'   * `$uncertainty_strategy` Character string. The strategy used to account for uncertainty in estimates. Here: 'paired'.
 #'   * `$trait_maps_vs_BAMM_samples_list` List of two elements recording the stochastic maps (`$trait_map_ID`) and BAMM samples (`$BAMM_posterior_sample_ID`) chosen for testing across time-steps.
-#'   * `$uncertainty_strategy` Character string. The strategy used to account for uncertainty in estimates. Here: 'paired'.
-#'   * `$trait_maps_vs_BAMM_samples_list` List of two elements recording the stochastic maps (`$trait_map_ID`) and BAMM samples (`$BAMM_posterior_sample_ID`) chosen for testing across time-steps.
 #'
 #'   Optional summary df for multinomial data, if `posthoc_pairwise_tests = TRUE`:
 #'   * `$pvalues_summary_df_for_posthoc_pairwise_tests` Data.frame with five columns providing test stat `$estimate`, `$p_value`, and `$p_value_adjusted`
