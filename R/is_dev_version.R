@@ -16,6 +16,8 @@
 #'
 #' @return Logical. TRUE if running a development version.
 #'
+#' @keywords internal
+#'
 #' @export
 #' @importFrom utils packageVersion
 #'
