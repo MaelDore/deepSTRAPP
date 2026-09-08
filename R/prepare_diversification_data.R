@@ -457,9 +457,9 @@ prepare_diversification_data <- function (BAMM_install_directory_path,
     if (nb_posterior_after_burn_in < nb_posterior_samples)
     {
       stop(paste0("'nb_posterior_samples' requested in not compatible with the number of posterior samples retainted after burn-in.\n",
-                  "The number of remaining samples = 'numberOfGenerations'/'eventData_freq' x (1 - 'burn_in'). Here it is ",nb_posterior_after_burn_in,".\n",
+                  "The number of remaining samples = 'numberOfGenerations'/'eventDataWriteFreq' x (1 - 'burn_in'). Here it is ",nb_posterior_after_burn_in,".\n",
                   "'nb_posterior_samples' requested is set to ", nb_posterior_samples,".\n",
-                  "Please adjust 'numberOfGenerations', 'eventData_freq', 'burn_in', or 'nb_posterior_samples' to obtain compatible values."))
+                  "Please adjust 'numberOfGenerations', 'eventDataWriteFreq', 'burn_in', or 'nb_posterior_samples' to obtain compatible values."))
 
     }
 
