@@ -9,6 +9,7 @@
 # Run all examples including loading of deepSTRAPP outputs
 # Add BioGeoBEARS/contsimmap as Imports with link through Remotes
 # Add link to archived MultinomialCI (BioGeoBEARS dependency) in Remotes
+# Add all datasets in the reference index for the pkgdown website
 
 ### CRAN Releases ###
 
@@ -19,6 +20,7 @@
 # Produce vignette visual outputs based on pre-rendered PNG images
 # Do not run examples including loading of deepSTRAPP outputs
 # Add BioGeoBEARS/contsimmap as Suggests with link through Additional_repositories
+# Remove missing datasets from the reference index for the pkgdown website
 
 ### 1/ From development version to CRAN release ####
 
@@ -42,19 +44,26 @@ file.copy(from = "./for_CRAN/eel_biogeo_data_for_CRAN.rda", to = "./data/eel_bio
 unlink(x = "./R/datasets_doc.R", force = T)
 file.copy(from = "./for_CRAN/datasets_doc_for_CRAN.R", to = "./R/datasets_doc_for_CRAN.R", overwrite = T)
 
-## 1.5/ Add pre-rendered visual outputs to the vignette folder
+# Rerun documentation
+devtools::document()
+
+## 1.5/ Add all datasets in the reference index for the pkgdown website
+unlink(x = "./_pkgdown.yml", force = T)
+file.copy(from = "./for_CRAN/_pkgdown_for_CRAN.yml", to = "./_pkgdown.yml", overwrite = T)
+
+## 1.6/ Add pre-rendered visual outputs to the vignette folder
 prerendered_vignette_outputs_path <- list.files(path = "./for_CRAN/Figures_for_vignettes_Low_resolution/", pattern = ".PNG")
 file.copy(from = paste0("./for_CRAN/Figures_for_vignettes_Low_resolution/",prerendered_vignette_outputs_path), to = paste0("./vignettes/figures/",prerendered_vignette_outputs_path), overwrite = T)
 
-## 1.6/ Replace DESCRIPTION with BioGeoBEARS as Suggests with link through Additional_repositories
+## 1.7/ Replace DESCRIPTION with BioGeoBEARS as Suggests with link through Additional_repositories
 unlink(x = "./DESCRIPTION", force = T)
 file.copy(from = "./for_CRAN/DESCRIPTION_for_CRAN", to = "./DESCRIPTION", overwrite = T)
 
-## 1.7/ Increment version number
+## 1.8/ Increment version number
 usethis::use_version(which = "minor") # Increase as minor update  1.X.0 when introducing new features that are compatible with previous usages
 usethis::use_version(which = "major") # Increase as major update  X.0.0 when introducing changes that are not backward compatible
 
-## 1.8/ Rerun check once done
+## 1.9/ Rerun check once done
 # Devtools check
 devtools::check()
 # Local check as in CRAN check tool
@@ -83,17 +92,24 @@ file.copy(from = "./for_CRAN/eel_biogeo_data.rda", to = "./data/eel_biogeo_data.
 unlink(x = "./R/datasets_doc_for_CRAN.R", force = T)
 file.copy(from = "./for_CRAN/datasets_doc.R", to = "./R/datasets_doc.R", overwrite = T)
 
-## 2.5/ Remove pre-rendered visual outputs to the vignette folder
+# Rerun documentation
+devtools::document()
+
+## 2.5/ Remove missing datasets from the reference index for the pkgdown website
+unlink(x = "./_pkgdown.yml", force = T)
+file.copy(from = "./for_CRAN/_pkgdown.yml", to = "./R/_pkgdown.yml", overwrite = T)
+
+## 2.6/ Remove pre-rendered visual outputs to the vignette folder
 prerendered_vignette_outputs_path <- list.files(path = "./for_CRAN/Figures_for_vignettes_Low_resolution/", pattern = ".PNG")
 unlink(x = paste0("./vignettes/figures/",prerendered_vignette_outputs_path), force = T)
 
-## 2.6/ Replace DESCRIPTION with BioGeoBEARS as Imports with link through Remotes
+## 2.7/ Replace DESCRIPTION with BioGeoBEARS as Imports with link through Remotes
 unlink(x = "./DESCRIPTION", force = T)
 file.copy(from = "./for_CRAN/DESCRIPTION", to = "./DESCRIPTION", overwrite = T)
 
-## 2.7/ Turn to the next development version
+## 2.8/ Turn to the next development version
 usethis::use_dev_version()
 
-## 2.8/ Rerun check once done
+## 2.9/ Rerun check once done
 devtools::check()
 
