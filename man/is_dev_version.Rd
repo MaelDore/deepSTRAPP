@@ -32,3 +32,4 @@ is_dev_version(pkg = "deepSTRAPP")
 \author{
 Maël Doré
 }
+\keyword{internal}
