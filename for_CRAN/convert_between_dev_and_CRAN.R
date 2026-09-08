@@ -8,6 +8,7 @@
 # Produce vignette visual outputs using code evaluation
 # Run all examples including loading of deepSTRAPP outputs
 # Add BioGeoBEARS/contsimmap as Imports with link through Remotes
+# Add link to archived MultinomialCI (BioGeoBEARS dependency) in Remotes
 
 ### CRAN Releases ###
 
