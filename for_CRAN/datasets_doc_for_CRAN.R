@@ -345,8 +345,8 @@
 #'   * `$ace_all_ranges` Numeric matrix. Record the posterior probabilities of ancestral ranges estimated at internal nodes.
 #'     All ranges observed along branches during the simulated biogeographic histories are present.
 #'     Rows are internal nodes. Columns are ranges. Values are posterior probabilities of each range per node.
-#'   * `$BSM_output` List of two lists that contain summary information of cladogenetic (`$RES_caldo_events_tables`) and anagenetic (`$RES_ana_events_tables`) events
-#'     recording across the 1000 simulations of biogeographic histories performed during Biogeographic Stochastic Mapping (BSM).
+#'   * `$BSM_output` List of two lists that contain summary information on cladogenetic (`$RES_caldo_events_tables`) and anagenetic (`$RES_ana_events_tables`) events
+#'     recorded across the 1000 simulations of biogeographic histories performed during Biogeographic Stochastic Mapping (BSM).
 #'     Each element of the list is a data.frame recording events occurring during one simulation.
 #'   * `$simmaps` List of 1000 objects of class `"simmap"`.
 #'     Each simmap object is a phylogeny with one simulated biogeographic history (i.e., transitions in geographic ranges) mapped along branches.
@@ -487,7 +487,7 @@
 #'   * `$MSP_tree` Object of class `phylo`. List of 4 elements duplicating information from the Phylogeny-related elements above,
 #'      except `$MSP_tree$edge.length` is recording the Marginal Shift Probability of each branch (i.e., the probability of a regime shift to occur along each branch)
 #'   * `$MAP_indices` Integer vector. The indices of the Maximum A Posteriori probability (MAP) configurations among the posterior samples.
-#'   * `$MAP_BAMM_object`. List of 18 elements of class `"bammdata"` recording the mean rates and regime shift locations found across
+#'   * `$MAP_BAMM_object` List of 18 elements of class `"bammdata"` recording the mean rates and regime shift locations found across
 #'      the Maximum A Posteriori probability (MAP) configurations. All BAMM elements summarizing diversification data hold a single entry describing
 #'      this mean diversification history.
 #'   * `$MSC_indices` Integer vector. The indices of the Maximum Shift Credibility (MSC) configurations among the posterior samples.
@@ -538,11 +538,11 @@
 # #'   BAMM elements summarizing diversification data:
 # #'   * `$numberEvents` Integer vector. Number of events/macroevolutionary regimes (k+1) recorded in each posterior configuration. k = number of shifts.
 # #'   * `$eventData` List of data.frames. One per posterior sample. Records shift events and macroevolutionary regimes parameters. 1st line = Background root regime.
-# #'   * `$eventVectors` List of integer vectors. One per posterior sample. Record regime ID per branches.
-# #'   * `$tipStates` List of integer vectors. One per posterior sample. Record regime ID per tips.
-# #'   * `$tipLambda` List of numeric vectors. One per posterior sample. Record speciation rates per tips.
-# #'   * `$tipMu` List of numeric vectors. One per posterior sample. Record extinction rates per tips.
-# #'   * `$eventBranchSegs` List of numeric matrices. One per posterior sample. Record regime ID per segments of branches.
+# #'   * `$eventVectors` List of integer vectors. One per posterior sample. Record regime ID per branch.
+# #'   * `$tipStates` List of integer vectors. One per posterior sample. Record regime ID per tip.
+# #'   * `$tipLambda` List of numeric vectors. One per posterior sample. Record speciation rates per tip.
+# #'   * `$tipMu` List of numeric vectors. One per posterior sample. Record extinction rates per tip.
+# #'   * `$eventBranchSegs` List of numeric matrices. One per posterior sample. Record regime ID per segment of branches.
 # #'   * `$meanTipLambda` Numeric vector. Mean tip speciation rates across all posterior configurations of tips.
 # #'   * `$meanTipMu` Numeric vector. Mean tip extinction rates across all posterior configurations of tips.
 # #'   * `$type` Character string. Set the type of data modeled with BAMM. Here, type = "diversification".
@@ -605,11 +605,11 @@
 # #'   BAMM elements summarizing diversification data:
 # #'   * `$numberEvents` Integer vector. Number of events/macroevolutionary regimes (k+1) recorded in each posterior configuration. k = number of shifts.
 # #'   * `$eventData` List of data.frames. One per posterior sample. Records shift events and macroevolutionary regimes parameters. 1st line = Background root regime.
-# #'   * `$eventVectors` List of integer vectors. One per posterior sample. Record regime ID per branches.
-# #'   * `$tipStates` List of integer vectors. One per posterior sample. Record regime ID per tips.
-# #'   * `$tipLambda` List of numeric vectors. One per posterior sample. Record speciation rates per tips.
-# #'   * `$tipMu` List of numeric vectors. One per posterior sample. Record extinction rates per tips.
-# #'   * `$eventBranchSegs` List of numeric matrices. One per posterior sample. Record regime ID per segments of branches.
+# #'   * `$eventVectors` List of integer vectors. One per posterior sample. Record regime ID per branch.
+# #'   * `$tipStates` List of integer vectors. One per posterior sample. Record regime ID per tip.
+# #'   * `$tipLambda` List of numeric vectors. One per posterior sample. Record speciation rates per tip.
+# #'   * `$tipMu` List of numeric vectors. One per posterior sample. Record extinction rates per tip.
+# #'   * `$eventBranchSegs` List of numeric matrices. One per posterior sample. Record regime ID per segment of branches.
 # #'   * `$meanTipLambda` Numeric vector. Mean tip speciation rates across all posterior configurations of tips.
 # #'   * `$meanTipMu` Numeric vector. Mean tip extinction rates across all posterior configurations of tips.
 # #'   * `$type` Character string. Set the type of data modeled with BAMM. Here, type = "diversification".
@@ -672,11 +672,11 @@
 # #'   BAMM elements summarizing diversification data updated for a `focal_time` of 10 My:
 # #'   * `$numberEvents` Integer vector. Number of events/macroevolutionary regimes (k+1) recorded in each posterior configuration. k = number of shifts.
 # #'   * `$eventData` List of data.frames. One per posterior sample. Records shift events and macroevolutionary regimes parameters. 1st line = Background root regime.
-# #'   * `$eventVectors` List of integer vectors. One per posterior sample. Record regime ID per branches.
-# #'   * `$tipStates` List of integer vectors. One per posterior sample. Record regime ID per tips.
-# #'   * `$tipLambda` List of numeric vectors. One per posterior sample. Record speciation rates per tips.
-# #'   * `$tipMu` List of numeric vectors. One per posterior sample. Record extinction rates per tips.
-# #'   * `$eventBranchSegs` List of numeric matrices. One per posterior sample. Record regime ID per segments of branches.
+# #'   * `$eventVectors` List of integer vectors. One per posterior sample. Record regime ID per branch.
+# #'   * `$tipStates` List of integer vectors. One per posterior sample. Record regime ID per tip.
+# #'   * `$tipLambda` List of numeric vectors. One per posterior sample. Record speciation rates per tip.
+# #'   * `$tipMu` List of numeric vectors. One per posterior sample. Record extinction rates per tip.
+# #'   * `$eventBranchSegs` List of numeric matrices. One per posterior sample. Record regime ID per segment of branches.
 # #'   * `$meanTipLambda` Numeric vector. Mean tip speciation rates across all posterior configurations of tips.
 # #'   * `$meanTipMu` Numeric vector. Mean tip extinction rates across all posterior configurations of tips.
 # #'   * `$type` Character string. Set the type of data modeled with BAMM. Here, type = "diversification".
