@@ -44,25 +44,34 @@ use_github_actions()  reports the R CMD check status of your development package
 
 <!-- badges: end -->
 
-The **R package deepSTRAPP** employs time-calibrated phylogenies and trait data to __test for differences in diversification rates between traits over evolutionary time__. It works with continuous, categorical, and biogeographic trait data and extends the STRAPP test from `[BAMMtools::traitDependentBAMM()]` to any time step along phylogenies.
+The **R package deepSTRAPP** employs time-calibrated phylogenies and trait data to __test for differences in diversification rates between traits over evolutionary time__. It handles continuous, categorical, and biogeographic trait data and extends the STRAPP test of `BAMMtools::traitDependentBAMM()` from the present day to any time step along a phylogeny.
 
 ## :dart: Summary
 <br>
-__deepSTRAPP__ provides a powerful analytic framework to investigate the __Diversification Rate Hypothesis (DRH)__ in the context of Historical Biogeography. 
-DRH posits that current heterogeneity in diversity patterns such as the Latitudinal Diversity Gradient are mostly due to differences in diversification rates across bioregions. This hypothesis is typically assessed by comparing diversification rates across tips between the different bioregions with for example a STRAPP test (*Rabosky & Huang, 2016*). However, such tests only compare current rates of diversification that may not be informative about the __long-term past dynamics shaping present-day biodiversity__. deepSTRAPP overcomes this methodological gap: it enables users to test the DRH by comparing diversification rates __at any time step along evolutionary time__. As a typical outcome, it allows researchers to __identify time-frames of significance__ during which diversification rates were different across trait values, providing a quantitative testing framework to __disentangle effects of past and current dynamics__ in explaining current patterns of biodiversity.
+__deepSTRAPP__ models independently the evolutionary history of continuous, categorical, or biogeographic trait data and the diversification dynamics of a clade, then tests for a relationship between ancestral trait values / states / ranges and diversification rates at any point in time. This flexibility allows users to __identify the specific time-frames of significance__ during which diversification dynamics diverged across traits or geographic regions, thereby disentangling the relative contributions of past versus recent processes in shaping present biodiversity patterns. 
 
-Beyond the biogeographic context, deepSTRAPP can be used to test for an evolutionary relationship between phenotypic evolution and diversification dynamics for __any type of trait__. It provides an alternative approach to state-dependent speciation and extinction (SSE) models that intend to model altogether trait evolution and diversification dynamics, but are often time-consuming and hard to parametrize, especially on large time-calibrated phylogenies. Thus, deepSTRAPP offers a flexible solution that __can be applied to phylogenies encompassing thousands of lineages__ (*Doré et al., 2025*). 
+### The statistical framework
 
-deepSTRAPP is especially suited for large phylogenies as the power of the statistical tests is limited by the number of diversification regime shifts detected on the phylogeny and used to perform permutation tests. Each macroevolutionary regime acts as an independent event used to test for differences, therefore the sample size of the tests is conditioned by the number of macroevolutionary regimes identified. It is unlikely to detect any significant differences with few regime shifts.
+__deepSTRAPP__ statistical framework is an extension of the STructured RAte Permutations on Phylogenies (STRAPP) test. STRAPP tests are based on __block-permutations__: rates data are randomized across tips within blocks defined by the diversification regimes identified on each tip (typically inferred with BAMM). Permuting within regimes rather than across the whole tree provide the correct error structure to __account for the phylogenetic pseudoreplication of rates__ occurring between tips sharing the same macroevolutionary regime. It requires multiple independent associations between character states and diversification to yield a significant macroevolutionary signal (*Rabosky & Huang, 2016*).
+
+### Applications
+
+In the context of __historical biogeography__, deepSTRAPP provides a powerful analytic framework to investigate the __Diversification Rate Hypothesis (DRH)__. The DRH posits that the current heterogeneity in diversity patterns, such as the Latitudinal Diversity Gradient, is mainly due to differences in diversification rates between bioregions. This hypothesis is typically assessed by comparing diversification rates across present-day tips between bioregions, for example with a STRAPP test. However, such tests only compare current rates of diversification that may not be informative about the __long-term past dynamics shaping present-day biodiversity__. deepSTRAPP overcomes this methodological gap: it enables users to test the DRH by comparing diversification rates __at any time step along evolutionary time__, providing a quantitative testing framework to __disentangle effects of past and current dynamics__ in explaining current patterns of biodiversity.
+
+Beyond the biogeographic context, deepSTRAPP can test for an __evolutionary relationship between phenotypic evolution and diversification dynamics__, enabling the detection of the __timing of adaptive radiations__ linking changes in trait states and bursts in diversification. It provides an alternative approach to state-dependent speciation and extinction (SSE) models that jointly model trait evolution and diversification dynamics but are not designed to __test for differences at a given point in time__.
+
+__deepSTRAPP__ is especially suited for __large phylogenies__ as the power of the statistical tests is limited by the number of diversification regime shifts detected on the phylogeny and used to perform permutation tests (e.g., *Doré et al., 2025*). Each macroevolutionary regime acts as an independent event used to test for differences, therefore the sample size of the tests is conditioned by the number of macroevolutionary regimes identified. Larger phylogenies tend to carry more regime shifts, thus hold more information susceptible to yield a significant test result.
+
+### Workflow
 
 A __full deepSTRAPP workflow__ runs as follows:
 
-* **Step 1**: Map trait evolution
+* **Step 1:** Map trait evolution
 * **Step 2:** Infer diversification dynamics (typically with BAMM)
 * **Step 3:** Run deepSTRAPP
- + **Step 3.1:** Extract trait values, diversification rates, and regimes at a given time in the past
- + **Step 3.2:** Run a STRAPP test
- + **Step 3.3:** Repeat steps 3.1 & 3.2 for many time steps along evolution time
+  + **Step 3.1:** Extract trait values, diversification rates, and regimes at a given time in the past
+  + **Step 3.2:** Run a STRAPP test
+  + **Step 3.3:** Repeat steps 3.1 & 3.2 for many time steps along evolutionary time
 * **Step 4:** Summarize test results
 
 ![Simplified deepSTRAPP workflow](man/figures/deepSTRAPP_workflow.png)
@@ -70,10 +79,10 @@ __Figure 1: Simplified deepSTRAPP workflow showing the main functions _(in itali
 
 **References:**
 
-> STRAPP test: Rabosky, D. L., & Huang, H. (2016). A robust semi-parametric test for detecting trait-dependent diversification. Systematic biology, 65(2), 181-193. https://doi.org/10.1093/sysbio/syv066.
+> STRAPP test: Rabosky, D. L., & Huang, H. (2016). A robust semi-parametric test for detecting trait-dependent diversification. *Systematic Biology*, 65(2), 181-193. https://doi.org/10.1093/sysbio/syv066.
 
-> deepSTRAPP application: Doré, M., Borowiec, M. L., Branstetter, M. G., Camacho, G. P., Fisher, B. L., Longino, J. T., Ward, P. S., Blaimer, B. B. (2025).
-Evolutionary history of ponerine ants highlights how the timing of dispersal events shapes modern biodiversity. Nature Communications, 16, 8297.
+> deepSTRAPP application: Doré, M., Borowiec, M. L., Branstetter, M. G., Camacho, G. P., Fisher, B. L., Longino, J. T., Ward, P. S., & Blaimer, B. B. (2025).
+Evolutionary history of ponerine ants highlights how the timing of dispersal events shapes modern biodiversity. *Nature Communications*, 16, 8297.
 https://doi.org/10.1038/s41467-025-63709-3
 <br>  
   
@@ -117,7 +126,7 @@ You will later need to provide to deepSTRAPP the path to your BAMM installation 
 
 __Reference:__
 
->  Rabosky, DL. Automatic detection of key innovations, rate shifts, and diversity-dependence on phylogenetic trees. PLoS One 9, e89543 (2014). DOI: https://doi.org/10.1371/journal.pone.0089543
+>  Rabosky, DL. Automatic detection of key innovations, rate shifts, and diversity-dependence on phylogenetic trees. *PLoS One* 9, e89543 (2014). DOI: https://doi.org/10.1371/journal.pone.0089543
 <br>
 
 
@@ -144,7 +153,7 @@ devtools::install_github(repo="bstaggmartin/contsimmap")
 ```
 __Reference:__
 
-> Martin, B. S., & Weber, M. G. (2026). Stochastic character mapping of continuous traits on phylogenies. Systematic Biology, syag031. DOI: http://doi.org/10.1093/sysbio/syag031 
+> Martin, B. S., & Weber, M. G. (2026). Stochastic character mapping of continuous traits on phylogenies. *Systematic Biology*, syag031. DOI: http://doi.org/10.1093/sysbio/syag031 
 
 
 * Archived copies of the non-CRAN R package dependencies are also provided through an alternative repository to ensure long-term compatibility and reproducibility, even if the development versions of these packages change over time.
@@ -264,17 +273,17 @@ For any use of __deepSTRAPP__:
 
 As __deepSTRAPP__ relies strongly on functions designed for the [phytools R package](https://blog.phytools.org/), it is good practice to also cite this package:
 
-> Revell, L. J. (2024) phytools 2.0: an updated R ecosystem for phylogenetic comparative methods (and other things). PeerJ, 12, e16505. https://doi.org/10.7717/peerj.16505.
+> Revell, L. J. (2024) phytools 2.0: an updated R ecosystem for phylogenetic comparative methods (and other things). *PeerJ*, 12, e16505. https://doi.org/10.7717/peerj.16505.
 
 If you use the modeling tools for continuous and categorical trait evolution embedded in the function *prepare_trait_data()*, you should cite the [R package geiger](https://github.com/mwpennell/geiger-v2):
 
-> Pennell, M.W., J.M. Eastman, G.J. Slater, J.W. Brown, J.C. Uyeda, R.G. FitzJohn, M.E. Alfaro, and L.J. Harmon. 2014. geiger v2.0: an expanded suite of methods for fitting macroevolutionary models to phylogenetic trees. Bioinformatics 30:2216-2218. https://doi.org/10.1093/bioinformatics/btu181.
+> Pennell, M.W., J.M. Eastman, G.J. Slater, J.W. Brown, J.C. Uyeda, R.G. FitzJohn, M.E. Alfaro, and L.J. Harmon. 2014. geiger v2.0: an expanded suite of methods for fitting macroevolutionary models to phylogenetic trees. *Bioinformatics* 30:2216-2218. https://doi.org/10.1093/bioinformatics/btu181.
 
 If you specifically use the function *prepare_trait_data()* to produce continuous stochastic maps, you should cite the [R package contsimmap](https://github.com/bstaggmartin/contsimmap/): 
 
-> Martin, B. S., & Weber, M. G. (2026). Stochastic character mapping of continuous traits on phylogenies. Systematic Biology, syag031. https://doi.org/10.1093/sysbio/syag031.
+> Martin, B. S., & Weber, M. G. (2026). Stochastic character mapping of continuous traits on phylogenies. *Systematic Biology*, syag031. https://doi.org/10.1093/sysbio/syag031.
 
 If you use the modeling tools for historical biogeography embedded in the function *prepare_trait_data()*, you should cite the [R package BioGeoBEARS](http://phylo.wikidot.com/biogeobears):
 
-> Matzke, N. J. (2013). Probabilistic historical biogeography: new models for founder-event speciation, imperfect detection, and fossils allow improved accuracy and model-testing. Frontiers of Biogeography, 5(4). https://doi.org/10.21425/F5FBG19694.
+> Matzke, N. J. (2013). Probabilistic historical biogeography: new models for founder-event speciation, imperfect detection, and fossils allow improved accuracy and model-testing. *Frontiers of Biogeography*, 5(4). https://doi.org/10.21425/F5FBG19694.
 
