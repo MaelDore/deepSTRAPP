@@ -10,6 +10,7 @@
 # Add BioGeoBEARS/contsimmap as Imports with link through Remotes
 # Add link to archived MultinomialCI (BioGeoBEARS dependency) in Remotes
 # Add all datasets in the reference index for the pkgdown website
+# Comment out dependencies = '"hard"' from pkgdown.yaml controlling the Github actions for the website deployment => Do not skip installing Suggested dependencies
 
 ### CRAN Releases ###
 
@@ -21,6 +22,8 @@
 # Do not run examples including loading of deepSTRAPP outputs
 # Add BioGeoBEARS/contsimmap as Suggests with link through Additional_repositories
 # Remove missing datasets from the reference index for the pkgdown website
+# Add dependencies = '"hard"' from pkgdown.yaml controlling the Github actions for the website deployment => Skip installing Suggested dependencies
+
 
 ### 1/ From development version to CRAN release ####
 
@@ -59,11 +62,15 @@ file.copy(from = paste0("./for_CRAN/Figures_for_vignettes_Low_resolution/",prere
 unlink(x = "./DESCRIPTION", force = T)
 file.copy(from = "./for_CRAN/DESCRIPTION_for_CRAN", to = "./DESCRIPTION", overwrite = T)
 
-## 1.8/ Increment version number
+## 1.8/ Replace pkgdown.yalm to skip installing Suggested dependencies during the Github actions for the website deployment
+unlink(x = "./.github/workflows/pkgdown.yaml", force = T)
+file.copy(from = "./for_CRAN/.github/workflows/pkgdown_for_CRAN.yaml", to = "./.github/workflows/pkgdown.yaml", overwrite = T)
+
+## 1.9/ Increment version number
 usethis::use_version(which = "minor") # Increase as minor update  1.X.0 when introducing new features that are compatible with previous usages
 usethis::use_version(which = "major") # Increase as major update  X.0.0 when introducing changes that are not backward compatible
 
-## 1.9/ Rerun check once done
+## 1.10/ Rerun check once done
 # Devtools check
 devtools::check()
 # Local check as in CRAN check tool
@@ -107,9 +114,13 @@ unlink(x = paste0("./vignettes/figures/",prerendered_vignette_outputs_path), for
 unlink(x = "./DESCRIPTION", force = T)
 file.copy(from = "./for_CRAN/DESCRIPTION", to = "./DESCRIPTION", overwrite = T)
 
-## 2.8/ Turn to the next development version
+## 2.9/ Replace pkgdown.yalm to skip installing Suggested dependencies during the Github actions for the website deployment
+unlink(x = "./.github/workflows/pkgdown.yaml", force = T)
+file.copy(from = "./for_CRAN/.github/workflows/pkgdown.yaml", to = "./.github/workflows/pkgdown.yaml", overwrite = T)
+
+## 2.10/ Turn to the next development version
 usethis::use_dev_version()
 
-## 2.9/ Rerun check once done
+## 2.11/ Rerun check once done
 devtools::check()
 
