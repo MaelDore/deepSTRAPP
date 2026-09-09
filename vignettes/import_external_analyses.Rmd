@@ -247,20 +247,17 @@ whale_contMaps <- convert_contsimmap_to_contMaps(contsimmap = contsimmap_output)
 ## Plot the resulting contMaps
 
 plot_contMap(whale_contMaps[[1]], color_scale = c("dodgerblue", "beige", "darkred"))
-title(main = "\nSimulation n°1")
+title(main = "Simulation n°1")
 
 plot_contMap(whale_contMaps[[10]], color_scale = c("dodgerblue", "beige", "darkred"))
-title(main = "\nSimulation n°10")
-
-plot_contMap(whale_contMaps[[100]], color_scale = c("dodgerblue", "beige", "darkred"))
-title(main = "\nSimulation n°100")
+title(main = "Simulation n°10")
 
 ## This contMaps object ('whale_contMaps') is the key input to provide to deepSTRAPP to test for correlations between rates and traits over evolutionary time.
 # Since it includes multiple simulated histories, it allows you to account for uncertainty in trait estimates in the analyses
 # using the 'paired' or 'full' options for 'uncertainty_strategy' in our deepSTRAPP run.
 
 ```
-```{r import_contMaps_eval, eval = TRUE, echo = FALSE}
+```{r import_contMaps_eval, eval = is_dev_version(), echo = FALSE}
 
 ## Model trait evolution and produce multiple simulations of evolutionary histories
 contsimmap_output <- contsimmap::make.contsimmap(
@@ -273,14 +270,21 @@ whale_contMaps <- convert_contsimmap_to_contMaps(contsimmap = contsimmap_output)
 
 ## Plot the resulting contMaps
 
-plot_contMap(whale_contMaps[[1]], color_scale = c("dodgerblue", "beige", "darkred"))
-title(main = "\nSimulation n°1")
+par(mfrow = c(1,2))
 
-plot_contMap(whale_contMaps[[10]], color_scale = c("dodgerblue", "beige", "darkred"))
-title(main = "\nSimulation n°10")
+plot_contMap(whale_contMaps[[1]], color_scale = c("dodgerblue", "beige", "darkred"), fsize = c(0.5, 0.7))
+title(main = "Simulation n°1\n\n")
 
-plot_contMap(whale_contMaps[[100]], color_scale = c("dodgerblue", "beige", "darkred"))
-title(main = "\nSimulation n°100")
+plot_contMap(whale_contMaps[[10]], color_scale = c("dodgerblue", "beige", "darkred"), fsize = c(0.5, 0.7))
+title(main = "Simulation n°10\n\n")
+
+par(mfrow = c(1,1))
+
+```
+```{r import_contMaps_eval, eval = !is_dev_version(), echo = FALSE}
+
+# Plot pre-rendered graph
+knitr::include_graphics("figures/7_Import_external_analyses_1.2_Cont_simmaps.PNG")
 
 ```
 

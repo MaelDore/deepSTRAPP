@@ -1144,16 +1144,21 @@ run_deepSTRAPP_over_time <- function (contMap = NULL,
 
 }
 
-## Push the dev version to the website
+# Push official version to the website (faster, lighter, but missing the dataset docs)
 
 ## Check the website integrity, especially the menu for tutorial/functions may have been messed up by names changes (check the YAML file)
 
 ## Revert to CRAN version
 # Move to 1.1.0 (check NEWS and dev_history tips) and push to GitHub (but do not deploy the website or push to CRAN yet)
 
-
 # Ask Bonnie and Yichen for review/testing
 
 # Then work on the second analysis example to include in the manuscript
+
+
+## Find a way to push the dev version to the website (including all datasets)
+
+
+
 
 

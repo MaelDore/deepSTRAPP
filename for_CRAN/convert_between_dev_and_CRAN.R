@@ -62,7 +62,7 @@ file.copy(from = paste0("./for_CRAN/Figures_for_vignettes_Low_resolution/",prere
 unlink(x = "./DESCRIPTION", force = T)
 file.copy(from = "./for_CRAN/DESCRIPTION_for_CRAN", to = "./DESCRIPTION", overwrite = T)
 
-## 1.8/ Replace pkgdown.yalm to skip installing Suggested dependencies during the Github actions for the website deployment
+## 1.8/ Replace pkgdown.yaml to skip installing Suggested dependencies during the Github actions for the website deployment
 unlink(x = "./.github/workflows/pkgdown.yaml", force = T)
 file.copy(from = "./for_CRAN/.github/workflows/pkgdown_for_CRAN.yaml", to = "./.github/workflows/pkgdown.yaml", overwrite = T)
 
@@ -114,7 +114,7 @@ unlink(x = paste0("./vignettes/figures/",prerendered_vignette_outputs_path), for
 unlink(x = "./DESCRIPTION", force = T)
 file.copy(from = "./for_CRAN/DESCRIPTION", to = "./DESCRIPTION", overwrite = T)
 
-## 2.9/ Replace pkgdown.yalm to skip installing Suggested dependencies during the Github actions for the website deployment
+## 2.9/ Replace pkgdown.yaml to skip installing Suggested dependencies during the Github actions for the website deployment
 unlink(x = "./.github/workflows/pkgdown.yaml", force = T)
 file.copy(from = "./for_CRAN/.github/workflows/pkgdown.yaml", to = "./.github/workflows/pkgdown.yaml", overwrite = T)
 
