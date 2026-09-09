@@ -192,13 +192,13 @@ eel_contMap <- eel_cont_data$contMap
 # Plot with initial color_scale
 plot_contMap(eel_contMap,
              fsize = c(0.6, 1)) # Adjust tip label size
-title(main = "\nML estimates")
+title(main = "ML estimates")
 
 # Plot with updated color_scale
 plot_contMap(contMap = eel_contMap,
              color_scale = c("purple", "violet", "cyan", "blue"),
              fsize = c(0.6, 1)) # Adjust tip label size
-title(main = "\nML estimates")
+title(main = "ML estimates")
 
 # The contMap is the main input needed to perform a deepSTRAPP run on continuous trait data.
 # However, since it only represents Maximum Likelihood (ML) estimates of ancestral trait values,
@@ -287,24 +287,24 @@ par(mfrow = c(2, 2))
 # Plot with initial color_scale
 plot_contMap(contMap = eel_cont_data$contMap,
              fsize = c(0.6, 1)) # Adjust tip label size
-title(main = "\nML estimates")
+title(main = "ML estimates\n\n\n")
 
 # Plot with updated color_scale
 plot_contMap(contMap = eel_cont_data$contMap,
              color_scale = c("purple", "violet", "cyan", "blue"),
              fsize = c(0.6, 1)) # Adjust tip label size
-title(main = "\nML estimates")
+title(main = "ML estimates\n\n\n")
 
 eel_contMaps <- eel_cont_data$contMaps
 
 # Plot contMap n°1 with initial color_scale
 plot_contMap(eel_contMaps[[1]],
              fsize = c(0.6, 1)) # Adjust tip label size
-title(main = "Stochastic Mapping simulation n°1\n")
+title(main = "Stochastic Mapping simulation n°1\n\n\n")
 # Plot contMap n°10 with initial color_scale
 plot_contMap(eel_contMaps[[10]],
              fsize = c(0.6, 1)) # Adjust tip label size
-title(main = "\nStochastic Mapping simulation n°10\n")
+title(main = "Stochastic Mapping simulation n°10\n\n\n")
 
 par(mfrow = c(1, 1))
 
