@@ -29,7 +29,7 @@ along a phylogeny.
 
 ## :dart: Summary
 
-**deepSTRAPP** models independently the evolutionary history of
+<br> **deepSTRAPP** models independently the evolutionary history of
 continuous, categorical, or biogeographic trait data and the
 diversification dynamics of a clade, then tests for a relationship
 between ancestral trait values / states / ranges and diversification

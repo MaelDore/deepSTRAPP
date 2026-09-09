@@ -48,6 +48,7 @@ The **R package deepSTRAPP** employs time-calibrated phylogenies and trait data 
 
 ## :dart: Summary
 
+<br>
 __deepSTRAPP__ models independently the evolutionary history of continuous, categorical, or biogeographic trait data and the diversification dynamics of a clade, then tests for a relationship between ancestral trait values / states / ranges and diversification rates at any point in time. This flexibility allows users to __identify the specific time-frames of significance__ during which diversification dynamics diverged across traits or geographic regions, thereby disentangling the relative contributions of past versus recent processes in shaping present biodiversity patterns. 
 <br><br>
 
