@@ -123,8 +123,7 @@ green. Final outputs in pink.
 > Communications*, 16, 8297.
 > <https://doi.org/10.1038/s41467-025-63709-3> <br>
 
-<br>  
-\## :envelope_with_arrow: Installation
+## :envelope_with_arrow: Installation
 
 <br> deepSTRAPP works on R version 4.4 or more. Be sure to have an R
 version that is compatible. <br> See <https://CRAN.R-project.org/>.
@@ -153,7 +152,9 @@ remotes::install_github(repo = "MaelDore/deepSTRAPP", build_vignettes = FALSE)
 You may need additional tools for package compilation such as Rtools
 (Windows) and Xcode (Mac OS). <br> See [this
 page](https://support.posit.co/hc/en-us/articles/200486498-Package-Development-Prerequisites)
-for details. <br> <br> \## :link: Dependencies
+for details. <br>
+
+## :link: Dependencies
 
 <br> deepSTRAPP relies on other software and R packages to perform some
 of its core tasks. R package dependencies will automatically be
@@ -227,7 +228,7 @@ drat::addRepo("maeldore", "https://maeldore.github.io/drat")
 install.packages(c("BioGeoBEARS", "contsimmap"))
 ```
 
-<br> \## :desktop_computer: Website
+## :desktop_computer: Website
 
 <br> A companion website is available to browse interactively the
 different tutorials and functions of **deepSTRAPP** at this URL:
@@ -235,7 +236,8 @@ different tutorials and functions of **deepSTRAPP** at this URL:
 
 An overview of all functions and datasets is available
 [here](https://maeldore.github.io/deepSTRAPP/reference/index.html). <br>
-<br> \## :joystick: Quick-to-run example
+
+## :joystick: Quick-to-run example
 
 <br> A **simple use-case** that shows how deepSTRAPP can be used to
 **test for differences in diversification rates between two trait states
@@ -245,8 +247,9 @@ and within R: `vignette("main_tutorial")`.
 
 This tutorial presents the main functions in a typical **deepSTRAPP
 workflow**. <br> For more advanced uses, please refer to the
-vignettes/tutorials below. <br> <br> \## :scroll: Advanced uses /
-tutorials
+vignettes/tutorials below. <br>
+
+## :scroll: Advanced uses / tutorials
 
 <br> Tutorials are available to explore more **advanced usages** of
 deepSTRAPP. They provide explanations on available arguments and
@@ -361,13 +364,14 @@ vignette("deepSTRAPP")
 utils::browseVignettes(package = "deepSTRAPP")
 ```
 
-<br> \## :bug: Found a bug?
+## :bug: Found a bug?
 
 <br> Thank you for finding it! Head over to the [GitHub Issues
 tab](https://github.com/MaelDore/deepSTRAPP/issues) and let me know
 about it. <br> You can also [send me an
-e-mail](mailto:mael.dore@gmail.com). <br> <br> \## :black_nib: How to
-cite deepSTRAPP
+e-mail](mailto:mael.dore@gmail.com). <br>
+
+## :black_nib: How to cite deepSTRAPP
 
 <br> For any use of **deepSTRAPP**:
 
