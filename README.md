@@ -29,7 +29,7 @@ along a phylogeny.
 
 ## :dart: Summary
 
-<br> **deepSTRAPP** models independently the evolutionary history of
+**deepSTRAPP** models independently the evolutionary history of
 continuous, categorical, or biogeographic trait data and the
 diversification dynamics of a clade, then tests for a relationship
 between ancestral trait values / states / ranges and diversification
@@ -37,7 +37,7 @@ rates at any point in time. This flexibility allows users to **identify
 the specific time-frames of significance** during which diversification
 dynamics diverged across traits or geographic regions, thereby
 disentangling the relative contributions of past versus recent processes
-in shaping present biodiversity patterns.
+in shaping present biodiversity patterns. <br>
 
 ### The statistical framework
 
@@ -51,6 +51,7 @@ for the phylogenetic pseudoreplication of rates** occurring between tips
 sharing the same macroevolutionary regime. It requires multiple
 independent associations between character states and diversification to
 yield a significant macroevolutionary signal (*Rabosky & Huang, 2016*).
+<br>
 
 ### Applications
 
@@ -86,7 +87,7 @@ macroevolutionary regime acts as an independent event used to test for
 differences, therefore the sample size of the tests is conditioned by
 the number of macroevolutionary regimes identified. Larger phylogenies
 tend to carry more regime shifts, thus hold more information susceptible
-to yield a significant test result.
+to yield a significant test result. <br>
 
 ### Workflow
 
@@ -100,7 +101,7 @@ A **full deepSTRAPP workflow** runs as follows:
   - **Step 3.2:** Run a STRAPP test
   - **Step 3.3:** Repeat steps 3.1 & 3.2 for many time steps along
     evolutionary time
-- **Step 4:** Summarize test results
+- **Step 4:** Summarize test results <br>
 
 ![Simplified deepSTRAPP workflow](man/figures/deepSTRAPP_workflow.png)
 **Figure 1: Simplified deepSTRAPP workflow showing the main functions
@@ -122,10 +123,11 @@ green. Final outputs in pink.
 > Communications*, 16, 8297.
 > <https://doi.org/10.1038/s41467-025-63709-3> <br>
 
-## :envelope_with_arrow: Installation
+<br>  
+\## :envelope_with_arrow: Installation
 
-deepSTRAPP works on R version 4.4 or more. Be sure to have an R version
-that is compatible. <br> See <https://CRAN.R-project.org/>.
+<br> deepSTRAPP works on R version 4.4 or more. Be sure to have an R
+version that is compatible. <br> See <https://CRAN.R-project.org/>.
 
 From **CRAN**, for the latest release:
 
@@ -151,15 +153,13 @@ remotes::install_github(repo = "MaelDore/deepSTRAPP", build_vignettes = FALSE)
 You may need additional tools for package compilation such as Rtools
 (Windows) and Xcode (Mac OS). <br> See [this
 page](https://support.posit.co/hc/en-us/articles/200486498-Package-Development-Prerequisites)
-for details. <br>
+for details. <br> <br> \## :link: Dependencies
 
-## :link: Dependencies
-
-deepSTRAPP relies on other software and R packages to perform some of
-its core tasks. R package dependencies will automatically be downloaded
-and installed alongside deepSTRAPP. However, R packages that are not
-currently available on CRAN, and external software may need to be
-installed independently.
+<br> deepSTRAPP relies on other software and R packages to perform some
+of its core tasks. R package dependencies will automatically be
+downloaded and installed alongside deepSTRAPP. However, R packages that
+are not currently available on CRAN, and external software may need to
+be installed independently.
 
 - The C++ software **BAMM** is used to model diversification dynamics on
   time-calibrated phylogenies. It is needed by deepSTRAPP to obtain
@@ -227,30 +227,28 @@ drat::addRepo("maeldore", "https://maeldore.github.io/drat")
 install.packages(c("BioGeoBEARS", "contsimmap"))
 ```
 
-## :desktop_computer: Website
+<br> \## :desktop_computer: Website
 
-A companion website is available to browse interactively the different
-tutorials and functions of **deepSTRAPP** at this URL:
+<br> A companion website is available to browse interactively the
+different tutorials and functions of **deepSTRAPP** at this URL:
 <https://maeldore.github.io/deepSTRAPP/>.
 
 An overview of all functions and datasets is available
 [here](https://maeldore.github.io/deepSTRAPP/reference/index.html). <br>
+<br> \## :joystick: Quick-to-run example
 
-## :joystick: Quick-to-run example
-
-A **simple use-case** that shows how deepSTRAPP can be used to **test
-for differences in diversification rates between two trait states along
-evolutionary times** is available
+<br> A **simple use-case** that shows how deepSTRAPP can be used to
+**test for differences in diversification rates between two trait states
+along evolutionary times** is available
 [here](https://maeldore.github.io/deepSTRAPP/articles/main_tutorial.html)
 and within R: `vignette("main_tutorial")`.
 
 This tutorial presents the main functions in a typical **deepSTRAPP
 workflow**. <br> For more advanced uses, please refer to the
-vignettes/tutorials below. <br>
+vignettes/tutorials below. <br> <br> \## :scroll: Advanced uses /
+tutorials
 
-## :scroll: Advanced uses / tutorials
-
-Tutorials are available to explore more **advanced usages** of
+<br> Tutorials are available to explore more **advanced usages** of
 deepSTRAPP. They provide explanations on available arguments and
 interpretations of results of deepSTRAPP across multiple types of data.
 They are listed below, in the [companion
@@ -363,16 +361,15 @@ vignette("deepSTRAPP")
 utils::browseVignettes(package = "deepSTRAPP")
 ```
 
-## :bug: Found a bug?
+<br> \## :bug: Found a bug?
 
-Thank you for finding it! Head over to the [GitHub Issues
+<br> Thank you for finding it! Head over to the [GitHub Issues
 tab](https://github.com/MaelDore/deepSTRAPP/issues) and let me know
 about it. <br> You can also [send me an
-e-mail](mailto:mael.dore@gmail.com). <br>
+e-mail](mailto:mael.dore@gmail.com). <br> <br> \## :black_nib: How to
+cite deepSTRAPP
 
-## :black_nib: How to cite deepSTRAPP
-
-For any use of **deepSTRAPP**:
+<br> For any use of **deepSTRAPP**:
 
 > Doré, M., & Blaimer, B. B., deepSTRAPP: Testing for differences in
 > diversification rates over deep evolutionary time. (DOI TBA)
