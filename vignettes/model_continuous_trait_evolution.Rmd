@@ -213,15 +213,11 @@ eel_contMaps <- eel_cont_data$contMaps
 # Plot contMap n°1 with initial color_scale
 plot_contMap(eel_contMaps[[1]],
              fsize = c(0.6, 1)) # Adjust tip label size
-title(main = "\nStochastic Mapping simulation n°1")
+title(main = "Stochastic Mapping simulation n°1")
 # Plot contMap n°10 with initial color_scale
 plot_contMap(eel_contMaps[[10]],
              fsize = c(0.6, 1)) # Adjust tip label size
-title(main = "\nStochastic Mapping simulation n°10")
-# Plot contMap n°100 with initial color_scale
-plot_contMap(eel_contMaps[[100]],
-             fsize = c(0.6, 1)) # Adjust tip label size
-title(main = "\nStochastic Mapping simulation n°100")
+title(main = "Stochastic Mapping simulation n°10")
 
 # Each simulation is different, but on average, they converge around the ML estimates shown in the contMap.
 
@@ -253,7 +249,7 @@ eel_cont_data$best_model_fit$opt # Parameter estimates and goodness-of-fit infor
 
 
 ```
-```{r model_trait_evolution_cont_eval, eval = TRUE, echo = FALSE, out.width = "100%"}
+```{r model_trait_evolution_cont_eval, eval = is_dev_version(), echo = FALSE, out.width = "100%"}
 suppressWarnings(library(maps))
 suppressWarnings(library(ape))
 suppressWarnings(library(phytools))
@@ -286,6 +282,8 @@ eel_cont_data <- suppressWarnings(prepare_trait_data(
     return_model_selection_df = TRUE, # To include the df for model selection in the output
     verbose = FALSE)) # To display progress
 
+par(mfrow = c(2, 2))
+
 # Plot with initial color_scale
 plot_contMap(contMap = eel_cont_data$contMap,
              fsize = c(0.6, 1)) # Adjust tip label size
@@ -302,16 +300,20 @@ eel_contMaps <- eel_cont_data$contMaps
 # Plot contMap n°1 with initial color_scale
 plot_contMap(eel_contMaps[[1]],
              fsize = c(0.6, 1)) # Adjust tip label size
-title(main = "\nStochastic Mapping simulation n°1")
+title(main = "Stochastic Mapping simulation n°1\n")
 # Plot contMap n°10 with initial color_scale
 plot_contMap(eel_contMaps[[10]],
              fsize = c(0.6, 1)) # Adjust tip label size
-title(main = "\nStochastic Mapping simulation n°10")
-# Plot contMap n°100 with initial color_scale
-plot_contMap(eel_contMaps[[100]],
-             fsize = c(0.6, 1)) # Adjust tip label size
-title(main = "\nStochastic Mapping simulation n°100")
+title(main = "\nStochastic Mapping simulation n°10\n")
+
+par(mfrow = c(1, 1))
 
 ## Explore summary of model selection
 eel_cont_data$model_selection_df # Summary of model selection
+```
+```{r model_trait_evolution_cont_eval_CRAN, eval = !is_dev_version(), echo = FALSE, out.width = "100%"}
+
+# Plot pre-rendered graph
+knitr::include_graphics("figures/2.1_Model_continuous_trait_evolution_2_Cont_simmaps.PNG")
+
 ```
