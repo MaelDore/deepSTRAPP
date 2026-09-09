@@ -131,7 +131,7 @@ mammals_cat_data <- prepare_trait_data(tip_data = mammals_data, phylo = mammals_
                                        nb_simulations = 100,
                                        plot_map = FALSE)
 #> 
-#> 2026-09-09 05:45:23.980271 - Fit 1 evolutionary model(s): ER.
+#> 2026-09-09 06:28:50.131598 - Fit 1 evolutionary model(s): ER.
 #> 
 #> ------ ER model ------ 
 #> 
@@ -160,11 +160,11 @@ mammals_cat_data <- prepare_trait_data(tip_data = mammals_data, phylo = mammals_
 #>  'res' -- optimization iteration summary
 #>  'opt' -- maximum likelihood parameter estimates
 #> 
-#> 2026-09-09 05:45:24.931939 - Compare model fits.
+#> 2026-09-09 06:28:51.712559 - Compare model fits.
 #> 
 #>    model     logL k      AIC     AICc delta_AICc Akaike_weights rank
 #> ER    ER -152.749 1 307.4981 307.5172          0            100    1
-#> 2026-09-09 05:45:24.933366 - Run simulations for stochastic mapping.
+#> 2026-09-09 06:28:51.713855 - Run simulations for stochastic mapping.
 #> 
 #> make.simmap is sampling character histories conditioned on
 #> the transition matrix
@@ -180,24 +180,24 @@ mammals_cat_data <- prepare_trait_data(tip_data = mammals_data, phylo = mammals_
 #>     large    medium     small 
 #> 0.3333333 0.3333333 0.3333333 
 #> Done.
-#> 2026-09-09 05:45:36.320838 - Extract ACE as posterior sampling from stochastic mapping.
-#> 2026-09-09 05:45:36.699843 - Create densityMaps by summarizing simulations of evolutionary history (simmaps).
+#> 2026-09-09 06:29:07.8595 - Extract ACE as posterior sampling from stochastic mapping.
+#> 2026-09-09 06:29:08.369131 - Create densityMaps by summarizing simulations of evolutionary history (simmaps).
 #> 
-#> 2026-09-09 05:45:37.762097 - Posterior probability computed for edge n°100/420
-#> 2026-09-09 05:45:38.48509 - Posterior probability computed for edge n°200/420
-#> 2026-09-09 05:45:39.329717 - Posterior probability computed for edge n°300/420
-#> 2026-09-09 05:45:40.221205 - Posterior probability computed for edge n°400/420
-#> 2026-09-09 05:45:40.482649 - Posterior probabilities computed for State = large - n°1/3
-#> 2026-09-09 05:45:41.571505 - Posterior probability computed for edge n°100/420
-#> 2026-09-09 05:45:42.289191 - Posterior probability computed for edge n°200/420
-#> 2026-09-09 05:45:43.138647 - Posterior probability computed for edge n°300/420
-#> 2026-09-09 05:45:44.06287 - Posterior probability computed for edge n°400/420
-#> 2026-09-09 05:45:44.341959 - Posterior probabilities computed for State = medium - n°2/3
-#> 2026-09-09 05:45:45.434158 - Posterior probability computed for edge n°100/420
-#> 2026-09-09 05:45:46.142947 - Posterior probability computed for edge n°200/420
-#> 2026-09-09 05:45:46.999234 - Posterior probability computed for edge n°300/420
-#> 2026-09-09 05:45:47.925218 - Posterior probability computed for edge n°400/420
-#> 2026-09-09 05:45:48.20936 - Posterior probabilities computed for State = small - n°3/3
+#> 2026-09-09 06:29:09.695014 - Posterior probability computed for edge n°100/420
+#> 2026-09-09 06:29:10.570582 - Posterior probability computed for edge n°200/420
+#> 2026-09-09 06:29:11.66696 - Posterior probability computed for edge n°300/420
+#> 2026-09-09 06:29:12.775188 - Posterior probability computed for edge n°400/420
+#> 2026-09-09 06:29:13.099874 - Posterior probabilities computed for State = large - n°1/3
+#> 2026-09-09 06:29:14.429611 - Posterior probability computed for edge n°100/420
+#> 2026-09-09 06:29:15.313818 - Posterior probability computed for edge n°200/420
+#> 2026-09-09 06:29:16.414849 - Posterior probability computed for edge n°300/420
+#> 2026-09-09 06:29:17.576572 - Posterior probability computed for edge n°400/420
+#> 2026-09-09 06:29:17.923974 - Posterior probabilities computed for State = medium - n°2/3
+#> 2026-09-09 06:29:19.255257 - Posterior probability computed for edge n°100/420
+#> 2026-09-09 06:29:20.136964 - Posterior probability computed for edge n°200/420
+#> 2026-09-09 06:29:21.202318 - Posterior probability computed for edge n°300/420
+#> 2026-09-09 06:29:22.345445 - Posterior probability computed for edge n°400/420
+#> 2026-09-09 06:29:22.712237 - Posterior probabilities computed for State = small - n°3/3
 
 # Set focal time
 focal_time <- 80

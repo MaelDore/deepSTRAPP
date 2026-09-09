@@ -103,7 +103,7 @@ str(model_comparison_output, max.level = 2)
 #>   .. ..- attr(*, "class")= chr [1:2] "bm" "function"
 #>   .. ..- attr(*, "model")= chr "OU"
 #>   ..$ bnd:'data.frame':  2 obs. of  2 variables:
-#>   ..$ res: num [1:100, 1:4] 4.34e-02 1.74e-217 7.12e-218 4.34e-02 1.23e-80 ...
+#>   ..$ res: num [1:100, 1:4] 4.34e-02 7.12e-218 1.74e-217 4.34e-02 4.34e-02 ...
 #>   .. ..- attr(*, "dimnames")=List of 2
 #>   ..$ opt:List of 8
 #>   ..- attr(*, "class")= chr [1:2] "gfit" "list"
@@ -120,8 +120,8 @@ print(model_comparison_output$best_model_fit)
 #> GEIGER-fitted comparative model of continuous data
 #>  fitted ‘OU’ model parameters:
 #>  alpha = 0.043393
-#>  sigsq = 278.039659
-#>  z0 = 92.068484
+#>  sigsq = 278.055245
+#>  z0 = 92.068580
 #> 
 #>  model summary:
 #>  log-likelihood = -329.253814
@@ -132,8 +132,8 @@ print(model_comparison_output$best_model_fit)
 #> Convergence diagnostics:
 #>  optimization iterations = 100
 #>  failed iterations = 0
-#>  number of iterations with same best fit = 4
-#>  frequency of best fit = 0.040
+#>  number of iterations with same best fit = 13
+#>  frequency of best fit = 0.130
 #> 
 #>  object summary:
 #>  'lik' -- likelihood function

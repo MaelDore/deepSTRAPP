@@ -121,18 +121,18 @@ use_github_actions()  reports the R CMD check status of your development package
 <h2 id="dart-summary">
 <span class="emoji" data-emoji="dart">🎯</span> Summary<a class="anchor" aria-label="anchor" href="#dart-summary"></a>
 </h2>
-<p><strong>deepSTRAPP</strong> models independently the evolutionary history of continuous, categorical, or biogeographic trait data and the diversification dynamics of a clade, then tests for a relationship between ancestral trait values / states / ranges and diversification rates at any point in time. This flexibility allows users to <strong>identify the specific time-frames of significance</strong> during which diversification dynamics diverged across traits or geographic regions, thereby disentangling the relative contributions of past versus recent processes in shaping present biodiversity patterns. <br></p>
+<p><strong>deepSTRAPP</strong> models independently the evolutionary history of continuous, categorical, or biogeographic trait data and the diversification dynamics of a clade, then tests for a relationship between ancestral trait values / states / ranges and diversification rates at any point in time. This flexibility allows users to <strong>identify the specific time-frames of significance</strong> during which diversification dynamics diverged across traits or geographic regions, thereby disentangling the relative contributions of past versus recent processes in shaping present biodiversity patterns. <br><br></p>
 <div class="section level3">
 <h3 id="the-statistical-framework">The statistical framework<a class="anchor" aria-label="anchor" href="#the-statistical-framework"></a>
 </h3>
-<p><strong>deepSTRAPP</strong> statistical framework is an extension of the STructured RAte Permutations on Phylogenies (STRAPP) test. STRAPP tests are based on <strong>block-permutations</strong>: rates data are randomized across tips within blocks defined by the diversification regimes identified on each tip (typically inferred with BAMM). Permuting within regimes rather than across the whole tree provide the correct error structure to <strong>account for the phylogenetic pseudoreplication of rates</strong> occurring between tips sharing the same macroevolutionary regime. It requires multiple independent associations between character states and diversification to yield a significant macroevolutionary signal (<em>Rabosky &amp; Huang, 2016</em>). <br></p>
+<p><strong>deepSTRAPP</strong> statistical framework is an extension of the STructured RAte Permutations on Phylogenies (STRAPP) test. STRAPP tests are based on <strong>block-permutations</strong>: rates data are randomized across tips within blocks defined by the diversification regimes identified on each tip (typically inferred with BAMM). Permuting within regimes rather than across the whole tree provide the correct error structure to <strong>account for the phylogenetic pseudoreplication of rates</strong> occurring between tips sharing the same macroevolutionary regime. It requires multiple independent associations between character states and diversification to yield a significant macroevolutionary signal (<em>Rabosky &amp; Huang, 2016</em>). <br><br></p>
 </div>
 <div class="section level3">
 <h3 id="applications">Applications<a class="anchor" aria-label="anchor" href="#applications"></a>
 </h3>
 <p>In the context of <strong>historical biogeography</strong>, deepSTRAPP provides a powerful analytic framework to investigate the <strong>Diversification Rate Hypothesis (DRH)</strong>. The DRH posits that the current heterogeneity in diversity patterns, such as the Latitudinal Diversity Gradient, is mainly due to differences in diversification rates between bioregions. This hypothesis is typically assessed by comparing diversification rates across present-day tips between bioregions, for example with a STRAPP test. However, such tests only compare current rates of diversification that may not be informative about the <strong>long-term past dynamics shaping present-day biodiversity</strong>. deepSTRAPP overcomes this methodological gap: it enables users to test the DRH by comparing diversification rates <strong>at any time step along evolutionary time</strong>, providing a quantitative testing framework to <strong>disentangle effects of past and current dynamics</strong> in explaining current patterns of biodiversity.</p>
 <p>Beyond the biogeographic context, deepSTRAPP can test for an <strong>evolutionary relationship between phenotypic evolution and diversification dynamics</strong>, enabling the detection of the <strong>timing of adaptive radiations</strong> linking changes in trait states and bursts in diversification. It provides an alternative approach to state-dependent speciation and extinction (SSE) models that jointly model trait evolution and diversification dynamics but are not designed to <strong>test for differences at a given point in time</strong>.</p>
-<p><strong>deepSTRAPP</strong> is especially suited for <strong>large phylogenies</strong> as the power of the statistical tests is limited by the number of diversification regime shifts detected on the phylogeny and used to perform permutation tests (e.g., <em>Doré et al., 2025</em>). Each macroevolutionary regime acts as an independent event used to test for differences, therefore the sample size of the tests is conditioned by the number of macroevolutionary regimes identified. Larger phylogenies tend to carry more regime shifts, thus hold more information susceptible to yield a significant test result. <br></p>
+<p><strong>deepSTRAPP</strong> is especially suited for <strong>large phylogenies</strong> as the power of the statistical tests is limited by the number of diversification regime shifts detected on the phylogeny and used to perform permutation tests (e.g., <em>Doré et al., 2025</em>). Each macroevolutionary regime acts as an independent event used to test for differences, therefore the sample size of the tests is conditioned by the number of macroevolutionary regimes identified. Larger phylogenies tend to carry more regime shifts, thus hold more information susceptible to yield a significant test result. <br><br></p>
 </div>
 <div class="section level3">
 <h3 id="workflow">Workflow<a class="anchor" aria-label="anchor" href="#workflow"></a>
@@ -155,7 +155,7 @@ use_github_actions()  reports the R CMD check status of your development package
 </ul>
 </li>
 <li>
-<strong>Step 4:</strong> Summarize test results <br>
+<strong>Step 4:</strong> Summarize test results <br><br>
 </li>
 </ul>
 <p><img src="reference/figures/deepSTRAPP_workflow.png" alt="Simplified deepSTRAPP workflow"><strong>Figure 1: Simplified deepSTRAPP workflow showing the main functions <em>(in italics)</em> involved in each step</strong>. Input data in grey. Data processing in blue (main) and beige (internal). Intermediate objects in green. Final outputs in pink.</p>
@@ -164,10 +164,15 @@ use_github_actions()  reports the R CMD check status of your development package
 <p>STRAPP test: Rabosky, D. L., &amp; Huang, H. (2016). A robust semi-parametric test for detecting trait-dependent diversification. <em>Systematic Biology</em>, 65(2), 181-193. <a href="https://doi.org/10.1093/sysbio/syv066" class="external-link uri">https://doi.org/10.1093/sysbio/syv066</a>.</p>
 </blockquote>
 <blockquote>
-<p>deepSTRAPP application: Doré, M., Borowiec, M. L., Branstetter, M. G., Camacho, G. P., Fisher, B. L., Longino, J. T., Ward, P. S., &amp; Blaimer, B. B. (2025). Evolutionary history of ponerine ants highlights how the timing of dispersal events shapes modern biodiversity. <em>Nature Communications</em>, 16, 8297. <a href="https://doi.org/10.1038/s41467-025-63709-3" class="external-link uri">https://doi.org/10.1038/s41467-025-63709-3</a> <br></p>
+<p>deepSTRAPP application: Doré, M., Borowiec, M. L., Branstetter, M. G., Camacho, G. P., Fisher, B. L., Longino, J. T., Ward, P. S., &amp; Blaimer, B. B. (2025). Evolutionary history of ponerine ants highlights how the timing of dispersal events shapes modern biodiversity. <em>Nature Communications</em>, 16, 8297. <a href="https://doi.org/10.1038/s41467-025-63709-3" class="external-link uri">https://doi.org/10.1038/s41467-025-63709-3</a></p>
 </blockquote>
-<p><br><br>
-## <span class="emoji" data-emoji="envelope_with_arrow">📩</span> Installation</p>
+<p><br></p>
+</div>
+</div>
+<div class="section level2">
+<h2 id="envelope_with_arrow-installation">
+<span class="emoji" data-emoji="envelope_with_arrow">📩</span> Installation<a class="anchor" aria-label="anchor" href="#envelope_with_arrow-installation"></a>
+</h2>
 <p><br> deepSTRAPP works on R version 4.4 or more. Be sure to have an R version that is compatible. <br> See <a href="https://CRAN.R-project.org/" class="external-link uri">https://CRAN.R-project.org/</a>.</p>
 <p>From <strong>CRAN</strong>, for the latest release:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
@@ -183,7 +188,12 @@ use_github_actions()  reports the R CMD check status of your development package
 <span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span>repo <span class="op">=</span> <span class="st">"MaelDore/deepSTRAPP"</span>, build_vignettes <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="co"># You will not have access to the vignettes/tutorials within R, but can still acess them through this website.</span></span>
 <span><span class="co"># See the dedicated Sections below.</span></span></code></pre></div>
-<p>You may need additional tools for package compilation such as Rtools (Windows) and Xcode (Mac OS). <br> See <a href="https://support.posit.co/hc/en-us/articles/200486498-Package-Development-Prerequisites" class="external-link">this page</a> for details. <br><br> ## <span class="emoji" data-emoji="link">🔗</span> Dependencies</p>
+<p>You may need additional tools for package compilation such as Rtools (Windows) and Xcode (Mac OS). <br> See <a href="https://support.posit.co/hc/en-us/articles/200486498-Package-Development-Prerequisites" class="external-link">this page</a> for details. <br><br></p>
+</div>
+<div class="section level2">
+<h2 id="link-dependencies">
+<span class="emoji" data-emoji="link">🔗</span> Dependencies<a class="anchor" aria-label="anchor" href="#link-dependencies"></a>
+</h2>
 <p><br> deepSTRAPP relies on other software and R packages to perform some of its core tasks. R package dependencies will automatically be downloaded and installed alongside deepSTRAPP. However, R packages that are not currently available on CRAN, and external software may need to be installed independently.</p>
 <ul>
 <li>The C++ software <strong>BAMM</strong> is used to model diversification dynamics on time-calibrated phylogenies. It is needed by deepSTRAPP to obtain estimates of diversification rates along branches. You can install the latest version of BAMM from its <a href="http://bamm-project.org/" class="external-link">official website</a>. You will later need to provide to deepSTRAPP the path to your BAMM installation folder as an argument to the dedicated function [prepare_diversification_data()], so it can call BAMM within R to perform its tasks.</li>
@@ -220,11 +230,26 @@ use_github_actions()  reports the R CMD check status of your development package
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"drat"</span><span class="op">)</span></span>
 <span><span class="fu">drat</span><span class="fu">::</span><span class="fu">addRepo</span><span class="op">(</span><span class="st">"maeldore"</span>, <span class="st">"https://maeldore.github.io/drat"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"BioGeoBEARS"</span>, <span class="st">"contsimmap"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><br> ## <span class="emoji" data-emoji="desktop_computer">🖥️</span> Website</p>
+<p><br></p>
+</div>
+<div class="section level2">
+<h2 id="desktop_computer-website">
+<span class="emoji" data-emoji="desktop_computer">🖥️</span> Website<a class="anchor" aria-label="anchor" href="#desktop_computer-website"></a>
+</h2>
 <p><br> A companion website is available to browse interactively the different tutorials and functions of <strong>deepSTRAPP</strong> at this URL: <a href="https://maeldore.github.io/deepSTRAPP/" class="uri">https://maeldore.github.io/deepSTRAPP/</a>.</p>
-<p>An overview of all functions and datasets is available <a href="https://maeldore.github.io/deepSTRAPP/reference/index.html">here</a>. <br><br> ## <span class="emoji" data-emoji="joystick">🕹️</span> Quick-to-run example</p>
+<p>An overview of all functions and datasets is available <a href="https://maeldore.github.io/deepSTRAPP/reference/index.html">here</a>. <br><br></p>
+</div>
+<div class="section level2">
+<h2 id="joystick-quick-to-run-example">
+<span class="emoji" data-emoji="joystick">🕹️</span> Quick-to-run example<a class="anchor" aria-label="anchor" href="#joystick-quick-to-run-example"></a>
+</h2>
 <p><br> A <strong>simple use-case</strong> that shows how deepSTRAPP can be used to <strong>test for differences in diversification rates between two trait states along evolutionary times</strong> is available <a href="https://maeldore.github.io/deepSTRAPP/articles/main_tutorial.html">here</a> and within R: <code><a href="articles/main_tutorial.html">vignette("main_tutorial")</a></code>.</p>
-<p>This tutorial presents the main functions in a typical <strong>deepSTRAPP workflow</strong>. <br> For more advanced uses, please refer to the vignettes/tutorials below. <br><br> ## <span class="emoji" data-emoji="scroll">📜</span> Advanced uses / tutorials</p>
+<p>This tutorial presents the main functions in a typical <strong>deepSTRAPP workflow</strong>. <br> For more advanced uses, please refer to the vignettes/tutorials below. <br><br></p>
+</div>
+<div class="section level2">
+<h2 id="scroll-advanced-uses--tutorials">
+<span class="emoji" data-emoji="scroll">📜</span> Advanced uses / tutorials<a class="anchor" aria-label="anchor" href="#scroll-advanced-uses--tutorials"></a>
+</h2>
 <p><br> Tutorials are available to explore more <strong>advanced usages</strong> of deepSTRAPP. They provide explanations on available arguments and interpretations of results of deepSTRAPP across multiple types of data. They are listed below, in the <a href="https://maeldore.github.io/deepSTRAPP/articles/deepSTRAPP.html">companion website</a>, and in this vignette: <code><a href="articles/deepSTRAPP.html">vignette("deepSTRAPP")</a></code>.</p>
 <p><strong>1/ Full deepSTRAPP workflows on different types of data</strong></p>
 <ul>
@@ -315,8 +340,18 @@ use_github_actions()  reports the R CMD check status of your development package
 <span></span>
 <span><span class="co"># You can also use this to open access to all local vignettes in an HTML Brower</span></span>
 <span><span class="fu">utils</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/utils/browseVignettes.html" class="external-link">browseVignettes</a></span><span class="op">(</span>package <span class="op">=</span> <span class="st">"deepSTRAPP"</span><span class="op">)</span></span></code></pre></div>
-<p><br> ## <span class="emoji" data-emoji="bug">🐛</span> Found a bug?</p>
-<p><br> Thank you for finding it! Head over to the <a href="https://github.com/MaelDore/deepSTRAPP/issues" class="external-link">GitHub Issues tab</a> and let me know about it. <br> You can also <a href="mailto:mael.dore@gmail.com">send me an e-mail</a>. <br><br> ## <span class="emoji" data-emoji="black_nib">✒️</span> How to cite deepSTRAPP</p>
+<p><br></p>
+</div>
+<div class="section level2">
+<h2 id="bug-found-a-bug">
+<span class="emoji" data-emoji="bug">🐛</span> Found a bug?<a class="anchor" aria-label="anchor" href="#bug-found-a-bug"></a>
+</h2>
+<p><br> Thank you for finding it! Head over to the <a href="https://github.com/MaelDore/deepSTRAPP/issues" class="external-link">GitHub Issues tab</a> and let me know about it. <br> You can also <a href="mailto:mael.dore@gmail.com">send me an e-mail</a>. <br><br></p>
+</div>
+<div class="section level2">
+<h2 id="black_nib-how-to-cite-deepstrapp">
+<span class="emoji" data-emoji="black_nib">✒️</span> How to cite deepSTRAPP<a class="anchor" aria-label="anchor" href="#black_nib-how-to-cite-deepstrapp"></a>
+</h2>
 <p><br> For any use of <strong>deepSTRAPP</strong>:</p>
 <blockquote>
 <p>Doré, M., &amp; Blaimer, B. B., deepSTRAPP: Testing for differences in diversification rates over deep evolutionary time. (DOI TBA)</p>
@@ -337,7 +372,6 @@ use_github_actions()  reports the R CMD check status of your development package
 <blockquote>
 <p>Matzke, N. J. (2013). Probabilistic historical biogeography: new models for founder-event speciation, imperfect detection, and fossils allow improved accuracy and model-testing. <em>Frontiers of Biogeography</em>, 5(4). <a href="https://doi.org/10.21425/F5FBG19694" class="external-link uri">https://doi.org/10.21425/F5FBG19694</a>.</p>
 </blockquote>
-</div>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">
