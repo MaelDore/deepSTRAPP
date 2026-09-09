@@ -158,7 +158,7 @@ Ponerinae_cat_3lvl_data_old_calib <- prepare_trait_data(
     plot_map = FALSE)
 #> Warning: Entries in 'tip_data' were reordered to match 'phylo$tip.label.
 #> 
-#> 2026-09-09 04:26:48.152448 - Fit 1 evolutionary model(s): ER.
+#> 2026-09-09 05:40:18.425118 - Fit 1 evolutionary model(s): ER.
 #> 
 #> ------ ER model ------ 
 #> 
@@ -187,11 +187,11 @@ Ponerinae_cat_3lvl_data_old_calib <- prepare_trait_data(
 #>  'res' -- optimization iteration summary
 #>  'opt' -- maximum likelihood parameter estimates
 #> 
-#> 2026-09-09 04:26:52.862327 - Compare model fits.
+#> 2026-09-09 05:40:23.330756 - Compare model fits.
 #> 
 #>    model      logL k      AIC     AICc delta_AICc Akaike_weights rank
 #> ER    ER -45.66509 1 93.33017 93.33278          0            100    1
-#> 2026-09-09 04:26:52.863791 - Run simulations for stochastic mapping.
+#> 2026-09-09 05:40:23.331821 - Run simulations for stochastic mapping.
 #> 
 #> make.simmap is sampling character histories conditioned on
 #> the transition matrix
@@ -207,102 +207,102 @@ Ponerinae_cat_3lvl_data_old_calib <- prepare_trait_data(
 #>     arboreal subterranean  terricolous 
 #>    0.3333333    0.3333333    0.3333333 
 #> Done.
-#> 2026-09-09 04:29:14.476297 - Extract ACE as posterior sampling from stochastic mapping.
-#> 2026-09-09 04:29:17.962216 - Create densityMaps by summarizing simulations of evolutionary history (simmaps).
+#> 2026-09-09 05:42:07.903723 - Extract ACE as posterior sampling from stochastic mapping.
+#> 2026-09-09 05:42:10.704748 - Create densityMaps by summarizing simulations of evolutionary history (simmaps).
 #> 
-#> 2026-09-09 04:29:21.796884 - Posterior probability computed for edge n°100/3066
-#> 2026-09-09 04:29:22.887474 - Posterior probability computed for edge n°200/3066
-#> 2026-09-09 04:29:24.183585 - Posterior probability computed for edge n°300/3066
-#> 2026-09-09 04:29:26.557785 - Posterior probability computed for edge n°400/3066
-#> 2026-09-09 04:29:27.448889 - Posterior probability computed for edge n°500/3066
-#> 2026-09-09 04:29:28.297863 - Posterior probability computed for edge n°600/3066
-#> 2026-09-09 04:29:28.73746 - Posterior probability computed for edge n°700/3066
-#> 2026-09-09 04:29:29.076267 - Posterior probability computed for edge n°800/3066
-#> 2026-09-09 04:29:29.457887 - Posterior probability computed for edge n°900/3066
-#> 2026-09-09 04:29:29.857433 - Posterior probability computed for edge n°1000/3066
-#> 2026-09-09 04:29:30.244592 - Posterior probability computed for edge n°1100/3066
-#> 2026-09-09 04:29:30.951986 - Posterior probability computed for edge n°1200/3066
-#> 2026-09-09 04:29:31.641279 - Posterior probability computed for edge n°1300/3066
-#> 2026-09-09 04:29:32.715061 - Posterior probability computed for edge n°1400/3066
-#> 2026-09-09 04:29:33.410419 - Posterior probability computed for edge n°1500/3066
-#> 2026-09-09 04:29:34.635818 - Posterior probability computed for edge n°1600/3066
-#> 2026-09-09 04:29:35.814981 - Posterior probability computed for edge n°1700/3066
-#> 2026-09-09 04:29:36.683394 - Posterior probability computed for edge n°1800/3066
-#> 2026-09-09 04:29:37.350288 - Posterior probability computed for edge n°1900/3066
-#> 2026-09-09 04:29:37.908486 - Posterior probability computed for edge n°2000/3066
-#> 2026-09-09 04:29:38.656933 - Posterior probability computed for edge n°2100/3066
-#> 2026-09-09 04:29:39.534876 - Posterior probability computed for edge n°2200/3066
-#> 2026-09-09 04:29:40.62518 - Posterior probability computed for edge n°2300/3066
-#> 2026-09-09 04:29:41.373658 - Posterior probability computed for edge n°2400/3066
-#> 2026-09-09 04:29:42.07622 - Posterior probability computed for edge n°2500/3066
-#> 2026-09-09 04:29:42.937977 - Posterior probability computed for edge n°2600/3066
-#> 2026-09-09 04:29:44.194309 - Posterior probability computed for edge n°2700/3066
-#> 2026-09-09 04:29:46.130086 - Posterior probability computed for edge n°2800/3066
-#> 2026-09-09 04:29:48.362587 - Posterior probability computed for edge n°2900/3066
-#> 2026-09-09 04:29:50.290279 - Posterior probability computed for edge n°3000/3066
-#> 2026-09-09 04:29:51.481278 - Posterior probabilities computed for State = arboreal - n°1/3
-#> 2026-09-09 04:29:54.777461 - Posterior probability computed for edge n°100/3066
-#> 2026-09-09 04:29:55.713662 - Posterior probability computed for edge n°200/3066
-#> 2026-09-09 04:29:56.840185 - Posterior probability computed for edge n°300/3066
-#> 2026-09-09 04:29:59.015032 - Posterior probability computed for edge n°400/3066
-#> 2026-09-09 04:29:59.794653 - Posterior probability computed for edge n°500/3066
-#> 2026-09-09 04:30:00.119693 - Posterior probability computed for edge n°600/3066
-#> 2026-09-09 04:30:00.543216 - Posterior probability computed for edge n°700/3066
-#> 2026-09-09 04:30:00.8904 - Posterior probability computed for edge n°800/3066
-#> 2026-09-09 04:30:01.278094 - Posterior probability computed for edge n°900/3066
-#> 2026-09-09 04:30:01.682271 - Posterior probability computed for edge n°1000/3066
-#> 2026-09-09 04:30:02.099037 - Posterior probability computed for edge n°1100/3066
-#> 2026-09-09 04:30:02.825659 - Posterior probability computed for edge n°1200/3066
-#> 2026-09-09 04:30:03.535182 - Posterior probability computed for edge n°1300/3066
-#> 2026-09-09 04:30:04.673845 - Posterior probability computed for edge n°1400/3066
-#> 2026-09-09 04:30:05.387501 - Posterior probability computed for edge n°1500/3066
-#> 2026-09-09 04:30:06.676788 - Posterior probability computed for edge n°1600/3066
-#> 2026-09-09 04:30:07.883584 - Posterior probability computed for edge n°1700/3066
-#> 2026-09-09 04:30:08.759679 - Posterior probability computed for edge n°1800/3066
-#> 2026-09-09 04:30:09.450129 - Posterior probability computed for edge n°1900/3066
-#> 2026-09-09 04:30:10.034208 - Posterior probability computed for edge n°2000/3066
-#> 2026-09-09 04:30:11.354097 - Posterior probability computed for edge n°2100/3066
-#> 2026-09-09 04:30:12.214719 - Posterior probability computed for edge n°2200/3066
-#> 2026-09-09 04:30:13.272962 - Posterior probability computed for edge n°2300/3066
-#> 2026-09-09 04:30:14.004575 - Posterior probability computed for edge n°2400/3066
-#> 2026-09-09 04:30:14.694465 - Posterior probability computed for edge n°2500/3066
-#> 2026-09-09 04:30:15.551386 - Posterior probability computed for edge n°2600/3066
-#> 2026-09-09 04:30:16.766581 - Posterior probability computed for edge n°2700/3066
-#> 2026-09-09 04:30:18.664914 - Posterior probability computed for edge n°2800/3066
-#> 2026-09-09 04:30:20.883614 - Posterior probability computed for edge n°2900/3066
-#> 2026-09-09 04:30:22.774385 - Posterior probability computed for edge n°3000/3066
-#> 2026-09-09 04:30:23.965978 - Posterior probabilities computed for State = subterranean - n°2/3
-#> 2026-09-09 04:30:27.318983 - Posterior probability computed for edge n°100/3066
-#> 2026-09-09 04:30:28.253654 - Posterior probability computed for edge n°200/3066
-#> 2026-09-09 04:30:29.38147 - Posterior probability computed for edge n°300/3066
-#> 2026-09-09 04:30:31.441 - Posterior probability computed for edge n°400/3066
-#> 2026-09-09 04:30:32.270909 - Posterior probability computed for edge n°500/3066
-#> 2026-09-09 04:30:32.597608 - Posterior probability computed for edge n°600/3066
-#> 2026-09-09 04:30:33.002862 - Posterior probability computed for edge n°700/3066
-#> 2026-09-09 04:30:33.345993 - Posterior probability computed for edge n°800/3066
-#> 2026-09-09 04:30:33.732288 - Posterior probability computed for edge n°900/3066
-#> 2026-09-09 04:30:34.153967 - Posterior probability computed for edge n°1000/3066
-#> 2026-09-09 04:30:34.550367 - Posterior probability computed for edge n°1100/3066
-#> 2026-09-09 04:30:35.263811 - Posterior probability computed for edge n°1200/3066
-#> 2026-09-09 04:30:35.983101 - Posterior probability computed for edge n°1300/3066
-#> 2026-09-09 04:30:37.090518 - Posterior probability computed for edge n°1400/3066
-#> 2026-09-09 04:30:37.806147 - Posterior probability computed for edge n°1500/3066
-#> 2026-09-09 04:30:39.060283 - Posterior probability computed for edge n°1600/3066
-#> 2026-09-09 04:30:40.298467 - Posterior probability computed for edge n°1700/3066
-#> 2026-09-09 04:30:41.178459 - Posterior probability computed for edge n°1800/3066
-#> 2026-09-09 04:30:41.880349 - Posterior probability computed for edge n°1900/3066
-#> 2026-09-09 04:30:42.459701 - Posterior probability computed for edge n°2000/3066
-#> 2026-09-09 04:30:43.225005 - Posterior probability computed for edge n°2100/3066
-#> 2026-09-09 04:30:44.124917 - Posterior probability computed for edge n°2200/3066
-#> 2026-09-09 04:30:45.248963 - Posterior probability computed for edge n°2300/3066
-#> 2026-09-09 04:30:46.027084 - Posterior probability computed for edge n°2400/3066
-#> 2026-09-09 04:30:46.746383 - Posterior probability computed for edge n°2500/3066
-#> 2026-09-09 04:30:47.639438 - Posterior probability computed for edge n°2600/3066
-#> 2026-09-09 04:30:48.911504 - Posterior probability computed for edge n°2700/3066
-#> 2026-09-09 04:30:51.451405 - Posterior probability computed for edge n°2800/3066
-#> 2026-09-09 04:30:53.651424 - Posterior probability computed for edge n°2900/3066
-#> 2026-09-09 04:30:55.54285 - Posterior probability computed for edge n°3000/3066
-#> 2026-09-09 04:30:56.712492 - Posterior probabilities computed for State = terricolous - n°3/3
+#> 2026-09-09 05:42:14.050789 - Posterior probability computed for edge n°100/3066
+#> 2026-09-09 05:42:14.972496 - Posterior probability computed for edge n°200/3066
+#> 2026-09-09 05:42:16.066481 - Posterior probability computed for edge n°300/3066
+#> 2026-09-09 05:42:18.071621 - Posterior probability computed for edge n°400/3066
+#> 2026-09-09 05:42:18.815122 - Posterior probability computed for edge n°500/3066
+#> 2026-09-09 05:42:19.678666 - Posterior probability computed for edge n°600/3066
+#> 2026-09-09 05:42:20.017638 - Posterior probability computed for edge n°700/3066
+#> 2026-09-09 05:42:20.283618 - Posterior probability computed for edge n°800/3066
+#> 2026-09-09 05:42:20.582539 - Posterior probability computed for edge n°900/3066
+#> 2026-09-09 05:42:20.895201 - Posterior probability computed for edge n°1000/3066
+#> 2026-09-09 05:42:21.19938 - Posterior probability computed for edge n°1100/3066
+#> 2026-09-09 05:42:21.756043 - Posterior probability computed for edge n°1200/3066
+#> 2026-09-09 05:42:22.300607 - Posterior probability computed for edge n°1300/3066
+#> 2026-09-09 05:42:23.153013 - Posterior probability computed for edge n°1400/3066
+#> 2026-09-09 05:42:23.701548 - Posterior probability computed for edge n°1500/3066
+#> 2026-09-09 05:42:24.674267 - Posterior probability computed for edge n°1600/3066
+#> 2026-09-09 05:42:25.59773 - Posterior probability computed for edge n°1700/3066
+#> 2026-09-09 05:42:26.287382 - Posterior probability computed for edge n°1800/3066
+#> 2026-09-09 05:42:26.817214 - Posterior probability computed for edge n°1900/3066
+#> 2026-09-09 05:42:27.262726 - Posterior probability computed for edge n°2000/3066
+#> 2026-09-09 05:42:27.856626 - Posterior probability computed for edge n°2100/3066
+#> 2026-09-09 05:42:28.559657 - Posterior probability computed for edge n°2200/3066
+#> 2026-09-09 05:42:29.42643 - Posterior probability computed for edge n°2300/3066
+#> 2026-09-09 05:42:30.023387 - Posterior probability computed for edge n°2400/3066
+#> 2026-09-09 05:42:30.582794 - Posterior probability computed for edge n°2500/3066
+#> 2026-09-09 05:42:31.268765 - Posterior probability computed for edge n°2600/3066
+#> 2026-09-09 05:42:32.272791 - Posterior probability computed for edge n°2700/3066
+#> 2026-09-09 05:42:33.819188 - Posterior probability computed for edge n°2800/3066
+#> 2026-09-09 05:42:35.609349 - Posterior probability computed for edge n°2900/3066
+#> 2026-09-09 05:42:37.153426 - Posterior probability computed for edge n°3000/3066
+#> 2026-09-09 05:42:38.112243 - Posterior probabilities computed for State = arboreal - n°1/3
+#> 2026-09-09 05:42:40.905881 - Posterior probability computed for edge n°100/3066
+#> 2026-09-09 05:42:41.668922 - Posterior probability computed for edge n°200/3066
+#> 2026-09-09 05:42:42.580366 - Posterior probability computed for edge n°300/3066
+#> 2026-09-09 05:42:44.402906 - Posterior probability computed for edge n°400/3066
+#> 2026-09-09 05:42:45.026481 - Posterior probability computed for edge n°500/3066
+#> 2026-09-09 05:42:45.285061 - Posterior probability computed for edge n°600/3066
+#> 2026-09-09 05:42:45.626197 - Posterior probability computed for edge n°700/3066
+#> 2026-09-09 05:42:45.904511 - Posterior probability computed for edge n°800/3066
+#> 2026-09-09 05:42:46.215595 - Posterior probability computed for edge n°900/3066
+#> 2026-09-09 05:42:46.537424 - Posterior probability computed for edge n°1000/3066
+#> 2026-09-09 05:42:46.866959 - Posterior probability computed for edge n°1100/3066
+#> 2026-09-09 05:42:47.446462 - Posterior probability computed for edge n°1200/3066
+#> 2026-09-09 05:42:48.006982 - Posterior probability computed for edge n°1300/3066
+#> 2026-09-09 05:42:48.912981 - Posterior probability computed for edge n°1400/3066
+#> 2026-09-09 05:42:49.485392 - Posterior probability computed for edge n°1500/3066
+#> 2026-09-09 05:42:50.523632 - Posterior probability computed for edge n°1600/3066
+#> 2026-09-09 05:42:51.49666 - Posterior probability computed for edge n°1700/3066
+#> 2026-09-09 05:42:52.204089 - Posterior probability computed for edge n°1800/3066
+#> 2026-09-09 05:42:52.758446 - Posterior probability computed for edge n°1900/3066
+#> 2026-09-09 05:42:53.232298 - Posterior probability computed for edge n°2000/3066
+#> 2026-09-09 05:42:54.501019 - Posterior probability computed for edge n°2100/3066
+#> 2026-09-09 05:42:55.185721 - Posterior probability computed for edge n°2200/3066
+#> 2026-09-09 05:42:56.015049 - Posterior probability computed for edge n°2300/3066
+#> 2026-09-09 05:42:56.585621 - Posterior probability computed for edge n°2400/3066
+#> 2026-09-09 05:42:57.123822 - Posterior probability computed for edge n°2500/3066
+#> 2026-09-09 05:42:57.779577 - Posterior probability computed for edge n°2600/3066
+#> 2026-09-09 05:42:58.739748 - Posterior probability computed for edge n°2700/3066
+#> 2026-09-09 05:43:00.231222 - Posterior probability computed for edge n°2800/3066
+#> 2026-09-09 05:43:01.967084 - Posterior probability computed for edge n°2900/3066
+#> 2026-09-09 05:43:03.445898 - Posterior probability computed for edge n°3000/3066
+#> 2026-09-09 05:43:04.3837 - Posterior probabilities computed for State = subterranean - n°2/3
+#> 2026-09-09 05:43:07.237971 - Posterior probability computed for edge n°100/3066
+#> 2026-09-09 05:43:07.991667 - Posterior probability computed for edge n°200/3066
+#> 2026-09-09 05:43:08.903048 - Posterior probability computed for edge n°300/3066
+#> 2026-09-09 05:43:10.581298 - Posterior probability computed for edge n°400/3066
+#> 2026-09-09 05:43:11.264691 - Posterior probability computed for edge n°500/3066
+#> 2026-09-09 05:43:11.526641 - Posterior probability computed for edge n°600/3066
+#> 2026-09-09 05:43:11.849726 - Posterior probability computed for edge n°700/3066
+#> 2026-09-09 05:43:12.122633 - Posterior probability computed for edge n°800/3066
+#> 2026-09-09 05:43:12.429395 - Posterior probability computed for edge n°900/3066
+#> 2026-09-09 05:43:12.773388 - Posterior probability computed for edge n°1000/3066
+#> 2026-09-09 05:43:13.087277 - Posterior probability computed for edge n°1100/3066
+#> 2026-09-09 05:43:13.657911 - Posterior probability computed for edge n°1200/3066
+#> 2026-09-09 05:43:14.242139 - Posterior probability computed for edge n°1300/3066
+#> 2026-09-09 05:43:15.137549 - Posterior probability computed for edge n°1400/3066
+#> 2026-09-09 05:43:15.714879 - Posterior probability computed for edge n°1500/3066
+#> 2026-09-09 05:43:16.740449 - Posterior probability computed for edge n°1600/3066
+#> 2026-09-09 05:43:17.71989 - Posterior probability computed for edge n°1700/3066
+#> 2026-09-09 05:43:18.429144 - Posterior probability computed for edge n°1800/3066
+#> 2026-09-09 05:43:19.001555 - Posterior probability computed for edge n°1900/3066
+#> 2026-09-09 05:43:19.467991 - Posterior probability computed for edge n°2000/3066
+#> 2026-09-09 05:43:20.085416 - Posterior probability computed for edge n°2100/3066
+#> 2026-09-09 05:43:20.811777 - Posterior probability computed for edge n°2200/3066
+#> 2026-09-09 05:43:21.724119 - Posterior probability computed for edge n°2300/3066
+#> 2026-09-09 05:43:22.350062 - Posterior probability computed for edge n°2400/3066
+#> 2026-09-09 05:43:22.929567 - Posterior probability computed for edge n°2500/3066
+#> 2026-09-09 05:43:23.655792 - Posterior probability computed for edge n°2600/3066
+#> 2026-09-09 05:43:24.701937 - Posterior probability computed for edge n°2700/3066
+#> 2026-09-09 05:43:26.981255 - Posterior probability computed for edge n°2800/3066
+#> 2026-09-09 05:43:28.761328 - Posterior probability computed for edge n°2900/3066
+#> 2026-09-09 05:43:30.235724 - Posterior probability computed for edge n°3000/3066
+#> 2026-09-09 05:43:31.161098 - Posterior probabilities computed for State = terricolous - n°3/3
 
 # Note that densityMaps are already produced by the [deepSTRAPP::prepare_trait_data()] function,
 # but for the sake of example, we can convert the simmaps stored in the output into densityMaps,
@@ -311,99 +311,99 @@ Ponerinae_cat_3lvl_data_old_calib <- prepare_trait_data(
 ## Convert simmaps to densityMaps as input format for deepSTRAPP
 Ponerinae_densityMaps <- convert_simmaps_to_densityMaps(
    simmaps = Ponerinae_cat_3lvl_data_old_calib$simmaps)
-#> 2026-09-09 04:31:00.121429 - Posterior probability computed for edge n°100/3066
-#> 2026-09-09 04:31:01.05538 - Posterior probability computed for edge n°200/3066
-#> 2026-09-09 04:31:02.194092 - Posterior probability computed for edge n°300/3066
-#> 2026-09-09 04:31:04.245768 - Posterior probability computed for edge n°400/3066
-#> 2026-09-09 04:31:05.058773 - Posterior probability computed for edge n°500/3066
-#> 2026-09-09 04:31:05.378841 - Posterior probability computed for edge n°600/3066
-#> 2026-09-09 04:31:05.780712 - Posterior probability computed for edge n°700/3066
-#> 2026-09-09 04:31:06.124419 - Posterior probability computed for edge n°800/3066
-#> 2026-09-09 04:31:06.526803 - Posterior probability computed for edge n°900/3066
-#> 2026-09-09 04:31:06.927899 - Posterior probability computed for edge n°1000/3066
-#> 2026-09-09 04:31:07.318288 - Posterior probability computed for edge n°1100/3066
-#> 2026-09-09 04:31:08.042275 - Posterior probability computed for edge n°1200/3066
-#> 2026-09-09 04:31:08.737472 - Posterior probability computed for edge n°1300/3066
-#> 2026-09-09 04:31:09.841002 - Posterior probability computed for edge n°1400/3066
-#> 2026-09-09 04:31:10.553288 - Posterior probability computed for edge n°1500/3066
-#> 2026-09-09 04:31:11.811564 - Posterior probability computed for edge n°1600/3066
-#> 2026-09-09 04:31:13.002347 - Posterior probability computed for edge n°1700/3066
-#> 2026-09-09 04:31:13.877224 - Posterior probability computed for edge n°1800/3066
-#> 2026-09-09 04:31:14.56646 - Posterior probability computed for edge n°1900/3066
-#> 2026-09-09 04:31:15.148361 - Posterior probability computed for edge n°2000/3066
-#> 2026-09-09 04:31:15.927269 - Posterior probability computed for edge n°2100/3066
-#> 2026-09-09 04:31:16.835731 - Posterior probability computed for edge n°2200/3066
-#> 2026-09-09 04:31:17.952231 - Posterior probability computed for edge n°2300/3066
-#> 2026-09-09 04:31:18.718192 - Posterior probability computed for edge n°2400/3066
-#> 2026-09-09 04:31:19.463234 - Posterior probability computed for edge n°2500/3066
-#> 2026-09-09 04:31:20.358078 - Posterior probability computed for edge n°2600/3066
-#> 2026-09-09 04:31:21.619105 - Posterior probability computed for edge n°2700/3066
-#> 2026-09-09 04:31:23.628742 - Posterior probability computed for edge n°2800/3066
-#> 2026-09-09 04:31:25.926912 - Posterior probability computed for edge n°2900/3066
-#> 2026-09-09 04:31:27.918798 - Posterior probability computed for edge n°3000/3066
-#> 2026-09-09 04:31:29.721688 - Posterior probabilities computed for State = arboreal - n°1/3
-#> 2026-09-09 04:31:32.985353 - Posterior probability computed for edge n°100/3066
-#> 2026-09-09 04:31:33.93558 - Posterior probability computed for edge n°200/3066
-#> 2026-09-09 04:31:35.056073 - Posterior probability computed for edge n°300/3066
-#> 2026-09-09 04:31:37.232116 - Posterior probability computed for edge n°400/3066
-#> 2026-09-09 04:31:38.006142 - Posterior probability computed for edge n°500/3066
-#> 2026-09-09 04:31:38.325315 - Posterior probability computed for edge n°600/3066
-#> 2026-09-09 04:31:38.745271 - Posterior probability computed for edge n°700/3066
-#> 2026-09-09 04:31:39.083781 - Posterior probability computed for edge n°800/3066
-#> 2026-09-09 04:31:39.465607 - Posterior probability computed for edge n°900/3066
-#> 2026-09-09 04:31:39.880438 - Posterior probability computed for edge n°1000/3066
-#> 2026-09-09 04:31:40.271204 - Posterior probability computed for edge n°1100/3066
-#> 2026-09-09 04:31:40.973691 - Posterior probability computed for edge n°1200/3066
-#> 2026-09-09 04:31:41.681031 - Posterior probability computed for edge n°1300/3066
-#> 2026-09-09 04:31:42.79022 - Posterior probability computed for edge n°1400/3066
-#> 2026-09-09 04:31:43.512988 - Posterior probability computed for edge n°1500/3066
-#> 2026-09-09 04:31:44.75311 - Posterior probability computed for edge n°1600/3066
-#> 2026-09-09 04:31:45.944374 - Posterior probability computed for edge n°1700/3066
-#> 2026-09-09 04:31:46.806015 - Posterior probability computed for edge n°1800/3066
-#> 2026-09-09 04:31:47.50415 - Posterior probability computed for edge n°1900/3066
-#> 2026-09-09 04:31:48.080862 - Posterior probability computed for edge n°2000/3066
-#> 2026-09-09 04:31:48.841028 - Posterior probability computed for edge n°2100/3066
-#> 2026-09-09 04:31:49.737963 - Posterior probability computed for edge n°2200/3066
-#> 2026-09-09 04:31:50.861817 - Posterior probability computed for edge n°2300/3066
-#> 2026-09-09 04:31:51.643462 - Posterior probability computed for edge n°2400/3066
-#> 2026-09-09 04:31:52.363903 - Posterior probability computed for edge n°2500/3066
-#> 2026-09-09 04:31:53.25662 - Posterior probability computed for edge n°2600/3066
-#> 2026-09-09 04:31:54.533273 - Posterior probability computed for edge n°2700/3066
-#> 2026-09-09 04:31:56.52481 - Posterior probability computed for edge n°2800/3066
-#> 2026-09-09 04:31:58.8132 - Posterior probability computed for edge n°2900/3066
-#> 2026-09-09 04:32:00.804686 - Posterior probability computed for edge n°3000/3066
-#> 2026-09-09 04:32:02.052824 - Posterior probabilities computed for State = subterranean - n°2/3
-#> 2026-09-09 04:32:05.626183 - Posterior probability computed for edge n°100/3066
-#> 2026-09-09 04:32:07.30364 - Posterior probability computed for edge n°200/3066
-#> 2026-09-09 04:32:08.356117 - Posterior probability computed for edge n°300/3066
-#> 2026-09-09 04:32:10.286388 - Posterior probability computed for edge n°400/3066
-#> 2026-09-09 04:32:11.026866 - Posterior probability computed for edge n°500/3066
-#> 2026-09-09 04:32:11.333244 - Posterior probability computed for edge n°600/3066
-#> 2026-09-09 04:32:11.720615 - Posterior probability computed for edge n°700/3066
-#> 2026-09-09 04:32:12.046918 - Posterior probability computed for edge n°800/3066
-#> 2026-09-09 04:32:12.415906 - Posterior probability computed for edge n°900/3066
-#> 2026-09-09 04:32:12.799484 - Posterior probability computed for edge n°1000/3066
-#> 2026-09-09 04:32:13.171692 - Posterior probability computed for edge n°1100/3066
-#> 2026-09-09 04:32:13.870986 - Posterior probability computed for edge n°1200/3066
-#> 2026-09-09 04:32:14.553705 - Posterior probability computed for edge n°1300/3066
-#> 2026-09-09 04:32:15.577615 - Posterior probability computed for edge n°1400/3066
-#> 2026-09-09 04:32:16.251347 - Posterior probability computed for edge n°1500/3066
-#> 2026-09-09 04:32:17.434464 - Posterior probability computed for edge n°1600/3066
-#> 2026-09-09 04:32:18.542378 - Posterior probability computed for edge n°1700/3066
-#> 2026-09-09 04:32:19.351045 - Posterior probability computed for edge n°1800/3066
-#> 2026-09-09 04:32:19.995279 - Posterior probability computed for edge n°1900/3066
-#> 2026-09-09 04:32:20.542105 - Posterior probability computed for edge n°2000/3066
-#> 2026-09-09 04:32:21.269897 - Posterior probability computed for edge n°2100/3066
-#> 2026-09-09 04:32:22.115719 - Posterior probability computed for edge n°2200/3066
-#> 2026-09-09 04:32:23.152823 - Posterior probability computed for edge n°2300/3066
-#> 2026-09-09 04:32:23.874856 - Posterior probability computed for edge n°2400/3066
-#> 2026-09-09 04:32:24.579886 - Posterior probability computed for edge n°2500/3066
-#> 2026-09-09 04:32:25.404637 - Posterior probability computed for edge n°2600/3066
-#> 2026-09-09 04:32:26.58552 - Posterior probability computed for edge n°2700/3066
-#> 2026-09-09 04:32:28.453143 - Posterior probability computed for edge n°2800/3066
-#> 2026-09-09 04:32:30.571316 - Posterior probability computed for edge n°2900/3066
-#> 2026-09-09 04:32:32.425801 - Posterior probability computed for edge n°3000/3066
-#> 2026-09-09 04:32:33.559677 - Posterior probabilities computed for State = terricolous - n°3/3
+#> 2026-09-09 05:43:34.087371 - Posterior probability computed for edge n°100/3066
+#> 2026-09-09 05:43:34.843148 - Posterior probability computed for edge n°200/3066
+#> 2026-09-09 05:43:35.749848 - Posterior probability computed for edge n°300/3066
+#> 2026-09-09 05:43:37.418806 - Posterior probability computed for edge n°400/3066
+#> 2026-09-09 05:43:38.082186 - Posterior probability computed for edge n°500/3066
+#> 2026-09-09 05:43:38.336417 - Posterior probability computed for edge n°600/3066
+#> 2026-09-09 05:43:38.659703 - Posterior probability computed for edge n°700/3066
+#> 2026-09-09 05:43:38.931446 - Posterior probability computed for edge n°800/3066
+#> 2026-09-09 05:43:39.258889 - Posterior probability computed for edge n°900/3066
+#> 2026-09-09 05:43:39.579535 - Posterior probability computed for edge n°1000/3066
+#> 2026-09-09 05:43:39.894997 - Posterior probability computed for edge n°1100/3066
+#> 2026-09-09 05:43:40.479095 - Posterior probability computed for edge n°1200/3066
+#> 2026-09-09 05:43:41.037549 - Posterior probability computed for edge n°1300/3066
+#> 2026-09-09 05:43:41.92833 - Posterior probability computed for edge n°1400/3066
+#> 2026-09-09 05:43:42.499922 - Posterior probability computed for edge n°1500/3066
+#> 2026-09-09 05:43:43.521653 - Posterior probability computed for edge n°1600/3066
+#> 2026-09-09 05:43:44.484237 - Posterior probability computed for edge n°1700/3066
+#> 2026-09-09 05:43:45.184817 - Posterior probability computed for edge n°1800/3066
+#> 2026-09-09 05:43:45.740027 - Posterior probability computed for edge n°1900/3066
+#> 2026-09-09 05:43:46.208605 - Posterior probability computed for edge n°2000/3066
+#> 2026-09-09 05:43:46.895879 - Posterior probability computed for edge n°2100/3066
+#> 2026-09-09 05:43:47.629697 - Posterior probability computed for edge n°2200/3066
+#> 2026-09-09 05:43:48.527913 - Posterior probability computed for edge n°2300/3066
+#> 2026-09-09 05:43:49.143745 - Posterior probability computed for edge n°2400/3066
+#> 2026-09-09 05:43:49.741477 - Posterior probability computed for edge n°2500/3066
+#> 2026-09-09 05:43:50.462072 - Posterior probability computed for edge n°2600/3066
+#> 2026-09-09 05:43:51.479721 - Posterior probability computed for edge n°2700/3066
+#> 2026-09-09 05:43:53.105807 - Posterior probability computed for edge n°2800/3066
+#> 2026-09-09 05:43:54.97004 - Posterior probability computed for edge n°2900/3066
+#> 2026-09-09 05:43:56.594472 - Posterior probability computed for edge n°3000/3066
+#> 2026-09-09 05:43:58.297424 - Posterior probabilities computed for State = arboreal - n°1/3
+#> 2026-09-09 05:44:01.016327 - Posterior probability computed for edge n°100/3066
+#> 2026-09-09 05:44:01.781187 - Posterior probability computed for edge n°200/3066
+#> 2026-09-09 05:44:02.687356 - Posterior probability computed for edge n°300/3066
+#> 2026-09-09 05:44:04.494105 - Posterior probability computed for edge n°400/3066
+#> 2026-09-09 05:44:05.110235 - Posterior probability computed for edge n°500/3066
+#> 2026-09-09 05:44:05.363417 - Posterior probability computed for edge n°600/3066
+#> 2026-09-09 05:44:05.701896 - Posterior probability computed for edge n°700/3066
+#> 2026-09-09 05:44:05.971902 - Posterior probability computed for edge n°800/3066
+#> 2026-09-09 05:44:06.275334 - Posterior probability computed for edge n°900/3066
+#> 2026-09-09 05:44:06.609591 - Posterior probability computed for edge n°1000/3066
+#> 2026-09-09 05:44:06.923356 - Posterior probability computed for edge n°1100/3066
+#> 2026-09-09 05:44:07.488712 - Posterior probability computed for edge n°1200/3066
+#> 2026-09-09 05:44:08.062515 - Posterior probability computed for edge n°1300/3066
+#> 2026-09-09 05:44:08.942375 - Posterior probability computed for edge n°1400/3066
+#> 2026-09-09 05:44:09.53601 - Posterior probability computed for edge n°1500/3066
+#> 2026-09-09 05:44:10.556015 - Posterior probability computed for edge n°1600/3066
+#> 2026-09-09 05:44:11.512028 - Posterior probability computed for edge n°1700/3066
+#> 2026-09-09 05:44:12.207613 - Posterior probability computed for edge n°1800/3066
+#> 2026-09-09 05:44:12.772887 - Posterior probability computed for edge n°1900/3066
+#> 2026-09-09 05:44:13.238313 - Posterior probability computed for edge n°2000/3066
+#> 2026-09-09 05:44:13.845084 - Posterior probability computed for edge n°2100/3066
+#> 2026-09-09 05:44:14.567376 - Posterior probability computed for edge n°2200/3066
+#> 2026-09-09 05:44:15.466944 - Posterior probability computed for edge n°2300/3066
+#> 2026-09-09 05:44:16.090613 - Posterior probability computed for edge n°2400/3066
+#> 2026-09-09 05:44:16.65758 - Posterior probability computed for edge n°2500/3066
+#> 2026-09-09 05:44:17.373106 - Posterior probability computed for edge n°2600/3066
+#> 2026-09-09 05:44:18.416137 - Posterior probability computed for edge n°2700/3066
+#> 2026-09-09 05:44:20.031718 - Posterior probability computed for edge n°2800/3066
+#> 2026-09-09 05:44:21.882319 - Posterior probability computed for edge n°2900/3066
+#> 2026-09-09 05:44:23.482071 - Posterior probability computed for edge n°3000/3066
+#> 2026-09-09 05:44:24.468685 - Posterior probabilities computed for State = subterranean - n°2/3
+#> 2026-09-09 05:44:27.475895 - Posterior probability computed for edge n°100/3066
+#> 2026-09-09 05:44:29.064807 - Posterior probability computed for edge n°200/3066
+#> 2026-09-09 05:44:29.869419 - Posterior probability computed for edge n°300/3066
+#> 2026-09-09 05:44:31.363105 - Posterior probability computed for edge n°400/3066
+#> 2026-09-09 05:44:31.931719 - Posterior probability computed for edge n°500/3066
+#> 2026-09-09 05:44:32.164659 - Posterior probability computed for edge n°600/3066
+#> 2026-09-09 05:44:32.456722 - Posterior probability computed for edge n°700/3066
+#> 2026-09-09 05:44:32.704952 - Posterior probability computed for edge n°800/3066
+#> 2026-09-09 05:44:32.985218 - Posterior probability computed for edge n°900/3066
+#> 2026-09-09 05:44:33.277101 - Posterior probability computed for edge n°1000/3066
+#> 2026-09-09 05:44:33.563093 - Posterior probability computed for edge n°1100/3066
+#> 2026-09-09 05:44:34.079648 - Posterior probability computed for edge n°1200/3066
+#> 2026-09-09 05:44:34.587703 - Posterior probability computed for edge n°1300/3066
+#> 2026-09-09 05:44:35.382141 - Posterior probability computed for edge n°1400/3066
+#> 2026-09-09 05:44:35.899922 - Posterior probability computed for edge n°1500/3066
+#> 2026-09-09 05:44:36.818886 - Posterior probability computed for edge n°1600/3066
+#> 2026-09-09 05:44:37.678375 - Posterior probability computed for edge n°1700/3066
+#> 2026-09-09 05:44:38.299938 - Posterior probability computed for edge n°1800/3066
+#> 2026-09-09 05:44:38.801125 - Posterior probability computed for edge n°1900/3066
+#> 2026-09-09 05:44:39.227808 - Posterior probability computed for edge n°2000/3066
+#> 2026-09-09 05:44:39.79069 - Posterior probability computed for edge n°2100/3066
+#> 2026-09-09 05:44:40.44994 - Posterior probability computed for edge n°2200/3066
+#> 2026-09-09 05:44:41.254313 - Posterior probability computed for edge n°2300/3066
+#> 2026-09-09 05:44:41.809057 - Posterior probability computed for edge n°2400/3066
+#> 2026-09-09 05:44:42.332052 - Posterior probability computed for edge n°2500/3066
+#> 2026-09-09 05:44:42.971168 - Posterior probability computed for edge n°2600/3066
+#> 2026-09-09 05:44:43.891397 - Posterior probability computed for edge n°2700/3066
+#> 2026-09-09 05:44:45.349706 - Posterior probability computed for edge n°2800/3066
+#> 2026-09-09 05:44:47.01131 - Posterior probability computed for edge n°2900/3066
+#> 2026-09-09 05:44:48.465826 - Posterior probability computed for edge n°3000/3066
+#> 2026-09-09 05:44:49.349368 - Posterior probabilities computed for State = terricolous - n°3/3
 
 # Plot densityMaps one by one
 plot(Ponerinae_densityMaps[[1]]) # densityMap for state n°1 ("arboreal")

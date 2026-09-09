@@ -43,17 +43,23 @@ for deepSTRAPP runs in light green. Final outputs in dark green.
 
 # The object depends on the type of trait data:
 
-#  * For continuous trait data, a 'contMap' is summarizing the evolution of trait values along branches. (See section 1.1)
-#    If one wants to account for uncertainty in trait estimates, multiple continuous stochastic maps are needed and summarized in a 'contMaps' object,
-#    which is a list with each 'contMap' representing an independent evolutionary history. (See section 1.2)
+#  * For continuous trait data, a 'contMap' is summarizing the evolution of trait values along branches.
+#    (See section 1.1)
+#    If one wants to account for uncertainty in trait estimates, multiple continuous stochastic maps
+#    are needed and summarized in a 'contMaps' object, which is a list with each 'contMap' representing
+#    an independent evolutionary history. (See section 1.2)
+#    
 
-#  * For categorical trait data, 'densityMaps' are a list of `densityMap` objects that represent the posterior probabilities of observing
-#    a given state along branches. Each `densityMap` in the list corresponds to a state.
-#    If one wants to track which simulated history provided which trait data, the said simulated histories (i.e., stochastic maps) can be provided
-#    as 'simmaps', a list of 'simmap' objects that map changes in states along branches for each simulation. (See section 1.3)
+#  * For categorical trait data, 'densityMaps' are a list of `densityMap` objects that represent 
+#    the posterior probabilities of observing a given state along branches. 
+#    Each `densityMap` in the list corresponds to a state.
+#    If one wants to track which simulated history provided which trait data, the said simulated histories 
+#    (i.e., stochastic maps) can be provided as 'simmaps', a list of 'simmap' objects that 
+#    map changes in states along branches for each simulation. (See section 1.3)
   
 #  * For biogeographic range data, similarly, 'densityMaps' recording frequency of ranges, 
-#    and/or 'simmaps' representing stochastic maps of biogeographic histories can be provided. (See section 1.4)
+#    and/or 'simmaps' representing stochastic maps of biogeographic histories can be provided. 
+#    (See section 1.4)
 
 
 # Set seed for reproducibility
@@ -62,8 +68,9 @@ set.seed(seed = 1234)
 
 #### 1.1/ Import continuous trait estimates as a 'contMap' #####
 
-## The example below illustrates how to convert the results of modeling continuous trait evolution with phytools::anc.ML().
-## Other models can be used as long as their outputs can be converted to a 'contMap'.
+# The example below illustrates how to convert the results of modeling continuous trait evolution
+# with phytools::anc.ML().
+# Other models can be used as long as their outputs can be converted to a 'contMap'.
 
 # Load the phylogeny
 library(phytools)
@@ -99,7 +106,8 @@ BM_fit$ace # Ancestral Character Estimates = Maximum Likelihood trait estimates 
 
 ## Convert model output into a 'contMap'
 
-# We use the [phytools::contMap()] function to interpolate trait values along branches based on our modeling results
+# We use the [phytools::contMap()] function to interpolate trait values along branches
+# based on our modeling results
 ?phytools::contMap()
 
 whale_contMap <- phytools::contMap(
@@ -112,12 +120,16 @@ whale_contMap <- phytools::contMap(
 ## Plot the resulting contMap
 plot_contMap(whale_contMap, color_scale = c("dodgerblue", "beige", "darkred"))
 
-## This contMap object ('whale_contMap') is the key input to provide to deepSTRAPP to test for correlations between rates and traits over evolutionary time.
-# However, since it only represents the ML estimates of trait evolution, we cannot account for uncertainty in trait estimates in the analyses.
+## This contMap object ('whale_contMap') is the key input to provide to deepSTRAPP 
+# to test for correlations between rates and traits over evolutionary time.
+# However, since it only represents the ML estimates of trait evolution, 
+# we cannot account for uncertainty in trait estimates in the analyses.
 # We need to use the 'rates_only' option for 'uncertainty_strategy' in our deepSTRAPP run.
-# To account for trait uncertainty, we need to produce continuous stochastic maps, and provide 'contMaps' as inputs. (See section 1.2 below)
+# To account for trait uncertainty, we need to produce continuous stochastic maps, 
+# and provide 'contMaps' as inputs. (See section 1.2 below)
 
-# The ACE ('BM_fit$ace') and tip_data (whale_tip_cont_data) can also be provided to deepSTRAPP to ensure the exact values for tip and node estimates are used
+# The ACE ('BM_fit$ace') and tip_data (whale_tip_cont_data) can also be provided to deepSTRAPP
+# to ensure the exact values for tip and node estimates are used.
 # In practice the difference is negligible if ignored.
 ```
 
@@ -131,8 +143,10 @@ plot_contMap(whale_contMap, color_scale = c("dodgerblue", "beige", "darkred"))
 
 #### 1.2/ Import continuous stochastic maps as 'contMaps' #####
 
-## The example below illustrates how to convert continuous stochastic maps generated with contsimmap::make.contsimmap().
-## Other models for continuous stochastic mapping can be used as long as their outputs can be converted to 'contMaps'.
+# The example below illustrates how to convert continuous stochastic maps
+# generated with contsimmap::make.contsimmap().
+# Other models for continuous stochastic mapping can be used as long as
+# their outputs can be converted to 'contMaps'.
 
 # Load the phylogeny
 library(phytools)
@@ -179,7 +193,8 @@ contsimmap_output <- contsimmap::make.contsimmap(
 # Output is an array storing trait evolution along edges (1D), for each trait (2D), across simulations (3D)
 dim(contsimmap_output)
 
-## Use a custom function [deepSTRAPP::convert_contsimmap_to_contMaps()] to convert the contsimmap output into a list of contMaps
+## Use a custom function [deepSTRAPP::convert_contsimmap_to_contMaps()] 
+# to convert the contsimmap output into a list of contMaps
 ?deepSTRAPP::convert_contsimmap_to_contMaps
 
 whale_contMaps <- convert_contsimmap_to_contMaps(contsimmap = contsimmap_output)
@@ -192,9 +207,11 @@ title(main = "Simulation n°1")
 plot_contMap(whale_contMaps[[10]], color_scale = c("dodgerblue", "beige", "darkred"))
 title(main = "Simulation n°10")
 
-## This contMaps object ('whale_contMaps') is the key input to provide to deepSTRAPP to test for correlations between rates and traits over evolutionary time.
-# Since it includes multiple simulated histories, it allows you to account for uncertainty in trait estimates in the analyses
-# using the 'paired' or 'full' options for 'uncertainty_strategy' in our deepSTRAPP run.
+## This contMaps object ('whale_contMaps') is the key input to provide to deepSTRAPP
+# to test for correlations between rates and traits over evolutionary time.
+# Since it includes multiple simulated histories, it allows you to account
+# for uncertainty in trait estimates in the analyses using the 'paired' or 'full' options
+# for 'uncertainty_strategy' in our deepSTRAPP run.
 ```
 
 ![](figures/7_Import_external_analyses_1.2_Cont_simmaps.PNG)
@@ -204,9 +221,10 @@ title(main = "Simulation n°10")
 
 #### 1.3/ Import ancestral state estimates as 'simmaps' and/or 'densityMaps' #####
 
-## The example below illustrates how to produce 'simmaps' and 'densityMaps' compatible with deepSTRAPP
-## based on models of ancestral state reconstructions fitted with geiger::fit.Discrete().
-## Other models for ancestral state reconstructions can be used as long as their outputs can be converted to 'simmaps' and then 'densityMaps'.
+# The example below illustrates how to produce 'simmaps' and 'densityMaps' compatible with deepSTRAPP
+# based on models of ancestral state reconstructions fitted with geiger::fit.Discrete().
+# Other models for ancestral state reconstructions can be used as long as their outputs
+# can be converted to 'simmaps' and then 'densityMaps'.
 
 # Load the phylogeny
 library(phytools)
@@ -325,8 +343,9 @@ plot(whale_densityMaps[[3]])
 
 ## This densityMaps object ('whale_densityMaps') is the alternative to 'simmaps' for testing differences
 # in evolutionary rates between states over time with deepSTRAPP.
-# Since it includes multiple simulated histories summarized as frequencies, it still allows you to account for uncertainty in trait estimates
-# in the analyses using the 'paired' or 'full' options for 'uncertainty_strategy'. 
+# Since it includes multiple simulated histories summarized as frequencies,
+# it still allows you to account for uncertainty in trait estimates in the analyses 
+# using the 'paired' or 'full' options for 'uncertainty_strategy'. 
 # However, trait data (i.e., states) will be attributed to 'Dummmy_maps' when performing the tests.
 ```
 
@@ -347,12 +366,12 @@ plot(whale_densityMaps[[3]])
 
 ![](import_external_analyses_files/figure-html/import_cat_eval-1.png)
 
-    #> 2026-09-09 04:44:36.929885 - Posterior probability computed for edge n°100/152
-    #> 2026-09-09 04:44:37.57992 - Posterior probabilities computed for State = large - n°1/3
-    #> 2026-09-09 04:44:39.550204 - Posterior probability computed for edge n°100/152
-    #> 2026-09-09 04:44:40.196447 - Posterior probabilities computed for State = medium - n°2/3
-    #> 2026-09-09 04:44:42.184903 - Posterior probability computed for edge n°100/152
-    #> 2026-09-09 04:44:42.851249 - Posterior probabilities computed for State = small - n°3/3
+    #> 2026-09-09 05:54:17.823966 - Posterior probability computed for edge n°100/152
+    #> 2026-09-09 05:54:18.325625 - Posterior probabilities computed for State = large - n°1/3
+    #> 2026-09-09 05:54:19.870993 - Posterior probability computed for edge n°100/152
+    #> 2026-09-09 05:54:20.38098 - Posterior probabilities computed for State = medium - n°2/3
+    #> 2026-09-09 05:54:21.940734 - Posterior probability computed for edge n°100/152
+    #> 2026-09-09 05:54:22.451608 - Posterior probabilities computed for State = small - n°3/3
 
 ![](import_external_analyses_files/figure-html/import_cat_eval-2.png)
 
@@ -361,9 +380,10 @@ plot(whale_densityMaps[[3]])
 
 #### 1.4/ Import biogeographic histories as 'simmaps' and/or 'densityMaps' #####
 
-## The example below illustrates how to produce 'densityMaps' compatible with deepSTRAPP
-## based on models of biogeographic history fitted with the package [BioGeoBEARS].
-## Other models for ancestral state reconstructions can be used as long as their outputs can be converted to 'simmaps' and then 'densityMaps'.
+# The example below illustrates how to produce 'densityMaps' compatible with deepSTRAPP
+# based on models of biogeographic history fitted with the package [BioGeoBEARS].
+# Other models for ancestral state reconstructions can be used as long as
+# their outputs can be converted to 'simmaps' and then 'densityMaps'.
 
 # The package 'BioGeoBEARS' is available at https://github.com/nmatzke/BioGeoBEARS.
 # For instructions, please see http://phylo.wikidot.com/biogeobears.
@@ -436,7 +456,8 @@ eel_range_tip_data <- eel_range_tip_data[eel.tree$tip.label]
 #   # Extract unique area
 #   unique_area_i <- unique_areas[i]
 #   # Detect presence in ranges
-#   binary_match_i <- unlist(lapply(X = unique_areas_in_ranges_list, FUN = function (x) { unique_area_i %in% x } ))
+#   binary_match_i <- unlist(lapply(X = unique_areas_in_ranges_list,
+#                                   FUN = function (x) { unique_area_i %in% x } ))
 #   
 #   # Add to ranges_df
 #   ranges_df <- cbind(ranges_df, binary_match_i)
@@ -467,7 +488,8 @@ eel_range_tip_data <- eel_range_tip_data[eel.tree$tip.label]
 #    max_range_size = 2, # To set the maximum number of areas encompassed by a lineage range at any time
 #    trfn = path_to_phylo, # To provide path to the input tree file
 #    geogfn = path_to_tip_ranges, # To provide path to the LagrangePHYLIP file with binary ranges
-#    return_condlikes_table = TRUE) # To ask to obtain all marginal likelihoods computed by the model and used to display ancestral states
+#    # To ask to obtain all marginal likelihoods computed by the model and used to display ancestral states
+#    return_condlikes_table = TRUE) 
 # 
 # # Update status of jump speciation parameter to be estimated
 # DEC_J_run$BioGeoBEARS_model_object@params_table["j","type"] <- "free"
@@ -605,9 +627,11 @@ par(mfrow = c(1,1))
 # deepSTRAPP relies on BAMM objects to summarize diversification dynamics on phylogenies.
 # These objects are the key inputs to provide for deepSTRAPP runs.
 
-# The [BAMMtools] R package already provides functions to load results of BAMM analyses into R with [BAMMtools::getEventData()]
-# However, BAMM objects used by deepSTRAPP, as produced directly by [deepSTRAPP::prepare_diversification_data()], also include
-# a few additional elements to tune the display of regime shift probabilities and locations with [deepSTRAPP::plot_BAMM_rates()].
+# The [BAMMtools] R package already provides functions to load results of
+# BAMM analyses into R with [BAMMtools::getEventData()]
+# However, BAMM objects used by deepSTRAPP, as produced directly by 
+# [deepSTRAPP::prepare_diversification_data()], also include a few additional elements
+# to tune the display of regime shift probabilities and locations with [deepSTRAPP::plot_BAMM_rates()].
 
 # Therefore, deepSTRAPP also offers functions to build and curate deepSTRAPP-customized BAMM objects
 # directly from external 'eventdata.txt' files resulting from a BAMM run.
@@ -616,7 +640,8 @@ par(mfrow = c(1,1))
 ?deepSTRAPP::subset_BAMM_object()
 ?deepSTRAPP::prune_BAMM_object()
 
-## Please note that the 'whale_event_data.txt' file used in this example here is not provided within deepSTRAPP
+## Please note that the 'whale_event_data.txt' file used 
+## in this example here is not provided within deepSTRAPP
 
 ### 2.1/ Build a BAMM_object from an external 'event_data.txt' file resulting from a BAMM run ####
 
@@ -708,9 +733,9 @@ all.equal(whale_BAMM_object_pruned$meanTipLambda,
 par(mfrow = c(1, 2))
 
 plot_BAMM_rates(whale_BAMM_object_subsetted, labels = TRUE, cex = 0.5)
-title("Initial phylogeny")
+title("Initial phylogeny - N = 87")
 plot_BAMM_rates(whale_BAMM_object_pruned, labels = TRUE, cex = 0.5)
-title("Pruned phylogeny")
+title("Pruned phylogeny - N = 77")
 
 par(mfrow = c(1, 1))
 ```
@@ -722,8 +747,8 @@ par(mfrow = c(1, 1))
 # ------ Step 3: Run deepSTRAPP ------ #
 
 ## We can now run deepSTRAPP using those newly created contMap(s), densityMaps, simmaps, and BAMM_object
-# the same way we would have if they were created directly using the dedicated [deepSTRAPP::prepare_trait_data()] 
-# and [deepSTRAPP::prepare_diversification_data()] functions.
+# the same way we would have if they were created directly using the dedicated 
+# [deepSTRAPP::prepare_trait_data()] and [deepSTRAPP::prepare_diversification_data()] functions.
 
 ## Here is an example using the 'densityMaps' object summarizing the ancestral characters of whales,
 # combined with the 'BAMM_object' built from the output of an external BAMM run.
@@ -760,7 +785,8 @@ deepSTRAPP_output$STRAPP_results[1:3]
 #  - 1/ States were distributed 'randomly', so we should not expect rate differences.
 #  - 2/ Whales exhibit only one main regime shift in diversification which makes 
 #       the power of STRAPP tests based on permutation across regimes very low,
-#       as most random permutations will reproduce the observed data (this also explains why stats_median = 0).
+#       as most random permutations will reproduce the observed data 
+#       (this also explains why stats_median = 0).
 
 # Plot rates vs. states across branches
 plot_rates_vs_trait_data_for_focal_time(
