@@ -259,10 +259,16 @@ title(main = "Simulation n°10")
 ```
 ```{r import_contMaps_eval, eval = is_dev_version(), echo = FALSE}
 
+## Model trait evolution using a Brownian Motion model and predict ancestral trait values at nodes
+BM_fit <- phytools::anc.ML(tree = whale.tree,
+                           x = whale_tip_cont_data,
+                           model = "BM")
+
 ## Model trait evolution and produce multiple simulations of evolutionary histories
 contsimmap_output <- contsimmap::make.contsimmap(
    tree = whale.tree,
    trait.data = whale_tip_cont_data,
+   Xsig2 = BM_fit$sig2/5, # Evolutionary rate (divided by 5 for example)
    nsims = 100) 
 
 ## Convert into a list of contMaps
