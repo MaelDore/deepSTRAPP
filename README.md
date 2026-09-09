@@ -37,7 +37,7 @@ rates at any point in time. This flexibility allows users to **identify
 the specific time-frames of significance** during which diversification
 dynamics diverged across traits or geographic regions, thereby
 disentangling the relative contributions of past versus recent processes
-in shaping present biodiversity patterns. <br>
+in shaping present biodiversity patterns. <br><br>
 
 ### The statistical framework
 
@@ -51,7 +51,7 @@ for the phylogenetic pseudoreplication of rates** occurring between tips
 sharing the same macroevolutionary regime. It requires multiple
 independent associations between character states and diversification to
 yield a significant macroevolutionary signal (*Rabosky & Huang, 2016*).
-<br>
+<br><br>
 
 ### Applications
 
@@ -87,7 +87,7 @@ macroevolutionary regime acts as an independent event used to test for
 differences, therefore the sample size of the tests is conditioned by
 the number of macroevolutionary regimes identified. Larger phylogenies
 tend to carry more regime shifts, thus hold more information susceptible
-to yield a significant test result. <br>
+to yield a significant test result. <br><br>
 
 ### Workflow
 
@@ -101,7 +101,7 @@ A **full deepSTRAPP workflow** runs as follows:
   - **Step 3.2:** Run a STRAPP test
   - **Step 3.3:** Repeat steps 3.1 & 3.2 for many time steps along
     evolutionary time
-- **Step 4:** Summarize test results <br>
+- **Step 4:** Summarize test results <br><br>
 
 ![Simplified deepSTRAPP workflow](man/figures/deepSTRAPP_workflow.png)
 **Figure 1: Simplified deepSTRAPP workflow showing the main functions
@@ -121,7 +121,9 @@ green. Final outputs in pink.
 > B. B. (2025). Evolutionary history of ponerine ants highlights how the
 > timing of dispersal events shapes modern biodiversity. *Nature
 > Communications*, 16, 8297.
-> <https://doi.org/10.1038/s41467-025-63709-3> <br>
+> <https://doi.org/10.1038/s41467-025-63709-3>
+
+<br>
 
 ## :envelope_with_arrow: Installation
 
@@ -152,7 +154,7 @@ remotes::install_github(repo = "MaelDore/deepSTRAPP", build_vignettes = FALSE)
 You may need additional tools for package compilation such as Rtools
 (Windows) and Xcode (Mac OS). <br> See [this
 page](https://support.posit.co/hc/en-us/articles/200486498-Package-Development-Prerequisites)
-for details. <br>
+for details. <br><br>
 
 ## :link: Dependencies
 
@@ -228,6 +230,8 @@ drat::addRepo("maeldore", "https://maeldore.github.io/drat")
 install.packages(c("BioGeoBEARS", "contsimmap"))
 ```
 
+<br>
+
 ## :desktop_computer: Website
 
 <br> A companion website is available to browse interactively the
@@ -235,7 +239,8 @@ different tutorials and functions of **deepSTRAPP** at this URL:
 <https://maeldore.github.io/deepSTRAPP/>.
 
 An overview of all functions and datasets is available
-[here](https://maeldore.github.io/deepSTRAPP/reference/index.html). <br>
+[here](https://maeldore.github.io/deepSTRAPP/reference/index.html).
+<br><br>
 
 ## :joystick: Quick-to-run example
 
@@ -247,7 +252,7 @@ and within R: `vignette("main_tutorial")`.
 
 This tutorial presents the main functions in a typical **deepSTRAPP
 workflow**. <br> For more advanced uses, please refer to the
-vignettes/tutorials below. <br>
+vignettes/tutorials below. <br><br>
 
 ## :scroll: Advanced uses / tutorials
 
@@ -364,12 +369,14 @@ vignette("deepSTRAPP")
 utils::browseVignettes(package = "deepSTRAPP")
 ```
 
+<br>
+
 ## :bug: Found a bug?
 
 <br> Thank you for finding it! Head over to the [GitHub Issues
 tab](https://github.com/MaelDore/deepSTRAPP/issues) and let me know
 about it. <br> You can also [send me an
-e-mail](mailto:mael.dore@gmail.com). <br>
+e-mail](mailto:mael.dore@gmail.com). <br><br>
 
 ## :black_nib: How to cite deepSTRAPP
 
