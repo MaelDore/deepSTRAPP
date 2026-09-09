@@ -287,7 +287,7 @@ title(main = "Simulation n°10\n\n")
 par(mfrow = c(1,1))
 
 ```
-```{r import_contMaps_eval_CRAN, eval = !is_dev_version(), echo = FALSE}
+```{r import_contMaps_eval_CRAN, eval = !is_dev_version(), echo = FALSE, out.width = "100%"}
 
 # Plot pre-rendered graph
 knitr::include_graphics("figures/7_Import_external_analyses_1.2_Cont_simmaps.PNG")
