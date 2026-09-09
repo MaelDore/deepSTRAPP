@@ -12,8 +12,8 @@
 <link rel="icon" sizes="any" href="../favicon.ico">
 <link rel="manifest" href="../site.webmanifest">
 <script src="../lightswitch.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
 <meta property="og:title" content="deepSTRAPP: Biogeographic range data">
@@ -26,7 +26,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">deepSTRAPP</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -62,7 +62,13 @@
     <li><h6 class="dropdown-header" data-toc-skip>5/ Plot rates through time (RTT)</h6></li>
     <li><a class="dropdown-item" href="../articles/plot_rates_through_time.html">Explore options for RTT plots</a></li>
     <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>6/ Cut phylogenies</h6></li>
+    <li><h6 class="dropdown-header" data-toc-skip>6/ Handle uncertainty</h6></li>
+    <li><a class="dropdown-item" href="../articles/handle_uncertainty.html">Explore strategies to handle uncertainty in trait and rate estimates</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>7/ Import external analyses</h6></li>
+    <li><a class="dropdown-item" href="../articles/import_external_analyses.html">Import results of external analyses into deepSTRAPP</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>8/ Cut phylogenies</h6></li>
     <li><a class="dropdown-item" href="../articles/cut_phylogenies.html">Cut different types of (mapped) phylogenies for a given focal-time</a></li>
   </ul>
 </li>
@@ -96,7 +102,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>deepSTRAPP: Biogeographic range data</h1>
                         <h4 data-toc-skip class="author">Maël Doré</h4>
             
-            <h4 data-toc-skip class="date">2025-10-22</h4>
+            <h4 data-toc-skip class="date">2026-09-09</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/MaelDore/deepSTRAPP/blob/master/vignettes/deepSTRAPP_biogeographic_data.Rmd" class="external-link"><code>vignettes/deepSTRAPP_biogeographic_data.Rmd</code></a></small>
       <div class="d-none name"><code>deepSTRAPP_biogeographic_data.Rmd</code></div>
@@ -108,18 +114,26 @@
 to test for <strong>differences</strong> in diversification rates
 between two <strong>biogeographic areas</strong>. It presents the main
 functions in a typical <strong>deepSTRAPP workflow</strong>.</p>
-<p><br> For an example with <strong>binary data</strong> (2 levels),
-please see the example in the <strong>Main tutorial</strong>:
-<code><a href="../articles/main_tutorial.html">vignette("main_tutorial")</a></code>.</p>
-<p>For an example with <strong>categorical multinominal data</strong>,
-see this vignette:
-<code>vignette("deepSTRAPP_categorical_3lvl_data")</code>.</p>
-<p>For an example with <strong>continuous data</strong>, see this
-vignette: <code><a href="../articles/deepSTRAPP_continuous_data.html">vignette("deepSTRAPP_continuous_data")</a></code>.</p>
 <p><br> Please note that the trait data and phylogeny calibration used
 in this example are <strong>NOT valid biological data</strong>. They
 were modified in order to provide results illustrating the usefulness of
 deepSTRAPP.</p>
+<p><br> For an example with <strong>continuous data</strong>, see this
+vignette: <code><a href="../articles/deepSTRAPP_continuous_data.html">vignette("deepSTRAPP_continuous_data")</a></code>.</p>
+<p>For an example with <strong>binary data</strong> (2 levels), please
+see the example in the <strong>Main tutorial</strong>:
+<code><a href="../articles/main_tutorial.html">vignette("main_tutorial")</a></code>.</p>
+<p>For an example with <strong>categorical multinomial data</strong>,
+see this vignette:
+<code><a href="../articles/deepSTRAPP_categorical_data.html">vignette("deepSTRAPP_categorical_data")</a></code>.</p>
+<p><br> For a detailed explanation on how to load results from
+<strong>external analyses</strong> within deepSTRAPP rather than relying
+on deepSTRAPP all-in-one functions to infer trait evolution and
+diversification dynamics, please see the examples in this vignette:
+<code><a href="../articles/import_external_analyses.html">vignette("import_external_analyses")</a></code>.</p>
+<p><br></p>
+<p>The R package <code>BioGeoBEARS</code> is needed for this workflow to
+process biogeographic data. <br> Please install it manually from: <a href="https://github.com/nmatzke/BioGeoBEARS" class="external-link uri">https://github.com/nmatzke/BioGeoBEARS</a>.</p>
 <p><br></p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ------ Step 0: Load data ------ #</span></span>
@@ -143,7 +157,6 @@ deepSTRAPP.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">Ponerinae_NO_tip_data</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">Ponerinae_binary_range_table</span><span class="op">$</span><span class="va">Taxa</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">Ponerinae_NO_tip_data</span><span class="op">)</span></span>
 <span></span>
-<span></span>
 <span><span class="co"># Select color scheme for ranges</span></span>
 <span><span class="va">colors_per_ranges</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mediumpurple2"</span>, <span class="st">"peachpuff2"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">colors_per_ranges</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"N"</span>, <span class="st">"O"</span><span class="op">)</span></span>
@@ -161,12 +174,13 @@ deepSTRAPP.</p>
 <span><span class="va">Ponerinae_NO_tip_data</span> <span class="op">&lt;-</span> <span class="va">Ponerinae_NO_tip_data</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/match.html" class="external-link">match</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Ponerinae_tree_old_calib</span><span class="op">$</span><span class="va">tip.label</span>,</span>
 <span>                                                     table <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">Ponerinae_NO_tip_data</span><span class="op">)</span><span class="op">)</span><span class="op">]</span></span>
 <span></span>
-<span></span>
 <span><span class="co">## Plot data on tips for visualization</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/grDevices/pdf.html" class="external-link">pdf</a></span><span class="op">(</span>file <span class="op">=</span> <span class="st">"./Ponerinae_biogeo_data_old_calib_on_phylo.pdf"</span>, width <span class="op">=</span> <span class="fl">20</span>, height <span class="op">=</span> <span class="fl">150</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Set plotting parameters</span></span>
+<span><span class="va">old_par</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>no.readonly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.1</span>,<span class="fl">0.1</span>,<span class="fl">0.1</span>,<span class="fl">0.1</span><span class="op">)</span>, oma <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span> <span class="co"># bltr</span></span>
+<span></span>
 <span><span class="co"># Graph presence/absence using plotTree.datamatrix</span></span>
 <span><span class="va">range_map</span> <span class="op">&lt;-</span> <span class="fu">phytools</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/phytools/man/plotTree.datamatrix.html" class="external-link">plotTree.datamatrix</a></span><span class="op">(</span></span>
 <span>  tree <span class="op">=</span> <span class="va">Ponerinae_tree_old_calib</span>,</span>
@@ -202,6 +216,9 @@ deepSTRAPP.</p>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/grDevices/dev.html" class="external-link">dev.off</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
+<span><span class="co"># Reset plotting parameters</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span><span class="va">old_par</span><span class="op">)</span></span>
+<span></span>
 <span><span class="co">## Inputs needed for Step 1 are the tip_data (Ponerinae_NO_tip_data) and the phylogeny</span></span>
 <span><span class="co">## (Ponerinae_tree_old_calib), and optionally, a color scheme (colors_per_ranges).</span></span></code></pre></div>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
@@ -211,7 +228,7 @@ deepSTRAPP.</p>
 <span></span>
 <span><span class="co"># 1.1/ Fit evolutionary models to trait data using Maximum Likelihood.</span></span>
 <span><span class="co"># 1.2/ Select the best fitting model comparing AICc.</span></span>
-<span><span class="co"># 1.3/ Infer ancestral characters estimates (ACE) at nodes.</span></span>
+<span><span class="co"># 1.3/ Infer ancestral character estimates (ACE) at nodes.</span></span>
 <span><span class="co"># 1.4/ Run stochastic mapping simulations to generate evolutionary histories</span></span>
 <span><span class="co">#      compatible with the best model and inferred ACE. (Only for categorical and biogeographic data)</span></span>
 <span><span class="co"># 1.5/ Infer ancestral states along branches.</span></span>
@@ -224,9 +241,12 @@ deepSTRAPP.</p>
 <span><span class="co"># All these actions are performed by a single function: deepSTRAPP::prepare_trait_data()</span></span>
 <span><span class="op">?</span><span class="fu">deepSTRAPP</span><span class="fu">::</span><span class="fu"><a href="../reference/prepare_trait_data.html">prepare_trait_data</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co">## In this example, to simplify the analyses, we set 'split_multi_area_ranges' = TRUE such as</span></span>
-<span><span class="co">## multi-range areas ('NO' in this case) are split between unique areas ('N' and 'O')</span></span>
-<span><span class="co">## to keep only two areas for downstream analyses</span></span>
+<span><span class="co">## The R package `BioGeoBEARS` is needed for this workflow to process biogeographic data.</span></span>
+<span><span class="co">## Please install it manually from: https://github.com/nmatzke/BioGeoBEARS.</span></span>
+<span></span>
+<span><span class="co"># In this example, to simplify the analyses, we set 'split_multi_area_ranges' = TRUE such that</span></span>
+<span><span class="co"># multi-area ranges ('NO' in this case) are split between unique areas ('N' and 'O')</span></span>
+<span><span class="co"># to keep only two areas for downstream analyses</span></span>
 <span></span>
 <span><span class="co"># Run prepare_trait_data with default options</span></span>
 <span><span class="co"># For biogeographic data, a DEC model is assumed by default.</span></span>
@@ -235,26 +255,27 @@ deepSTRAPP.</p>
 <span>   trait_data_type <span class="op">=</span> <span class="st">"biogeographic"</span>,</span>
 <span>   phylo <span class="op">=</span> <span class="va">Ponerinae_tree_old_calib</span>,</span>
 <span>   evolutionary_models <span class="op">=</span> <span class="st">"DEC+J"</span>, <span class="co"># Default = "DEC" for biogeographic</span></span>
+<span>   BioGeoBEARS_directory_path <span class="op">=</span> <span class="st">"./BioGeoBEARS_directory/"</span>,</span>
 <span>   prefix_for_files <span class="op">=</span> <span class="st">"Ponerinae_old_calib"</span>,</span>
-<span>   split_multi_area_ranges <span class="op">=</span> <span class="cn">TRUE</span>, <span class="co"># Set to TRUE to split multi-range areas NO between N and O</span></span>
-<span>   nb_simulations <span class="op">=</span> <span class="fl">100</span>, <span class="co"># Reduce number of simulations to save time</span></span>
+<span>   split_multi_area_ranges <span class="op">=</span> <span class="cn">TRUE</span>, <span class="co"># Set to TRUE to split multi-area ranges NO between N and O</span></span>
+<span>   nb_simulations <span class="op">=</span> <span class="fl">100</span>, <span class="co"># Reduce number of simulations to save time (Default = '1000')</span></span>
 <span>   colors_per_levels <span class="op">=</span> <span class="va">colors_per_ranges</span>,</span>
 <span>   seed <span class="op">=</span> <span class="fl">1234</span><span class="op">)</span> <span class="co"># Set seed for reproducibility</span></span>
 <span></span>
-<span><span class="co">## Load Result to save time</span></span>
+<span><span class="co">## Load Result to save time </span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">Ponerinae_biogeo_data_old_calib</span>, package <span class="op">=</span> <span class="st">"deepSTRAPP"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Explore output</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">Ponerinae_biogeo_data_old_calib</span>, <span class="fl">1</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># $densityMaps hold maps for unique areas (Here, 'N' and 'O'), that will be used for downstream analyses.</span></span>
-<span><span class="co"># $densityMaps_all_ranges hold maps for unique areas AND multi-range areas (Here, also includes 'NO')</span></span>
+<span><span class="co"># $densityMaps_all_ranges hold maps for unique areas AND multi-area ranges (Here, also includes 'NO')</span></span>
 <span></span>
 <span><span class="co">## Plot densityMaps for each range</span></span>
 <span></span>
 <span><span class="co"># densityMap for range n°1 (N = "New World")</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">Ponerinae_biogeo_data_old_calib</span><span class="op">$</span><span class="va">densityMaps</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
-<span><span class="co"># densityMap for range n°2 (N = "Old World")</span></span>
+<span><span class="co"># densityMap for range n°2 (O = "Old World")</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">Ponerinae_biogeo_data_old_calib</span><span class="op">$</span><span class="va">densityMaps</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="co"># densityMap for range n°3 (NO = "New World" + "Old World")</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">Ponerinae_biogeo_data_old_calib</span><span class="op">$</span><span class="va">densityMaps_all_ranges</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
@@ -276,7 +297,7 @@ deepSTRAPP.</p>
 <span><span class="va">Ponerinae_biogeo_data_old_calib</span><span class="op">$</span><span class="va">ace_all_ranges</span> <span class="co"># Including multi-area ranges too (Here, NO)</span></span>
 <span></span>
 <span></span>
-<span><span class="co">## Inputs needed for Step 2 are the densityMaps (Ponerinae_densityMaps), and optionally,</span></span>
+<span><span class="co">## Inputs needed for Step 3 are the densityMaps (Ponerinae_densityMaps), and optionally,</span></span>
 <span><span class="co">## the tip_data (Ponerinae_NO_tip_data), and the ACE (Ponerinae_ACE)</span></span></code></pre></div>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ------ Step 2: Prepare diversification data ------ #</span></span>
@@ -285,11 +306,11 @@ deepSTRAPP.</p>
 <span></span>
 <span><span class="co"># Run a BAMM (Bayesian Analysis of Macroevolutionary Mixtures)</span></span>
 <span></span>
-<span><span class="co"># You need the BAMM C++ program installed in your machine to run this step.</span></span>
-<span><span class="co"># See the BAMM website: http://bamm-project.org/ and the companion R package [BAMMtools].</span></span>
+<span><span class="co">## You need the BAMM C++ program installed on your machine to run this step.</span></span>
+<span><span class="co">## See the BAMM website: http://bamm-project.org/ and the companion R package [BAMMtools].</span></span>
 <span></span>
 <span><span class="co"># 2.1/ Set BAMM - Record BAMM settings and generate all input files needed for BAMM.</span></span>
-<span><span class="co"># 2.2/ Run BAMM - Run BAMM and move output files in dedicated directory.</span></span>
+<span><span class="co"># 2.2/ Run BAMM - Run BAMM and move output files into a dedicated directory.</span></span>
 <span><span class="co"># 2.3/ Evaluate BAMM - Produce evaluation plots and ESS data.</span></span>
 <span><span class="co"># 2.4/ Import BAMM outputs - Load `BAMM_object` in R and subset posterior samples.</span></span>
 <span><span class="co"># 2.5/ Clean BAMM files - Remove files generated during the BAMM run.</span></span>
@@ -298,21 +319,24 @@ deepSTRAPP.</p>
 <span><span class="op">?</span><span class="fu">deepSTRAPP</span><span class="fu">::</span><span class="fu"><a href="../reference/prepare_diversification_data.html">prepare_diversification_data</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Run BAMM workflow with deepSTRAPP</span></span>
-<span><span class="co">## This step is time-consuming. You can skip it and load directly the result if needed</span></span>
-<span><span class="va">Ponerinae_BAMM_object</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/prepare_diversification_data.html">prepare_diversification_data</a></span><span class="op">(</span></span>
+<span><span class="co">## This step is time-consuming. You can skip it and load the result directly if needed</span></span>
+<span><span class="va">Ponerinae_BAMM_object_old_calib</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/prepare_diversification_data.html">prepare_diversification_data</a></span><span class="op">(</span></span>
 <span>   BAMM_install_directory_path <span class="op">=</span> <span class="st">"./software/bamm-2.5.0/"</span>, <span class="co"># To adjust to your own path to BAMM</span></span>
 <span>   phylo <span class="op">=</span> <span class="va">Ponerinae_tree_old_calib</span>,</span>
 <span>   prefix_for_files <span class="op">=</span> <span class="st">"Ponerinae_old_calib"</span>,</span>
 <span>   seed <span class="op">=</span> <span class="fl">1234</span>, <span class="co"># Set seed for reproducibility</span></span>
-<span>   numberOfGenerations <span class="op">=</span> <span class="fl">10</span><span class="op">^</span><span class="fl">7</span> <span class="co"># Set high for optimal run, but will take a long time</span></span>
-<span><span class="op">)</span></span>
+<span>   numberOfGenerations <span class="op">=</span> <span class="fl">10</span><span class="op">^</span><span class="fl">7</span>, <span class="co"># Set high for optimal run, but will take a long time</span></span>
+<span>   BAMM_output_directory_path <span class="op">=</span>  <span class="st">"./BAMM_outputs/"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Load directly the result</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">Ponerinae_BAMM_object_old_calib</span><span class="op">)</span></span>
+<span><span class="co"># This dataset is only available in development versions installed from GitHub.</span></span>
+<span><span class="co"># It is not available in CRAN versions.</span></span>
+<span><span class="co"># Use remotes::install_github(repo = "MaelDore/deepSTRAPP") to get the latest development version.</span></span>
 <span></span>
 <span><span class="co"># Explore output</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">Ponerinae_BAMM_object_old_calib</span>, <span class="fl">1</span><span class="op">)</span></span>
-<span><span class="co"># Record the regime shift events and macroevolutionary regimes parameters across posterior samples</span></span>
+<span><span class="co"># Record the regime shift events and macroevolutionary regime parameters across posterior samples</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">Ponerinae_BAMM_object_old_calib</span><span class="op">$</span><span class="va">eventData</span>, <span class="fl">1</span><span class="op">)</span> </span>
 <span><span class="co"># Mean speciation rates at tips aggregated across all posterior samples</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">Ponerinae_BAMM_object_old_calib</span><span class="op">$</span><span class="va">meanTipLambda</span><span class="op">)</span> </span>
@@ -341,39 +365,54 @@ deepSTRAPP.</p>
 <span><span class="op">?</span><span class="fu">deepSTRAPP</span><span class="fu">::</span><span class="fu"><a href="../reference/run_deepSTRAPP_for_focal_time.html">run_deepSTRAPP_for_focal_time</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">?</span><span class="fu">deepSTRAPP</span><span class="fu">::</span><span class="fu"><a href="../reference/run_deepSTRAPP_over_time.html">run_deepSTRAPP_over_time</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co">## Set for five time steps of 5 My. Will generate deepSTRAPP workflows for 0 to 40 Mya.</span></span>
+<span><span class="co">## Set for time steps of 5 My from 0 to 40 Mya.</span></span>
 <span><span class="va">time_step_duration</span> <span class="op">&lt;-</span> <span class="fl">5</span></span>
 <span><span class="va">time_range</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">40</span><span class="op">)</span></span>
 <span></span>
+<span><span class="co"># In this example, we provide the 'densityMaps' as input. Those record frequencies of ranges</span></span>
+<span><span class="co"># observed across stochastic simulations of biogeographic history.</span></span>
+<span><span class="co"># If we want to keep track of which simulation produced which ranges, </span></span>
+<span><span class="co"># we need to provide the full sets of stochastic maps ('simmaps') as inputs.</span></span>
+<span></span>
 <span><span class="co"># Run deepSTRAPP on net diversification rates</span></span>
-<span><span class="co">## This step is time-consuming. You can skip it and load directly the result if needed</span></span>
+<span><span class="co">## This step is time-consuming. You can skip it and load the result directly if needed</span></span>
 <span><span class="va">Ponerinae_deepSTRAPP_biogeo_old_calib_0_40</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_deepSTRAPP_over_time.html">run_deepSTRAPP_over_time</a></span><span class="op">(</span></span>
 <span>    densityMaps <span class="op">=</span> <span class="va">Ponerinae_biogeo_data_old_calib</span><span class="op">$</span><span class="va">densityMaps</span>,</span>
+<span>    <span class="co"># Specify the number of simulations to be able to reconstruct</span></span>
+<span>    <span class="co"># distributions of ranges based on frequencies recorded in the densityMaps</span></span>
+<span>    nb_simulations <span class="op">=</span> <span class="fl">100</span>,</span>
 <span>    ace <span class="op">=</span> <span class="va">Ponerinae_biogeo_data_old_calib</span><span class="op">$</span><span class="va">ace</span>,</span>
 <span>    tip_data <span class="op">=</span> <span class="va">Ponerinae_NO_tip_data</span>,</span>
 <span>    trait_data_type <span class="op">=</span> <span class="st">"biogeographic"</span>,</span>
 <span>    BAMM_object <span class="op">=</span> <span class="va">Ponerinae_BAMM_object_old_calib</span>,</span>
 <span>    time_range <span class="op">=</span> <span class="va">time_range</span>,</span>
 <span>    time_step_duration <span class="op">=</span> <span class="va">time_step_duration</span>,</span>
+<span>    <span class="co"># Deal with uncertainty in estimates by pairing ranges </span></span>
+<span>    <span class="co"># (reconstructed from densityMaps) with BAMM posterior samples</span></span>
+<span>    uncertainty_strategy <span class="op">=</span> <span class="st">"paired"</span>,</span>
 <span>    seed <span class="op">=</span> <span class="fl">1234</span>, <span class="co"># Set seed for reproducibility</span></span>
 <span>    alpha <span class="op">=</span> <span class="fl">0.10</span>, <span class="co"># Select a generous level of significance for the sake of the example</span></span>
 <span>    <span class="co"># Needed to obtain STRAPP stats and plot evaluation histograms (See 4.2)</span></span>
 <span>    return_perm_data <span class="op">=</span> <span class="cn">TRUE</span>, </span>
-<span>     <span class="co"># Needed to get trait data and plot rates through time (See 4.3)</span></span>
+<span>    <span class="co"># Needed to get trait data, plot rates through time (See 4.3) and trait vs. rates (See 4.4)</span></span>
 <span>    extract_trait_data_melted_df <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>    <span class="co"># Needed to get diversification data and plot rates through time (See 4.3)</span></span>
+<span>    <span class="co"># Needed to get diversification data, plot rates through time (See 4.3) and trait vs. rates (See 4.4)</span></span>
 <span>    extract_diversification_data_melted_df <span class="op">=</span> <span class="cn">TRUE</span>, </span>
 <span>    <span class="co"># Needed to obtain STRAPP stats and plot evaluation histograms (See 4.2)</span></span>
 <span>    return_STRAPP_results <span class="op">=</span> <span class="cn">TRUE</span>, </span>
-<span>    <span class="co"># Needed to plot updated densityMaps (See 4.4)</span></span>
-<span>    return_updated_trait_data_with_Map <span class="op">=</span> <span class="cn">TRUE</span>, </span>
-<span>    <span class="co"># Needed to map diversification rates on updated phylogenies (See 4.5)</span></span>
-<span>    return_updated_BAMM_object <span class="op">=</span> <span class="cn">TRUE</span>, </span>
+<span>    <span class="co"># Needed to plot updated densityMaps (See 4.5)</span></span>
+<span>    return_updated_Maps <span class="op">=</span> <span class="cn">TRUE</span>, </span>
+<span>    <span class="co"># Needed to map diversification rates on updated phylogenies (See 4.6)</span></span>
+<span>    return_updated_BAMM_objects <span class="op">=</span> <span class="cn">TRUE</span>, </span>
 <span>    verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>    verbose_extended <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Load the deepSTRAPP output summarizing results for 0 to 40 My</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">Ponerinae_deepSTRAPP_biogeo_old_calib_0_40</span>, package <span class="op">=</span> <span class="st">"deepSTRAPP"</span><span class="op">)</span></span>
+<span><span class="va">Ponerinae_deepSTRAPP_biogeo_old_calib_0_40</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, </span>
+<span>    <span class="st">"Ponerinae_deepSTRAPP_biogeo_old_calib_0_40.rds"</span>, package <span class="op">=</span> <span class="st">"deepSTRAPP"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co"># This dataset is only available in development versions installed from GitHub.</span></span>
+<span><span class="co"># It is not available in CRAN versions.</span></span>
+<span><span class="co"># Use remotes::install_github(repo = "MaelDore/deepSTRAPP") to get the latest development version.</span></span>
 <span></span>
 <span><span class="co">## Explore output</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">Ponerinae_deepSTRAPP_biogeo_old_calib_0_40</span>, max.level <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
@@ -386,21 +425,29 @@ deepSTRAPP.</p>
 <span><span class="va">Ponerinae_deepSTRAPP_biogeo_old_calib_0_40</span><span class="op">$</span><span class="va">pvalues_summary_df</span></span>
 <span></span>
 <span><span class="co"># Access STRAPP test results</span></span>
-<span><span class="co"># Can be passed down to [deepSTRAPP::plot_histograms_STRAPP_tests_over_time()] to generate plot</span></span>
-<span><span class="co"># showing the null distribution of the test statistics</span></span>
+<span><span class="co"># Can be passed down to [deepSTRAPP::plot_histograms_STRAPP_tests_over_time()] to generate plots</span></span>
+<span><span class="co"># showing the null distributions of the test statistics</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">Ponerinae_deepSTRAPP_biogeo_old_calib_0_40</span><span class="op">$</span><span class="va">STRAPP_results</span>, max.level <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Access trait data in a melted data.frame</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">Ponerinae_deepSTRAPP_biogeo_old_calib_0_40</span><span class="op">$</span><span class="va">trait_data_df_over_time</span><span class="op">)</span></span>
+<span><span class="co"># Range data were extracted from densityMaps recording only frequency of ranges.</span></span>
+<span><span class="co"># Thus, ranges have been distributed accordingly across 100 'Dummy_maps'</span></span>
+<span><span class="co"># to reproduce the recorded frequencies.</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">Ponerinae_deepSTRAPP_biogeo_old_calib_0_40</span><span class="op">$</span><span class="va">trait_data_df_over_time</span><span class="op">$</span><span class="va">Map_ID</span><span class="op">)</span></span>
+<span></span>
 <span><span class="co"># Access the diversification data in a melted data.frame</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">Ponerinae_deepSTRAPP_biogeo_old_calib_0_40</span><span class="op">$</span><span class="va">diversification_data_df_over_time</span><span class="op">)</span></span>
-<span><span class="co"># Both can be passed down to [deepSTRAPP::plot_rates_through_time()] to generate a plot</span></span>
-<span><span class="co"># showing the evolution of diversification rates though time in relation to trait values</span></span>
+<span><span class="co"># Diversification data includes 1000 BAMM posteriors</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">Ponerinae_deepSTRAPP_biogeo_old_calib_0_40</span><span class="op">$</span><span class="va">diversification_data_df_over_time</span><span class="op">$</span><span class="va">BAMM_sample_ID</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Both melted data.frames can be passed down to [deepSTRAPP::plot_rates_through_time()] to generate a plot</span></span>
+<span><span class="co"># showing the evolution of diversification rates through time in relation to trait values</span></span>
 <span></span>
 <span><span class="co"># Access updated densityMaps for each focal time</span></span>
 <span><span class="co"># Can be used to plot densityMaps with branch cut-off at focal time</span></span>
 <span><span class="co"># with [deepSTRAPP::plot_densityMaps_overlay()]</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">Ponerinae_deepSTRAPP_biogeo_old_calib_0_40</span><span class="op">$</span><span class="va">updated_trait_data_with_Map_over_time</span>, max.level <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">Ponerinae_deepSTRAPP_biogeo_old_calib_0_40</span><span class="op">$</span><span class="va">updated_trait_Maps_over_time</span>, max.level <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Access updated BAMM_object for each focal time</span></span>
 <span><span class="co"># Can be used to map rates and regime shifts on phylogeny with branch cut-off </span></span>
@@ -425,7 +472,11 @@ deepSTRAPP.</p>
 <span><span class="co"># Each plot is achieved through a dedicated function</span></span>
 <span></span>
 <span><span class="co"># Load the deepSTRAPP output summarizing results for 0 to 40 My</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">Ponerinae_deepSTRAPP_biogeo_old_calib_0_40</span>, package <span class="op">=</span> <span class="st">"deepSTRAPP"</span><span class="op">)</span></span>
+<span><span class="va">Ponerinae_deepSTRAPP_biogeo_old_calib_0_40</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, </span>
+<span>    <span class="st">"Ponerinae_deepSTRAPP_biogeo_old_calib_0_40.rds"</span>, package <span class="op">=</span> <span class="st">"deepSTRAPP"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co"># This dataset is only available in development versions installed from GitHub.</span></span>
+<span><span class="co"># It is not available in CRAN versions.</span></span>
+<span><span class="co"># Use remotes::install_github(repo = "MaelDore/deepSTRAPP") to get the latest development version.</span></span>
 <span></span>
 <span><span class="co">### 4.1/ Plot evolution of STRAPP tests p-values through time ####</span></span>
 <span></span>
@@ -436,23 +487,23 @@ deepSTRAPP.</p>
 <span>   deepSTRAPP_outputs <span class="op">=</span> <span class="va">Ponerinae_deepSTRAPP_biogeo_old_calib_0_40</span>,</span>
 <span>   alpha <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># This is the main output of deepSTRAPP. It shows the evolution of the significance</span></span>
-<span><span class="co"># of the STRAPP tests over time.</span></span>
+<span><span class="co"># This is the main output of deepSTRAPP. </span></span>
+<span><span class="co"># It shows the evolution of the significance of the STRAPP tests over time.</span></span>
 <span><span class="co"># This example highlights the importance of deepSTRAPP as the significance</span></span>
 <span><span class="co"># of STRAPP tests change over time. </span></span>
 <span><span class="co"># Differences in net diversification rates are not significant in the present</span></span>
-<span><span class="co"># (assuming a significant threshold of alpha = 0.10).</span></span>
-<span><span class="co"># Meanwhile, rates are significantly different in the past between 8 My to 30 My (the green area).</span></span>
+<span><span class="co"># (assuming a significance threshold of alpha = 0.10).</span></span>
+<span><span class="co"># Meanwhile, rates are significantly different in the past between ca. 8 My to 28 My (the green area).</span></span>
 <span><span class="co"># This result supports the idea that differences in biodiversity across bioregions</span></span>
 <span><span class="co"># (i.e., "Old World" vs. "New World" ants) can be explained by differences of diversification rates</span></span>
 <span><span class="co"># that was detected in the past.</span></span>
 <span><span class="co"># Without use of deepSTRAPP, this conclusion would not have been supported by current diversification rates</span></span>
-<span><span class="co"># alone (although here, results should be discussed is regards to their weak degree of significance).</span></span></code></pre></div>
-<p><img src="deepSTRAPP_biogeographic_data_files/figure-html/plot_results_biogeo_2lvl_eval-1.png" width="672" style="display: block; margin: auto;"></p>
+<span><span class="co"># alone (although here, results should be discussed with regard to their weak degree of significance).</span></span></code></pre></div>
+<p><img src="figures/1.3_deepSTRAPP_biogeographic_data_4.1_plot_pvalues.PNG" class="r-plt" alt="" width="100%" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">### 4.2/ Plot histogram of STRAPP test stats ####</span></span>
 <span></span>
-<span><span class="co"># Plot an histogram of the distribution of the test statistics used</span></span>
+<span><span class="co"># Plot a histogram of the distribution of the test statistics used</span></span>
 <span><span class="co"># to assess the significance of STRAPP tests</span></span>
 <span>  <span class="co">#  For a single 'focal_time': deepSTRAPP::plot_histogram_STRAPP_test_for_focal_time()</span></span>
 <span>  <span class="co">#  For multiple 'time_steps': deepSTRAPP::plot_histograms_STRAPP_tests_over_time()</span></span>
@@ -476,16 +527,16 @@ deepSTRAPP.</p>
 <span><span class="co"># The black line represents the expected value under the null hypothesis H0 </span></span>
 <span><span class="co">#  =&gt; Δ Mann-Whitney-Wilcoxon U-stat = 0.</span></span>
 <span><span class="co"># The histogram shows the distribution of the test statistics as observed</span></span>
-<span><span class="co"># across the 1000 posterior samples from BAMM.</span></span>
+<span><span class="co"># across the 1000 combinations of stochastic maps and posterior samples from BAMM.</span></span>
 <span><span class="co"># The red line represents the significance threshold for which 90% of the observed data</span></span>
 <span><span class="co"># exhibited a higher value than expected.</span></span>
-<span><span class="co"># Since this red line is above the null expectation (quantile 10% = 380.4),</span></span>
+<span><span class="co"># Since this red line is above the null expectation (quantile 10% = 278.8),</span></span>
 <span><span class="co"># the test is significant for a value of alpha = 0.10.</span></span>
 <span></span>
 <span><span class="co"># Plot the histograms of test stats for all time-steps</span></span>
 <span><span class="fu"><a href="../reference/plot_histograms_STRAPP_tests_over_time.html">plot_histograms_STRAPP_tests_over_time</a></span><span class="op">(</span></span>
 <span>   deepSTRAPP_outputs <span class="op">=</span> <span class="va">Ponerinae_deepSTRAPP_biogeo_old_calib_0_40</span><span class="op">)</span></span></code></pre></div>
-<p><img src="deepSTRAPP_biogeographic_data_files/figure-html/plot_histogram_STRAPP_tests_biogeo_2lvl_eval-1.png" width="672" style="display: block; margin: auto;"></p>
+<p><img src="figures/1.3_deepSTRAPP_biogeographic_data_4.2_plot_STRAPP_tests.PNG" class="r-plt" alt="" width="100%" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">### 4.3/ Plot evolution of rates through time ~ trait data ####</span></span>
 <span></span>
@@ -498,26 +549,26 @@ deepSTRAPP.</p>
 <span></span>
 <span><span class="co"># This plot helps to visualize how differences in rates evolved over time.</span></span>
 <span><span class="co"># You can see that both bioregions "New World" and "Old World" had fairly different rates over time,</span></span>
-<span><span class="co"># with differences detected as significant between 8 to 30 My.</span></span>
+<span><span class="co"># with differences detected as significant between ca. 8 to 28 My.</span></span>
 <span><span class="co"># However, in the present, we recorded an increase in diversification rates that blurred </span></span>
 <span><span class="co"># these differences and led to a non-significant STRAPP test when comparing current rates.</span></span>
 <span><span class="co"># This plot, alongside results of deepSTRAPP, supports the Diversification Rate Hypothesis </span></span>
-<span><span class="co"># in showing how "Old World" ant lineages may have accumulated faster, especially between 8 to 30 My.</span></span>
+<span><span class="co"># in showing how "Old World" ant lineages may have accumulated faster, especially between 8 to 28 My.</span></span>
 <span></span>
 <span><span class="co"># N.B.: The increase of diversification rates recorded in the present may largely be artifactual,</span></span>
-<span><span class="co"># due to the fact some lineages in the present will go extinct in the future,</span></span>
+<span><span class="co"># due to the fact that some lineages in the present will go extinct in the future,</span></span>
 <span><span class="co"># but have not been recorded as such. </span></span>
 <span><span class="co"># This bias is named the "pull of the present", and can impair evaluation of</span></span>
 <span><span class="co"># the Diversification Rate Hypothesis based only on current rates.</span></span>
 <span><span class="co"># deepSTRAPP offers a solution to this issue by investigating rate differences at any time in the past.</span></span></code></pre></div>
-<p><img src="deepSTRAPP_biogeographic_data_files/figure-html/plot_rates_through_time_biogeo_2lvl_eval-1.png" width="672" style="display: block; margin: auto;"></p>
+<p><img src="figures/1.3_deepSTRAPP_biogeographic_data_4.3_plot_rates_through_time.PNG" class="r-plt" alt="" width="100%" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">### 4.4/ Plot rates vs. ranges across branches for a given focal time ####</span></span>
 <span></span>
 <span><span class="co"># ?deepSTRAPP::plot_rates_vs_trait_data_for_focal_time()</span></span>
 <span><span class="co"># ?deepSTRAPP::plot_rates_vs_trait_data_over_time()</span></span>
 <span></span>
-<span><span class="co"># This plot help to visualize differences in rates vs. ranges across all branches</span></span>
+<span><span class="co"># This plot helps to visualize differences in rates vs. ranges across all branches</span></span>
 <span><span class="co"># found at specific time-steps (i.e., 'focal_time').</span></span>
 <span></span>
 <span><span class="co"># Generate ggplot for time = 10 My</span></span>
@@ -527,24 +578,25 @@ deepSTRAPP.</p>
 <span>   colors_per_levels <span class="op">=</span> <span class="va">colors_per_ranges</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Here we focus on T = 10 My to highlight the differences detected in the previous steps.</span></span>
-<span><span class="co"># You can see that "Old World" ants tend to have higher rates than "New World" ants, at this time-step.</span></span>
+<span><span class="co"># You can see that "Old World" ants tend to have higher mean rates than "New World" ants, at this time-step.</span></span>
 <span><span class="co"># This plot, alongside other results of deepSTRAPP, supports the Diversification Rate Hypothesis in showing </span></span>
-<span><span class="co"># "Old World" ant lineages may have accumulated faster, especially between 8 to 30 My.</span></span>
+<span><span class="co"># "Old World" ant lineages may have accumulated faster, especially between 8 to 28 My.</span></span>
 <span><span class="co"># Additionally, the plot displays summary statistics for the STRAPP test associated with the data shown:</span></span>
-<span><span class="co">#   * An observed statistic computed across the mean rates and trait states (i.e., habitats) shown on the plot.</span></span>
-<span><span class="co">#     Here, U-stat obs = -27346, indicating ants in the "New World" exhibited lower rates than "Old World" ants.</span></span>
-<span><span class="co">#     This is not the statistic of the STRAPP test itself, which is conducted across all BAMM posterior samples.</span></span>
-<span><span class="co">#   * The quantile of null statistic distribution at the significant threshold used to define test significance. </span></span>
+<span><span class="co">#   * An observed statistic computed across the mean rates and geographic ranges shown on the plot.</span></span>
+<span><span class="co">#     Here, the low negative U-stat obs = -29636, indicates ants in the "New World" exhibited lower rates than "Old World" ants.</span></span>
+<span><span class="co">#     This is not the statistic of the STRAPP test itself, which is conducted across all paired stochastic maps</span></span>
+<span><span class="co">#     and BAMM posterior samples according to the default "uncertainty_strategy" used for testing.</span></span>
+<span><span class="co">#   * The quantile of null statistic distribution at the significance threshold used to define test significance. </span></span>
 <span><span class="co">#     The test will be considered significant (i.e., the null hypothesis is rejected)</span></span>
 <span><span class="co">#     if this value is higher than zero, as shown on the histogram in Section 4.2.</span></span>
-<span><span class="co">#     Here, Q10% = 380.4, so the test is significant (according to this significance threshold).</span></span>
-<span><span class="co">#   * The p-value of the associated STRAPP test. Here, p = 0.088.</span></span>
+<span><span class="co">#     Here, Q10% = 278.8, so the test is significant (according to this significance threshold).</span></span>
+<span><span class="co">#   * The p-value of the associated STRAPP test. Here, p = 0.089.</span></span>
 <span></span>
 <span><span class="co"># Plot rates vs. ranges for all time-steps</span></span>
 <span><span class="fu"><a href="../reference/plot_rates_vs_trait_data_over_time.html">plot_rates_vs_trait_data_over_time</a></span><span class="op">(</span></span>
 <span>   deepSTRAPP_outputs <span class="op">=</span> <span class="va">Ponerinae_deepSTRAPP_biogeo_old_calib_0_40</span>,</span>
 <span>   colors_per_levels <span class="op">=</span> <span class="va">colors_per_ranges</span><span class="op">)</span></span></code></pre></div>
-<p><img src="deepSTRAPP_biogeographic_data_files/figure-html/plot_rates_vs_traits_biogeo_2lvl_eval-1.png" width="100%" style="display: block; margin: auto;"></p>
+<p><img src="figures/1.3_deepSTRAPP_biogeographic_data_4.4_plot_rates_vs_traits.PNG" class="r-plt" alt="" width="100%" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">### 4.5/ Plot updated densityMaps mapping trait evolution for a given 'focal_time' ####</span></span>
 <span></span>
@@ -559,7 +611,7 @@ deepSTRAPP.</p>
 <span><span class="co">## The next plot shows the evolution of trait data across the whole phylogeny (100-0 My).</span></span>
 <span></span>
 <span><span class="co"># Plot initial densityMaps (t = 0)</span></span>
-<span><span class="va">densityMaps_0My</span> <span class="op">&lt;-</span> <span class="va">Ponerinae_deepSTRAPP_biogeo_old_calib_0_40</span><span class="op">$</span><span class="va">updated_trait_data_with_Map_over_time</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
+<span><span class="va">densityMaps_0My</span> <span class="op">&lt;-</span> <span class="va">Ponerinae_deepSTRAPP_biogeo_old_calib_0_40</span><span class="op">$</span><span class="va">updated_Maps_over_time</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
 <span><span class="fu"><a href="../reference/plot_densityMaps_overlay.html">plot_densityMaps_overlay</a></span><span class="op">(</span><span class="va">densityMaps_0My</span><span class="op">$</span><span class="va">densityMaps</span>,</span>
 <span>                         colors_per_levels <span class="op">=</span> <span class="va">colors_per_ranges</span>,</span>
 <span>                         cex_pies <span class="op">=</span> <span class="fl">0.3</span>, <span class="co"># Reduce pie size</span></span>
@@ -569,7 +621,7 @@ deepSTRAPP.</p>
 <span><span class="co">## The next plot shows the evolution of trait data from root to 10 Mya (100-10 My).</span></span>
 <span></span>
 <span><span class="co"># Plot updated densityMaps for time-step n°3 = 10 My</span></span>
-<span><span class="va">densityMaps_10My</span> <span class="op">&lt;-</span> <span class="va">Ponerinae_deepSTRAPP_biogeo_old_calib_0_40</span><span class="op">$</span><span class="va">updated_trait_data_with_Map_over_time</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span></span>
+<span><span class="va">densityMaps_10My</span> <span class="op">&lt;-</span> <span class="va">Ponerinae_deepSTRAPP_biogeo_old_calib_0_40</span><span class="op">$</span><span class="va">updated_Maps_over_time</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span></span>
 <span><span class="fu"><a href="../reference/plot_densityMaps_overlay.html">plot_densityMaps_overlay</a></span><span class="op">(</span><span class="va">densityMaps_10My</span><span class="op">$</span><span class="va">densityMaps</span>,</span>
 <span>                         colors_per_levels <span class="op">=</span> <span class="va">colors_per_ranges</span>,</span>
 <span>                         cex_pies <span class="op">=</span> <span class="fl">0.4</span>, <span class="co"># Reduce pie size</span></span>
@@ -579,12 +631,12 @@ deepSTRAPP.</p>
 <span><span class="co">## The next plot shows the evolution of trait data from root to 40 Mya (100-40 My).</span></span>
 <span></span>
 <span><span class="co"># Plot updated densityMaps for time-step n°9 = 40 My</span></span>
-<span><span class="va">densityMaps_40My</span> <span class="op">&lt;-</span> <span class="va">Ponerinae_deepSTRAPP_biogeo_old_calib_0_40</span><span class="op">$</span><span class="va">updated_trait_data_with_Map_over_time</span><span class="op">[[</span><span class="fl">9</span><span class="op">]</span><span class="op">]</span></span>
+<span><span class="va">densityMaps_40My</span> <span class="op">&lt;-</span> <span class="va">Ponerinae_deepSTRAPP_biogeo_old_calib_0_40</span><span class="op">$</span><span class="va">updated_Maps_over_time</span><span class="op">[[</span><span class="fl">9</span><span class="op">]</span><span class="op">]</span></span>
 <span><span class="fu"><a href="../reference/plot_densityMaps_overlay.html">plot_densityMaps_overlay</a></span><span class="op">(</span><span class="va">densityMaps_40My</span><span class="op">$</span><span class="va">densityMaps</span>,</span>
 <span>                         colors_per_levels <span class="op">=</span> <span class="va">colors_per_ranges</span>,</span>
 <span>                         fsize <span class="op">=</span> <span class="fl">0.2</span><span class="op">)</span> <span class="co"># Reduce tip label size</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/title.html" class="external-link">title</a></span><span class="op">(</span>main <span class="op">=</span> <span class="st">"Trait evolution for 100-40 My"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="deepSTRAPP_biogeographic_data_files/figure-html/plot_updated_densityMaps_biogeo_2lvl_eval-1.png" width="672" style="display: block; margin: auto;"><img src="deepSTRAPP_biogeographic_data_files/figure-html/plot_updated_densityMaps_biogeo_2lvl_eval-2.png" width="672" style="display: block; margin: auto;"></p>
+<p><img src="figures/1.3_deepSTRAPP_biogeographic_data_4.5_plot_updated_densityMaps_1.PNG" class="r-plt" alt="" width="100%" style="display: block; margin: auto;"><img src="figures/1.3_deepSTRAPP_biogeographic_data_4.5_plot_updated_densityMaps_2.PNG" class="r-plt" alt="" width="100%" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">### 4.6/ Plot updated diversification rates and regimes for a given 'focal_time' ####</span></span>
 <span></span>
@@ -603,7 +655,7 @@ deepSTRAPP.</p>
 <span></span>
 <span><span class="co"># Plot diversification rates on initial phylogeny (t = 0)</span></span>
 <span><span class="va">BAMM_map_0My</span> <span class="op">&lt;-</span> <span class="va">Ponerinae_deepSTRAPP_biogeo_old_calib_0_40</span><span class="op">$</span><span class="va">updated_BAMM_objects_over_time</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
-<span><span class="fu"><a href="../reference/plot_BAMM_rates.html">plot_BAMM_rates</a></span><span class="op">(</span><span class="va">BAMM_map_0My</span>, labels <span class="op">=</span> <span class="cn">FALSE</span>, par.reset <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/plot_BAMM_rates.html">plot_BAMM_rates</a></span><span class="op">(</span><span class="va">BAMM_map_0My</span>, labels <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>v <span class="op">=</span> <span class="va">root_age</span> <span class="op">-</span> <span class="fl">10</span>, col <span class="op">=</span> <span class="st">"red"</span>, lty <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="co"># Show where the phylogeny will be cut for t = 10My</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>v <span class="op">=</span> <span class="va">root_age</span> <span class="op">-</span> <span class="fl">40</span>, col <span class="op">=</span> <span class="st">"red"</span>, lty <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="co"># Show where the phylogeny will be cut for t = 40My</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/title.html" class="external-link">title</a></span><span class="op">(</span>main <span class="op">=</span> <span class="st">"BAMM rates for 100-0 My"</span><span class="op">)</span></span>
@@ -623,7 +675,7 @@ deepSTRAPP.</p>
 <span><span class="fu"><a href="../reference/plot_BAMM_rates.html">plot_BAMM_rates</a></span><span class="op">(</span><span class="va">BAMM_map_40My</span>, labels <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>                colorbreaks <span class="op">=</span> <span class="va">BAMM_map_40My</span><span class="op">$</span><span class="va">initial_colorbreaks</span><span class="op">$</span><span class="va">net_diversification</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/title.html" class="external-link">title</a></span><span class="op">(</span>main <span class="op">=</span> <span class="st">"BAMM rates for 100-40 My"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="deepSTRAPP_biogeographic_data_files/figure-html/plot_BAMM_rates_biogeo_2lvl_eval-1.png" width="672" style="display: block; margin: auto;"></p>
+<p><img src="figures/1.3_deepSTRAPP_biogeographic_data_4.6_plot_BAMM_rates.PNG" class="r-plt" alt="" width="100%" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">### 4.7/ Plot both trait evolution and diversification rates and regimes updated for a given 'focal_time' ####</span></span>
 <span></span>
@@ -643,8 +695,7 @@ deepSTRAPP.</p>
 <span>  focal_time <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  ftype <span class="op">=</span> <span class="st">"off"</span>, lwd <span class="op">=</span> <span class="fl">0.7</span>,</span>
 <span>  colors_per_levels <span class="op">=</span> <span class="va">colors_per_ranges</span>,</span>
-<span>  labels <span class="op">=</span> <span class="cn">FALSE</span>, legend <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  par.reset <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span>  labels <span class="op">=</span> <span class="cn">FALSE</span>, legend <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## The next plot shows the evolution of ranges and rates from root to 10 Mya (100-10 My).</span></span>
 <span></span>
@@ -654,8 +705,7 @@ deepSTRAPP.</p>
 <span>  focal_time <span class="op">=</span> <span class="fl">10</span>, </span>
 <span>  ftype <span class="op">=</span> <span class="st">"off"</span>, lwd <span class="op">=</span> <span class="fl">1.2</span>,</span>
 <span>  colors_per_levels <span class="op">=</span> <span class="va">colors_per_ranges</span>,</span>
-<span>  labels <span class="op">=</span> <span class="cn">FALSE</span>, legend <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  par.reset <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span>  labels <span class="op">=</span> <span class="cn">FALSE</span>, legend <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## The next plot shows the evolution of ranges and rates from root to 40 Mya (100-40 My).</span></span>
 <span></span>
@@ -665,9 +715,8 @@ deepSTRAPP.</p>
 <span>  focal_time <span class="op">=</span> <span class="fl">40</span>, </span>
 <span>  ftype <span class="op">=</span> <span class="st">"off"</span>, lwd <span class="op">=</span> <span class="fl">1.2</span>,</span>
 <span>  colors_per_levels <span class="op">=</span> <span class="va">colors_per_ranges</span>,</span>
-<span>  labels <span class="op">=</span> <span class="cn">FALSE</span>, legend <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  par.reset <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="deepSTRAPP_biogeographic_data_files/figure-html/plot_traits_vs_rates_on_phylogeny_biogeo_2lvl_eval-1.png" width="672" style="display: block; margin: auto;"><img src="deepSTRAPP_biogeographic_data_files/figure-html/plot_traits_vs_rates_on_phylogeny_biogeo_2lvl_eval-2.png" width="672" style="display: block; margin: auto;"></p>
+<span>  labels <span class="op">=</span> <span class="cn">FALSE</span>, legend <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+<p><img src="figures/1.3_deepSTRAPP_biogeographic_data_4.7_plot_traits_vs_rate_maps_1.PNG" class="r-plt" alt="" width="100%" style="display: block; margin: auto;"><img src="figures/1.3_deepSTRAPP_biogeographic_data_4.7_plot_traits_vs_rate_maps_2.PNG" class="r-plt" alt="" width="100%" style="display: block; margin: auto;"></p>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
 </div>
@@ -679,7 +728,7 @@ deepSTRAPP.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>

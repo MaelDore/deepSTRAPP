@@ -12,8 +12,8 @@
 <link rel="icon" sizes="any" href="../favicon.ico">
 <link rel="manifest" href="../site.webmanifest">
 <script src="../lightswitch.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
 <meta property="og:title" content="Model continuous trait evolution">
@@ -26,7 +26,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">deepSTRAPP</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -62,7 +62,13 @@
     <li><h6 class="dropdown-header" data-toc-skip>5/ Plot rates through time (RTT)</h6></li>
     <li><a class="dropdown-item" href="../articles/plot_rates_through_time.html">Explore options for RTT plots</a></li>
     <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>6/ Cut phylogenies</h6></li>
+    <li><h6 class="dropdown-header" data-toc-skip>6/ Handle uncertainty</h6></li>
+    <li><a class="dropdown-item" href="../articles/handle_uncertainty.html">Explore strategies to handle uncertainty in trait and rate estimates</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>7/ Import external analyses</h6></li>
+    <li><a class="dropdown-item" href="../articles/import_external_analyses.html">Import results of external analyses into deepSTRAPP</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>8/ Cut phylogenies</h6></li>
     <li><a class="dropdown-item" href="../articles/cut_phylogenies.html">Cut different types of (mapped) phylogenies for a given focal-time</a></li>
   </ul>
 </li>
@@ -96,7 +102,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Model continuous trait evolution</h1>
                         <h4 data-toc-skip class="author">Maël Doré</h4>
             
-            <h4 data-toc-skip class="date">2025-10-22</h4>
+            <h4 data-toc-skip class="date">2026-09-09</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/MaelDore/deepSTRAPP/blob/master/vignettes/model_continuous_trait_evolution.Rmd" class="external-link"><code>vignettes/model_continuous_trait_evolution.Rmd</code></a></small>
       <div class="d-none name"><code>model_continuous_trait_evolution.Rmd</code></div>
@@ -116,6 +122,12 @@ vignette: <code><a href="../articles/model_categorical_trait_evolution.html">vig
 <p>For an example with <strong>biogeographic</strong> data, see this
 vignette:
 <code><a href="../articles/model_biogeographic_range_evolution.html">vignette("model_biogeographic_range_evolution")</a></code></p>
+<p><br></p>
+<p>For a detailed explanation on how to load results from
+<strong>external analyses</strong> within deepSTRAPP rather than relying
+on deepSTRAPP all-in-one function to infer trait evolution, please see
+the examples in this vignette:
+<code><a href="../articles/import_external_analyses.html">vignette("import_external_analyses")</a></code>.</p>
 <p><br></p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
@@ -149,7 +161,7 @@ vignette:
 <span></span>
 <span><span class="co"># 1.1/ Fit evolutionary models to trait data using Maximum Likelihood.</span></span>
 <span><span class="co"># 1.2/ Select the best fitting model comparing AICc.</span></span>
-<span><span class="co"># 1.3/ Infer ancestral characters estimates (ACE) at nodes.</span></span>
+<span><span class="co"># 1.3/ Infer ancestral character estimates (ACE) at nodes.</span></span>
 <span><span class="co"># 1.4/ Infer ancestral states along branches using interpolation to produce a `contMap`.</span></span>
 <span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/MaelDore/deepSTRAPP" class="external-link">deepSTRAPP</a></span><span class="op">)</span></span>
@@ -181,7 +193,7 @@ vignette:
 <span>    <span class="co"># through time under the model r[t] = r[0] * exp(a * t),  where r[0] is the initial rate,</span></span>
 <span>    <span class="co"># 'a' is the rate change parameter, and t is time. By default, 'a' is set to be negative,</span></span>
 <span>    <span class="co"># therefore the model represents a decelerating rate of evolution.</span></span>
-<span>    <span class="co"># Parameter estimate boundaries can be change to allow accelerating evolution </span></span>
+<span>    <span class="co"># Parameter estimate boundaries can be changed to allow accelerating evolution </span></span>
 <span>    <span class="co"># with positive values of 'a' (as in the ACDC model).</span></span>
 <span> <span class="co"># "rate_trend": Linear trend model.</span></span>
 <span>    <span class="co"># Time dependent model where rate of evolution varies linearly with time </span></span>
@@ -192,19 +204,19 @@ vignette:
 <span>    <span class="co"># predicts covariance among trait values for species (i.e., the degree of phylogenetic signal).</span></span>
 <span>    <span class="co"># The model multiplies all internal branch lengths by 'lambda'.</span></span>
 <span>    <span class="co"># 'lambda' close to zero indicates no phylogenetic signal. </span></span>
-<span>    <span class="co"># 'lambda' close to one approximate the 'BM' model and indicates strong phylogenetic signal.</span></span>
+<span>    <span class="co"># 'lambda' close to one approximates the 'BM' model and indicates strong phylogenetic signal.</span></span>
 <span> <span class="co"># "kappa": Pagel's kappa model.</span></span>
 <span>    <span class="co"># Based on branch length transformation. Punctuational (speciational) model where</span></span>
 <span>    <span class="co"># trait divergence is related to the number of speciation events between pairs of species.</span></span>
 <span>    <span class="co"># Assumes that speciation events are responsible for trait divergence.</span></span>
 <span>    <span class="co"># The model raises all branch lengths to an estimated power 'kappa'.</span></span>
 <span>    <span class="co"># 'kappa' close to zero indicates a strong dependency of trait evolution on speciation events.</span></span>
-<span>    <span class="co"># 'kappa' close to one approximate the 'BM' model and indicates strong phylogenetic signal.</span></span>
+<span>    <span class="co"># 'kappa' close to one approximates the 'BM' model and indicates strong phylogenetic signal.</span></span>
 <span> <span class="co"># "delta": Pagel's delta model.</span></span>
 <span>    <span class="co"># Based on branch length transformation. Time-dependent model that modulates </span></span>
 <span>    <span class="co"># the relative contributions of early vs. late evolution in the tree.</span></span>
 <span>    <span class="co"># The model raises all node depths to an estimated power 'delta'.</span></span>
-<span>    <span class="co"># 'delta' close to one approximate the 'BM' model and indicates strong phylogenetic signal.</span></span>
+<span>    <span class="co"># 'delta' close to one approximates the 'BM' model and indicates strong phylogenetic signal.</span></span>
 <span>    <span class="co"># 'delta' lower than one gives more weight to early evolution, thus represents decelerating rates.</span></span>
 <span>    <span class="co"># 'delta' higher than one gives more weight to late evolution, thus represents accelerating rates.</span></span>
 <span></span>
@@ -216,9 +228,13 @@ vignette:
 <span>    seed <span class="op">=</span> <span class="fl">1234</span>, <span class="co"># Set seed for reproducibility</span></span>
 <span>    <span class="co"># All possible models</span></span>
 <span>    evolutionary_models <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"BM"</span>, <span class="st">"OU"</span>,  <span class="st">"EB"</span>, <span class="st">"rate_trend"</span>, <span class="st">"lambda"</span>, <span class="st">"kappa"</span>, <span class="st">"delta"</span><span class="op">)</span>, </span>
-<span>    control <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>niter <span class="op">=</span> <span class="fl">200</span><span class="op">)</span>, <span class="co"># Example of additional parameters that can be pass down</span></span>
+<span>    control <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>niter <span class="op">=</span> <span class="fl">200</span><span class="op">)</span>, <span class="co"># Example of additional parameters that can be passed down</span></span>
 <span>    <span class="co"># to geiger::fitContinuous() to control parameter optimization.</span></span>
-<span>    res <span class="op">=</span> <span class="fl">100</span>, <span class="co"># To set the reoslution of the continuous mapping of trait value on the contMap</span></span>
+<span>    res <span class="op">=</span> <span class="fl">100</span>, <span class="co"># To set the resolution of the continuous mapping of trait value on the contMap</span></span>
+<span>    <span class="co"># Perform simulations of trait evolution (i.e., continuous stochastic mapping) such as</span></span>
+<span>    <span class="co"># the uncertainty in trait estimates is captured through the simulations.</span></span>
+<span>    run_stochastic_maps <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>    nb_simulations <span class="op">=</span> <span class="fl">100</span>,</span>
 <span>    color_scale <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"darkgreen"</span>, <span class="st">"limegreen"</span>, <span class="st">"orange"</span>, <span class="st">"red"</span><span class="op">)</span>,</span>
 <span>    plot_map <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>    <span class="co"># PDF_file_path = "./eel_contMap.pdf", # To export in PDF the contMap generated</span></span>
@@ -233,25 +249,48 @@ vignette:
 <span><span class="co">## Explore output</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">eel_cont_data</span>, <span class="fl">1</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co">## Extract the contMap showing interpolated continuous trait evolution</span></span>
-<span><span class="co">## on the phylogeny as estimated from the model</span></span>
+<span><span class="co">## Extract the contMap showing interpolated ML estimates of the continuous trait </span></span>
+<span><span class="co">## evolution on the phylogeny as estimated from the model</span></span>
 <span><span class="va">eel_contMap</span> <span class="op">&lt;-</span> <span class="va">eel_cont_data</span><span class="op">$</span><span class="va">contMap</span></span>
 <span></span>
 <span><span class="co"># Plot with initial color_scale</span></span>
 <span><span class="fu"><a href="../reference/plot_contMap.html">plot_contMap</a></span><span class="op">(</span><span class="va">eel_contMap</span>,</span>
 <span>             fsize <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.6</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="co"># Adjust tip label size</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/title.html" class="external-link">title</a></span><span class="op">(</span>main <span class="op">=</span> <span class="st">"ML estimates"</span><span class="op">)</span></span>
+<span></span>
 <span><span class="co"># Plot with updated color_scale</span></span>
 <span><span class="fu"><a href="../reference/plot_contMap.html">plot_contMap</a></span><span class="op">(</span>contMap <span class="op">=</span> <span class="va">eel_contMap</span>,</span>
 <span>             color_scale <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"purple"</span>, <span class="st">"violet"</span>, <span class="st">"cyan"</span>, <span class="st">"blue"</span><span class="op">)</span>,</span>
 <span>             fsize <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.6</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="co"># Adjust tip label size</span></span>
-<span><span class="co"># The contMap is the main input needed to perform a deepSTRAPP run on continuous trait data.</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/title.html" class="external-link">title</a></span><span class="op">(</span>main <span class="op">=</span> <span class="st">"ML estimates"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co">## Extract the Ancestral Character Estimates (ACE) = trait values at nodes</span></span>
+<span><span class="co"># The contMap is the main input needed to perform a deepSTRAPP run on continuous trait data.</span></span>
+<span><span class="co"># However, since it only represents Maximum Likelihood (ML) estimates of ancestral trait values,</span></span>
+<span><span class="co"># it does not allow you to account for uncertainty in trait estimates.</span></span>
+<span><span class="co"># For this, we need to provide the full set of stochastic maps as contMaps</span></span>
+<span></span>
+<span><span class="co">## Extract the contMaps representing independent simulated evolutionary histories </span></span>
+<span><span class="co">## conditioned on the observed trait data and model fit.</span></span>
+<span><span class="co">## The variance observed across the maps represents the uncertainty in ancestral trait estimates.</span></span>
+<span><span class="va">eel_contMaps</span> <span class="op">&lt;-</span> <span class="va">eel_cont_data</span><span class="op">$</span><span class="va">contMaps</span></span>
+<span></span>
+<span><span class="co"># Plot contMap n°1 with initial color_scale</span></span>
+<span><span class="fu"><a href="../reference/plot_contMap.html">plot_contMap</a></span><span class="op">(</span><span class="va">eel_contMaps</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>,</span>
+<span>             fsize <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.6</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="co"># Adjust tip label size</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/title.html" class="external-link">title</a></span><span class="op">(</span>main <span class="op">=</span> <span class="st">"Stochastic Mapping simulation n°1"</span><span class="op">)</span></span>
+<span><span class="co"># Plot contMap n°10 with initial color_scale</span></span>
+<span><span class="fu"><a href="../reference/plot_contMap.html">plot_contMap</a></span><span class="op">(</span><span class="va">eel_contMaps</span><span class="op">[[</span><span class="fl">10</span><span class="op">]</span><span class="op">]</span>,</span>
+<span>             fsize <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.6</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="co"># Adjust tip label size</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/title.html" class="external-link">title</a></span><span class="op">(</span>main <span class="op">=</span> <span class="st">"Stochastic Mapping simulation n°10"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Each simulation is different, but on average, they converge around the ML estimates shown in the contMap.</span></span>
+<span></span>
+<span><span class="co">## Extract the Ancestral Character Estimates (ACE) = ML trait estimates at nodes</span></span>
 <span><span class="va">eel_ACE</span> <span class="op">&lt;-</span> <span class="va">eel_cont_data</span><span class="op">$</span><span class="va">ace</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">eel_ACE</span><span class="op">)</span></span>
 <span><span class="co"># This is a named numerical vector with names = internal node ID and values = ACE.</span></span>
-<span><span class="co"># It can be used as an optional input in deepSTRAPP run to provide</span></span>
-<span><span class="co"># perfectly accurate estimates for trait values at internal nodes. </span></span>
+<span><span class="co"># It can be used as an optional input in a deepSTRAPP run to provide</span></span>
+<span><span class="co"># perfectly accurate ML estimates for trait values at internal nodes. </span></span>
 <span></span>
 <span><span class="co">## Explore summary of model selection</span></span>
 <span><span class="va">eel_cont_data</span><span class="op">$</span><span class="va">model_selection_df</span> <span class="co"># Summary of model selection</span></span>
@@ -266,25 +305,12 @@ vignette:
 <span><span class="co"># 'lambda' = 0.636. The best model detects a moderate degree of phylogenetic signal.</span></span>
 <span></span>
 <span></span>
-<span><span class="co">## Inputs needed to run deepSTRAPP are the contMap (eel_contMap), and optionally,</span></span>
-<span><span class="co">## the tip_data (eel_tip_data), and the ACE (eel_ACE)</span></span></code></pre></div>
-<p><img src="model_continuous_trait_evolution_files/figure-html/model_trait_evolution_cont_eval-1.png" width="672"><img src="model_continuous_trait_evolution_files/figure-html/model_trait_evolution_cont_eval-2.png" width="672"></p>
-<pre><code><span><span class="co">#&gt;                 model      logL k      AIC     AICc delta_AICc Akaike_weights</span></span>
-<span><span class="co">#&gt; BM                 BM -338.9352 2 681.8704 682.0773 17.7682886            0.0</span></span>
-<span><span class="co">#&gt; OU                 OU -329.2538 3 664.5076 664.9287  0.6196536           28.0</span></span>
-<span><span class="co">#&gt; EB                 EB -338.9355 3 683.8710 684.2921 19.9830415            0.0</span></span>
-<span><span class="co">#&gt; rate_trend rate_trend -335.1346 3 676.2692 676.6902 12.3811866            0.1</span></span>
-<span><span class="co">#&gt; lambda         lambda -328.9440 3 663.8880 664.3090  0.0000000           38.2</span></span>
-<span><span class="co">#&gt; kappa           kappa -329.0984 3 664.1969 664.6179  0.3088913           32.7</span></span>
-<span><span class="co">#&gt; delta           delta -332.6586 3 671.3173 671.7383  7.4293004            0.9</span></span>
-<span><span class="co">#&gt;            rank</span></span>
-<span><span class="co">#&gt; BM            6</span></span>
-<span><span class="co">#&gt; OU            3</span></span>
-<span><span class="co">#&gt; EB            7</span></span>
-<span><span class="co">#&gt; rate_trend    5</span></span>
-<span><span class="co">#&gt; lambda        1</span></span>
-<span><span class="co">#&gt; kappa         2</span></span>
-<span><span class="co">#&gt; delta         4</span></span></code></pre>
+<span><span class="co">## The minimal input needed to run deepSTRAPP is the contMap (eel_contMap).</span></span>
+<span><span class="co">## If you want to account for uncertainty in trait estimates, you need to provide the full sets of stochastic maps (eel_contMaps),</span></span>
+<span><span class="co">## and choose either 'paired' (the default) or 'full' as the uncertainty_strategy.</span></span>
+<span><span class="co">## Optionally, you can provide the tip_data (eel_tip_data) and the ACE (eel_ACE) to force </span></span>
+<span><span class="co">## the use of the exact trait values at tips and nodes (in practice, the difference is negligible).</span></span></code></pre></div>
+<p><img src="figures/2.1_Model_continuous_trait_evolution_2_Cont_simmaps.PNG" class="r-plt" alt="" width="100%"></p>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
 </div>
@@ -296,7 +322,7 @@ vignette:
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>

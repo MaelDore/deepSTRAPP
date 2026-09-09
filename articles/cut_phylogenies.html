@@ -12,8 +12,8 @@
 <link rel="icon" sizes="any" href="../favicon.ico">
 <link rel="manifest" href="../site.webmanifest">
 <script src="../lightswitch.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
 <meta property="og:title" content="Cut phylogenies">
@@ -26,7 +26,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">deepSTRAPP</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -62,7 +62,13 @@
     <li><h6 class="dropdown-header" data-toc-skip>5/ Plot rates through time (RTT)</h6></li>
     <li><a class="dropdown-item" href="../articles/plot_rates_through_time.html">Explore options for RTT plots</a></li>
     <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>6/ Cut phylogenies</h6></li>
+    <li><h6 class="dropdown-header" data-toc-skip>6/ Handle uncertainty</h6></li>
+    <li><a class="dropdown-item" href="../articles/handle_uncertainty.html">Explore strategies to handle uncertainty in trait and rate estimates</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>7/ Import external analyses</h6></li>
+    <li><a class="dropdown-item" href="../articles/import_external_analyses.html">Import results of external analyses into deepSTRAPP</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>8/ Cut phylogenies</h6></li>
     <li><a class="dropdown-item" href="../articles/cut_phylogenies.html">Cut different types of (mapped) phylogenies for a given focal-time</a></li>
   </ul>
 </li>
@@ -96,7 +102,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Cut phylogenies</h1>
                         <h4 data-toc-skip class="author">Maël Doré</h4>
             
-            <h4 data-toc-skip class="date">2025-10-22</h4>
+            <h4 data-toc-skip class="date">2026-09-09</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/MaelDore/deepSTRAPP/blob/master/vignettes/cut_phylogenies.Rmd" class="external-link"><code>vignettes/cut_phylogenies.Rmd</code></a></small>
       <div class="d-none name"><code>cut_phylogenies.Rmd</code></div>
@@ -109,8 +115,9 @@ functions</strong> used internally by deepSTRAPP to <strong>cut (mapped)
 phylogenies</strong> to a given focal-time, and then extract data from
 freshly cut tips.</p>
 <p>These functions can be used to cut any (mapped) phylogenies outside
-of a deepSTRAPP run including a regular phylogeny, contMap, densityMap,
-and BAMM_object with diversification rates.</p>
+of a deepSTRAPP run including a regular phylogeny, contMap(s),
+densityMap(s), simmap(s), and BAMM_object with diversification
+rates.</p>
 <p><br></p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ------ Example 1: Cut a regular phylogeny ------ #</span></span>
@@ -158,7 +165,7 @@ and BAMM_object with diversification rates.</p>
 <span>  keep_tip_labels <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">cut_tree_without_tip_labels</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/title.html" class="external-link">title</a></span><span class="op">(</span>main <span class="op">=</span> <span class="st">"Past phylogeny - 30 Mya"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="cut_phylogenies_files/figure-html/cut_phylogeny_eval-1.png" width="100%"></p>
+<p><img src="cut_phylogenies_files/figure-html/cut_phylogeny_eval-1.png" class="r-plt" alt="" width="100%"></p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Show edge labels</span></span>
 <span></span>
@@ -174,7 +181,7 @@ and BAMM_object with diversification rates.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">cut_tree_with_tip_labels</span><span class="op">)</span></span>
 <span><span class="fu">ape</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ape/man/nodelabels.html" class="external-link">edgelabels</a></span><span class="op">(</span>text <span class="op">=</span> <span class="va">cut_tree_with_tip_labels</span><span class="op">$</span><span class="va">initial_edges_ID</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/title.html" class="external-link">title</a></span><span class="op">(</span>main <span class="op">=</span> <span class="st">"Past phylogeny - 30 Mya"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="cut_phylogenies_files/figure-html/cut_phylogeny_eval_2-1.png" width="100%"></p>
+<p><img src="cut_phylogenies_files/figure-html/cut_phylogeny_eval_2-1.png" class="r-plt" alt="" width="100%"></p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ------ Example 2: Cut a contMap ------ #</span></span>
 <span></span>
@@ -242,21 +249,28 @@ and BAMM_object with diversification rates.</p>
 <span><span class="fu"><a href="../reference/plot_contMap.html">plot_contMap</a></span><span class="op">(</span><span class="va">updated_contMap</span><span class="op">)</span></span>
 <span><span class="fu">ape</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ape/man/nodelabels.html" class="external-link">nodelabels</a></span><span class="op">(</span>text <span class="op">=</span> <span class="va">updated_contMap</span><span class="op">$</span><span class="va">tree</span><span class="op">$</span><span class="va">initial_nodes_ID</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/title.html" class="external-link">title</a></span><span class="op">(</span>main <span class="op">=</span> <span class="st">"Past contMap - 80 Mya"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="cut_phylogenies_files/figure-html/cut_contMap_eval-1.png" width="100%"><img src="cut_phylogenies_files/figure-html/cut_contMap_eval-2.png" width="100%"></p>
+<p><img src="cut_phylogenies_files/figure-html/cut_contMap_eval-1.png" class="r-plt" alt="" width="100%"><img src="cut_phylogenies_files/figure-html/cut_contMap_eval-2.png" class="r-plt" alt="" width="100%"></p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># ------ Example 3: Cut densityMaps ------ #</span></span>
+<code class="sourceCode R"><span><span class="co"># ------ Example 3: Cut densityMaps and simmaps ------ #</span></span>
 <span></span>
-<span><span class="co"># See help of the dedicated function</span></span>
+<span><span class="co"># See help of the dedicated functions</span></span>
 <span><span class="op">?</span><span class="fu">deepSTRAPP</span><span class="fu">::</span><span class="fu"><a href="../reference/cut_densityMaps_for_focal_time.html">cut_densityMaps_for_focal_time</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="op">?</span><span class="fu">deepSTRAPP</span><span class="fu">::</span><span class="fu"><a href="../reference/cut_simmaps_for_focal_time.html">cut_simmaps_for_focal_time</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># A densityMap is a phylogeny with posterior probabilities of a given state mapped along branches.</span></span>
 <span><span class="co"># It is typically obtained with `[phytools::densityMap()]`.</span></span>
 <span><span class="co"># Within deepSTRAPP, it is part of the output of `[deepSTRAPP::prepare_trait_data()]`</span></span>
-<span><span class="co"># when used on a categorical trait.</span></span>
-<span><span class="co"># deepSTRAPP also offers to overlay densityMaps of all states to obtain a single mapping of all states</span></span>
-<span><span class="co"># on a unique phylogeny with `[deepSTRAPP::plot_densityMaps_overlay()]`</span></span>
+<span><span class="co"># when used on a categorical or biogeographic trait.</span></span>
+<span><span class="co"># deepSTRAPP also offers to overlay densityMaps of all states/ranges to obtain a single mapping </span></span>
+<span><span class="co"># of all states/ranges on a unique phylogeny with `[deepSTRAPP::plot_densityMaps_overlay()]`</span></span>
 <span></span>
-<span><span class="co">#### 1/ Prepare data ####</span></span>
+<span><span class="co"># A simmap is a phylogeny with states/ranges from a unique simulation of evolutionary history mapped along branches.</span></span>
+<span><span class="co"># It is typically obtained with `[phytools::make.simmap()]`.</span></span>
+<span><span class="co"># Within deepSTRAPP, it is part of the output of `[deepSTRAPP::prepare_trait_data()]`</span></span>
+<span><span class="co"># when 'run_stochastic_maps = TRUE' and 'return_simmaps = TRUE'.</span></span>
+<span></span>
+<span></span>
+<span><span class="co">#### 3.1/ Prepare data ####</span></span>
 <span></span>
 <span><span class="co">## Load mammals phylogeny and data from the R package motmot (data included in deepSTRAPP)</span></span>
 <span><span class="co"># Initial data source: Slater, 2013; DOI: 10.1111/2041-210X.12084</span></span>
@@ -280,17 +294,19 @@ and BAMM_object with diversification rates.</p>
 <span><span class="va">colors_per_states</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"darkblue"</span>, <span class="st">"dodgerblue"</span>, <span class="st">"lightblue"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">colors_per_states</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"small"</span>, <span class="st">"medium"</span>, <span class="st">"large"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Produce densityMaps using stochastic character mapping based on an equal-rates (ER) Mk model</span></span>
+<span><span class="co"># Produce densityMaps and simmaps using stochastic character mapping based on an equal-rates (ER) Mk model</span></span>
 <span><span class="va">mammals_cat_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/prepare_trait_data.html">prepare_trait_data</a></span><span class="op">(</span>tip_data <span class="op">=</span> <span class="va">mammals_data</span>, phylo <span class="op">=</span> <span class="va">mammals_tree</span>,</span>
 <span>                                       trait_data_type <span class="op">=</span> <span class="st">"categorical"</span>,</span>
 <span>                                       evolutionary_models <span class="op">=</span> <span class="st">"ER"</span>,</span>
+<span>                                       run_stochastic_maps <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>                                       nb_simulations <span class="op">=</span> <span class="fl">100</span>, </span>
-<span>                                       colors_per_levels <span class="op">=</span> <span class="va">colors_per_states</span><span class="op">)</span></span>
+<span>                                       colors_per_levels <span class="op">=</span> <span class="va">colors_per_states</span>,</span>
+<span>                                       return_simmaps <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Set focal time</span></span>
 <span><span class="va">focal_time</span> <span class="op">&lt;-</span> <span class="fl">80</span></span>
 <span></span>
-<span><span class="co">#### 2/ Plot a unique cut densityMap ####</span></span>
+<span><span class="co">#### 3.2/ Plot a unique cut densityMap ####</span></span>
 <span></span>
 <span><span class="co"># Extract the density map for small mammals (state 3 = "small")</span></span>
 <span><span class="va">mammals_densityMap_small</span> <span class="op">&lt;-</span> <span class="va">mammals_cat_data</span><span class="op">$</span><span class="va">densityMaps</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span></span>
@@ -302,14 +318,14 @@ and BAMM_object with diversification rates.</p>
 <span>     focal_time <span class="op">=</span> <span class="va">focal_time</span>,</span>
 <span>     keep_tip_labels <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Plot node labels on initial stochastic map with cut-off</span></span>
+<span><span class="co"># Plot node labels on initial densityMap with cut-off</span></span>
 <span><span class="fu">phytools</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/phytools/man/densityMap.html" class="external-link">plot.densityMap</a></span><span class="op">(</span><span class="va">mammals_densityMap_small</span><span class="op">)</span></span>
 <span><span class="fu">ape</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ape/man/nodelabels.html" class="external-link">nodelabels</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>v <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="fu">phytools</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/phytools/man/nodeHeights.html" class="external-link">nodeHeights</a></span><span class="op">(</span><span class="va">mammals_densityMap_small</span><span class="op">$</span><span class="va">tree</span><span class="op">)</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span><span class="op">)</span> <span class="op">-</span> <span class="va">focal_time</span>,</span>
 <span>       col <span class="op">=</span> <span class="st">"red"</span>, lty <span class="op">=</span> <span class="fl">2</span>, lwd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/title.html" class="external-link">title</a></span><span class="op">(</span>main <span class="op">=</span> <span class="st">"Current densityMap - 0 Mya"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Plot initial node labels on cut stochastic map</span></span>
+<span><span class="co"># Plot initial node labels on cut densityMap</span></span>
 <span><span class="fu">phytools</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/phytools/man/densityMap.html" class="external-link">plot.densityMap</a></span><span class="op">(</span><span class="va">updated_mammals_densityMap_small</span><span class="op">)</span></span>
 <span><span class="fu">ape</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ape/man/nodelabels.html" class="external-link">nodelabels</a></span><span class="op">(</span>text <span class="op">=</span> <span class="va">updated_mammals_densityMap_small</span><span class="op">$</span><span class="va">tree</span><span class="op">$</span><span class="va">initial_nodes_ID</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/title.html" class="external-link">title</a></span><span class="op">(</span>main <span class="op">=</span> <span class="st">"Past densityMap - 80 Mya"</span><span class="op">)</span></span></code></pre></div>
@@ -329,10 +345,10 @@ and BAMM_object with diversification rates.</p>
 <span><span class="co">#&gt; pi =</span></span>
 <span><span class="co">#&gt;     large    medium     small </span></span>
 <span><span class="co">#&gt; 0.3333333 0.3333333 0.3333333</span></span></code></pre>
-<p><img src="cut_phylogenies_files/figure-html/cut_densityMap_eval-1.png" width="100%"></p>
+<p><img src="cut_phylogenies_files/figure-html/cut_densityMap_eval-1.png" class="r-plt" alt="" width="100%"></p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
-<span><span class="co">#### 3/ Plot set of overlaid densityMaps ####</span></span>
+<span><span class="co">#### 3.3/ Plot set of overlaid densityMaps ####</span></span>
 <span></span>
 <span><span class="co">## Cut all densityMaps to 80 Mya while keeping tip.label</span></span>
 <span><span class="co"># on terminal branches with a unique descending tip.</span></span>
@@ -354,9 +370,41 @@ and BAMM_object with diversification rates.</p>
 <span>                         colors_per_levels <span class="op">=</span> <span class="va">colors_per_states</span><span class="op">)</span></span>
 <span><span class="fu">ape</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ape/man/nodelabels.html" class="external-link">nodelabels</a></span><span class="op">(</span>text <span class="op">=</span> <span class="va">updated_mammals_densityMaps</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">tree</span><span class="op">$</span><span class="va">initial_nodes_ID</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/title.html" class="external-link">title</a></span><span class="op">(</span>main <span class="op">=</span> <span class="st">"Past overlaid densityMaps - 80 Mya"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="cut_phylogenies_files/figure-html/cut_densityMaps_eval-1.png" width="100%"></p>
+<p><img src="cut_phylogenies_files/figure-html/cut_densityMaps_eval-1.png" class="r-plt" alt="" width="100%"></p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># ------ Example 3: Cut a BAMM_object ------ #</span></span>
+<code class="sourceCode R"><span></span>
+<span><span class="co">#### 3.4/ Plot a unique cut simmap ####</span></span>
+<span></span>
+<span><span class="co"># Extract the simmap n°1 as an example</span></span>
+<span><span class="va">mammals_simmap_1</span> <span class="op">&lt;-</span> <span class="va">mammals_cat_data</span><span class="op">$</span><span class="va">simmaps</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
+<span></span>
+<span><span class="co">## Cut the extracted simmap to 80 Mya while keeping tip.label</span></span>
+<span><span class="co"># on terminal branches with a unique descending tip.</span></span>
+<span><span class="va">updated_mammals_simmap_1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cut_simmap_for_focal_time.html">cut_simmap_for_focal_time</a></span><span class="op">(</span></span>
+<span>     simmap <span class="op">=</span> <span class="va">mammals_simmap_1</span>,</span>
+<span>     focal_time <span class="op">=</span> <span class="va">focal_time</span>,</span>
+<span>     keep_tip_labels <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Plot node labels on initial stochastic map with cut-off</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mammals_simmap_1</span><span class="op">)</span></span>
+<span><span class="fu">ape</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ape/man/nodelabels.html" class="external-link">nodelabels</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>v <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="fu">phytools</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/phytools/man/nodeHeights.html" class="external-link">nodeHeights</a></span><span class="op">(</span><span class="va">mammals_simmap_1</span><span class="op">)</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span><span class="op">)</span> <span class="op">-</span> <span class="va">focal_time</span>,</span>
+<span>       col <span class="op">=</span> <span class="st">"red"</span>, lty <span class="op">=</span> <span class="fl">2</span>, lwd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/title.html" class="external-link">title</a></span><span class="op">(</span>main <span class="op">=</span> <span class="st">"Current simmap - 0 Mya"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Plot initial node labels on cut stochastic map</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">updated_mammals_simmap_1</span><span class="op">)</span></span>
+<span><span class="fu">ape</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ape/man/nodelabels.html" class="external-link">nodelabels</a></span><span class="op">(</span>text <span class="op">=</span> <span class="va">updated_mammals_simmap_1</span><span class="op">$</span><span class="va">initial_nodes_ID</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/title.html" class="external-link">title</a></span><span class="op">(</span>main <span class="op">=</span> <span class="st">"Past simmap - 80 Mya"</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">#&gt; no colors provided. using the following legend:</span></span>
+<span><span class="co">#&gt;     large    medium     small </span></span>
+<span><span class="co">#&gt;   "black" "#DF536B" "#61D04F"</span></span>
+<span><span class="co">#&gt; no colors provided. using the following legend:</span></span>
+<span><span class="co">#&gt;     large    medium     small </span></span>
+<span><span class="co">#&gt;   "black" "#DF536B" "#61D04F"</span></span></code></pre>
+<p><img src="cut_phylogenies_files/figure-html/cut_simmaps_eval-1.png" class="r-plt" alt="" width="100%"></p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># ------ Example 4: Cut a BAMM_object ------ #</span></span>
 <span></span>
 <span><span class="co"># See help of the dedicated function</span></span>
 <span><span class="op">?</span><span class="fu">deepSTRAPP</span><span class="fu">::</span><span class="fu"><a href="../reference/update_rates_and_regimes_for_focal_time.html">update_rates_and_regimes_for_focal_time</a></span><span class="op">(</span><span class="op">)</span></span>
@@ -419,8 +467,7 @@ and BAMM_object with diversification rates.</p>
 <span></span>
 <span><span class="co"># Plot initial BAMM_object for t = 0 My</span></span>
 <span><span class="fu"><a href="../reference/plot_BAMM_rates.html">plot_BAMM_rates</a></span><span class="op">(</span><span class="va">whale_BAMM_object</span>, add_regime_shifts <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>                labels <span class="op">=</span> <span class="cn">TRUE</span>, legend <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>                par.reset <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="co"># Keep plotting parameters in memory to use abline().</span></span>
+<span>                labels <span class="op">=</span> <span class="cn">TRUE</span>, legend <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>v <span class="op">=</span> <span class="va">root_age</span> <span class="op">-</span> <span class="va">focal_time</span>,</span>
 <span>       col <span class="op">=</span> <span class="st">"red"</span>, lty <span class="op">=</span> <span class="fl">2</span>, lwd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/title.html" class="external-link">title</a></span><span class="op">(</span>main <span class="op">=</span> <span class="st">"\nPresent BAMM rates - 0 Mya"</span><span class="op">)</span></span>
@@ -429,7 +476,7 @@ and BAMM_object with diversification rates.</p>
 <span><span class="fu"><a href="../reference/plot_BAMM_rates.html">plot_BAMM_rates</a></span><span class="op">(</span><span class="va">whale_BAMM_object_5My</span>, add_regime_shifts <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>                labels <span class="op">=</span> <span class="cn">TRUE</span>, legend <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/title.html" class="external-link">title</a></span><span class="op">(</span>main <span class="op">=</span> <span class="st">"\nPast BAMM rates - 5 Mya"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="cut_phylogenies_files/figure-html/cut_BAMM_object_eval-1.png" width="100%"></p>
+<p><img src="cut_phylogenies_files/figure-html/cut_BAMM_object_eval-1.png" class="r-plt" alt="" width="100%"></p>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
 </div>
@@ -441,7 +488,7 @@ and BAMM_object with diversification rates.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>
