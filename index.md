@@ -9,6 +9,7 @@ from the present day to any time step along a phylogeny.
 
 ## 🎯 Summary
 
+  
 **deepSTRAPP** models independently the evolutionary history of
 continuous, categorical, or biogeographic trait data and the
 diversification dynamics of a clade, then tests for a relationship
