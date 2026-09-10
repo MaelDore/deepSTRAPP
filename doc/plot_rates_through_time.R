@@ -40,7 +40,8 @@ knitr::opts_chunk$set(
 # #### Step 1: Prepare data ####
 # 
 # # Load results of a STRAPP test workflow run on continuous trait data
-# data(Ponerinae_deepSTRAPP_cont_old_calib_0_40, package = "deepSTRAPP")
+# Ponerinae_deepSTRAPP_cont_old_calib_0_40 <- readRDS(system.file("extdata",
+#     "Ponerinae_deepSTRAPP_cont_old_calib_0_40.rds", package = "deepSTRAPP"))
 # # This dataset is only available in development versions installed from GitHub.
 # # It is not available in CRAN versions.
 # # Use remotes::install_github(repo = "MaelDore/deepSTRAPP") to get the latest development version.
@@ -78,7 +79,7 @@ knitr::opts_chunk$set(
 # ## Adjust quartile ranges
 # 
 # # You can define different trait quantile groups based on 'quantile_ranges'.
-# # The default is c(0, 0.25, 0.5, 0.75, 1.0) which yields for equivalent groups
+# # The default is c(0, 0.25, 0.5, 0.75, 1.0) which yields four equivalent groups
 # # with each spanning 25% of the trait data.
 # 
 # # You can try a different option with for instance five groups:
@@ -91,7 +92,7 @@ knitr::opts_chunk$set(
 # ## Plot Confidence Intervals (CI)
 # 
 # # You can include confidence intervals on the plot.
-# # They are build from the BAMM posterior samples, which each yields different diversification rates,
+# # They are built from the BAMM posterior samples, which each yields different diversification rates,
 # # that can be plotted to show uncertainty in the evaluation.
 # 
 # # The function offers two types of CI (CI_type):
@@ -120,7 +121,7 @@ knitr::opts_chunk$set(
 # 
 # ## Plot different types of rates
 # 
-# # deepSTRAPP also let you plot different types of rates.
+# # deepSTRAPP also lets you plot different types of rates.
 # # Even if you carried out the analysis on "net_diversification" rates (as the default)
 # # you can still plot the evolution of "speciation" and "extinction" rates
 # 
@@ -145,7 +146,8 @@ knitr::opts_chunk$set(
 
 ## ----plot_RTT_cont_eval_dev, fig.width = 16, fig.height = 15, out.width = "100%", eval = is_dev_version(), echo = FALSE----
 # # Load results of a STRAPP test workflow run on continuous trait data
-# data(Ponerinae_deepSTRAPP_cont_old_calib_0_40, package = "deepSTRAPP")
+# Ponerinae_deepSTRAPP_cont_old_calib_0_40 <- readRDS(system.file("extdata",
+#     "Ponerinae_deepSTRAPP_cont_old_calib_0_40.rds", package = "deepSTRAPP"))
 # 
 # # Select a color scheme from lowest to highest values
 # color_scale = c("darkgreen", "limegreen", "orange", "red")
@@ -223,12 +225,13 @@ knitr::include_graphics("figures/5_Explore_plot_RTT_1_Example_continuous.PNG")
 
 
 ## ----plot_RTT_cat_3lvl--------------------------------------------------------
-# # ------ Example 2: Categorical multinominal trait data ------ #
+# # ------ Example 2: Categorical multinomial trait data ------ #
 # 
 # #### Step 1: Prepare data ####
 # 
-# # Load results of a STRAPP test workflow run on continuous trait data
-# data(Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40, package = "deepSTRAPP")
+# # Load results of a STRAPP test workflow run on categorical (3-levels) trait data
+# Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40 <- readRDS(system.file("extdata",
+#     "Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40.rds", package = "deepSTRAPP"))
 # # This dataset is only available in development versions installed from GitHub.
 # # It is not available in CRAN versions.
 # # Use remotes::install_github(repo = "MaelDore/deepSTRAPP") to get the latest development version.
@@ -246,7 +249,7 @@ knitr::include_graphics("figures/5_Explore_plot_RTT_1_Example_continuous.PNG")
 # 
 # # For categorical trait data, the trait data are states.
 # # We can directly plot the evolution of rates between states.
-# # In the case of multinominal data (with more than two states/ranges),
+# # In the case of multinomial data (with more than two states/ranges),
 # # the function allows you to select the states you wish to plot, if not all.
 # 
 # ## Generate default plot with all states
@@ -280,7 +283,8 @@ knitr::include_graphics("figures/5_Explore_plot_RTT_1_Example_continuous.PNG")
 
 ## ----plot_RTT_cat_3lvl_eval_dev, fig.width = 14, fig.height = 10, out.width = "100%", eval = is_dev_version(), echo = FALSE----
 # # Load results of a STRAPP test workflow run on continuous trait data
-# data(Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40, package = "deepSTRAPP")
+# Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40 <- readRDS(system.file("extdata",
+#     "Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40.rds", package = "deepSTRAPP"))
 # 
 # ## Select color scheme for states
 # colors_per_states <- c("forestgreen", "sienna", "goldenrod")
@@ -333,6 +337,6 @@ knitr::include_graphics("figures/5_Explore_plot_RTT_1_Example_continuous.PNG")
 ## ----plot_RTT_cat_3lvl_eval_CRAN, eval = !is_dev_version(), echo = FALSE, out.width = "100%"----
 
 # Plot pre-rendered graph
-knitr::include_graphics("figures/5_Explore_plot_RTT_2_Example_multinominal.PNG")
+knitr::include_graphics("figures/5_Explore_plot_RTT_2_Example_multinomial.PNG")
 
 

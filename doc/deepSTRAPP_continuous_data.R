@@ -47,7 +47,7 @@ knitr::opts_chunk$set(
 # Ponerinae_cont_tip_data <- setNames(object = Ponerinae_trait_tip_data$fake_cont_tip_data,
 #                                     nm = Ponerinae_trait_tip_data$Taxa)
 # 
-# # This not valid biological data. For the sake of this example, we will assume this is size data.
+# # This is not valid biological data. For the sake of this example, we will assume this is size data.
 # 
 # # Select a color scheme from lowest to highest values (i.e., smallest to largest ants)
 # color_scale = c("darkgreen", "limegreen", "orange", "red")
@@ -72,8 +72,8 @@ knitr::opts_chunk$set(
 # ## Goal: Map trait evolution on the time-calibrated phylogeny
 # 
 # # 1.1/ Fit evolutionary models to trait data using Maximum Likelihood (ML).
-# # 1.2/ Select the best fitting model comparing AICc.
-# # 1.3/ Infer ancestral characters estimates (ACE) at nodes.
+# # 1.2/ Select the best fitting model by comparing AICc.
+# # 1.3/ Infer ancestral character estimates (ACE) at nodes.
 # # 1.4/ Infer ancestral states along branches using interpolation to produce a `contMap`.
 # 
 # library(deepSTRAPP)
@@ -82,7 +82,7 @@ knitr::opts_chunk$set(
 # ?deepSTRAPP::prepare_trait_data()
 # 
 # # Run prepare_trait_data with default options
-# # For continuous trait, a BM model is assumed by default.
+# # For a continuous trait, a BM model is assumed by default.
 # Ponerinae_trait_object <- prepare_trait_data(tip_data = Ponerinae_cont_tip_data,
 #                                              trait_data_type = "continuous",
 #                                              phylo = Ponerinae_tree_old_calib,
@@ -114,11 +114,11 @@ knitr::opts_chunk$set(
 # 
 # # Run a BAMM (Bayesian Analysis of Macroevolutionary Mixtures)
 # 
-# # You need the BAMM C++ program installed in your machine to run this step.
+# # You need the BAMM C++ program installed on your machine to run this step.
 # # See the BAMM website: http://bamm-project.org/ and the companion R package [BAMMtools].
 # 
 # # 2.1/ Set BAMM - Record BAMM settings and generate all input files needed for BAMM.
-# # 2.2/ Run BAMM - Run BAMM and move output files in dedicated directory.
+# # 2.2/ Run BAMM - Run BAMM and move output files into a dedicated directory.
 # # 2.3/ Evaluate BAMM - Produce evaluation plots and ESS data.
 # # 2.4/ Import BAMM outputs - Load `BAMM_object` in R and subset posterior samples.
 # # 2.5/ Clean BAMM files - Remove files generated during the BAMM run.
@@ -127,7 +127,7 @@ knitr::opts_chunk$set(
 # ?deepSTRAPP::prepare_diversification_data()
 # 
 # # Run BAMM workflow with deepSTRAPP
-# ## This step is time-consuming. You can skip it and load directly the result if needed
+# ## This step is time-consuming. You can skip it and load the result directly if needed
 # Ponerinae_BAMM_object_old_calib <- prepare_diversification_data(
 #    BAMM_install_directory_path = "./software/bamm-2.5.0/", # To adjust to your own path to BAMM
 #    phylo = Ponerinae_tree_old_calib,
@@ -184,11 +184,11 @@ knitr::opts_chunk$set(
 # # and chose the 'rates_only' strategy to account for uncertainty.
 # # The contMap records the interpolated ML estimates of ancestral trait values.
 # # If we want to account for uncertainty in trait estimates,
-# # we need to the full sets of continuous stochastic maps ('simmaps') as inputs,
+# # we need to provide the full sets of continuous stochastic maps ('simmaps') as inputs,
 # # and select either 'paired' or 'full' as the uncertainty_strategy.
 # 
 # # Run deepSTRAPP on net diversification rates
-# ## This step is time-consuming. You can skip it and load directly the result if needed
+# ## This step is time-consuming. You can skip it and load the result directly if needed
 # Ponerinae_deepSTRAPP_cont_old_calib_0_40 <- run_deepSTRAPP_over_time(
 #     contMap = Ponerinae_contMap,
 #     ace = Ponerinae_ACE,
@@ -218,7 +218,8 @@ knitr::opts_chunk$set(
 #     verbose_extended = TRUE)
 # 
 # # Load the deepSTRAPP output summarizing results for 0 to 40 My
-# data(Ponerinae_deepSTRAPP_cont_old_calib_0_40, package = "deepSTRAPP")
+# Ponerinae_deepSTRAPP_cont_old_calib_0_40 <- readRDS(system.file("extdata",
+#     "Ponerinae_deepSTRAPP_cont_old_calib_0_40.rds", package = "deepSTRAPP"))
 # # This dataset is only available in development versions installed from GitHub.
 # # It is not available in CRAN versions.
 # # Use remotes::install_github(repo = "MaelDore/deepSTRAPP") to get the latest development version.
@@ -234,8 +235,8 @@ knitr::opts_chunk$set(
 # Ponerinae_deepSTRAPP_cont_old_calib_0_40$pvalues_summary_df
 # 
 # # Access STRAPP test results
-# # Can be passed down to [deepSTRAPP::plot_histograms_STRAPP_tests_over_time()] to generate plot
-# # showing the null distribution of the test statistics
+# # Can be passed down to [deepSTRAPP::plot_histograms_STRAPP_tests_over_time()] to generate plots
+# # showing the null distributions of the test statistics
 # str(Ponerinae_deepSTRAPP_cont_old_calib_0_40$STRAPP_results, max.level = 2)
 # 
 # # Access trait data in a melted data.frame
@@ -249,7 +250,7 @@ knitr::opts_chunk$set(
 # table(Ponerinae_deepSTRAPP_cont_old_calib_0_40$diversification_data_df$BAMM_sample_ID)
 # 
 # # Both melted data.frames can be passed down to [deepSTRAPP::plot_rates_through_time()] to generate a plot
-# # showing the evolution of diversification rates though time in relation to trait values
+# # showing the evolution of diversification rates through time in relation to trait values
 # 
 # # Access updated contMaps for each focal time
 # # Can be used to plot contMap with branch cut-off at focal time with [deepSTRAPP::plot_contMap()]
@@ -280,7 +281,8 @@ knitr::opts_chunk$set(
 # # Each plot is achieved through a dedicated function
 # 
 # # Load the deepSTRAPP output summarizing results for 0 to 40 My
-# data(Ponerinae_deepSTRAPP_cont_old_calib_0_40, package = "deepSTRAPP")
+# Ponerinae_deepSTRAPP_cont_old_calib_0_40 <- readRDS(system.file("extdata",
+#     "Ponerinae_deepSTRAPP_cont_old_calib_0_40.rds", package = "deepSTRAPP"))
 # # This dataset is only available in development versions installed from GitHub.
 # # It is not available in CRAN versions.
 # # Use remotes::install_github(repo = "MaelDore/deepSTRAPP") to get the latest development version.
@@ -298,11 +300,11 @@ knitr::opts_chunk$set(
 # # This example highlights the importance of deepSTRAPP as the significance of STRAPP tests
 # # change over time.
 # # Correlation between trait values and net diversification rates are not significant in the present
-# # (assuming a significant threshold of alpha = 0.05).
+# # (assuming a significance threshold of alpha = 0.05).
 # # Meanwhile, correlations were significant in the past between 2 My to 25 My (the green area).
 # # This result supports the idea that differences in biodiversity in relation to trait values
 # # (e.g., ant size) can be explained by correlations between rates and net diversification rates
-# # that occurred in the past. Without use of deepSTRAPP, this conclusion would not have been supported
+# # that occurred in the past. Without the use of deepSTRAPP, this conclusion would not have been supported
 # # by current diversification rates alone.
 # 
 # 
@@ -310,7 +312,8 @@ knitr::opts_chunk$set(
 ## ----plot_pvalues_cont_eval_dev, eval = is_dev_version(), echo = FALSE--------
 # 
 # # Load the deepSTRAPP output summarizing results for 0 to 40 My
-# data(Ponerinae_deepSTRAPP_cont_old_calib_0_40, package = "deepSTRAPP")
+# Ponerinae_deepSTRAPP_cont_old_calib_0_40 <- readRDS(system.file("extdata",
+#   "Ponerinae_deepSTRAPP_cont_old_calib_0_40.rds", package = "deepSTRAPP"))
 # 
 # # Produce the results of overall Kruskal-Wallis tests over time
 # ggplot_STRAPP_pvalues <- deepSTRAPP::plot_STRAPP_pvalues_over_time(
@@ -332,7 +335,7 @@ knitr::include_graphics("figures/1.1_deepSTRAPP_continuous_data_4.1_plot_pvalues
 ## ----plot_histogram_STRAPP_tests_cont-----------------------------------------
 # ### 4.2/ Plot histogram of STRAPP test stats ####
 # 
-# # Plot an histogram of the distribution of the test statistics used to assess
+# # Plot a histogram of the distribution of the test statistics used to assess
 # # the significance of STRAPP tests
 #   #  For a single 'focal_time': deepSTRAPP::plot_histogram_STRAPP_test_for_focal_time()
 #   #  For multiple 'time_steps': deepSTRAPP::plot_histograms_STRAPP_tests_over_time()
@@ -400,7 +403,7 @@ knitr::include_graphics("figures/1.1_deepSTRAPP_continuous_data_4.2_plot_STRAPP_
 # # than ant lineages with high trait value (e.g., large size), especially between 5 to 25 My.
 # 
 # # N.B.: The increase of diversification rates recorded in the present may largely be artifactual,
-# # due to the fact some lineages in the present will go extinct in the future,
+# # due to the fact that some lineages in the present will go extinct in the future,
 # # but have not yet been recorded as such.
 # # This bias is named the "pull of the present", and can impair evaluation of
 # # the Diversification Rate Hypothesis based only on current rates.
@@ -433,7 +436,7 @@ knitr::include_graphics("figures/1.1_deepSTRAPP_continuous_data_4.3_plot_rates_t
 # # ?deepSTRAPP::plot_rates_vs_trait_data_for_focal_time()
 # # ?deepSTRAPP::plot_rates_vs_trait_data_over_time()
 # 
-# # This plot help to visualize differences in rates vs. ranges across all branches
+# # This plot helps to visualize differences in rates vs. ranges across all branches
 # # found at specific time-steps (i.e., 'focal_time').
 # 
 # # Generate ggplot for time = 20 My
@@ -443,7 +446,7 @@ knitr::include_graphics("figures/1.1_deepSTRAPP_continuous_data_4.3_plot_rates_t
 #    color_scale = color_scale)
 # 
 # # Here we focus on T = 20 My to highlight the correlation detected in the previous steps.
-# # You can see that ants in the highest mean trait values (in red) exhibits the lowest mean rates, at this time-step.
+# # You can see that ants in the highest mean trait values (in red) exhibit the lowest mean rates, at this time-step.
 # # This plot, alongside other results of deepSTRAPP, supports the Diversification Rate Hypothesis in showing
 # # how ant lineages with low trait values (e.g., small size) may have accumulated faster
 # # than ant lineages with high trait value (e.g., large size), especially between 5 to 25 My.
@@ -451,7 +454,7 @@ knitr::include_graphics("figures/1.1_deepSTRAPP_continuous_data_4.3_plot_rates_t
 # #   * An observed statistic computed across the mean rates and trait values shown on the plot.
 # #     Here, rho obs = -0.902, indicating a strong negative correlation between size and diversification in ponerine ants.
 # #     This is not the statistic of the STRAPP test itself, which is conducted across all BAMM posterior samples.
-# #   * The quantile of null statistic distribution at the significant threshold used to define test significance.
+# #   * The quantile of null statistic distribution at the significance threshold used to define test significance.
 # #     The test will be considered significant (i.e., the null hypothesis is rejected)
 # #     if this value is higher than zero, as shown on the histogram in Section 4.2.
 # #     Here, Q5% = 0.018, so the test is significant (according to this significance threshold).
@@ -561,7 +564,7 @@ knitr::include_graphics("figures/1.1_deepSTRAPP_continuous_data_4.5_plot_updated
 # 
 # # Plot diversification rates on initial phylogeny (t = 0)
 # BAMM_map_0My <- Ponerinae_deepSTRAPP_cont_old_calib_0_40$updated_BAMM_objects_over_time[[1]]
-# plot_BAMM_rates(BAMM_map_0My, labels = FALSE, par.reset = FALSE)
+# plot_BAMM_rates(BAMM_map_0My, labels = FALSE)
 # abline(v = root_age - 20, col = "red", lty = 2) # Show where the phylogeny will be cut
 # title(main = "BAMM rates for 100-0 My")
 # 
@@ -580,7 +583,7 @@ knitr::include_graphics("figures/1.1_deepSTRAPP_continuous_data_4.5_plot_updated
 # 
 # # Plot diversification rates on initial phylogeny (t = 0)
 # BAMM_map_0My <- Ponerinae_deepSTRAPP_cont_old_calib_0_40$updated_BAMM_objects_over_time[[1]]
-# plot_BAMM_rates(BAMM_map_0My, labels = FALSE, legend = TRUE, par.reset = FALSE)
+# plot_BAMM_rates(BAMM_map_0My, labels = FALSE, legend = TRUE)
 # abline(v = max(phytools::nodeHeights(Ponerinae_tree_old_calib)[,2]) - 20, col = "red", lty = 2) # Show where the phylogeny will be cut
 # title(main = "BAMM rates for 100-0 My")
 # 
@@ -617,8 +620,7 @@ knitr::include_graphics("figures/1.1_deepSTRAPP_continuous_data_4.6_plot_BAMM_ra
 #   focal_time = 0,
 #   ftype = "off", lwd = 0.7,
 #   color_scale = c("darkgreen", "limegreen", "orange", "red"),
-#   labels = FALSE, legend = FALSE,
-#   par.reset = FALSE)
+#   labels = FALSE, legend = FALSE)
 # 
 # ## The next plot shows the evolution of trait values and rates from root to 20 Mya (100-20 My).
 # 
@@ -628,8 +630,7 @@ knitr::include_graphics("figures/1.1_deepSTRAPP_continuous_data_4.6_plot_BAMM_ra
 #   focal_time = 20,
 #   ftype = "off", lwd = 1.2,
 #   color_scale = c("darkgreen", "limegreen", "orange", "red"),
-#   labels = FALSE, legend = FALSE,
-#   par.reset = FALSE)
+#   labels = FALSE, legend = FALSE)
 # 
 
 ## ----plot_traits_vs_rate_maps_cont_eval_dev, fig.height = 7, eval = is_dev_version(), echo = FALSE----
@@ -639,8 +640,7 @@ knitr::include_graphics("figures/1.1_deepSTRAPP_continuous_data_4.6_plot_BAMM_ra
 #   focal_time = 0,
 #   ftype = "off", lwd = 0.7,
 #   color_scale = c("darkgreen", "limegreen", "orange", "red"),
-#   labels = FALSE, legend = FALSE,
-#   par.reset = FALSE)
+#   labels = FALSE, legend = FALSE)
 # 
 # # Plot diversification rates on updated phylogeny for time-step n°5 = 20 My
 # plot_traits_vs_rates_on_phylogeny_for_focal_time(
@@ -648,8 +648,7 @@ knitr::include_graphics("figures/1.1_deepSTRAPP_continuous_data_4.6_plot_BAMM_ra
 #   focal_time = 20,
 #   ftype = "off", lwd = 1.2,
 #   color_scale = c("darkgreen", "limegreen", "orange", "red"),
-#   labels = FALSE, legend = FALSE,
-#   par.reset = FALSE)
+#   labels = FALSE, legend = FALSE)
 
 ## ----plot_traits_vs_rate_maps_cont_eval_CRAN, eval = !is_dev_version(), echo = FALSE, out.width = "100%"----
 

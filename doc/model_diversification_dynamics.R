@@ -41,7 +41,7 @@ knitr::opts_chunk$set(
 # # Run a BAMM (Bayesian Analysis of Macroevolutionary Mixtures)
 # 
 # # Step 1/ Set BAMM - Record BAMM settings and generate all input files needed for BAMM.
-# # Step 2/ Run BAMM - Run BAMM and move output files in dedicated directory.
+# # Step 2/ Run BAMM - Run BAMM and move output files into a dedicated directory.
 # # Step 3/ Evaluate BAMM - Produce evaluation plots and ESS data.
 # # Step 4/ Import BAMM outputs - Load `BAMM_object` in R and subset posterior samples.
 # # Step 5/ Clean BAMM files - Remove files generated during the BAMM run.
@@ -50,7 +50,7 @@ knitr::opts_chunk$set(
 # ?deepSTRAPP::prepare_diversification_data()
 # 
 # # This function perform a single BAMM run to infer diversification rates and regime shifts.
-# # Due to the stochastic nature of the exploration of the parameter space with MCMC process,
+# # Due to the stochastic nature of the exploration of the parameter space with a MCMC process,
 # # best practice recommend to ran multiple runs and check for convergence of the MCMC traces,
 # # ensuring that the region of high probability has been reached by your MCMC runs.
 # 
@@ -87,7 +87,7 @@ knitr::opts_chunk$set(
 #    # The path to the `.txt` file used to provide clade-specific sampling fractions.
 #    # Here, we use a global sampling fraction.
 #    sampleProbsFilename = NULL,
-#    # Set the expected number of regime shifts. It acts as an hyperparameter controlling
+#    # Set the expected number of regime shifts. It acts as a hyperparameter controlling
 #    # the exponential prior distribution used to modulate reversible jumps across
 #    # model configurations in the rjMCMC run.
 #    # When set to 'NULL', an empirical rule is used to define this value: 1 regime shift expected
@@ -95,7 +95,7 @@ knitr::opts_chunk$set(
 #    expectedNumberOfShifts = NULL,
 #    # Set the frequency in which to write the event data to the output file =
 #    # the sampling frequency of posterior samples.
-#    # When set to `NULL`, the frequency is set such as 2000 posterior samples
+#    # When set to `NULL`, the frequency is set such that 2000 posterior samples
 #    # are recorded (before removing the burn-in).
 #    eventDataWriteFreq = NULL,
 #    # Proportion of posterior samples removed from the BAMM output to ensure that the remaining samples
@@ -111,7 +111,7 @@ knitr::opts_chunk$set(
 #    keep_BAMM_outputs = TRUE, # To keep the BAMM_output directory after the run
 #    # Controls the definition of 'core-shifts' used to distinguish across configurations
 #    # when identifying the most frequent regime shift configuration (MAP) across samples.
-#    MAP_odd_ratio_threshold = 5,
+#    MAP_odds_ratio_threshold = 5,
 #    # To include (or not) the evaluation step and produce MCMC trace, ESS,
 #    # and prior/posterior comparisons for expected number of shifts.
 #    skip_evaluations = FALSE,
@@ -137,7 +137,7 @@ knitr::opts_chunk$set(
 #    # A good value for expectedNumberOfShifts is one with high similarities between the distributions
 #    # hinting that the information in the data coincides
 #    # with your expectations for the number of regime shifts.
-#    # The best practice consists in trying several values to control if it affects or not the final output.
+#    # The best practice is to try several values to check whether it affects the final output.
 # 
 # # An example of these plots and table is shown below:
 # 
@@ -184,13 +184,13 @@ knitr::include_graphics("figures/whale_PP_nb_shifts_plot.png", dpi = 50)
 # # we compute the Marginal posterior Shift Probability (MSP) of each branch,
 # # as the probability to observe a regime shift on each individual branch across all posterior samples.
 # # For more details, see `[BAMMtools::marginalShiftProbsTree()]`.
-# # This branch-specific information is stored as phylogenetic tree with branch scaled to their MSP score.
+# # This branch-specific information is stored as a phylogenetic tree with branches scaled to their MSP scores.
 # whale_BAMM_object$MSP_tree # Tree with branch scaled to MSP scores.
 # 
 # # Plot the MSP tree
 # plot(whale_BAMM_object$MSP_tree, cex = 0.25)
-# title(main = "Marginal posterior Shift Probabilities per branches")
-# # Please note that a series of long branch does not indicate that a regime shift
+# title(main = "Marginal posterior Shift Probabilities per branch")
+# # Please note that a series of long branches does not indicate that a regime shift
 # # is likely to occur on each branch, but rather that the location of the regime shift
 # # is uncertain and shared across closely related branches, which is illustrated by the next plots.
 # 
@@ -201,7 +201,7 @@ knitr::include_graphics("figures/whale_PP_nb_shifts_plot.png", dpi = 50)
 # 
 # ### Define regime shift location
 # 
-# # deepSTRAPP allows to plot the location of regime shifts over mean diversification rates mapped on a phylogeny
+# # deepSTRAPP allows you to plot the location of regime shifts over mean diversification rates mapped on a phylogeny
 # ?deepSTRAPP::plot_BAMM_rates()
 # 
 # # Three options are available based on the regime shifts recorded across all BAMM posterior samples
@@ -216,8 +216,8 @@ knitr::include_graphics("figures/whale_PP_nb_shifts_plot.png", dpi = 50)
 #    # This only accounts for which branches the regimes occur on, not the location of shifts
 #    # along the branches.
 #    # For more details, see `[BAMMtools::credibleShiftSet()]`.
-#    # Only regime shifts with an odd-ratio of marginal posterior shift probability / prior shift probability
-#    # higher than the threshold provided in the `MAP_odd_ratio_threshold` argument (default = 5)
+#    # Only regime shifts with an odds ratio of marginal posterior shift probability / prior shift probability
+#    # higher than the threshold provided in the `MAP_odds_ratio_threshold` argument (default = 5)
 #    # are considered as core-shifts and used to identify the MAP configuration.
 #    # The location of the regimes along each branch is then averaged across all the identified MAP samples.
 # 
@@ -228,7 +228,7 @@ knitr::include_graphics("figures/whale_PP_nb_shifts_plot.png", dpi = 50)
 # 
 #  # `MSC` = Maximum Shift Credibility.
 #    # Shows location of regime shifts according to the samples exhibiting
-#    # the Maximum Shift Credibility (MCS) configuration = the configuration with the highest Posterior
+#    # the Maximum Shift Credibility (MSC) configuration = the configuration with the highest Posterior
 #    # probability to occur as computed from the product of the marginal branch-specific shift probabilities.
 #    # This only accounts for which branches the regimes occur on, not the location of shifts
 #    # along the branches.
@@ -290,12 +290,16 @@ knitr::include_graphics("figures/whale_PP_nb_shifts_plot.png", dpi = 50)
 # # and regime shifts on a time-calibrated phylogeny and obtain the `BAMM_object` object needed
 # # to run the deepSTRAPP workflow ([run_deepSTRAPP_for_focal_time], [run_deepSTRAPP_over_time]).
 # # However, it is one option among others for modeling diversification on phylogenies.
-# # You may wish to explore alternatives models such as LSBDS model in RevBayes (Höhna et al., 2016),
+# 
+# # You may wish to explore alternative models such as LSBDS model in RevBayes (Höhna et al., 2016),
 # # the MTBD model (Barido-Sottani et al., 2020), or the ClaDS2 model (Maliet et al., 2019) for your own data.
 # # However, you will need Bayesian models that infer regime shifts
 # # to be able to perform STRAPP tests (Rabosky & Huang, 2016).
-# # Additionally, you need to format the model output such as in `BAMM_object`,
+# 
+# # Additionally, you need to format the model output as in `BAMM_object`,
 # # so it can be used in a deepSTRAPP workflow.
+# # See the function [deepSTRAPP::build_BAMM_object()] and Step 2 of `vignette("import_external_analyses")`
+# # to learn how to build such objects from an 'event_data.txt' file summarizing regime shifts across MCMC generations.
 # 
 
 ## ----explore_diversity_dynamics_eval, eval = TRUE, echo = FALSE---------------
@@ -304,7 +308,7 @@ data(whale_BAMM_object, package = "deepSTRAPP")
 
 # Plot the MSP tree
 plot(whale_BAMM_object$MSP_tree, cex = 0.25)
-title(main = "Marginal posterior Shift Probabilities per branches")
+title(main = "Marginal posterior Shift Probabilities per branch")
 
 ## Plot two samples
 

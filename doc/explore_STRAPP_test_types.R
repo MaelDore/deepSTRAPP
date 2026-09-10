@@ -45,7 +45,7 @@ is_dev_version <- function (pkg = "deepSTRAPP")
 # Ponerinae_cont_tip_data <- setNames(object = Ponerinae_trait_tip_data$fake_cont_tip_data,
 #                                     nm = Ponerinae_trait_tip_data$Taxa)
 # 
-# # This not valid biological data. For the sake of example, we will assume this is size data.
+# # This is not valid biological data. For the sake of example, we will assume this is size data.
 # 
 # # Reorder tip data as in phylogeny
 # Ponerinae_cont_tip_data <- Ponerinae_cont_tip_data[Ponerinae_tree_old_calib$tip.label]
@@ -100,7 +100,7 @@ is_dev_version <- function (pkg = "deepSTRAPP")
 # # The test is significant as the estimate is higher than zero.
 # # However, without plotting the rates vs. trait data, we do not know the direction of this correlation.
 # 
-# # Plot histogram of Spearman sum-rank test stats
+# # Plot histogram of Spearman rank correlation test stats
 # plot_histogram_STRAPP_test_for_focal_time(
 #   deepSTRAPP_outputs = deepSTRAPP_output_two_tailed)
 # 
@@ -180,13 +180,13 @@ knitr::include_graphics("figures/4_Explore_STRAPP_hypotheses_1.2_Example_continu
 # #   * An observed statistic computed across the mean rates and trait values shown on the plot.
 # #     Here, rho obs = -0.86, indicates a negative correlation.
 # #     This is not the statistic of the STRAPP test itself, which is conducted across all BAMM posterior samples.
-# #   * The quantile of null statistic distribution at the significant threshold used to define test significance.
+# #   * The quantile of null statistic distribution at the significance threshold used to define test significance.
 # #     The test will be considered significant (i.e., the null hypothesis is rejected)
 # #     if this value is higher than zero, as shown on the histogram above.
 # #     Here, Q5% = 0.066, so the test is significant (according to this significance threshold).
 # #   * The p-value of the associated STRAPP test. Here, p = 0.018.
 # 
-# # We could have directly tested for hypothesis with a one-tailed test (See Step 3 below).
+# # We could have directly tested for this hypothesis with a one-tailed test (See Step 3 below).
 # 
 
 ## ----STRAPP_tests_cont_two_tailed_eval_2_dev, fig.width = 8.5, fig.height = 6, out.width = "100%", eval = is_dev_version(), echo = FALSE----
@@ -244,7 +244,7 @@ knitr::include_graphics("figures/4_Explore_STRAPP_hypotheses_1.2_Example_continu
 # # between observed and permuted data.
 # # The test is significant as the estimate is lower than zero.
 # 
-# # Plot histogram of Spearman sum-rank test stats
+# # Plot histogram of Spearman rank correlation test stats
 # plot_histogram_STRAPP_test_for_focal_time(
 #   deepSTRAPP_outputs = deepSTRAPP_output_one_tailed)
 # 
@@ -296,7 +296,7 @@ knitr::include_graphics("figures/4_Explore_STRAPP_hypotheses_1.3_Example_continu
 # # Use remotes::install_github(repo = "MaelDore/deepSTRAPP") to get the latest development version.
 # 
 # 
-# # Extract continuous trait data as a named vector
+# # Extract categorical (2-levels) trait data as a named vector
 # Ponerinae_cat_2lvl_tip_data <- setNames(object = Ponerinae_trait_tip_data$fake_cat_2lvl_tip_data,
 #                                     nm = Ponerinae_trait_tip_data$Taxa)
 # # Reorder tip data as in phylogeny
@@ -431,7 +431,7 @@ knitr::include_graphics("figures/4_Explore_STRAPP_hypotheses_2.2_Example_cat_2lv
 # #   * An observed statistic computed across the mean rates and trait states shown on the plot.
 # #     Here, the very low U-stats obs = -38713, indicates the first group "large" ants have lower rates than "small" ants.
 # #     This is not the statistic of the STRAPP test itself, which is conducted across all BAMM posterior samples.
-# #   * The quantile of null statistic distribution at the significant threshold used to define test significance.
+# #   * The quantile of null statistic distribution at the significance threshold used to define test significance.
 # #     The test will be considered significant (i.e., the null hypothesis is rejected)
 # #     if this value is higher than zero, as shown on the histogram above.
 # #     Here, Q5% = 176.45, so the test is significant (according to this significance threshold).
@@ -528,7 +528,7 @@ knitr::include_graphics("figures/4_Explore_STRAPP_hypotheses_2.3_Example_cat_2lv
 
 
 ## ----STRAPP_tests_cat_3lvl_overall--------------------------------------------
-# # ------ Example 3: Categorical multinominal (3-levels) trait data ------ #
+# # ------ Example 3: Categorical multinomial (3-levels) trait data ------ #
 # 
 # #### Step 1: Prepare data ####
 # 
@@ -544,7 +544,7 @@ knitr::include_graphics("figures/4_Explore_STRAPP_hypotheses_2.3_Example_cat_2lv
 # # Use remotes::install_github(repo = "MaelDore/deepSTRAPP") to get the latest development version.
 # 
 # 
-# # Extract continuous trait data as a named vector
+# # Extract categorical (3-levels) data as a named vector
 # Ponerinae_cat_3lvl_tip_data <- setNames(object = Ponerinae_trait_tip_data$fake_cat_3lvl_tip_data,
 #                                     nm = Ponerinae_trait_tip_data$Taxa)
 # # Reorder tip data as in phylogeny
@@ -568,15 +568,15 @@ knitr::include_graphics("figures/4_Explore_STRAPP_hypotheses_2.3_Example_cat_2lv
 # 
 # #### Step 2: Run the overall Kruskal-Wallis test ####
 # 
-# # For multinominal data (i.e., with more than two states/ranges), the overall test
+# # For multinomial data (i.e., with more than two states/ranges), the overall test
 # # is by definition a one-tailed Kruskal-Wallis test for rate differences across all states/ranges.
 # # There is no two-tailed version of this test, thus deepSTRAPP assumes a one-tailed test by default.
 # # The null hypothesis is that there is no difference in rates across all states/ranges.
-# # The alternative hypothesis is that there is at least one pairs of states/ranges
+# # The alternative hypothesis is that there is at least one pair of states/ranges
 # # with differences in diversification rates.
 # 
 # # To test for differences between pairs of states/ranges, you need to run post hoc pairwise tests.
-# # These Dunn's test can be one-tailed or two-tailed depending on the null hypotheses stated.
+# # These Dunn's tests can be one-tailed or two-tailed depending on the null hypotheses stated.
 # # See the next Steps 3 & 4 for post hoc pairwise tests.
 # 
 # # Here, we run an overall STRAPP test for t = 10 Mya.
@@ -591,7 +591,7 @@ knitr::include_graphics("figures/4_Explore_STRAPP_hypotheses_2.3_Example_cat_2lv
 #    focal_time = focal_time,
 #    uncertainty_strategy = "rates_only",
 #    alpha = 0.10, # Adjust the significance threshold
-#    posthoc_pairwise_tests = FALSE, # To run the overall
+#    posthoc_pairwise_tests = FALSE, # To run the overall test
 #    rate_type = "net_diversification",
 #    seed = 1234, # Set seed for reproducibility
 #    return_perm_data = TRUE, # Keep permutation data to be able to plot histograms of tests
@@ -612,7 +612,7 @@ knitr::include_graphics("figures/4_Explore_STRAPP_hypotheses_2.3_Example_cat_2lv
 # # However, without plotting the rates vs. states, or running post hoc pairwise tests,
 # # we do not know which pairs of states exhibit differences.
 # 
-# # Plot histogram of Kruskall-Wallis one-way ANOVA test stats
+# # Plot histogram of Kruskal-Wallis one-way ANOVA test stats
 # plot_histogram_STRAPP_test_for_focal_time(
 #   deepSTRAPP_outputs = deepSTRAPP_output_overall)
 # 
@@ -651,7 +651,7 @@ knitr::include_graphics("figures/4_Explore_STRAPP_hypotheses_2.3_Example_cat_2lv
 #    focal_time = 10,
 #    uncertainty_strategy = "rates_only",
 #    alpha = 0.10, # Adjust the significance threshold
-#    posthoc_pairwise_tests = FALSE, # To run the overall
+#    posthoc_pairwise_tests = FALSE, # To run the overall test
 #    rate_type = "net_diversification",
 #    seed = 1234, # Set seed for reproducibility
 #    return_perm_data = TRUE, # Keep permutation data to be able to plot histograms of tests
@@ -660,7 +660,7 @@ knitr::include_graphics("figures/4_Explore_STRAPP_hypotheses_2.3_Example_cat_2lv
 #    extract_diversification_data_melted_df = TRUE,
 #    verbose = FALSE))
 # 
-# # Plot histogram of Kruskall-Wallis one-way ANOVA test stats
+# # Plot histogram of Kruskal-Wallis one-way ANOVA test stats
 # plot_histogram_STRAPP_test_for_focal_time(
 #   deepSTRAPP_outputs = deepSTRAPP_output_overall)
 
@@ -689,7 +689,7 @@ knitr::include_graphics("figures/4_Explore_STRAPP_hypotheses_3.2_Example_cat_3lv
 # #     Here, the high H-stat obs = 374.82 indicates there is a difference in rates between states.
 # #     Please note that this is not the statistic of the STRAPP test itself,
 # #     which is conducted across all BAMM posterior samples.
-# #   * The quantile of null statistic distribution at the significant threshold used to define test significance.
+# #   * The quantile of null statistic distribution at the significance threshold used to define test significance.
 # #     The test will be considered significant (i.e., the null hypothesis is rejected)
 # #     if this value is higher than zero, as shown on the histogram above.
 # #     Here, Q10% = 5.606, so the test is significant (according to this significance threshold),
@@ -697,7 +697,7 @@ knitr::include_graphics("figures/4_Explore_STRAPP_hypotheses_3.2_Example_cat_3lv
 # #   * The p-value of the associated STRAPP test. Here, p = 0.083.
 # 
 # # We can explore those potential differences with post hoc pairwise tests,
-# # with both one-tailed hypothesis tests or two-tailed tests (See Steps 3 & 4 below).
+# # with either one-tailed or two-tailed tests (See Steps 3 & 4 below).
 # 
 
 ## ----STRAPP_tests_cat_3lvl_overall_eval_2_dev, fig.width = 8.5, fig.height = 6, out.width = "100%", eval = is_dev_version(), echo = FALSE----
@@ -718,7 +718,7 @@ knitr::include_graphics("figures/4_Explore_STRAPP_hypotheses_3.2_Example_cat_3lv
 # #### Step 3: Run all post hoc Dunn's two-tailed tests ####
 # 
 # # Post hoc tests are pairwise tests for differences between pairs of states/ranges.
-# # They can be two-tailed, without assumption regarding which states exhibit higher rates than the others.
+# # They can be two-tailed, without assumption regarding which states exhibit higher rates than the others,
 # # or they can be one-tailed, with assumption on which states exhibit higher rates within each pair.
 # 
 # # deepSTRAPP runs post hoc pairwise tests across all pairs of states.
@@ -758,24 +758,24 @@ knitr::include_graphics("figures/4_Explore_STRAPP_hypotheses_3.2_Example_cat_3lv
 # deepSTRAPP_output_two_tailed$STRAPP_results$posthoc_pairwise_tests$summary_df
 # 
 # # We obtain a p-value for each pair of states. Here there are 3 possible pairs.
-# # Only the pair "arboreal != terricolous" yields to a significant result.
-# # For this pair, we obtain a p-value = 0.025 leading us to discard the null hypothesis (no differences).
+# # Only the pair "arboreal != terricolous" yields a significant result.
+# # For this pair, we obtain a p-value = 0.030 leading us to discard the null hypothesis (no differences).
 # # The estimate is the quantile 5% of the distribution of differences
 # # in absolute Dunn's Z-stats between observed and permuted data.
-# # The test is significant as the estimate is higher than zero (Q5% = 0.759).
-# # However, without plotting the rates vs. states, we would have not know the direction of this difference.
+# # The test is significant as the estimate is higher than zero (Q5% = 0.532).
+# # However, without plotting the rates vs. states, we would not have known the direction of this difference.
 # 
 # # Plot histogram of all post hoc two-tailed test stats
 # plot_histogram_STRAPP_test_for_focal_time(
 #   deepSTRAPP_outputs = deepSTRAPP_output_two_tailed,
 #   plot_posthoc_tests = TRUE)
 # 
-# # Only the test for the pair "arboreal =! terricolous" is significant as the red line
+# # Only the test for the pair "arboreal != terricolous" is significant as the red line
 # # (quantile 5% = 0.532) is above the null expectation that Δ Dunn's Z-stats = 0.
 # # The conclusion is that it is the difference in rates between "arboreal" ants
 # # and "terricolous" ants that drives the differences in rates recorded overall
 # # with the Kruskal-Wallis test.
-# # Yet, with this test only, we do not know which states has the higher rates
+# # Yet, with this test only, we do not know which state has the higher rates
 # # We can look at the plot of rates vs. states above (See Step 2),
 # # but we can also test directly for the two hypotheses (i.e., ("arboreal" > "terricolous")
 # # or ("terricolous" > "arboreal") using one-tailed tests.
@@ -861,7 +861,7 @@ knitr::include_graphics("figures/4_Explore_STRAPP_hypotheses_3.3_Example_cat_3lv
 # 
 # # We obtain a p-value for each pair of states in each direction.
 # # Here there are 3 possible pairs = 6 one-tailed tests.
-# # Only the alternative hypothesis "arboreal < terricolous" yields to a significant result.
+# # Only the alternative hypothesis "arboreal < terricolous" yields a significant result.
 # # For this test, we obtain a p-value = 0.014 leading us to discard the null hypothesis that
 # # "arboreal" ants have equivalent or higher rates than "terricolous" ants.
 # # The estimate is the quantile 5% of the distribution of differences
@@ -877,8 +877,8 @@ knitr::include_graphics("figures/4_Explore_STRAPP_hypotheses_3.3_Example_cat_3lv
 # 
 # # Only the test for the alternative hypothesis "arboreal < terricolous" is significant as the red line
 # # (quantile 5% = 1.713) is above the null expectation that Δ Dunn's Z-stats = 0.
-# # The conclusion is that it is the higher rates in "terricolous" ants vs. lower rates in "arboreal" ants
-# # that drives the differences in rates recorded overall with the Kruskal-Wallis test.
+# # The conclusion is that higher rates in "terricolous" ants vs. lower rates in "arboreal" ants
+# # are driving the differences in rates recorded overall with the Kruskal-Wallis test.
 
 ## ----STRAPP_tests_cat_3lvl_one_tailed_eval_dev, fig.width = 8.5, fig.height = 6, out.width = "100%", eval = is_dev_version(), echo = FALSE----
 # # We run a one-tailed STRAPP test for t = 10 Mya.

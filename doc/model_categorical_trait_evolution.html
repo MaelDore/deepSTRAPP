@@ -12,7 +12,7 @@
 
 <meta name="author" content="Maël Doré" />
 
-<meta name="date" content="2026-08-24" />
+<meta name="date" content="2026-09-10" />
 
 <title>Model categorical trait evolution</title>
 
@@ -341,7 +341,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <h1 class="title toc-ignore">Model categorical trait evolution</h1>
 <h4 class="author">Maël Doré</h4>
-<h4 class="date">2026-08-24</h4>
+<h4 class="date">2026-09-10</h4>
 
 
 
@@ -406,7 +406,7 @@ the examples in this vignette:
 <span id="cb1-40"><a href="#cb1-40" tabindex="-1"></a></span>
 <span id="cb1-41"><a href="#cb1-41" tabindex="-1"></a><span class="co"># 1.1/ Fit evolutionary models to trait data using Maximum Likelihood.</span></span>
 <span id="cb1-42"><a href="#cb1-42" tabindex="-1"></a><span class="co"># 1.2/ Select the best fitting model comparing AICc.</span></span>
-<span id="cb1-43"><a href="#cb1-43" tabindex="-1"></a><span class="co"># 1.3/ Infer ancestral characters estimates (ACE) at nodes.</span></span>
+<span id="cb1-43"><a href="#cb1-43" tabindex="-1"></a><span class="co"># 1.3/ Infer ancestral character estimates (ACE) at nodes.</span></span>
 <span id="cb1-44"><a href="#cb1-44" tabindex="-1"></a><span class="co"># 1.4/ Run stochastic mapping simulations to generate evolutionary histories</span></span>
 <span id="cb1-45"><a href="#cb1-45" tabindex="-1"></a><span class="co">#      compatible with the best model and inferred ACE.</span></span>
 <span id="cb1-46"><a href="#cb1-46" tabindex="-1"></a><span class="co"># 1.5/ Infer ancestral states along branches.</span></span>
@@ -434,15 +434,15 @@ the examples in this vignette:
 <span id="cb1-68"><a href="#cb1-68" tabindex="-1"></a>       <span class="co"># Ex: A &lt;-&gt; B = A &lt;-&gt; C.</span></span>
 <span id="cb1-69"><a href="#cb1-69" tabindex="-1"></a> <span class="co"># &quot;SYM&quot;: Symmetric model. </span></span>
 <span id="cb1-70"><a href="#cb1-70" tabindex="-1"></a>    <span class="co"># Forward and reverse transitions share the same parameter,</span></span>
-<span id="cb1-71"><a href="#cb1-71" tabindex="-1"></a>    <span class="co"># but transitions between diffrent states have different rates.</span></span>
+<span id="cb1-71"><a href="#cb1-71" tabindex="-1"></a>    <span class="co"># but transitions between different states have different rates.</span></span>
 <span id="cb1-72"><a href="#cb1-72" tabindex="-1"></a>       <span class="co"># Ex: (A -&gt; B = B -&gt; A) ≠ (A -&gt; C = C -&gt; A).</span></span>
 <span id="cb1-73"><a href="#cb1-73" tabindex="-1"></a> <span class="co"># &quot;ARD&quot;: All-Rates-Different model. </span></span>
 <span id="cb1-74"><a href="#cb1-74" tabindex="-1"></a>    <span class="co"># Each transition rate is a unique parameter.</span></span>
 <span id="cb1-75"><a href="#cb1-75" tabindex="-1"></a>        <span class="co"># Ex: A -&gt; B ≠ B -&gt; A ≠ A -&gt; C ≠ C -&gt; A.</span></span>
-<span id="cb1-76"><a href="#cb1-76" tabindex="-1"></a> <span class="co"># &quot;meristic&quot;: Step-stone model</span></span>
+<span id="cb1-76"><a href="#cb1-76" tabindex="-1"></a> <span class="co"># &quot;meristic&quot;: Stepping-stone model</span></span>
 <span id="cb1-77"><a href="#cb1-77" tabindex="-1"></a>    <span class="co"># Transitions occur in a step-wise ordered fashion (e.g., 1 &lt;-&gt; 2 &lt;-&gt; 3).</span></span>
 <span id="cb1-78"><a href="#cb1-78" tabindex="-1"></a>    <span class="co"># Transitions between non-adjacent states are forbidden (e.g., 1 &lt;-&gt; 3 is forbidden).</span></span>
-<span id="cb1-79"><a href="#cb1-79" tabindex="-1"></a>    <span class="co"># Transitions rates are assumed to be symmetrical.</span></span>
+<span id="cb1-79"><a href="#cb1-79" tabindex="-1"></a>    <span class="co"># Transition rates are assumed to be symmetrical.</span></span>
 <span id="cb1-80"><a href="#cb1-80" tabindex="-1"></a>        <span class="co"># Ex: (1 -&gt; 2 = 2 -&gt; 1) ≠ (2 -&gt; 3 = 3 -&gt; 2), with 1 &lt;-&gt; 3 set to zero.</span></span>
 <span id="cb1-81"><a href="#cb1-81" tabindex="-1"></a> <span class="co"># &quot;matrix&quot;: Custom model.</span></span>
 <span id="cb1-82"><a href="#cb1-82" tabindex="-1"></a>    <span class="co"># Allows to provide a custom &quot;Q_matrix&quot; defining transition classes between states. </span></span>
@@ -467,7 +467,7 @@ the examples in this vignette:
 <span id="cb1-101"><a href="#cb1-101" tabindex="-1"></a>    <span class="at">seed =</span> <span class="dv">1234</span>, <span class="co"># Set seed for reproducibility</span></span>
 <span id="cb1-102"><a href="#cb1-102" tabindex="-1"></a>    <span class="at">evolutionary_models =</span> <span class="fu">c</span>(<span class="st">&quot;ER&quot;</span>, <span class="st">&quot;SYM&quot;</span>, <span class="st">&quot;ARD&quot;</span>, <span class="st">&quot;meristic&quot;</span>, <span class="st">&quot;matrix&quot;</span>), <span class="co"># All possible models</span></span>
 <span id="cb1-103"><a href="#cb1-103" tabindex="-1"></a>    <span class="at">Q_matrix =</span> Q_matrix, <span class="co"># Custom transition rate classes matrix for the &quot;matrix&quot; model</span></span>
-<span id="cb1-104"><a href="#cb1-104" tabindex="-1"></a>    <span class="at">transform =</span> <span class="st">&quot;lambda&quot;</span>, <span class="co"># Example of additional parameters that can be pass down </span></span>
+<span id="cb1-104"><a href="#cb1-104" tabindex="-1"></a>    <span class="at">transform =</span> <span class="st">&quot;lambda&quot;</span>, <span class="co"># Example of additional parameters that can be passed down </span></span>
 <span id="cb1-105"><a href="#cb1-105" tabindex="-1"></a>    <span class="co"># to geiger::fitDiscrete() to control tree transformation.</span></span>
 <span id="cb1-106"><a href="#cb1-106" tabindex="-1"></a>    <span class="at">res =</span> <span class="dv">100</span>, <span class="co"># To set the resolution of the continuous mapping of states on the densityMaps</span></span>
 <span id="cb1-107"><a href="#cb1-107" tabindex="-1"></a>    <span class="co"># Reduce the number of Stochastic Mapping simulations to save time (Default = &#39;1000&#39;)</span></span>
@@ -475,7 +475,7 @@ the examples in this vignette:
 <span id="cb1-109"><a href="#cb1-109" tabindex="-1"></a>    <span class="at">colors_per_levels =</span> colors_per_states,</span>
 <span id="cb1-110"><a href="#cb1-110" tabindex="-1"></a>    <span class="co"># Plot the densityMaps with plot_densityMaps_overlay() to show all states at once.</span></span>
 <span id="cb1-111"><a href="#cb1-111" tabindex="-1"></a>    <span class="at">plot_overlay =</span> <span class="cn">TRUE</span>, </span>
-<span id="cb1-112"><a href="#cb1-112" tabindex="-1"></a>    <span class="co"># To export in PDF the densityMaps generated (Here a single map as &#39;plot_overlay = TRUE&#39;)</span></span>
+<span id="cb1-112"><a href="#cb1-112" tabindex="-1"></a>    <span class="co"># To export to PDF the generated densityMaps (Here a single map as &#39;plot_overlay = TRUE&#39;)</span></span>
 <span id="cb1-113"><a href="#cb1-113" tabindex="-1"></a>    <span class="co"># PDF_file_path = &quot;./eel_densityMaps_overlay.pdf&quot;, </span></span>
 <span id="cb1-114"><a href="#cb1-114" tabindex="-1"></a>    <span class="at">return_ace =</span> <span class="cn">TRUE</span>, <span class="co"># To include Ancestral Character Estimates (ACE) at nodes in the output</span></span>
 <span id="cb1-115"><a href="#cb1-115" tabindex="-1"></a>    <span class="co"># To include the Stochastic Mapping simulations (simmaps) in the output</span></span>
@@ -502,7 +502,7 @@ the examples in this vignette:
 <span id="cb1-136"><a href="#cb1-136" tabindex="-1"></a><span class="fu">plot</span>(eel_densityMaps[[<span class="dv">2</span>]]) <span class="co"># densityMap for state n°2 (&quot;kiss&quot;)</span></span>
 <span id="cb1-137"><a href="#cb1-137" tabindex="-1"></a><span class="fu">plot</span>(eel_densityMaps[[<span class="dv">3</span>]]) <span class="co"># densityMap for state n°3 (&quot;suction&quot;)</span></span>
 <span id="cb1-138"><a href="#cb1-138" tabindex="-1"></a></span>
-<span id="cb1-139"><a href="#cb1-139" tabindex="-1"></a><span class="co"># Plot all densityMaps overlaid in on a single phylogeny.</span></span>
+<span id="cb1-139"><a href="#cb1-139" tabindex="-1"></a><span class="co"># Plot all densityMaps overlaid on a single phylogeny.</span></span>
 <span id="cb1-140"><a href="#cb1-140" tabindex="-1"></a><span class="co"># Each color highlights presence of its associated state.</span></span>
 <span id="cb1-141"><a href="#cb1-141" tabindex="-1"></a><span class="fu">plot_densityMaps_overlay</span>(eel_densityMaps)</span>
 <span id="cb1-142"><a href="#cb1-142" tabindex="-1"></a><span class="fu">title</span>(<span class="at">main =</span> <span class="st">&quot;</span><span class="sc">\n</span><span class="st">Ancestral States - Initial color scheme&quot;</span>)</span>
@@ -522,7 +522,7 @@ the examples in this vignette:
 <span id="cb1-156"><a href="#cb1-156" tabindex="-1"></a><span class="fu">head</span>(eel_ACE)</span>
 <span id="cb1-157"><a href="#cb1-157" tabindex="-1"></a><span class="co"># This is a matrix with row.names = internal node ID, colnames = ancestral states,</span></span>
 <span id="cb1-158"><a href="#cb1-158" tabindex="-1"></a><span class="co"># and values = posterior probabilities.</span></span>
-<span id="cb1-159"><a href="#cb1-159" tabindex="-1"></a><span class="co"># It can be used as an optional input in deepSTRAPP run to provide perfectly accurate estimates</span></span>
+<span id="cb1-159"><a href="#cb1-159" tabindex="-1"></a><span class="co"># It can be used as an optional input in a deepSTRAPP run to provide perfectly accurate estimates</span></span>
 <span id="cb1-160"><a href="#cb1-160" tabindex="-1"></a><span class="co"># for ancestral states at internal nodes. </span></span>
 <span id="cb1-161"><a href="#cb1-161" tabindex="-1"></a></span>
 <span id="cb1-162"><a href="#cb1-162" tabindex="-1"></a><span class="do">## Explore summary of model selection</span></span>
@@ -533,7 +533,7 @@ the examples in this vignette:
 <span id="cb1-167"><a href="#cb1-167" tabindex="-1"></a><span class="co"># Here, the best model is the Equal-Rates model (&#39;ER&#39;)</span></span>
 <span id="cb1-168"><a href="#cb1-168" tabindex="-1"></a></span>
 <span id="cb1-169"><a href="#cb1-169" tabindex="-1"></a><span class="do">## Explore best model fit (ER model)</span></span>
-<span id="cb1-170"><a href="#cb1-170" tabindex="-1"></a>eel_cat_3lvl_data<span class="sc">$</span>best_model_fit <span class="co"># Summary of best model optimization by geiger::fitContinuous()</span></span>
+<span id="cb1-170"><a href="#cb1-170" tabindex="-1"></a>eel_cat_3lvl_data<span class="sc">$</span>best_model_fit <span class="co"># Summary of best model optimization by geiger::fitDiscrete()</span></span>
 <span id="cb1-171"><a href="#cb1-171" tabindex="-1"></a>eel_cat_3lvl_data<span class="sc">$</span>best_model_fit<span class="sc">$</span>opt <span class="co"># Parameter estimates and goodness-of-fit information</span></span>
 <span id="cb1-172"><a href="#cb1-172" tabindex="-1"></a><span class="co"># Unique transition parameter = 0.0208 transitions per branch per My.</span></span>
 <span id="cb1-173"><a href="#cb1-173" tabindex="-1"></a></span>

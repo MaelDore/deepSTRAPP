@@ -12,7 +12,7 @@
 
 <meta name="author" content="Maël Doré" />
 
-<meta name="date" content="2026-08-24" />
+<meta name="date" content="2026-09-10" />
 
 <title>Model biogeographic range evolution</title>
 
@@ -341,7 +341,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <h1 class="title toc-ignore">Model biogeographic range evolution</h1>
 <h4 class="author">Maël Doré</h4>
-<h4 class="date">2026-08-24</h4>
+<h4 class="date">2026-09-10</h4>
 
 
 
@@ -389,16 +389,16 @@ process biogeographic data. <br> Please install it manually from: <a href="https
 <span id="cb1-20"><a href="#cb1-20" tabindex="-1"></a>eel_range_tip_data <span class="ot">&lt;-</span> stats<span class="sc">::</span><span class="fu">setNames</span>(eel_range_tip_data, <span class="fu">rownames</span>(eel.data))</span>
 <span id="cb1-21"><a href="#cb1-21" tabindex="-1"></a><span class="fu">table</span>(eel_range_tip_data)</span>
 <span id="cb1-22"><a href="#cb1-22" tabindex="-1"></a></span>
-<span id="cb1-23"><a href="#cb1-23" tabindex="-1"></a><span class="co"># Here, the input date is a vector of character strings with tip.label as names, and range data as values.</span></span>
+<span id="cb1-23"><a href="#cb1-23" tabindex="-1"></a><span class="co"># Here, the input data is a vector of character strings with tip.label as names, and range data as values.</span></span>
 <span id="cb1-24"><a href="#cb1-24" tabindex="-1"></a><span class="co"># Range coding scheme must follow the coding scheme used in BioGeoBEARS:</span></span>
 <span id="cb1-25"><a href="#cb1-25" tabindex="-1"></a>  <span class="co"># Unique areas must be in CAPITAL letters (e.g., &quot;A&quot;, &quot;B&quot;)</span></span>
-<span id="cb1-26"><a href="#cb1-26" tabindex="-1"></a>  <span class="co"># Ranges encompassing multiple areas are formed in combining unique area letters</span></span>
+<span id="cb1-26"><a href="#cb1-26" tabindex="-1"></a>  <span class="co"># Ranges encompassing multiple areas are formed by combining unique area letters</span></span>
 <span id="cb1-27"><a href="#cb1-27" tabindex="-1"></a>  <span class="co"># in alphabetic order (e.g., &quot;AB&quot;, &quot;BC&quot;, &quot;ABC&quot;)</span></span>
 <span id="cb1-28"><a href="#cb1-28" tabindex="-1"></a>eel_range_tip_data</span>
 <span id="cb1-29"><a href="#cb1-29" tabindex="-1"></a></span>
 <span id="cb1-30"><a href="#cb1-30" tabindex="-1"></a><span class="do">## Convert into binary presence/absence matrix</span></span>
 <span id="cb1-31"><a href="#cb1-31" tabindex="-1"></a></span>
-<span id="cb1-32"><a href="#cb1-32" tabindex="-1"></a><span class="co"># deepSTRAPP also accept biogeographic data as binary presence/absence matrix or data.frame</span></span>
+<span id="cb1-32"><a href="#cb1-32" tabindex="-1"></a><span class="co"># deepSTRAPP also accepts biogeographic data as a binary presence/absence matrix or data.frame</span></span>
 <span id="cb1-33"><a href="#cb1-33" tabindex="-1"></a><span class="co"># Here is the equivalent biogeographic data converted into a valid binary presence/absence matrix</span></span>
 <span id="cb1-34"><a href="#cb1-34" tabindex="-1"></a></span>
 <span id="cb1-35"><a href="#cb1-35" tabindex="-1"></a><span class="co"># Extract ranges</span></span>
@@ -419,7 +419,7 @@ process biogeographic data. <br> Please install it manually from: <a href="https
 <span id="cb1-50"><a href="#cb1-50" tabindex="-1"></a>{</span>
 <span id="cb1-51"><a href="#cb1-51" tabindex="-1"></a>  <span class="co"># i &lt;- 1</span></span>
 <span id="cb1-52"><a href="#cb1-52" tabindex="-1"></a>  </span>
-<span id="cb1-53"><a href="#cb1-53" tabindex="-1"></a>  <span class="co"># Extract range for taxa i</span></span>
+<span id="cb1-53"><a href="#cb1-53" tabindex="-1"></a>  <span class="co"># Extract range for taxon i</span></span>
 <span id="cb1-54"><a href="#cb1-54" tabindex="-1"></a>  range_i <span class="ot">&lt;-</span> eel_range_tip_data[i]</span>
 <span id="cb1-55"><a href="#cb1-55" tabindex="-1"></a>  <span class="co"># Decompose range in unique areas</span></span>
 <span id="cb1-56"><a href="#cb1-56" tabindex="-1"></a>  all_unique_areas_in_range_i <span class="ot">&lt;-</span> <span class="fu">unlist</span>(<span class="fu">strsplit</span>(<span class="at">x =</span> range_i, <span class="at">split =</span> <span class="st">&quot;&quot;</span>))</span>
@@ -458,7 +458,7 @@ process biogeographic data. <br> Please install it manually from: <a href="https
 <span id="cb1-89"><a href="#cb1-89" tabindex="-1"></a></span>
 <span id="cb1-90"><a href="#cb1-90" tabindex="-1"></a><span class="co"># 1.1/ Fit biogeographic evolutionary models to trait data using Maximum Likelihood.</span></span>
 <span id="cb1-91"><a href="#cb1-91" tabindex="-1"></a><span class="co"># 1.2/ Select the best fitting model comparing AICc.</span></span>
-<span id="cb1-92"><a href="#cb1-92" tabindex="-1"></a><span class="co"># 1.3/ Infer ancestral characters estimates (ACE) of ranges at nodes.</span></span>
+<span id="cb1-92"><a href="#cb1-92" tabindex="-1"></a><span class="co"># 1.3/ Infer ancestral character estimates (ACE) of ranges at nodes.</span></span>
 <span id="cb1-93"><a href="#cb1-93" tabindex="-1"></a><span class="co"># 1.4/ Run Biogeographic Stochastic Mapping (BSM) simulations to generate biogeographic histories</span></span>
 <span id="cb1-94"><a href="#cb1-94" tabindex="-1"></a><span class="co">#      compatible with the best model and inferred ACE.</span></span>
 <span id="cb1-95"><a href="#cb1-95" tabindex="-1"></a><span class="co"># 1.5/ Infer ancestral ranges along branches.</span></span>
@@ -504,7 +504,7 @@ process biogeographic data. <br> Please install it manually from: <a href="https
 <span id="cb1-135"><a href="#cb1-135" tabindex="-1"></a></span>
 <span id="cb1-136"><a href="#cb1-136" tabindex="-1"></a> <span class="co"># &quot;BAYAREALIKE&quot;: BAYAREALIKE is a likelihood interpretation of the Bayesian implementation </span></span>
 <span id="cb1-137"><a href="#cb1-137" tabindex="-1"></a> <span class="co"># of BAYAREA model, and it is &quot;like BAYAREA&quot;.</span></span>
-<span id="cb1-138"><a href="#cb1-138" tabindex="-1"></a>    <span class="co"># It is the &quot;simpler&quot; model, that allows the least types of biogeographic events to occur.</span></span>
+<span id="cb1-138"><a href="#cb1-138" tabindex="-1"></a>    <span class="co"># It is the &quot;simpler&quot; model, that allows the fewest types of biogeographic events to occur.</span></span>
 <span id="cb1-139"><a href="#cb1-139" tabindex="-1"></a>    <span class="co"># Nothing is happening during cladogenesis. Only inheritance of previous range (y = 1).</span></span>
 <span id="cb1-140"><a href="#cb1-140" tabindex="-1"></a>      <span class="co"># Allows narrow and wide-spread sympatric speciation: A -&gt; (A),(A); AB =&gt; (AB),(AB)</span></span>
 <span id="cb1-141"><a href="#cb1-141" tabindex="-1"></a>    <span class="co"># No narrow or wide vicariance (v = 0)</span></span>
@@ -516,7 +516,7 @@ process biogeographic data. <br> Please install it manually from: <a href="https
 <span id="cb1-147"><a href="#cb1-147" tabindex="-1"></a>    <span class="co"># Compared to BAYAREALIKE, it allows vicariance events to occur during speciation.</span></span>
 <span id="cb1-148"><a href="#cb1-148" tabindex="-1"></a>    <span class="co"># Allows narrow sympatric speciation (y): A -&gt; (A),(A)</span></span>
 <span id="cb1-149"><a href="#cb1-149" tabindex="-1"></a>      <span class="co"># Does NOT allow wide-spread sympatric speciation.</span></span>
-<span id="cb1-150"><a href="#cb1-150" tabindex="-1"></a>    <span class="co"># Allows and narrow AND wide-spread vicariance (v): AB -&gt; (A),(B); ABCD -&gt; (AB),(CD)</span></span>
+<span id="cb1-150"><a href="#cb1-150" tabindex="-1"></a>    <span class="co"># Allows both narrow AND wide-spread vicariance (v): AB -&gt; (A),(B); ABCD -&gt; (AB),(CD)</span></span>
 <span id="cb1-151"><a href="#cb1-151" tabindex="-1"></a>    <span class="co"># No subset sympatric speciation (s = 0)</span></span>
 <span id="cb1-152"><a href="#cb1-152" tabindex="-1"></a>    <span class="co"># No jump dispersal (j = 0)</span></span>
 <span id="cb1-153"><a href="#cb1-153" tabindex="-1"></a>    <span class="co"># Relative weights of y and v are fixed to 1.</span></span>
@@ -524,7 +524,7 @@ process biogeographic data. <br> Please install it manually from: <a href="https
 <span id="cb1-155"><a href="#cb1-155" tabindex="-1"></a></span>
 <span id="cb1-156"><a href="#cb1-156" tabindex="-1"></a> <span class="co"># &quot;DEC&quot;: Dispersal-Extinction-Cladogenesis model. This is the default model in deepSTRAPP.</span></span>
 <span id="cb1-157"><a href="#cb1-157" tabindex="-1"></a>    <span class="co"># Compared to BAYAREALIKE, it allows subset speciation (s) to occur,</span></span>
-<span id="cb1-158"><a href="#cb1-158" tabindex="-1"></a>    <span class="co"># but it does not allows wide-spread vicariance.</span></span>
+<span id="cb1-158"><a href="#cb1-158" tabindex="-1"></a>    <span class="co"># but it does not allow wide-spread vicariance.</span></span>
 <span id="cb1-159"><a href="#cb1-159" tabindex="-1"></a>    <span class="co"># Allows narrow sympatric speciation (y): A -&gt; (A),(A)</span></span>
 <span id="cb1-160"><a href="#cb1-160" tabindex="-1"></a>      <span class="co"># Does NOT allow wide-spread sympatric speciation.</span></span>
 <span id="cb1-161"><a href="#cb1-161" tabindex="-1"></a>    <span class="co"># Allows narrow vicariance (v): AB -&gt; (A),(B)</span></span>
@@ -536,7 +536,7 @@ process biogeographic data. <br> Please install it manually from: <a href="https
 <span id="cb1-167"><a href="#cb1-167" tabindex="-1"></a></span>
 <span id="cb1-168"><a href="#cb1-168" tabindex="-1"></a> <span class="co"># &quot;...+J&quot;: All previous models can add jump-dispersal events with the parameter j.</span></span>
 <span id="cb1-169"><a href="#cb1-169" tabindex="-1"></a>    <span class="co"># Allows jump-dispersal events to occur at speciation: A -&gt; (A),(B)</span></span>
-<span id="cb1-170"><a href="#cb1-170" tabindex="-1"></a>      <span class="co"># Depicts cladogenetic founder events where a small population disperse to a new area.</span></span>
+<span id="cb1-170"><a href="#cb1-170" tabindex="-1"></a>      <span class="co"># Depicts cladogenetic founder events where a small population disperses to a new area.</span></span>
 <span id="cb1-171"><a href="#cb1-171" tabindex="-1"></a>      <span class="co"># Isolation results in speciation of the two populations in distinct lineages</span></span>
 <span id="cb1-172"><a href="#cb1-172" tabindex="-1"></a>      <span class="co"># occurring in two different areas.</span></span>
 <span id="cb1-173"><a href="#cb1-173" tabindex="-1"></a>    <span class="co"># Relative weights of y,v,s are fixed to 1-j (&quot;BAYAREALIKE+J&quot;), 2-j (&quot;DIVALIKE+J&quot;), or 3-j (&quot;DEC+J&quot;).</span></span>
@@ -557,8 +557,8 @@ process biogeographic data. <br> Please install it manually from: <a href="https
 <span id="cb1-188"><a href="#cb1-188" tabindex="-1"></a>     <span class="at">BioGeoBEARS_directory_path =</span> <span class="st">&quot;./BioGeoBEARS_directory/&quot;</span>, </span>
 <span id="cb1-189"><a href="#cb1-189" tabindex="-1"></a>     <span class="co"># Whether to save BioGeoBEARS intermediate files, or remove them after the run</span></span>
 <span id="cb1-190"><a href="#cb1-190" tabindex="-1"></a>     <span class="at">keep_BioGeoBEARS_files =</span> <span class="cn">TRUE</span>, </span>
-<span id="cb1-191"><a href="#cb1-191" tabindex="-1"></a>     <span class="at">prefix_for_files =</span> <span class="st">&quot;eel&quot;</span>, <span class="co"># Prefixe used to save BioGeoBEARS intermediate files</span></span>
-<span id="cb1-192"><a href="#cb1-192" tabindex="-1"></a>     <span class="co"># To set the number of core to use for computation. </span></span>
+<span id="cb1-191"><a href="#cb1-191" tabindex="-1"></a>     <span class="at">prefix_for_files =</span> <span class="st">&quot;eel&quot;</span>, <span class="co"># Prefix used to save BioGeoBEARS intermediate files</span></span>
+<span id="cb1-192"><a href="#cb1-192" tabindex="-1"></a>     <span class="co"># To set the number of cores to use for computation. </span></span>
 <span id="cb1-193"><a href="#cb1-193" tabindex="-1"></a>     <span class="co"># Parallelization over multiple cores may speed up the process.</span></span>
 <span id="cb1-194"><a href="#cb1-194" tabindex="-1"></a>     <span class="at">nb_cores =</span> <span class="dv">1</span>, </span>
 <span id="cb1-195"><a href="#cb1-195" tabindex="-1"></a>     <span class="co"># To define the maximum number of unique areas in ranges. Ex: &quot;AB&quot; = 2; &quot;ABC&quot; = 3.</span></span>
@@ -574,7 +574,7 @@ process biogeographic data. <br> Please install it manually from: <a href="https
 <span id="cb1-205"><a href="#cb1-205" tabindex="-1"></a>     <span class="co"># To include Ancestral Character Estimates (ACE) of ranges at nodes in the output</span></span>
 <span id="cb1-206"><a href="#cb1-206" tabindex="-1"></a>     <span class="at">return_ace =</span> <span class="cn">TRUE</span>, </span>
 <span id="cb1-207"><a href="#cb1-207" tabindex="-1"></a>     <span class="co"># To include the lists of cladogenetic and anagenetic events produced with BioGeoBEARS::runBSM()</span></span>
-<span id="cb1-208"><a href="#cb1-208" tabindex="-1"></a>     <span class="at">return_BSM =</span> <span class="cn">FALSE</span>, </span>
+<span id="cb1-208"><a href="#cb1-208" tabindex="-1"></a>     <span class="at">return_BSM =</span> <span class="cn">TRUE</span>, </span>
 <span id="cb1-209"><a href="#cb1-209" tabindex="-1"></a>     <span class="co"># To include the Biogeographic Stochastic Mapping simulations (simmaps) in the output</span></span>
 <span id="cb1-210"><a href="#cb1-210" tabindex="-1"></a>     <span class="co"># This is needed if you want to keep track of which simulation produced which ranges</span></span>
 <span id="cb1-211"><a href="#cb1-211" tabindex="-1"></a>     <span class="co"># used to compute the tests in deepSTRAPP</span></span>
@@ -597,7 +597,7 @@ process biogeographic data. <br> Please install it manually from: <a href="https
 <span id="cb1-228"><a href="#cb1-228" tabindex="-1"></a></span>
 <span id="cb1-229"><a href="#cb1-229" tabindex="-1"></a><span class="co"># Because we selected &#39;split_multi_area_ranges = TRUE&#39;, </span></span>
 <span id="cb1-230"><a href="#cb1-230" tabindex="-1"></a><span class="co"># those densityMaps only record posterior probability of presence in the two unique areas &quot;A&quot; and &quot;B&quot;.</span></span>
-<span id="cb1-231"><a href="#cb1-231" tabindex="-1"></a><span class="co"># Probability of presences in multi-area range &quot;AB&quot; have been equally split between &quot;A&quot; and &quot;B&quot;.</span></span>
+<span id="cb1-231"><a href="#cb1-231" tabindex="-1"></a><span class="co"># Probability of presence in multi-area range &quot;AB&quot; has been equally split between &quot;A&quot; and &quot;B&quot;.</span></span>
 <span id="cb1-232"><a href="#cb1-232" tabindex="-1"></a><span class="co"># This is useful when you wish to test for differences in rates</span></span>
 <span id="cb1-233"><a href="#cb1-233" tabindex="-1"></a><span class="co"># between unique areas only (e.g., &quot;A&quot; and &quot;B&quot;).</span></span>
 <span id="cb1-234"><a href="#cb1-234" tabindex="-1"></a></span>
@@ -605,7 +605,7 @@ process biogeographic data. <br> Please install it manually from: <a href="https
 <span id="cb1-236"><a href="#cb1-236" tabindex="-1"></a>eel_densityMaps_all_ranges <span class="ot">&lt;-</span> eel_biogeo_data<span class="sc">$</span>densityMaps_all_ranges</span>
 <span id="cb1-237"><a href="#cb1-237" tabindex="-1"></a><span class="co"># If you wish to test for differences across all types of ranges (e.g., &quot;A&quot;, &quot;B&quot;, and &quot;AB&quot;),</span></span>
 <span id="cb1-238"><a href="#cb1-238" tabindex="-1"></a><span class="co"># you need to use these densityMaps, or set &#39;split_multi_area_ranges = FALSE&#39;</span></span>
-<span id="cb1-239"><a href="#cb1-239" tabindex="-1"></a><span class="co"># such as no split of multi-area ranges is performed, and the densityMaps contains all ranges by default.</span></span>
+<span id="cb1-239"><a href="#cb1-239" tabindex="-1"></a><span class="co"># such as no split of multi-area ranges is performed, and the densityMaps contain all ranges by default.</span></span>
 <span id="cb1-240"><a href="#cb1-240" tabindex="-1"></a></span>
 <span id="cb1-241"><a href="#cb1-241" tabindex="-1"></a><span class="do">## Plot densityMap for each range</span></span>
 <span id="cb1-242"><a href="#cb1-242" tabindex="-1"></a><span class="co"># Grey represents absence of the range. Color represents presence of the range.</span></span>
@@ -613,7 +613,7 @@ process biogeographic data. <br> Please install it manually from: <a href="https
 <span id="cb1-244"><a href="#cb1-244" tabindex="-1"></a><span class="fu">plot</span>(eel_densityMaps_all_ranges[[<span class="dv">2</span>]]) <span class="co"># densityMap for range n°2 (&quot;B&quot;)</span></span>
 <span id="cb1-245"><a href="#cb1-245" tabindex="-1"></a><span class="fu">plot</span>(eel_densityMaps_all_ranges[[<span class="dv">3</span>]]) <span class="co"># densityMap for range n°3 (&quot;AB&quot;)</span></span>
 <span id="cb1-246"><a href="#cb1-246" tabindex="-1"></a></span>
-<span id="cb1-247"><a href="#cb1-247" tabindex="-1"></a><span class="do">## Plot all densityMaps overlaid in on a single phylogeny</span></span>
+<span id="cb1-247"><a href="#cb1-247" tabindex="-1"></a><span class="do">## Plot all densityMaps overlaid on a single phylogeny</span></span>
 <span id="cb1-248"><a href="#cb1-248" tabindex="-1"></a><span class="co"># Each color highlights presence of its associated range.</span></span>
 <span id="cb1-249"><a href="#cb1-249" tabindex="-1"></a></span>
 <span id="cb1-250"><a href="#cb1-250" tabindex="-1"></a><span class="co"># Plot densityMaps considering only unique areas</span></span>
@@ -635,7 +635,7 @@ process biogeographic data. <br> Please install it manually from: <a href="https
 <span id="cb1-266"><a href="#cb1-266" tabindex="-1"></a></span>
 <span id="cb1-267"><a href="#cb1-267" tabindex="-1"></a><span class="co"># This is a matrix of numerical values with row.names = internal node ID,</span></span>
 <span id="cb1-268"><a href="#cb1-268" tabindex="-1"></a><span class="co"># colnames = ancestral ranges and values = posterior probability.</span></span>
-<span id="cb1-269"><a href="#cb1-269" tabindex="-1"></a><span class="co"># It can be used as an optional input in deepSTRAPP run to provide</span></span>
+<span id="cb1-269"><a href="#cb1-269" tabindex="-1"></a><span class="co"># It can be used as an optional input in a deepSTRAPP run to provide</span></span>
 <span id="cb1-270"><a href="#cb1-270" tabindex="-1"></a><span class="co"># perfectly accurate estimates for ancestral ranges at internal nodes. </span></span>
 <span id="cb1-271"><a href="#cb1-271" tabindex="-1"></a></span>
 <span id="cb1-272"><a href="#cb1-272" tabindex="-1"></a></span>
@@ -663,7 +663,7 @@ process biogeographic data. <br> Please install it manually from: <a href="https
 <span id="cb1-294"><a href="#cb1-294" tabindex="-1"></a>?BioGeoBEARS<span class="sc">::</span><span class="fu">runBSM</span>()</span>
 <span id="cb1-295"><a href="#cb1-295" tabindex="-1"></a></span>
 <span id="cb1-296"><a href="#cb1-296" tabindex="-1"></a><span class="co"># This element contains two lists of data.frames summarizing cladogenetic</span></span>
-<span id="cb1-297"><a href="#cb1-297" tabindex="-1"></a><span class="co"># and anagenetic events occurring all BSM simulations.</span></span>
+<span id="cb1-297"><a href="#cb1-297" tabindex="-1"></a><span class="co"># and anagenetic events occurring across all BSM simulations.</span></span>
 <span id="cb1-298"><a href="#cb1-298" tabindex="-1"></a><span class="co"># Each simulation yields a data.frame for each list.</span></span>
 <span id="cb1-299"><a href="#cb1-299" tabindex="-1"></a><span class="fu">str</span>(eel_biogeo_data<span class="sc">$</span>BSM_output, <span class="dv">1</span>)</span>
 <span id="cb1-300"><a href="#cb1-300" tabindex="-1"></a></span>
@@ -679,7 +679,7 @@ process biogeographic data. <br> Please install it manually from: <a href="https
 <span id="cb1-310"><a href="#cb1-310" tabindex="-1"></a><span class="co"># Each simmap represents a simulated biogeographic history with final ranges </span></span>
 <span id="cb1-311"><a href="#cb1-311" tabindex="-1"></a><span class="co"># compatible with the tip_data and estimated ACE at nodes = conditioned by tip data and model fit.</span></span>
 <span id="cb1-312"><a href="#cb1-312" tabindex="-1"></a><span class="co"># Each simmap also follows the transition parameters of the best fit model</span></span>
-<span id="cb1-313"><a href="#cb1-313" tabindex="-1"></a><span class="co"># to simulate cladogenetic and anagenetic transitions between geographic areas .</span></span>
+<span id="cb1-313"><a href="#cb1-313" tabindex="-1"></a><span class="co"># to simulate cladogenetic and anagenetic transitions between geographic areas.</span></span>
 <span id="cb1-314"><a href="#cb1-314" tabindex="-1"></a><span class="co"># Therefore, the simmaps encompass all ranges explored by the model, including the multi-area ranges.</span></span>
 <span id="cb1-315"><a href="#cb1-315" tabindex="-1"></a>eel_simmaps <span class="ot">&lt;-</span> eel_biogeo_data<span class="sc">$</span>simmaps</span>
 <span id="cb1-316"><a href="#cb1-316" tabindex="-1"></a></span>

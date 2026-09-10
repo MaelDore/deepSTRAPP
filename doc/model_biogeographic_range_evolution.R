@@ -57,16 +57,16 @@ knitr::opts_chunk$set(
 # eel_range_tip_data <- stats::setNames(eel_range_tip_data, rownames(eel.data))
 # table(eel_range_tip_data)
 # 
-# # Here, the input date is a vector of character strings with tip.label as names, and range data as values.
+# # Here, the input data is a vector of character strings with tip.label as names, and range data as values.
 # # Range coding scheme must follow the coding scheme used in BioGeoBEARS:
 #   # Unique areas must be in CAPITAL letters (e.g., "A", "B")
-#   # Ranges encompassing multiple areas are formed in combining unique area letters
+#   # Ranges encompassing multiple areas are formed by combining unique area letters
 #   # in alphabetic order (e.g., "AB", "BC", "ABC")
 # eel_range_tip_data
 # 
 # ## Convert into binary presence/absence matrix
 # 
-# # deepSTRAPP also accept biogeographic data as binary presence/absence matrix or data.frame
+# # deepSTRAPP also accepts biogeographic data as a binary presence/absence matrix or data.frame
 # # Here is the equivalent biogeographic data converted into a valid binary presence/absence matrix
 # 
 # # Extract ranges
@@ -87,7 +87,7 @@ knitr::opts_chunk$set(
 # {
 #   # i <- 1
 # 
-#   # Extract range for taxa i
+#   # Extract range for taxon i
 #   range_i <- eel_range_tip_data[i]
 #   # Decompose range in unique areas
 #   all_unique_areas_in_range_i <- unlist(strsplit(x = range_i, split = ""))
@@ -126,7 +126,7 @@ knitr::opts_chunk$set(
 # 
 # # 1.1/ Fit biogeographic evolutionary models to trait data using Maximum Likelihood.
 # # 1.2/ Select the best fitting model comparing AICc.
-# # 1.3/ Infer ancestral characters estimates (ACE) of ranges at nodes.
+# # 1.3/ Infer ancestral character estimates (ACE) of ranges at nodes.
 # # 1.4/ Run Biogeographic Stochastic Mapping (BSM) simulations to generate biogeographic histories
 # #      compatible with the best model and inferred ACE.
 # # 1.5/ Infer ancestral ranges along branches.
@@ -172,7 +172,7 @@ knitr::opts_chunk$set(
 # 
 #  # "BAYAREALIKE": BAYAREALIKE is a likelihood interpretation of the Bayesian implementation
 #  # of BAYAREA model, and it is "like BAYAREA".
-#     # It is the "simpler" model, that allows the least types of biogeographic events to occur.
+#     # It is the "simpler" model, that allows the fewest types of biogeographic events to occur.
 #     # Nothing is happening during cladogenesis. Only inheritance of previous range (y = 1).
 #       # Allows narrow and wide-spread sympatric speciation: A -> (A),(A); AB => (AB),(AB)
 #     # No narrow or wide vicariance (v = 0)
@@ -184,7 +184,7 @@ knitr::opts_chunk$set(
 #     # Compared to BAYAREALIKE, it allows vicariance events to occur during speciation.
 #     # Allows narrow sympatric speciation (y): A -> (A),(A)
 #       # Does NOT allow wide-spread sympatric speciation.
-#     # Allows and narrow AND wide-spread vicariance (v): AB -> (A),(B); ABCD -> (AB),(CD)
+#     # Allows both narrow AND wide-spread vicariance (v): AB -> (A),(B); ABCD -> (AB),(CD)
 #     # No subset sympatric speciation (s = 0)
 #     # No jump dispersal (j = 0)
 #     # Relative weights of y and v are fixed to 1.
@@ -192,7 +192,7 @@ knitr::opts_chunk$set(
 # 
 #  # "DEC": Dispersal-Extinction-Cladogenesis model. This is the default model in deepSTRAPP.
 #     # Compared to BAYAREALIKE, it allows subset speciation (s) to occur,
-#     # but it does not allows wide-spread vicariance.
+#     # but it does not allow wide-spread vicariance.
 #     # Allows narrow sympatric speciation (y): A -> (A),(A)
 #       # Does NOT allow wide-spread sympatric speciation.
 #     # Allows narrow vicariance (v): AB -> (A),(B)
@@ -204,7 +204,7 @@ knitr::opts_chunk$set(
 # 
 #  # "...+J": All previous models can add jump-dispersal events with the parameter j.
 #     # Allows jump-dispersal events to occur at speciation: A -> (A),(B)
-#       # Depicts cladogenetic founder events where a small population disperse to a new area.
+#       # Depicts cladogenetic founder events where a small population disperses to a new area.
 #       # Isolation results in speciation of the two populations in distinct lineages
 #       # occurring in two different areas.
 #     # Relative weights of y,v,s are fixed to 1-j ("BAYAREALIKE+J"), 2-j ("DIVALIKE+J"), or 3-j ("DEC+J").
@@ -225,8 +225,8 @@ knitr::opts_chunk$set(
 #      BioGeoBEARS_directory_path = "./BioGeoBEARS_directory/",
 #      # Whether to save BioGeoBEARS intermediate files, or remove them after the run
 #      keep_BioGeoBEARS_files = TRUE,
-#      prefix_for_files = "eel", # Prefixe used to save BioGeoBEARS intermediate files
-#      # To set the number of core to use for computation.
+#      prefix_for_files = "eel", # Prefix used to save BioGeoBEARS intermediate files
+#      # To set the number of cores to use for computation.
 #      # Parallelization over multiple cores may speed up the process.
 #      nb_cores = 1,
 #      # To define the maximum number of unique areas in ranges. Ex: "AB" = 2; "ABC" = 3.
@@ -242,7 +242,7 @@ knitr::opts_chunk$set(
 #      # To include Ancestral Character Estimates (ACE) of ranges at nodes in the output
 #      return_ace = TRUE,
 #      # To include the lists of cladogenetic and anagenetic events produced with BioGeoBEARS::runBSM()
-#      return_BSM = FALSE,
+#      return_BSM = TRUE,
 #      # To include the Biogeographic Stochastic Mapping simulations (simmaps) in the output
 #      # This is needed if you want to keep track of which simulation produced which ranges
 #      # used to compute the tests in deepSTRAPP
@@ -265,7 +265,7 @@ knitr::opts_chunk$set(
 # 
 # # Because we selected 'split_multi_area_ranges = TRUE',
 # # those densityMaps only record posterior probability of presence in the two unique areas "A" and "B".
-# # Probability of presences in multi-area range "AB" have been equally split between "A" and "B".
+# # Probability of presence in multi-area range "AB" has been equally split between "A" and "B".
 # # This is useful when you wish to test for differences in rates
 # # between unique areas only (e.g., "A" and "B").
 # 
@@ -273,7 +273,7 @@ knitr::opts_chunk$set(
 # eel_densityMaps_all_ranges <- eel_biogeo_data$densityMaps_all_ranges
 # # If you wish to test for differences across all types of ranges (e.g., "A", "B", and "AB"),
 # # you need to use these densityMaps, or set 'split_multi_area_ranges = FALSE'
-# # such as no split of multi-area ranges is performed, and the densityMaps contains all ranges by default.
+# # such as no split of multi-area ranges is performed, and the densityMaps contain all ranges by default.
 # 
 # ## Plot densityMap for each range
 # # Grey represents absence of the range. Color represents presence of the range.
@@ -281,7 +281,7 @@ knitr::opts_chunk$set(
 # plot(eel_densityMaps_all_ranges[[2]]) # densityMap for range n°2 ("B")
 # plot(eel_densityMaps_all_ranges[[3]]) # densityMap for range n°3 ("AB")
 # 
-# ## Plot all densityMaps overlaid in on a single phylogeny
+# ## Plot all densityMaps overlaid on a single phylogeny
 # # Each color highlights presence of its associated range.
 # 
 # # Plot densityMaps considering only unique areas
@@ -303,7 +303,7 @@ knitr::opts_chunk$set(
 # 
 # # This is a matrix of numerical values with row.names = internal node ID,
 # # colnames = ancestral ranges and values = posterior probability.
-# # It can be used as an optional input in deepSTRAPP run to provide
+# # It can be used as an optional input in a deepSTRAPP run to provide
 # # perfectly accurate estimates for ancestral ranges at internal nodes.
 # 
 # 
@@ -331,7 +331,7 @@ knitr::opts_chunk$set(
 # ?BioGeoBEARS::runBSM()
 # 
 # # This element contains two lists of data.frames summarizing cladogenetic
-# # and anagenetic events occurring all BSM simulations.
+# # and anagenetic events occurring across all BSM simulations.
 # # Each simulation yields a data.frame for each list.
 # str(eel_biogeo_data$BSM_output, 1)
 # 
@@ -347,7 +347,7 @@ knitr::opts_chunk$set(
 # # Each simmap represents a simulated biogeographic history with final ranges
 # # compatible with the tip_data and estimated ACE at nodes = conditioned by tip data and model fit.
 # # Each simmap also follows the transition parameters of the best fit model
-# # to simulate cladogenetic and anagenetic transitions between geographic areas .
+# # to simulate cladogenetic and anagenetic transitions between geographic areas.
 # # Therefore, the simmaps encompass all ranges explored by the model, including the multi-area ranges.
 # eel_simmaps <- eel_biogeo_data$simmaps
 # 
