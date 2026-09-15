@@ -1086,16 +1086,14 @@ run_deepSTRAPP_over_time <- function (contMap = NULL,
   final_ouput$states_observed_overall <- states_observed_overall
   if (!is.null(states_observed_overall))
   {
-    # Every time step records its states/ranges, including those hosting a single one and those where
-    # no test could be run, so there is normally nothing missing here. The NA fall-backs only keep the
-    # list and the vector aligned with 'time_steps' should a time step record nothing at all.
+    # Every time step records its states/ranges, including those hosting a single one, where no test could be run.
     states_observed_per_time_steps <- lapply(
       X = deepSTRAPP_outputs_over_time,
       FUN = function (x) { x$STRAPP_results$states_observed } )
     names(states_observed_per_time_steps) <- paste0(time_steps)
 
     # Get counts of observed states
-    nb_states_observed_per_time_steps <- lapply(X = states_observed_per_time_steps, FUN = length)
+    nb_states_observed_per_time_steps <- unlist(lapply(X = states_observed_per_time_steps, FUN = length))
     names(nb_states_observed_per_time_steps) <- paste0(time_steps)
 
     final_ouput$states_observed_per_time_steps <- states_observed_per_time_steps

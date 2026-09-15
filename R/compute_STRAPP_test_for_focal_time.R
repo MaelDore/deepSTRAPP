@@ -178,7 +178,8 @@
 #'   * `$posthoc_pairwise_tests$perm_data_array` A 3D array containing stats data for all post hoc pairwise tests in a similar format to `$perm_data_df`.
 #'
 #'   If no STRAPP test was performed in the case of categorical/biogeographic data with a single state/range at `focal_time`,
-#'   only the `$trait_data_type`, `$trait_data_type_for_stats` = "none", `$focal_time`, `$states_observed`, and `$nb_states_observed` are returned.
+#'   only the `$trait_data_type`, `$trait_data_type_for_stats` = "none", `$focal_time`, `$trait_maps_vs_BAMM_samples_list`,
+#'   `$states_observed`, and `$nb_states_observed` are returned.
 #'
 #' @author Maël Doré
 #'
