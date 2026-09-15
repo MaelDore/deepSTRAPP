@@ -103,7 +103,7 @@ str(model_comparison_output, max.level = 2)
 #>   .. ..- attr(*, "class")= chr [1:2] "bm" "function"
 #>   .. ..- attr(*, "model")= chr "OU"
 #>   ..$ bnd:'data.frame':  2 obs. of  2 variables:
-#>   ..$ res: num [1:100, 1:4] 7.12e-218 4.34e-02 1.90e-139 4.31e-216 1.41e-216 ...
+#>   ..$ res: num [1:100, 1:4] 7.12e-218 4.34e-02 4.34e-02 4.34e-02 7.12e-218 ...
 #>   .. ..- attr(*, "dimnames")=List of 2
 #>   ..$ opt:List of 8
 #>   ..- attr(*, "class")= chr [1:2] "gfit" "list"
@@ -132,8 +132,8 @@ print(model_comparison_output$best_model_fit)
 #> Convergence diagnostics:
 #>  optimization iterations = 100
 #>  failed iterations = 0
-#>  number of iterations with same best fit = 3
-#>  frequency of best fit = 0.030
+#>  number of iterations with same best fit = 4
+#>  frequency of best fit = 0.040
 #> 
 #>  object summary:
 #>  'lik' -- likelihood function
