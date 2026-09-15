@@ -1100,7 +1100,6 @@ run_deepSTRAPP_over_time <- function (contMap = NULL,
 
     final_ouput$states_observed_per_time_steps <- states_observed_per_time_steps
     final_ouput$nb_states_observed_per_time_steps <- nb_states_observed_per_time_steps
-
   }
 
   ## Store type of diversification rates tested
