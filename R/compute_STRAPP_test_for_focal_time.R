@@ -670,7 +670,7 @@ compute_STRAPP_test_for_focal_time <- function (BAMM_object, trait_data_list,
         stop(paste0("'trait_data_type_for_stats' = 'continuous' is incompatible with 'trait_data_type' = '",trait_data_type_provided,"'.\n",
                     "Categorical and biogeographic data require 'binary' or 'multinomial' statistical methods.\n",
                     "'binary' runs Mann-Whitney-Wilcoxon tests between two states/ranges.\n",
-                    "'mutinomial' runs Kruskal-Wallis tests across all states/ranges, and optionally post hoc Dunn's tests among pairs of states/ranges if 'run_posthoc_tests = TRUE'."))
+                    "'multinomial' runs Kruskal-Wallis tests across all states/ranges, and optionally post hoc Dunn's tests among pairs of states/ranges if 'posthoc_pairwise_tests = TRUE'."))
       }
       if ((trait_data_type_for_stats %in% c("binary", "multinomial")) & !(trait_data_type_provided %in% c("categorical", "biogeographic")))
       {
@@ -755,7 +755,8 @@ compute_STRAPP_test_for_focal_time <- function (BAMM_object, trait_data_list,
 
         ## Create empty STRAPP_results object with no test
         STRAPP_results <- list(trait_data_type = trait_data_type,
-                               trait_data_type_for_stats = "none")
+                               trait_data_type_for_stats = "none",
+                               focal_time = focal_time)
         run_test <- FALSE
       }
 
@@ -834,7 +835,8 @@ compute_STRAPP_test_for_focal_time <- function (BAMM_object, trait_data_list,
 
         ## Create empty STRAPP_results object with no test
         STRAPP_results <- list(trait_data_type = trait_data_type,
-                               trait_data_type_for_stats = "none")
+                               trait_data_type_for_stats = "none",
+                               focal_time = focal_time)
         run_test <- FALSE
       }
 
@@ -1077,6 +1079,11 @@ compute_STRAPP_test_for_focal_time <- function (BAMM_object, trait_data_list,
     } else {
       states_observed <- sort(unique(unlist(lapply(X = trait_data, FUN = function (x) { levels(as.factor(x)) } ))))
     }
+
+    # When every stochastic map was discarded for hosting a single state/range, the lines above returns
+    # NULL, and assigning NULL would drop the element from the list instead of recording an empty one.
+    if (is.null(states_observed)) { states_observed <- NA }
+
     STRAPP_results$states_observed <- states_observed # States/ranges found at this focal time
     STRAPP_results$nb_states_observed <- length(states_observed) # Number of states/ranges found at this focal time
   }

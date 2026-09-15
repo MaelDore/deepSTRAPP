@@ -178,9 +178,9 @@
 #'     so that the same test is used at every time step for consistency across p-values.
 #'   * `$states_observed_overall` (Only for categorical and biogeographic data) Character string vector of all states/ranges found in the complete trait mapping.
 #'     This is what the statistical method `trait_data_type_for_stats` is based on, and it can be larger than the set of states/ranges found at any given time step.
-#'   * `$states_observed_per_time_steps` (Only for categorical and biogeographic data) List of character string vectors. States/ranges found at each time step.
-#'     They can be steps with fewer states/ranges than others, which may affect the interpretation of the p-values obtained for these steps.
-#'    * `$nb_states_observed_per_time_steps` (Only for categorical and biogeographic data) Numeric vector. Number of states/ranges found at each time step.
+#'   * `$states_observed_per_time_steps` (Only for categorical and biogeographic data) List of character string vectors, one per time step and named after it.
+#'     States/ranges found at each time step. There can be steps with fewer states/ranges than others, which may affect the interpretation of the p-values obtained for these steps.
+#'   * `$nb_states_observed_per_time_steps` (Only for categorical and biogeographic data) Named numeric vector. Number of states/ranges found at each time step.
 #'     Recorded so that the interpretation of the p-values obtained from steps with fewer states/ranges can be adjusted if needed.
 #'   * `$rate_type` Character string. The type of diversification rates used in the tests: 'speciation', 'extinction' or 'net_diversification'.
 #'   * `$uncertainty_strategy` Character string. The strategy used to account for uncertainty in estimates. One of 'rates_only', 'paired', or 'full'.
@@ -1085,18 +1085,18 @@ run_deepSTRAPP_over_time <- function (contMap = NULL,
   final_ouput$states_observed_overall <- states_observed_overall
   if (!is.null(states_observed_overall))
   {
-    # Record NA rather than a dropped element for a time step that did not record the count,
-    # so that the vector stays aligned with 'time_steps'.
-
-    states_observed_per_time_steps <- unlist(lapply(
+    # Record NA when no states is recorded to keep the list/vector matching with time steps
+    states_observed_per_time_steps <- lapply(
       X = deepSTRAPP_outputs_over_time,
       FUN = function (x)
       {
         states_observed_i <- x$STRAPP_results$states_observed
-        if (is.null(n_states_observed_i)) { NA_integer_ } else { states_observed_i }
-      } ))
+        if (is.null(states_observed_i)) { character(NA) } else { states_observed_i }
+      } )
+    names(states_observed_per_time_steps) <- paste0(time_steps)
 
-    nb_states_observed_per_time_steps <- lapply(FUN = states_observed_per_time_steps, X = length())
+    nb_states_observed_per_time_steps <- lapply(X = states_observed_per_time_steps, FUN = length)
+    names(nb_states_observed_per_time_steps) <- paste0(time_steps)
 
     final_ouput$states_observed_per_time_steps <- states_observed_per_time_steps
     final_ouput$nb_states_observed_per_time_steps <- nb_states_observed_per_time_steps
@@ -1229,10 +1229,10 @@ run_deepSTRAPP_over_time <- function (contMap = NULL,
 #' @details The number of states/ranges present at a given `focal_time` depends on where the
 #'   transitions fall along the branches: a state/range can be absent from the deeper time steps
 #'   simply because no lineage carried it then. Selecting the statistical method from the states
-#'   observed at each time step would therefore let the changes in statistical tests part-way along a trajectory,
+#'   observed at each time step would therefore let the statistical test change part-way along a trajectory,
 #'   so that p-values plotted on a single curve would come from a Kruskal-Wallis test at some time
-#'   steps and from a Mann-Whitney U test at others. To prevent that, the statistical methods is set once,
-#'   at the beginning of the run, based on states/ranges observed across the whole stochastic maps.
+#'   steps and from a Mann-Whitney U test at others. To prevent that, the statistical method is set once,
+#'   at the beginning of the run, based on the states/ranges observed across all the stochastic maps.
 #'
 #'   * For `densityMaps`, the states/ranges are the names of the objects,
 #'     in the `Density_map_X` format enforced by [deepSTRAPP::prepare_trait_data()].
