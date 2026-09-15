@@ -83,6 +83,11 @@
 #'   This is a way to detect which pairs of states have significant differences in rates if the overall test (Kruskal-Wallis) is significant. Default is `FALSE`.
 #' @param p.adjust_method A character string. Only for multinomial data (with more than two states). It specifies the type of correction to apply to the p-values
 #'  in the post hoc pairwise tests to account for multiple comparisons. See [stats::p.adjust()] for the available methods. Default is `none`.
+#' @param trait_data_type_for_stats (Optional) Character string. One of `"continuous"`, `"binary"`, or `"multinomial"`.
+#'  Imposes the statistical method to use, instead of deriving it from the type of traits and the number of states/ranges observed at this `focal_time`.
+#'  This is set automatically by [deepSTRAPP::run_deepSTRAPP_over_time()], which fixes the method once for the whole run from the
+#'  complete trait mapping, so that the same test is used at every time step and the p-values along the trajectory remain comparable.
+#'  Default is `NULL`, in which case the method is selected from the number of states/ranges in `trait_data_list$trait_data` observed at this `focal_time`.
 #' @param return_perm_data Logical. Whether to return the stats data computed from the posterior samples for observed and permuted data in the output.
 #'  This is needed to plot the histogram of the null distribution used to assess significance of the test with [deepSTRAPP::plot_histogram_STRAPP_test_for_focal_time()].
 #'  Default is `FALSE`.
@@ -141,10 +146,13 @@
 #'   * `$rate_type` Character string. The type of diversification rates tested. One of 'speciation', 'extinction' or 'net_diversification'.
 #'   * `$trait_data_type` Character string. The type of trait data as found in 'trait_data_list$trait_data_type'. One of 'continuous', 'categorical', or 'biogeographic'.
 #'   * `$trait_data_type_for_stats` Character string. The type of trait data used to select statistical method. One of 'continuous', 'binary', or 'multinomial'.
+#'   * `$focal_time` The time in the past at which the trait and rates data were tested.
 #'   * `$uncertainty_strategy` Character string. The strategy used to account for uncertainty in estimates.
 #'   * `$trait_maps_vs_BAMM_samples_list` List of two elements recording the stochastic maps (`$trait_map_ID`) and BAMM samples (`$BAMM_posterior_sample_ID`) chosen for testing.
 #'      Those may partly differ from the actual maps and BAMM samples used for the test as recorded in `$perm_data_df` because invalid maps with not enough states/ranges are discarded.
-#'   * `$focal_time` The time in the past at which the trait and rates data were tested.
+#'   * `$states_observed` (Only for categorical and biogeographic data) Character string vector of the states/ranges actually found in `trait_data_list$trait_data` at this `focal_time`.
+#'      This can be a subset of the states/ranges described in the complete trait mapping, since a state/range may be absent from the deeper time steps.
+#'   * `$nb_states_observed` (Only for categorical and biogeographic data) Integer. Number of states/ranges actually found in `trait_data_list$trait_data` at this `focal_time`.
 #'
 #'   If using continuous or binary data:
 #'   * `$two-tailed` Logical. Record the type of test used: two-tailed if `TRUE`, one-tailed if `FALSE`.
@@ -170,7 +178,7 @@
 #'   * `$posthoc_pairwise_tests$perm_data_array` A 3D array containing stats data for all post hoc pairwise tests in a similar format to `$perm_data_df`.
 #'
 #'   If no STRAPP test was performed in the case of categorical/biogeographic data with a single state/range at `focal_time`,
-#'   only the `$trait_data_type`, `$trait_data_type_for_stats` = "none", and `$focal_time` are returned.
+#'   only the `$trait_data_type`, `$trait_data_type_for_stats` = "none", `$focal_time`, `$states_observed`, and `$nb_states_observed` are returned.
 #'
 #' @author Maël Doré
 #'
@@ -373,10 +381,15 @@ compute_STRAPP_test_for_focal_time <- function (BAMM_object, trait_data_list,
                                                 one_tailed_hypothesis = NULL,
                                                 posthoc_pairwise_tests = FALSE,
                                                 p.adjust_method = "none",
+                                                trait_data_type_for_stats = NULL,
                                                 return_perm_data = FALSE,
                                                 nthreads = 1,
                                                 print_hypothesis = TRUE)
 {
+
+  ## Record whether the statistical method was set or derived from data by the function.
+  # This affect the warning messages and validity checks needed
+  trait_data_type_for_stats_was_supplied <- !is.null(trait_data_type_for_stats)
 
   ### Check input validity
   {
@@ -640,6 +653,42 @@ compute_STRAPP_test_for_focal_time <- function (BAMM_object, trait_data_list,
       stop(paste0("'p.adjust_method' specifies the type of correction to apply to the p-values. See ?stats::p.adjust for the available methods.\n"))
     }
 
+    ## trait_data_type_for_stats
+    # Optional. Supplied by run_deepSTRAPP_over_time() to impose the same statistical method at every time step.
+    if (trait_data_type_for_stats_was_supplied)
+    {
+      if (!(trait_data_type_for_stats %in% c("continuous", "binary", "multinomial")))
+      {
+        stop(paste0("'trait_data_type_for_stats' must be one of 'continuous', 'binary', or 'multinomial'.\n",
+                    "Current value of 'trait_data_type_for_stats' is '",trait_data_type_for_stats,"'."))
+      }
+
+      trait_data_type_provided <- trait_data_list$trait_data_type
+
+      if ((trait_data_type_for_stats == "continuous") & (trait_data_type_provided %in% c("categorical", "biogeographic")))
+      {
+        stop(paste0("'trait_data_type_for_stats' = 'continuous' is incompatible with 'trait_data_type' = '",trait_data_type_provided,"'.\n",
+                    "Categorical and biogeographic data require 'binary' or 'multinomial' statistical methods.\n",
+                    "'binary' runs Mann-Whitney-Wilcoxon tests between two states/ranges.\n",
+                    "'mutinomial' runs Kruskal-Wallis tests across all states/ranges, and optionally post hoc Dunn's tests among pairs of states/ranges if 'run_posthoc_tests = TRUE'."))
+      }
+      if ((trait_data_type_for_stats %in% c("binary", "multinomial")) & !(trait_data_type_provided %in% c("categorical", "biogeographic")))
+      {
+        stop(paste0("'trait_data_type_for_stats' = '",trait_data_type_for_stats,"' is incompatible with 'trait_data_type' = '",trait_data_type_provided,"'.\n",
+                    "Continuous data require the 'continuous' statistical method to perform Spearman's rank-correlation tests."))
+      }
+
+      # Warn against setting one_tailed_hypothesis for multinomial tests
+      if ((trait_data_type_for_stats == "multinomial") & !is.null(one_tailed_hypothesis))
+      {
+        stop(paste0("'one_tailed_hypothesis' cannot be used with multinomial data (more than two states/ranges).\n",
+                    "For multinomial data, directional one-tailed tests are obtained by setting 'posthoc_pairwise_tests = TRUE' together with 'two_tailed = FALSE':\n",
+                    "all one-tailed pairwise hypotheses are then tested automatically.\n",
+                    "Please remove the 'one_tailed_hypothesis' argument or replace it with 'NULL'.\n",
+                    "Alternatively provide trait data with only two states/ranges and set the 'one_tailed_hypothesis' you wish to test for."))
+      }
+    }
+
     ## nthreads
     if (nthreads > 1) {
       if (!"package:parallel" %in% search())
@@ -669,6 +718,9 @@ compute_STRAPP_test_for_focal_time <- function (BAMM_object, trait_data_list,
 
   ## Extract type of trait data
   trait_data_type <- trait_data_list$trait_data_type
+
+  ## Extract focal time (to record in STRAPP_results)
+  focal_time <- trait_data_list$focal_time
 
   ## Filter data to keep only the designated Map x BAMM samples ('$trait_maps_vs_BAMM_samples_list')
   if (!is.null(trait_maps_vs_BAMM_samples_list))
@@ -707,13 +759,41 @@ compute_STRAPP_test_for_focal_time <- function (BAMM_object, trait_data_list,
         run_test <- FALSE
       }
 
-      if (nb_levels == 2) # Case with two states
+      ## Select the statistical method based on the number of states
+
+      if (!trait_data_type_for_stats_was_supplied)
       {
-        trait_data_type_for_stats <- "binary"
-      } else { # Case with more than two states
-        trait_data_type_for_stats <- "multinomial"
+        # In case when 'trait_data_type_for_stats' was not supplied,
+        # it is decided based on the number of states/ranges
+
+        if (nb_levels == 2) # Case with two states
+        {
+          trait_data_type_for_stats <- "binary"
+        } else { # Case with more than two states
+          trait_data_type_for_stats <- "multinomial"
+        }
+      } else {
+
+        # When 'trait_data_type_for_stats' is supplied it is authoritative:
+        # run_deepSTRAPP_over_time() fixes it once from the complete trait mapping
+        # so that the same test is used at every time step to ensure consistency between p-values.
+
+        # In case when "multinomial" was supplied as 'trait_data_type_for_stats',
+        # but two states/ranges are recorded in the dataset, send a message to clarify that
+        # multinomial tests would be performed anyway for consistency.
+        if (run_test & (trait_data_type_for_stats == "multinomial") & !posthoc_pairwise_tests & (nb_levels == 2))
+        {
+          message(paste0("Only two states/ranges are present at focal time = ",BAMM_object$focal_time,": ",paste(levels(as.factor(trait_data)), collapse = ", "),".\n",
+                         "The multinomial test (Kruskal-Wallis) is kept at this time step so that the same statistic is used across all time steps.\n"))
+        }
+        if (run_test & (trait_data_type_for_stats == "multinomial") & posthoc_pairwise_tests & (nb_levels == 2))
+        {
+          message(paste0("Only two states/ranges are present at focal time = ",BAMM_object$focal_time,": ",paste(levels(as.factor(trait_data)), collapse = ", "),".\n",
+                         "The multinomial tests (Kruskal-Wallis and post hoc Dunn's tests) are kept at this time step so that the same statistic is used across all time steps.\n"))
+        }
       }
     } else {
+      # For continuous trait, the stats method is always 'continuous'
       trait_data_type_for_stats <- "continuous"
     }
 
@@ -723,11 +803,13 @@ compute_STRAPP_test_for_focal_time <- function (BAMM_object, trait_data_list,
       stop(paste0("'posthoc_pairwise_tests = TRUE' does not make sense for a continuous trait.\n",
                   "Please set 'posthoc_pairwise_tests = FALSE' or provide categorical/biogeographic data with more than two states/ranges."))
     }
-    if (trait_data_type_for_stats == "binary" & posthoc_pairwise_tests == TRUE)
+    # Only relevant when the statistical method was derived here.
+    # When it was imposed from outside, a binary method means the trait itself is binary.
+    if (!trait_data_type_for_stats_was_supplied & trait_data_type_for_stats == "binary" & posthoc_pairwise_tests == TRUE)
     {
       warning(paste0("There are only two states/ranges found at focal time = ",BAMM_object$focal_time,": ",paste(levels(as.factor(trait_data)), collapse = ", "),".\n",
                      "'posthoc_pairwise_tests = TRUE' only makes sense for categorical/biogeographic data with more than two states/ranges.\n",
-                     "If you want to test specific hypotheses with continuous or categorical binary data, use 'two_tailed = FALSE' and provide the 'one_tailed_hypothesis'.\n"))
+                     "A binary test (Mann-Whitney U) was used instead and no post hoc pairwise test was computed.\n"))
     }
   }
 
@@ -781,13 +863,41 @@ compute_STRAPP_test_for_focal_time <- function (BAMM_object, trait_data_list,
         }
       }
 
-      if (max(nb_levels_list) == 2) # Case with maximum two states
+      ## Select the statistical method.
+
+      if (!trait_data_type_for_stats_was_supplied)
       {
-        trait_data_type_for_stats <- "binary"
-      } else { # Case with more than two states in at least one stochastic map
-        trait_data_type_for_stats <- "multinomial"
+        # In case when 'trait_data_type_for_stats' was not supplied,
+        # it is decided based on the number of states/ranges found across all maps
+
+        if (max(nb_levels_list) == 2) # Case with maximum two states across all maps
+        {
+          trait_data_type_for_stats <- "binary"
+        } else { # Case with more than two states in at least one stochastic map
+          trait_data_type_for_stats <- "multinomial"
+        }
+      } else {
+
+        # When 'trait_data_type_for_stats' is supplied it is authoritative:
+        # run_deepSTRAPP_over_time() fixes it once from the complete trait mapping
+        # so that the same test is used at every time step to ensure consistency between p-values.
+
+        # In case when "multinomial" was supplied as 'trait_data_type_for_stats',
+        # but two states/ranges are recorded across all maps,
+        # send a message to clarify that multinomial tests would be performed anyway for consistency.
+        if (run_test & (trait_data_type_for_stats == "multinomial") & !posthoc_pairwise_tests & (max(nb_levels_list) == 2))
+        {
+          message(paste0("Only two states/ranges are present at focal time = ",BAMM_object$focal_time," across all stochastic maps.\n",
+                         "The multinomial test (Kruskal-Wallis) is kept at this time step so that the same statistic is used across all time steps.\n"))
+        }
+        if (run_test & (trait_data_type_for_stats == "multinomial") & posthoc_pairwise_tests & (max(nb_levels_list) == 2))
+        {
+          message(paste0("Only two states/ranges are present at focal time = ",BAMM_object$focal_time," across all stochastic maps.\n",
+                         "The multinomial tests (Kruskal-Wallis and post hoc Dunn's tests) are kept at this time step so that the same statistic is used across all time steps.\n"))
+        }
       }
     } else {
+      # For continuous trait, the stats method is always 'continuous'
       trait_data_type_for_stats <- "continuous"
     }
 
@@ -797,11 +907,13 @@ compute_STRAPP_test_for_focal_time <- function (BAMM_object, trait_data_list,
       stop(paste0("'posthoc_pairwise_tests = TRUE' does not make sense for a continuous trait.\n",
                   "Please set 'posthoc_pairwise_tests = FALSE' or provide categorical/biogeographic data with more than two states/ranges."))
     }
-    if (trait_data_type_for_stats == "binary" & posthoc_pairwise_tests == TRUE)
+    # Only relevant when the statistical method was derived here.
+    # When it was imposed from outside, a binary method means the trait itself is binary.
+    if (!trait_data_type_for_stats_was_supplied & trait_data_type_for_stats == "binary" & posthoc_pairwise_tests == TRUE)
     {
       warning(paste0("There are only two states/ranges found at focal time = ",BAMM_object$focal_time," across all stochastic maps.\n",
                      "'posthoc_pairwise_tests = TRUE' only makes sense for categorical/biogeographic data with more than two states/ranges.\n",
-                     "If you want to test specific hypotheses with continuous or categorical binary data, use 'two_tailed = FALSE' and provide the 'one_tailed_hypothesis'.\n"))
+                     "A binary test (Mann-Whitney U) was used instead and no post hoc pairwise test was computed.\n"))
     }
   }
 
@@ -900,6 +1012,7 @@ compute_STRAPP_test_for_focal_time <- function (BAMM_object, trait_data_list,
                trait_data = trait_data,
                trait_data_type = trait_data_type,
                rate_type = rate_type,
+               focal_time = focal_time,
                uncertainty_strategy = uncertainty_strategy,
                nb_permutations = nb_permutations,
                alpha = alpha,
@@ -916,6 +1029,7 @@ compute_STRAPP_test_for_focal_time <- function (BAMM_object, trait_data_list,
                trait_data = trait_data,
                trait_data_type = trait_data_type,
                rate_type = rate_type,
+               focal_time = focal_time,
                uncertainty_strategy = uncertainty_strategy,
                nb_permutations = nb_permutations,
                alpha = alpha,
@@ -933,6 +1047,7 @@ compute_STRAPP_test_for_focal_time <- function (BAMM_object, trait_data_list,
                trait_data = trait_data,
                trait_data_type = trait_data_type,
                rate_type = rate_type,
+               focal_time = focal_time,
                uncertainty_strategy = uncertainty_strategy,
                nb_permutations = nb_permutations,
                alpha = alpha,
@@ -951,8 +1066,20 @@ compute_STRAPP_test_for_focal_time <- function (BAMM_object, trait_data_list,
   # with not enough states will be discarded.
   STRAPP_results$trait_maps_vs_BAMM_samples_list <- trait_maps_vs_BAMM_samples_list
 
-  ## Include focal_time in the output
-  STRAPP_results$focal_time <- BAMM_object$focal_time
+  ## Include the states/ranges actually observed at this focal time in the output
+  # Helps users to trace the number of states/ranges used to perform the test,
+  # which may vary between time-steps and affect the interpretation of p-values.
+  if (trait_data_type %in% c("categorical", "biogeographic"))
+  {
+    if (trait_data_is_ML_estimates)
+    {
+      states_observed <- levels(as.factor(trait_data))
+    } else {
+      states_observed <- sort(unique(unlist(lapply(X = trait_data, FUN = function (x) { levels(as.factor(x)) } ))))
+    }
+    STRAPP_results$states_observed <- states_observed # States/ranges found at this focal time
+    STRAPP_results$nb_states_observed <- length(states_observed) # Number of states/ranges found at this focal time
+  }
 
   ## Export the STRAPP test output
   return(STRAPP_results)
@@ -965,6 +1092,7 @@ compute_STRAPP_test_for_continuous_data <- function (
     BAMM_data, trait_data,
     trait_data_type = "continuous",
     rate_type = "net_diversification",
+    focal_time,
     uncertainty_strategy = "paired",
     nb_permutations = NULL,
     alpha = 0.05,
@@ -1356,6 +1484,7 @@ compute_STRAPP_test_for_continuous_data <- function (
   STRAPP_results$rate_type <- rate_type # Type of rates: speciation, extinction, or net diversification
   STRAPP_results$trait_data_type <- trait_data_type # Type of trait data: continuous, categorical, or biogeographic
   STRAPP_results$trait_data_type_for_stats <- "continuous" # Type of trait data used to select statistical method: continuous, binary, or multinomial
+  STRAPP_results$focal_time <- focal_time # Record the focal time
   STRAPP_results$uncertainty_strategy <- uncertainty_strategy # Type of strategy employed to account for uncertainty in estimates
 
   ## Save permutation results in a data.frame
@@ -1395,6 +1524,7 @@ compute_STRAPP_test_for_binary_data <- function (
     BAMM_data, trait_data,
     trait_data_type,
     rate_type = "net_diversification",
+    focal_time,
     uncertainty_strategy = "paired",
     nb_permutations = NULL,
     alpha = 0.05,
@@ -1853,6 +1983,7 @@ compute_STRAPP_test_for_binary_data <- function (
   STRAPP_results$rate_type <- rate_type # Type of rates: speciation, extinction, or net diversification
   STRAPP_results$trait_data_type <- trait_data_type # Type of trait data: continuous, categorical, or biogeographic
   STRAPP_results$trait_data_type_for_stats <- "binary" # Type of trait data used to select statistical method: continuous, binary, or multinomial
+  STRAPP_results$focal_time <- focal_time # Record the focal time
   STRAPP_results$uncertainty_strategy <- uncertainty_strategy # Type of strategy employed to account for uncertainty in estimates
 
   ## Save permutation results in a data.frame
@@ -1892,6 +2023,7 @@ compute_STRAPP_test_for_multinomial_data <- function (
     BAMM_data, trait_data,
     trait_data_type,
     rate_type = "net_diversification",
+    focal_time,
     uncertainty_strategy = "paired",
     nb_permutations = NULL,
     alpha = 0.05,
@@ -2210,6 +2342,7 @@ compute_STRAPP_test_for_multinomial_data <- function (
   STRAPP_results$rate_type <- rate_type # Type of rates: speciation, extinction, or net diversification
   STRAPP_results$trait_data_type <- trait_data_type # Type of trait data: continuous, categorical, or biogeographic
   STRAPP_results$trait_data_type_for_stats <- "multinomial" # Type of trait data used to select statistical method: continuous, binary, or multinomial
+  STRAPP_results$focal_time <- focal_time # Record the focal time
   STRAPP_results$uncertainty_strategy <- uncertainty_strategy # Type of strategy employed to account for uncertainty in estimates
 
   ## Save permutation results in a data.frame
@@ -2232,13 +2365,11 @@ compute_STRAPP_test_for_multinomial_data <- function (
     STRAPP_results$perm_data_df <- perm_data_df
   }
 
-  #### For posthoc tests, need to adjust results to account only for map cases where the tested pair is present across all maps!!!! #####
-  ## Careful of the post-hoc trick. Need to be run on maps that host each pair only
-  # i.e, some maps will not have pair A/B despite the overall test being able to run
-  # Think about consequences for downstream plots
-
-  # See how example works. Maybe no need to worry, we can just not record any value for cases with missing pairs of states,
-  # since by default tests for all pairs of present states are run.
+  ## Post hoc tests are computed only on the maps that host each tested pair
+  # Some stochastic maps will not host pair A/B despite the overall test being able to run.
+  # Those maps yields NA obs and perm stats which are then excluded from the p-value computation of each specific pair.
+  # '$summary_df$nb_test_stats' then reports how many maps actually contributed to each pair,
+  # so a pair supported by few maps is visible.
 
   ## Deal with post hoc pairwise tests
   if (posthoc_pairwise_tests)
@@ -2307,8 +2438,6 @@ compute_STRAPP_test_for_multinomial_data <- function (
         }
 
       }
-
-
 
       # If the test failed to provide a statistic because the value is reaching the ceiling for computation,
       # use the normal distribution and set an extremely high p-value to approximate a value
@@ -2442,20 +2571,35 @@ compute_STRAPP_test_for_multinomial_data <- function (
 
       ## Extract Z-scores from outputs
 
-      # Get list of pairs by recording all unique pairs found across all stochastic maps
+      # Get list of pairs by recording all unique pairs found across all stochastic maps.
+      # Keep the canonical order produced by dunn_test(): for one-tailed tests, all "greater than"
+      # comparisons first, then all "lower than" ones.
       pairs_list <- unique(unlist(lapply(X = Dunn_obs, FUN = function (x) { x$pairs })))
-      pairs_list <- pairs_list[order(pairs_list)]
+      if (two_tailed)
+      {
+        pairs_list <- pairs_list[order(pairs_list)]
+      } else {
+        pairs_list <- c(sort(grep(pattern = " > ", x = pairs_list, fixed = TRUE, value = TRUE)),
+                        sort(grep(pattern = " < ", x = pairs_list, fixed = TRUE, value = TRUE)))
+      }
 
       # Initiate list for Z-scores
       Z_obs <- list()
       Z_perm <- list()
 
-      # Loop per pairs of states tested
+      # Loop per pairs of states tested.
+      # Extract results per pairs by matching names, not by position.
+      # Two things break positional indexing:
+      #  - stochastic maps do not all host the same states, so a map missing a state omits pairs from
+      #    the middle of its own output and shifts every later position;
+      #  - for one-tailed tests, each map orders its pairs as [all ">", then all "<"],
+      #    which is not the alphabetical order of the union of pairs.
+
       for (i in seq_along(pairs_list))
       {
         # i <- 1
-        Z_obs[[i]] <- unlist(lapply(X = Dunn_obs, FUN = function (x) { x$Z_stats[i] } ))
-        Z_perm[[i]] <- unlist(lapply(X = Dunn_perm, FUN = function (x) { x$Z_stats[i] } ))
+        Z_obs[[i]] <- unlist(lapply(X = Dunn_obs, FUN = function (x) { x$Z_stats[match(x = pairs_list[i], table = x$pairs)] } ))
+        Z_perm[[i]] <- unlist(lapply(X = Dunn_perm, FUN = function (x) { x$Z_stats[match(x = pairs_list[i], table = x$pairs)] } ))
       }
       names(Z_obs) <- names(Z_perm) <- pairs_list
 
@@ -2562,20 +2706,35 @@ compute_STRAPP_test_for_multinomial_data <- function (
 
       ## Extract Z-scores from outputs
 
-      # Get list of pairs by recording all unique pairs found across all stochastic maps
+      # Get list of pairs by recording all unique pairs found across all stochastic maps.
+      # Keep the canonical order produced by dunn_test(): for one-tailed tests, all "greater than"
+      # comparisons first, then all "lower than" ones.
       pairs_list <- unique(unlist(lapply(X = Dunn_obs, FUN = function (x) { x$pairs })))
-      pairs_list <- pairs_list[order(pairs_list)]
+      if (two_tailed)
+      {
+        pairs_list <- pairs_list[order(pairs_list)]
+      } else {
+        pairs_list <- c(sort(grep(pattern = " > ", x = pairs_list, fixed = TRUE, value = TRUE)),
+                        sort(grep(pattern = " < ", x = pairs_list, fixed = TRUE, value = TRUE)))
+      }
 
       # Initiate list for Z-scores
       Z_obs <- list()
       Z_perm <- list()
 
-      # Loop per pairs of states tested
+      # Loop per pairs of states tested.
+      # Extract results per pairs by matching names, not by position.
+      # Two things break positional indexing:
+      #  - stochastic maps do not all host the same states, so a map missing a state omits pairs from
+      #    the middle of its own output and shifts every later position;
+      #  - for one-tailed tests, each map orders its pairs as [all ">", then all "<"],
+      #    which is not the alphabetical order of the union of pairs.
+
       for (i in seq_along(pairs_list))
       {
         # i <- 1
-        Z_obs[[i]] <- unlist(lapply(X = Dunn_obs, FUN = function (x) { x$Z_stats[i] } ))
-        Z_perm[[i]] <- unlist(lapply(X = Dunn_perm, FUN = function (x) { x$Z_stats[i] } ))
+        Z_obs[[i]] <- unlist(lapply(X = Dunn_obs, FUN = function (x) { x$Z_stats[match(x = pairs_list[i], table = x$pairs)] } ))
+        Z_perm[[i]] <- unlist(lapply(X = Dunn_perm, FUN = function (x) { x$Z_stats[match(x = pairs_list[i], table = x$pairs)] } ))
       }
       names(Z_obs) <- names(Z_perm) <- pairs_list
 
@@ -2620,12 +2779,12 @@ compute_STRAPP_test_for_multinomial_data <- function (
     } else {
       # For one-tailed, use the number of unique pairs by splitting p-values in two blocks
       # because reciprocal tests (A > B vs. B > A) are not independent tests.
-      n_pairs <- length(p_values)
-      p_values_forward <- p_values[1:(n_pairs/2)]
-      p_values_backward <- p_values[((n_pairs/2)+1):n_pairs]
-      p_values_forward <- stats::p.adjust(p = p_values_forward, method = p.adjust_method)
-      p_values_backward <- stats::p.adjust(p = p_values_backward, method = p.adjust_method)
-      p_values_adjusted <- c(p_values_forward, p_values_backward)
+      # The two blocks are identified by their direction symbol
+      forward_pairs_ID <- grep(pattern = " > ", x = pairs_list, fixed = TRUE)
+      backward_pairs_ID <- grep(pattern = " < ", x = pairs_list, fixed = TRUE)
+      p_values_adjusted <- p_values
+      p_values_adjusted[forward_pairs_ID] <- stats::p.adjust(p = p_values[forward_pairs_ID], method = p.adjust_method)
+      p_values_adjusted[backward_pairs_ID] <- stats::p.adjust(p = p_values[backward_pairs_ID], method = p.adjust_method)
     }
 
     ## Save test stats

@@ -101,11 +101,16 @@
 #'   if the overall test (Kruskal-Wallis) is significant. Default is `FALSE`.
 #' @param p.adjust_method A character string. Only for multinomial data (with more than two states). It specifies the type of correction to apply to the p-values
 #'   in the post hoc pairwise tests to account for multiple comparisons. See [stats::p.adjust()] for the available methods. Default is `none`.
+#' @param trait_data_type_for_stats (Optional) Character string. One of `"continuous"`, `"binary"`, or `"multinomial"`.
+#'   Imposes the statistical method to use, instead of deriving it from the type of traits and the number of states/ranges observed at this `focal_time`.
+#'   This is set automatically by [deepSTRAPP::run_deepSTRAPP_over_time()], which fixes the method once for the whole run from the
+#'   complete trait mapping, so that the same test is used at every time step and the p-values along the trajectory remain comparable.
+#'   Default is `NULL`, in which case the method is selected from the number of states/ranges in `trait_data_list$trait_data` observed at this `focal_time`.
 #' @param return_perm_data Logical. Whether to return the stats data computed from the posterior samples for observed and permuted data in the output.
 #'   This is needed to plot the histogram of the null distribution used to assess significance of the test with [deepSTRAPP::plot_histogram_STRAPP_test_for_focal_time()].
 #'   Default is `FALSE`.
 #' @param nthreads Integer. Number of threads to use for parallel computing of the STRAPP tests across the permutations.
-#'  The R package `parallel` must be loaded for `nthreads > 1`. Default is `1`.
+#'   The R package `parallel` must be loaded for `nthreads > 1`. Default is `1`.
 #' @param print_hypothesis Logical. Whether to print information on what test is carried out, detailing the null and alternative hypotheses,
 #'   what significance level is used to reject or not the null hypothesis, and how uncertainty in trait estimates is handled. Default is `TRUE`.
 #' @param extract_trait_data_melted_df Logical. Specify whether trait data (values/states/ranges) must be extracted from the mapped phylogenies
@@ -568,6 +573,7 @@ run_deepSTRAPP_for_focal_time <- function (contMap = NULL,
                                            one_tailed_hypothesis = NULL,
                                            posthoc_pairwise_tests = FALSE,
                                            p.adjust_method = "none",
+                                           trait_data_type_for_stats = NULL,
                                            return_perm_data = FALSE,
                                            nthreads = 1,
                                            print_hypothesis = TRUE,
@@ -916,6 +922,7 @@ run_deepSTRAPP_for_focal_time <- function (contMap = NULL,
     one_tailed_hypothesis = one_tailed_hypothesis,
     posthoc_pairwise_tests = posthoc_pairwise_tests,
     p.adjust_method = p.adjust_method,
+    trait_data_type_for_stats = trait_data_type_for_stats,
     return_perm_data = return_perm_data,
     nthreads = nthreads,
     print_hypothesis = print_hypothesis)

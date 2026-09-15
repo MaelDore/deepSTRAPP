@@ -174,6 +174,14 @@
 #'   * `$time_steps` Numeric vector. Time steps at which the STRAPP tests were carried out in the same order as the objects returned in the output lists.
 #'   * `$trait_data_type` Character string. Specify the type of trait data. Possible values are: "continuous", "categorical", "biogeographic".
 #'   * `$trait_data_type_for_stats` Character string. The type of trait data used to select statistical method. One of 'continuous', 'binary', or 'multinomial'.
+#'     The method is fixed once for the whole run, based on the number of states/ranges found in the complete trait mapping,
+#'     so that the same test is used at every time step for consistency across p-values.
+#'   * `$states_observed_overall` (Only for categorical and biogeographic data) Character string vector of all states/ranges found in the complete trait mapping.
+#'     This is what the statistical method `trait_data_type_for_stats` is based on, and it can be larger than the set of states/ranges found at any given time step.
+#'   * `$states_observed_per_time_steps` (Only for categorical and biogeographic data) List of character string vectors. States/ranges found at each time step.
+#'     They can be steps with fewer states/ranges than others, which may affect the interpretation of the p-values obtained for these steps.
+#'    * `$nb_states_observed_per_time_steps` (Only for categorical and biogeographic data) Numeric vector. Number of states/ranges found at each time step.
+#'     Recorded so that the interpretation of the p-values obtained from steps with fewer states/ranges can be adjusted if needed.
 #'   * `$rate_type` Character string. The type of diversification rates used in the tests: 'speciation', 'extinction' or 'net_diversification'.
 #'   * `$uncertainty_strategy` Character string. The strategy used to account for uncertainty in estimates. One of 'rates_only', 'paired', or 'full'.
 #'   * `$trait_maps_vs_BAMM_samples_list` List of two elements recording the stochastic maps (`$trait_map_ID`) and BAMM samples (`$BAMM_posterior_sample_ID`) chosen for testing across time-steps.
@@ -949,6 +957,32 @@ run_deepSTRAPP_over_time <- function (contMap = NULL,
     ## Other validity checks should all already be included in the wrapped functions
   }
 
+  ### Fix the statistical method once, for the whole run
+
+  # The number of states/ranges present at a given focal time depends on where the transitions fall along the branches,
+  # so a state/range described in the trait mapping can be absent from the deepest time steps.
+  # However, for consistency, a single statistical test should be used throughout time steps
+  # so that p-values remains comparable.
+  # The method is therefore decided once, from the complete trait mapping, and imposed on every step.
+
+  determined_trait_data_type_for_stats <- determine_trait_data_type_for_stats(
+    trait_data_type = trait_data_type,
+    densityMaps = densityMaps,
+    simmaps = simmaps,
+    tip_data = tip_data)
+
+  trait_data_type_for_stats_fixed <- determined_trait_data_type_for_stats$trait_data_type_for_stats
+  states_observed_overall <- determined_trait_data_type_for_stats$states_observed_overall
+
+  if (verbose | verbose_extended)
+  {
+    cat(paste0("Statistical method fixed for the whole run: '",trait_data_type_for_stats_fixed,"'",
+               ifelse(is.null(states_observed_overall), "",
+                      paste0(", based on ",length(states_observed_overall)," states/ranges described in the trait mapping: ",
+                             paste(states_observed_overall, collapse = ", "))),".\n",
+               "The same test is used at every time step, including those where fewer states/ranges remain.\n\n"))
+  }
+
   ### Run deepSTRAPP workflow per time steps
 
   deepSTRAPP_outputs_over_time <- list()
@@ -988,6 +1022,7 @@ run_deepSTRAPP_over_time <- function (contMap = NULL,
       one_tailed_hypothesis = one_tailed_hypothesis,
       posthoc_pairwise_tests = posthoc_pairwise_tests,
       p.adjust_method = p.adjust_method,
+      trait_data_type_for_stats = trait_data_type_for_stats_fixed, # Fix the stat method for the whole run
       return_perm_data = return_perm_data,
       nthreads = nthreads,
       print_hypothesis = print_hypothesis,
@@ -1041,12 +1076,31 @@ run_deepSTRAPP_over_time <- function (contMap = NULL,
   final_ouput$trait_data_type <- trait_data_type
 
   ## Store the type of trait data used to select the appropriate statistical method
-  trait_data_type_for_stats_list <- unlist(lapply(X = deepSTRAPP_outputs_over_time, FUN = function (x) { x$STRAPP_results$trait_data_type_for_stats } ))
-  trait_data_type_for_stats_list <- setdiff(trait_data_type_for_stats_list, "none")
-  final_ouput$trait_data_type_for_stats <- unique(trait_data_type_for_stats_list)
-  if (length(final_ouput$trait_data_type_for_stats) > 1) # Deal with cases with a mix of binary and multinomial tests due to the absence of states at some time-steps
+  # The method is fixed once for the whole run, so every time step that produced a test must report the same one.
+  final_ouput$trait_data_type_for_stats <- trait_data_type_for_stats_fixed
+
+  ## Store the states/ranges found in the overall trait mapping, and at each the time steps.
+  # A time step hosting fewer states/ranges than found across the complete maps is not an error,
+  # but it is an interpretive caveat worth recording: the number of compared groups changed along the trajectory.
+  final_ouput$states_observed_overall <- states_observed_overall
+  if (!is.null(states_observed_overall))
   {
-    final_ouput$trait_data_type_for_stats <- "multinomial"
+    # Record NA rather than a dropped element for a time step that did not record the count,
+    # so that the vector stays aligned with 'time_steps'.
+
+    states_observed_per_time_steps <- unlist(lapply(
+      X = deepSTRAPP_outputs_over_time,
+      FUN = function (x)
+      {
+        states_observed_i <- x$STRAPP_results$states_observed
+        if (is.null(n_states_observed_i)) { NA_integer_ } else { states_observed_i }
+      } ))
+
+    nb_states_observed_per_time_steps <- lapply(FUN = states_observed_per_time_steps, X = length())
+
+    final_ouput$states_observed_per_time_steps <- states_observed_per_time_steps
+    final_ouput$nb_states_observed_per_time_steps <- nb_states_observed_per_time_steps
+
   }
 
   ## Store type of diversification rates tested
@@ -1070,13 +1124,17 @@ run_deepSTRAPP_over_time <- function (contMap = NULL,
     time_steps_with_posthoc_tests_ID <- which(!unlist(lapply(X = pvalues_summary_df_for_posthoc_pairwise_tests, FUN = is.null)))
 
     # Add focal_time and rename columns to match with $pvalues_summary_df
+    # Index with the recorded ID, not with the loop counter: a time step without post hoc results is
+    # not necessarily the last one, and using the counter would then read an empty slot and attach the
+    # wrong focal_time to a block of pairs.
     for (i in seq_along(time_steps_with_posthoc_tests_ID))
     {
-      pvalues_summary_df_i <- pvalues_summary_df_for_posthoc_pairwise_tests[[i]]
-      pvalues_summary_df_i$focal_time <- deepSTRAPP_outputs_over_time[[i]]$STRAPP_results$focal_time
+      time_step_ID <- time_steps_with_posthoc_tests_ID[i]
+      pvalues_summary_df_i <- pvalues_summary_df_for_posthoc_pairwise_tests[[time_step_ID]]
+      pvalues_summary_df_i$focal_time <- deepSTRAPP_outputs_over_time[[time_step_ID]]$STRAPP_results$focal_time
       pvalues_summary_df_i <- pvalues_summary_df_i[, c("focal_time", "pairs", "estimates", "p_values", "p_values_adjusted")]
       names(pvalues_summary_df_i) <- c("focal_time", "pair", "estimate", "p_value", "p_value_adjusted")
-      pvalues_summary_df_for_posthoc_pairwise_tests[[i]] <- pvalues_summary_df_i
+      pvalues_summary_df_for_posthoc_pairwise_tests[[time_step_ID]] <- pvalues_summary_df_i
     }
     # Bind across all time steps
     pvalues_summary_df_for_posthoc_pairwise_tests <- do.call(what = rbind, args = pvalues_summary_df_for_posthoc_pairwise_tests)
@@ -1144,17 +1202,128 @@ run_deepSTRAPP_over_time <- function (contMap = NULL,
 
 }
 
-# Push official version to the website (faster, lighter, but missing the dataset docs)
 
-## Check the website integrity, especially the menu for tutorial/functions may have been messed up by names changes (check the YAML file)
+#### Determine the statistical method to use, once, from the complete trait mapping ####
+
+#' @title Determine the statistical method to use from the complete trait mapping
+#'
+#' @description Determines which statistical method should be used to test for
+#'   differences/correlations between trait data and diversification rates,
+#'   based on all states/ranges described in the complete trait mapping
+#'   rather than on those observed at a given `focal_time`.
+#'
+#' @param trait_data_type Character string. Specify the type of trait data.
+#'   Possible values are: "continuous", "categorical", "biogeographic".
+#' @param densityMaps (Optional) For categorical trait or biogeographic data. Named list of `densityMap` objects,
+#'   one per state/range, as obtained with [deepSTRAPP::prepare_trait_data()].
+#' @param simmaps (Optional) For categorical trait or biogeographic data. List of `simmap` objects,
+#'   as obtained with [deepSTRAPP::prepare_trait_data()].
+#' @param tip_data (Optional) Named character string vector of tip states/ranges.
+#'
+#' @returns A list of two elements:
+#'   * `$trait_data_type_for_stats` Character string. The type of trait data used to select the statistical method.
+#'     One of 'continuous', 'binary', or 'multinomial'.
+#'   * `$states_observed_overall` Character string vector of all states/ranges found in the complete trait mapping.
+#'     `NULL` for continuous data.
+#'
+#' @details The number of states/ranges present at a given `focal_time` depends on where the
+#'   transitions fall along the branches: a state/range can be absent from the deeper time steps
+#'   simply because no lineage carried it then. Selecting the statistical method from the states
+#'   observed at each time step would therefore let the changes in statistical tests part-way along a trajectory,
+#'   so that p-values plotted on a single curve would come from a Kruskal-Wallis test at some time
+#'   steps and from a Mann-Whitney U test at others. To prevent that, the statistical methods is set once,
+#'   at the beginning of the run, based on states/ranges observed across the whole stochastic maps.
+#'
+#'   * For `densityMaps`, the states/ranges are the names of the objects,
+#'     in the `Density_map_X` format enforced by [deepSTRAPP::prepare_trait_data()].
+#'   * For `simmaps`, the states/ranges are the column names of the `$mapped.edge` element of each map,
+#'     with a fall-back on the names of the `$maps` element when `$mapped.edge` is absent.
+#'
+#'   A single state/range across the whole trait mapping means that no STRAPP test can be computed at any time step,
+#'    so the function stops immediately rather than letting the run fail one `focal_time` at a time.
+#'
+#' @author Maël Doré
+#'
+#' @seealso [deepSTRAPP::run_deepSTRAPP_over_time()] [deepSTRAPP::compute_STRAPP_test_for_focal_time()]
+#'
+#' @keywords internal
+#'
+#' @noRd
+
+determine_trait_data_type_for_stats <- function (trait_data_type,
+                                                 densityMaps = NULL,
+                                                 simmaps = NULL,
+                                                 tip_data = NULL)
+{
+  ## Continuous traits never depend on a count of states/ranges
+  if (!(trait_data_type %in% c("categorical", "biogeographic")))
+  {
+    return(list(trait_data_type_for_stats = "continuous",
+                states_observed_overall = NULL))
+  }
+
+  states_observed_overall <- NULL
+
+  ## Extract the state/range list from the complete trait mapping
+  if (!is.null(densityMaps))
+  {
+    # The states/ranges are the names of the densityMaps, as enforced in
+    # extract_most_likely_trait_values_for_focal_time()
+    states_observed_overall <- stringr::str_remove(string = names(densityMaps), pattern = "Density_map_")
+  } else {
+    if (!is.null(simmaps))
+    {
+      # Extracts states/ranges names as colnames in $mapped.edge
+      # If absent, extract states from the maps
+      states_observed_overall <- unique(unlist(lapply(
+        X = simmaps,
+        FUN = function (x)
+        {
+          if (!is.null(x$mapped.edge)) { colnames(x$mapped.edge) } else { unique(unlist(lapply(X = x$maps, FUN = names))) }
+        })))
+    }
+  }
+
+  ## Include the tip states/ranges, for safety
+  # A state/range observed only at the tips would otherwise be missed if the mapping did not record it along any edge.
+  if (!is.null(tip_data))
+  {
+    states_observed_overall <- union(states_observed_overall, unique(as.character(tip_data)))
+  }
+
+  if (is.null(states_observed_overall))
+  {
+    stop(paste0("The states/ranges could not be extracted from the trait mapping for 'trait_data_type' = '",trait_data_type,"'.\n",
+                "Please provide 'densityMaps' or 'simmaps', as obtained with prepare_trait_data()."))
+  }
+
+  states_observed_overall <- sort(states_observed_overall)
+
+  ## A single state/range across the whole tree means no test can be computed at any time step
+  if (length(states_observed_overall) < 2)
+  {
+    stop(paste0("Only a single state/range is described across the whole trait mapping: '",paste(states_observed_overall, collapse = ", "),"'.\n",
+                "No STRAPP test for difference in rates can be computed at any time step.\n",
+                "Please provide trait data with at least two states/ranges."))
+  }
+
+  ## Select the statistical method
+  if (length(states_observed_overall) == 2) # Case with two states/ranges
+  {
+    trait_data_type_for_stats <- "binary"
+  } else { # Case with more than two states/ranges
+    trait_data_type_for_stats <- "multinomial"
+  }
+
+  return(list(trait_data_type_for_stats = trait_data_type_for_stats,
+              states_observed_overall = states_observed_overall))
+}
+
+
+# Push official version to the website (faster, lighter, but missing the dataset docs)
 
 ## Revert to CRAN version
 # Move to 1.1.0 (check NEWS and dev_history tips) and push to GitHub (but do not deploy the website or push to CRAN yet)
-
-# Ask Bonnie and Yichen for review/testing
-
-# Then work on the second analysis example to include in the manuscript
-
 
 ## Find a way to push the dev version to the website (including all datasets)
 
