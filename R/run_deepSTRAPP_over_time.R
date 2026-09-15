@@ -182,6 +182,7 @@
 #'     States/ranges found at each time step. There can be steps with fewer states/ranges than others, which may affect the interpretation of the p-values obtained for these steps.
 #'   * `$nb_states_observed_per_time_steps` (Only for categorical and biogeographic data) Named numeric vector. Number of states/ranges found at each time step.
 #'     Recorded so that the interpretation of the p-values obtained from steps with fewer states/ranges can be adjusted if needed.
+#'     For cases with only one state/range, no test could be computed, and they should be matching a `NA` in `$pvalues_summary_df`.
 #'   * `$rate_type` Character string. The type of diversification rates used in the tests: 'speciation', 'extinction' or 'net_diversification'.
 #'   * `$uncertainty_strategy` Character string. The strategy used to account for uncertainty in estimates. One of 'rates_only', 'paired', or 'full'.
 #'   * `$trait_maps_vs_BAMM_samples_list` List of two elements recording the stochastic maps (`$trait_map_ID`) and BAMM samples (`$BAMM_posterior_sample_ID`) chosen for testing across time-steps.
@@ -1085,16 +1086,15 @@ run_deepSTRAPP_over_time <- function (contMap = NULL,
   final_ouput$states_observed_overall <- states_observed_overall
   if (!is.null(states_observed_overall))
   {
-    # Record NA when no states is recorded to keep the list/vector matching with time steps
+    # Every time step records its states/ranges, including those hosting a single one and those where
+    # no test could be run, so there is normally nothing missing here. The NA fall-backs only keep the
+    # list and the vector aligned with 'time_steps' should a time step record nothing at all.
     states_observed_per_time_steps <- lapply(
       X = deepSTRAPP_outputs_over_time,
-      FUN = function (x)
-      {
-        states_observed_i <- x$STRAPP_results$states_observed
-        if (is.null(states_observed_i)) { character(NA) } else { states_observed_i }
-      } )
+      FUN = function (x) { x$STRAPP_results$states_observed } )
     names(states_observed_per_time_steps) <- paste0(time_steps)
 
+    # Get counts of observed states
     nb_states_observed_per_time_steps <- lapply(X = states_observed_per_time_steps, FUN = length)
     names(nb_states_observed_per_time_steps) <- paste0(time_steps)
 

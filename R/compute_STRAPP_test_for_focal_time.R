@@ -746,6 +746,11 @@ compute_STRAPP_test_for_focal_time <- function (BAMM_object, trait_data_list,
     {
       nb_levels <- nlevels(as.factor(trait_data))
 
+      ## Record the states/ranges observed at this focal time
+      # Recorded here, before any test validity check, so that a time step where no test can be run
+      # still reports the single state/range that was found rather than nothing.
+      states_observed <- levels(as.factor(trait_data))
+
       if (nb_levels == 1) # Case with a single state
       {
         # Send warning
@@ -825,6 +830,12 @@ compute_STRAPP_test_for_focal_time <- function (BAMM_object, trait_data_list,
     if (trait_data_type %in% c("categorical", "biogeographic"))
     {
       nb_levels_list <- unlist(lapply(X = trait_data, FUN = function (x) { nlevels(as.factor(x)) } ))
+
+      ## Record the states/ranges observed at this focal time, across all stochastic maps
+      # Recorded here, before the stochastic maps hosting a single state/range are discarded below, so
+      # that a time step where no test can be run still reports the single state/range that was found
+      # rather than nothing, and so that the record does not depend on which maps were kept.
+      states_observed <- sort(unique(unlist(lapply(X = trait_data, FUN = function (x) { levels(as.factor(x)) } ))))
 
       if (all(nb_levels_list == 1)) # Case with a single state across all maps
       {
@@ -1073,17 +1084,6 @@ compute_STRAPP_test_for_focal_time <- function (BAMM_object, trait_data_list,
   # which may vary between time-steps and affect the interpretation of p-values.
   if (trait_data_type %in% c("categorical", "biogeographic"))
   {
-    if (trait_data_is_ML_estimates)
-    {
-      states_observed <- levels(as.factor(trait_data))
-    } else {
-      states_observed <- sort(unique(unlist(lapply(X = trait_data, FUN = function (x) { levels(as.factor(x)) } ))))
-    }
-
-    # When every stochastic map was discarded for hosting a single state/range, the lines above returns
-    # NULL, and assigning NULL would drop the element from the list instead of recording an empty one.
-    if (is.null(states_observed)) { states_observed <- NA }
-
     STRAPP_results$states_observed <- states_observed # States/ranges found at this focal time
     STRAPP_results$nb_states_observed <- length(states_observed) # Number of states/ranges found at this focal time
   }
