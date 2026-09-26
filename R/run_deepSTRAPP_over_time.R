@@ -1316,15 +1316,3 @@ determine_trait_data_type_for_stats <- function (trait_data_type,
               states_observed_overall = states_observed_overall))
 }
 
-
-# Push official version to the website (faster, lighter, but missing the dataset docs)
-
-## Revert to CRAN version
-# Move to 1.1.0 (check NEWS and dev_history tips) and push to GitHub (but do not deploy the website or push to CRAN yet)
-
-## Find a way to push the dev version to the website (including all datasets)
-
-
-
-
-
