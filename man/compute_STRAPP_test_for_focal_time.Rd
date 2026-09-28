@@ -17,6 +17,7 @@ compute_STRAPP_test_for_focal_time(
   one_tailed_hypothesis = NULL,
   posthoc_pairwise_tests = FALSE,
   p.adjust_method = "none",
+  trait_data_type_for_stats = NULL,
   return_perm_data = FALSE,
   nthreads = 1,
   print_hypothesis = TRUE
@@ -83,6 +84,12 @@ This is a way to detect which pairs of states have significant differences in ra
 \item{p.adjust_method}{A character string. Only for multinomial data (with more than two states). It specifies the type of correction to apply to the p-values
 in the post hoc pairwise tests to account for multiple comparisons. See \code{\link[stats:p.adjust]{stats::p.adjust()}} for the available methods. Default is \code{none}.}
 
+\item{trait_data_type_for_stats}{(Optional) Character string. One of \code{"continuous"}, \code{"binary"}, or \code{"multinomial"}.
+Imposes the statistical method to use, instead of deriving it from the type of traits and the number of states/ranges observed at this \code{focal_time}.
+This is set automatically by \code{\link[=run_deepSTRAPP_over_time]{run_deepSTRAPP_over_time()}}, which fixes the method once for the whole run from the
+complete trait mapping, so that the same test is used at every time step and the p-values along the trajectory remain comparable.
+Default is \code{NULL}, in which case the method is selected from the number of states/ranges in \code{trait_data_list$trait_data} observed at this \code{focal_time}.}
+
 \item{return_perm_data}{Logical. Whether to return the stats data computed from the posterior samples for observed and permuted data in the output.
 This is needed to plot the histogram of the null distribution used to assess significance of the test with \code{\link[=plot_histogram_STRAPP_test_for_focal_time]{plot_histogram_STRAPP_test_for_focal_time()}}.
 Default is \code{FALSE}.}
@@ -106,10 +113,13 @@ according to the significance level provided (\code{alpha}). The test is signifi
 \item \verb{$rate_type} Character string. The type of diversification rates tested. One of 'speciation', 'extinction' or 'net_diversification'.
 \item \verb{$trait_data_type} Character string. The type of trait data as found in 'trait_data_list$trait_data_type'. One of 'continuous', 'categorical', or 'biogeographic'.
 \item \verb{$trait_data_type_for_stats} Character string. The type of trait data used to select statistical method. One of 'continuous', 'binary', or 'multinomial'.
+\item \verb{$focal_time} The time in the past at which the trait and rates data were tested.
 \item \verb{$uncertainty_strategy} Character string. The strategy used to account for uncertainty in estimates.
 \item \verb{$trait_maps_vs_BAMM_samples_list} List of two elements recording the stochastic maps (\verb{$trait_map_ID}) and BAMM samples (\verb{$BAMM_posterior_sample_ID}) chosen for testing.
 Those may partly differ from the actual maps and BAMM samples used for the test as recorded in \verb{$perm_data_df} because invalid maps with not enough states/ranges are discarded.
-\item \verb{$focal_time} The time in the past at which the trait and rates data were tested.
+\item \verb{$states_observed} (Only for categorical and biogeographic data) Character string vector of the states/ranges actually found in \code{trait_data_list$trait_data} at this \code{focal_time}.
+This can be a subset of the states/ranges described in the complete trait mapping, since a state/range may be absent from the deeper time steps.
+\item \verb{$nb_states_observed} (Only for categorical and biogeographic data) Integer. Number of states/ranges actually found in \code{trait_data_list$trait_data} at this \code{focal_time}.
 }
 
 If using continuous or binary data:
@@ -146,7 +156,8 @@ Combined with \code{posthoc_pairwise_tests = TRUE}, the stats data are also prov
 }
 
 If no STRAPP test was performed in the case of categorical/biogeographic data with a single state/range at \code{focal_time},
-only the \verb{$trait_data_type}, \verb{$trait_data_type_for_stats} = "none", and \verb{$focal_time} are returned.
+only the \verb{$trait_data_type}, \verb{$trait_data_type_for_stats} = "none", \verb{$focal_time}, \verb{$trait_maps_vs_BAMM_samples_list},
+\verb{$states_observed}, and \verb{$nb_states_observed} are returned.
 }
 \description{
 Carries out the appropriate statistical method to test for a relationship between

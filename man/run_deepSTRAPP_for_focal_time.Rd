@@ -26,6 +26,7 @@ run_deepSTRAPP_for_focal_time(
   one_tailed_hypothesis = NULL,
   posthoc_pairwise_tests = FALSE,
   p.adjust_method = "none",
+  trait_data_type_for_stats = NULL,
   return_perm_data = FALSE,
   nthreads = 1,
   print_hypothesis = TRUE,
@@ -150,6 +151,12 @@ if the overall test (Kruskal-Wallis) is significant. Default is \code{FALSE}.}
 
 \item{p.adjust_method}{A character string. Only for multinomial data (with more than two states). It specifies the type of correction to apply to the p-values
 in the post hoc pairwise tests to account for multiple comparisons. See \code{\link[stats:p.adjust]{stats::p.adjust()}} for the available methods. Default is \code{none}.}
+
+\item{trait_data_type_for_stats}{(Optional) Character string. One of \code{"continuous"}, \code{"binary"}, or \code{"multinomial"}.
+Imposes the statistical method to use, instead of deriving it from the type of traits and the number of states/ranges observed at this \code{focal_time}.
+This is set automatically by \code{\link[=run_deepSTRAPP_over_time]{run_deepSTRAPP_over_time()}}, which fixes the method once for the whole run from the
+complete trait mapping, so that the same test is used at every time step and the p-values along the trajectory remain comparable.
+Default is \code{NULL}, in which case the method is selected from the number of states/ranges in \code{trait_data_list$trait_data} observed at this \code{focal_time}.}
 
 \item{return_perm_data}{Logical. Whether to return the stats data computed from the posterior samples for observed and permuted data in the output.
 This is needed to plot the histogram of the null distribution used to assess significance of the test with \code{\link[=plot_histogram_STRAPP_test_for_focal_time]{plot_histogram_STRAPP_test_for_focal_time()}}.

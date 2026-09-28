@@ -50,7 +50,7 @@
 #'   Each `densityMap` is named as "Density_map_X" with X being each of the state/range recorded across the `simmaps`.
 #'
 #'   Each `densityMap` is a list of three elements:
-#'   * `$tree` List of classes `"simmap"` and `"phylo"` that contains the phylogeny in [ape] format
+#'   * `$tree` List of classes `"simmap"` and `"phylo"` that contains the phylogeny in [ape][ape::ape-package] format
 #'      and the mapping of states/ranges frequencies along branches in `$tree$maps`.
 #'   * `$cols` Named character strings. Colors mapped to the 0 to 1000 scale used to record frequencies in `$tree$maps`.
 #'   * `$states` Character string with two values. First entry is the absence of the state/range recorded as "Not X".

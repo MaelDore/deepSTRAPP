@@ -26,6 +26,7 @@
 ^pkgdown$
 ^\.github$
 ^cran-comments\.md$
+^cran-comments_v1.0.0\.md$
 
 ^for_CRAN/*
 ^CRAN-SUBMISSION$

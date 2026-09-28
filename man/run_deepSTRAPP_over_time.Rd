@@ -203,6 +203,15 @@ that can be passed down to \code{\link[=plot_STRAPP_pvalues_over_time]{plot_STRA
 \item \verb{$time_steps} Numeric vector. Time steps at which the STRAPP tests were carried out in the same order as the objects returned in the output lists.
 \item \verb{$trait_data_type} Character string. Specify the type of trait data. Possible values are: "continuous", "categorical", "biogeographic".
 \item \verb{$trait_data_type_for_stats} Character string. The type of trait data used to select statistical method. One of 'continuous', 'binary', or 'multinomial'.
+The method is fixed once for the whole run, based on the number of states/ranges found in the complete trait mapping,
+so that the same test is used at every time step for consistency across p-values.
+\item \verb{$states_observed_overall} (Only for categorical and biogeographic data) Character string vector of all states/ranges found in the complete trait mapping.
+This is what the statistical method \code{trait_data_type_for_stats} is based on, and it can be larger than the set of states/ranges found at any given time step.
+\item \verb{$states_observed_per_time_steps} (Only for categorical and biogeographic data) List of character string vectors, one per time step and named after it.
+States/ranges found at each time step. There can be steps with fewer states/ranges than others, which may affect the interpretation of the p-values obtained for these steps.
+\item \verb{$nb_states_observed_per_time_steps} (Only for categorical and biogeographic data) Named numeric vector. Number of states/ranges found at each time step.
+Recorded so that the interpretation of the p-values obtained from steps with fewer states/ranges can be adjusted if needed.
+For cases with only one state/range, no test could be computed, and they should be matching a \code{NA} in \verb{$pvalues_summary_df}.
 \item \verb{$rate_type} Character string. The type of diversification rates used in the tests: 'speciation', 'extinction' or 'net_diversification'.
 \item \verb{$uncertainty_strategy} Character string. The strategy used to account for uncertainty in estimates. One of 'rates_only', 'paired', or 'full'.
 \item \verb{$trait_maps_vs_BAMM_samples_list} List of two elements recording the stochastic maps (\verb{$trait_map_ID}) and BAMM samples (\verb{$BAMM_posterior_sample_ID}) chosen for testing across time-steps.
