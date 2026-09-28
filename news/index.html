@@ -68,14 +68,42 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Changelog</h1>
-      <small>Source: <a href="https://github.com/MaelDore/deepSTRAPP/blob/master/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/MaelDore/deepSTRAPP/blob/v1.1.0/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.1.0" id="deepstrapp-110">deepSTRAPP 1.1.0<a class="anchor" aria-label="anchor" href="#deepstrapp-110"></a></h2>
 <ul><li>Handle uncertainty in trait estimates. See the ‘uncertainty_strategy’ argument in run_deepSTRAPP_*() functions.</li>
 <li>Add functions to load results from external BAMM analyses. See the dedicated vignette/tutorial “import_external_analyses”.</li>
+</ul><div class="section level3">
+<h3 id="accounting-for-uncertainty-in-ancestral-trait-estimates-1-1-0">Accounting for uncertainty in ancestral trait estimates<a class="anchor" aria-label="anchor" href="#accounting-for-uncertainty-in-ancestral-trait-estimates-1-1-0"></a></h3>
+<ul><li>STRAPP tests can now be run across a posterior sample of trait histories rather than a single reconstruction. The <code>uncertainty_strategy</code> argument of <code><a href="../reference/run_deepSTRAPP_for_focal_time.html">run_deepSTRAPP_for_focal_time()</a></code>, <code><a href="../reference/run_deepSTRAPP_over_time.html">run_deepSTRAPP_over_time()</a></code> and <code><a href="../reference/compute_STRAPP_test_for_focal_time.html">compute_STRAPP_test_for_focal_time()</a></code> selects how trait and rate uncertainty are combined: <code>"rates_only"</code> (BAMM posterior samples with a single trait reconstruction), <code>"paired"</code> (each stochastic map paired with one BAMM sample), or <code>"full"</code> (all stochastic maps crossed with all BAMM samples).</li>
+<li>Stochastic maps can be supplied directly through the new <code>contMaps</code> and <code>simmaps</code> arguments, or simulated from posterior probabilities with <code>nb_simulations</code>.</li>
+<li>
+<code>trait_maps_vs_BAMM_samples_list</code> records, and lets you impose, which stochastic map is paired with which BAMM sample, so that the same pairing is used at every time step of a trajectory.</li>
+<li>See the new vignette <code>handle_uncertainty</code>.</li>
 </ul></div>
+<div class="section level3">
+<h3 id="importing-results-from-external-analyses-1-1-0">Importing results from external analyses<a class="anchor" aria-label="anchor" href="#importing-results-from-external-analyses-1-1-0"></a></h3>
+<ul><li>New functions to bring analyses run outside deepSTRAPP into the workflow: <code><a href="../reference/build_BAMM_object.html">build_BAMM_object()</a></code>, <code><a href="../reference/subset_BAMM_object.html">subset_BAMM_object()</a></code> and <code><a href="../reference/prune_BAMM_object.html">prune_BAMM_object()</a></code> for BAMM output; <code><a href="../reference/convert_BSM_to_simmap.html">convert_BSM_to_simmap()</a></code> and <code><a href="../reference/convert_BSM_to_simmap.html">convert_BSMs_to_simmaps()</a></code> for BioGeoBEARS biogeographic stochastic maps; <code><a href="../reference/convert_contsimmap_to_contMaps.html">convert_contsimmap_to_contMaps()</a></code> for <code>contsimmap</code> output; and <code><a href="../reference/convert_simmaps_to_densityMaps.html">convert_simmaps_to_densityMaps()</a></code> to summarise stochastic maps as posterior densities.</li>
+<li>
+<code><a href="../reference/aggregate_contMaps.html">aggregate_contMaps()</a></code> summarises a list of continuous stochastic maps into a single mean or median <code>contMap</code>.</li>
+<li>See the new vignette <code>import_external_analyses</code>.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="consistency-of-the-statistical-method-across-time-steps-1-1-0">Consistency of the statistical method across time steps<a class="anchor" aria-label="anchor" href="#consistency-of-the-statistical-method-across-time-steps-1-1-0"></a></h3>
+<ul><li>
+<code><a href="../reference/run_deepSTRAPP_over_time.html">run_deepSTRAPP_over_time()</a></code> now selects the statistical method once, before any test is run, from all states/ranges described in the complete trait mapping, and applies it at every time step. The method previously depended on the states/ranges still present at each time step, so a trajectory could mix Kruskal-Wallis and Mann-Whitney U p-values on a single curve when a state/range was absent from the deeper time steps. This is not the case anymore, and all p-values across time-steps are prodcued by the same type of test.</li>
+<li>The states/ranges actually observed are now reported: <code>$states_observed</code> and <code>$nb_states_observed</code> per time step, and <code>$states_observed_overall</code>, <code>$states_observed_per_time_steps</code> and <code>$nb_states_observed_per_time_steps</code> in the output of <code><a href="../reference/run_deepSTRAPP_over_time.html">run_deepSTRAPP_over_time()</a></code>.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="other-additions-1-1-0">Other additions<a class="anchor" aria-label="anchor" href="#other-additions-1-1-0"></a></h3>
+<ul><li>New <code><a href="../reference/extract_all_trait_values_for_focal_time.html">extract_all_trait_values_for_focal_time()</a></code> to extract trait data from every stochastic map at a given time, and <code><a href="../reference/extract_trait_data_melted_df_for_focal_time.html">extract_trait_data_melted_df_for_focal_time()</a></code> to return it in long dataframe format.</li>
+<li>New <code><a href="../reference/cut_contMaps_for_focal_time.html">cut_contMaps_for_focal_time()</a></code>, <code><a href="../reference/cut_simmap_for_focal_time.html">cut_simmap_for_focal_time()</a></code> and <code><a href="../reference/cut_simmaps_for_focal_time.html">cut_simmaps_for_focal_time()</a></code> to cut lists of stochastic maps at a focal time.</li>
+<li>
+<code><a href="../reference/run_deepSTRAPP_for_focal_time.html">run_deepSTRAPP_for_focal_time()</a></code> and <code><a href="../reference/run_deepSTRAPP_over_time.html">run_deepSTRAPP_over_time()</a></code> gain <code>return_updated_Maps</code> to return the mappings cut at each focal time, and <code><a href="../reference/run_deepSTRAPP_for_focal_time.html">run_deepSTRAPP_for_focal_time()</a></code> gains <code>extract_trait_data_melted_df</code> to return the underlying trait data in long dataframe format.</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.0.0" id="deepstrapp-100">deepSTRAPP 1.0.0<a class="anchor" aria-label="anchor" href="#deepstrapp-100"></a></h2><p class="text-muted">CRAN release: 2026-01-19</p>
 <ul><li>First release on CRAN</li>

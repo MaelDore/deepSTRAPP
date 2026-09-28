@@ -48,6 +48,7 @@ run_deepSTRAPP_for_focal_time(
   one_tailed_hypothesis = NULL,
   posthoc_pairwise_tests = FALSE,
   p.adjust_method = "none",
+  trait_data_type_for_stats = NULL,
   return_perm_data = FALSE,
   nthreads = 1,
   print_hypothesis = TRUE,
@@ -294,6 +295,19 @@ run_deepSTRAPP_for_focal_time(
   in the post hoc pairwise tests to account for multiple comparisons.
   See [`stats::p.adjust()`](https://rdrr.io/r/stats/p.adjust.html) for
   the available methods. Default is `none`.
+
+- trait_data_type_for_stats:
+
+  (Optional) Character string. One of `"continuous"`, `"binary"`, or
+  `"multinomial"`. Imposes the statistical method to use, instead of
+  deriving it from the type of traits and the number of states/ranges
+  observed at this `focal_time`. This is set automatically by
+  [`run_deepSTRAPP_over_time()`](https://maeldore.github.io/deepSTRAPP/reference/run_deepSTRAPP_over_time.md),
+  which fixes the method once for the whole run from the complete trait
+  mapping, so that the same test is used at every time step and the
+  p-values along the trajectory remain comparable. Default is `NULL`, in
+  which case the method is selected from the number of states/ranges in
+  `trait_data_list$trait_data` observed at this `focal_time`.
 
 - return_perm_data:
 

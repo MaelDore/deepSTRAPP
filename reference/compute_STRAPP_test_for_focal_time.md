@@ -69,6 +69,7 @@ compute_STRAPP_test_for_focal_time(
   one_tailed_hypothesis = NULL,
   posthoc_pairwise_tests = FALSE,
   p.adjust_method = "none",
+  trait_data_type_for_stats = NULL,
   return_perm_data = FALSE,
   nthreads = 1,
   print_hypothesis = TRUE
@@ -211,6 +212,19 @@ compute_STRAPP_test_for_focal_time(
   See [`stats::p.adjust()`](https://rdrr.io/r/stats/p.adjust.html) for
   the available methods. Default is `none`.
 
+- trait_data_type_for_stats:
+
+  (Optional) Character string. One of `"continuous"`, `"binary"`, or
+  `"multinomial"`. Imposes the statistical method to use, instead of
+  deriving it from the type of traits and the number of states/ranges
+  observed at this `focal_time`. This is set automatically by
+  [`run_deepSTRAPP_over_time()`](https://maeldore.github.io/deepSTRAPP/reference/run_deepSTRAPP_over_time.md),
+  which fixes the method once for the whole run from the complete trait
+  mapping, so that the same test is used at every time step and the
+  p-values along the trajectory remain comparable. Default is `NULL`, in
+  which case the method is selected from the number of states/ranges in
+  `trait_data_list$trait_data` observed at this `focal_time`.
+
 - return_perm_data:
 
   Logical. Whether to return the stats data computed from the posterior
@@ -265,6 +279,9 @@ Summary elements for the main test:
   used to select statistical method. One of 'continuous', 'binary', or
   'multinomial'.
 
+- `$focal_time` The time in the past at which the trait and rates data
+  were tested.
+
 - `$uncertainty_strategy` Character string. The strategy used to account
   for uncertainty in estimates.
 
@@ -275,8 +292,15 @@ Summary elements for the main test:
   recorded in `$perm_data_df` because invalid maps with not enough
   states/ranges are discarded.
 
-- `$focal_time` The time in the past at which the trait and rates data
-  were tested.
+- `$states_observed` (Only for categorical and biogeographic data)
+  Character string vector of the states/ranges actually found in
+  `trait_data_list$trait_data` at this `focal_time`. This can be a
+  subset of the states/ranges described in the complete trait mapping,
+  since a state/range may be absent from the deeper time steps.
+
+- `$nb_states_observed` (Only for categorical and biogeographic data)
+  Integer. Number of states/ranges actually found in
+  `trait_data_list$trait_data` at this `focal_time`.
 
 If using continuous or binary data:
 
@@ -334,8 +358,9 @@ of the test with
 
 If no STRAPP test was performed in the case of categorical/biogeographic
 data with a single state/range at `focal_time`, only the
-`$trait_data_type`, `$trait_data_type_for_stats` = "none", and
-`$focal_time` are returned.
+`$trait_data_type`, `$trait_data_type_for_stats` = "none",
+`$focal_time`, `$trait_maps_vs_BAMM_samples_list`, `$states_observed`,
+and `$nb_states_observed` are returned.
 
 ## Details
 

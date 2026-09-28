@@ -144,7 +144,7 @@ The associated test for post hoc pairwise tests is Dunn's post hoc pairwise rank
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Compute STRAPP to test for a relationship between diversification rates and trait data</h1>
-      <small class="dont-index">Source: <a href="https://github.com/MaelDore/deepSTRAPP/blob/master/R/compute_STRAPP_test_for_focal_time.R" class="external-link"><code>R/compute_STRAPP_test_for_focal_time.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/MaelDore/deepSTRAPP/blob/v1.1.0/R/compute_STRAPP_test_for_focal_time.R" class="external-link"><code>R/compute_STRAPP_test_for_focal_time.R</code></a></small>
       <div class="d-none name"><code>compute_STRAPP_test_for_focal_time.Rd</code></div>
     </div>
 
@@ -205,6 +205,7 @@ The associated test for post hoc pairwise tests is Dunn's post hoc pairwise rank
 <span>  one_tailed_hypothesis <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  posthoc_pairwise_tests <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  p.adjust_method <span class="op">=</span> <span class="st">"none"</span>,</span>
+<span>  trait_data_type_for_stats <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  return_perm_data <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  nthreads <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  print_hypothesis <span class="op">=</span> <span class="cn">TRUE</span></span>
@@ -295,6 +296,14 @@ This is a way to detect which pairs of states have significant differences in ra
 in the post hoc pairwise tests to account for multiple comparisons. See <code><a href="https://rdrr.io/r/stats/p.adjust.html" class="external-link">stats::p.adjust()</a></code> for the available methods. Default is <code>none</code>.</p></dd>
 
 
+<dt id="arg-trait-data-type-for-stats">trait_data_type_for_stats<a class="anchor" aria-label="anchor" href="#arg-trait-data-type-for-stats"></a></dt>
+<dd><p>(Optional) Character string. One of <code>"continuous"</code>, <code>"binary"</code>, or <code>"multinomial"</code>.
+Imposes the statistical method to use, instead of deriving it from the type of traits and the number of states/ranges observed at this <code>focal_time</code>.
+This is set automatically by <code><a href="run_deepSTRAPP_over_time.html">run_deepSTRAPP_over_time()</a></code>, which fixes the method once for the whole run from the
+complete trait mapping, so that the same test is used at every time step and the p-values along the trajectory remain comparable.
+Default is <code>NULL</code>, in which case the method is selected from the number of states/ranges in <code>trait_data_list$trait_data</code> observed at this <code>focal_time</code>.</p></dd>
+
+
 <dt id="arg-return-perm-data">return_perm_data<a class="anchor" aria-label="anchor" href="#arg-return-perm-data"></a></dt>
 <dd><p>Logical. Whether to return the stats data computed from the posterior samples for observed and permuted data in the output.
 This is needed to plot the histogram of the null distribution used to assess significance of the test with <code><a href="plot_histogram_STRAPP_test_for_focal_time.html">plot_histogram_STRAPP_test_for_focal_time()</a></code>.
@@ -322,10 +331,13 @@ according to the significance level provided (<code>alpha</code>). The test is s
 <li><p><code>$rate_type</code> Character string. The type of diversification rates tested. One of 'speciation', 'extinction' or 'net_diversification'.</p></li>
 <li><p><code>$trait_data_type</code> Character string. The type of trait data as found in 'trait_data_list$trait_data_type'. One of 'continuous', 'categorical', or 'biogeographic'.</p></li>
 <li><p><code>$trait_data_type_for_stats</code> Character string. The type of trait data used to select statistical method. One of 'continuous', 'binary', or 'multinomial'.</p></li>
+<li><p><code>$focal_time</code> The time in the past at which the trait and rates data were tested.</p></li>
 <li><p><code>$uncertainty_strategy</code> Character string. The strategy used to account for uncertainty in estimates.</p></li>
 <li><p><code>$trait_maps_vs_BAMM_samples_list</code> List of two elements recording the stochastic maps (<code>$trait_map_ID</code>) and BAMM samples (<code>$BAMM_posterior_sample_ID</code>) chosen for testing.
 Those may partly differ from the actual maps and BAMM samples used for the test as recorded in <code>$perm_data_df</code> because invalid maps with not enough states/ranges are discarded.</p></li>
-<li><p><code>$focal_time</code> The time in the past at which the trait and rates data were tested.</p></li>
+<li><p><code>$states_observed</code> (Only for categorical and biogeographic data) Character string vector of the states/ranges actually found in <code>trait_data_list$trait_data</code> at this <code>focal_time</code>.
+This can be a subset of the states/ranges described in the complete trait mapping, since a state/range may be absent from the deeper time steps.</p></li>
+<li><p><code>$nb_states_observed</code> (Only for categorical and biogeographic data) Integer. Number of states/ranges actually found in <code>trait_data_list$trait_data</code> at this <code>focal_time</code>.</p></li>
 </ul><p>If using continuous or binary data:</p><ul><li><p><code>$two-tailed</code> Logical. Record the type of test used: two-tailed if <code>TRUE</code>, one-tailed if <code>FALSE</code>.
 If <code>one_tailed_hypothesis</code> is provided (only for continuous and binary trait data):</p></li>
 <li><p><code>$one_tailed_hypothesis</code> Character string. Record of the alternative hypothesis used for the one-tailed tests.</p></li>
@@ -344,7 +356,8 @@ Combined with <code>posthoc_pairwise_tests = TRUE</code>, the stats data are als
 </ul></li>
 <li><p><code>$posthoc_pairwise_tests$perm_data_array</code> A 3D array containing stats data for all post hoc pairwise tests in a similar format to <code>$perm_data_df</code>.</p></li>
 </ul><p>If no STRAPP test was performed in the case of categorical/biogeographic data with a single state/range at <code>focal_time</code>,
-only the <code>$trait_data_type</code>, <code>$trait_data_type_for_stats</code> = "none", and <code>$focal_time</code> are returned.</p>
+only the <code>$trait_data_type</code>, <code>$trait_data_type_for_stats</code> = "none", <code>$focal_time</code>, <code>$trait_maps_vs_BAMM_samples_list</code>,
+<code>$states_observed</code>, and <code>$nb_states_observed</code> are returned.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>

@@ -96,7 +96,7 @@ Tests can be carried out on speciation, extinction and net diversification rates
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Run deepSTRAPP to test for a relationship between diversification rates and trait data over multiple time steps</h1>
-      <small class="dont-index">Source: <a href="https://github.com/MaelDore/deepSTRAPP/blob/master/R/run_deepSTRAPP_over_time.R" class="external-link"><code>R/run_deepSTRAPP_over_time.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/MaelDore/deepSTRAPP/blob/v1.1.0/R/run_deepSTRAPP_over_time.R" class="external-link"><code>R/run_deepSTRAPP_over_time.R</code></a></small>
       <div class="d-none name"><code>run_deepSTRAPP_over_time.Rd</code></div>
     </div>
 
@@ -379,7 +379,16 @@ a message will also be printed when rates are extracted. Default is <code>FALSE<
 that can be passed down to <code><a href="plot_STRAPP_pvalues_over_time.html">plot_STRAPP_pvalues_over_time()</a></code> to generate a plot showing the evolution of the test results across time.</p></li>
 <li><p><code>$time_steps</code> Numeric vector. Time steps at which the STRAPP tests were carried out in the same order as the objects returned in the output lists.</p></li>
 <li><p><code>$trait_data_type</code> Character string. Specify the type of trait data. Possible values are: "continuous", "categorical", "biogeographic".</p></li>
-<li><p><code>$trait_data_type_for_stats</code> Character string. The type of trait data used to select statistical method. One of 'continuous', 'binary', or 'multinomial'.</p></li>
+<li><p><code>$trait_data_type_for_stats</code> Character string. The type of trait data used to select statistical method. One of 'continuous', 'binary', or 'multinomial'.
+The method is fixed once for the whole run, based on the number of states/ranges found in the complete trait mapping,
+so that the same test is used at every time step for consistency across p-values.</p></li>
+<li><p><code>$states_observed_overall</code> (Only for categorical and biogeographic data) Character string vector of all states/ranges found in the complete trait mapping.
+This is what the statistical method <code>trait_data_type_for_stats</code> is based on, and it can be larger than the set of states/ranges found at any given time step.</p></li>
+<li><p><code>$states_observed_per_time_steps</code> (Only for categorical and biogeographic data) List of character string vectors, one per time step and named after it.
+States/ranges found at each time step. There can be steps with fewer states/ranges than others, which may affect the interpretation of the p-values obtained for these steps.</p></li>
+<li><p><code>$nb_states_observed_per_time_steps</code> (Only for categorical and biogeographic data) Named numeric vector. Number of states/ranges found at each time step.
+Recorded so that the interpretation of the p-values obtained from steps with fewer states/ranges can be adjusted if needed.
+For cases with only one state/range, no test could be computed, and they should be matching a <code>NA</code> in <code>$pvalues_summary_df</code>.</p></li>
 <li><p><code>$rate_type</code> Character string. The type of diversification rates used in the tests: 'speciation', 'extinction' or 'net_diversification'.</p></li>
 <li><p><code>$uncertainty_strategy</code> Character string. The strategy used to account for uncertainty in estimates. One of 'rates_only', 'paired', or 'full'.</p></li>
 <li><p><code>$trait_maps_vs_BAMM_samples_list</code> List of two elements recording the stochastic maps (<code>$trait_map_ID</code>) and BAMM samples (<code>$BAMM_posterior_sample_ID</code>) chosen for testing across time-steps.

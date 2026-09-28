@@ -411,7 +411,29 @@ The function returns a list with at least five elements.
 
 - `$trait_data_type_for_stats` Character string. The type of trait data
   used to select statistical method. One of 'continuous', 'binary', or
-  'multinomial'.
+  'multinomial'. The method is fixed once for the whole run, based on
+  the number of states/ranges found in the complete trait mapping, so
+  that the same test is used at every time step for consistency across
+  p-values.
+
+- `$states_observed_overall` (Only for categorical and biogeographic
+  data) Character string vector of all states/ranges found in the
+  complete trait mapping. This is what the statistical method
+  `trait_data_type_for_stats` is based on, and it can be larger than the
+  set of states/ranges found at any given time step.
+
+- `$states_observed_per_time_steps` (Only for categorical and
+  biogeographic data) List of character string vectors, one per time
+  step and named after it. States/ranges found at each time step. There
+  can be steps with fewer states/ranges than others, which may affect
+  the interpretation of the p-values obtained for these steps.
+
+- `$nb_states_observed_per_time_steps` (Only for categorical and
+  biogeographic data) Named numeric vector. Number of states/ranges
+  found at each time step. Recorded so that the interpretation of the
+  p-values obtained from steps with fewer states/ranges can be adjusted
+  if needed. For cases with only one state/range, no test could be
+  computed, and they should be matching a `NA` in `$pvalues_summary_df`.
 
 - `$rate_type` Character string. The type of diversification rates used
   in the tests: 'speciation', 'extinction' or 'net_diversification'.

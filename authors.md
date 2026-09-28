@@ -20,7 +20,7 @@
 ## Citation
 
 Source:
-[`inst/CITATION`](https://github.com/MaelDore/deepSTRAPP/blob/master/inst/CITATION)
+[`inst/CITATION`](https://github.com/MaelDore/deepSTRAPP/blob/v1.1.0/inst/CITATION)
 
 Doré M, Blaimer BB (2025). “deepSTRAPP: Testing for differences in
 diversification rates over deep evolutionary time.” *TBA*, **TBA**(TBA),
