@@ -562,22 +562,38 @@ convert_BSMs_to_simmaps <- function(model_fit, phylo, BSM_output)
 }
 
 
-## Internal helper: make a BioGeoBEARS results object usable on any machine ####
+### Helper function to make a BioGeoBEARS results object usable on any machine ####
 
-# `BioGeoBEARS::get_Qmat_COOmat_from_BioGeoBEARS_run_object()` does not rely only on the content of the `model_fit` object.
-# It re-reads two files from the disk using the paths recorded in the object:
-# the phylogeny (`model_fit$inputs$trfn`) and the file with tip ranges (`model_fit$inputs$geogfn`).
-# Those are absolute paths on the machine where the model was fitted, so they do not exist elsewhere
-# (e.g., for the `eel_biogeo_data` dataset, or for any BioGeoBEARS analysis moved to another machine/directory).
-#
-# This helper fixes the `model_fit` object on the fly:
-#  - $inputs$trfn: if the file cannot be found, the `phylo` provided by the user is written in a temporary file.
-#  - $inputs$geogfn: if the file cannot be found, look for a file with the same name in the 'extdata' directory of deepSTRAPP
-#    (where the tip range files of the example datasets are shipped). If not found, stop with an informative error message.
-#  - $inputs$BioGeoBEARS_model_object: restore the S4 class 'BioGeoBEARS_model' if the object was stored as a plain list
-#    (as done for the datasets shipped in the package so they can be loaded without BioGeoBEARS installed).
-#
-# Returns a list with the repaired `model_fit` and the paths of the temporary files to delete after use.
+#' @title Repair a BioGeoBEARS results object so it can be used on any machine
+#'
+#' @description Fix on the fly the `model_fit` object, a BioGeoBEARS results object, so BioGeoBEARS functions can use it
+#'  even if it was generated on another machine, or if the files used for the analyses have been moved.
+#'
+#'  `BioGeoBEARS::get_Qmat_COOmat_from_BioGeoBEARS_run_object()` does not rely only on the content of the `model_fit` object.
+#'  It re-reads two files from the disk, using the paths recorded in the object: the phylogeny (`model_fit$inputs$trfn`)
+#'  and the file with tip ranges (`model_fit$inputs$geogfn`). When those are absolute paths from the machine where the model was fitted,
+#'  the files do not exist elsewhere (e.g., for the `eel_biogeo_data` dataset, or for any BioGeoBEARS analysis moved to another machine/directory).
+#'
+#' @param model_fit A BioGeoBEARS results object, produced by ML inference via `BioGeoBEARS::bears_optim_run()`.
+#' @param phylo Time-calibrated phylogeny used in the BioGeoBEARS analyses to produce the historical biogeographic inference
+#'   of the geographic ranges. Object of class `"phylo"`.
+#'
+#' @details The function applies the following fixes to `model_fit$inputs`:
+#'  * `$trfn`: If the file cannot be found, the `phylo` provided is written in a temporary file, and its path replaces the original one.
+#'  * `$geogfn`: If the file cannot be found, the function looks for a file with the same name in the `extdata` directory of deepSTRAPP
+#'    (where the tip ranges files of the example datasets are shipped). Windows paths are handled even if the session runs on Linux/macOS.
+#'    If no file is found, the function stops with an informative error message.
+#'  * `$BioGeoBEARS_model_object`: The S4 class `"BioGeoBEARS_model"` is restored if the object was stored as a plain list
+#'    (as done for the datasets shipped in the package so they can be loaded without BioGeoBEARS installed).
+#'
+#' @return A list with two elements:
+#'   * `$model_fit` The repaired `model_fit` object.
+#'   * `$tmp_files` Character vector. Paths of the temporary files created, which must be deleted by the calling function (e.g., with `on.exit(unlink(...))`).
+#'
+#' @author Maël Doré
+#'
+#' @noRd
+#'
 
 repair_BioGeoBEARS_model_fit <- function(model_fit, phylo)
 {
