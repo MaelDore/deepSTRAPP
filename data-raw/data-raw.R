@@ -604,6 +604,21 @@ eel_biogeo_data <- prepare_trait_data(
   return_model_selection_df = TRUE,
   verbose = TRUE)
 
+## Make the dataset portable: remove absolute paths to local files
+# BioGeoBEARS re-reads the tree and tip range files from the paths recorded in best_model_fit$inputs
+# (see convert_BSMs_to_simmaps()). Absolute paths from the build machine do not exist on users' machines.
+# Ship the two files in inst/extdata/ and only record their names in the object.
+# convert_BSMs_to_simmaps() resolves them to the install location with system.file().
+BioGeoBEARS_directory_path <- "./BioGeoBEARS_directory/" # Directory where prepare_trait_data() saved its files
+dir.create("inst/extdata", showWarnings = FALSE, recursive = TRUE)
+file.copy(from = file.path(BioGeoBEARS_directory_path, c("eel_phylo.tree", "eel_tip_ranges.data")),
+          to = "inst/extdata", overwrite = TRUE)
+eel_biogeo_data$best_model_fit$inputs$trfn <- "eel_phylo.tree"
+eel_biogeo_data$best_model_fit$inputs$geogfn <- "eel_tip_ranges.data"
+eel_biogeo_data$best_model_fit$inputs$wd <- "."
+# Control: no absolute path left
+stopifnot(!any(grepl("^[A-Za-z]:|^/|^~", unlist(eel_biogeo_data$best_model_fit$inputs[c("trfn", "geogfn", "wd")]))))
+
 # Explore output
 str(eel_biogeo_data, 1)
 eel_biogeo_data$model_selection_df # Summary of model selection

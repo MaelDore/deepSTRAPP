@@ -63,6 +63,11 @@ Initial functions in R package BioGeoBEARS by Nicholas J. Matzke:
 }
 }
 \details{
+\itemize{
+\item \code{BioGeoBEARS::BSM_to_phytools_SM()}
+\item \code{BioGeoBEARS::BSMs_to_phytools_SMs()}
+}
+
 These functions are slight adaptations of original functions from the R Package \code{BioGeoBEARS} by N. Matzke.
 
 Initial functions: \code{BioGeoBEARS::BSM_to_phytools_SM()} \code{BioGeoBEARS::BSMs_to_phytools_SMs()}
@@ -71,6 +76,8 @@ Changes:
 \itemize{
 \item Solves issue with differences in ranges allowed across time-strata.
 \item Requires directly the output of \code{BioGeoBEARS::runBSM()} instead of separated cladogenetic and anagenetic event tables.
+\item Resolve paths to local tree and tip range files.
+\item Restore the S4 class 'BioGeoBEARS_model' if needed.
 \item Update the documentation.
 }
 }
