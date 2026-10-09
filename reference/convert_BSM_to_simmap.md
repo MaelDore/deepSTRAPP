@@ -92,6 +92,10 @@ biogeographic simulations in a unique list of classes
 
 ## Details
 
+- `BioGeoBEARS::BSM_to_phytools_SM()`
+
+- `BioGeoBEARS::BSMs_to_phytools_SMs()`
+
 These functions are slight adaptations of original functions from the R
 Package `BioGeoBEARS` by N. Matzke.
 
@@ -104,6 +108,10 @@ Changes:
 
 - Requires directly the output of `BioGeoBEARS::runBSM()` instead of
   separated cladogenetic and anagenetic event tables.
+
+- Resolve paths to local tree and tip range files.
+
+- Restore the S4 class 'BioGeoBEARS_model' if needed.
 
 - Update the documentation.
 

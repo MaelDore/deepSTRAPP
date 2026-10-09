@@ -28,7 +28,7 @@ RAte Permutations on Phylogenies (STRAPP) test. STRAPP tests are based
 on **block-permutations**: rates data are randomized across tips within
 blocks defined by the diversification regimes identified on each tip
 (typically inferred with BAMM). Permuting within regimes rather than
-across the whole tree provide the correct error structure to **account
+across the whole tree provides the correct error structure to **account
 for the phylogenetic pseudoreplication of rates** occurring between tips
 sharing the same macroevolutionary regime. It requires multiple
 independent associations between character states and diversification to
@@ -135,7 +135,7 @@ library(devtools)
 # If you want to have access to the vignettes/tutorials locally, run:
 remotes::install_github(repo = "MaelDore/deepSTRAPP")
 
-# Altough, this is time-consuming, you can also opt for this light installation:
+# Since this is time-consuming, you can also opt for this light installation:
 remotes::install_github(repo = "MaelDore/deepSTRAPP", build_vignettes = FALSE)
 # You will not have access to the vignettes/tutorials within R, but can still acess them through this website.
 # See the dedicated Sections below.

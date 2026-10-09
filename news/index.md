@@ -1,6 +1,16 @@
 # Changelog
 
+## deepSTRAPP 1.1.1
+
+- [`convert_BSM_to_simmap()`](https://maeldore.github.io/deepSTRAPP/reference/convert_BSM_to_simmap.md)
+  and
+  [`convert_BSMs_to_simmaps()`](https://maeldore.github.io/deepSTRAPP/reference/convert_BSM_to_simmap.md)
+  now repair paths to phylo and tip ranges objects used in the example
+  `eel_biogeo_data` dataset.
+
 ## deepSTRAPP 1.1.0
+
+CRAN release: 2026-09-28
 
 - Handle uncertainty in trait estimates. See the ‘uncertainty_strategy’
   argument in run_deepSTRAPP\_\*() functions.

@@ -94,7 +94,7 @@ BioGeoBEARS::BSMs_to_phytools_SMs()
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Convert Biogeographic Stochastic Map (BSM) to phytools SIMMAP stochastic map (SM) format</h1>
-      <small class="dont-index">Source: <a href="https://github.com/MaelDore/deepSTRAPP/blob/v1.1.0/R/convert_BSMs_to_simmaps.R" class="external-link"><code>R/convert_BSMs_to_simmaps.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/MaelDore/deepSTRAPP/blob/master/R/convert_BSMs_to_simmaps.R" class="external-link"><code>R/convert_BSMs_to_simmaps.R</code></a></small>
       <div class="d-none name"><code>convert_BSM_to_simmap.Rd</code></div>
     </div>
 
@@ -156,10 +156,15 @@ from all biogeographic simulations in a unique list of classes <code>c("multiSim
 </ul></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>These functions are slight adaptations of original functions from the R Package <code>BioGeoBEARS</code> by N. Matzke.</p>
+
+<ul><li><p><code>BioGeoBEARS::BSM_to_phytools_SM()</code></p></li>
+<li><p><code>BioGeoBEARS::BSMs_to_phytools_SMs()</code></p></li>
+</ul><p>These functions are slight adaptations of original functions from the R Package <code>BioGeoBEARS</code> by N. Matzke.</p>
 <p>Initial functions: <code>BioGeoBEARS::BSM_to_phytools_SM()</code> <code>BioGeoBEARS::BSMs_to_phytools_SMs()</code></p>
 <p>Changes:</p><ul><li><p>Solves issue with differences in ranges allowed across time-strata.</p></li>
 <li><p>Requires directly the output of <code>BioGeoBEARS::runBSM()</code> instead of separated cladogenetic and anagenetic event tables.</p></li>
+<li><p>Resolve paths to local tree and tip range files.</p></li>
+<li><p>Restore the S4 class 'BioGeoBEARS_model' if needed.</p></li>
 <li><p>Update the documentation.</p></li>
 </ul></div>
     <div class="section level2">

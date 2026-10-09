@@ -125,7 +125,7 @@ use_github_actions()  reports the R CMD check status of your development package
 <div class="section level3">
 <h3 id="the-statistical-framework">The statistical framework<a class="anchor" aria-label="anchor" href="#the-statistical-framework"></a>
 </h3>
-<p><strong>deepSTRAPP</strong> statistical framework is an extension of the STructured RAte Permutations on Phylogenies (STRAPP) test. STRAPP tests are based on <strong>block-permutations</strong>: rates data are randomized across tips within blocks defined by the diversification regimes identified on each tip (typically inferred with BAMM). Permuting within regimes rather than across the whole tree provide the correct error structure to <strong>account for the phylogenetic pseudoreplication of rates</strong> occurring between tips sharing the same macroevolutionary regime. It requires multiple independent associations between character states and diversification to yield a significant macroevolutionary signal (<em>Rabosky &amp; Huang, 2016</em>). <br><br></p>
+<p><strong>deepSTRAPP</strong> statistical framework is an extension of the STructured RAte Permutations on Phylogenies (STRAPP) test. STRAPP tests are based on <strong>block-permutations</strong>: rates data are randomized across tips within blocks defined by the diversification regimes identified on each tip (typically inferred with BAMM). Permuting within regimes rather than across the whole tree provides the correct error structure to <strong>account for the phylogenetic pseudoreplication of rates</strong> occurring between tips sharing the same macroevolutionary regime. It requires multiple independent associations between character states and diversification to yield a significant macroevolutionary signal (<em>Rabosky &amp; Huang, 2016</em>). <br><br></p>
 </div>
 <div class="section level3">
 <h3 id="applications">Applications<a class="anchor" aria-label="anchor" href="#applications"></a>
@@ -184,7 +184,7 @@ use_github_actions()  reports the R CMD check status of your development package
 <span><span class="co"># If you want to have access to the vignettes/tutorials locally, run:</span></span>
 <span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span>repo <span class="op">=</span> <span class="st">"MaelDore/deepSTRAPP"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Altough, this is time-consuming, you can also opt for this light installation:</span></span>
+<span><span class="co"># Since this is time-consuming, you can also opt for this light installation:</span></span>
 <span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span>repo <span class="op">=</span> <span class="st">"MaelDore/deepSTRAPP"</span>, build_vignettes <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="co"># You will not have access to the vignettes/tutorials within R, but can still acess them through this website.</span></span>
 <span><span class="co"># See the dedicated Sections below.</span></span></code></pre></div>

@@ -366,12 +366,12 @@ plot(whale_densityMaps[[3]])
 
 ![](import_external_analyses_files/figure-html/import_cat_eval-1.png)
 
-    #> 2026-09-28 01:58:29.230886 - Posterior probability computed for edge n°100/152
-    #> 2026-09-28 01:58:29.891012 - Posterior probabilities computed for State = large - n°1/3
-    #> 2026-09-28 01:58:31.878917 - Posterior probability computed for edge n°100/152
-    #> 2026-09-28 01:58:32.537718 - Posterior probabilities computed for State = medium - n°2/3
-    #> 2026-09-28 01:58:34.55012 - Posterior probability computed for edge n°100/152
-    #> 2026-09-28 01:58:35.218237 - Posterior probabilities computed for State = small - n°3/3
+    #> 2026-10-09 01:36:41.982457 - Posterior probability computed for edge n°100/152
+    #> 2026-10-09 01:36:42.511425 - Posterior probabilities computed for State = large - n°1/3
+    #> 2026-10-09 01:36:44.093924 - Posterior probability computed for edge n°100/152
+    #> 2026-10-09 01:36:44.620093 - Posterior probabilities computed for State = medium - n°2/3
+    #> 2026-10-09 01:36:46.222326 - Posterior probability computed for edge n°100/152
+    #> 2026-10-09 01:36:46.747489 - Posterior probabilities computed for State = small - n°3/3
 
 ![](import_external_analyses_files/figure-html/import_cat_eval-2.png)
 
@@ -432,7 +432,7 @@ eel_range_tip_data <- eel_range_tip_data[eel.tree$tip.label]
 # dir.create(path = BioGeoBEARS_directory_path)
 # 
 # # Store phylogeny in Newick format
-# write.tree(phylo = eel.tree, file = paste0(BioGeoBEARS_directory_path, "eel.tree"))
+# write.tree(phy = eel.tree, file = paste0(BioGeoBEARS_directory_path, "eel.tree"))
 # path_to_phylo <- BioGeoBEARS::np(paste0(BioGeoBEARS_directory_path, "eel.tree"))
 # 
 # ## Prepare tip ranges for BioGeoBEARS
@@ -467,7 +467,7 @@ eel_range_tip_data <- eel_range_tip_data[eel.tree$tip.label]
 # binary_df <- ranges_df[, -1]
 # # Convert character strings into numerical factors
 # binary_df_num <- as.data.frame(apply(X = binary_df, MARGIN = 2, FUN = as.numeric))
-# row.names(binary_df_num) <- names(tip_data)
+# row.names(binary_df_num) <- names(eel_range_tip_data)
 # names(binary_df_num) <- unique_areas
 # 
 # # Produce tipranges object from numeric df
@@ -512,6 +512,15 @@ eel_range_tip_data <- eel_range_tip_data[eel.tree$tip.label]
 # Please use remotes::install_github(repo = "MaelDore/deepSTRAPP") to install the latest version.
 data(eel_biogeo_data, package = "deepSTRAPP")
 DEC_J_fit <- eel_biogeo_data$best_model_fit
+
+# Note: BioGeoBEARS re-reads the phylogeny and the tip ranges files
+# from the paths recorded in the model object
+# (in 'DEC_J_fit$inputs$trfn' and 'DEC_J_fit$inputs$geogfn').
+# If you run your own analyses on one machine and import them on another, or if you move the files,
+# those paths will not be valid anymore. 
+# Update them with:
+# DEC_J_fit$inputs$trfn <- "path/to/your/phylo.tree"
+# DEC_J_fit$inputs$geogfn <- "path/to/your/tip_ranges.data"
 
 # This object is your modeling results
 # It stores information about model fit and ancestral range estimates at internal nodes

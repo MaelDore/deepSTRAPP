@@ -102,9 +102,9 @@
       <img src="../logo.png" class="logo" alt=""><h1>Import external analyses</h1>
                         <h4 data-toc-skip class="author">Maël Doré</h4>
             
-            <h4 data-toc-skip class="date">2026-09-28</h4>
+            <h4 data-toc-skip class="date">2026-10-09</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/MaelDore/deepSTRAPP/blob/v1.1.0/vignettes/import_external_analyses.Rmd" class="external-link"><code>vignettes/import_external_analyses.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/MaelDore/deepSTRAPP/blob/master/vignettes/import_external_analyses.Rmd" class="external-link"><code>vignettes/import_external_analyses.Rmd</code></a></small>
       <div class="d-none name"><code>import_external_analyses.Rmd</code></div>
     </div>
 
@@ -456,12 +456,12 @@ green. Final outputs in dark green. <br></p>
 <span><span class="co">#&gt; 0.3333333 0.3333333 0.3333333</span></span>
 <span><span class="co">#&gt; Done.</span></span></code></pre>
 <p><img src="import_external_analyses_files/figure-html/import_cat_eval-1.png" class="r-plt" alt="" width="504"></p>
-<pre><code><span><span class="co">#&gt; 2026-09-28 01:58:29.230886 - Posterior probability computed for edge n°100/152</span></span>
-<span><span class="co">#&gt; 2026-09-28 01:58:29.891012 - Posterior probabilities computed for State = large - n°1/3</span></span>
-<span><span class="co">#&gt; 2026-09-28 01:58:31.878917 - Posterior probability computed for edge n°100/152</span></span>
-<span><span class="co">#&gt; 2026-09-28 01:58:32.537718 - Posterior probabilities computed for State = medium - n°2/3</span></span>
-<span><span class="co">#&gt; 2026-09-28 01:58:34.55012 - Posterior probability computed for edge n°100/152</span></span>
-<span><span class="co">#&gt; 2026-09-28 01:58:35.218237 - Posterior probabilities computed for State = small - n°3/3</span></span></code></pre>
+<pre><code><span><span class="co">#&gt; 2026-10-09 01:36:41.982457 - Posterior probability computed for edge n°100/152</span></span>
+<span><span class="co">#&gt; 2026-10-09 01:36:42.511425 - Posterior probabilities computed for State = large - n°1/3</span></span>
+<span><span class="co">#&gt; 2026-10-09 01:36:44.093924 - Posterior probability computed for edge n°100/152</span></span>
+<span><span class="co">#&gt; 2026-10-09 01:36:44.620093 - Posterior probabilities computed for State = medium - n°2/3</span></span>
+<span><span class="co">#&gt; 2026-10-09 01:36:46.222326 - Posterior probability computed for edge n°100/152</span></span>
+<span><span class="co">#&gt; 2026-10-09 01:36:46.747489 - Posterior probabilities computed for State = small - n°3/3</span></span></code></pre>
 <p><img src="import_external_analyses_files/figure-html/import_cat_eval-2.png" class="r-plt" alt="" width="504"></p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
@@ -519,7 +519,7 @@ green. Final outputs in dark green. <br></p>
 <span><span class="co"># dir.create(path = BioGeoBEARS_directory_path)</span></span>
 <span><span class="co"># </span></span>
 <span><span class="co"># # Store phylogeny in Newick format</span></span>
-<span><span class="co"># write.tree(phylo = eel.tree, file = paste0(BioGeoBEARS_directory_path, "eel.tree"))</span></span>
+<span><span class="co"># write.tree(phy = eel.tree, file = paste0(BioGeoBEARS_directory_path, "eel.tree"))</span></span>
 <span><span class="co"># path_to_phylo &lt;- BioGeoBEARS::np(paste0(BioGeoBEARS_directory_path, "eel.tree"))</span></span>
 <span><span class="co"># </span></span>
 <span><span class="co"># ## Prepare tip ranges for BioGeoBEARS</span></span>
@@ -554,7 +554,7 @@ green. Final outputs in dark green. <br></p>
 <span><span class="co"># binary_df &lt;- ranges_df[, -1]</span></span>
 <span><span class="co"># # Convert character strings into numerical factors</span></span>
 <span><span class="co"># binary_df_num &lt;- as.data.frame(apply(X = binary_df, MARGIN = 2, FUN = as.numeric))</span></span>
-<span><span class="co"># row.names(binary_df_num) &lt;- names(tip_data)</span></span>
+<span><span class="co"># row.names(binary_df_num) &lt;- names(eel_range_tip_data)</span></span>
 <span><span class="co"># names(binary_df_num) &lt;- unique_areas</span></span>
 <span><span class="co"># </span></span>
 <span><span class="co"># # Produce tipranges object from numeric df</span></span>
@@ -599,6 +599,15 @@ green. Final outputs in dark green. <br></p>
 <span><span class="co"># Please use remotes::install_github(repo = "MaelDore/deepSTRAPP") to install the latest version.</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">eel_biogeo_data</span>, package <span class="op">=</span> <span class="st">"deepSTRAPP"</span><span class="op">)</span></span>
 <span><span class="va">DEC_J_fit</span> <span class="op">&lt;-</span> <span class="va">eel_biogeo_data</span><span class="op">$</span><span class="va">best_model_fit</span></span>
+<span></span>
+<span><span class="co"># Note: BioGeoBEARS re-reads the phylogeny and the tip ranges files</span></span>
+<span><span class="co"># from the paths recorded in the model object</span></span>
+<span><span class="co"># (in 'DEC_J_fit$inputs$trfn' and 'DEC_J_fit$inputs$geogfn').</span></span>
+<span><span class="co"># If you run your own analyses on one machine and import them on another, or if you move the files,</span></span>
+<span><span class="co"># those paths will not be valid anymore. </span></span>
+<span><span class="co"># Update them with:</span></span>
+<span><span class="co"># DEC_J_fit$inputs$trfn &lt;- "path/to/your/phylo.tree"</span></span>
+<span><span class="co"># DEC_J_fit$inputs$geogfn &lt;- "path/to/your/tip_ranges.data"</span></span>
 <span></span>
 <span><span class="co"># This object is your modeling results</span></span>
 <span><span class="co"># It stores information about model fit and ancestral range estimates at internal nodes</span></span>
