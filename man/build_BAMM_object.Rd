@@ -123,7 +123,8 @@ Additionally, you need to format the model output such as in \code{BAMM_object},
 # The key output from a BAMM is the 'event_data.txt' file
 # It can be loaded in R to use as input for deepSTRAPP
 
-# The 'whale_event_data.txt' file used for example here is provided within deepSTRAPP in the 'extdata' directory
+# The 'whale_event_data.txt' file used for example here is provided
+# within deepSTRAPP in the 'extdata' directory
 
 library(phytools)
 data(whale.tree)
