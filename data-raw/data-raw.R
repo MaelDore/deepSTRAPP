@@ -941,6 +941,11 @@ plot.bammdata(whale_BAMM_object, labels = TRUE)
 # Export in deepSTRAPP
 usethis::use_data(whale_BAMM_object, overwrite = TRUE)
 
+## Ship the BAMM event data file in inst/extdata/ so users can run the 'import_external_analyses' tutorial
+# (see ?build_BAMM_object and vignette("import_external_analyses"))
+dir.create("inst/extdata", showWarnings = FALSE, recursive = TRUE)
+file.copy(from = "./BAMM_outputs/whale_event_data.txt", to = "inst/extdata/whale_event_data.txt", overwrite = TRUE)
+
 
 ### 12/ Include Ponerinae_BAMM_object ####
 

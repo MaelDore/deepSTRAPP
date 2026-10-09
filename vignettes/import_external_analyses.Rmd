@@ -834,14 +834,16 @@ knitr::include_graphics("figures/7_Import_external_analyses_1.4.5_Biogeo_density
 ?deepSTRAPP::subset_BAMM_object()
 ?deepSTRAPP::prune_BAMM_object()
 
-## Please note that the 'whale_event_data.txt' file used 
-## in this example here is not provided within deepSTRAPP
+## The 'whale_event_data.txt' file used in this example is provided within deepSTRAPP.
+# It is stored in the 'extdata' directory of the package.
+# Use system.file() to get its path on your machine.
+# To import your own BAMM results, provide the path to your own 'event_data.txt' file instead.
 
 ### 2.1/ Build a BAMM_object from an external 'event_data.txt' file resulting from a BAMM run ####
 
 whale_BAMM_object <- build_BAMM_object(
     phylo = whale.tree,
-    eventdata = "./BAMM_outputs/whale_event_data.txt",
+    eventdata = system.file("extdata", "whale_event_data.txt", package = "deepSTRAPP"),
     burn_in = 0.25, # Remove 25% as burn-in
     nb_posterior_samples = 1000, # Retain 1000 samples
     expectedNumberOfShifts = 1,

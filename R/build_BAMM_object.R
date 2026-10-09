@@ -110,20 +110,19 @@
 #' # The key output from a BAMM is the 'event_data.txt' file
 #' # It can be loaded in R to use as input for deepSTRAPP
 #'
+#' # The 'whale_event_data.txt' file used for example here is provided within deepSTRAPP in the 'extdata' directory
+#'
 #' library(phytools)
 #' data(whale.tree)
 #'
-#' \dontrun{
-#' ## The 'whale_event_data.txt' file used for example here is not provided within deepSTRAPP
 #' BAMM_object <- build_BAMM_object(
 #'    phylo = whale.tree,
-#'    eventdata = "./BAMM_outputs/whale_event_data.txt",
+#'    eventdata = system.file("extdata", "whale_event_data.txt", package = "deepSTRAPP"),
 #'    burn_in = 0.25, # Remove 25% as burn-in
 #'    nb_posterior_samples = 1000, # Retain 1000 samples
 #'    expectedNumberOfShifts = 1,
 #'    verbose = TRUE)
 #' str(BAMM_object, 1)
-#' }
 #'
 
 build_BAMM_object <- function (phylo,
