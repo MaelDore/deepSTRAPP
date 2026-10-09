@@ -366,12 +366,12 @@ plot(whale_densityMaps[[3]])
 
 ![](import_external_analyses_files/figure-html/import_cat_eval-1.png)
 
-    #> 2026-10-09 01:36:41.982457 - Posterior probability computed for edge n°100/152
-    #> 2026-10-09 01:36:42.511425 - Posterior probabilities computed for State = large - n°1/3
-    #> 2026-10-09 01:36:44.093924 - Posterior probability computed for edge n°100/152
-    #> 2026-10-09 01:36:44.620093 - Posterior probabilities computed for State = medium - n°2/3
-    #> 2026-10-09 01:36:46.222326 - Posterior probability computed for edge n°100/152
-    #> 2026-10-09 01:36:46.747489 - Posterior probabilities computed for State = small - n°3/3
+    #> 2026-10-09 07:56:09.482705 - Posterior probability computed for edge n°100/152
+    #> 2026-10-09 07:56:10.146634 - Posterior probabilities computed for State = large - n°1/3
+    #> 2026-10-09 07:56:12.15221 - Posterior probability computed for edge n°100/152
+    #> 2026-10-09 07:56:12.818789 - Posterior probabilities computed for State = medium - n°2/3
+    #> 2026-10-09 07:56:14.853696 - Posterior probability computed for edge n°100/152
+    #> 2026-10-09 07:56:15.521675 - Posterior probabilities computed for State = small - n°3/3
 
 ![](import_external_analyses_files/figure-html/import_cat_eval-2.png)
 
@@ -649,14 +649,16 @@ par(mfrow = c(1,1))
 ?deepSTRAPP::subset_BAMM_object()
 ?deepSTRAPP::prune_BAMM_object()
 
-## Please note that the 'whale_event_data.txt' file used 
-## in this example here is not provided within deepSTRAPP
+## The 'whale_event_data.txt' file used in this example is provided within deepSTRAPP.
+# It is stored in the 'extdata' directory of the package.
+# Use system.file() to get its path on your machine.
+# To import your own BAMM results, provide the path to your own 'event_data.txt' file instead.
 
 ### 2.1/ Build a BAMM_object from an external 'event_data.txt' file resulting from a BAMM run ####
 
 whale_BAMM_object <- build_BAMM_object(
     phylo = whale.tree,
-    eventdata = "./BAMM_outputs/whale_event_data.txt",
+    eventdata = system.file("extdata", "whale_event_data.txt", package = "deepSTRAPP"),
     burn_in = 0.25, # Remove 25% as burn-in
     nb_posterior_samples = 1000, # Retain 1000 samples
     expectedNumberOfShifts = 1,
