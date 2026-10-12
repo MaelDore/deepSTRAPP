@@ -852,7 +852,7 @@ whale_BAMM_object <- build_BAMM_object(
 # Inspect resulting object
 str(whale_BAMM_object, 1)
 # Check current number of BAMM posterior samples
-length(Ponerinae_BAMM_object_old_calib$eventData)
+length(whale_BAMM_object$eventData)
 # We have initially 1000 posterior samples in the updated BAMM object
 
 ### 2.2/ Subset the BAMM_object to retain a lower number of posterior samples ####
