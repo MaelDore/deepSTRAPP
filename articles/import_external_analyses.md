@@ -366,12 +366,12 @@ plot(whale_densityMaps[[3]])
 
 ![](import_external_analyses_files/figure-html/import_cat_eval-1.png)
 
-    #> 2026-10-09 07:56:09.482705 - Posterior probability computed for edge n°100/152
-    #> 2026-10-09 07:56:10.146634 - Posterior probabilities computed for State = large - n°1/3
-    #> 2026-10-09 07:56:12.15221 - Posterior probability computed for edge n°100/152
-    #> 2026-10-09 07:56:12.818789 - Posterior probabilities computed for State = medium - n°2/3
-    #> 2026-10-09 07:56:14.853696 - Posterior probability computed for edge n°100/152
-    #> 2026-10-09 07:56:15.521675 - Posterior probabilities computed for State = small - n°3/3
+    #> 2026-10-12 00:58:03.508017 - Posterior probability computed for edge n°100/152
+    #> 2026-10-12 00:58:04.160292 - Posterior probabilities computed for State = large - n°1/3
+    #> 2026-10-12 00:58:06.148475 - Posterior probability computed for edge n°100/152
+    #> 2026-10-12 00:58:06.804477 - Posterior probabilities computed for State = medium - n°2/3
+    #> 2026-10-12 00:58:08.794449 - Posterior probability computed for edge n°100/152
+    #> 2026-10-12 00:58:09.454067 - Posterior probabilities computed for State = small - n°3/3
 
 ![](import_external_analyses_files/figure-html/import_cat_eval-2.png)
 
@@ -667,7 +667,7 @@ whale_BAMM_object <- build_BAMM_object(
 # Inspect resulting object
 str(whale_BAMM_object, 1)
 # Check current number of BAMM posterior samples
-length(Ponerinae_BAMM_object_old_calib$eventData)
+length(whale_BAMM_object$eventData)
 # We have initially 1000 posterior samples in the updated BAMM object
 
 ### 2.2/ Subset the BAMM_object to retain a lower number of posterior samples ####

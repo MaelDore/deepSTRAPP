@@ -179,15 +179,21 @@ use_github_actions()  reports the R CMD check status of your development package
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"deepSTRAPP"</span><span class="op">)</span></span></code></pre></div>
 <p>From <strong>GitHub</strong>, for the current development version, including all <strong>example datasets</strong>:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://devtools.r-lib.org/" class="external-link">devtools</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="co">## Install one of the two installer packages first</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"pak"</span><span class="op">)</span>      <span class="co"># Recommended</span></span>
+<span><span class="co"># install.packages("remotes")  # Alternative</span></span>
 <span></span>
-<span><span class="co"># If you want to have access to the vignettes/tutorials locally, run:</span></span>
-<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span>repo <span class="op">=</span> <span class="st">"MaelDore/deepSTRAPP"</span><span class="op">)</span></span>
+<span><span class="co">## For a light installation (fast, no vignettes), run:</span></span>
+<span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pak.html" class="external-link">pak</a></span><span class="op">(</span><span class="st">"MaelDore/deepSTRAPP"</span><span class="op">)</span> <span class="co"># Recommended</span></span>
+<span><span class="co"># remotes::install_github(repo = "MaelDore/deepSTRAPP") # Alternative</span></span>
+<span><span class="co"># You will not have access to the vignettes/tutorials within R, but can still access them through this website.</span></span>
+<span><span class="co"># See the dedicated Sections below.</span></span>
 <span></span>
-<span><span class="co"># Since this is time-consuming, you can also opt for this light installation:</span></span>
-<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span>repo <span class="op">=</span> <span class="st">"MaelDore/deepSTRAPP"</span>, build_vignettes <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="co"># You will not have access to the vignettes/tutorials within R, but can still acess them through this website.</span></span>
-<span><span class="co"># See the dedicated Sections below.</span></span></code></pre></div>
+<span><span class="co">## For a full installation (with vignettes/tutorials available in R), run:</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>pkg.build_vignettes <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pak.html" class="external-link">pak</a></span><span class="op">(</span><span class="st">"MaelDore/deepSTRAPP"</span><span class="op">)</span> <span class="co"># Recommended</span></span>
+<span><span class="co"># remotes::install_github(repo = "MaelDore/deepSTRAPP", dependencies = TRUE, build_vignettes = TRUE) # Alternative</span></span>
+<span><span class="co"># Note: this may be time-consuming. The light installation is enough for most users.</span></span></code></pre></div>
 <p>You may need additional tools for package compilation such as Rtools (Windows) and Xcode (Mac OS). <br> See <a href="https://support.posit.co/hc/en-us/articles/200486498-Package-Development-Prerequisites" class="external-link">this page</a> for details. <br><br></p>
 </div>
 <div class="section level2">
@@ -206,8 +212,8 @@ use_github_actions()  reports the R CMD check status of your development package
 <li>The R package <strong>BioGeoBEARS</strong> is used to infer ancestral ranges on time-calibrated phylogenies. It is needed by deepSTRAPP to perform the tests based on biogeographic ranges. You can install the latest version of BioGeoBEARS from its <a href="https://github.com/nmatzke/BioGeoBEARS" class="external-link">author’s repository on GitHub</a>:</li>
 </ul>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://devtools.r-lib.org/" class="external-link">devtools</a></span><span class="op">)</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span>repo<span class="op">=</span><span class="st">"nmatzke/BioGeoBEARS"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pak.html" class="external-link">pak</a></span><span class="op">(</span><span class="st">"nmatzke/BioGeoBEARS"</span><span class="op">)</span> <span class="co"># Recommended</span></span>
+<span><span class="co"># devtools::install_github(repo="nmatzke/BioGeoBEARS") # Alternative</span></span></code></pre></div>
 <p>For more information, please refer to the <a href="http://phylo.wikidot.com/biogeobears" class="external-link">official BioGeoBEARS Wiki</a>.</p>
 <p><strong>Reference:</strong></p>
 <blockquote>
@@ -217,8 +223,8 @@ use_github_actions()  reports the R CMD check status of your development package
 <li>The R package <strong>contsimmap</strong> is used to produce stochastic character maps of continuous trait data on phylogenies (i.e., continuous stochastic maps). It is needed by deepSTRAPP to propagate the uncertainty in ancestral trait inferences within tests based on continuous traits. You can install the latest version of contsimmap from its <a href="https://github.com/bstaggmartin/contsimmap" class="external-link">author’s repository on GitHub</a>:</li>
 </ul>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://devtools.r-lib.org/" class="external-link">devtools</a></span><span class="op">)</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span>repo<span class="op">=</span><span class="st">"bstaggmartin/contsimmap"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pak.html" class="external-link">pak</a></span><span class="op">(</span><span class="st">"bstaggmartin/contsimmap"</span><span class="op">)</span> <span class="co"># Recommended</span></span>
+<span><span class="co"># devtools::install_github(repo="bstaggmartin/contsimmap") # Alternative</span></span></code></pre></div>
 <p><strong>Reference:</strong></p>
 <blockquote>
 <p>Martin, B. S., &amp; Weber, M. G. (2026). Stochastic character mapping of continuous traits on phylogenies. <em>Systematic Biology</em>, syag031. DOI: <a href="http://doi.org/10.1093/sysbio/syag031" class="external-link uri">http://doi.org/10.1093/sysbio/syag031</a></p>
