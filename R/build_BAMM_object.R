@@ -18,7 +18,7 @@
 #'
 #'   Those additional elements are used by [deepSTRAPP::plot_BAMM_rates()] to display regime shift probabilities and locations.
 #'
-#'   This function is meant to enable users to inject into the deepSTRAPP framework the results of their own BAMM analyses.
+#'   This function enables users to integrate the results of their own BAMM analyses into the deepSTRAPP framework.
 #'   Alternatively, a full BAMM analysis starting from a time-calibrated phylogeny alone can be carried out within deepSTRAPP with [deepSTRAPP::prepare_diversification_data()].
 #'
 #' # Note on Bayesian Analysis of Macroevolutionary Mixtures (BAMM)
