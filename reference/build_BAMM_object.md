@@ -32,10 +32,10 @@ Those additional elements are used by
 [`plot_BAMM_rates()`](https://maeldore.github.io/deepSTRAPP/reference/plot_BAMM_rates.md)
 to display regime shift probabilities and locations.
 
-This function is meant to enable users to inject into the deepSTRAPP
-framework the results of their own BAMM analyses. Alternatively, a full
-BAMM analysis starting from a time-calibrated phylogeny alone can be
-carried out within deepSTRAPP with
+This function enables users to inject into the deepSTRAPP framework the
+results of their own BAMM analyses. Alternatively, a full BAMM analysis
+starting from a time-calibrated phylogeny alone can be carried out
+within deepSTRAPP with
 [`prepare_diversification_data()`](https://maeldore.github.io/deepSTRAPP/reference/prepare_diversification_data.md).
 
 ## Usage

@@ -366,12 +366,12 @@ plot(whale_densityMaps[[3]])
 
 ![](import_external_analyses_files/figure-html/import_cat_eval-1.png)
 
-    #> 2026-10-12 00:58:03.508017 - Posterior probability computed for edge n°100/152
-    #> 2026-10-12 00:58:04.160292 - Posterior probabilities computed for State = large - n°1/3
-    #> 2026-10-12 00:58:06.148475 - Posterior probability computed for edge n°100/152
-    #> 2026-10-12 00:58:06.804477 - Posterior probabilities computed for State = medium - n°2/3
-    #> 2026-10-12 00:58:08.794449 - Posterior probability computed for edge n°100/152
-    #> 2026-10-12 00:58:09.454067 - Posterior probabilities computed for State = small - n°3/3
+    #> 2026-10-14 09:46:14.549157 - Posterior probability computed for edge n°100/152
+    #> 2026-10-14 09:46:15.06935 - Posterior probabilities computed for State = large - n°1/3
+    #> 2026-10-14 09:46:16.640221 - Posterior probability computed for edge n°100/152
+    #> 2026-10-14 09:46:17.157798 - Posterior probabilities computed for State = medium - n°2/3
+    #> 2026-10-14 09:46:18.750177 - Posterior probability computed for edge n°100/152
+    #> 2026-10-14 09:46:19.277178 - Posterior probabilities computed for State = small - n°3/3
 
 ![](import_external_analyses_files/figure-html/import_cat_eval-2.png)
 

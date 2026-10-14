@@ -145,28 +145,28 @@ eel_cat_3lvl_data <- prepare_trait_data(tip_data = eel_data, phylo = eel.tree,
     return_model_selection_df = TRUE) 
 #> Warning: Entries in 'tip_data' were reordered to match 'phylo$tip.label.
 #> 
-#> 2026-10-12 00:49:38.502659 - Fit 5 evolutionary model(s): ER, SYM, ARD, meristic, matrix.
+#> 2026-10-14 09:39:37.534195 - Fit 5 evolutionary model(s): ER, SYM, ARD, meristic, matrix.
 #> 
 #> ------ ARD model ------ 
 #> 
 #> GEIGER-fitted comparative model of discrete data
 #>  fitted Q matrix:
 #>                     bite          kiss       suction
-#>     bite    -0.030277451  3.952755e-25  3.027745e-02
-#>     kiss     0.037502683 -3.750268e-02  1.331551e-21
-#>     suction  0.001238872  3.344767e-02 -3.468654e-02
+#>     bite    -0.030276943  5.305002e-33  3.027694e-02
+#>     kiss     0.037504169 -3.750417e-02  7.430502e-28
+#>     suction  0.001236936  3.345092e-02 -3.468786e-02
 #> 
 #>  model summary:
 #>  log-likelihood = -62.758696
 #>  AIC = 137.517393
-#>  AICc = 139.072949
+#>  AICc = 139.072948
 #>  free parameters = 6
 #> 
 #> Convergence diagnostics:
 #>  optimization iterations = 100
 #>  failed iterations = 0
-#>  number of iterations with same best fit = 2
-#>  frequency of best fit = 0.020
+#>  number of iterations with same best fit = 6
+#>  frequency of best fit = 0.060
 #> 
 #>  object summary:
 #>  'lik' -- likelihood function
@@ -206,9 +206,9 @@ eel_cat_3lvl_data <- prepare_trait_data(tip_data = eel_data, phylo = eel.tree,
 #> GEIGER-fitted comparative model of discrete data
 #>  fitted Q matrix:
 #>                     bite        kiss      suction
-#>     bite    -0.040962874  0.03174442  0.009218452
+#>     bite    -0.040962874  0.03174442  0.009218451
 #>     kiss     0.031744422 -0.05706395  0.025319531
-#>     suction  0.009218452  0.02531953 -0.034537983
+#>     suction  0.009218451  0.02531953 -0.034537983
 #> 
 #>  model summary:
 #>  log-likelihood = -63.442589
@@ -219,8 +219,8 @@ eel_cat_3lvl_data <- prepare_trait_data(tip_data = eel_data, phylo = eel.tree,
 #> Convergence diagnostics:
 #>  optimization iterations = 100
 #>  failed iterations = 0
-#>  number of iterations with same best fit = 35
-#>  frequency of best fit = 0.350
+#>  number of iterations with same best fit = 34
+#>  frequency of best fit = 0.340
 #> 
 #>  object summary:
 #>  'lik' -- likelihood function
@@ -246,8 +246,8 @@ eel_cat_3lvl_data <- prepare_trait_data(tip_data = eel_data, phylo = eel.tree,
 #> Convergence diagnostics:
 #>  optimization iterations = 100
 #>  failed iterations = 0
-#>  number of iterations with same best fit = 83
-#>  frequency of best fit = 0.830
+#>  number of iterations with same best fit = 81
+#>  frequency of best fit = 0.810
 #> 
 #>  object summary:
 #>  'lik' -- likelihood function
@@ -261,8 +261,8 @@ eel_cat_3lvl_data <- prepare_trait_data(tip_data = eel_data, phylo = eel.tree,
 #>  fitted Q matrix:
 #>                   bite        kiss     suction
 #>     bite    0.00000000  0.00000000  0.00000000
-#>     kiss    0.02464787 -0.06273437  0.03808651
-#>     suction 0.00000000  0.03808651 -0.03808651
+#>     kiss    0.02464789 -0.06273441  0.03808652
+#>     suction 0.00000000  0.03808652 -0.03808652
 #> 
 #>  model summary:
 #>  log-likelihood = -65.718012
@@ -273,8 +273,8 @@ eel_cat_3lvl_data <- prepare_trait_data(tip_data = eel_data, phylo = eel.tree,
 #> Convergence diagnostics:
 #>  optimization iterations = 100
 #>  failed iterations = 0
-#>  number of iterations with same best fit = 47
-#>  frequency of best fit = 0.470
+#>  number of iterations with same best fit = 41
+#>  frequency of best fit = 0.410
 #> 
 #>  object summary:
 #>  'lik' -- likelihood function
@@ -282,7 +282,7 @@ eel_cat_3lvl_data <- prepare_trait_data(tip_data = eel_data, phylo = eel.tree,
 #>  'res' -- optimization iteration summary
 #>  'opt' -- maximum likelihood parameter estimates
 #> 
-#> 2026-10-12 00:50:19.652753 - Compare model fits.
+#> 2026-10-14 09:40:14.879262 - Compare model fits.
 #> 
 #>             model      logL k      AIC     AICc delta_AICc Akaike_weights rank
 #> ER             ER -63.78440 1 129.5688 129.6366   0.000000           62.3    1
@@ -290,7 +290,7 @@ eel_cat_3lvl_data <- prepare_trait_data(tip_data = eel_data, phylo = eel.tree,
 #> ARD           ARD -62.75870 6 137.5174 139.0729   9.436348            0.6    5
 #> meristic meristic -63.66754 2 131.3351 131.5420   1.905384           24.0    2
 #> matrix     matrix -65.71801 2 135.4360 135.6429   6.006319            3.1    4
-#> 2026-10-12 00:50:19.655333 - Run simulations for stochastic mapping.
+#> 2026-10-14 09:40:14.880587 - Run simulations for stochastic mapping.
 #> 
 #> make.simmap is sampling character histories conditioned on
 #> the transition matrix
@@ -306,17 +306,17 @@ eel_cat_3lvl_data <- prepare_trait_data(tip_data = eel_data, phylo = eel.tree,
 #>      bite      kiss   suction 
 #> 0.3333333 0.3333333 0.3333333 
 #> Done.
-#> 2026-10-12 00:51:09.560157 - Extract ACE as posterior sampling from stochastic mapping.
-#> 2026-10-12 00:51:11.451098 - Create densityMaps by summarizing simulations of evolutionary history (simmaps).
+#> 2026-10-14 09:40:50.687721 - Extract ACE as posterior sampling from stochastic mapping.
+#> 2026-10-14 09:40:52.218773 - Create densityMaps by summarizing simulations of evolutionary history (simmaps).
 #> 
-#> 2026-10-12 00:51:31.764143 - Posterior probability computed for edge n°100/120
-#> 2026-10-12 00:51:38.293937 - Posterior probabilities computed for State = bite - n°1/3
-#> 2026-10-12 00:51:58.142979 - Posterior probability computed for edge n°100/120
-#> 2026-10-12 00:52:04.826907 - Posterior probabilities computed for State = kiss - n°2/3
-#> 2026-10-12 00:52:25.350309 - Posterior probability computed for edge n°100/120
-#> 2026-10-12 00:52:31.898131 - Posterior probabilities computed for State = suction - n°3/3
+#> 2026-10-14 09:41:08.733108 - Posterior probability computed for edge n°100/120
+#> 2026-10-14 09:41:13.70059 - Posterior probabilities computed for State = bite - n°1/3
+#> 2026-10-14 09:41:29.368419 - Posterior probability computed for edge n°100/120
+#> 2026-10-14 09:41:34.635903 - Posterior probabilities computed for State = kiss - n°2/3
+#> 2026-10-14 09:41:50.662111 - Posterior probability computed for edge n°100/120
+#> 2026-10-14 09:41:56.528426 - Posterior probabilities computed for State = suction - n°3/3
 #> 
-#> 2026-10-12 00:52:31.898359 - Plot a unique densityMap with for all states overlaid.
+#> 2026-10-14 09:41:56.528632 - Plot a unique densityMap with for all states overlaid.
 
 
 # Load directly output
