@@ -68,7 +68,7 @@ Ponerinae_cat_3lvl_tip_data <- Ponerinae_cat_3lvl_tip_data[match(x = Ponerinae_t
 pdf(file = "./Ponerinae_cat_3lvl_data_old_calib_on_phylo.pdf", width = 20, height = 150)
 
 # Set plotting parameters
-old_par <- par(no.readonly = TRUE)
+old_par <- par()[c("mar", "oma")]
 par(mar = c(0.1,0.1,0.1,0.1), oma = c(0,0,0,0)) # bltr
 
 # Graph presence/absence using plotTree.datamatrix
