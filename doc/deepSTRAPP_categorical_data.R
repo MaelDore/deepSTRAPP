@@ -71,7 +71,7 @@ knitr::opts_chunk$set(
 # pdf(file = "./Ponerinae_cat_3lvl_data_old_calib_on_phylo.pdf", width = 20, height = 150)
 # 
 # # Set plotting parameters
-# old_par <- par(no.readonly = TRUE)
+# old_par <- par()[c("mar", "oma")]
 # par(mar = c(0.1,0.1,0.1,0.1), oma = c(0,0,0,0)) # bltr
 # 
 # # Graph presence/absence using plotTree.datamatrix
@@ -754,7 +754,7 @@ knitr::include_graphics("figures/1.2_deepSTRAPP_categorical_3lvl_data_4.5_plot_u
 # 
 
 ## ----plot_BAMM_rates_cat_3lvl_eval_dev, eval = is_dev_version(), echo = FALSE----
-# old_par <- par(no.readonly = TRUE)
+# old_par <- par()["mfrow"]
 # par(mfrow = c(1, 2))
 # 
 # # Plot diversification rates on initial phylogeny (t = 0)

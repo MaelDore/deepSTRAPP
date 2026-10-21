@@ -578,7 +578,7 @@ knitr::include_graphics("figures/1.1_deepSTRAPP_continuous_data_4.5_plot_updated
 # 
 
 ## ----plot_BAMM_rates_cont_eval_dev, eval = is_dev_version(), echo = FALSE-----
-# old_par <- par(no.readonly = TRUE)
+# old_par <- par()["mfrow"]
 # par(mfrow = c(1, 2))
 # 
 # # Plot diversification rates on initial phylogeny (t = 0)

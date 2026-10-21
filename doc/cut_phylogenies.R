@@ -97,7 +97,7 @@ cut_tree_with_tip_labels <- cut_phylo_for_focal_time(
   keep_tip_labels = TRUE)
 
 ## Show tip labels
-old_par <- par(no.readonly = TRUE)
+old_par <- par()["mfrow"]
 par(mfrow = c(1, 2))
 
 # Plot internal node labels on initial tree with cut-off
@@ -134,7 +134,7 @@ par(old_par)
 
 ## ----cut_phylogeny_eval_2, fig.width = 15, fig.height = 10, out.width = "100%", eval = TRUE, echo = FALSE----
 ## Show edge labels
-old_par <- par(no.readonly = TRUE)
+old_par <- par()["mfrow"]
 par(mfrow = c(1, 2))
 
 # Plot edge labels on initial tree with cut-off
@@ -249,7 +249,7 @@ updated_contMap <- cut_contMap_for_focal_time(
    keep_tip_labels = TRUE)
 
 ## Plot with tip.labels
-old_par <- par(no.readonly = TRUE)
+old_par <- par()["mfrow"]
 par(mfrow = c(1, 2))
 
 # Plot node labels on initial stochastic map with cut-off
@@ -273,7 +273,7 @@ updated_contMap <- cut_contMap_for_focal_time(
    keep_tip_labels = FALSE)
 
 ## Plot without tip.labels
-old_par <- par(no.readonly = TRUE)
+old_par <- par()["mfrow"]
 par(mfrow = c(1, 2))
 
 # Plot node labels on initial stochastic map with cut-off
@@ -419,7 +419,7 @@ updated_mammals_densityMap_small <- cut_densityMap_for_focal_time(
      keep_tip_labels = TRUE)
 
 ## Plot with tip.labels
-old_par <- par(no.readonly = TRUE)
+old_par <- par()["mfrow"]
 par(mfrow = c(1, 2))
 
 # Plot node labels on initial densityMap with cut-off
@@ -473,7 +473,7 @@ updated_mammals_densityMaps <- cut_densityMaps_for_focal_time(
      keep_tip_labels = TRUE)
 
 ## Plot with tip.labels
-old_par <- par(no.readonly = TRUE)
+old_par <- par()["mfrow"]
 par(mfrow = c(1, 2))
 
 # Plot node labels on initial stochastic map with cut-off
@@ -532,7 +532,7 @@ updated_mammals_simmap_1 <- cut_simmap_for_focal_time(
      keep_tip_labels = TRUE)
 
 ## Plot with tip.labels
-old_par <- par(no.readonly = TRUE)
+old_par <- par()["mfrow"]
 par(mfrow = c(1, 2))
 
 # Plot node labels on initial stochastic map with cut-off
@@ -650,7 +650,7 @@ root_age <- max(phytools::nodeHeights(whale_BAMM_object)[,2])
 # Remove temporary "phylo" class
 class(whale_BAMM_object) <- setdiff(class(whale_BAMM_object), "phylo")
 
-old_par <- par(no.readonly = TRUE)
+old_par <- par()["mfrow"]
 par(mfrow = c(1, 2))
 
 # Plot initial BAMM_object for t = 0 My
