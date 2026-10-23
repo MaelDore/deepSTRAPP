@@ -50,7 +50,7 @@ file.copy(from = "./for_CRAN/datasets_doc_for_CRAN.R", to = "./R/datasets_doc_fo
 # Rerun documentation
 devtools::document()
 
-## 1.5/ Add all datasets in the reference index for the pkgdown website
+## 1.5/ Remove missing datasets from the reference index for the pkgdown website
 unlink(x = "./_pkgdown.yml", force = T)
 file.copy(from = "./for_CRAN/_pkgdown_for_CRAN.yml", to = "./_pkgdown.yml", overwrite = T)
 
@@ -102,9 +102,9 @@ file.copy(from = "./for_CRAN/datasets_doc.R", to = "./R/datasets_doc.R", overwri
 # Rerun documentation
 devtools::document()
 
-## 2.5/ Remove missing datasets from the reference index for the pkgdown website
+## 2.5/ Add all datasets in the reference index for the pkgdown website
 unlink(x = "./_pkgdown.yml", force = T)
-file.copy(from = "./for_CRAN/_pkgdown.yml", to = "./R/_pkgdown.yml", overwrite = T)
+file.copy(from = "./for_CRAN/_pkgdown.yml", to = "./_pkgdown.yml", overwrite = T)
 
 ## 2.6/ Remove pre-rendered visual outputs to the vignette folder
 prerendered_vignette_outputs_path <- list.files(path = "./for_CRAN/Figures_for_vignettes_Low_resolution/", pattern = ".PNG")
@@ -114,13 +114,13 @@ unlink(x = paste0("./vignettes/figures/",prerendered_vignette_outputs_path), for
 unlink(x = "./DESCRIPTION", force = T)
 file.copy(from = "./for_CRAN/DESCRIPTION", to = "./DESCRIPTION", overwrite = T)
 
-## 2.9/ Replace pkgdown.yaml to skip installing Suggested dependencies during the Github actions for the website deployment
+## 2.8/ Replace pkgdown.yaml to skip installing Suggested dependencies during the Github actions for the website deployment
 unlink(x = "./.github/workflows/pkgdown.yaml", force = T)
 file.copy(from = "./for_CRAN/.github/workflows/pkgdown.yaml", to = "./.github/workflows/pkgdown.yaml", overwrite = T)
 
-## 2.10/ Turn to the next development version
+## 2.9/ Turn to the next development version
 usethis::use_dev_version()
 
-## 2.11/ Rerun check once done
+## 2.10/ Rerun check once done
 devtools::check()
 
