@@ -70,12 +70,22 @@ if (deepSTRAPP::is_dev_version())
  eel_tip_data <- stats::setNames(eel.data$Max_TL_cm,
                                  rownames(eel.data))
 
+ # ----- Infer evolutionary rate ----- #
+
+ # Use phytools::anc.ML() to extract the evolutionary rate under a BM
+ BM_fit <- phytools::anc.ML(tree = eel.tree,
+                            x = eel_tip_data,
+                            model = "BM")
+ # Extract evolutionary rate = sigma²
+ sigma2 <- BM_fit$sig2
+
  # ----- Run continuous stochastic mapping ----- #
 
  \donttest{ # (May take several seconds to run)
  eel_contsimmap <- contsimmap::make.contsimmap(
     tree = eel.tree,
     trait.data = eel_tip_data,
+    Xsig2 = list(sigma2), # Evolutionary rate
     nsim = 100, res = 100,
     verbose = TRUE)
 
