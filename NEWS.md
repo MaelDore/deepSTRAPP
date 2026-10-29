@@ -1,8 +1,8 @@
-# deepSTRAPP 1.1.0.9000 (development version available on GitHub)
+# deepSTRAPP 1.1.1.9000 (development version available on GitHub)
 
 * Include all deepSTRAPP datasets that are to heavy to be included in the CRAN release.
 
-# deepSTRAPP 1.1.1 (Not released yet)
+# deepSTRAPP 1.1.1
 
 * `convert_BSM_to_simmap()` and `convert_BSMs_to_simmaps()` now repair paths to phylo and tip ranges objects used in the example `eel_biogeo_data` dataset.
 
