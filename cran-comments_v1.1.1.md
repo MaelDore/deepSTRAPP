@@ -13,6 +13,9 @@ Availability using Additional_repositories specification:
   BioGeoBEARS   yes   https://maeldore.github.io/drat
   contsimmap    yes   https://maeldore.github.io/drat
   
+> Packages suggested but not available for checking:
+    'BioGeoBEARS', 'contsimmap'  
+  
   Core features of deepSTRAPP relies on the BioGeoBEARS and contsimmap packages, which are not hosted on CRAN 
   but are well-established and actively maintained R packages widely used in macroevolutionary research.
   These packages are indicated as Suggests and conditions are implemented to check for its presence when running functions that rely on them,
@@ -20,14 +23,6 @@ Availability using Additional_repositories specification:
   
   These suggested dependencies were already present in deepSTRAPP v1.1.0.
 
-> Found the following (possibly) invalid URLs:
-  URL: https://support.posit.co/hc/en-us/articles/200486498-Package-Development-Prerequisites
-  
-  This URL is valid, but the server blocks automated requests.
-  Please ignore this warning.
-  
-  This note was already present in deepSTRAPP v1.1.0.
-  
 * Note 2:
 
 > checking installed package size ... NOTE
