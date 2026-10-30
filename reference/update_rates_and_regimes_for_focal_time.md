@@ -338,16 +338,16 @@ whale_BAMM_object_5My <- update_rates_and_regimes_for_focal_time(
    update_all_elements = TRUE,
    keep_tip_labels = TRUE,
    verbose = TRUE)
-#> 2026-10-28 08:51:47.972453 - Tip regimes/rates updated for BAMM posterior sample n°100/1000
-#> 2026-10-28 08:51:48.010271 - Tip regimes/rates updated for BAMM posterior sample n°200/1000
-#> 2026-10-28 08:51:48.035418 - Tip regimes/rates updated for BAMM posterior sample n°300/1000
-#> 2026-10-28 08:51:48.059543 - Tip regimes/rates updated for BAMM posterior sample n°400/1000
-#> 2026-10-28 08:51:48.083608 - Tip regimes/rates updated for BAMM posterior sample n°500/1000
-#> 2026-10-28 08:51:48.125652 - Tip regimes/rates updated for BAMM posterior sample n°600/1000
-#> 2026-10-28 08:51:48.15576 - Tip regimes/rates updated for BAMM posterior sample n°700/1000
-#> 2026-10-28 08:51:48.181731 - Tip regimes/rates updated for BAMM posterior sample n°800/1000
-#> 2026-10-28 08:51:48.204468 - Tip regimes/rates updated for BAMM posterior sample n°900/1000
-#> 2026-10-28 08:51:48.228462 - Tip regimes/rates updated for BAMM posterior sample n°1000/1000
+#> 2026-10-30 01:15:11.876358 - Tip regimes/rates updated for BAMM posterior sample n°100/1000
+#> 2026-10-30 01:15:11.90561 - Tip regimes/rates updated for BAMM posterior sample n°200/1000
+#> 2026-10-30 01:15:11.931165 - Tip regimes/rates updated for BAMM posterior sample n°300/1000
+#> 2026-10-30 01:15:11.955199 - Tip regimes/rates updated for BAMM posterior sample n°400/1000
+#> 2026-10-30 01:15:11.979502 - Tip regimes/rates updated for BAMM posterior sample n°500/1000
+#> 2026-10-30 01:15:12.02009 - Tip regimes/rates updated for BAMM posterior sample n°600/1000
+#> 2026-10-30 01:15:12.047403 - Tip regimes/rates updated for BAMM posterior sample n°700/1000
+#> 2026-10-30 01:15:12.071794 - Tip regimes/rates updated for BAMM posterior sample n°800/1000
+#> 2026-10-30 01:15:12.095931 - Tip regimes/rates updated for BAMM posterior sample n°900/1000
+#> 2026-10-30 01:15:12.121217 - Tip regimes/rates updated for BAMM posterior sample n°1000/1000
 
 # Add "phylo" class to be compatible with phytools::nodeHeights()
 class(whale_BAMM_object) <- unique(c(class(whale_BAMM_object), "phylo"))

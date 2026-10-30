@@ -1,11 +1,13 @@
 # Changelog
 
-## deepSTRAPP 1.1.0.9000 (development version available on GitHub)
+## deepSTRAPP 1.1.1.9000 (development version available on GitHub)
 
 - Include all deepSTRAPP datasets that are to heavy to be included in
   the CRAN release.
 
-## deepSTRAPP 1.1.1 (Not released yet)
+## deepSTRAPP 1.1.1
+
+CRAN release: 2026-10-29
 
 - [`convert_BSM_to_simmap()`](https://maeldore.github.io/deepSTRAPP/reference/convert_BSM_to_simmap.md)
   and

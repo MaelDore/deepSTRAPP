@@ -401,23 +401,23 @@ whale_BAMM_object_pruned <- prune_BAMM_object(
    BAMM_object = whale_BAMM_object,
    tips_to_prune = tips_without_data,
    verbose = TRUE)
-#> 2026-10-28 08:51:31.507952 - Pruning the phylogeny: 30 tip(s) removed, 57 tip(s) retained.
-#> 2026-10-28 08:51:31.511577 - Pruned phylogeny built. Root shifted by 0 time units. 23 branch(es) resulting from merging.
-#> 2026-10-28 08:51:31.511675 - Updating BAMM elements across 1000 posterior sample(s).
-#> 2026-10-28 08:51:31.564399 - BAMM elements pruned for posterior sample n°100/1000
-#> 2026-10-28 08:51:31.615062 - BAMM elements pruned for posterior sample n°200/1000
-#> 2026-10-28 08:51:31.666198 - BAMM elements pruned for posterior sample n°300/1000
-#> 2026-10-28 08:51:31.747671 - BAMM elements pruned for posterior sample n°400/1000
-#> 2026-10-28 08:51:31.798588 - BAMM elements pruned for posterior sample n°500/1000
-#> 2026-10-28 08:51:31.877719 - BAMM elements pruned for posterior sample n°600/1000
-#> 2026-10-28 08:51:31.932607 - BAMM elements pruned for posterior sample n°700/1000
-#> 2026-10-28 08:51:31.983344 - BAMM elements pruned for posterior sample n°800/1000
-#> 2026-10-28 08:51:32.033987 - BAMM elements pruned for posterior sample n°900/1000
-#> 2026-10-28 08:51:32.087364 - BAMM elements pruned for posterior sample n°1000/1000
-#> 2026-10-28 08:51:32.08757 - Recomputing the Marginal Shift Probability (MSP) tree on the pruned phylogeny.
-#> 2026-10-28 08:51:32.095087 - Pruning the Maximum A Posteriori probability (MAP) BAMM object.
-#> 2026-10-28 08:51:32.096017 - Pruning the Maximum Shift Credibility (MSC) BAMM object.
-#> 2026-10-28 08:51:32.096798 - Pruning of the BAMM object completed.
+#> 2026-10-30 01:14:54.853603 - Pruning the phylogeny: 30 tip(s) removed, 57 tip(s) retained.
+#> 2026-10-30 01:14:54.8572 - Pruned phylogeny built. Root shifted by 0 time units. 23 branch(es) resulting from merging.
+#> 2026-10-30 01:14:54.857294 - Updating BAMM elements across 1000 posterior sample(s).
+#> 2026-10-30 01:14:54.9111 - BAMM elements pruned for posterior sample n°100/1000
+#> 2026-10-30 01:14:54.964072 - BAMM elements pruned for posterior sample n°200/1000
+#> 2026-10-30 01:14:55.016491 - BAMM elements pruned for posterior sample n°300/1000
+#> 2026-10-30 01:14:55.069314 - BAMM elements pruned for posterior sample n°400/1000
+#> 2026-10-30 01:14:55.121271 - BAMM elements pruned for posterior sample n°500/1000
+#> 2026-10-30 01:14:55.202357 - BAMM elements pruned for posterior sample n°600/1000
+#> 2026-10-30 01:14:55.287318 - BAMM elements pruned for posterior sample n°700/1000
+#> 2026-10-30 01:14:55.35826 - BAMM elements pruned for posterior sample n°800/1000
+#> 2026-10-30 01:14:55.412399 - BAMM elements pruned for posterior sample n°900/1000
+#> 2026-10-30 01:14:55.470209 - BAMM elements pruned for posterior sample n°1000/1000
+#> 2026-10-30 01:14:55.470385 - Recomputing the Marginal Shift Probability (MSP) tree on the pruned phylogeny.
+#> 2026-10-30 01:14:55.478261 - Pruning the Maximum A Posteriori probability (MAP) BAMM object.
+#> 2026-10-30 01:14:55.479192 - Pruning the Maximum Shift Credibility (MSC) BAMM object.
+#> 2026-10-30 01:14:55.479987 - Pruning of the BAMM object completed.
 
 # Check structure of the pruned BAMM_object
 str(whale_BAMM_object_pruned, 1)
@@ -562,21 +562,21 @@ whale_BAMM_object_recomputed <- prune_BAMM_object(
    MRCA_node = 103,
    recompute_shift_configurations = TRUE,
    verbose = TRUE)
-#> 2026-10-28 08:51:34.582307 - Pruning the phylogeny: 15 tip(s) removed, 72 tip(s) retained.
-#> 2026-10-28 08:51:34.585498 - Pruned phylogeny built. Root shifted by 2.009 time units. 0 branch(es) resulting from merging.
-#> 2026-10-28 08:51:34.585603 - Updating BAMM elements across 1000 posterior sample(s).
-#> 2026-10-28 08:51:34.674694 - BAMM elements pruned for posterior sample n°100/1000
-#> 2026-10-28 08:51:34.728465 - BAMM elements pruned for posterior sample n°200/1000
-#> 2026-10-28 08:51:34.782084 - BAMM elements pruned for posterior sample n°300/1000
-#> 2026-10-28 08:51:34.83573 - BAMM elements pruned for posterior sample n°400/1000
-#> 2026-10-28 08:51:34.889087 - BAMM elements pruned for posterior sample n°500/1000
-#> 2026-10-28 08:51:34.963568 - BAMM elements pruned for posterior sample n°600/1000
-#> 2026-10-28 08:51:35.019682 - BAMM elements pruned for posterior sample n°700/1000
-#> 2026-10-28 08:51:35.073463 - BAMM elements pruned for posterior sample n°800/1000
-#> 2026-10-28 08:51:35.127012 - BAMM elements pruned for posterior sample n°900/1000
-#> 2026-10-28 08:51:35.183214 - BAMM elements pruned for posterior sample n°1000/1000
-#> 2026-10-28 08:51:35.183406 - Recomputing the Marginal Shift Probability (MSP) tree on the pruned phylogeny.
-#> 2026-10-28 08:51:35.191112 - Detecting the Maximum A Posteriori probability (MAP) configurations on the pruned phylogeny.
+#> 2026-10-30 01:14:58.082161 - Pruning the phylogeny: 15 tip(s) removed, 72 tip(s) retained.
+#> 2026-10-30 01:14:58.085226 - Pruned phylogeny built. Root shifted by 2.009 time units. 0 branch(es) resulting from merging.
+#> 2026-10-30 01:14:58.085322 - Updating BAMM elements across 1000 posterior sample(s).
+#> 2026-10-30 01:14:58.140986 - BAMM elements pruned for posterior sample n°100/1000
+#> 2026-10-30 01:14:58.196196 - BAMM elements pruned for posterior sample n°200/1000
+#> 2026-10-30 01:14:58.251083 - BAMM elements pruned for posterior sample n°300/1000
+#> 2026-10-30 01:14:58.351832 - BAMM elements pruned for posterior sample n°400/1000
+#> 2026-10-30 01:14:58.408637 - BAMM elements pruned for posterior sample n°500/1000
+#> 2026-10-30 01:14:58.488447 - BAMM elements pruned for posterior sample n°600/1000
+#> 2026-10-30 01:14:58.546527 - BAMM elements pruned for posterior sample n°700/1000
+#> 2026-10-30 01:14:58.602222 - BAMM elements pruned for posterior sample n°800/1000
+#> 2026-10-30 01:14:58.65832 - BAMM elements pruned for posterior sample n°900/1000
+#> 2026-10-30 01:14:58.71591 - BAMM elements pruned for posterior sample n°1000/1000
+#> 2026-10-30 01:14:58.71612 - Recomputing the Marginal Shift Probability (MSP) tree on the pruned phylogeny.
+#> 2026-10-30 01:14:58.724474 - Detecting the Maximum A Posteriori probability (MAP) configurations on the pruned phylogeny.
 #> Processing event data from data.frame
 #> 
 #> Discarded as burnin: GENERATIONS <  0
@@ -586,7 +586,7 @@ whale_BAMM_object_recomputed <- prune_BAMM_object(
 #> 
 #> Done with recursive sequence
 #> 
-#> 2026-10-28 08:51:35.516176 - Detecting the Maximum Shift Credibility (MSC) configurations on the pruned phylogeny.
+#> 2026-10-30 01:14:59.073957 - Detecting the Maximum Shift Credibility (MSC) configurations on the pruned phylogeny.
 #> Processing event data from data.frame
 #> 
 #> Discarded as burnin: GENERATIONS <  0
@@ -596,7 +596,7 @@ whale_BAMM_object_recomputed <- prune_BAMM_object(
 #> 
 #> Done with recursive sequence
 #> 
-#> 2026-10-28 08:51:35.648294 - Pruning of the BAMM object completed.
+#> 2026-10-30 01:14:59.22299 - Pruning of the BAMM object completed.
 
 # Compare the number of posterior samples supporting the MAP configuration
 length(whale_BAMM_object$MAP_indices)

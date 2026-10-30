@@ -71,9 +71,6 @@ eel_data <- stats::setNames(eel.data$Max_TL_cm,
 BM_fit <- geiger::fitContinuous(phy = eel.tree, dat = eel_data, model = "BM")
 # Fit EB model
 EB_fit <- geiger::fitContinuous(phy = eel.tree, dat = eel_data, model = "EB")
-#> Warning: 
-#> Parameter estimates appear at bounds:
-#>  a
 # Fit OU model
 OU_fit <- geiger::fitContinuous(phy = eel.tree, dat = eel_data, model = "OU")
 
@@ -103,7 +100,7 @@ str(model_comparison_output, max.level = 2)
 #>   .. ..- attr(*, "class")= chr [1:2] "bm" "function"
 #>   .. ..- attr(*, "model")= chr "OU"
 #>   ..$ bnd:'data.frame':  2 obs. of  2 variables:
-#>   ..$ res: num [1:100, 1:4] 7.12e-218 7.12e-218 7.12e-218 7.12e-218 5.09e-181 ...
+#>   ..$ res: num [1:100, 1:4] 1.74e-217 7.12e-218 4.34e-02 4.49e-115 6.19e-23 ...
 #>   .. ..- attr(*, "dimnames")=List of 2
 #>   ..$ opt:List of 8
 #>   ..- attr(*, "class")= chr [1:2] "gfit" "list"
@@ -120,8 +117,8 @@ print(model_comparison_output$best_model_fit)
 #> GEIGER-fitted comparative model of continuous data
 #>  fitted ‘OU’ model parameters:
 #>  alpha = 0.043394
-#>  sigsq = 278.053993
-#>  z0 = 92.068751
+#>  sigsq = 278.054730
+#>  z0 = 92.068628
 #> 
 #>  model summary:
 #>  log-likelihood = -329.253814
