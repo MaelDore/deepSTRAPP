@@ -1,11 +1,11 @@
 bibentry(
   bibtype  = "Article",
-  title    = "deepSTRAPP: Testing for differences in diversification rates over deep evolutionary time",
+  title    = "deepSTRAPP: An R package to assess trait-and range-dependent diversification dynamics over time",
   author   = "Maël Doré, Bonnie B. Blaimer",
-  journal  = "TBA",
+  journal  = "Methods in Ecology and Evolution",
   year     = 2026,
   volume   = "TBA",
   number   = "TBA",
   pages    = "TBA",
-  doi      = ""
+  doi      = "https://doi.org/10.1111/2041-210x.70451"
 )
