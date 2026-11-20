@@ -4,8 +4,8 @@ bibentry(
   author   = "Maël Doré, Bonnie B. Blaimer",
   journal  = "Methods in Ecology and Evolution",
   year     = 2026,
-  volume   = "TBA",
-  number   = "TBA",
-  pages    = "TBA",
+  volume   = "00",
+  number   = "",
+  pages    = "1-8",
   doi      = "https://doi.org/10.1111/2041-210x.70451"
 )
