@@ -67,8 +67,8 @@ unlink(x = "./.github/workflows/pkgdown.yaml", force = T)
 file.copy(from = "./for_CRAN/.github/workflows/pkgdown_for_CRAN.yaml", to = "./.github/workflows/pkgdown.yaml", overwrite = T)
 
 ## 1.9/ Increment version number
-usethis::use_version(which = "minor") # Increase as minor update  1.X.0 when introducing new features that are compatible with previous usages
-usethis::use_version(which = "major") # Increase as major update  X.0.0 when introducing changes that are not backward compatible
+# usethis::use_version(which = "minor") # Increase as minor update  1.X.0 when introducing new features that are compatible with previous usages
+# usethis::use_version(which = "major") # Increase as major update  X.0.0 when introducing changes that are not backward compatible
 
 ## 1.10/ Rerun check once done
 # Devtools check
@@ -119,7 +119,7 @@ unlink(x = "./.github/workflows/pkgdown.yaml", force = T)
 file.copy(from = "./for_CRAN/.github/workflows/pkgdown.yaml", to = "./.github/workflows/pkgdown.yaml", overwrite = T)
 
 ## 2.9/ Turn to the next development version
-usethis::use_dev_version()
+# usethis::use_dev_version()
 
 ## 2.10/ Rerun check once done
 devtools::check()
