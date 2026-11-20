@@ -151,7 +151,6 @@ reference:
   contents:
   - Ponerinae_trait_cont_tip_data_10My
   - eel_cat_3lvl_data
-  - Ponerinae_cont_data_old_calib
   - Ponerinae_cat_2lvl_data_old_calib
   - Ponerinae_cat_3lvl_data_old_calib
   - eel_biogeo_data
@@ -160,13 +159,3 @@ reference:
   contents:
   - BAMM_template_diversification
   - whale_BAMM_object
-  - Ponerinae_BAMM_object
-  - Ponerinae_BAMM_object_old_calib
-  - Ponerinae_BAMM_object_10My
-- subtitle: deepSTRAPP data
-  contents:
-  - Ponerinae_deepSTRAPP_cont_old_calib_0_40
-  - Ponerinae_deepSTRAPP_cat_2lvl_old_calib_0_40
-  - Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40
-  - Ponerinae_deepSTRAPP_biogeo_old_calib_0_40
-
