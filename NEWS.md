@@ -8,9 +8,6 @@
 
 # deepSTRAPP 1.1.0
 
-* Handle uncertainty in trait estimates. See the 'uncertainty_strategy' argument in run_deepSTRAPP_*() functions.
-* Add functions to load results from external BAMM analyses. See the dedicated vignette/tutorial "import_external_analyses".
-
 ## Accounting for uncertainty in ancestral trait estimates
 
 * STRAPP tests can now be run across a posterior sample of trait histories rather than a single
