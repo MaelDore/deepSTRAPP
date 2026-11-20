@@ -174,9 +174,9 @@ installed independently.
 
 **Reference:**
 
-> Rabosky, DL. Automatic detection of key innovations, rate shifts, and
-> diversity-dependence on phylogenetic trees. *PLoS One* 9, e89543
-> (2014). DOI: <https://doi.org/10.1371/journal.pone.0089543>  
+> Rabosky, DL. (2014). Automatic detection of key innovations, rate
+> shifts, and diversity-dependence on phylogenetic trees. *PLoS One*, 9,
+> e89543. DOI: <https://doi.org/10.1371/journal.pone.0089543>  
 
 - The R package **BioGeoBEARS** is used to infer ancestral ranges on
   time-calibrated phylogenies. It is needed by deepSTRAPP to perform the
@@ -395,8 +395,10 @@ You can also [send me an e-mail](mailto:mael.dore@gmail.com).
   
 For any use of **deepSTRAPP**:
 
-> Doré, M., & Blaimer, B. B., deepSTRAPP: Testing for differences in
-> diversification rates over deep evolutionary time. (DOI TBA)
+> Doré, M., & Blaimer, B. B. (2026). deepSTRAPP: An R package to assess
+> trait-and range-dependent diversification dynamics over time. *Methods
+> in Ecology and Evolution*, 00:1-8.
+> <https://doi.org/10.1111/2041-210x.70451>.
 
 As **deepSTRAPP** relies strongly on functions designed for the
 [phytools R package](https://blog.phytools.org/), it is good practice to
@@ -411,9 +413,9 @@ evolution embedded in the function *prepare_trait_data()*, you should
 cite the [R package geiger](https://github.com/mwpennell/geiger-v2):
 
 > Pennell, M.W., J.M. Eastman, G.J. Slater, J.W. Brown, J.C. Uyeda, R.G.
-> FitzJohn, M.E. Alfaro, and L.J. Harmon. 2014. geiger v2.0: an expanded
-> suite of methods for fitting macroevolutionary models to phylogenetic
-> trees. *Bioinformatics* 30:2216-2218.
+> FitzJohn, M.E. Alfaro, and L.J. Harmon. (2014). geiger v2.0: an
+> expanded suite of methods for fitting macroevolutionary models to
+> phylogenetic trees. *Bioinformatics*, 30:2216-2218.
 > <https://doi.org/10.1093/bioinformatics/btu181>.
 
 If you specifically use the function *prepare_trait_data()* to produce

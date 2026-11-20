@@ -151,16 +151,16 @@ mammals_cat_data <- prepare_trait_data(tip_data = mammals_data, phylo = mammals_
                                        return_simmaps = TRUE,
                                        plot_map = FALSE)
 #> 
-#> 2026-10-30 01:07:18.004798 - Fit 1 evolutionary model(s): ER.
+#> 2026-11-20 01:03:21.733979 - Fit 1 evolutionary model(s): ER.
 #> 
 #> ------ ER model ------ 
 #> 
 #> GEIGER-fitted comparative model of discrete data
 #>  fitted Q matrix:
 #>                   large       medium        small
-#>     large  -0.006199429  0.003099714  0.003099714
-#>     medium  0.003099714 -0.006199429  0.003099714
-#>     small   0.003099714  0.003099714 -0.006199429
+#>     large  -0.006199438  0.003099719  0.003099719
+#>     medium  0.003099719 -0.006199438  0.003099719
+#>     small   0.003099719  0.003099719 -0.006199438
 #> 
 #>  model summary:
 #>  log-likelihood = -152.749035
@@ -180,44 +180,44 @@ mammals_cat_data <- prepare_trait_data(tip_data = mammals_data, phylo = mammals_
 #>  'res' -- optimization iteration summary
 #>  'opt' -- maximum likelihood parameter estimates
 #> 
-#> 2026-10-30 01:07:19.556094 - Compare model fits.
+#> 2026-11-20 01:03:23.602387 - Compare model fits.
 #> 
 #>    model     logL k      AIC     AICc delta_AICc Akaike_weights rank
 #> ER    ER -152.749 1 307.4981 307.5172          0            100    1
-#> 2026-10-30 01:07:19.558018 - Run simulations for stochastic mapping.
+#> 2026-11-20 01:03:23.603674 - Run simulations for stochastic mapping.
 #> 
 #> make.simmap is sampling character histories conditioned on
 #> the transition matrix
 #> 
 #> Q =
 #>               large       medium        small
-#> large  -0.006199429  0.003099714  0.003099714
-#> medium  0.003099714 -0.006199429  0.003099714
-#> small   0.003099714  0.003099714 -0.006199429
+#> large  -0.006199438  0.003099719  0.003099719
+#> medium  0.003099719 -0.006199438  0.003099719
+#> small   0.003099719  0.003099719 -0.006199438
 #> (specified by the user);
 #> and (mean) root node prior probabilities
 #> pi =
 #>     large    medium     small 
 #> 0.3333333 0.3333333 0.3333333 
 #> Done.
-#> 2026-10-30 01:07:36.489605 - Extract ACE as posterior sampling from stochastic mapping.
-#> 2026-10-30 01:07:37.057194 - Create densityMaps by summarizing simulations of evolutionary history (simmaps).
+#> 2026-11-20 01:03:33.374033 - Extract ACE as posterior sampling from stochastic mapping.
+#> 2026-11-20 01:03:33.681951 - Create densityMaps by summarizing simulations of evolutionary history (simmaps).
 #> 
-#> 2026-10-30 01:07:38.982259 - Posterior probability computed for edge n°100/420
-#> 2026-10-30 01:07:39.856672 - Posterior probability computed for edge n°200/420
-#> 2026-10-30 01:07:40.928292 - Posterior probability computed for edge n°300/420
-#> 2026-10-30 01:07:42.026046 - Posterior probability computed for edge n°400/420
-#> 2026-10-30 01:07:42.357943 - Posterior probabilities computed for State = large - n°1/3
-#> 2026-10-30 01:07:43.682103 - Posterior probability computed for edge n°100/420
-#> 2026-10-30 01:07:44.565895 - Posterior probability computed for edge n°200/420
-#> 2026-10-30 01:07:45.646167 - Posterior probability computed for edge n°300/420
-#> 2026-10-30 01:07:46.789706 - Posterior probability computed for edge n°400/420
-#> 2026-10-30 01:07:47.145082 - Posterior probabilities computed for State = medium - n°2/3
-#> 2026-10-30 01:07:48.496203 - Posterior probability computed for edge n°100/420
-#> 2026-10-30 01:07:49.369459 - Posterior probability computed for edge n°200/420
-#> 2026-10-30 01:07:50.457009 - Posterior probability computed for edge n°300/420
-#> 2026-10-30 01:07:51.622247 - Posterior probability computed for edge n°400/420
-#> 2026-10-30 01:07:51.976563 - Posterior probabilities computed for State = small - n°3/3
+#> 2026-11-20 01:03:34.656117 - Posterior probability computed for edge n°100/420
+#> 2026-11-20 01:03:35.279425 - Posterior probability computed for edge n°200/420
+#> 2026-11-20 01:03:36.059036 - Posterior probability computed for edge n°300/420
+#> 2026-11-20 01:03:36.834596 - Posterior probability computed for edge n°400/420
+#> 2026-11-20 01:03:37.024556 - Posterior probabilities computed for State = large - n°1/3
+#> 2026-11-20 01:03:37.983105 - Posterior probability computed for edge n°100/420
+#> 2026-11-20 01:03:38.595924 - Posterior probability computed for edge n°200/420
+#> 2026-11-20 01:03:39.355365 - Posterior probability computed for edge n°300/420
+#> 2026-11-20 01:03:40.149157 - Posterior probability computed for edge n°400/420
+#> 2026-11-20 01:03:40.353863 - Posterior probabilities computed for State = medium - n°2/3
+#> 2026-11-20 01:03:41.356995 - Posterior probability computed for edge n°100/420
+#> 2026-11-20 01:03:41.915821 - Posterior probability computed for edge n°200/420
+#> 2026-11-20 01:03:42.675094 - Posterior probability computed for edge n°300/420
+#> 2026-11-20 01:03:43.466462 - Posterior probability computed for edge n°400/420
+#> 2026-11-20 01:03:43.731959 - Posterior probabilities computed for State = small - n°3/3
 
 # Extract the simulated evolutionary histories (simmaps)
 mammals_simmaps <- mammals_cat_data$simmaps

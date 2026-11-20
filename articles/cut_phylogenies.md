@@ -244,9 +244,9 @@ title(main = "Past densityMap - 80 Mya")
     #> 
     #> Q =
     #>               large       medium        small
-    #> large  -0.006199429  0.003099714  0.003099714
-    #> medium  0.003099714 -0.006199429  0.003099714
-    #> small   0.003099714  0.003099714 -0.006199429
+    #> large  -0.006199438  0.003099719  0.003099719
+    #> medium  0.003099719 -0.006199438  0.003099719
+    #> small   0.003099719  0.003099719 -0.006199438
     #> (specified by the user);
     #> and (mean) root node prior probabilities
     #> pi =

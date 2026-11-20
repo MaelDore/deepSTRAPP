@@ -20,18 +20,19 @@
 ## Citation
 
 Source:
-[`inst/CITATION`](https://github.com/MaelDore/deepSTRAPP/blob/v1.1.1/inst/CITATION)
+[`inst/CITATION`](https://github.com/MaelDore/deepSTRAPP/blob/master/inst/CITATION)
 
-Doré M, Blaimer BB (2026). “deepSTRAPP: Testing for differences in
-diversification rates over deep evolutionary time.” *TBA*, **TBA**(TBA),
-TBA.
+Doré M, Blaimer BB (2026). “deepSTRAPP: An R package to assess trait-and
+range-dependent diversification dynamics over time.” *Methods in Ecology
+and Evolution*, **00**, 1-8.
+[doi:10.1111/2041-210x.70451](https://doi.org/10.1111/2041-210x.70451).
 
     @Article{,
-      title = {deepSTRAPP: Testing for differences in diversification rates over deep evolutionary time},
+      title = {deepSTRAPP: An R package to assess trait-and range-dependent diversification dynamics over time},
       author = {Maël Doré and Bonnie B. Blaimer},
-      journal = {TBA},
+      journal = {Methods in Ecology and Evolution},
       year = {2026},
-      volume = {TBA},
-      number = {TBA},
-      pages = {TBA},
+      volume = {00},
+      pages = {1-8},
+      doi = {https://doi.org/10.1111/2041-210x.70451},
     }

@@ -278,7 +278,7 @@ BAMM_object <- build_BAMM_object(
    nb_posterior_samples = 1000, # Retain 1000 samples
    expectedNumberOfShifts = 1,
    verbose = TRUE)
-#> Reading event datafile:  /home/runner/.cache/R/renv/library/deepSTRAPP-c9e56a57/linux-ubuntu-noble/R-4.6/x86_64-pc-linux-gnu/deepSTRAPP/extdata/whale_event_data.txt 
+#> Reading event datafile:  /home/runner/.cache/R/renv/library/deepSTRAPP-c9e56a57/linux-ubuntu-resolute/R-4.6/x86_64-pc-linux-gnu/deepSTRAPP/extdata/whale_event_data.txt 
 #>      ...........
 #> Read a total of 2000 samples from posterior
 #> 

@@ -354,9 +354,9 @@ plot(whale_densityMaps[[3]])
     #> 
     #> Q =
     #>               large       medium        small
-    #> large  -0.009330876  0.004665438  0.004665438
-    #> medium  0.004665438 -0.009330876  0.004665438
-    #> small   0.004665438  0.004665438 -0.009330876
+    #> large  -0.009330875  0.004665438  0.004665438
+    #> medium  0.004665438 -0.009330875  0.004665438
+    #> small   0.004665438  0.004665438 -0.009330875
     #> (specified by the user);
     #> and (mean) root node prior probabilities
     #> pi =
@@ -366,12 +366,12 @@ plot(whale_densityMaps[[3]])
 
 ![](import_external_analyses_files/figure-html/import_cat_eval-1.png)
 
-    #> 2026-10-30 01:17:01.807874 - Posterior probability computed for edge n°100/152
-    #> 2026-10-30 01:17:02.456708 - Posterior probabilities computed for State = large - n°1/3
-    #> 2026-10-30 01:17:04.440408 - Posterior probability computed for edge n°100/152
-    #> 2026-10-30 01:17:05.096147 - Posterior probabilities computed for State = medium - n°2/3
-    #> 2026-10-30 01:17:07.081018 - Posterior probability computed for edge n°100/152
-    #> 2026-10-30 01:17:07.734354 - Posterior probabilities computed for State = small - n°3/3
+    #> 2026-11-20 01:09:03.953326 - Posterior probability computed for edge n°100/152
+    #> 2026-11-20 01:09:04.346304 - Posterior probabilities computed for State = large - n°1/3
+    #> 2026-11-20 01:09:05.603593 - Posterior probability computed for edge n°100/152
+    #> 2026-11-20 01:09:06.007326 - Posterior probabilities computed for State = medium - n°2/3
+    #> 2026-11-20 01:09:07.168468 - Posterior probability computed for edge n°100/152
+    #> 2026-11-20 01:09:07.550765 - Posterior probabilities computed for State = small - n°3/3
 
 ![](import_external_analyses_files/figure-html/import_cat_eval-2.png)
 
