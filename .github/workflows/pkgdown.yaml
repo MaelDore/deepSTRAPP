@@ -39,7 +39,7 @@ jobs:
             local::.
             MultinomialCI=url::https://cran.r-project.org/src/contrib/Archive/MultinomialCI/MultinomialCI_1.2.tar.gz
           needs: website
-          dependencies: '"hard"' # Added to skip Suggests dependencies from pak checking.
+          # dependencies: '"hard"' # Added to skip Suggests dependencies from pak checking.
           # May be used for non-dev version if the check fails, but favor deploying dev version anyway as they have all datasets
 
       - name: Build site
