@@ -26,14 +26,14 @@ is_dev_version <- function (pkg = "deepSTRAPP")
 
 
 ## ----adjust_dpi_CRAN, include = FALSE, eval = !is_dev_version()---------------
-knitr::opts_chunk$set(
-  dpi = 72   # Lower DPI to save space
-)
+# knitr::opts_chunk$set(
+#   dpi = 72   # Lower DPI to save space
+# )
 
 ## ----adjust_dpi_dev, include = FALSE, eval = is_dev_version()-----------------
-# knitr::opts_chunk$set(
-#   dpi = 72   # Default DPI for the dev version
-# )
+knitr::opts_chunk$set(
+  dpi = 72   # Default DPI for the dev version
+)
 
 ## ----model_diversity_dynamics-------------------------------------------------
 # ## Goal: Map evolution of diversification rates and regime shifts on the time-calibrated phylogeny

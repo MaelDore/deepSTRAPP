@@ -25,14 +25,14 @@ is_dev_version <- function (pkg = "deepSTRAPP")
 
 
 ## ----adjust_dpi_CRAN, include = FALSE, eval = !is_dev_version()---------------
-knitr::opts_chunk$set(
-  dpi = 72   # Lower DPI to save space
-)
+# knitr::opts_chunk$set(
+#   dpi = 72   # Lower DPI to save space
+# )
 
 ## ----adjust_dpi_dev, include = FALSE, eval = is_dev_version()-----------------
-# knitr::opts_chunk$set(
-#   dpi = 72   # Default DPI for the dev version
-# )
+knitr::opts_chunk$set(
+  dpi = 72   # Default DPI for the dev version
+)
 
 ## ----modularity_figure_eval, eval = TRUE, echo = FALSE, out.width = "100%"----
 
@@ -241,40 +241,40 @@ title(main = "ML estimates\n\n")
 # 
 
 ## ----import_contMaps_eval, eval = is_dev_version(), echo = FALSE--------------
-# 
-# ## Model trait evolution using a Brownian Motion model and predict ancestral trait values at nodes
-# BM_fit <- phytools::anc.ML(tree = whale.tree,
-#                            x = whale_tip_cont_data,
-#                            model = "BM")
-# 
-# ## Model trait evolution and produce multiple simulations of evolutionary histories
-# contsimmap_output <- contsimmap::make.contsimmap(
-#    tree = whale.tree,
-#    trait.data = whale_tip_cont_data,
-#    Xsig2 = BM_fit$sig2/5, # Evolutionary rate (divided by 5 for example)
-#    nsims = 100)
-# 
-# ## Convert into a list of contMaps
-# whale_contMaps <- convert_contsimmap_to_contMaps(contsimmap = contsimmap_output)
-# 
-# ## Plot the resulting contMaps
-# 
-# par(mfrow = c(1,2))
-# 
-# plot_contMap(whale_contMaps[[1]], color_scale = c("dodgerblue", "beige", "darkred"), fsize = c(0.5, 0.7))
-# title(main = "Simulation n°1\n\n")
-# 
-# plot_contMap(whale_contMaps[[10]], color_scale = c("dodgerblue", "beige", "darkred"), fsize = c(0.5, 0.7))
-# title(main = "Simulation n°10\n\n")
-# 
-# par(mfrow = c(1,1))
-# 
+
+## Model trait evolution using a Brownian Motion model and predict ancestral trait values at nodes
+BM_fit <- phytools::anc.ML(tree = whale.tree,
+                           x = whale_tip_cont_data,
+                           model = "BM")
+
+## Model trait evolution and produce multiple simulations of evolutionary histories
+contsimmap_output <- contsimmap::make.contsimmap(
+   tree = whale.tree,
+   trait.data = whale_tip_cont_data,
+   Xsig2 = BM_fit$sig2/5, # Evolutionary rate (divided by 5 for example)
+   nsims = 100) 
+
+## Convert into a list of contMaps
+whale_contMaps <- convert_contsimmap_to_contMaps(contsimmap = contsimmap_output)
+
+## Plot the resulting contMaps
+
+par(mfrow = c(1,2))
+
+plot_contMap(whale_contMaps[[1]], color_scale = c("dodgerblue", "beige", "darkred"), fsize = c(0.5, 0.7))
+title(main = "Simulation n°1\n\n")
+
+plot_contMap(whale_contMaps[[10]], color_scale = c("dodgerblue", "beige", "darkred"), fsize = c(0.5, 0.7))
+title(main = "Simulation n°10\n\n")
+
+par(mfrow = c(1,1))
+
 
 ## ----import_contMaps_eval_CRAN, eval = !is_dev_version(), echo = FALSE, out.width = "100%"----
-
-# Plot pre-rendered graph
-knitr::include_graphics("figures/7_Import_external_analyses_1.2_Cont_simmaps.PNG")
-
+# 
+# # Plot pre-rendered graph
+# knitr::include_graphics("figures/7_Import_external_analyses_1.2_Cont_simmaps.PNG")
+# 
 
 ## ----import_cat---------------------------------------------------------------
 # 
@@ -664,6 +664,20 @@ plot_densityMaps_overlay(whale_densityMaps)
 #                                        phylo = eel.tree,
 #                                        BSM_output = BSM_output)
 # 
+# ## Note on node numbering:
+# # BioGeoBEARS reads the phylogeny from a Newick file, so it numbers the nodes as ape::read.tree() does.
+# # The tables of events in 'BSM_output' and the ancestral range estimates in 'DEC_J_fit' follow this numbering.
+# 
+# # If your 'phylo' object has the same topology but a different numbering of its internal nodes
+# # (e.g., a tree with edges not in cladewise order),
+# # convert_BSMs_to_simmaps() converts the events on the phylogeny and then
+# # renumbers the nodes and sorts the edges of the simmaps to match your 'phylo' object.
+# 
+# # Therefore, the `simmap` objects are compatible with `phylo`, whatever the node numbering of `phylo`
+# # However, 'BSM_output' and 'DEC_J_fit' keep the node numbering of BioGeoBEARS.
+# # Do not match their node numbers directly with the nodes of 'phylo' unless:
+# # identical(ape::read.tree(text = ape::write.tree(phylo))$edge, phylo$edge)
+# 
 # ## Plot the resulting simmaps
 # 
 # # Set colors per ranges
@@ -679,7 +693,7 @@ plot_densityMaps_overlay(whale_densityMaps)
 # par(mfrow = c(1,1))
 # 
 # ## The `simmaps` object (`eel_simmaps`) is the main input for testing differences
-# # in evolutionary rates between states over time with deepSTRAPP.
+# ## in evolutionary rates between states over time with deepSTRAPP.
 # # Importantly, `simmaps` retain the identity of each simulated history,
 # # allowing deepSTRAPP to keep track of which simulation generated each set of trait values (i.e., states).
 # 
@@ -721,62 +735,62 @@ plot_densityMaps_overlay(whale_densityMaps)
 # 
 
 ## ----import_biogeo_eval, eval = is_dev_version(), echo = FALSE----------------
-# 
-# ## Load phylogeny
-# library(phytools)
-# data(eel.tree)
-# 
-# ## Load directly the output of prepare_trait_data() on biogeographic data to save time
-# data(eel_biogeo_data, package = "deepSTRAPP")
-# DEC_J_fit <- eel_biogeo_data$best_model_fit
-# BSM_output <- eel_biogeo_data$BSM_output
-# 
-# # Convert BioGeoBEARS outputs into simmaps
-# eel_simmaps <- convert_BSMs_to_simmaps(model_fit = DEC_J_fit,
-#                                        phylo = eel.tree,
-#                                        BSM_output = BSM_output)
-# 
-# ## Plot the resulting simmaps
-# 
-# # Set colors per ranges
-# colors_per_ranges <- c("dodgerblue", "gold", "yellowgreen")
-# names(colors_per_ranges) <- c("A", "B", "AB")
-# 
-# par(mfrow = c(1,2))
-# plot(eel_simmaps[[1]], colors = colors_per_ranges)
-# title(main = "\nSimulation n°1")
-# 
-# plot(eel_simmaps[[10]], colors = colors_per_ranges)
-# title(main = "\nSimulation n°10")
-# par(mfrow = c(1,1))
-# 
-# 
-# ## Convert 'simmaps' into 'densityMaps'
-# eel_densityMaps <- convert_simmaps_to_densityMaps(
-#    simmaps = eel_simmaps,
-#    colors_per_levels = colors_per_ranges,
-#    verbose = FALSE)
-# 
-# ## Plot the resulting densityMaps
-# plot_densityMaps_overlay(eel_densityMaps)
-# 
-# par(mfrow = c(1,3))
-# # Plot the densityMap for range n°1 = "A"
-# plot(eel_densityMaps[[1]])
-# # Plot the densityMap for range n°2 = "AB"
-# plot(eel_densityMaps[[2]])
-# # Plot the densityMap for range n°3 = "B"
-# plot(eel_densityMaps[[3]])
-# par(mfrow = c(1,1))
-# 
+
+## Load phylogeny
+library(phytools)
+data(eel.tree)
+
+## Load directly the output of prepare_trait_data() on biogeographic data to save time
+data(eel_biogeo_data, package = "deepSTRAPP")
+DEC_J_fit <- eel_biogeo_data$best_model_fit
+BSM_output <- eel_biogeo_data$BSM_output
+
+# Convert BioGeoBEARS outputs into simmaps
+eel_simmaps <- convert_BSMs_to_simmaps(model_fit = DEC_J_fit,
+                                       phylo = eel.tree,
+                                       BSM_output = BSM_output)
+
+## Plot the resulting simmaps
+
+# Set colors per ranges
+colors_per_ranges <- c("dodgerblue", "gold", "yellowgreen")
+names(colors_per_ranges) <- c("A", "B", "AB")
+
+par(mfrow = c(1,2))
+plot(eel_simmaps[[1]], colors = colors_per_ranges)
+title(main = "\nSimulation n°1")
+
+plot(eel_simmaps[[10]], colors = colors_per_ranges)
+title(main = "\nSimulation n°10")
+par(mfrow = c(1,1))
+
+
+## Convert 'simmaps' into 'densityMaps'
+eel_densityMaps <- convert_simmaps_to_densityMaps(
+   simmaps = eel_simmaps,
+   colors_per_levels = colors_per_ranges,
+   verbose = FALSE)
+
+## Plot the resulting densityMaps
+plot_densityMaps_overlay(eel_densityMaps)
+
+par(mfrow = c(1,3))
+# Plot the densityMap for range n°1 = "A"
+plot(eel_densityMaps[[1]])
+# Plot the densityMap for range n°2 = "AB"
+plot(eel_densityMaps[[2]])
+# Plot the densityMap for range n°3 = "B"
+plot(eel_densityMaps[[3]])
+par(mfrow = c(1,1))
+
 
 ## ----import_biogeo_eval_CRAN, eval = !is_dev_version(), echo = FALSE, out.width = "100%"----
-
-# Plot pre-rendered graph
-knitr::include_graphics("figures/7_Import_external_analyses_1.4.4_Biogeo_simmaps.PNG")
-knitr::include_graphics("figures/7_Import_external_analyses_1.4.5_Biogeo_densityMaps_overlay.PNG")
-knitr::include_graphics("figures/7_Import_external_analyses_1.4.5_Biogeo_densityMaps_per_ranges.PNG")
-
+# 
+# # Plot pre-rendered graph
+# knitr::include_graphics("figures/7_Import_external_analyses_1.4.4_Biogeo_simmaps.PNG")
+# knitr::include_graphics("figures/7_Import_external_analyses_1.4.5_Biogeo_densityMaps_overlay.PNG")
+# knitr::include_graphics("figures/7_Import_external_analyses_1.4.5_Biogeo_densityMaps_per_ranges.PNG")
+# 
 
 ## ----import_BAMM_object-------------------------------------------------------
 # # ------ Step 2: Prepare diversification data ------ #
@@ -901,38 +915,38 @@ knitr::include_graphics("figures/7_Import_external_analyses_1.4.5_Biogeo_density
 # 
 
 ## ----import_BAMM_object_eval, eval = is_dev_version(), echo = FALSE-----------
-# 
-# ## Load BAMM object
-# data(whale_BAMM_object, package = "deepSTRAPP")
-# 
-# ## Subset BAMM_object
-# whale_BAMM_object_subsetted <- subset_BAMM_object(
-#   BAMM_object = whale_BAMM_object,
-#   nb_posterior_samples = 100,
-#   seed = 1234)
-# 
-# ## Prune BAMM_object
-# whale_BAMM_object_pruned <- prune_BAMM_object(
-#   BAMM_object = whale_BAMM_object,
-#   tips_to_keep = whale_tree_pruned$tip.label,
-#   verbose = FALSE)
-# 
-# ## Compare the initial and the pruned phylogeny
-# par(mfrow = c(1, 2))
-# 
-# plot_BAMM_rates(whale_BAMM_object_subsetted, labels = TRUE, cex = 0.5)
-# title("Initial phylogeny")
-# plot_BAMM_rates(whale_BAMM_object_pruned, labels = TRUE, cex = 0.5)
-# title("Pruned phylogeny")
-# 
-# par(mfrow = c(1, 1))
-# 
+
+## Load BAMM object
+data(whale_BAMM_object, package = "deepSTRAPP")
+
+## Subset BAMM_object
+whale_BAMM_object_subsetted <- subset_BAMM_object(
+  BAMM_object = whale_BAMM_object,
+  nb_posterior_samples = 100,
+  seed = 1234)
+
+## Prune BAMM_object
+whale_BAMM_object_pruned <- prune_BAMM_object(
+  BAMM_object = whale_BAMM_object,
+  tips_to_keep = whale_tree_pruned$tip.label,
+  verbose = FALSE)
+
+## Compare the initial and the pruned phylogeny
+par(mfrow = c(1, 2))
+
+plot_BAMM_rates(whale_BAMM_object_subsetted, labels = TRUE, cex = 0.5)
+title("Initial phylogeny")
+plot_BAMM_rates(whale_BAMM_object_pruned, labels = TRUE, cex = 0.5)
+title("Pruned phylogeny")
+
+par(mfrow = c(1, 1))
+
 
 ## ----import_BAMM_object_CRAN, eval = !is_dev_version(), echo = FALSE, out.width = "100%"----
-
-# Plot pre-rendered graph
-knitr::include_graphics("figures/7_Import_external_analyses_2.3_Pruned_BAMM_object.PNG")
-
+# 
+# # Plot pre-rendered graph
+# knitr::include_graphics("figures/7_Import_external_analyses_2.3_Pruned_BAMM_object.PNG")
+# 
 
 ## ----import_run_deepSTRAPP----------------------------------------------------
 # # ------ Step 3: Run deepSTRAPP ------ #
@@ -1000,35 +1014,35 @@ knitr::include_graphics("figures/7_Import_external_analyses_2.3_Pruned_BAMM_obje
 # 
 
 ## ----import_run_deepSTRAPP_eval, eval = is_dev_version(), echo = FALSE--------
-# 
-# # Set focal time to 5 Mya
-# focal_time <- 5
-# 
-# ## Run deepSTRAPP on net diversification rates for focal time = 5 Mya.
-# deepSTRAPP_output <- run_deepSTRAPP_for_focal_time(
-#       densityMaps = whale_densityMaps,
-#       # Specify the nb of simulations to reconstruct
-#       # state distribution across dummy stochastic maps
-#       nb_simulations = 100,
-#       trait_data_type = "categorical",
-#       rate_type = "net_diversification",
-#       BAMM_object = whale_BAMM_object_pruned,
-#       focal_time = focal_time,
-#       seed = 1,
-#       uncertainty_strategy = "paired",
-#       return_perm_data = TRUE,
-#       extract_trait_data_melted_df = TRUE,
-#       extract_diversification_data_melted_df = TRUE)
-# 
-# # Plot rates vs. states across branches
-# plot_rates_vs_trait_data_for_focal_time(
-#     deepSTRAPP_outputs = deepSTRAPP_output,
-#     colors_per_levels = colors_per_states)
-# 
+
+# Set focal time to 5 Mya
+focal_time <- 5
+
+## Run deepSTRAPP on net diversification rates for focal time = 5 Mya.
+deepSTRAPP_output <- run_deepSTRAPP_for_focal_time( 
+      densityMaps = whale_densityMaps,
+      # Specify the nb of simulations to reconstruct
+      # state distribution across dummy stochastic maps
+      nb_simulations = 100,
+      trait_data_type = "categorical",
+      rate_type = "net_diversification",
+      BAMM_object = whale_BAMM_object_pruned,
+      focal_time = focal_time,
+      seed = 1,
+      uncertainty_strategy = "paired",
+      return_perm_data = TRUE,
+      extract_trait_data_melted_df = TRUE,
+      extract_diversification_data_melted_df = TRUE)
+
+# Plot rates vs. states across branches
+plot_rates_vs_trait_data_for_focal_time(
+    deepSTRAPP_outputs = deepSTRAPP_output,
+    colors_per_levels = colors_per_states)
+
 
 ## ----import_run_deepSTRAPP_CRAN, eval = !is_dev_version(), echo = FALSE, out.width = "100%"----
-
-# Plot pre-rendered graph
-knitr::include_graphics("figures/7_Import_external_analyses_3_Rates_vs_states.PNG")
-
+# 
+# # Plot pre-rendered graph
+# knitr::include_graphics("figures/7_Import_external_analyses_3_Rates_vs_states.PNG")
+# 
 

@@ -25,14 +25,14 @@ is_dev_version <- function (pkg = "deepSTRAPP")
 
 
 ## ----adjust_dpi_CRAN, include = FALSE, eval = !is_dev_version()---------------
-knitr::opts_chunk$set(
-  dpi = 72   # Lower DPI to save space
-)
+# knitr::opts_chunk$set(
+#   dpi = 72   # Lower DPI to save space
+# )
 
 ## ----adjust_dpi_dev, include = FALSE, eval = is_dev_version()-----------------
-# knitr::opts_chunk$set(
-#   dpi = 72   # Default DPI for the dev version
-# )
+knitr::opts_chunk$set(
+  dpi = 72   # Default DPI for the dev version
+)
 
 ## ----model_trait_evolution_biogeo---------------------------------------------
 # 
@@ -339,6 +339,16 @@ knitr::opts_chunk$set(
 # head(eel_biogeo_data$BSM_output$RES_clado_events_tables[[1]])
 # # Example: Anagenetic event summary for simulation n°1
 # head(eel_biogeo_data$BSM_output$RES_ana_events_tables[[1]])
+# 
+# ## Note on node numbering:
+# # BioGeoBEARS numbers the nodes of the phylogeny as ape::read.tree() does.
+# # The node numbers in 'BSM_output' (and in 'best_model_fit') follow this numbering.
+# # For eel.tree, it is the same as in the phylo object.
+# # For a phylogeny with another numbering of its internal nodes (e.g., with edges not in cladewise order),
+# # prepare_trait_data() renumbers $simmaps, $densityMaps and $ace to match the input phylogeny 'phylo',
+# # but 'BSM_output' and 'best_model_fit' are returned as produced by BioGeoBEARS.
+# # Use deepSTRAPP::convert_BSMs_to_simmaps() to convert the BioGeoBEARS outputs into 'simmaps'
+# # that match the node numbering in 'phylo'.
 # 
 # 
 # ## Explore simmaps

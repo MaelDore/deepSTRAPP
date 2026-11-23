@@ -25,14 +25,14 @@ is_dev_version <- function (pkg = "deepSTRAPP")
 
 
 ## ----adjust_dpi_CRAN, include = FALSE, eval = !is_dev_version()---------------
-knitr::opts_chunk$set(
-  dpi = 72   # Lower DPI to save space
-)
+# knitr::opts_chunk$set(
+#   dpi = 72   # Lower DPI to save space
+# )
 
 ## ----adjust_dpi_dev, include = FALSE, eval = is_dev_version()-----------------
-# knitr::opts_chunk$set(
-#   dpi = 72   # Default DPI for the dev version
-# )
+knitr::opts_chunk$set(
+  dpi = 72   # Default DPI for the dev version
+)
 
 ## ----model_trait_evolution_cont-----------------------------------------------
 # 
@@ -219,70 +219,70 @@ knitr::opts_chunk$set(
 # 
 
 ## ----model_trait_evolution_cont_eval, eval = is_dev_version(), echo = FALSE, out.width = "100%"----
-# suppressWarnings(library(maps))
-# suppressWarnings(library(ape))
-# suppressWarnings(library(phytools))
-# 
-# data(eel.tree)
-# data(eel.data)
-# 
-# # Extract body size
-# eel_tip_data <- stats::setNames(eel.data$Max_TL_cm,
-#                                 rownames(eel.data))
-# # Reorder tip_data as in phylogeny
-# eel_tip_data <- eel_tip_data[eel.tree$tip.label]
-# 
-# ## Model trait data evolution
-# eel_cont_data <- suppressWarnings(prepare_trait_data(
-#     tip_data = eel_tip_data,
-#     trait_data_type = "continuous",
-#     phylo = eel.tree,
-#     seed = 1234, # Set seed for reproducibility
-#     evolutionary_models = c("BM", "OU",  "EB", "rate_trend", "lambda", "kappa", "delta"), # All possible models
-#     control = list(niter = 200), # Example of additional parameters that can be passed down to geiger::fitContinuous() to control parameter optimization.
-#     res = 100, # To set the resolution of the continuous mapping of trait value on the contMap
-#     run_stochastic_maps = TRUE,
-#     nb_simulations = 100,
-#     color_scale = c("darkgreen", "limegreen", "orange", "red"),
-#     plot_map = FALSE,
-#     # PDF_file_path = "./eel_contMap.pdf", # To export in PDF the contMap generated
-#     return_ace = TRUE, # To include Ancestral Character Estimates (ACE) at nodes in the output
-#     return_best_model_fit = TRUE, # To include the best model fit in the output
-#     return_model_selection_df = TRUE, # To include the df for model selection in the output
-#     verbose = FALSE)) # To display progress
-# 
-# par(mfrow = c(2, 2))
-# 
-# # Plot with initial color_scale
-# plot_contMap(contMap = eel_cont_data$contMap,
-#              fsize = c(0.6, 1)) # Adjust tip label size
-# title(main = "ML estimates\n\n\n")
-# 
-# # Plot with updated color_scale
-# plot_contMap(contMap = eel_cont_data$contMap,
-#              color_scale = c("purple", "violet", "cyan", "blue"),
-#              fsize = c(0.6, 1)) # Adjust tip label size
-# title(main = "ML estimates\n\n\n")
-# 
-# eel_contMaps <- eel_cont_data$contMaps
-# 
-# # Plot contMap n°1 with initial color_scale
-# plot_contMap(eel_contMaps[[1]],
-#              fsize = c(0.6, 1)) # Adjust tip label size
-# title(main = "Stochastic Mapping simulation n°1\n\n\n")
-# # Plot contMap n°10 with initial color_scale
-# plot_contMap(eel_contMaps[[10]],
-#              fsize = c(0.6, 1)) # Adjust tip label size
-# title(main = "Stochastic Mapping simulation n°10\n\n\n")
-# 
-# par(mfrow = c(1, 1))
-# 
-# ## Explore summary of model selection
-# eel_cont_data$model_selection_df # Summary of model selection
+suppressWarnings(library(maps))
+suppressWarnings(library(ape))
+suppressWarnings(library(phytools))
+
+data(eel.tree)
+data(eel.data)
+
+# Extract body size
+eel_tip_data <- stats::setNames(eel.data$Max_TL_cm,
+                                rownames(eel.data))
+# Reorder tip_data as in phylogeny
+eel_tip_data <- eel_tip_data[eel.tree$tip.label]
+
+## Model trait data evolution
+eel_cont_data <- suppressWarnings(prepare_trait_data(
+    tip_data = eel_tip_data,
+    trait_data_type = "continuous",
+    phylo = eel.tree,
+    seed = 1234, # Set seed for reproducibility
+    evolutionary_models = c("BM", "OU",  "EB", "rate_trend", "lambda", "kappa", "delta"), # All possible models
+    control = list(niter = 200), # Example of additional parameters that can be passed down to geiger::fitContinuous() to control parameter optimization.
+    res = 100, # To set the resolution of the continuous mapping of trait value on the contMap
+    run_stochastic_maps = TRUE,
+    nb_simulations = 100,
+    color_scale = c("darkgreen", "limegreen", "orange", "red"),
+    plot_map = FALSE,
+    # PDF_file_path = "./eel_contMap.pdf", # To export in PDF the contMap generated
+    return_ace = TRUE, # To include Ancestral Character Estimates (ACE) at nodes in the output
+    return_best_model_fit = TRUE, # To include the best model fit in the output
+    return_model_selection_df = TRUE, # To include the df for model selection in the output
+    verbose = FALSE)) # To display progress
+
+par(mfrow = c(2, 2))
+
+# Plot with initial color_scale
+plot_contMap(contMap = eel_cont_data$contMap,
+             fsize = c(0.6, 1)) # Adjust tip label size
+title(main = "ML estimates\n\n\n")
+
+# Plot with updated color_scale
+plot_contMap(contMap = eel_cont_data$contMap,
+             color_scale = c("purple", "violet", "cyan", "blue"),
+             fsize = c(0.6, 1)) # Adjust tip label size
+title(main = "ML estimates\n\n\n")
+
+eel_contMaps <- eel_cont_data$contMaps
+
+# Plot contMap n°1 with initial color_scale
+plot_contMap(eel_contMaps[[1]],
+             fsize = c(0.6, 1)) # Adjust tip label size
+title(main = "Stochastic Mapping simulation n°1\n\n\n")
+# Plot contMap n°10 with initial color_scale
+plot_contMap(eel_contMaps[[10]],
+             fsize = c(0.6, 1)) # Adjust tip label size
+title(main = "Stochastic Mapping simulation n°10\n\n\n")
+
+par(mfrow = c(1, 1))
+
+## Explore summary of model selection
+eel_cont_data$model_selection_df # Summary of model selection
 
 ## ----model_trait_evolution_cont_eval_CRAN, eval = !is_dev_version(), echo = FALSE, out.width = "100%"----
-
-# Plot pre-rendered graph
-knitr::include_graphics("figures/2.1_Model_continuous_trait_evolution_2_Cont_simmaps.PNG")
-
+# 
+# # Plot pre-rendered graph
+# knitr::include_graphics("figures/2.1_Model_continuous_trait_evolution_2_Cont_simmaps.PNG")
+# 
 

@@ -26,14 +26,14 @@ is_dev_version <- function (pkg = "deepSTRAPP")
 
 
 ## ----adjust_dpi_CRAN, include = FALSE, eval = !is_dev_version()---------------
-knitr::opts_chunk$set(
-  dpi = 50   # Lower DPI to save space
-)
+# knitr::opts_chunk$set(
+#   dpi = 50   # Lower DPI to save space
+# )
 
 ## ----adjust_dpi_dev, include = FALSE, eval = is_dev_version()-----------------
-# knitr::opts_chunk$set(
-#   dpi = 72   # Default DPI for the dev version
-# )
+knitr::opts_chunk$set(
+  dpi = 72   # Default DPI for the dev version
+)
 
 ## ----load_data_biogeo_2lvl----------------------------------------------------
 # # ------ Step 0: Load data ------ #
@@ -430,27 +430,27 @@ names(colors_per_ranges) <- c("N", "O")
 # 
 
 ## ----plot_pvalues_biogeo_2lvl_eval_dev, eval = is_dev_version(), echo = FALSE----
-# 
-# # Load the deepSTRAPP output summarizing results for 0 to 40 My
-# Ponerinae_deepSTRAPP_biogeo_old_calib_0_40 <- readRDS(system.file("extdata",
-#     "Ponerinae_deepSTRAPP_biogeo_old_calib_0_40.rds", package = "deepSTRAPP"))
-# 
-# # Produce plot for results of overall Kruskal-Wallis tests over time
-# ggplot_STRAPP_pvalues <- deepSTRAPP::plot_STRAPP_pvalues_over_time(
-#    deepSTRAPP_outputs = Ponerinae_deepSTRAPP_biogeo_old_calib_0_40,
-#    alpha = 0.1, display_plot = FALSE)
-# # Adjust main title size
-# ggplot_STRAPP_pvalues <- ggplot_STRAPP_pvalues +
-#   ggplot2::theme(plot.title = ggplot2::element_text(size = 18))
-# # Print plot
-# print(ggplot_STRAPP_pvalues)
-# 
+
+# Load the deepSTRAPP output summarizing results for 0 to 40 My
+Ponerinae_deepSTRAPP_biogeo_old_calib_0_40 <- readRDS(system.file("extdata", 
+    "Ponerinae_deepSTRAPP_biogeo_old_calib_0_40.rds", package = "deepSTRAPP"))
+
+# Produce plot for results of overall Kruskal-Wallis tests over time
+ggplot_STRAPP_pvalues <- deepSTRAPP::plot_STRAPP_pvalues_over_time(
+   deepSTRAPP_outputs = Ponerinae_deepSTRAPP_biogeo_old_calib_0_40,
+   alpha = 0.1, display_plot = FALSE)
+# Adjust main title size
+ggplot_STRAPP_pvalues <- ggplot_STRAPP_pvalues +
+  ggplot2::theme(plot.title = ggplot2::element_text(size = 18))
+# Print plot
+print(ggplot_STRAPP_pvalues)
+
 
 ## ----plot_pvalues_biogeo_2lvl_eval_CRAN, eval = !is_dev_version(), echo = FALSE, out.width = "100%"----
-
-# Plot pre-rendered graph
-knitr::include_graphics("figures/1.3_deepSTRAPP_biogeographic_data_4.1_plot_pvalues.PNG")
-
+# 
+# # Plot pre-rendered graph
+# knitr::include_graphics("figures/1.3_deepSTRAPP_biogeographic_data_4.1_plot_pvalues.PNG")
+# 
 
 ## ----plot_histogram_STRAPP_tests_overall_biogeo_2lvl--------------------------
 # ### 4.2/ Plot histogram of STRAPP test stats ####
@@ -491,23 +491,23 @@ knitr::include_graphics("figures/1.3_deepSTRAPP_biogeographic_data_4.1_plot_pval
 # 
 
 ## ----plot_histogram_STRAPP_tests_biogeo_2lvl_eval_dev, eval = is_dev_version(), echo = FALSE----
-# 
-# # Produce the histogram of test stats for time-step n°3 = 10 My
-# ggplot_histogram <- plot_histogram_STRAPP_test_for_focal_time(
-#    deepSTRAPP_outputs = Ponerinae_deepSTRAPP_biogeo_old_calib_0_40,
-#    focal_time = 10, display_plot = FALSE)
-# # Adjust title size
-# ggplot_histogram <- ggplot_histogram +
-#   ggplot2::theme(plot.title = ggplot2::element_text(size = 18))
-# # Print plot
-# print(ggplot_histogram)
-# 
+
+# Produce the histogram of test stats for time-step n°3 = 10 My
+ggplot_histogram <- plot_histogram_STRAPP_test_for_focal_time(
+   deepSTRAPP_outputs = Ponerinae_deepSTRAPP_biogeo_old_calib_0_40,
+   focal_time = 10, display_plot = FALSE)
+# Adjust title size
+ggplot_histogram <- ggplot_histogram +
+  ggplot2::theme(plot.title = ggplot2::element_text(size = 18))
+# Print plot
+print(ggplot_histogram)
+
 
 ## ----plot_histogram_STRAPP_tests_biogeo_2lvl_eval_CRAN, eval = !is_dev_version(), echo = FALSE, out.width = "100%"----
-
-# Plot pre-rendered graph
-knitr::include_graphics("figures/1.3_deepSTRAPP_biogeographic_data_4.2_plot_STRAPP_tests.PNG")
-
+# 
+# # Plot pre-rendered graph
+# knitr::include_graphics("figures/1.3_deepSTRAPP_biogeographic_data_4.2_plot_STRAPP_tests.PNG")
+# 
 
 ## ----plot_rates_through_time_biogeo_2lvl--------------------------------------
 # ### 4.3/ Plot evolution of rates through time ~ trait data ####
@@ -536,15 +536,15 @@ knitr::include_graphics("figures/1.3_deepSTRAPP_biogeographic_data_4.2_plot_STRA
 # 
 
 ## ----plot_rates_through_time_biogeo_2lvl_eval_dev, eval = is_dev_version(), echo = FALSE----
-# plot_rates_through_time(deepSTRAPP_outputs = Ponerinae_deepSTRAPP_biogeo_old_calib_0_40,
-#                         colors_per_levels = colors_per_ranges, verbose = FALSE,
-#                         plot_CI = TRUE)
+plot_rates_through_time(deepSTRAPP_outputs = Ponerinae_deepSTRAPP_biogeo_old_calib_0_40,
+                        colors_per_levels = colors_per_ranges, verbose = FALSE,
+                        plot_CI = TRUE)
 
 ## ----plot_rates_through_time_biogeo_2lvl_eval_CRAN, eval = !is_dev_version(), echo = FALSE, out.width = "100%"----
-
-# Plot pre-rendered graph
-knitr::include_graphics("figures/1.3_deepSTRAPP_biogeographic_data_4.3_plot_rates_through_time.PNG")
-
+# 
+# # Plot pre-rendered graph
+# knitr::include_graphics("figures/1.3_deepSTRAPP_biogeographic_data_4.3_plot_rates_through_time.PNG")
+# 
 
 ## ----plot_rates_vs_traits_biogeo_2lvl-----------------------------------------
 # ### 4.4/ Plot rates vs. ranges across branches for a given focal time ####
@@ -583,17 +583,17 @@ knitr::include_graphics("figures/1.3_deepSTRAPP_biogeographic_data_4.3_plot_rate
 # 
 
 ## ----plot_rates_vs_traits_biogeo_2lvl_eval, fig.height = 7, fig.width = 8.5, out.width = "100%", eval = is_dev_version(), echo = FALSE----
-# # Generate ggplot for time = 10 My
-# plot_rates_vs_trait_data_for_focal_time(
-#    deepSTRAPP_outputs = Ponerinae_deepSTRAPP_biogeo_old_calib_0_40,
-#    focal_time = 10,
-#    colors_per_levels = colors_per_ranges)
+# Generate ggplot for time = 10 My
+plot_rates_vs_trait_data_for_focal_time(
+   deepSTRAPP_outputs = Ponerinae_deepSTRAPP_biogeo_old_calib_0_40,
+   focal_time = 10,
+   colors_per_levels = colors_per_ranges)
 
 ## ----plot_rates_vs_traits_biogeo_2lvl_eval_CRAN, eval = !is_dev_version(), echo = FALSE, out.width = "100%"----
-
-# Plot pre-rendered graph
-knitr::include_graphics("figures/1.3_deepSTRAPP_biogeographic_data_4.4_plot_rates_vs_traits.PNG")
-
+# 
+# # Plot pre-rendered graph
+# knitr::include_graphics("figures/1.3_deepSTRAPP_biogeographic_data_4.4_plot_rates_vs_traits.PNG")
+# 
 
 ## ----plot_updated_densityMaps_biogeo_2lvl-------------------------------------
 # ### 4.5/ Plot updated densityMaps mapping trait evolution for a given 'focal_time' ####
@@ -637,27 +637,27 @@ knitr::include_graphics("figures/1.3_deepSTRAPP_biogeographic_data_4.4_plot_rate
 # 
 
 ## ----plot_updated_densityMaps_biogeo_2lvl_eval, eval = is_dev_version(), echo = FALSE----
-# # Plot initial densityMaps (t = 0)
-# densityMaps_0My <- Ponerinae_deepSTRAPP_biogeo_old_calib_0_40$updated_Maps_over_time[[1]]
-# plot_densityMaps_overlay(densityMaps_0My$densityMaps,
-#                          colors_per_levels = colors_per_ranges,
-#                          cex_pies = 0.3, # Reduce pie size
-#                          fsize = 0.1)
-# title(main = "Trait evolution for 100-0 My")
-# 
-# # Plot updated densityMaps for time-step n°9 = 40 My
-# densityMaps_40My <- Ponerinae_deepSTRAPP_biogeo_old_calib_0_40$updated_Maps_over_time[[9]]
-# plot_densityMaps_overlay(densityMaps_40My$densityMaps,
-#                          colors_per_levels = colors_per_ranges,
-#                          fsize = 0.2)
-# title(main = "Trait evolution for 100-40 My")
+# Plot initial densityMaps (t = 0)
+densityMaps_0My <- Ponerinae_deepSTRAPP_biogeo_old_calib_0_40$updated_Maps_over_time[[1]]
+plot_densityMaps_overlay(densityMaps_0My$densityMaps,
+                         colors_per_levels = colors_per_ranges,
+                         cex_pies = 0.3, # Reduce pie size
+                         fsize = 0.1)
+title(main = "Trait evolution for 100-0 My")
+
+# Plot updated densityMaps for time-step n°9 = 40 My
+densityMaps_40My <- Ponerinae_deepSTRAPP_biogeo_old_calib_0_40$updated_Maps_over_time[[9]]
+plot_densityMaps_overlay(densityMaps_40My$densityMaps,
+                         colors_per_levels = colors_per_ranges,
+                         fsize = 0.2)
+title(main = "Trait evolution for 100-40 My")
 
 ## ----plot_updated_densityMaps_biogeo_2lvl_eval_CRAN, eval = !is_dev_version(), echo = FALSE, out.width = "100%"----
-
-# Plot pre-rendered graph
-knitr::include_graphics("figures/1.3_deepSTRAPP_biogeographic_data_4.5_plot_updated_densityMaps_1.PNG")
-knitr::include_graphics("figures/1.3_deepSTRAPP_biogeographic_data_4.5_plot_updated_densityMaps_2.PNG")
-
+# 
+# # Plot pre-rendered graph
+# knitr::include_graphics("figures/1.3_deepSTRAPP_biogeographic_data_4.5_plot_updated_densityMaps_1.PNG")
+# knitr::include_graphics("figures/1.3_deepSTRAPP_biogeographic_data_4.5_plot_updated_densityMaps_2.PNG")
+# 
 
 ## ----plot_BAMM_rates_biogeo_2lvl----------------------------------------------
 # ### 4.6/ Plot updated diversification rates and regimes for a given 'focal_time' ####
@@ -700,28 +700,28 @@ knitr::include_graphics("figures/1.3_deepSTRAPP_biogeographic_data_4.5_plot_upda
 # 
 
 ## ----plot_BAMM_rates_biogeo_2lvl_eval_dev, eval = is_dev_version(), echo = FALSE----
-# old_par <- par()["mfrow"]
-# par(mfrow = c(1, 2))
-# 
-# # Plot diversification rates on initial phylogeny (t = 0)
-# BAMM_map_0My <- Ponerinae_deepSTRAPP_biogeo_old_calib_0_40$updated_BAMM_objects_over_time[[1]]
-# plot_BAMM_rates(BAMM_map_0My, labels = FALSE, legend = TRUE)
-# abline(v = max(phytools::nodeHeights(Ponerinae_tree_old_calib)[,2]) - 10, col = "red", lty = 2) # Show where the phylogeny will be cut
-# title(main = "BAMM rates for 100-0 My")
-# 
-# # Plot diversification rates on updated phylogeny for time-step n°3 = 10 My
-# BAMM_map_10My <- Ponerinae_deepSTRAPP_biogeo_old_calib_0_40$updated_BAMM_objects_over_time[[3]]
-# plot_BAMM_rates(BAMM_map_10My, labels = FALSE, legend = TRUE,
-#                 colorbreaks = BAMM_map_10My$initial_colorbreaks$net_diversification)
-# title(main = "BAMM rates for 100-10 My")
-# 
-# par(old_par)
+old_par <- par()["mfrow"]
+par(mfrow = c(1, 2))
+
+# Plot diversification rates on initial phylogeny (t = 0)
+BAMM_map_0My <- Ponerinae_deepSTRAPP_biogeo_old_calib_0_40$updated_BAMM_objects_over_time[[1]]
+plot_BAMM_rates(BAMM_map_0My, labels = FALSE, legend = TRUE)
+abline(v = max(phytools::nodeHeights(Ponerinae_tree_old_calib)[,2]) - 10, col = "red", lty = 2) # Show where the phylogeny will be cut
+title(main = "BAMM rates for 100-0 My")
+
+# Plot diversification rates on updated phylogeny for time-step n°3 = 10 My
+BAMM_map_10My <- Ponerinae_deepSTRAPP_biogeo_old_calib_0_40$updated_BAMM_objects_over_time[[3]]
+plot_BAMM_rates(BAMM_map_10My, labels = FALSE, legend = TRUE,
+                colorbreaks = BAMM_map_10My$initial_colorbreaks$net_diversification)
+title(main = "BAMM rates for 100-10 My")
+
+par(old_par)
 
 ## ----plot_BAMM_rates_biogeo_2lvl_eval_CRAN, eval = !is_dev_version(), echo = FALSE, out.width = "100%"----
-
-# Plot pre-rendered graph
-knitr::include_graphics("figures/1.3_deepSTRAPP_biogeographic_data_4.6_plot_BAMM_rates.PNG")
-
+# 
+# # Plot pre-rendered graph
+# knitr::include_graphics("figures/1.3_deepSTRAPP_biogeographic_data_4.6_plot_BAMM_rates.PNG")
+# 
 
 ## ----plot_traits_vs_rates_on_phylogeny_biogeo_2lvl----------------------------
 # ### 4.7/ Plot both trait evolution and diversification rates and regimes updated for a given 'focal_time' ####
@@ -766,26 +766,26 @@ knitr::include_graphics("figures/1.3_deepSTRAPP_biogeographic_data_4.6_plot_BAMM
 # 
 
 ## ----plot_traits_vs_rates_on_phylogeny_biogeo_2lvl_eval_dev, eval = is_dev_version(), echo = FALSE----
-# # Plot both mapped phylogenies in the present (t = 0)
-# plot_traits_vs_rates_on_phylogeny_for_focal_time(
-#   deepSTRAPP_outputs = Ponerinae_deepSTRAPP_biogeo_old_calib_0_40,
-#   focal_time = 0,
-#   ftype = "off", lwd = 0.7,
-#   colors_per_levels = colors_per_ranges,
-#   labels = FALSE, legend = FALSE)
-# 
-# # Plot both mapped phylogenies for time-step n°9 = 40 My
-# plot_traits_vs_rates_on_phylogeny_for_focal_time(
-#   deepSTRAPP_outputs = Ponerinae_deepSTRAPP_biogeo_old_calib_0_40,
-#   focal_time = 40,
-#   ftype = "off", lwd = 1.2,
-#   colors_per_levels = colors_per_ranges,
-#   labels = FALSE, legend = FALSE)
+# Plot both mapped phylogenies in the present (t = 0)
+plot_traits_vs_rates_on_phylogeny_for_focal_time(
+  deepSTRAPP_outputs = Ponerinae_deepSTRAPP_biogeo_old_calib_0_40,
+  focal_time = 0,
+  ftype = "off", lwd = 0.7,
+  colors_per_levels = colors_per_ranges,
+  labels = FALSE, legend = FALSE)
+
+# Plot both mapped phylogenies for time-step n°9 = 40 My
+plot_traits_vs_rates_on_phylogeny_for_focal_time(
+  deepSTRAPP_outputs = Ponerinae_deepSTRAPP_biogeo_old_calib_0_40,
+  focal_time = 40, 
+  ftype = "off", lwd = 1.2,
+  colors_per_levels = colors_per_ranges,
+  labels = FALSE, legend = FALSE)
 
 ## ----plot_traits_vs_rates_on_phylogeny_biogeo_2lvl_eval_CRAN, eval = !is_dev_version(), echo = FALSE, out.width = "100%"----
-
-# Plot pre-rendered graph
-knitr::include_graphics("figures/1.3_deepSTRAPP_biogeographic_data_4.7_plot_traits_vs_rate_maps_1.PNG")
-knitr::include_graphics("figures/1.3_deepSTRAPP_biogeographic_data_4.7_plot_traits_vs_rate_maps_2.PNG")
-
+# 
+# # Plot pre-rendered graph
+# knitr::include_graphics("figures/1.3_deepSTRAPP_biogeographic_data_4.7_plot_traits_vs_rate_maps_1.PNG")
+# knitr::include_graphics("figures/1.3_deepSTRAPP_biogeographic_data_4.7_plot_traits_vs_rate_maps_2.PNG")
+# 
 

@@ -25,14 +25,14 @@ is_dev_version <- function (pkg = "deepSTRAPP")
 
 
 ## ----adjust_dpi_CRAN, include = FALSE, eval = !is_dev_version()---------------
-knitr::opts_chunk$set(
-  dpi = 50   # Lower DPI to save space
-)
+# knitr::opts_chunk$set(
+#   dpi = 50   # Lower DPI to save space
+# )
 
 ## ----adjust_dpi_dev, include = FALSE, eval = is_dev_version()-----------------
-# knitr::opts_chunk$set(
-#   dpi = 72   # Default DPI for the dev version
-# )
+knitr::opts_chunk$set(
+  dpi = 72   # Default DPI for the dev version
+)
 
 ## ----plot_RTT_cont------------------------------------------------------------
 # # ------ Example 1: Continuous trait data ------ #
@@ -145,84 +145,84 @@ knitr::opts_chunk$set(
 # 
 
 ## ----plot_RTT_cont_eval_dev, fig.width = 16, fig.height = 15, out.width = "100%", eval = is_dev_version(), echo = FALSE----
-# # Load results of a STRAPP test workflow run on continuous trait data
-# Ponerinae_deepSTRAPP_cont_old_calib_0_40 <- readRDS(system.file("extdata",
-#     "Ponerinae_deepSTRAPP_cont_old_calib_0_40.rds", package = "deepSTRAPP"))
-# 
-# # Select a color scheme from lowest to highest values
-# color_scale = c("darkgreen", "limegreen", "orange", "red")
-# 
-# ## Generate default plot
-# plot_RTT_continuous_1 <- plot_rates_through_time(
-#    deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_old_calib_0_40,
-#    color_scale = color_scale, display_plot = FALSE, verbose = FALSE)
-# plot_RTT_continuous_1 <- plot_RTT_continuous_1$rates_TT_ggplot +
-#   ggplot2::ggtitle(label = "Default plot")
-# 
-# # Plot with five trait quantile groups
-# plot_RTT_continuous_2 <- plot_rates_through_time(
-#    deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_old_calib_0_40,
-#    quantile_ranges = c(0, 0.20, 0.40, 0.60, 0.80, 1.0),
-#    color_scale = color_scale, display_plot = FALSE, verbose = FALSE)
-# plot_RTT_continuous_2 <- plot_RTT_continuous_2$rates_TT_ggplot +
-#   ggplot2::ggtitle(label = "Five groups")
-# 
-# # Plot "fuzzy" CI
-# plot_RTT_continuous_3 <- plot_rates_through_time(
-#    deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_old_calib_0_40,
-#    color_scale = color_scale,
-#    plot_CI = TRUE, # To add CI on the plot
-#    CI_type = "fuzzy", # Select type of CI
-#    display_plot = FALSE, verbose = FALSE)
-# plot_RTT_continuous_3 <- plot_RTT_continuous_3$rates_TT_ggplot +
-#   ggplot2::ggtitle(label = "Fuzzy CI")
-# 
-# # Plot "quantiles_rect" CI
-# plot_RTT_continuous_4 <- plot_rates_through_time(
-#    deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_old_calib_0_40,
-#    color_scale = color_scale,
-#    plot_CI = TRUE, # To add CI on the plot
-#    CI_type = "quantiles_rect", # Select type of CI
-#    CI_quantiles = 0.9, # Adjust range of CI
-#    display_plot = FALSE, verbose = FALSE)
-# plot_RTT_continuous_4 <- plot_RTT_continuous_4$rates_TT_ggplot +
-#   ggplot2::ggtitle(label = "Rectangular CI")
-# 
-# # Plot "speciation" rates
-# plot_RTT_continuous_5 <- plot_rates_through_time(
-#    deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_old_calib_0_40,
-#    rate_type = "speciation",
-#    color_scale = color_scale,
-#    plot_CI = TRUE, # To add CI on the plot
-#    CI_type = "quantiles_rect", # Select type of CI
-#    CI_quantiles = 0.9, # Adjust range of CI
-#    display_plot = FALSE, verbose = FALSE)
-# plot_RTT_continuous_5 <- plot_RTT_continuous_5$rates_TT_ggplot +
-#   ggplot2::ggtitle(label = "Speciation rates")
-# 
-# # Plot "extinction" rates
-# plot_RTT_continuous_6 <- plot_rates_through_time(
-#    deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_old_calib_0_40,
-#    rate_type = "extinction",
-#    color_scale = color_scale,
-#    plot_CI = TRUE, # To add CI on the plot
-#    CI_type = "quantiles_rect", # Select type of CI
-#    CI_quantiles = 0.9, # Adjust range of CI
-#    display_plot = FALSE, verbose = FALSE)
-# plot_RTT_continuous_6 <- plot_RTT_continuous_6$rates_TT_ggplot +
-#   ggplot2::ggtitle(label = "Extinction rates")
-# 
-# cowplot::plot_grid(plotlist = list(plot_RTT_continuous_1, plot_RTT_continuous_2,
-#                                    plot_RTT_continuous_3, plot_RTT_continuous_4,
-#                                    plot_RTT_continuous_5, plot_RTT_continuous_6),
-#                    ncol = 2, nrow = 3)
-# 
+# Load results of a STRAPP test workflow run on continuous trait data
+Ponerinae_deepSTRAPP_cont_old_calib_0_40 <- readRDS(system.file("extdata", 
+    "Ponerinae_deepSTRAPP_cont_old_calib_0_40.rds", package = "deepSTRAPP"))
+
+# Select a color scheme from lowest to highest values
+color_scale = c("darkgreen", "limegreen", "orange", "red")
+
+## Generate default plot
+plot_RTT_continuous_1 <- plot_rates_through_time(
+   deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_old_calib_0_40,
+   color_scale = color_scale, display_plot = FALSE, verbose = FALSE)
+plot_RTT_continuous_1 <- plot_RTT_continuous_1$rates_TT_ggplot +
+  ggplot2::ggtitle(label = "Default plot")
+
+# Plot with five trait quantile groups
+plot_RTT_continuous_2 <- plot_rates_through_time(
+   deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_old_calib_0_40,
+   quantile_ranges = c(0, 0.20, 0.40, 0.60, 0.80, 1.0),
+   color_scale = color_scale, display_plot = FALSE, verbose = FALSE)
+plot_RTT_continuous_2 <- plot_RTT_continuous_2$rates_TT_ggplot +
+  ggplot2::ggtitle(label = "Five groups")
+
+# Plot "fuzzy" CI
+plot_RTT_continuous_3 <- plot_rates_through_time(
+   deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_old_calib_0_40,
+   color_scale = color_scale,
+   plot_CI = TRUE, # To add CI on the plot
+   CI_type = "fuzzy", # Select type of CI
+   display_plot = FALSE, verbose = FALSE)
+plot_RTT_continuous_3 <- plot_RTT_continuous_3$rates_TT_ggplot +
+  ggplot2::ggtitle(label = "Fuzzy CI")
+
+# Plot "quantiles_rect" CI
+plot_RTT_continuous_4 <- plot_rates_through_time(
+   deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_old_calib_0_40,
+   color_scale = color_scale,
+   plot_CI = TRUE, # To add CI on the plot
+   CI_type = "quantiles_rect", # Select type of CI
+   CI_quantiles = 0.9, # Adjust range of CI
+   display_plot = FALSE, verbose = FALSE)
+plot_RTT_continuous_4 <- plot_RTT_continuous_4$rates_TT_ggplot +
+  ggplot2::ggtitle(label = "Rectangular CI")
+
+# Plot "speciation" rates
+plot_RTT_continuous_5 <- plot_rates_through_time(
+   deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_old_calib_0_40,
+   rate_type = "speciation",
+   color_scale = color_scale,
+   plot_CI = TRUE, # To add CI on the plot
+   CI_type = "quantiles_rect", # Select type of CI
+   CI_quantiles = 0.9, # Adjust range of CI
+   display_plot = FALSE, verbose = FALSE)
+plot_RTT_continuous_5 <- plot_RTT_continuous_5$rates_TT_ggplot +
+  ggplot2::ggtitle(label = "Speciation rates")
+
+# Plot "extinction" rates
+plot_RTT_continuous_6 <- plot_rates_through_time(
+   deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cont_old_calib_0_40,
+   rate_type = "extinction",
+   color_scale = color_scale,
+   plot_CI = TRUE, # To add CI on the plot
+   CI_type = "quantiles_rect", # Select type of CI
+   CI_quantiles = 0.9, # Adjust range of CI
+   display_plot = FALSE, verbose = FALSE)
+plot_RTT_continuous_6 <- plot_RTT_continuous_6$rates_TT_ggplot +
+  ggplot2::ggtitle(label = "Extinction rates")
+
+cowplot::plot_grid(plotlist = list(plot_RTT_continuous_1, plot_RTT_continuous_2,
+                                   plot_RTT_continuous_3, plot_RTT_continuous_4,
+                                   plot_RTT_continuous_5, plot_RTT_continuous_6),
+                   ncol = 2, nrow = 3)
+
 
 ## ----plot_RTT_cont_eval_CRAN, eval = !is_dev_version(), echo = FALSE, out.width = "100%"----
-
-# Plot pre-rendered graph
-knitr::include_graphics("figures/5_Explore_plot_RTT_1_Example_continuous.PNG")
-
+# 
+# # Plot pre-rendered graph
+# knitr::include_graphics("figures/5_Explore_plot_RTT_1_Example_continuous.PNG")
+# 
 
 ## ----plot_RTT_cat_3lvl--------------------------------------------------------
 # # ------ Example 2: Categorical multinomial trait data ------ #
@@ -282,61 +282,61 @@ knitr::include_graphics("figures/5_Explore_plot_RTT_1_Example_continuous.PNG")
 # 
 
 ## ----plot_RTT_cat_3lvl_eval_dev, fig.width = 14, fig.height = 10, out.width = "100%", eval = is_dev_version(), echo = FALSE----
-# # Load results of a STRAPP test workflow run on continuous trait data
-# Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40 <- readRDS(system.file("extdata",
-#     "Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40.rds", package = "deepSTRAPP"))
-# 
-# ## Select color scheme for states
-# colors_per_states <- c("forestgreen", "sienna", "goldenrod")
-# names(colors_per_states) <- c("arboreal", "subterranean", "terricolous")
-# 
-# ## Generate default plot
-# plot_RTT_categorical_1 <- plot_rates_through_time(
-#    deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40,
-#    colors_per_levels = colors_per_states,
-#    display_plot = FALSE, verbose = FALSE)
-# plot_RTT_categorical_1 <- plot_RTT_categorical_1$rates_TT_ggplot +
-#   ggplot2::ggtitle(label = "Default plot")
-# 
-# # Plot "fuzzy" CI
-# plot_RTT_categorical_2 <- plot_rates_through_time(
-#    deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40,
-#    colors_per_levels = colors_per_states,
-#    plot_CI = TRUE,
-#    CI_type = "fuzzy",
-#    display_plot = FALSE, verbose = FALSE)
-# plot_RTT_categorical_2 <- plot_RTT_categorical_2$rates_TT_ggplot +
-#   ggplot2::ggtitle(label = "Fuzzy CI")
-# 
-# # Plot "quantiles_rect" CI
-# plot_RTT_categorical_3 <- plot_rates_through_time(
-#    deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40,
-#    colors_per_levels = colors_per_states,
-#    plot_CI = TRUE,
-#    CI_type = "quantiles_rect",
-#    display_plot = FALSE, verbose = FALSE)
-# plot_RTT_categorical_3 <- plot_RTT_categorical_3$rates_TT_ggplot +
-#   ggplot2::ggtitle(label = "Rectangular CI")
-# 
-# ## Subset to plot only "arboreal" and "terricolous" states
-# plot_RTT_categorical_4 <- plot_rates_through_time(
-#    deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40,
-#    select_trait_levels = c("arboreal", "terricolous"), # List the states to plot
-#    colors_per_levels = colors_per_states[c("arboreal", "terricolous")], # Subset colors
-#    plot_CI = TRUE,
-#    CI_type = "quantiles_rect",
-#    display_plot = FALSE, verbose = FALSE)
-# plot_RTT_categorical_4 <- plot_RTT_categorical_4$rates_TT_ggplot +
-#   ggplot2::ggtitle(label = "Subset two states")
-# 
-# cowplot::plot_grid(plotlist = list(plot_RTT_categorical_1, plot_RTT_categorical_2,
-#                                    plot_RTT_categorical_3, plot_RTT_categorical_4),
-#                    ncol = 2, nrow = 2)
-# 
+# Load results of a STRAPP test workflow run on continuous trait data
+Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40 <- readRDS(system.file("extdata", 
+    "Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40.rds", package = "deepSTRAPP"))
+
+## Select color scheme for states
+colors_per_states <- c("forestgreen", "sienna", "goldenrod")
+names(colors_per_states) <- c("arboreal", "subterranean", "terricolous")
+
+## Generate default plot
+plot_RTT_categorical_1 <- plot_rates_through_time(
+   deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40,
+   colors_per_levels = colors_per_states,
+   display_plot = FALSE, verbose = FALSE)
+plot_RTT_categorical_1 <- plot_RTT_categorical_1$rates_TT_ggplot +
+  ggplot2::ggtitle(label = "Default plot")
+
+# Plot "fuzzy" CI
+plot_RTT_categorical_2 <- plot_rates_through_time(
+   deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40,
+   colors_per_levels = colors_per_states,
+   plot_CI = TRUE, 
+   CI_type = "fuzzy",
+   display_plot = FALSE, verbose = FALSE)
+plot_RTT_categorical_2 <- plot_RTT_categorical_2$rates_TT_ggplot +
+  ggplot2::ggtitle(label = "Fuzzy CI")
+
+# Plot "quantiles_rect" CI
+plot_RTT_categorical_3 <- plot_rates_through_time(
+   deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40,
+   colors_per_levels = colors_per_states,
+   plot_CI = TRUE, 
+   CI_type = "quantiles_rect",
+   display_plot = FALSE, verbose = FALSE)
+plot_RTT_categorical_3 <- plot_RTT_categorical_3$rates_TT_ggplot +
+  ggplot2::ggtitle(label = "Rectangular CI")
+
+## Subset to plot only "arboreal" and "terricolous" states
+plot_RTT_categorical_4 <- plot_rates_through_time(
+   deepSTRAPP_outputs = Ponerinae_deepSTRAPP_cat_3lvl_old_calib_0_40,
+   select_trait_levels = c("arboreal", "terricolous"), # List the states to plot
+   colors_per_levels = colors_per_states[c("arboreal", "terricolous")], # Subset colors
+   plot_CI = TRUE, 
+   CI_type = "quantiles_rect",
+   display_plot = FALSE, verbose = FALSE)
+plot_RTT_categorical_4 <- plot_RTT_categorical_4$rates_TT_ggplot +
+  ggplot2::ggtitle(label = "Subset two states")
+
+cowplot::plot_grid(plotlist = list(plot_RTT_categorical_1, plot_RTT_categorical_2,
+                                   plot_RTT_categorical_3, plot_RTT_categorical_4),
+                   ncol = 2, nrow = 2)
+
 
 ## ----plot_RTT_cat_3lvl_eval_CRAN, eval = !is_dev_version(), echo = FALSE, out.width = "100%"----
-
-# Plot pre-rendered graph
-knitr::include_graphics("figures/5_Explore_plot_RTT_2_Example_multinomial.PNG")
-
+# 
+# # Plot pre-rendered graph
+# knitr::include_graphics("figures/5_Explore_plot_RTT_2_Example_multinomial.PNG")
+# 
 

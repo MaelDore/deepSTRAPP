@@ -25,14 +25,14 @@ is_dev_version <- function (pkg = "deepSTRAPP")
 
 
 ## ----adjust_dpi_CRAN, include = FALSE, eval = !is_dev_version()---------------
-knitr::opts_chunk$set(
-  dpi = 72   # Lower DPI to save space
-)
+# knitr::opts_chunk$set(
+#   dpi = 72   # Lower DPI to save space
+# )
 
 ## ----adjust_dpi_dev, include = FALSE, eval = is_dev_version()-----------------
-# knitr::opts_chunk$set(
-#   dpi = 72   # Default DPI for the dev version
-# )
+knitr::opts_chunk$set(
+  dpi = 72   # Default DPI for the dev version
+)
 
 ## ----load_data_uncertainty----------------------------------------------------
 # # ------ Step 0: Load data ------ #
@@ -135,37 +135,37 @@ knitr::opts_chunk$set(
 # 
 
 ## ----prepare_trait_data_uncertainty_eval, eval = is_dev_version(), echo = FALSE----
-# 
-# ## Load trait df
-# data("Ponerinae_trait_tip_data", package = "deepSTRAPP")
-# 
-# # Extract continuous trait data as a named vector
-# Ponerinae_cont_tip_data <- setNames(object = Ponerinae_trait_tip_data$fake_cont_tip_data,
-#                                     nm = Ponerinae_trait_tip_data$Taxa)
-# 
-# ## Load phylogeny with old time-calibration
-# data("Ponerinae_tree_old_calib", package = "deepSTRAPP")
-# 
-# # Select a color scheme from lowest to highest values (i.e., smallest to largest ants)
-# color_scale = c("darkgreen", "limegreen", "orange", "red")
-# 
-# ## Run prepare_trait_data with default options
-# # For continuous trait, a BM model is assumed by default.
-# Ponerinae_trait_object <- prepare_trait_data(tip_data = Ponerinae_cont_tip_data,
-#                                              trait_data_type = "continuous",
-#                                              phylo = Ponerinae_tree_old_calib,
-#                                              # Set to 'TRUE' to produce the stochastic maps
-#                                              run_stochastic_maps = TRUE,
-#                                              nb_simulations = 100,
-#                                              seed = 1234, # Set seed for reproducibility
-#                                              plot_map = FALSE)
-# 
-# # Extract contMap(s)
-# Ponerinae_contMap <- Ponerinae_trait_object$contMap
-# Ponerinae_contMaps <- Ponerinae_trait_object$contMaps
-# 
-# ## Input needed for Step 3 are the contMap (Ponerinae_contMap) and contMaps (Ponerinae_contMaps)
-# 
+
+## Load trait df
+data("Ponerinae_trait_tip_data", package = "deepSTRAPP")
+
+# Extract continuous trait data as a named vector
+Ponerinae_cont_tip_data <- setNames(object = Ponerinae_trait_tip_data$fake_cont_tip_data,
+                                    nm = Ponerinae_trait_tip_data$Taxa)
+
+## Load phylogeny with old time-calibration
+data("Ponerinae_tree_old_calib", package = "deepSTRAPP")
+
+# Select a color scheme from lowest to highest values (i.e., smallest to largest ants)
+color_scale = c("darkgreen", "limegreen", "orange", "red")
+
+## Run prepare_trait_data with default options
+# For continuous trait, a BM model is assumed by default.
+Ponerinae_trait_object <- prepare_trait_data(tip_data = Ponerinae_cont_tip_data,
+                                             trait_data_type = "continuous",
+                                             phylo = Ponerinae_tree_old_calib,
+                                             # Set to 'TRUE' to produce the stochastic maps
+                                             run_stochastic_maps = TRUE,
+                                             nb_simulations = 100,
+                                             seed = 1234, # Set seed for reproducibility
+                                             plot_map = FALSE) 
+
+# Extract contMap(s)
+Ponerinae_contMap <- Ponerinae_trait_object$contMap
+Ponerinae_contMaps <- Ponerinae_trait_object$contMaps
+
+## Input needed for Step 3 are the contMap (Ponerinae_contMap) and contMaps (Ponerinae_contMaps)
+
 
 ## ----prepare_diversification_data_uncertainty---------------------------------
 # # ------ Step 2: Prepare diversification data ------ #
@@ -225,16 +225,16 @@ knitr::opts_chunk$set(
 # 
 
 ## ----prepare_diversification_data_uncertainty_eval, eval = is_dev_version(), echo = FALSE----
-# 
-# # Load the Ponerinae_BAMM_object output
-# data(Ponerinae_BAMM_object_old_calib, package = "deepSTRAPP")
-# 
-# # Produce the results of overall Kruskal-Wallis tests over time
-# Ponerinae_BAMM_object <- subset_BAMM_object(
-#    BAMM_object = Ponerinae_BAMM_object_old_calib,
-#    nb_posterior_samples = 100,
-#    seed = 1234)
-# 
+
+# Load the Ponerinae_BAMM_object output
+data(Ponerinae_BAMM_object_old_calib, package = "deepSTRAPP")
+
+# Produce the results of overall Kruskal-Wallis tests over time
+Ponerinae_BAMM_object <- subset_BAMM_object(
+   BAMM_object = Ponerinae_BAMM_object_old_calib,
+   nb_posterior_samples = 100,
+   seed = 1234)
+
 
 ## ----run_uncertainty----------------------------------------------------------
 # # ------ Step 3: Run deepSTRAPP workflows ------ #
@@ -393,46 +393,46 @@ knitr::opts_chunk$set(
 # 
 
 ## ----run_uncertainty_eval, eval = is_dev_version(), echo = FALSE--------------
-# 
-# ## Set the focal_time for analyses to 10 Mya.
-# focal_time <- 10
-# 
-# ## Run deepSTRAPP for the "rates_only" strategy
-# deepSTRAPP_rates_only <- run_deepSTRAPP_for_focal_time(
-#     contMap = Ponerinae_contMap,
-#     trait_data_type = "continuous",
-#     BAMM_object = Ponerinae_BAMM_object,
-#     focal_time = focal_time,
-#     uncertainty_strategy = "rates_only",
-#     seed = 1234, # Set seed for reproducibility
-#     return_perm_data = TRUE,
-#     extract_trait_data_melted_df = TRUE,
-#     extract_diversification_data_melted_df = TRUE)
-# 
-# ## Run deepSTRAPP for the "paired" strategy
-# deepSTRAPP_paired <- run_deepSTRAPP_for_focal_time(
-#     contMaps = Ponerinae_contMaps,
-#     trait_data_type = "continuous",
-#     BAMM_object = Ponerinae_BAMM_object,
-#     focal_time = focal_time,
-#     uncertainty_strategy = "paired",
-#     seed = 1234, # Set seed for reproducibility
-#     return_perm_data = TRUE,
-#     extract_trait_data_melted_df = TRUE,
-#     extract_diversification_data_melted_df = TRUE)
-# 
-# ## Run deepSTRAPP for the "full" strategy
-# deepSTRAPP_full <- run_deepSTRAPP_for_focal_time(
-#     contMaps = Ponerinae_contMaps,
-#     trait_data_type = "continuous",
-#     BAMM_object = Ponerinae_BAMM_object,
-#     focal_time = focal_time,
-#     uncertainty_strategy = "full",
-#     seed = 1234, # Set seed for reproducibility
-#     return_perm_data = TRUE,
-#     extract_trait_data_melted_df = TRUE,
-#     extract_diversification_data_melted_df = TRUE)
-# 
+
+## Set the focal_time for analyses to 10 Mya.
+focal_time <- 10
+
+## Run deepSTRAPP for the "rates_only" strategy
+deepSTRAPP_rates_only <- run_deepSTRAPP_for_focal_time(
+    contMap = Ponerinae_contMap,
+    trait_data_type = "continuous",
+    BAMM_object = Ponerinae_BAMM_object,
+    focal_time = focal_time,
+    uncertainty_strategy = "rates_only",
+    seed = 1234, # Set seed for reproducibility
+    return_perm_data = TRUE, 
+    extract_trait_data_melted_df = TRUE, 
+    extract_diversification_data_melted_df = TRUE)
+
+## Run deepSTRAPP for the "paired" strategy
+deepSTRAPP_paired <- run_deepSTRAPP_for_focal_time(
+    contMaps = Ponerinae_contMaps,
+    trait_data_type = "continuous",
+    BAMM_object = Ponerinae_BAMM_object,
+    focal_time = focal_time,
+    uncertainty_strategy = "paired",
+    seed = 1234, # Set seed for reproducibility
+    return_perm_data = TRUE, 
+    extract_trait_data_melted_df = TRUE, 
+    extract_diversification_data_melted_df = TRUE)
+
+## Run deepSTRAPP for the "full" strategy
+deepSTRAPP_full <- run_deepSTRAPP_for_focal_time(
+    contMaps = Ponerinae_contMaps,
+    trait_data_type = "continuous",
+    BAMM_object = Ponerinae_BAMM_object,
+    focal_time = focal_time,
+    uncertainty_strategy = "full",
+    seed = 1234, # Set seed for reproducibility
+    return_perm_data = TRUE, 
+    extract_trait_data_melted_df = TRUE, 
+    extract_diversification_data_melted_df = TRUE)
+
 
 ## ----compare_uncertainty_histos-----------------------------------------------
 # # ------ Step 4: Compare outputs across uncertainty strategies ------ #
@@ -520,44 +520,44 @@ knitr::opts_chunk$set(
 # 
 
 ## ----compare_uncertainty_histos_eval, eval = is_dev_version(), echo = FALSE----
-# 
-# ## Aggregate test results in a summary df
-# STRAPP_results_df <- rbind(
-#   deepSTRAPP_rates_only$STRAPP_results[c(10, 1:4)],
-#   deepSTRAPP_paired$STRAPP_results[c(10, 1:4)],
-#   deepSTRAPP_full$STRAPP_results[c(10, 1:4)])
-# 
-# print(STRAPP_results_df)
-# 
-# ## Plot histos
-# 
-# # For "rates_only":
-# ggplot_rates_only <- plot_histogram_STRAPP_test_for_focal_time(
-#    deepSTRAPP_outputs = deepSTRAPP_rates_only,
-#    focal_time = focal_time,
-#    display_plot = FALSE)
-# 
-# # For "paired":
-# ggplot_paired <- plot_histogram_STRAPP_test_for_focal_time(
-#    deepSTRAPP_outputs = deepSTRAPP_paired,
-#    focal_time = focal_time,
-#    display_plot = FALSE)
-# 
-# # For "full":
-# ggplot_full <- plot_histogram_STRAPP_test_for_focal_time(
-#    deepSTRAPP_outputs = deepSTRAPP_full,
-#    focal_time = focal_time,
-#    display_plot = FALSE)
-# 
-# cowplot::plot_grid(plotlist = list(ggplot_rates_only, ggplot_paired, ggplot_full),
-#                    ncol = 1, nrow = 3)
-# 
+
+## Aggregate test results in a summary df
+STRAPP_results_df <- rbind(
+  deepSTRAPP_rates_only$STRAPP_results[c(10, 1:4)],
+  deepSTRAPP_paired$STRAPP_results[c(10, 1:4)],
+  deepSTRAPP_full$STRAPP_results[c(10, 1:4)])
+
+print(STRAPP_results_df)
+
+## Plot histos
+
+# For "rates_only":
+ggplot_rates_only <- plot_histogram_STRAPP_test_for_focal_time(
+   deepSTRAPP_outputs = deepSTRAPP_rates_only,
+   focal_time = focal_time,
+   display_plot = FALSE)
+
+# For "paired":
+ggplot_paired <- plot_histogram_STRAPP_test_for_focal_time(
+   deepSTRAPP_outputs = deepSTRAPP_paired,
+   focal_time = focal_time,
+   display_plot = FALSE)
+
+# For "full":
+ggplot_full <- plot_histogram_STRAPP_test_for_focal_time(
+   deepSTRAPP_outputs = deepSTRAPP_full,
+   focal_time = focal_time,
+   display_plot = FALSE)
+
+cowplot::plot_grid(plotlist = list(ggplot_rates_only, ggplot_paired, ggplot_full),
+                   ncol = 1, nrow = 3)
+
 
 ## ----compare_uncertainty_histos_eval_CRAN, eval = !is_dev_version(), echo = FALSE, out.width = "100%"----
-
-# Plot pre-rendered graph
-knitr::include_graphics("figures/6_Handle_uncertainty_4.2_Histos.PNG")
-
+# 
+# # Plot pre-rendered graph
+# knitr::include_graphics("figures/6_Handle_uncertainty_4.2_Histos.PNG")
+# 
 
 ## ----compare_uncertainty_rates_vs_traits--------------------------------------
 # 
@@ -600,44 +600,44 @@ knitr::include_graphics("figures/6_Handle_uncertainty_4.2_Histos.PNG")
 # 
 
 ## ----compare_uncertainty_rates_vs_traits_eval, eval = is_dev_version(), echo = FALSE----
-# 
-# ## Plot rates vs. traits
-# 
-# # For "rates_only":
-# ggplot_rates_only <- plot_rates_vs_trait_data_for_focal_time(
-#    deepSTRAPP_outputs = deepSTRAPP_rates_only,
-#    focal_time = focal_time,
-#    color_scale = color_scale,
-#    display_plot = FALSE)[[1]]
-# ggplot_rates_only <- ggplot_rates_only +
-#   ggplot2::ggtitle(label = "Strategy = 'rates-only'")
-# 
-# # For "paired":
-# ggplot_paired <- plot_rates_vs_trait_data_for_focal_time(
-#    deepSTRAPP_outputs = deepSTRAPP_paired,
-#    focal_time = focal_time,
-#    color_scale = color_scale,
-#    display_plot = FALSE)[[1]]
-# ggplot_paired <- ggplot_paired +
-#   ggplot2::ggtitle(label = "Strategy = 'paired'")
-# 
-# # For "full":
-# ggplot_full <- plot_rates_vs_trait_data_for_focal_time(
-#    deepSTRAPP_outputs = deepSTRAPP_full,
-#    focal_time = focal_time,
-#    color_scale = color_scale,
-#    display_plot = FALSE)[[1]]
-# ggplot_full <- ggplot_full +
-#   ggplot2::ggtitle(label = "Strategy = 'full'")
-# 
-# 
-# cowplot::plot_grid(plotlist = list(ggplot_rates_only, ggplot_paired, ggplot_full),
-#                    ncol = 1, nrow = 3)
-# 
+
+## Plot rates vs. traits
+
+# For "rates_only":
+ggplot_rates_only <- plot_rates_vs_trait_data_for_focal_time(
+   deepSTRAPP_outputs = deepSTRAPP_rates_only,
+   focal_time = focal_time,
+   color_scale = color_scale,
+   display_plot = FALSE)[[1]]
+ggplot_rates_only <- ggplot_rates_only +
+  ggplot2::ggtitle(label = "Strategy = 'rates-only'")
+
+# For "paired":
+ggplot_paired <- plot_rates_vs_trait_data_for_focal_time(
+   deepSTRAPP_outputs = deepSTRAPP_paired,
+   focal_time = focal_time,
+   color_scale = color_scale,
+   display_plot = FALSE)[[1]]
+ggplot_paired <- ggplot_paired +
+  ggplot2::ggtitle(label = "Strategy = 'paired'")
+
+# For "full":
+ggplot_full <- plot_rates_vs_trait_data_for_focal_time(
+   deepSTRAPP_outputs = deepSTRAPP_full,
+   focal_time = focal_time,
+   color_scale = color_scale,
+   display_plot = FALSE)[[1]]
+ggplot_full <- ggplot_full +
+  ggplot2::ggtitle(label = "Strategy = 'full'")
+
+
+cowplot::plot_grid(plotlist = list(ggplot_rates_only, ggplot_paired, ggplot_full),
+                   ncol = 1, nrow = 3)
+
 
 ## ----compare_uncertainty_rates_vs_traits_eval_CRAN, eval = !is_dev_version(), echo = FALSE, out.width = "100%"----
-
-# Plot pre-rendered graph
-knitr::include_graphics("figures/6_Handle_uncertainty_4.3_Rates_vs_traits.PNG")
-
+# 
+# # Plot pre-rendered graph
+# knitr::include_graphics("figures/6_Handle_uncertainty_4.3_Rates_vs_traits.PNG")
+# 
 
