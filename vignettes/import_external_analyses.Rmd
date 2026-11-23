@@ -700,6 +700,20 @@ eel_simmaps <- convert_BSMs_to_simmaps(model_fit = DEC_J_fit,
                                        phylo = eel.tree,
                                        BSM_output = BSM_output)
 
+## Note on node numbering:
+# BioGeoBEARS reads the phylogeny from a Newick file, so it numbers the nodes as ape::read.tree() does.
+# The tables of events in 'BSM_output' and the ancestral range estimates in 'DEC_J_fit' follow this numbering.
+
+# If your 'phylo' object has the same topology but a different numbering of its internal nodes
+# (e.g., a tree with edges not in cladewise order),
+# convert_BSMs_to_simmaps() converts the events on the phylogeny and then
+# renumbers the nodes and sorts the edges of the simmaps to match your 'phylo' object.
+
+# Therefore, the `simmap` objects are compatible with `phylo`, whatever the node numbering of `phylo`
+# However, 'BSM_output' and 'DEC_J_fit' keep the node numbering of BioGeoBEARS.
+# Do not match their node numbers directly with the nodes of 'phylo' unless:
+# identical(ape::read.tree(text = ape::write.tree(phylo))$edge, phylo$edge)
+
 ## Plot the resulting simmaps
 
 # Set colors per ranges
@@ -715,7 +729,7 @@ title(main = "\nSimulation n°10")
 par(mfrow = c(1,1))
 
 ## The `simmaps` object (`eel_simmaps`) is the main input for testing differences
-# in evolutionary rates between states over time with deepSTRAPP.
+## in evolutionary rates between states over time with deepSTRAPP.
 # Importantly, `simmaps` retain the identity of each simulated history,
 # allowing deepSTRAPP to keep track of which simulation generated each set of trait values (i.e., states).
 

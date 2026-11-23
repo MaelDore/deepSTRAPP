@@ -53,6 +53,8 @@
 #' @param model_fit A BioGeoBEARS results object, produced by ML inference via `BioGeoBEARS::bears_optim_run()`.
 #' @param phylo Time-calibrated phylogeny used in the BioGeoBEARS analyses to produce the historical biogeographic inference
 #'  and run the Biogeographic Stochastic Mapping. Object of class `"phylo"` as defined in `{ape}`.
+#'  The numbering of its internal nodes does not need to match the one used by BioGeoBEARS:
+#'  the `simmap` objects returned follow the node numbering and the order of the edges of `phylo` (see Details).
 #' @param BSM_output A list with two objects, a cladogenetic events table and an anagenetic events table, as the result of
 #'   Biogeographic Stochastic Mapping conducted with `BioGeoBEARS::runBSM()`.
 #' @param sim_index Integer. Index of the biogeographic simulation targeted to produce the `simmap` with [deepSTRAPP::convert_BSM_to_simmap()].
@@ -69,7 +71,23 @@
 #'  * Requires directly the output of `BioGeoBEARS::runBSM()` instead of separated cladogenetic and anagenetic event tables.
 #'  * Resolve paths to local tree and tip range files.
 #'  * Restore the S4 class 'BioGeoBEARS_model' if needed.
+#'  * Ensure that the node numbering of `phylo` does not affect the output (see below).
 #'  * Update the documentation.
+#'
+#' # Notes on the node numbering
+#'
+#'  BioGeoBEARS reads phylogenies from Newick files. It numbers the nodes (and orders the edges) as [ape::read.tree()] does,
+#'  i.e., with tips in order of appearance and internal nodes in depth-first order, with edges in "cladewise" order.
+#'  The tables of events in `BSM_output`, and the ancestral range estimates in `model_fit`, refer to this numbering
+#'  to ensure those outputs are compatible with what a BioGeoBEARS run performed outside of deepSTRAPP woudl produce.
+#'
+#'  A `phylo` object that has the same topology but another numbering of its internal nodes
+#'  (e.g., a tree whose edges are not in cladewise order) would not match them,
+#'  and the stochastic maps would be inconsistent with the edges of `phylo`.
+#'
+#'  To avoid this, the functions renumber the nodes and sort the edges of the resulting `simmap` objects to match `phylo`.
+#'  Therefore, the `simmap` objects can be used directly with `phylo`, whatever the node numbering of `phylo`.
+#'  Conversely, `BSM_output` and `model_fit` always keep the node numbering used by BioGeoBEARS and may not match with `phylo`.
 #'
 #' @return The [deepSTRAPP::convert_BSM_to_simmap()] function returns a list with two elements:
 #'   * `$simmap` A unique `simmap` for a given biogeographic simulation as an object of classes `c("simmap", "phylo")`.
@@ -131,7 +149,20 @@
 #'  # Explore output
 #'  str(all_simmaps, max.level = 1)
 #'  # Plot simmap n°1
-#'  plot(all_simmaps[[1]]) }
+#'  plot(all_simmaps[[1]])
+#'
+#'  ## The node numbering of 'phylo' does not need to match the one used by BioGeoBEARS
+#'
+#'  # Use the same topology, but other node numbering and other order of the edges
+#'  eel_tree_postorder <- ape::reorder.phylo(eel.tree, order = "postorder")
+#'
+#'  # Convert BioGeoBEARS outputs into simmaps
+#'  all_simmaps_postorder <- convert_BSMs_to_simmaps(model_fit = eel_biogeo_data$best_model_fit,
+#'                                                   phylo = eel_tree_postorder,
+#'                                                   BSM_output = eel_biogeo_data$BSM_output)
+#'
+#'  # The simmaps follow the new node numbering and the edge order of the phylogeny provided
+#'  identical(all_simmaps_postorder[[1]]$edge, eel_tree_postorder$edge) }
 #' }
 #'
 
@@ -154,6 +185,11 @@ convert_BSM_to_simmap <- function(model_fit, phylo, BSM_output, sim_index)
   repaired <- repair_BioGeoBEARS_model_fit(model_fit = model_fit, phylo = phylo)
   model_fit <- repaired$model_fit
   on.exit(unlink(repaired$tmp_files), add = TRUE)
+
+  # Use the node numbering of BioGeoBEARS (as ape::read.tree() does) to match the tables of events. Restored at the end (see import_phylo_as_BioGeoBEARS())
+  phylo_input <- phylo
+  phylo_BioGeoBEARS <- import_phylo_as_BioGeoBEARS(phylo = phylo_input)
+  phylo <- phylo_BioGeoBEARS$phylo
 
   # Extract the tables of cladogenetic and anagenetic events
   clado_events_table <- BSM_output$RES_clado_events_tables[[sim_index]]
@@ -531,6 +567,12 @@ convert_BSM_to_simmap <- function(model_fit, phylo, BSM_output, sim_index)
   tr_wSimmap$maps
   tr_wSimmap$mapped.edge
 
+  # Restore the node numbering and the order of the edges of the input phylogeny
+  if (phylo_BioGeoBEARS$numbering_changed)
+  {
+    tr_wSimmap <- restore_simmap_node_numbering(simmaps = tr_wSimmap, phylo_input = phylo_input, node_ids_in_input = phylo_BioGeoBEARS$node_ids_in_input)
+  }
+
   return(list(simmap = tr_wSimmap, residence_times = state_times_df))
 }
 
@@ -548,6 +590,11 @@ convert_BSMs_to_simmaps <- function(model_fit, phylo, BSM_output)
   model_fit <- repaired$model_fit
   on.exit(unlink(repaired$tmp_files), add = TRUE)
 
+  # Use the node numbering of BioGeoBEARS for all simulations. Restored at the end (see import_phylo_as_BioGeoBEARS())
+  phylo_input <- phylo
+  phylo_BioGeoBEARS <- import_phylo_as_BioGeoBEARS(phylo = phylo_input)
+  phylo <- phylo_BioGeoBEARS$phylo
+
   # Initiate final output
   simmaps_list = list()
 
@@ -558,6 +605,13 @@ convert_BSMs_to_simmaps <- function(model_fit, phylo, BSM_output)
   }
 
   class(simmaps_list) = c("multiSimmap", "multiPhylo")
+
+  # Restore the node numbering and the order of the edges of the input phylogeny
+  if (phylo_BioGeoBEARS$numbering_changed)
+  {
+    simmaps_list <- restore_simmap_node_numbering(simmaps = simmaps_list, phylo_input = phylo_input, node_ids_in_input = phylo_BioGeoBEARS$node_ids_in_input)
+  }
+
   return(simmaps_list)
 }
 
@@ -651,3 +705,79 @@ repair_BioGeoBEARS_model_fit <- function(model_fit, phylo)
 }
 
 
+### Helper functions to handle the node numbering of phylogenies used with BioGeoBEARS ####
+
+#' @title Import a phylogeny as BioGeoBEARS does
+#'
+#' @description BioGeoBEARS reads phylogenies from Newick files, so it numbers the nodes and orders the edges as [ape::read.tree()] does.
+#'  The function re-imports the phylogeny in the same way, and records how its nodes match the nodes of the original phylogeny.
+#'
+#' @param phylo Object of class `"phylo"`.
+#'
+#' @return A list with three elements:
+#'   * `$phylo` Object of class `"phylo"`. The re-imported phylogeny, with the node numbering used by BioGeoBEARS.
+#'   * `$node_ids_in_input` Integer vector. Node number in the original `phylo` of each node of the re-imported phylogeny (tips first, then internal nodes).
+#'   * `$numbering_changed` Logical. Whether the edge matrix (node numbering or order of the edges) differs between the re-imported and the original phylogeny.
+#'
+#' @importFrom ape read.tree write.tree
+#' @importFrom phytools matchNodes
+#'
+#' @noRd
+
+import_phylo_as_BioGeoBEARS <- function (phylo)
+{
+  # Re-import the phylogeny from the Newick format
+  phylo_BioGeoBEARS <- ape::read.tree(text = ape::write.tree(phy = phylo, digits = 15))
+
+  # Match tips (by labels) and internal nodes (by descendants)
+  node_ids_in_input <- c(match(x = phylo_BioGeoBEARS$tip.label, table = phylo$tip.label), integer(phylo_BioGeoBEARS$Nnode))
+  node_matches <- phytools::matchNodes(tr1 = phylo_BioGeoBEARS, tr2 = phylo, method = "descendants")
+  node_ids_in_input[node_matches[, 1]] <- node_matches[, 2]
+
+  return(list(phylo = phylo_BioGeoBEARS,
+              node_ids_in_input = node_ids_in_input,
+              numbering_changed = !identical(phylo_BioGeoBEARS$edge, phylo$edge)))
+}
+
+#' @title Restore the node numbering of a phylogeny in a simmap or a multiSimmap
+#'
+#' @description Renumber the nodes of simmaps built on a phylogeny re-imported with [ape::read.tree()] (see `import_phylo_as_BioGeoBEARS()`),
+#'   and sort their edges, so that they match the nodes and the edges of the original phylogeny.
+#'
+#' @param simmaps Object of class `"simmap"`, or `"multiSimmap"`, built on a phylogeny with the same topology as `phylo_input`.
+#' @param phylo_input Object of class `"phylo"`. The phylogeny with the target node numbering.
+#' @param node_ids_in_input Integer vector. Node number in `phylo_input` of each node of `simmaps` (tips first, then internal nodes).
+#'
+#' @return The simmap or the multiSimmap, with the same classes as the input, and the node numbering, the order of the edges
+#'   and the branch lengths of `phylo_input`.
+#'
+#' @noRd
+
+restore_simmap_node_numbering <- function (simmaps, phylo_input, node_ids_in_input)
+{
+  restore_one <- function (simmap)
+  {
+    new_edge <- matrix(node_ids_in_input[simmap$edge], ncol = 2)
+    # Edges in the order of the input phylo
+    edge_order <- match(paste(phylo_input$edge[, 1], phylo_input$edge[, 2]), paste(new_edge[, 1], new_edge[, 2]))
+    if (anyNA(edge_order)) { stop("The simmap and 'phylo_input' do not have the same topology.") }
+    simmap$edge <- phylo_input$edge
+    simmap$edge.length <- phylo_input$edge.length
+    simmap$maps <- simmap$maps[edge_order]
+    simmap$mapped.edge <- simmap$mapped.edge[edge_order, , drop = FALSE]
+    row.names(simmap$mapped.edge) <- paste(phylo_input$edge[, 1], phylo_input$edge[, 2], sep = ",")
+    simmap$tip.label <- phylo_input$tip.label
+    simmap$node.label <- phylo_input$node.label
+    attr(simmap, "order") <- attr(phylo_input, "order")
+    return(simmap)
+  }
+  if (inherits(simmaps, "multiSimmap"))
+  {
+    simmaps_classes <- class(simmaps)
+    simmaps <- lapply(X = unclass(simmaps), FUN = restore_one)
+    class(simmaps) <- simmaps_classes
+    return(simmaps)
+  } else {
+    return(restore_one(simmaps))
+  }
+}

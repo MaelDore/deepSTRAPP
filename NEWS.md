@@ -2,6 +2,13 @@
 
 * Include all deepSTRAPP datasets that are to heavy to be included in the CRAN release.
 
+* `prepare_trait_data()` now accepts biogeographic `tip_data` in which an area is only found within multi-area ranges (e.g., area `"C"` only in range `"BC"`).
+* `prepare_trait_data()` no longer fails when building density maps for a state or a range that is absent from the first stochastic map but present in other maps (e.g., a rarely visited range such as `"C"` or `"AC"`).
+
+* **Biogeographic data: node numbering**. BioGeoBEARS reads the phylogeny from a Newick file, so it numbers the nodes (and orders the edges) as `ape::read.tree()` does. Phylogenies with the same topology but another numbering of their internal nodes (e.g., with edges not in cladewise order) led to stochastic maps that were inconsistent with the edges of `phylo`.
+  * `convert_BSM_to_simmap()` and `convert_BSMs_to_simmaps()` now convert the BSM outputs on the phylogeny as re-imported by `ape::read.tree()`, then renumber the nodes and sort the edges of the simmaps to match the `phylo` provided. Simmaps are therefore compatible with `phylo`, whatever its node numbering.
+  * `prepare_trait_data()` now renumbers nodes in `$simmaps`, `$densityMaps`, `$densityMaps_all_ranges` and `$ace` to match the input `phylo`. `$BSM_output` and `$best_model_fit` keep the numbering used by BioGeoBEARS for compatibility with BioGeoBEARS outputs as produced by external analyses.
+
 # deepSTRAPP 1.1.1
 
 * `convert_BSM_to_simmap()` and `convert_BSMs_to_simmaps()` now repair paths to phylo and tip ranges objects used in the example `eel_biogeo_data` dataset.

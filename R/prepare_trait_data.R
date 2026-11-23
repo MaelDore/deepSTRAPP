@@ -22,6 +22,8 @@
 #'   (ex: A, B), combined to form multi-area ranges (Ex: AB). Alternatively, you can provide tip_data as a matrix or data.frame of
 #'   binary presence/absence in each area (coded as unique CAPITAL letter). In this case, columns are unique areas, rows are taxa,
 #'   and values are integer (0/1) signaling absence or presence of the taxa in the area.
+#'   The unique areas used for modeling are all the areas found in the ranges, which means that an area can be found only within multi-area ranges
+#'   (Ex: tips in 'BC', but no tips in 'C', yet the area C will be accounted for).
 #' @param trait_data_type Character string. Type of trait data. Either: "continuous", "categorical" or "biogeographic".
 #' @param phylo Time-calibrated phylogeny. Object of class `"phylo"` as defined in `{ape}`.
 #'   Tip labels (`phylo$tip.label`) should match names in `tip_data`.
@@ -144,6 +146,18 @@
 #'  The R package `BioGeoBEARS` is needed for this function to work with biogeographic data.
 #'  Please install it manually from: \href{https://github.com/nmatzke/BioGeoBEARS}{https://github.com/nmatzke/BioGeoBEARS}.
 #'
+#' # Notes on the node numbering for biogeographic data
+#'
+#'  BioGeoBEARS reads phylogenies from Newick files, so it numbers the nodes (and orders the edges) as [ape::read.tree()] does.
+#'  If `phylo` has the same topology but another numbering of its internal nodes (e.g., a tree whose edges are not in cladewise order),
+#'  the models and stochastic maps are computed on the re-imported phylogeny (following BioGeoBEARS usage),
+#'  but the results are renumbered to match `phylo`. Therefore, `$simmaps`, `$densityMaps`, `$densityMaps_all_ranges` and `$ace`
+#'  always follow the node numbering (and the order of the edges) of `phylo`, whatever its numbering.
+#'  However, `$BSM_output` and `$best_model_fit` are returned as produced by BioGeoBEARS, with its own node numbering.
+#'  Those outputs can be used with [deepSTRAPP::convert_BSMs_to_simmaps()], which handles the numbering and ensure proper matching with `phylo`,
+#'  but their node numbers (e.g., in the tables of events, or in the rows of the ancestral range estimates of the model fit)
+#'  should not be matched directly with the nodes of `phylo` unless `phylo` has the same numbering as `ape::read.tree(text = ape::write.tree(phylo))`.
+#'
 #' @return The function returns a list with at least three elements.
 #'
 #'   * `$contMap` (For "continuous" data) Object of class `"contMap"`, typically generated with [phytools::contMap()],
@@ -173,14 +187,18 @@
 #'   * `$BSM_output` List of two lists that contains summary information of cladogenetic (`$RES_caldo_events_tables`) and anagenetic (`$RES_ana_events_tables`) events
 #'     recording across the N simulations of biogeographic histories performed during Biogeographic Stochastic Mapping (BSM).
 #'     Each element of the list is a data.frame recording events occurring during one simulation.
+#'     Node numbers follow the numbering used by BioGeoBEARS (as [ape::read.tree()]), which may differ from the numbering of `phylo` (see Notes on the node numbering).
 #'
 #'   If `return_simmaps = TRUE`, (Only for categorical and biogeographic data)
 #'   * `$simmaps` List that contains as many objects of class `"simmap"` that `nb_simulations` were requested.
 #'     Each simmap object is a phylogeny with one simulated discrete character/geographic evolutionary history (i.e., transitions in character states/geographic ranges) mapped along branches.
 #'     This is needed to be able to track which simulated history provided which trait data in downstream analyses, although it may create voluminous objects.
+#'     The simmaps follow the node numbering and the order of the edges of `phylo`.
 #'
 #'   If `return_best_model_fit = TRUE`,
 #'   * `$best_model_fit` List that provides the output of the best fitting model.
+#'     For biogeographic data, the node numbers (e.g., rows of the ancestral range estimates) follow the numbering used by BioGeoBEARS (as [ape::read.tree()]),
+#'     which may differ from the numbering of `phylo` (see Notes on the node numbering).
 #'
 #'   If `model_selection_df = TRUE`,
 #'   * `$model_selection_df` Data.frame that summarizes model comparisons used to select the best fitting model.
@@ -1367,6 +1385,7 @@ prepare_trait_data_for_categorical_data <- function (
     densityMap_state_i <- densityMap_custom(trees = simmaps_binary_i,
                                             tol = 1e-5, verbose = verbose,
                                             col_scale = NULL,
+                                            states = c("0", "1"), # Binary maps. Avoid deriving states from the first map only (it may lack the state '1' or '0' while other maps have it)
                                             plot = FALSE)
 
     ## Update color gradient
@@ -1578,10 +1597,9 @@ prepare_trait_data_for_biogeographic_data <- function (
 
   ## Extract and order ranges
   all_ranges <- unique(tip_data)
-  all_ranges <- all_ranges[order(all_ranges)]
-  unique_areas <- all_ranges[nchar(all_ranges) == 1]
-  multi_area_ranges <- setdiff(all_ranges, unique_areas)
-  all_ranges <- c(unique_areas, multi_area_ranges)
+  # Unique areas are all the letters found in the ranges: an area may be found only within multi-area ranges (Ex: C in BC)
+  unique_areas <- unique(unlist(strsplit(x = all_ranges, split = "")))
+  unique_areas <- unique_areas[order(unique_areas)]
 
   ### Check input validity
   {
@@ -1592,18 +1610,6 @@ prepare_trait_data_for_biogeographic_data <- function (
       stop(paste0("For 'trait_data_type = biogeographic', 'tip_data' must be only in CAPITALS following BioGeoBEARS scheme.\n",
                   "See details in documentation from R package 'BioGeoBEARS'."))
     }
-    # Check that all multi-area ranges are covered by unique areas
-    unique_areas_in_multi_area_ranges <- unique(unlist(strsplit(x = multi_area_ranges, split = "")))
-    if (!all(unique_areas_in_multi_area_ranges %in% unique_areas))
-    {
-      missing_unique_areas <- unique_areas_in_multi_area_ranges[!(unique_areas_in_multi_area_ranges %in% unique_areas)]
-      detect_problematic_multi_area_ranges <- unlist(lapply(X = strsplit(x = multi_area_ranges, split = ""), FUN = function (x) { any(missing_unique_areas %in% x) }))
-      problematic_multi_area_ranges <- multi_area_ranges[detect_problematic_multi_area_ranges]
-      stop(paste0("For 'trait_data_type = biogeographic', 'tip_data' must following BioGeoBEARS scheme.\n",
-                  "Currently, range(s) ",paste(problematic_multi_area_ranges, collapse = ", ")," is/are not covered by the unique areas found in tip_data.\n",
-                  "Unique areas: ",paste(unique_areas, collapse = ", "),"."))
-    }
-
     ## evolutionary_models
     if (!is.null(evolutionary_models))
     {
@@ -1704,6 +1710,18 @@ prepare_trait_data_for_biogeographic_data <- function (
   nb_tips <- length(phylo$tip.label)
   # Get number of nodes
   nb_nodes <- nb_tips + phylo$Nnode
+
+  ## Make sure that node numbers are the ones BioGeoBEARS will use
+  # BioGeoBEARS reads the phylogeny from a Newick file, so it numbers the internal nodes as ape::read.tree() does.
+  # If 'phylo' has the same topology but another numbering of its internal nodes (e.g., tree with edges in cladewise order),
+  # the outputs of BioGeoBEARS (ancestral states per node, stochastic maps per edge) would not match the nodes/edges of 'phylo'.
+  # To fix this, the models and the maps are computed on the re-imported phylogeny (as in BioGeoBEARS), and results are renumbered to match the input 'phylo' at the end.
+  # See the helper fucntions import_phylo_as_BioGeoBEARS() and restore_simmap_node_numbering()
+  phylo_input <- phylo
+  phylo_BioGeoBEARS <- import_phylo_as_BioGeoBEARS(phylo = phylo_input)
+  phylo <- phylo_BioGeoBEARS$phylo
+  node_numbering_changed <- phylo_BioGeoBEARS$numbering_changed
+  node_ids_in_input <- phylo_BioGeoBEARS$node_ids_in_input
 
   ### Step 1 - Run all models and store their results in a list
 
@@ -2480,6 +2498,7 @@ prepare_trait_data_for_biogeographic_data <- function (
     densityMap_range_i <- densityMap_custom(trees = simmaps_binary_i,
                                             tol = 1e-5, verbose = verbose,
                                             col_scale = NULL,
+                                            states = c("0", "1"), # Binary maps. Avoid deriving states from the first map only (it may lack the state '1' or '0' while other maps have it)
                                             plot = FALSE)
 
     ## Update color gradient
@@ -2720,6 +2739,29 @@ prepare_trait_data_for_biogeographic_data <- function (
     if (length(list.files(path = file.path(BioGeoBEARS_directory_path))) == 0)
     {
       unlink(x = file.path(BioGeoBEARS_directory_path), force = TRUE)
+    }
+  }
+
+  ## Restore the node numbering of the input 'phylo' in the results
+  if (node_numbering_changed)
+  {
+    # Simmaps and trees of densityMaps: renumber nodes and sort edges as in the input phylo
+    all_simmaps <- restore_simmap_node_numbering(all_simmaps, phylo_input = phylo_input, node_ids_in_input = node_ids_in_input)
+    densityMaps_all_ranges <- lapply(X = densityMaps_all_ranges, FUN = function (x) { x$tree <- restore_simmap_node_numbering(x$tree, phylo_input = phylo_input, node_ids_in_input = node_ids_in_input); return(x) })
+    if (split_multi_area_ranges)
+    {
+      densityMaps_unique_areas <- lapply(X = densityMaps_unique_areas, FUN = function (x) { x$tree <- restore_simmap_node_numbering(x$tree, phylo_input = phylo_input, node_ids_in_input = node_ids_in_input); return(x) })
+    }
+    # Ancestral estimates: sort internal nodes as in the input phylo
+    internal_rows <- (nb_tips + 1):nrow(ace_matrix)
+    new_node_ids <- node_ids_in_input[as.integer(row.names(ace_matrix)[internal_rows])]
+    new_order <- c(seq_len(nb_tips), nb_tips + order(new_node_ids))
+    ace_matrix <- ace_matrix[new_order, , drop = FALSE]
+    row.names(ace_matrix) <- c(phylo_input$tip.label, sort(new_node_ids))
+    if (split_multi_area_ranges)
+    {
+      ace_matrix_unique_areas <- ace_matrix_unique_areas[new_order, , drop = FALSE]
+      row.names(ace_matrix_unique_areas) <- row.names(ace_matrix)
     }
   }
 
