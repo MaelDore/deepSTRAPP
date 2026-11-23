@@ -37,11 +37,16 @@ Rows are internal nodes. Columns are ranges. Values are posterior probabilities 
 \item \verb{$BSM_output} List of two lists that contain summary information of cladogenetic (\verb{$RES_caldo_events_tables}) and anagenetic (\verb{$RES_ana_events_tables}) events
 recorded across the 1000 simulations of biogeographic histories performed during Biogeographic Stochastic Mapping (BSM).
 Each element of the list is a data.frame recording events occurring during one simulation.
+Node numbers follow the numbering used by BioGeoBEARS, which is the one of \code{phytools::eel.tree} (the same as \code{ape::read.tree()} would give).
 \item \verb{$simmaps} List of 1000 objects of class \code{"simmap"}.
 Each simmap object is a phylogeny with one simulated biogeographic history (i.e., transitions in geographic ranges) mapped along branches.
 \item \verb{$best_model_fit} List that provides the output of the best fitting model (Here: DEC+J model).
+Node numbers follow the numbering used by BioGeoBEARS, which is the one of \code{phytools::eel.tree}.
 \item \verb{$model_selection_df} Data.frame that summarizes model comparisons used to select the best fitting model.
 }
+
+Note that BioGeoBEARS numbers the nodes of a phylogeny as \code{ape::read.tree()} does. For other phylogenies, the nodes of \verb{$BSM_output}
+and \verb{$best_model_fit} may differ from the nodes of the original \code{phylo} object. See \code{\link[=convert_BSMs_to_simmaps]{convert_BSMs_to_simmaps()}}.
 }
 \references{
 Collar, D. C., P. C. Wainwright, M. E. Alfaro, L. J. Revell, and R. S. Mehta (2014) Biting disrupts integration to spur skull evolution in eels. Nature Communications, 5, 5505.

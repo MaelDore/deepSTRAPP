@@ -41,7 +41,9 @@ Names should be ordered as the tip labels in the phylogeny found in \code{phylo$
 For biogeographic data, ranges should follow the coding scheme of BioGeoBEARS with a unique CAPITAL letter per unique area
 (ex: A, B), combined to form multi-area ranges (Ex: AB). Alternatively, you can provide tip_data as a matrix or data.frame of
 binary presence/absence in each area (coded as unique CAPITAL letter). In this case, columns are unique areas, rows are taxa,
-and values are integer (0/1) signaling absence or presence of the taxa in the area.}
+and values are integer (0/1) signaling absence or presence of the taxa in the area.
+The unique areas used for modeling are all the areas found in the ranges, which means that an area can be found only within multi-area ranges
+(Ex: tips in 'BC', but no tips in 'C', yet the area C will be accounted for).}
 
 \item{trait_data_type}{Character string. Type of trait data. Either: "continuous", "categorical" or "biogeographic".}
 
@@ -157,6 +159,7 @@ If \code{return_BSM = TRUE}, (Only for biogeographic data)
 \item \verb{$BSM_output} List of two lists that contains summary information of cladogenetic (\verb{$RES_caldo_events_tables}) and anagenetic (\verb{$RES_ana_events_tables}) events
 recording across the N simulations of biogeographic histories performed during Biogeographic Stochastic Mapping (BSM).
 Each element of the list is a data.frame recording events occurring during one simulation.
+Node numbers follow the numbering used by BioGeoBEARS (as \code{\link[ape:read.tree]{ape::read.tree()}}), which may differ from the numbering of \code{phylo} (see Notes on the node numbering).
 }
 
 If \code{return_simmaps = TRUE}, (Only for categorical and biogeographic data)
@@ -164,11 +167,14 @@ If \code{return_simmaps = TRUE}, (Only for categorical and biogeographic data)
 \item \verb{$simmaps} List that contains as many objects of class \code{"simmap"} that \code{nb_simulations} were requested.
 Each simmap object is a phylogeny with one simulated discrete character/geographic evolutionary history (i.e., transitions in character states/geographic ranges) mapped along branches.
 This is needed to be able to track which simulated history provided which trait data in downstream analyses, although it may create voluminous objects.
+The simmaps follow the node numbering and the order of the edges of \code{phylo}.
 }
 
 If \code{return_best_model_fit = TRUE},
 \itemize{
 \item \verb{$best_model_fit} List that provides the output of the best fitting model.
+For biogeographic data, the node numbers (e.g., rows of the ancestral range estimates) follow the numbering used by BioGeoBEARS (as \code{\link[ape:read.tree]{ape::read.tree()}}),
+which may differ from the numbering of \code{phylo} (see Notes on the node numbering).
 }
 
 If \code{model_selection_df = TRUE},
@@ -260,6 +266,18 @@ See for instance, \href{http://phylo.wikidot.com/biogeobears}{http://phylo.wikid
 
 The R package \code{BioGeoBEARS} is needed for this function to work with biogeographic data.
 Please install it manually from: \href{https://github.com/nmatzke/BioGeoBEARS}{https://github.com/nmatzke/BioGeoBEARS}.
+}
+
+\section{Notes on the node numbering for biogeographic data}{
+BioGeoBEARS reads phylogenies from Newick files, so it numbers the nodes (and orders the edges) as \code{\link[ape:read.tree]{ape::read.tree()}} does.
+If \code{phylo} has the same topology but another numbering of its internal nodes (e.g., a tree whose edges are not in cladewise order),
+the models and stochastic maps are computed on the re-imported phylogeny (following BioGeoBEARS usage),
+but the results are renumbered to match \code{phylo}. Therefore, \verb{$simmaps}, \verb{$densityMaps}, \verb{$densityMaps_all_ranges} and \verb{$ace}
+always follow the node numbering (and the order of the edges) of \code{phylo}, whatever its numbering.
+However, \verb{$BSM_output} and \verb{$best_model_fit} are returned as produced by BioGeoBEARS, with its own node numbering.
+Those outputs can be used with \code{\link[=convert_BSMs_to_simmaps]{convert_BSMs_to_simmaps()}}, which handles the numbering and ensure proper matching with \code{phylo},
+but their node numbers (e.g., in the tables of events, or in the rows of the ancestral range estimates of the model fit)
+should not be matched directly with the nodes of \code{phylo} unless \code{phylo} has the same numbering as \code{ape::read.tree(text = ape::write.tree(phylo))}.
 }
 
 \examples{

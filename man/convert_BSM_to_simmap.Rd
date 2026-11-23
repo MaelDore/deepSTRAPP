@@ -13,7 +13,9 @@ convert_BSMs_to_simmaps(model_fit, phylo, BSM_output)
 \item{model_fit}{A BioGeoBEARS results object, produced by ML inference via \code{BioGeoBEARS::bears_optim_run()}.}
 
 \item{phylo}{Time-calibrated phylogeny used in the BioGeoBEARS analyses to produce the historical biogeographic inference
-and run the Biogeographic Stochastic Mapping. Object of class \code{"phylo"} as defined in \code{{ape}}.}
+and run the Biogeographic Stochastic Mapping. Object of class \code{"phylo"} as defined in \code{{ape}}.
+The numbering of its internal nodes does not need to match the one used by BioGeoBEARS:
+the \code{simmap} objects returned follow the node numbering and the order of the edges of \code{phylo} (see Details).}
 
 \item{BSM_output}{A list with two objects, a cladogenetic events table and an anagenetic events table, as the result of
 Biogeographic Stochastic Mapping conducted with \code{BioGeoBEARS::runBSM()}.}
@@ -78,9 +80,25 @@ Changes:
 \item Requires directly the output of \code{BioGeoBEARS::runBSM()} instead of separated cladogenetic and anagenetic event tables.
 \item Resolve paths to local tree and tip range files.
 \item Restore the S4 class 'BioGeoBEARS_model' if needed.
+\item Ensure that the node numbering of \code{phylo} does not affect the output (see below).
 \item Update the documentation.
 }
 }
+\section{Notes on the node numbering}{
+BioGeoBEARS reads phylogenies from Newick files. It numbers the nodes (and orders the edges) as \code{\link[ape:read.tree]{ape::read.tree()}} does,
+i.e., with tips in order of appearance and internal nodes in depth-first order, with edges in "cladewise" order.
+The tables of events in \code{BSM_output}, and the ancestral range estimates in \code{model_fit}, refer to this numbering
+to ensure those outputs are compatible with what a BioGeoBEARS run performed outside of deepSTRAPP woudl produce.
+
+A \code{phylo} object that has the same topology but another numbering of its internal nodes
+(e.g., a tree whose edges are not in cladewise order) would not match them,
+and the stochastic maps would be inconsistent with the edges of \code{phylo}.
+
+To avoid this, the functions renumber the nodes and sort the edges of the resulting \code{simmap} objects to match \code{phylo}.
+Therefore, the \code{simmap} objects can be used directly with \code{phylo}, whatever the node numbering of \code{phylo}.
+Conversely, \code{BSM_output} and \code{model_fit} always keep the node numbering used by BioGeoBEARS and may not match with \code{phylo}.
+}
+
 \section{Notes on BioGeoBEARS}{
 The R package \code{BioGeoBEARS} is needed for this function to work with biogeographic data.
 Please install it manually from: \href{https://github.com/nmatzke/BioGeoBEARS}{https://github.com/nmatzke/BioGeoBEARS}.
@@ -144,7 +162,20 @@ if (deepSTRAPP::is_dev_version())
  # Explore output
  str(all_simmaps, max.level = 1)
  # Plot simmap n°1
- plot(all_simmaps[[1]]) }
+ plot(all_simmaps[[1]])
+
+ ## The node numbering of 'phylo' does not need to match the one used by BioGeoBEARS
+
+ # Use the same topology, but other node numbering and other order of the edges
+ eel_tree_postorder <- ape::reorder.phylo(eel.tree, order = "postorder")
+
+ # Convert BioGeoBEARS outputs into simmaps
+ all_simmaps_postorder <- convert_BSMs_to_simmaps(model_fit = eel_biogeo_data$best_model_fit,
+                                                  phylo = eel_tree_postorder,
+                                                  BSM_output = eel_biogeo_data$BSM_output)
+
+ # The simmaps follow the new node numbering and the edge order of the phylogeny provided
+ identical(all_simmaps_postorder[[1]]$edge, eel_tree_postorder$edge) }
 }
 
 }

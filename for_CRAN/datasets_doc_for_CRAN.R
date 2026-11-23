@@ -348,10 +348,15 @@
 #'   * `$BSM_output` List of two lists that contain summary information on cladogenetic (`$RES_caldo_events_tables`) and anagenetic (`$RES_ana_events_tables`) events
 #'     recorded across the 1000 simulations of biogeographic histories performed during Biogeographic Stochastic Mapping (BSM).
 #'     Each element of the list is a data.frame recording events occurring during one simulation.
+#'     Node numbers follow the numbering used by BioGeoBEARS, which is the one of `phytools::eel.tree` (the same as `ape::read.tree()` would give).
 #'   * `$simmaps` List of 1000 objects of class `"simmap"`.
 #'     Each simmap object is a phylogeny with one simulated biogeographic history (i.e., transitions in geographic ranges) mapped along branches.
 #'   * `$best_model_fit` List that provides the output of the best fitting model (Here: DEC+J model).
+#'     Node numbers follow the numbering used by BioGeoBEARS, which is the one of `phytools::eel.tree`.
 #'   * `$model_selection_df` Data.frame that summarizes model comparisons used to select the best fitting model.
+#'
+#'  Note that BioGeoBEARS numbers the nodes of a phylogeny as `ape::read.tree()` does. For other phylogenies, the nodes of `$BSM_output`
+#'  and `$best_model_fit` may differ from the nodes of the original `phylo` object. See [deepSTRAPP::convert_BSMs_to_simmaps()].
 #'
 #' @docType data
 #' @keywords datasets
