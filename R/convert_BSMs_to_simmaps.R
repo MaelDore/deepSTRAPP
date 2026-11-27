@@ -226,6 +226,20 @@ convert_BSM_to_simmap <- function(model_fit, phylo, BSM_output, sim_index)
   max_range_size <- max(nchar(reduced_ranges_list))
   ranges_list <- generate_list_ranges(areas_list = areanames, max_range_size = max_range_size, include_null_range = model_fit$inputs$include_null_range)
 
+  # Time-stratified models: BSM state numbers index the master list of all geographic states
+  # (saved by BioGeoBEARS in model_fit$inputs$all_geog_states_list_usually_inferred_from_areas_maxareas),
+  # not the list of states of the first time period returned by get_Qmat_COOmat_from_BioGeoBEARS_run_object()
+  # (which can be reduced, e.g. with an adjacency matrix, and can differ between time periods).
+  # Build the ranges list from the master list, so the number of ranges and their order always match the state numbers.
+  if (stratTF)
+  {
+    master_states_list <- model_fit$inputs$all_geog_states_list_usually_inferred_from_areas_maxareas
+    if (!is.null(master_states_list))
+    {
+      ranges_list <- convert_states_list_to_ranges_list(states_list_0based = master_states_list, areanames = areanames)
+    }
+  }
+
   # Get list of edges:
   trtable = BioGeoBEARS::prt(tr, printflag=FALSE)
   trtable
@@ -783,4 +797,28 @@ restore_simmap_node_numbering <- function (simmaps, phylo_input, node_ids_in_inp
   } else {
     return(restore_one(simmaps))
   }
+}
+
+
+### Helper function to convert a list of states (0-based area indices) into a vector of range names ####
+
+#' @title Convert a list of states into range names
+#'
+#' @description Convert a list of states, as used by BioGeoBEARS (list of 0-based indices of areas, with `NA` for the null range),
+#'   into a vector of range names obtained by concatenating the names of the areas.
+#'
+#' @param states_list_0based List of integer vectors. Each element is a state/range, defined by the 0-based indices of its areas.
+#' @param areanames Character vector. Names of the areas.
+#'
+#' @return A character vector of range names, in the order of `states_list_0based`.
+#'
+#' @noRd
+#'
+
+convert_states_list_to_ranges_list <- function (states_list_0based, areanames)
+{
+  ranges_list <- vapply(X = states_list_0based, FUN = function (x) {
+    if ((length(x) == 1) && is.na(x)) { "_" } else { paste(areanames[x + 1], collapse = "") }
+  }, FUN.VALUE = character(1))
+  return(unname(ranges_list))
 }

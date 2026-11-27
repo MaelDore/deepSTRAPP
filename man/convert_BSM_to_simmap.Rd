@@ -81,6 +81,7 @@ Changes:
 \item Resolve paths to local tree and tip range files.
 \item Restore the S4 class 'BioGeoBEARS_model' if needed.
 \item Ensure that the node numbering of \code{phylo} does not affect the output (see below).
+\item Handle BSM outputs using model fits based on a manually provided reduced list of states
 \item Update the documentation.
 }
 }
