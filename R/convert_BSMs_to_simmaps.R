@@ -404,7 +404,10 @@ convert_BSM_to_simmap <- function(model_fit, phylo, BSM_output, sim_index)
       # But, since there are NO events on this branch, don't add to it if
       # there is already something there (e.g. don't add the same branch for
       # multiple branch segments)
-      names_of_states_array = c(ranges_list[bottom_state_num_1based])
+      # State numbers of BSM tables index the list of states used in the fit (possibly restricted, e.g. with an adjacency matrix),
+      # not the full list of all possible ranges. Use the restricted list (identical to the full list if no restriction) when not time-stratified
+      ranges_list_of_fit <- if (stratTF) { ranges_list } else { reduced_ranges_list }
+      names_of_states_array = c(ranges_list_of_fit[bottom_state_num_1based])
       times_in_each_state_array = unique(c(clado_events_table$edge.length[clado_row_TF]))
 
       if (length(times_in_each_state_array) != 1)
